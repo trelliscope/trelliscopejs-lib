@@ -8,7 +8,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplay, fetchSelectedDisplay } from '../actions';
+import { setSelectedDisplay, fetchDisplay } from '../actions';
 import { uiConstsSelector } from '../selectors';
 
 class DisplaySelect extends React.Component {
