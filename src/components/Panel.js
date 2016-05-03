@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import Delay from 'react-delay';
 
 class Panel extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Panel extends React.Component {
                     src={this.state.panelContent}
                     alt="panel"
                     style={this.props.style.plotObject}
-                  /> : 'loading...'}
+                  /> : <Delay wait={500}><div>'loading...'</div></Delay>}
                 </div>
               </td>
             </tr>
