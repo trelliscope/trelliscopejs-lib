@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { setLabels } from '../actions';
 import { uiConstsSelector, contentHeightSelector } from '../selectors';
 
-import { Table, TableHeaderColumn, TableRow, TableHeader,
+import { Table, TableRow,
   TableRowColumn, TableBody } from 'material-ui/Table';
 
 const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
@@ -37,8 +37,10 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
         >
           {tableData.map((row) => (
             <TableRow key={row.name} selected={row.selected}>
-              <TableRowColumn>{row.name}<br/>
-                <span style={{ color: '#888', fontStyle: 'italic' }}>{row.desc}</span>
+              <TableRowColumn>{row.name}<br />
+                <span style={{ color: '#888', fontStyle: 'italic' }}>
+                  {row.desc}
+                </span>
               </TableRowColumn>
             </TableRow>
             ))}

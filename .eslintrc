@@ -2,6 +2,8 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "rules": {
+    "no-underscore-dangle": 0,
+    "no-nested-ternary": 0,
     "comma-dangle": [2, "never"],
     "new-cap": [2, {"capIsNewExceptions": ["Radium"]}]
   }

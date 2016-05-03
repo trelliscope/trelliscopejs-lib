@@ -44,23 +44,23 @@ const Content = ({ style, idx, ci, layout, labels }) => {
 
     ret = (
       <div style={style.bounding}>
-      <table style={style.table}>
-      <tbody>
-      {dataMatrix.map((rr, i) => (
-        <tr key={`row${i}`}>
-        {rr.map((el) => (
-          <Panel
-            key={el.key}
-            panelKey={el.key}
-            labels={el.labels}
-            style={style.panel}
-            iface={ci.iface}
-          />
-        ))}
-        </tr>
-      ))}
-      </tbody>
-      </table>
+        <table style={style.table}>
+          <tbody>
+          {dataMatrix.map((rr, i) => (
+            <tr key={`row${i}`}>
+            {rr.map((el) => (
+              <Panel
+                key={el.key}
+                panelKey={el.key}
+                labels={el.labels}
+                style={style.panel}
+                iface={ci.iface}
+              />
+            ))}
+            </tr>
+          ))}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -170,7 +170,7 @@ const styleSelector = createSelector(
             paddingTop: 0,
             paddingBottom: 0,
             paddingLeft: 8,
-            paddingRight: 8,
+            paddingRight: 8
             // borderTop: '1px solid white'
           },
           labelNameCell: {

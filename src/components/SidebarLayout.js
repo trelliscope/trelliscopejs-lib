@@ -16,28 +16,28 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
         <div style={style.row}>
           <div style={style.label}>Rows:</div>
           <div style={style.ninput}>
-          <NumericInput
-            value={layout.nrow}
-            size={5} min={1} step={1}
-            style={style.input}
-            onChange={(nr) => handleChange({
-              nrow: nr, ncol: layout.ncol, arrange: layout.arrange
-            })}
-          />
+            <NumericInput
+              value={layout.nrow}
+              size={5} min={1} step={1}
+              style={style.input}
+              onChange={(nr) => handleChange({
+                nrow: nr, ncol: layout.ncol, arrange: layout.arrange
+              })}
+            />
           </div>
         </div>
         <Divider />
         <div style={style.row}>
           <div style={style.label}>Columns:</div>
           <div style={style.ninput}>
-          <NumericInput
-            value={layout.ncol}
-            size={5} min={1} step={1}
-            style={style.input}
-            onChange={(nc) => handleChange({
-              nrow: layout.nrow, ncol: nc, arrange: layout.arrange
-            })}
-          />
+            <NumericInput
+              value={layout.ncol}
+              size={5} min={1} step={1}
+              style={style.input}
+              onChange={(nc) => handleChange({
+                nrow: layout.nrow, ncol: nc, arrange: layout.arrange
+              })}
+            />
           </div>
         </div>
         <Divider />

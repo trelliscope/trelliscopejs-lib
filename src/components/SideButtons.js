@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Radium from 'radium';
 import { setActiveSidebar } from '../actions';
 import { createSelector } from 'reselect';
-import Mousetrap from 'Mousetrap';
+import Mousetrap from 'mousetrap';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js';
 import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors';
 import SideButton from './SideButton';
@@ -48,19 +48,19 @@ class SideButtons extends React.Component {
   }
   render() {
     return (
-    <div style={this.props.style.base}>
-      <div style={this.props.style.spacer}></div>
-      {buttons.map((d, i) => (
-        <SideButton
-          key={`sidebutton-${i}`}
-          bstyle={this.props.buttonStyle}
-          isActive={d.title === this.props.active}
-          icon={d.icon}
-          title={d.title}
-          onClick={() => this.props.setActive(d.title)}
-        />
-      ))}
-    </div>
+      <div style={this.props.style.base}>
+        <div style={this.props.style.spacer}></div>
+        {buttons.map((d, i) => (
+          <SideButton
+            key={`sidebutton-${i}`}
+            bstyle={this.props.buttonStyle}
+            isActive={d.title === this.props.active}
+            icon={d.icon}
+            title={d.title}
+            onClick={() => this.props.setActive(d.title)}
+          />
+        ))}
+      </div>
     );
   }
 }

@@ -21,68 +21,68 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
     }
     content = (
       <div>
-      <div style={style.tableWrap}>
-      <table style={style.table}>
-      <tbody>
-      {sort.map((d, i) => {
-        const ic = d.dir === 'asc' ? 'up' : 'down';
-        return (
-           <tr style={style.tr} key={i}>
-            <td style={style.sortButton}>
-              <FloatingActionButton
-                mini
-                key={i}
-                zDepth={1}
-                onClick={() => {
-                  const sort2 = Object.assign([], sort);
-                  sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
-                  handleChange(sort2);
-                }}
-              >
-                <i className={`fa fa-chevron-${ic}`}></i>
-              </FloatingActionButton>
-            </td>
-            <td style={style.labels}>
-              {d.name}<br />
-              <span style={{ color: '#888', fontStyle: 'italic' }}>
-                {cogDesc[d.name]}
-              </span>
-            </td>
-            <td style={style.closeButton}>
-              <IconButton
-                iconStyle={{ fontSize: 16, color: '#aaa' }}
-                iconClassName="fa fa-times"
-                onClick={() => {
-                  const sort2 = Object.assign([], sort);
-                  sort2.splice(i, 1);
-                  handleChange(sort2);
-                }}
-              />
-            </td>
-          </tr>
-        );
-      })}
-      </tbody>
-      </table>
-      </div>
-      <div style={style.notUsedHeader}>
-        {sort.length === 0 ? 'Select a variable:' : notUsed.length === 0 ? '' : 'More variables:'}
-      </div>
-      <div style={style.notUsed}>
-        {notUsed.map((d, i) => (
-          <div
-            style={style.variable}
-            key={i}
-            onClick={() => {
-              const sort2 = Object.assign([], sort);
-              sort2.push({ name: d, dir: 'asc' });
-              handleChange(sort2);
-            }}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
+        <div style={style.tableWrap}>
+          <table style={style.table}>
+            <tbody>
+            {sort.map((d, i) => {
+              const ic = d.dir === 'asc' ? 'up' : 'down';
+              return (
+                <tr style={style.tr} key={i}>
+                  <td style={style.sortButton}>
+                    <FloatingActionButton
+                      mini
+                      key={i}
+                      zDepth={1}
+                      onClick={() => {
+                        const sort2 = Object.assign([], sort);
+                        sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
+                        handleChange(sort2);
+                      }}
+                    >
+                      <i className={`fa fa-chevron-${ic}`}></i>
+                    </FloatingActionButton>
+                  </td>
+                  <td style={style.labels}>
+                    {d.name}<br />
+                    <span style={{ color: '#888', fontStyle: 'italic' }}>
+                      {cogDesc[d.name]}
+                    </span>
+                  </td>
+                  <td style={style.closeButton}>
+                    <IconButton
+                      iconStyle={{ fontSize: 16, color: '#aaa' }}
+                      iconClassName="fa fa-times"
+                      onClick={() => {
+                        const sort2 = Object.assign([], sort);
+                        sort2.splice(i, 1);
+                        handleChange(sort2);
+                      }}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
+            </tbody>
+          </table>
+        </div>
+        <div style={style.notUsedHeader}>
+          {sort.length === 0 ? 'Select a variable:' : notUsed.length === 0 ? '' : 'More variables:'}
+        </div>
+        <div style={style.notUsed}>
+          {notUsed.map((d, i) => (
+            <div
+              style={style.variable}
+              key={i}
+              onClick={() => {
+                const sort2 = Object.assign([], sort);
+                sort2.push({ name: d, dir: 'asc' });
+                handleChange(sort2);
+              }}
+            >
+              {d}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

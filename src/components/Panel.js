@@ -18,42 +18,48 @@ class Panel extends React.Component {
     return (
       <td>
         <table style={this.props.style.panelTable}>
-        <tbody>
-          <tr>
-            <td style={this.props.style.plotCell}>
-              <div style={this.props.style.plotDiv}>
-              {this.state.loaded ?
-                <img
-                  src={this.state.panelContent}
-                  alt="panel"
-                  style={this.props.style.plotObject}
-                /> : 'loading...'}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <table style={this.props.style.labelTable}>
-              <tbody>
-              {this.props.labels.map((d, i) => (
-                <tr key={i} style={this.props.style.labelRow}>
-                  <td style={[this.props.style.labelCell, this.props.style.labelNameCell]}>
-                    <div style={this.props.style.labelOverflow}>
-                      {d.name}
-                    </div>
-                  </td>
-                  <td style={[this.props.style.labelCell, this.props.style.labelValueCell]}>
-                    <div style={this.props.style.labelOverflow}>
-                      {d.value}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              </tbody>
-              </table>
-            </td>
-          </tr>
-        </tbody>
+          <tbody>
+            <tr>
+              <td style={this.props.style.plotCell}>
+                <div style={this.props.style.plotDiv}>
+                {this.state.loaded ?
+                  <img
+                    src={this.state.panelContent}
+                    alt="panel"
+                    style={this.props.style.plotObject}
+                  /> : 'loading...'}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table style={this.props.style.labelTable}>
+                  <tbody>
+                  {this.props.labels.map((d, i) => (
+                    <tr key={i} style={this.props.style.labelRow}>
+                      <td
+                        style={[this.props.style.labelCell,
+                        this.props.style.labelNameCell]}
+                      >
+                        <div style={this.props.style.labelOverflow}>
+                          {d.name}
+                        </div>
+                      </td>
+                      <td
+                        style={[this.props.style.labelCell,
+                        this.props.style.labelValueCell]}
+                      >
+                        <div style={this.props.style.labelOverflow}>
+                          {d.value}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </td>
     );

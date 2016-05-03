@@ -3,7 +3,7 @@ import Radium from 'radium';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import { createSelector } from 'reselect';
-import Mousetrap from 'Mousetrap';
+import Mousetrap from 'mousetrap';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';

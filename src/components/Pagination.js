@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Radium from 'radium';
-import Mousetrap from 'Mousetrap';
+import Mousetrap from 'mousetrap';
 import { uiConstsSelector } from '../selectors';
 import { setPageNum } from '../actions';
 

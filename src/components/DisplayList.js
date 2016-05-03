@@ -37,43 +37,43 @@ const DisplayList = ({ displayInfo, handleClick }) => {
 
   const displayList = Object.keys(dispGroups).map((k) => (
     <div style={styles.root} key={k}>
-    <GridList
-      cellHeight={200}
-      cols={3}
-      style={styles.gridList}
-    >
-      <Subheader style={{ fontSize: 20 }}>{k}</Subheader>
-      {dispGroups[k].map((i) => (
-        <GridTile
-          key={i}
-          style={styles.gridTile}
-          title={
-            <span style={{ fontWeight: 400, color: redA200 }}>
-              {displayInfo[i].name}
-            </span>
-          }
-          subtitle={
-            <span style={{ fontSize: 13 }}>
-              {displayInfo[i].desc}<br />
-              <span style={{ fontStyle: 'italic', fontSize: 11 }}>
-                {displayInfo[i].n} panels,
-                {displayInfo[i].updated.substring(0, displayInfo[i].updated.length - 3)}
+      <GridList
+        cellHeight={200}
+        cols={3}
+        style={styles.gridList}
+      >
+        <Subheader style={{ fontSize: 20 }}>{k}</Subheader>
+        {dispGroups[k].map((i) => (
+          <GridTile
+            key={i}
+            style={styles.gridTile}
+            title={
+              <span style={{ fontWeight: 400, color: redA200 }}>
+                {displayInfo[i].name}
               </span>
-            </span>
-          }
-          titleBackground="rgba(0, 0, 0, 0.65)"
-          onClick={() => handleClick(displayInfo[i].name, displayInfo[i].group)}
-          children={[
-            <img
-              src={`vdb/displays/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
-              alt={displayInfo[i].name}
-              style={styles.img}
-              key={`img${i}`}
-            />
-          ]}
-        />
-      ))}
-    </GridList>
+            }
+            subtitle={
+              <span style={{ fontSize: 13 }}>
+                {displayInfo[i].desc}<br />
+                <span style={{ fontStyle: 'italic', fontSize: 11 }}>
+                  {displayInfo[i].n} panels,
+                  {displayInfo[i].updated.substring(0, displayInfo[i].updated.length - 3)}
+                </span>
+              </span>
+            }
+            titleBackground="rgba(0, 0, 0, 0.65)"
+            onClick={() => handleClick(displayInfo[i].name, displayInfo[i].group)}
+            children={[
+              <img
+                src={`vdb/displays/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
+                alt={displayInfo[i].name}
+                style={styles.img}
+                key={`img${i}`}
+              />
+            ]}
+          />
+        ))}
+      </GridList>
     </div>
   ));
 

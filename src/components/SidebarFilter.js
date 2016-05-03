@@ -6,11 +6,12 @@ import { uiConstsSelector } from '../selectors';
 
 const SidebarFilter = ({ style, filter }) => {
   const fKeys = Object.keys(filter);
-  let content = <div style={{ padding: 10 }}>todo</div>;
-  // if (fKeys.length > 0) {
-  //   const filter1 = filter[fKeys[0]];
-  //   content = <div style={style}>{filter1.name} {filter1.type}</div>;
-  // }
+  let content = <div style={style}>todo</div>;
+  if (fKeys.length > 0) {
+    const filter1 = filter[fKeys[0]];
+    content = <div style={style}>{filter1.name} {filter1.type}</div>;
+    content = <div style={style}>todo</div>;
+  }
   return (content);
 };
 
@@ -22,13 +23,13 @@ SidebarFilter.propTypes = {
 // ------ redux container ------
 
 const filterSelector = state => state.filter;
-const dispSelector = state => state._displayInfo;
+// const dispSelector = state => state._displayInfo;
 
 const stateSelector = createSelector(
-  uiConstsSelector, filterSelector, dispSelector,
-  (ui, filter, di) => ({
+  uiConstsSelector, filterSelector,
+  (ui, filter) => ({
     style: {
-      background: di.isFetching ? 'red' : 'white'
+      padding: 10
     },
     filter
   })
@@ -38,4 +39,6 @@ const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-export default connect(mapStateToProps)(SidebarFilter);
+export default connect(
+  mapStateToProps
+)(Radium(SidebarFilter));
