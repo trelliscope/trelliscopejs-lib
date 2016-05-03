@@ -1,17 +1,22 @@
 import { combineReducers } from 'redux';
 import sidebar from './sidebar';
 import ui from './ui';
-import currentDisplay from './currentDisplay';
-import { layout, labels, sort, filter } from './displayState';
+import selectedDisplay from './selectedDisplay';
+import { layout, labels, sort, filter, pageNum } from './displayState';
+import _displayInfo from './_displayInfo';
+import _cogInterface from './_cogInterface';
 
 const app = combineReducers({
   ui,
   sidebar,
-  currentDisplay,
+  selectedDisplay,
   layout,
   labels,
   sort,
-  filter
+  filter,
+  pageNum,
+  _displayInfo,
+  _cogInterface
 });
 
 export default app;

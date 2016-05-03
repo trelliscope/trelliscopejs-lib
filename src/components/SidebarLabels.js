@@ -65,7 +65,7 @@ SidebarLabels.propTypes = {
 // ------ redux container ------
 
 const labelsSelector = state => state.labels;
-const dispSelector = state => state.currentDisplay.displayInfo;
+const dispSelector = state => state._displayInfo;
 
 const stateSelector = createSelector(
   contentHeightSelector, uiConstsSelector, labelsSelector, dispSelector,

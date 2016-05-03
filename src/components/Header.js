@@ -5,12 +5,12 @@ import { createSelector } from 'reselect';
 import { uiConstsSelector, windowWidthSelector } from '../selectors';
 import DisplaySelect from './DisplaySelect';
 
-const Header = ({ style, currentDisplay }) => {
+const Header = ({ style, selectedDisplay }) => {
   let displayName = '';
   let iconStyle = { visibility: 'hidden' };
-  if (currentDisplay.selectedDisplay.name !== '') {
-    displayName = `${currentDisplay.selectedDisplay.group} /
-      ${currentDisplay.selectedDisplay.name}`;
+  if (selectedDisplay.name !== '') {
+    displayName = `${selectedDisplay.group} /
+      ${selectedDisplay.name}`;
     iconStyle = { color: '#aaa', fontSize: 12 };
   } else {
     displayName = <span><i className="fa fa-long-arrow-left" /> select a display to view...</span>;
@@ -29,15 +29,15 @@ const Header = ({ style, currentDisplay }) => {
 
 Header.propTypes = {
   style: React.PropTypes.object,
-  currentDisplay: React.PropTypes.object
+  selectedDisplay: React.PropTypes.object
 };
 
 // ------ redux container ------
 
-const currentDisplaySelector = state => state.currentDisplay;
+const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
-  windowWidthSelector, uiConstsSelector, currentDisplaySelector,
+  windowWidthSelector, uiConstsSelector, selectedDisplaySelector,
   (ww, ui, sd) => ({
     style: {
       outer: {
@@ -84,7 +84,7 @@ const styleSelector = createSelector(
         paddingLeft: 18
       }
     },
-    currentDisplay: sd
+    selectedDisplay: sd
   })
 );
 

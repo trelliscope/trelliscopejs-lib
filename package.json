@@ -68,6 +68,7 @@
     "redux-immutable": "^3.0.6",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
-    "reselect": "^2.3.0"
+    "reselect": "^2.3.0",
+    "thenby": "^1.1.3"
   }
 }

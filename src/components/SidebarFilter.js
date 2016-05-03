@@ -22,7 +22,7 @@ SidebarFilter.propTypes = {
 // ------ redux container ------
 
 const filterSelector = state => state.filter;
-const dispSelector = state => state.currentDisplay.displayInfo;
+const dispSelector = state => state._displayInfo;
 
 const stateSelector = createSelector(
   uiConstsSelector, filterSelector, dispSelector,

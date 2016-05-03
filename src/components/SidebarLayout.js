@@ -79,7 +79,7 @@ SidebarLayout.propTypes = {
 // ------ redux container ------
 
 const layoutSelector = state => state.layout;
-const dispSelector = state => state.currentDisplay.displayInfo;
+const dispSelector = state => state._displayInfo;
 
 const stateSelector = createSelector(
   uiConstsSelector, layoutSelector, dispSelector,

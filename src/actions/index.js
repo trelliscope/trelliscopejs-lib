@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
-  SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants.js';
+  SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
+  REQUEST_COGIFACE, RECEIVE_COGIFACE } from '../constants.js';
 
 export const setActiveSidebar = (active) => (
   { type: ACTIVE_SIDEBAR, active }
@@ -39,6 +40,30 @@ export const receiveDisplay = (name, group, json) => (
   }
 );
 
+export const requestCogInterfaceInfo = (iface) => (
+  { type: REQUEST_COGIFACE, iface }
+);
+
+export const receiveCogInterfaceInfo = (iface, json) => (
+  {
+    type: RECEIVE_COGIFACE,
+    iface,
+    info: json,
+    receivedAt: Date.now()
+  }
+);
+
+export const fetchCogInterfaceInfo = (dispatch, iface) => {
+  dispatch(receiveCogInterfaceInfo(iface));
+
+  return fetch(`vdb/displays/${iface.group}/${iface.name}/cogData.json`)
+    .then(response => response.json())
+    .then(json => {
+      dispatch(receiveCogInterfaceInfo(iface, json));
+    }
+  );
+};
+
 export const fetchDisplay = (name, group) =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
@@ -51,7 +76,7 @@ export const fetchDisplay = (name, group) =>
         dispatch(setLabels(json.state.labels));
         dispatch(setSort(json.state.sort));
         dispatch(setFilter(json.state.filter));
+        fetchCogInterfaceInfo(dispatch, json.cogInterface);
       }
     );
   };
-

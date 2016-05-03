@@ -100,7 +100,7 @@ SidebarSort.propTypes = {
 
 const sortSelector = state => state.sort;
 const cogDescSelector = state => {
-  const cogInfo = state.currentDisplay.displayInfo.info.cogInfo;
+  const cogInfo = state._displayInfo.info.cogInfo;
   const res = {};
   for (let i = 0; i < cogInfo.length; i++) {
     res[cogInfo[i].name] = cogInfo[i].desc;

@@ -1,4 +1,4 @@
-import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER } from '../constants.js';
+import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_PAGENUM } from '../constants.js';
 
 export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row' }, action) => {
   switch (action.type) {
@@ -27,10 +27,19 @@ export const sort = (state = [], action) => {
   return state;
 };
 
-export const filter = (state = {}, action) => {
+export const filter = (state = [], action) => {
   switch (action.type) {
     case SET_FILTER:
-      return Object.assign({}, state, action.filter);
+      return Object.assign([], state, action.filter);
+    default:
+  }
+  return state;
+};
+
+export const pageNum = (state = 1, action) => {
+  switch (action.type) {
+    case SET_PAGENUM:
+      return Object.assign(null, state, action.pageNum);
     default:
   }
   return state;

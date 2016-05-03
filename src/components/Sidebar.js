@@ -58,7 +58,7 @@ Sidebar.propTypes = {
 
 // ------ redux container ------
 
-const displayLoadedSelector = state => state.currentDisplay.displayInfo.isLoaded;
+const displayLoadedSelector = state => state._displayInfo.isLoaded;
 
 const stateSelector = createSelector(
   contentHeightSelector, uiConstsSelector, sidebarActiveSelector, displayLoadedSelector,

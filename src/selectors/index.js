@@ -52,6 +52,12 @@ export const uiConstsSelector = () => (
         background: '#c1c1c1',
         color: 'white'
       }
+    },
+    content: {
+      label: {
+        height: 15,
+        fontSize: 12
+      }
     }
   }
 );

@@ -1,4 +1,4 @@
-import { ACTIVE_SIDEBAR } from '../constants.js'
+import { ACTIVE_SIDEBAR } from '../constants.js';
 
 const sidebarReducer = (state = { active: '' }, action) => {
   switch (action.type) {
