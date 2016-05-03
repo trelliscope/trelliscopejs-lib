@@ -48,7 +48,7 @@ const DisplayList = ({ displayInfo, handleClick }) => {
           key={i}
           style={styles.gridTile}
           title={
-            <span style={{ fontWeight: 600, color: redA200 }}>
+            <span style={{ fontWeight: 400, color: redA200 }}>
               {displayInfo[i].name}
             </span>
           }

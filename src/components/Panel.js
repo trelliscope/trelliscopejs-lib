@@ -16,24 +16,40 @@ class Panel extends React.Component {
   render() {
     return (
       <td>
-      <table>
-      <tbody>
-      <tr>
-      <td>
-      {this.state.loaded ? <img src={this.state.panelContent} alt="stuff" style={this.props.style.plot} /> : 'panel...'}
-      </td>
-      </tr>
-      <tr>
-      {this.props.labels.map((d, i) => (
-        <tr key={i} style={this.props.style.labels}>
-        <td>
-        {d.value}
-        </td>
-        </tr>
-      ))}
-      </tr>
-      </tbody>
-      </table>
+        <table style={this.props.style.panelTable}>
+        <tbody>
+          <tr>
+            <td style={this.props.style.plotCell}>
+            {this.state.loaded ?
+              <img
+                src={this.state.panelContent}
+                alt="panel"
+                style={this.props.style.plotObject}
+              /> : 'panel...'}
+            </td>
+          </tr>
+          <tr>
+          <table style={this.props.style.labelTable}>
+          <tbody>
+          {this.props.labels.map((d, i) => (
+            <tr key={i} style={this.props.style.labelRow}>
+              <td style={[this.props.style.labelCell, this.props.style.labelNameCell]}>
+              <div style={this.props.style.labelOverflow}>
+              {d.name}
+              </div>
+              </td>
+              <td style={[this.props.style.labelCell, this.props.style.labelValueCell]}>
+              <div style={this.props.style.labelOverflow}>
+              {d.value}
+              </div>
+              </td>
+            </tr>
+          ))}
+          </tbody>
+          </table>
+          </tr>
+        </tbody>
+        </table>
       </td>
     );
   }

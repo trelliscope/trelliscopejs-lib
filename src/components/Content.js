@@ -33,7 +33,7 @@ const Content = ({ style, idx, ci, layout, labels }) => {
     for (let i = 0; i < idx.length; i++) {
       let rr;
       let cc;
-      if (idx.arrange === 'row') {
+      if (layout.arrange === 'row') {
         rr = Math.floor(i / layout.ncol);
         cc = i % layout.ncol;
       } else {
@@ -45,11 +45,11 @@ const Content = ({ style, idx, ci, layout, labels }) => {
 
     ret = (
       <div style={style.bounding}>
-      <table>
+      <table style={style.table}>
       <tbody>
       {dataMatrix.map((rr, i) => (
         <tr key={`row${i}`}>
-        {rr.map((el, j) => (
+        {rr.map((el) => (
           <Panel
             key={el.key}
             panelKey={el.key}
@@ -107,24 +107,69 @@ const styleSelector = createSelector(
     return ({
       style: {
         bounding: {
+          // border: '3px solid red',
           position: 'absolute',
           top: ui.header.height,
           right: 0,
           boxSizing: 'border-box',
           padding: 0,
-          // border: '3px solid red',
           width: cw,
-          height: ch
+          height: ch,
+          paddingTop: 3
+        },
+        table: {
+          borderCollapse: 'collapse',
+          borderSpacing: 0,
+          tableLayout: 'fixed',
+          boxSizing: 'border-box',
+          margin: '0 auto'
         },
         panel: {
-          plot: {
-            width: newW,
-            heigth: newH
+          panelTable: {
+            padding: 0,
+            borderSpacing: 0,
+            boxSizing: 'border-box',
+            border: '1px solid #ddd'
           },
-          labels: {
+          plotCell: {
+            padding: 0
+          },
+          plotObject: {
+            display: 'block',
+            width: newW,
+            height: newH
+          },
+          labelTable: {
+            width: newW,
+            padding: 0,
+            tableLayout: 'fixed',
+            borderSpacing: 0,
+            boxSizing: 'border-box'
+          },
+          labelRow: {
             width: newW,
             height: cogHeight,
-            fontSize: cogHeight - 12
+            fontSize: cogHeight - 12,
+            background: '#efefef'
+          },
+          labelCell: {
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: 8,
+            paddingRight: 8
+          },
+          labelNameCell: {
+            width: '33%',
+            borderRight: '1px solid #fff',
+            fontWeight: 400
+          },
+          labelValueCell: {
+            width: '67%'
+          },
+          labelOverflow: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis'
           }
         }
       },
