@@ -116,7 +116,7 @@ const styleSelector = createSelector(
           padding: 0,
           width: cw,
           height: ch,
-          transition: 'all 0.2s ease-in-out',
+          transition: 'all 0.15s ease-in-out',
           paddingTop: 3
         },
         table: {
@@ -142,18 +142,18 @@ const styleSelector = createSelector(
             background: '#f6f6f6',
             textAlign: 'center',
             lineHeight: `${newH}px`,
-            transition: 'all 0.2s ease-in-out',
+            transition: 'all 0.15s ease-in-out',
             color: '#bbb'
             // transitionDelay: '0.5s'
           },
           plotObject: {
             display: 'block',
-            transition: 'all 0.2s ease-in-out',
+            transition: 'all 0.15s ease-in-out',
             width: newW,
             height: newH
           },
           labelTable: {
-            transition: 'all 0.2s ease-in-out',
+            transition: 'all 0.15s ease-in-out',
             width: newW,
             padding: 0,
             tableLayout: 'fixed',
