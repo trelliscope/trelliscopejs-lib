@@ -32,6 +32,7 @@ class Panel extends React.Component {
             </td>
           </tr>
           <tr>
+          <td>
           <table style={this.props.style.labelTable}>
           <tbody>
           {this.props.labels.map((d, i) => (
@@ -50,6 +51,7 @@ class Panel extends React.Component {
           ))}
           </tbody>
           </table>
+          </td>
           </tr>
         </tbody>
         </table>
