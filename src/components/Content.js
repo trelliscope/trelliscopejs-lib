@@ -7,7 +7,6 @@ import { currentJSONIndexSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
 
 const Content = ({ style, idx, ci, layout, labels }) => {
-
   let ret = <div></div>;
 
   if (ci.iface && ci.info) {
@@ -84,13 +83,15 @@ const styleSelector = createSelector(
     const tPad = 3; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->8
-    const cogHeightArr = [26, 24, 22, 19];
-    const cogHeight = cogHeightArr[Math.min(layout.nrow - 1, 3)];
-    const nCog = labels.length; // number of cogs to show
+    const labelHeightArr = [26, 24, 22, 19];
+    const maxDim = Math.max(layout.nrow, layout.ncol - 2);
+    const labelHeight = labelHeightArr[Math.min(maxDim - 1, 3)];
+    const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change
     const wExtra = 2 + 2 * tPad; // 2 for border + tPad on either side
-    const hExtra = 2 + 2 * tPad + nCog * cogHeight; // 2 for border + tPad on top / bottom + cogHeight for every row of visible cognostics
+    // 2 for border + tPad on top / bottom + labelHeight for every row of visible cognostics
+    const hExtra = 2 + 2 * tPad + nLabels * labelHeight;
 
     // first try stretching panels across full width:
     let newW = Math.round((cw - (wExtra * layout.ncol)) / layout.ncol, 0);
@@ -115,6 +116,7 @@ const styleSelector = createSelector(
           padding: 0,
           width: cw,
           height: ch,
+          transition: 'all 0.2s ease-in-out',
           paddingTop: 3
         },
         table: {
@@ -134,12 +136,24 @@ const styleSelector = createSelector(
           plotCell: {
             padding: 0
           },
+          plotDiv: {
+            width: newW,
+            height: newH,
+            background: '#f6f6f6',
+            textAlign: 'center',
+            lineHeight: `${newH}px`,
+            transition: 'all 0.2s ease-in-out',
+            color: '#bbb'
+            // transitionDelay: '0.5s'
+          },
           plotObject: {
             display: 'block',
+            transition: 'all 0.2s ease-in-out',
             width: newW,
             height: newH
           },
           labelTable: {
+            transition: 'all 0.2s ease-in-out',
             width: newW,
             padding: 0,
             tableLayout: 'fixed',
@@ -148,15 +162,16 @@ const styleSelector = createSelector(
           },
           labelRow: {
             width: newW,
-            height: cogHeight,
-            fontSize: cogHeight - 12,
-            background: '#efefef'
+            height: labelHeight,
+            fontSize: labelHeight - 12,
+            background: '#f6f6f6'
           },
           labelCell: {
             paddingTop: 0,
             paddingBottom: 0,
             paddingLeft: 8,
-            paddingRight: 8
+            paddingRight: 8,
+            // borderTop: '1px solid white'
           },
           labelNameCell: {
             width: '33%',

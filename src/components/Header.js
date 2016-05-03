@@ -4,6 +4,7 @@ import Radium from 'radium';
 import { createSelector } from 'reselect';
 import { uiConstsSelector, windowWidthSelector } from '../selectors';
 import DisplaySelect from './DisplaySelect';
+import Pagination from './Pagination';
 
 const Header = ({ style, selectedDisplay }) => {
   let displayName = '';
@@ -22,6 +23,7 @@ const Header = ({ style, selectedDisplay }) => {
       <div style={style.display}>
         {displayName} <i style={iconStyle} className="fa fa-info-circle" />
       </div>
+      <Pagination />
       <div style={style.title}>Trelliscope</div>
     </div>
   );
@@ -73,8 +75,8 @@ const styleSelector = createSelector(
         // display: 'inline-block',
         borderColor: ui.header.borderColor,
         height: ui.header.height,
-        paddingLeft: 20,
-        paddingRight: 20,
+        textAlign: 'center',
+        width: ui.header.titleWidth,
         fontSize: 17,
         background: '#FF4308',
         color: 'white'

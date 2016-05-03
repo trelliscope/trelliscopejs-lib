@@ -36,10 +36,15 @@ export const filter = (state = [], action) => {
   return state;
 };
 
+// let pn = Math.round(action.pageNum);
+// if (pn < 1) {
+//   pn = 1;
+// }
+
 export const pageNum = (state = 1, action) => {
   switch (action.type) {
     case SET_PAGENUM:
-      return Object.assign(null, state, action.pageNum);
+      return action.n;
     default:
   }
   return state;

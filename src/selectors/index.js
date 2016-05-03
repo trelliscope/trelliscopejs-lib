@@ -19,7 +19,8 @@ export const uiConstsSelector = () => (
         active: {
           background: '#15a4fa'
         }
-      }
+      },
+      titleWidth: 120
     },
     footer: {
       height: 30,

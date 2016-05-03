@@ -25,7 +25,7 @@ class DisplaySelect extends React.Component {
     Mousetrap.bind(['o'], this.handleKey);
   }
   componentWillUnmount() {
-    Mousetrap.bind(['o'], this.handleKey);
+    Mousetrap.unbind(['o']);
   }
   handleOpen = () => {
     if (this.state.loaded) {

@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
-  SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
+  SET_PAGENUM, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_COGIFACE, RECEIVE_COGIFACE } from '../constants.js';
 
 export const setActiveSidebar = (active) => (
@@ -21,6 +21,10 @@ export const setSort = (sort) => (
 
 export const setFilter = (filter) => (
   { type: SET_FILTER, filter }
+);
+
+export const setPageNum = (n) => (
+  { type: SET_PAGENUM, n }
 );
 
 export const setSelectedDisplay = (name, group) => (

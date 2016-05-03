@@ -7,7 +7,8 @@ class Panel extends React.Component {
     this.state = { loaded: false, panelContent: null };
   }
   componentDidMount() {
-    fetch(`vdb/displays/${this.props.iface.group}/${this.props.iface.name}/png/${this.props.panelKey}.json`)
+    const filebase = `vdb/displays/${this.props.iface.group}/${this.props.iface.name}`;
+    fetch(`${filebase}/png/${this.props.panelKey}.json`)
       .then(response => response.json())
       .then(json => {
         this.setState({ panelContent: json, loaded: true });
@@ -20,12 +21,14 @@ class Panel extends React.Component {
         <tbody>
           <tr>
             <td style={this.props.style.plotCell}>
+            <div style={this.props.style.plotDiv}>
             {this.state.loaded ?
               <img
                 src={this.state.panelContent}
                 alt="panel"
                 style={this.props.style.plotObject}
-              /> : 'panel...'}
+              /> : 'loading...'}
+            </div>
             </td>
           </tr>
           <tr>
