@@ -117,15 +117,14 @@ const styleSelector = createSelector(
       style: {
         bounding: {
           // border: '3px solid red',
+          background: '#fdfdfd',
           position: 'absolute',
           top: ui.header.height,
           right: 0,
           boxSizing: 'border-box',
           padding: 0,
           width: cw,
-          height: ch,
-          transition: 'all 0.5s ease-in-out',
-          paddingTop: 3
+          height: ch
         },
         panel: {
           bounding: {
