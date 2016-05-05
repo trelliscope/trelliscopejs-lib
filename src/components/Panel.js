@@ -1,6 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
+import { findDOMNode } from 'react-dom';
 
 class Panel extends React.Component {
   constructor(props) {
@@ -14,55 +15,53 @@ class Panel extends React.Component {
       .then(json => {
         this.setState({ panelContent: json, loaded: true });
       });
+    // Get the components DOM node
+    const elem = findDOMNode(this);
+    // Set the opacity of the element to 0
+    elem.style.opacity = 0;
+    setTimeout(() => (elem.style.opacity = 1), 10);
   }
   render() {
     return (
-      <td>
-        <table style={this.props.style.panelTable}>
-          <tbody>
-            <tr>
-              <td style={this.props.style.plotCell}>
-                <div style={this.props.style.plotDiv}>
-                {this.state.loaded ?
-                  <img
-                    src={this.state.panelContent}
-                    alt="panel"
-                    style={this.props.style.plotObject}
-                  /> : <Delay wait={500}><div>'loading...'</div></Delay>}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <table style={this.props.style.labelTable}>
-                  <tbody>
-                  {this.props.labels.map((d, i) => (
-                    <tr key={i} style={this.props.style.labelRow}>
-                      <td
-                        style={[this.props.style.labelCell,
-                        this.props.style.labelNameCell]}
-                      >
-                        <div style={this.props.style.labelOverflow}>
-                          {d.name}
-                        </div>
-                      </td>
-                      <td
-                        style={[this.props.style.labelCell,
-                        this.props.style.labelValueCell]}
-                      >
-                        <div style={this.props.style.labelOverflow}>
-                          {d.value}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
+      <div style={[this.props.style.bounding, this.props.dimStyle]}>
+        <div style={this.props.style.panel}>
+        {this.state.loaded ?
+          <img
+            src={this.state.panelContent}
+            alt="panel"
+            style={this.props.style.panelContent}
+          /> :
+          <Delay wait={500}>
+            <div>'loading...'</div>
+          </Delay>}
+        </div>
+        <div>
+          <table style={this.props.style.labelTable}>
+            <tbody>
+            {this.props.labels.map((d, i) => (
+              <tr key={i} style={this.props.style.labelRow}>
+                <td
+                  style={[this.props.style.labelCell,
+                  this.props.style.labelNameCell]}
+                >
+                  <div style={this.props.style.labelOverflow}>
+                    {d.name}
+                  </div>
+                </td>
+                <td
+                  style={[this.props.style.labelCell,
+                  this.props.style.labelValueCell]}
+                >
+                  <div style={this.props.style.labelOverflow}>
+                    {d.value}
+                  </div>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     );
   }
 }
@@ -71,7 +70,8 @@ Panel.propTypes = {
   style: React.PropTypes.object,
   labels: React.PropTypes.array,
   iface: React.PropTypes.object,
-  panelKey: React.PropTypes.string
+  panelKey: React.PropTypes.string,
+  dimStyle: React.PropTypes.object
 };
 
 export default Radium(Panel);

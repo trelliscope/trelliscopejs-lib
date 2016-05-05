@@ -6,7 +6,7 @@ import { uiConstsSelector, contentWidthSelector, contentHeightSelector } from '.
 import { currentJSONIndexSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
 
-const Content = ({ style, idx, ci, layout, labels }) => {
+const Content = ({ style, idx, ci, layout, labels, dims }) => {
   let ret = <div></div>;
 
   if (ci.iface && ci.info) {
@@ -25,10 +25,9 @@ const Content = ({ style, idx, ci, layout, labels }) => {
     }
 
     // populate a matrix with panel key and cog label information
-    const dataMatrix = new Array(layout.nrow);
-    for (let i = 0; i < layout.nrow; i++) {
-      dataMatrix[i] = new Array(layout.ncol);
-    }
+    // const dataMatrix = new Array(layout.nrow);
+    const panelMatrix = [];
+
     for (let i = 0; i < idx.length; i++) {
       let rr;
       let cc;
@@ -39,28 +38,32 @@ const Content = ({ style, idx, ci, layout, labels }) => {
         rr = i % layout.nrow;
         cc = Math.floor(i / layout.nrow);
       }
-      dataMatrix[rr][cc] = { key: panelKeys[i], labels: panelLabels[i] };
+      panelMatrix.push(
+        {
+          rowIndex: rr,
+          colIndex: cc,
+          key: panelKeys[i],
+          labels: panelLabels[i]
+        }
+      );
     }
+    panelMatrix.sort((a, b) => ((a.key > b.key) ? 1 : ((b.key > a.key) ? -1 : 0)));
 
     ret = (
       <div style={style.bounding}>
-        <table style={style.table}>
-          <tbody>
-          {dataMatrix.map((rr, i) => (
-            <tr key={`row${i}`}>
-            {rr.map((el) => (
-              <Panel
-                key={el.key}
-                panelKey={el.key}
-                labels={el.labels}
-                style={style.panel}
-                iface={ci.iface}
-              />
-            ))}
-            </tr>
-          ))}
-          </tbody>
-        </table>
+        {panelMatrix.map((el) => (
+          <Panel
+            key={el.key}
+            panelKey={el.key}
+            labels={el.labels}
+            style={style.panel}
+            iface={ci.iface}
+            dimStyle={{
+              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad,
+              left: dims.pWidth * el.colIndex + (el.colIndex + 1) * dims.pPad + dims.wOffset
+            }}
+          />
+        ))}
       </div>
     );
   }
@@ -70,7 +73,11 @@ const Content = ({ style, idx, ci, layout, labels }) => {
 
 Content.propTypes = {
   style: React.PropTypes.object,
-  idx: React.PropTypes.array
+  idx: React.PropTypes.array,
+  ci: React.PropTypes.object,
+  layout: React.PropTypes.object,
+  labels: React.PropTypes.array,
+  dims: React.PropTypes.object
 };
 
 // ------ redux container ------
@@ -80,29 +87,30 @@ const styleSelector = createSelector(
   currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector,
   (cw, ch, ui, idx, ci, layout, aspect, labels) => {
-    const tPad = 3; // padding on either side of the panel
+    const pPad = 3; // padding on either side of the panel
     // height of row of cog label depends on number of rows
-    // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->8
+    // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
     const labelHeightArr = [26, 24, 22, 19];
     const maxDim = Math.max(layout.nrow, layout.ncol - 2);
     const labelHeight = labelHeightArr[Math.min(maxDim - 1, 3)];
     const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change
-    const wExtra = 2 + 2 * tPad; // 2 for border + tPad on either side
-    // 2 for border + tPad on top / bottom + labelHeight for every row of visible cognostics
-    const hExtra = 2 + 2 * tPad + nLabels * labelHeight;
+    const wExtra = pPad * (layout.ncol + 1);
+    const hExtra = pPad * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
 
     // first try stretching panels across full width:
-    let newW = Math.round((cw - (wExtra * layout.ncol)) / layout.ncol, 0);
+    let newW = Math.round((cw - wExtra) / layout.ncol, 0);
     // given this, compute panel height
     let newH = Math.round(newW * aspect, 0);
+    let wOffset = 0;
 
     // check to see if this will make it too tall:
     // if so, do row-first full-height stretching
-    if ((newH + hExtra) * layout.nrow > ch) {
-      newH = Math.round((ch - (hExtra * layout.nrow)) / layout.nrow, 0);
+    if ((newH * layout.nrow + hExtra) > ch) {
+      newH = Math.round((ch - hExtra) / layout.nrow, 0);
       newW = Math.round(newH / aspect, 0);
+      wOffset = (cw - (newW * layout.ncol + wExtra)) / 2;
     }
 
     return ({
@@ -116,44 +124,38 @@ const styleSelector = createSelector(
           padding: 0,
           width: cw,
           height: ch,
-          transition: 'all 0.15s ease-in-out',
+          transition: 'all 0.5s ease-in-out',
           paddingTop: 3
         },
-        table: {
-          borderCollapse: 'collapse',
-          borderSpacing: 0,
-          tableLayout: 'fixed',
-          boxSizing: 'border-box',
-          margin: '0 auto'
-        },
         panel: {
-          panelTable: {
+          bounding: {
+            transition: 'all 0.5s ease-in-out',
+            position: 'absolute',
+            overflow: 'hidden',
+            width: newW,
+            height: newH + nLabels * labelHeight,
             padding: 0,
-            borderSpacing: 0,
             boxSizing: 'border-box',
             border: '1px solid #ddd'
           },
-          plotCell: {
-            padding: 0
-          },
-          plotDiv: {
+          panel: {
+            transition: 'all 0.5s ease-in-out',
             width: newW,
             height: newH,
+            boxSizing: 'border-box',
             background: '#f6f6f6',
             textAlign: 'center',
             lineHeight: `${newH}px`,
-            transition: 'all 0.15s ease-in-out',
             color: '#bbb'
-            // transitionDelay: '0.5s'
           },
-          plotObject: {
+          panelContent: {
+            transition: 'all 0.5s ease-in-out',
             display: 'block',
-            transition: 'all 0.15s ease-in-out',
             width: newW,
             height: newH
           },
           labelTable: {
-            transition: 'all 0.15s ease-in-out',
+            transition: 'all 0.5s ease-in-out',
             width: newW,
             padding: 0,
             tableLayout: 'fixed',
@@ -161,6 +163,7 @@ const styleSelector = createSelector(
             boxSizing: 'border-box'
           },
           labelRow: {
+            transition: 'all 0.5s ease-in-out',
             width: newW,
             height: labelHeight,
             fontSize: labelHeight - 12,
@@ -191,7 +194,13 @@ const styleSelector = createSelector(
       idx,
       ci,
       layout,
-      labels
+      labels,
+      dims: {
+        pWidth: newW,
+        pHeight: newH + nLabels * labelHeight,
+        wOffset,
+        pPad
+      }
     });
   }
 );
