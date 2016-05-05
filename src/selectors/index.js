@@ -55,6 +55,9 @@ export const uiConstsSelector = () => (
       }
     },
     content: {
+      panel: {
+        pad: 2
+      },
       label: {
         height: 15,
         fontSize: 12

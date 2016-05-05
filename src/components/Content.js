@@ -87,7 +87,7 @@ const styleSelector = createSelector(
   currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector,
   (cw, ch, ui, idx, ci, layout, aspect, labels) => {
-    const pPad = 3; // padding on either side of the panel
+    const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
     const labelHeightArr = [26, 24, 22, 19];
