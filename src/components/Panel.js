@@ -15,9 +15,8 @@ class Panel extends React.Component {
       .then(json => {
         this.setState({ panelContent: json, loaded: true });
       });
-    // Get the components DOM node
+    // fade in on new component
     const elem = findDOMNode(this);
-    // Set the opacity of the element to 0
     elem.style.opacity = 0;
     setTimeout(() => (elem.style.opacity = 1), 10);
   }
