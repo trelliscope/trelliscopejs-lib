@@ -84,7 +84,8 @@ const stateSelector = createSelector(
         top: ui.header.height,
         width: ui.sideButtons.width,
         height: ch,
-        background: ui.sideButtons.background
+        background: ui.sideButtons.background,
+        zIndex: 1000
       },
       spacer: {
         transition: 'height 0.2s',

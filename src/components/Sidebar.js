@@ -12,29 +12,29 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
 
 const Sidebar = ({ style, active, displayLoaded }) => {
   if (active === '') {
-    return <div style={[style.base, style.hidden]}></div>;
+    return <div style={[style.base, style.hidden]} ref="side-container"></div>;
   }
 
   const emptyStyle = { paddingLeft: 8, paddingTop: 5 };
   let content;
   if (active === SB_CONFIG) {
-    content = <div style={emptyStyle}>Configuration...</div>;
+    content = <div style={emptyStyle} ref="side-container">Configuration...</div>;
   } else {
     if (!displayLoaded) {
-      content = <div style={emptyStyle}>Load a display...</div>;
+      content = <div style={emptyStyle} ref="side-container">Load a display...</div>;
     } else {
       switch (active) {
         case SB_PANEL_LAYOUT:
-          content = <SidebarLayout />;
+          content = <div ref="side-container"><SidebarLayout /></div>;
           break;
         case SB_PANEL_FILTER :
-          content = <SidebarFilter />;
+          content = <div ref="side-container"><SidebarFilter /></div>;
           break;
         case SB_PANEL_SORT :
-          content = <SidebarSort />;
+          content = <div ref="side-container"><SidebarSort /></div>;
           break;
         case SB_PANEL_LABELS :
-          content = <SidebarLabels />;
+          content = <div ref="side-container"><SidebarLabels /></div>;
           break;
         default:
           content = '';
@@ -65,21 +65,25 @@ const stateSelector = createSelector(
   (ch, ui, active, displayLoaded) => ({
     style: {
       base: {
+        transitionProperty: 'left',
+        transitionDuration: '0.5s',
+        transitionTimingFunction: 'ease-in-out',
         position: 'absolute',
         left: ui.sideButtons.width,
         top: ui.header.height,
         width: ui.sidebar.width,
+        boxSizing: 'border-box',
         height: ch,
-        visibility: 'visible',
-        opacity: 1,
         borderRight: '1px solid',
         borderColor: ui.sidebar.borderColor,
-        transition: 'opacity 0.25s ease, visibility 0.5s ease'
+        background: '#fff',
+        zIndex: 999
       },
       hidden: {
-        visibility: 'hidden',
-        opacity: 0,
-        transition: 'opacity 0.25s ease, visibility 0.5s ease'
+        transitionProperty: 'left',
+        transitionDuration: '0.5s',
+        transitionTimingFunction: 'ease-in-out',
+        left: ui.sideButtons.width - ui.sidebar.width
       },
       header: {
         paddingLeft: 10,

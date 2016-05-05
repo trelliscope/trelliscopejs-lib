@@ -21,6 +21,7 @@ class Panel extends React.Component {
     setTimeout(() => (elem.style.opacity = 1), 10);
   }
   render() {
+    // console.log(this.props.dimStyle.left);
     return (
       <div style={[this.props.style.bounding, this.props.dimStyle]}>
         <div style={this.props.style.panel}>
@@ -38,7 +39,7 @@ class Panel extends React.Component {
           <table style={this.props.style.labelTable}>
             <tbody>
             {this.props.labels.map((d, i) => (
-              <tr key={i} style={this.props.style.labelRow}>
+              <tr key={`label${i}`} style={this.props.style.labelRow}>
                 <td
                   style={[this.props.style.labelCell,
                   this.props.style.labelNameCell]}

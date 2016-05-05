@@ -42,6 +42,7 @@ const Content = ({ style, idx, ci, layout, labels, dims }) => {
         {
           rowIndex: rr,
           colIndex: cc,
+          iColIndex: layout.ncol - cc - 1,
           key: panelKeys[i],
           labels: panelLabels[i]
         }
@@ -59,8 +60,8 @@ const Content = ({ style, idx, ci, layout, labels, dims }) => {
             style={style.panel}
             iface={ci.iface}
             dimStyle={{
-              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad,
-              left: dims.pWidth * el.colIndex + (el.colIndex + 1) * dims.pPad + dims.wOffset
+              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad + dims.hOffset,
+              right: dims.pWidth * el.iColIndex + (el.iColIndex + 1) * dims.pPad + dims.wOffset
             }}
           />
         ))}
@@ -113,12 +114,14 @@ const styleSelector = createSelector(
       wOffset = (cw - (newW * layout.ncol + wExtra)) / 2;
     }
 
+    const hOffset = ui.header.height;
+
     return ({
       style: {
         bounding: {
           // border: '3px solid red',
           background: '#fdfdfd',
-          position: 'absolute',
+          position: 'fixed',
           top: ui.header.height,
           right: 0,
           boxSizing: 'border-box',
@@ -129,7 +132,7 @@ const styleSelector = createSelector(
         panel: {
           bounding: {
             transition: 'all 0.5s ease-in-out',
-            position: 'absolute',
+            position: 'fixed',
             overflow: 'hidden',
             width: newW,
             height: newH + nLabels * labelHeight,
@@ -198,6 +201,7 @@ const styleSelector = createSelector(
         pWidth: newW,
         pHeight: newH + nLabels * labelHeight,
         wOffset,
+        hOffset,
         pPad
       }
     });
