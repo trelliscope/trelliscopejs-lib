@@ -16,7 +16,6 @@ const Header = ({ style, selectedDisplay }) => {
   } else {
     displayName = <span><i className="fa fa-long-arrow-left" /> select a display to view...</span>;
   }
-  // <div style={style.logo}>logo</div>
   return (
     <div style={style.outer}>
       <DisplaySelect />
@@ -57,16 +56,6 @@ const styleSelector = createSelector(
         lineHeight: `${ui.header.height}px`,
         fontSize: ui.header.fontSize,
         fontWeight: 300
-      },
-      logo: {
-        width: ui.sideButtons.width,
-        height: ui.header.height,
-        boxSizing: 'border-box',
-        color: '#ccc',
-        background: '#eee',
-        textAlign: 'center',
-        lineHeight: `${ui.sideButtons.width - 1}px`,
-        display: 'inline-block'
       },
       title: {
         position: 'absolute',
