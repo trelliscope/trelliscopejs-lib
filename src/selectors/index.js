@@ -62,6 +62,10 @@ export const uiConstsSelector = () => (
         height: 15,
         fontSize: 12
       }
+    },
+    trans: {
+      duration: '300ms',
+      timing: 'ease'
     }
   }
 );

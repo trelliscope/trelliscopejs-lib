@@ -66,8 +66,8 @@ const stateSelector = createSelector(
     style: {
       base: {
         transitionProperty: 'left',
-        transitionDuration: '0.5s',
-        transitionTimingFunction: 'ease-in-out',
+        transitionDuration: ui.trans.duration,
+        transitionTimingFunction: ui.trans.timing,
         position: 'absolute',
         left: ui.sideButtons.width,
         top: ui.header.height,
@@ -81,8 +81,8 @@ const stateSelector = createSelector(
       },
       hidden: {
         transitionProperty: 'left',
-        transitionDuration: '0.5s',
-        transitionTimingFunction: 'ease-in-out',
+        transitionDuration: ui.trans.duration,
+        transitionTimingFunction: ui.trans.timing,
         left: ui.sideButtons.width - ui.sidebar.width
       },
       header: {

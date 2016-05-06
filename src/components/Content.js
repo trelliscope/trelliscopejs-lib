@@ -131,7 +131,9 @@ const styleSelector = createSelector(
         },
         panel: {
           bounding: {
-            transition: 'all 0.5s ease-in-out',
+            transitionProperty: 'all',
+            transitionDuration: ui.trans.duration,
+            transitionTimingFunction: ui.trans.timing,
             position: 'fixed',
             overflow: 'hidden',
             width: newW,
@@ -141,7 +143,9 @@ const styleSelector = createSelector(
             border: '1px solid #ddd'
           },
           panel: {
-            transition: 'all 0.5s ease-in-out',
+            transitionProperty: 'all',
+            transitionDuration: ui.trans.duration,
+            transitionTimingFunction: ui.trans.timing,
             width: newW,
             height: newH,
             boxSizing: 'border-box',
@@ -151,13 +155,17 @@ const styleSelector = createSelector(
             color: '#bbb'
           },
           panelContent: {
-            transition: 'all 0.5s ease-in-out',
+            transitionProperty: 'all',
+            transitionDuration: ui.trans.duration,
+            transitionTimingFunction: ui.trans.timing,
             display: 'block',
             width: newW,
             height: newH
           },
           labelTable: {
-            transition: 'all 0.5s ease-in-out',
+            transitionProperty: 'all',
+            transitionDuration: ui.trans.duration,
+            transitionTimingFunction: ui.trans.timing,
             width: newW,
             padding: 0,
             tableLayout: 'fixed',
@@ -165,7 +173,9 @@ const styleSelector = createSelector(
             boxSizing: 'border-box'
           },
           labelRow: {
-            transition: 'all 0.5s ease-in-out',
+            transitionProperty: 'all',
+            transitionDuration: ui.trans.duration,
+            transitionTimingFunction: ui.trans.timing,
             width: newW,
             height: labelHeight,
             fontSize: labelHeight - 12,
