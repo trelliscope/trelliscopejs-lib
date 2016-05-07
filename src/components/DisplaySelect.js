@@ -19,8 +19,7 @@ class DisplaySelect extends React.Component {
       loaded: false,
       displayList: [],
       open: false,
-      btnScale: 1,
-      clicked: false
+      btnScale: 1
     };
   }
   componentDidMount() {
@@ -31,14 +30,15 @@ class DisplaySelect extends React.Component {
       });
     Mousetrap.bind(['o'], this.handleKey);
 
-    const elem = ReactDOM.findDOMNode(this.refs.attnCircle);
-
     const attnInterval = setInterval(() => {
-      if (this.state.clicked) {
+      const elem = ReactDOM.findDOMNode(this.refs.attnCircle);
+      if (this.props.selectedDisplay.name !== '') {
         clearInterval(attnInterval);
       }
-      elem.style.transform = `scale(${this.state.btnScale})`;
-      this.setState({ btnScale: this.state.btnScale === 1 ? 0.85 : 1 });
+      if (elem) {
+        elem.style.transform = `scale(${this.state.btnScale})`;
+        this.setState({ btnScale: this.state.btnScale === 1 ? 0.85 : 1 });
+      }
     }, 750);
   }
   componentWillUnmount() {
@@ -46,9 +46,7 @@ class DisplaySelect extends React.Component {
   }
   handleOpen = () => {
     if (this.state.loaded) {
-      // this.props.handleClick(
-      //   this.state.displayList[0].name, this.state.displayList[0].group);
-      this.setState({ open: true, clicked: true });
+      this.setState({ open: true });
     }
   }
   handleKey = () => {
@@ -88,7 +86,7 @@ class DisplaySelect extends React.Component {
         </div>
       </div>
     );
-    if (this.state.clicked) {
+    if (this.props.selectedDisplay.name !== '' || this.state.open) {
       attnDiv = '';
     }
 
@@ -118,14 +116,17 @@ class DisplaySelect extends React.Component {
 
 DisplaySelect.propTypes = {
   style: React.PropTypes.object,
+  selectedDisplay: React.PropTypes.object,
   handleClick: React.PropTypes.func
 };
 
 // ------ redux container ------
 
+const selectedDisplaySelector = state => state.selectedDisplay;
+
 const styleSelector = createSelector(
-  uiConstsSelector,
-  (ui) => ({
+  uiConstsSelector, selectedDisplaySelector,
+  (ui, sd) => ({
     style: {
       attn: {
         outer: {
@@ -184,7 +185,8 @@ const styleSelector = createSelector(
           borderColor: emphasize(ui.header.button.active.background, 0.4)
         }
       }
-    }
+    },
+    selectedDisplay: sd
   })
 );
 
