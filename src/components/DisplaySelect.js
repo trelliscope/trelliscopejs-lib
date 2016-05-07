@@ -127,9 +127,6 @@ const styleSelector = createSelector(
   uiConstsSelector,
   (ui) => ({
     style: {
-      main: {
-
-      },
       attn: {
         outer: {
           position: 'absolute',
@@ -178,7 +175,9 @@ const styleSelector = createSelector(
         borderRight: '1px solid',
         borderColor: ui.header.button.active.background,
         // borderColor: ui.header.borderColor,
+        transition: 'background 250ms',
         ':hover': {
+          transition: 'background 250ms',
           background: emphasize(ui.header.button.active.background, 0.4),
           color: 'white',
           cursor: 'pointer',

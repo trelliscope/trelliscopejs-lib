@@ -107,16 +107,19 @@ const stateSelector = createSelector(
         borderBottom: '1px solid',
         borderColor: ui.sideButtons.button.borderColor,
         userSelect: 'none',
-        transition: 'color 0.2s ease, background 0.2s ease',
+        transition: 'color 0.2s, background 0.2s',
         ':hover': {
+          transition: 'color 0.2s, background 0.2s',
           background: ui.sideButtons.button.hover.background,
           cursor: 'pointer'
         }
       },
       active: {
+        transition: 'color 0.2s, background 0.2s',
         background: 'white',
         color: ui.sideButtons.button.active.color,
         ':hover': {
+          transition: 'color 0.2s, background 0.2s',
           background: ui.sideButtons.button.active.background
         }
       }
