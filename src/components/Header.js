@@ -9,10 +9,12 @@ import Pagination from './Pagination';
 const Header = ({ style, selectedDisplay }) => {
   let displayName = '';
   let iconStyle = { visibility: 'hidden' };
+  let pagination = '';
   if (selectedDisplay.name !== '') {
     displayName = `${selectedDisplay.group} /
       ${selectedDisplay.name}`;
     iconStyle = { color: '#aaa', fontSize: 12 };
+    pagination = <Pagination />;
   } else {
     displayName = <span><i className="fa fa-long-arrow-left" /> select a display to view...</span>;
   }
@@ -22,7 +24,7 @@ const Header = ({ style, selectedDisplay }) => {
       <div style={style.display}>
         {displayName} <i style={iconStyle} className="fa fa-info-circle" />
       </div>
-      <Pagination />
+      {pagination}
       <div style={style.title}>Trelliscope</div>
     </div>
   );

@@ -1,9 +1,21 @@
-import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_PAGENUM } from '../constants.js';
+import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER } from '../constants.js';
 
-export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row' }, action) => {
+export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }, action) => {
   switch (action.type) {
-    case SET_LAYOUT:
-      return Object.assign({}, state, action.layout);
+    case SET_LAYOUT: {
+      // if the layout change was to nrow / ncol
+      // then we need to recompute pageNum
+      const obj = action.layout;
+      if (action.layout.nrow || action.layout.ncol) {
+        // if user has put garbage into nrow or ncol field, keep original state
+        if (isNaN(action.layout.nrow) || isNaN(action.layout.ncol)) {
+          return Object.assign({}, state, {});
+        }
+        const prevPanelIndex = state.nrow * state.ncol * (state.pageNum - 1) + 1;
+        obj.pageNum = Math.ceil(prevPanelIndex / (action.layout.nrow * action.layout.ncol));
+      }
+      return Object.assign({}, state, obj);
+    }
     default:
   }
   return state;
@@ -31,20 +43,6 @@ export const filter = (state = [], action) => {
   switch (action.type) {
     case SET_FILTER:
       return Object.assign([], state, action.filter);
-    default:
-  }
-  return state;
-};
-
-// let pn = Math.round(action.pageNum);
-// if (pn < 1) {
-//   pn = 1;
-// }
-
-export const pageNum = (state = 1, action) => {
-  switch (action.type) {
-    case SET_PAGENUM:
-      return action.n;
     default:
   }
   return state;

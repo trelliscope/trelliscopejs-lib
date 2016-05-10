@@ -96,7 +96,7 @@ class DisplaySelect extends React.Component {
         style={[this.props.style.button, styleOverride]}
       >
         {attnDiv}
-        <i className="fa fa-folder-open"></i>
+        <i className="fa fa-folder-open" style={{ paddingLeft: 4 }}></i>
         <Dialog
           title="Select a Display"
           actions={actions}

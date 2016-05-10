@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-export const pageNumSelector = state => state.pageNum;
+export const pageNumSelector = state => state.layout.pageNum;
 export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;
 export const cogInterfaceSelector = state => state._cogInterface;
 export const filterSelector = state => state.filter;
@@ -9,32 +9,6 @@ export const layoutSelector = state => state.layout;
 export const labelsSelector = state => state.labels;
 export const aspectSelector = state =>
   state._displayInfo.info.height / state._displayInfo.info.width;
-
-const keepRecord = (rec, filt) => {
-  let keep = true;
-  switch (filt.type) {
-    case 'regex':
-      if (rec.match(filt.value) === null) {
-        keep = false;
-      }
-      break;
-    case 'range':
-      if (filt.value.from && rec < filt.value.from) {
-        keep = false;
-      }
-      if (filt.value.to && rec > filt.value.to) {
-        keep = false;
-      }
-      break;
-    case 'select':
-      if (filt.value.indexOf(rec) < 0) {
-        keep = false;
-      }
-      break;
-    default:
-  }
-  return keep;
-};
 
 const sortFn = (property) => {
   let sortOrder = 1;
@@ -60,6 +34,32 @@ const multiSort = (args) => {
     }
     return result;
   };
+};
+
+const keepRecord = (rec, filt) => {
+  let keep = true;
+  switch (filt.type) {
+    case 'regex':
+      if (rec.match(filt.value) === null) {
+        keep = false;
+      }
+      break;
+    case 'range':
+      if (filt.value.from && rec < filt.value.from) {
+        keep = false;
+      }
+      if (filt.value.to && rec > filt.value.to) {
+        keep = false;
+      }
+      break;
+    case 'select':
+      if (filt.value.indexOf(rec) < 0) {
+        keep = false;
+      }
+      break;
+    default:
+  }
+  return keep;
 };
 
 export const JSONFilterIndexSelector = createSelector(
@@ -119,4 +119,9 @@ export const currentJSONIndexSelector = createSelector(
     }
     return result;
   }
+);
+
+export const JSONFilterCardinalitySelector = createSelector(
+  JSONFilterIndexSelector,
+  (ci) => ci.length
 );
