@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
+  REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   REQUEST_COGIFACE, RECEIVE_COGIFACE } from '../constants.js';
 
 export const setActiveSidebar = (active) => (
@@ -21,6 +22,18 @@ export const setSort = (sort) => (
 
 export const setFilter = (filter) => (
   { type: SET_FILTER, filter }
+);
+
+export const requestDisplayList = () => (
+  { type: REQUEST_DISPLAY_LIST }
+);
+
+export const receiveDisplayList = (json) => (
+  {
+    type: RECEIVE_DISPLAY_LIST,
+    list: json,
+    receivedAt: Date.now()
+  }
 );
 
 export const setSelectedDisplay = (name, group) => (
@@ -63,6 +76,18 @@ export const fetchCogInterfaceInfo = (dispatch, iface) => {
     }
   );
 };
+
+export const fetchDisplayList = () =>
+  (dispatch) => {
+    dispatch(requestDisplayList());
+
+    return fetch('vdb/displays/displayList.json')
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveDisplayList(json));
+      }
+    );
+  };
 
 export const fetchDisplay = (name, group) =>
   (dispatch) => {

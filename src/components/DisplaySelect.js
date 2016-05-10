@@ -2,32 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Radium from 'radium';
 import { connect } from 'react-redux';
-import fetch from 'isomorphic-fetch';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplay } from '../actions';
+import { setSelectedDisplay, fetchDisplayList, fetchDisplay } from '../actions';
 import { uiConstsSelector } from '../selectors';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
-      displayList: [],
       open: false,
       btnScale: 1
     };
   }
   componentDidMount() {
-    fetch('vdb/displays/displayList.json')
-      .then(response => response.json())
-      .then(json => {
-        this.setState({ displayList: json, loaded: true });
-      });
+    this.props.loadDisplayList();
+
     Mousetrap.bind(['o'], this.handleKey);
 
     const attnInterval = setInterval(() => {
@@ -45,7 +39,7 @@ class DisplaySelect extends React.Component {
     Mousetrap.unbind(['o']);
   }
   handleOpen = () => {
-    if (this.state.loaded) {
+    if (this.props.displayList && this.props.displayList.isLoaded) {
       this.setState({ open: true });
     }
   }
@@ -75,7 +69,7 @@ class DisplaySelect extends React.Component {
         borderColor: '#ccc'
       }
     };
-    if (this.state.loaded) {
+    if (this.props.displayList && this.props.displayList.isLoaded) {
       styleOverride = { };
     }
     let attnDiv = (
@@ -105,7 +99,7 @@ class DisplaySelect extends React.Component {
           onRequestClose={this.handleClose}
         >
           <DisplayList
-            displayInfo={this.state.displayList}
+            displayInfo={this.props.displayList.list}
             handleClick={this.handleSelect}
           />
         </Dialog>
@@ -116,17 +110,20 @@ class DisplaySelect extends React.Component {
 
 DisplaySelect.propTypes = {
   style: React.PropTypes.object,
+  handleClick: React.PropTypes.func,
+  loadDisplayList: React.PropTypes.func,
   selectedDisplay: React.PropTypes.object,
-  handleClick: React.PropTypes.func
+  displayList: React.PropTypes.object
 };
 
 // ------ redux container ------
 
+const displayListSelector = state => state._displayList;
 const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
-  uiConstsSelector, selectedDisplaySelector,
-  (ui, sd) => ({
+  uiConstsSelector, selectedDisplaySelector, displayListSelector,
+  (ui, selectedDisplay, displayList) => ({
     style: {
       attn: {
         outer: {
@@ -186,7 +183,8 @@ const styleSelector = createSelector(
         }
       }
     },
-    selectedDisplay: sd
+    selectedDisplay,
+    displayList
   })
 );
 
@@ -198,6 +196,9 @@ const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group) => {
     dispatch(setSelectedDisplay(name, group));
     dispatch(fetchDisplay(name, group));
+  },
+  loadDisplayList: () => {
+    dispatch(fetchDisplayList());
   }
 });
 
