@@ -16,12 +16,12 @@ const Header = ({ style, selectedDisplay }) => {
     iconStyle = { color: '#aaa', fontSize: 12 };
     pagination = <Pagination />;
   } else {
-    displayName = <span><i className="fa fa-long-arrow-left" /> select a display to view...</span>;
+    displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
   }
   return (
     <div style={style.outer}>
       <DisplaySelect />
-      <div style={style.display}>
+      <div style={style.displayName}>
         {displayName} <i style={iconStyle} className="fa fa-info-circle" />
       </div>
       {pagination}
@@ -72,9 +72,12 @@ const styleSelector = createSelector(
         background: '#FF4308',
         color: 'white'
       },
-      display: {
+      displayName: {
         display: 'inline-block',
-        paddingLeft: 18
+        paddingLeft: 18,
+        position: 'fixed',
+        top: 0,
+        left: ui.header.height
       }
     },
     selectedDisplay: sd

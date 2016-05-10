@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 
 export const uiConstsSelector = () => (
   {
+    fontFamily: '"Open Sans", sans-serif',
     header: {
       height: 45,
       fontSize: 16,

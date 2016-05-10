@@ -11,11 +11,11 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants.js';
 
 const buttons = [
-  { icon: 'fa fa-th', title: SB_PANEL_LAYOUT, key: 'g' },
-  { icon: 'fa fa-list-ul', title: SB_PANEL_LABELS, key: 'l' },
-  { icon: 'fa fa-filter', title: SB_PANEL_FILTER, key: 'f' },
-  { icon: 'fa fa-sort-amount-asc', title: SB_PANEL_SORT, key: 's' },
-  { icon: 'fa fa-cog', title: SB_CONFIG, key: 'c' }
+  { icon: 'icon-th', title: SB_PANEL_LAYOUT, key: 'g' },
+  { icon: 'icon-list-ul', title: SB_PANEL_LABELS, key: 'l' },
+  { icon: 'icon-filter', title: SB_PANEL_FILTER, key: 'f' },
+  { icon: 'icon-sort-amount-asc', title: SB_PANEL_SORT, key: 's' },
+  { icon: 'icon-cog', title: SB_CONFIG, key: 'c' }
 ];
 
 class SideButtons extends React.Component {

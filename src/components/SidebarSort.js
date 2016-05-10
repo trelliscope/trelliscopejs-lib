@@ -39,7 +39,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
                         handleChange(sort2);
                       }}
                     >
-                      <i className={`fa fa-chevron-${ic}`}></i>
+                      <i className={`icon-chevron-${ic}`}></i>
                     </FloatingActionButton>
                   </td>
                   <td style={style.labels}>
@@ -51,7 +51,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
                   <td style={style.closeButton}>
                     <IconButton
                       iconStyle={{ fontSize: 16, color: '#aaa' }}
-                      iconClassName="fa fa-times"
+                      iconClassName="icon-times"
                       onClick={() => {
                         const sort2 = Object.assign([], sort);
                         sort2.splice(i, 1);

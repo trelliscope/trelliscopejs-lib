@@ -141,7 +141,7 @@ const styleSelector = createSelector(
         height: 28,
         fontSize: 15,
         borderRadius: 2,
-        fontFamily: '"Open Sans", sans-serif',
+        fontFamily: ui.fontFamily,
         border: '1px solid rgb(204, 204, 204)',
         display: 'block',
         // -webkit-appearance: 'none',

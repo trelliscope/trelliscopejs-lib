@@ -4,7 +4,6 @@ import { createSelector } from 'reselect';
 import Radium from 'radium';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
-import NumericInput from './NumericInput';
 import { uiConstsSelector } from '../selectors';
 import { setLayout } from '../actions';
 import { JSONFilterCardinalitySelector, nPerPageSelector, pageNumSelector }
@@ -56,14 +55,14 @@ class Pagination extends React.Component {
         <IconButton
           style={style.button}
           iconStyle={style.icon}
-          iconClassName="fa fa-chevron-left"
+          iconClassName="icon-chevron-left"
           onClick={() => this.pageLeft()}
         />
         {this.props.n} / {this.props.totPages}
         <IconButton
           style={style.button}
           iconStyle={style.icon}
-          iconClassName="fa fa-chevron-right"
+          iconClassName="icon-chevron-right"
           onClick={() => this.pageRight()}
         />
       </div>

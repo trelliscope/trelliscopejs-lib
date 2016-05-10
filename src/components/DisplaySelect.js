@@ -96,7 +96,7 @@ class DisplaySelect extends React.Component {
         style={[this.props.style.button, styleOverride]}
       >
         {attnDiv}
-        <i className="fa fa-folder-open" style={{ paddingLeft: 4 }}></i>
+        <i className="icon-folder-open" style={{ paddingLeft: 3 }}></i>
         <Dialog
           title="Select a Display"
           actions={actions}
@@ -144,7 +144,8 @@ const styleSelector = createSelector(
           width: 45,
           top: 0,
           left: 0,
-          transition: 'transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+          transition: ['transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
+            '0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'].join(' '),
           opacity: 1,
           transform: 'scale(0.85)'
         },
@@ -160,15 +161,14 @@ const styleSelector = createSelector(
         }
       },
       button: {
-        // position: 'absolute',
+        position: 'fixed',
         boxSizing: 'border-box',
-        // top: 0,
-        // right: 0,
-        display: 'inline-block',
+        top: 0,
+        left: 0,
         height: ui.header.height,
         width: ui.header.height,
         fontSize: 16,
-        lineHeight: `${ui.header.height}px`,
+        lineHeight: `${ui.header.height + 2}px`,
         background: ui.header.button.active.background,
         color: 'white',
         // color: ui.header.button.color,
