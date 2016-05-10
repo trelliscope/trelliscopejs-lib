@@ -7,10 +7,6 @@ export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 },
       // then we need to recompute pageNum
       const obj = action.layout;
       if (action.layout.nrow || action.layout.ncol) {
-        // if user has put garbage into nrow or ncol field, keep original state
-        if (isNaN(action.layout.nrow) || isNaN(action.layout.ncol)) {
-          return Object.assign({}, state, {});
-        }
         const prevPanelIndex = state.nrow * state.ncol * (state.pageNum - 1) + 1;
         obj.pageNum = Math.ceil(prevPanelIndex / (action.layout.nrow * action.layout.ncol));
       }

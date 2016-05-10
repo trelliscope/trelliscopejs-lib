@@ -20,9 +20,11 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               value={layout.nrow}
               size={5} min={1} step={1}
               style={style.input}
-              onChange={(nr) => handleChange({
-                nrow: nr, ncol: layout.ncol, arrange: layout.arrange
-              })}
+              onChange={(nr) => {
+                if (!isNaN(nr)) {
+                  handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange });
+                }
+              }}
             />
           </div>
         </div>
@@ -34,9 +36,11 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               value={layout.ncol}
               size={5} min={1} step={1}
               style={style.input}
-              onChange={(nc) => handleChange({
-                nrow: layout.nrow, ncol: nc, arrange: layout.arrange
-              })}
+              onChange={(nc) => {
+                if (!isNaN(nc)) {
+                  handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange });
+                }
+              }}
             />
           </div>
         </div>
