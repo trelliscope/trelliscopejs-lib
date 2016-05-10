@@ -4,7 +4,7 @@
   "description": "trelliscopejs",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html # && cp -r vdb dist/",
+    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ # && cp -r vdb dist/",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "deploy": "gulp deploy",
     "lint": "eslint src"
