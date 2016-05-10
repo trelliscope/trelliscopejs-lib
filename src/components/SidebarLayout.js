@@ -21,7 +21,6 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               arrows
               value={layout.nrow}
               size={5} min={1} step={1}
-              style={style.input}
               onChange={(nr) =>
                 handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
               }
@@ -36,7 +35,6 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               arrows
               value={layout.ncol}
               size={5} min={1} step={1}
-              style={style.input}
               onChange={(nc) =>
                 handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
               }
@@ -105,25 +103,6 @@ const stateSelector = createSelector(
       },
       ninput: {
         float: 'right'
-      },
-      input: {
-        wrap: {
-          borderRadius: 0,
-          fontSize: 13
-        },
-        input: {
-          height: 28,
-          fontSize: 15,
-          borderRadius: 0,
-          fontFamily: '"Open Sans", sans-serif',
-          padding: 10,
-          border: '1px solid #ccc',
-          display: 'block'
-        },
-        btn: {
-          boxShadow: 'none',
-          cursor: 'pointer'
-        }
       },
       radio: {
         marginBottom: 5,
