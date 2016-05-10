@@ -72,10 +72,10 @@ export const fetchDisplay = (name, group) =>
       .then(response => response.json())
       .then(json => {
         dispatch(receiveDisplay(name, group, json));
-        dispatch(setLayout(json.state.layout));
         dispatch(setLabels(json.state.labels));
         dispatch(setSort(json.state.sort));
         dispatch(setFilter(json.state.filter));
+        dispatch(setLayout(json.state.layout));
         fetchCogInterfaceInfo(dispatch, json.cogInterface);
       }
     );

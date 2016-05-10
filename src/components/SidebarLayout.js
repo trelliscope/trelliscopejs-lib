@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NumericInput } from 'react-numeric-input';
+// import { NumericInput } from 'react-numeric-input';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
 import Radium from 'radium';
+import NumericInput from './NumericInput';
 import { createSelector } from 'reselect';
 import { setLayout } from '../actions';
 import { uiConstsSelector } from '../selectors';
@@ -17,14 +18,13 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
           <div style={style.label}>Rows:</div>
           <div style={style.ninput}>
             <NumericInput
+              arrows
               value={layout.nrow}
               size={5} min={1} step={1}
               style={style.input}
-              onChange={(nr) => {
-                if (!isNaN(nr)) {
-                  handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange });
-                }
-              }}
+              onChange={(nr) =>
+                handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
+              }
             />
           </div>
         </div>
@@ -33,14 +33,13 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
           <div style={style.label}>Columns:</div>
           <div style={style.ninput}>
             <NumericInput
+              arrows
               value={layout.ncol}
               size={5} min={1} step={1}
               style={style.input}
-              onChange={(nc) => {
-                if (!isNaN(nc)) {
-                  handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange });
-                }
-              }}
+              onChange={(nc) =>
+                handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
+              }
             />
           </div>
         </div>
@@ -76,7 +75,7 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
 
 SidebarLayout.propTypes = {
   style: React.PropTypes.object,
-  labels: React.PropTypes.object,
+  layout: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 

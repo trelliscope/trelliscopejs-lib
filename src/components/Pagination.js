@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import Radium from 'radium';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
+import NumericInput from './NumericInput';
 import { uiConstsSelector } from '../selectors';
 import { setLayout } from '../actions';
 import { JSONFilterCardinalitySelector, nPerPageSelector, pageNumSelector }

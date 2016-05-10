@@ -5,10 +5,13 @@ export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 },
     case SET_LAYOUT: {
       // if the layout change was to nrow / ncol
       // then we need to recompute pageNum
-      const obj = action.layout;
-      if (action.layout.nrow || action.layout.ncol) {
+      const obj = Object.assign({}, action.layout, {});
+      if (obj.nrow || obj.ncol) {
         const prevPanelIndex = state.nrow * state.ncol * (state.pageNum - 1) + 1;
-        obj.pageNum = Math.ceil(prevPanelIndex / (action.layout.nrow * action.layout.ncol));
+        obj.pageNum = Math.ceil(prevPanelIndex / (obj.nrow * obj.ncol));
+        if (isNaN(obj.pageNum)) {
+          obj.pageNum = 1;
+        }
       }
       return Object.assign({}, state, obj);
     }

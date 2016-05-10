@@ -21,7 +21,6 @@ class Panel extends React.Component {
     setTimeout(() => (elem.style.opacity = 1), 10);
   }
   render() {
-    // console.log(this.props.dimStyle.left);
     return (
       <div style={[this.props.style.bounding, this.props.dimStyle]}>
         <div style={this.props.style.panel}>
