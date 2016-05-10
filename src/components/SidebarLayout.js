@@ -55,13 +55,24 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
           >
             <RadioButton
               value="row"
-              label="By row"
-              style={style.radio}
+              label={
+                <span style={style.input.labelSpan}>
+                  By row&nbsp;&nbsp;
+                  <i className="icon-byrow" style={style.input.icon} />
+                </span>}
+              style={style.input.radio}
+              labelStyle={style.input.label}
             />
             <RadioButton
               value="column"
-              label="By column"
-              style={style.radio}
+              label={
+                <span style={style.input.labelSpan}>
+                  By column&nbsp;&nbsp;
+                  <i className="icon-bycol" style={style.input.icon} />
+                </span>
+              }
+              style={style.input.radio}
+              labelStyle={style.input.label}
             />
           </RadioButtonGroup>
         </div>
@@ -104,9 +115,22 @@ const stateSelector = createSelector(
       ninput: {
         float: 'right'
       },
-      radio: {
-        marginBottom: 5,
-        marginTop: 0
+      input: {
+        radio: {
+          marginBottom: 5,
+          marginTop: 0
+        },
+        label: {
+          marginTop: -8
+        },
+        labelSpan: {
+          lineHeight: '40px',
+          verticalAlign: 'middle'
+        },
+        icon: {
+          fontSize: 23,
+          verticalAlign: 'text-bottom'
+        }
       }
     },
     layout
