@@ -3,7 +3,7 @@ import Radium from 'radium';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-// import marked from 'marked';
+import marked from 'marked';
 // import katex from 'katex';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -15,10 +15,19 @@ class DisplayInfo extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    Mousetrap.bind(['i'], this.handleKey);
+    if (this.props.active) {
+      Mousetrap.bind(['i'], this.handleKey);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.active) {
+      Mousetrap.bind(['i'], this.handleKey);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['i']);
+    if (this.props.active) {
+      Mousetrap.unbind(['i']);
+    }
   }
   handleOpen = () => {
     this.setState({ open: true });
@@ -38,18 +47,11 @@ class DisplayInfo extends React.Component {
       />
     ];
 
-    const mdDesc = '';
-    // if (this.props.displayInfo.isLoaded) {
-    //   mdDesc = marked(this.props.displayInfo.info.mdDesc);
-    //   // mdDesc = katex.renderToString(mdDesc);
-    // }
-
-    return (
-      <div
-        onClick={this.handleOpen}
-        style={this.props.style.button}
-      >
-        <i className="icon-info" style={{ paddingLeft: 2, lineHeight: '45px' }}></i>
+    let dialogContent = '';
+    if (this.props.displayInfo.isLoaded) {
+      const mdDesc = marked(this.props.displayInfo.info.mdDesc);
+      // mdDesc = katex.renderToString(mdDesc);
+      dialogContent = (
         <Dialog
           title="Information About This Display"
           actions={actions}
@@ -57,24 +59,54 @@ class DisplayInfo extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <div dangerouslySetInnerHTML={{ __html: mdDesc }} />
-          <h3>Display Attributes</h3>
-          <ul>
-          </ul>
-          <h3>Cognostics</h3>
-          <p>To help navigate the panels, the following cognostics have been computed:</p>
-          <ul>
-          </ul>
-          <h3>Data</h3>
-          <p>The input data source is a </p>
-          <p>One subset of the data looks like this:</p>
-          <pre><code>
-          </code></pre>
-          <h3>Panel Function</h3>
-          The R code that generates each panel ():
-          <pre><code>
-          </code></pre>
+          <div style={this.props.style.modal.container}>
+            <div dangerouslySetInnerHTML={{ __html: mdDesc }} />
+            <h3>Display Attributes</h3>
+            <ul>
+              <li>
+                <strong>name</strong>: {this.props.displayInfo.info.name}
+              </li>
+              <li>
+                <strong>description</strong>: {this.props.displayInfo.info.desc}
+              </li>
+              <li>
+                <strong>updated</strong>: {this.props.displayInfo.info.updated}
+              </li>
+              <li>
+                <strong># panels</strong>: {this.props.displayInfo.info.n}
+              </li>
+            </ul>
+            <h3>Cognostics</h3>
+            <p>To help navigate the panels, the following cognostics have been computed:</p>
+            <ul>
+              {this.props.displayInfo.info.cogInfo.map((d, i) => (
+                <li key={i}>
+                  <strong>{d.name}</strong>: {d.desc}
+                </li>
+              ))}
+            </ul>
+            <h3>Data</h3>
+            <p>The data for one subset has the following structure:</p>
+            <pre><code>
+            {this.props.displayInfo.info.example}
+            </code></pre>
+            <h3>Panel Function</h3>
+            The R code that generates each panel:
+            <pre><code>
+            {this.props.displayInfo.info.panelFn}
+            </code></pre>
+          </div>
         </Dialog>
+      );
+    }
+
+    return (
+      <div
+        onClick={this.handleOpen}
+        style={this.props.style.button}
+      >
+        <i className="icon-info" style={{ paddingLeft: 2, lineHeight: '45px' }}></i>
+        {dialogContent}
       </div>
     );
   }
@@ -84,7 +116,8 @@ DisplayInfo.propTypes = {
   style: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
-  handleClick: React.PropTypes.func
+  handleClick: React.PropTypes.func,
+  active: React.PropTypes.bool
 };
 
 // ------ redux container ------
@@ -118,10 +151,17 @@ const styleSelector = createSelector(
           background: '#eee',
           cursor: 'pointer'
         }
+      },
+      modal: {
+        container: {
+          overflowY: 'auto',
+          maxHeight: 520
+        }
       }
     },
     selectedDisplay,
-    displayInfo
+    displayInfo,
+    active: selectedDisplay.name !== ''
   })
 );
 
