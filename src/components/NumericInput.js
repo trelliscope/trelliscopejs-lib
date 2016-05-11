@@ -24,7 +24,7 @@ class NumericInput extends React.Component {
       ReactDOM.findDOMNode(this.refs.numericinput).blur();
       return false;
     });
-    this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c'],
+    this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
       (event) => event.stopPropagation());
   }
   componentWillReceiveProps(nextProps) {
@@ -34,7 +34,7 @@ class NumericInput extends React.Component {
     this.mousetrap.unbind(['up']);
     this.mousetrap.unbind(['down']);
     this.mousetrap.unbind(['esc']);
-    this.mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c']);
+    this.mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r']);
   }
   increment = () => {
     const newVal = this.state.value + this.state.step;
