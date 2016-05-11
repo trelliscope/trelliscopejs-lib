@@ -92,7 +92,7 @@ class DisplaySelect extends React.Component {
         {attnDiv}
         <i className="icon-folder-open" style={{ paddingLeft: 3 }}></i>
         <Dialog
-          title="Select a Display"
+          title="Select a Display to Open"
           actions={actions}
           modal={false}
           open={this.state.open}
@@ -158,6 +158,7 @@ const styleSelector = createSelector(
         }
       },
       button: {
+        zIndex: 500,
         position: 'fixed',
         boxSizing: 'border-box',
         top: 0,
