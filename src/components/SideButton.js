@@ -17,7 +17,7 @@ const SideButton = ({ bstyle, isActive, icon, title, onClick }) => {
       style={[bstyle.base, isActive && bstyle.active, title === SB_CONFIG && bottom]}
       type={"button"} onClick={onClick}
     >
-      <i className={icon}></i>
+      <i className={icon} style={bstyle.icon}></i>
     </div>
   );
 };

@@ -112,6 +112,9 @@ const stateSelector = createSelector(
           transition: 'color 0.2s, background 0.2s',
           background: ui.sideButtons.button.hover.background,
           cursor: 'pointer'
+        },
+        icon: {
+          lineHeight: `${ui.sideButtons.width}px`
         }
       },
       active: {
