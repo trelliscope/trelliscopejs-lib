@@ -14,10 +14,19 @@ class RelatedDisplays extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    Mousetrap.bind(['r'], this.handleKey);
+    if (this.props.active) {
+      Mousetrap.bind(['r'], this.handleKey);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.active) {
+      Mousetrap.bind(['r'], this.handleKey);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['r']);
+    if (this.props.active) {
+      Mousetrap.unbind(['r']);
+    }
   }
   handleOpen = () => {
     this.setState({ open: true });
@@ -49,6 +58,7 @@ class RelatedDisplays extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
+          Under construction...
           {this.props.relatedDisplays.map((d, i) => (
             <div key={i}>{d.group} / {d.name}</div>
           ))}
@@ -62,7 +72,8 @@ RelatedDisplays.propTypes = {
   style: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
   relatedDisplays: React.PropTypes.array,
-  handleClick: React.PropTypes.func
+  handleClick: React.PropTypes.func,
+  active: React.PropTypes.bool
 };
 
 // ------ redux container ------
@@ -98,7 +109,8 @@ const styleSelector = createSelector(
         }
       }
     },
-    relatedDisplays: rd
+    relatedDisplays: rd,
+    active: rd.length > 0
   })
 );
 
