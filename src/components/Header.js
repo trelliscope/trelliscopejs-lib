@@ -3,8 +3,12 @@ import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
 import { uiConstsSelector, windowWidthSelector } from '../selectors';
+import DisplayInfo from './DisplayInfo';
+import RelatedDisplays from './RelatedDisplays';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
+import HeaderLogo from './HeaderLogo';
+import { relatedDisplaysSelector } from '../selectors/display';
 
 const Header = ({ style, selectedDisplay }) => {
   let displayName = '';
@@ -21,11 +25,13 @@ const Header = ({ style, selectedDisplay }) => {
   return (
     <div style={style.outer}>
       <DisplaySelect />
+      <RelatedDisplays />
+      <DisplayInfo />
       <div style={style.displayName}>
         {displayName} <i style={iconStyle} className="fa fa-info-circle" />
       </div>
       {pagination}
-      <div style={style.title}>Trelliscope</div>
+      <HeaderLogo />
     </div>
   );
 };
@@ -40,11 +46,11 @@ Header.propTypes = {
 const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
-  windowWidthSelector, uiConstsSelector, selectedDisplaySelector,
-  (ww, ui, sd) => ({
+  windowWidthSelector, uiConstsSelector, selectedDisplaySelector, relatedDisplaysSelector,
+  (ww, ui, sd, rd) => ({
     style: {
       outer: {
-        position: 'absolute',
+        position: 'fixed',
         boxSizing: 'border-box',
         top: 0,
         left: 0,
@@ -59,25 +65,14 @@ const styleSelector = createSelector(
         fontSize: ui.header.fontSize,
         fontWeight: 300
       },
-      title: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        // display: 'inline-block',
-        borderColor: ui.header.borderColor,
-        height: ui.header.height,
-        textAlign: 'center',
-        width: ui.header.titleWidth,
-        fontSize: 17,
-        background: '#FF4308',
-        color: 'white'
-      },
       displayName: {
         display: 'inline-block',
         paddingLeft: 18,
         position: 'fixed',
         top: 0,
-        left: ui.header.height
+        transition: 'left 0.5s ease',
+        left: ui.header.height *
+          (1 + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1))
       }
     },
     selectedDisplay: sd
