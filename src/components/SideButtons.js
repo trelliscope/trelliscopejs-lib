@@ -30,19 +30,23 @@ class SideButtons extends React.Component {
     Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
   }
   handleKey = (e, k) => {
-    // allow keyboard shortcuts for sidebars
-    // if 'esc', close it, otherwise, open according to key code
-    if (k === 'esc' || k === 'enter') {
-      this.props.setActive('');
+    if (e.target.nodeName === 'INPUT') {
+      e.stopPropagation();
     } else {
-      const which = [];
-      for (let ii = 0; ii < buttons.length; ii++) {
-        if (buttons[ii].key === k) {
-          which.push(buttons[ii].title);
+      // allow keyboard shortcuts for sidebars
+      // if 'esc', close it, otherwise, open according to key code
+      if (k === 'esc' || k === 'enter') {
+        this.props.setActive('');
+      } else {
+        const which = [];
+        for (let ii = 0; ii < buttons.length; ii++) {
+          if (buttons[ii].key === k) {
+            which.push(buttons[ii].title);
+          }
         }
-      }
-      if (which.length > 0) {
-        this.props.setActive(which[0]);
+        if (which.length > 0) {
+          this.props.setActive(which[0]);
+        }
       }
     }
   }
