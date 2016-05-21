@@ -2,6 +2,7 @@ import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
 import { findDOMNode } from 'react-dom';
+import fetch from 'isomorphic-fetch';
 
 class Panel extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class Panel extends React.Component {
   }
   componentDidMount() {
     const filebase = `vdb/displays/${this.props.iface.group}/${this.props.iface.name}`;
-    fetch(`${filebase}/png/${this.props.panelKey}.json`)
+    this.serverRequest = fetch(`${filebase}/png/${this.props.panelKey}.json`)
       .then(response => response.json())
       .then(json => {
         this.setState({ panelContent: json, loaded: true });
@@ -19,6 +20,11 @@ class Panel extends React.Component {
     const elem = findDOMNode(this);
     elem.style.opacity = 0;
     setTimeout(() => (elem.style.opacity = 1), 10);
+  }
+  componentWillUnmount() {
+    // need to do something like:
+    // this.serverRequest.abort();
+    // but I can't find a single non-jQuery JS http library that supports aborting a request
   }
   render() {
     return (
