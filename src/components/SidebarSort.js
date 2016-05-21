@@ -99,14 +99,17 @@ SidebarSort.propTypes = {
 // ------ redux container ------
 
 const sortSelector = state => state.sort;
-const cogDescSelector = state => {
-  const cogInfo = state._displayInfo.info.cogInfo;
-  const res = {};
-  for (let i = 0; i < cogInfo.length; i++) {
-    res[cogInfo[i].name] = cogInfo[i].desc;
+const displayInfoSelector = state => state._displayInfo;
+const cogDescSelector = createSelector(
+  displayInfoSelector,
+  (di) => {
+    const res = {};
+    for (let i = 0; i < di.info.cogInfo.length; i++) {
+      res[di.info.cogInfo[i].name] = di.info.cogInfo[i].desc;
+    }
+    return (res);
   }
-  return (res);
-};
+);
 
 const stateSelector = createSelector(
   uiConstsSelector, sortSelector, cogDescSelector, sidebarHeightSelector,
