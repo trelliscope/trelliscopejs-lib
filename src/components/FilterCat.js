@@ -29,14 +29,15 @@ const sortOptions = [
   { payload: 'id,desc', text: 'Order: label descending' }
 ];
 
-const FilterCat = ({ cogName, style }) => {
+const FilterCat = ({ filterState, style, handleChange }) => {
+  const sortOrder = filterState.orderValue ? filterState.orderValue : 'idx,asc';
   const iconButtonElement = <IconButton iconClassName="icon-more_vert" />;
-
-
   const extraOptionsInput = (
     <IconMenu
-      // value={this.state.filter.orderValue}
-      // onChange={this._handleSort}
+      value={sortOrder}
+      onChange={(e, value) => {
+        handleChange(Object.assign(filterState, { orderValue: value }));
+      }}
       style={style.extraOptionsInput}
       iconButtonElement={iconButtonElement}
       desktop
@@ -67,41 +68,41 @@ const FilterCat = ({ cogName, style }) => {
 
   return (
     <div style={style.container}>
-      <div style={style.innerContainer}>
-        <div
-          style={style.plotContainer}
-          // onMouseDown={this._mouseDown}
-          // onMouseLeave={this._mouseLeave}
-          // onWheel={this._wheel}
-        >
-        </div>
-        <div style={style.inputContainer}>
-          <TextField
-            hintText="regex"
-            ref="regexInput"
-            key="regexInput"
-            style={style.regexInput}
-            desktop
-            // defaultValue={this.state.regex}
-            // onChange={this._handleRegex}
-          />
-          {extraOptionsInput}
-        </div>
+      <div
+        style={style.plotContainer}
+        // onMouseDown={}
+        // onMouseLeave={}
+        // onWheel={}
+      >
       </div>
-      <div style={style.footer}>
-        <div
-          style={[style.footerIcon, style.footerClose]}
-          // onMouseDown={this._handleDeactivate}
-        >
-          <i className="icon-times-circle"></i>
-        </div>
-        <div
-          style={[style.footerIcon, style.footerReset]}
-          // onMouseDown={this._handleReset}
-        >
-          <i className="icon-undo"></i>
-        </div>
-        <div style={style.footerName}>{cogName}</div>
+      <div style={style.inputContainer}>
+        <TextField
+          hintText="regex"
+          ref="regexInput"
+          key="regexInput"
+          style={style.regexInput}
+          desktop
+          defaultValue={filterState.type === 'regex' ? filterState.value : ''}
+          onChange={(e) => {
+            let newState = {};
+            if (e.target.value === '') {
+              newState = {
+                name: filterState.name,
+                orderValue: sortOrder
+              };
+            } else {
+              newState = {
+                name: filterState.name,
+                type: 'regex',
+                value: e.target.value,
+                orderValue: sortOrder
+              };
+            }
+            // TODO: throttle this
+            handleChange(newState);
+          }}
+        />
+        {extraOptionsInput}
       </div>
     </div>
   );
@@ -109,8 +110,9 @@ const FilterCat = ({ cogName, style }) => {
 
 
 FilterCat.propTypes = {
-  cogName: React.PropTypes.string,
-  style: React.PropTypes.object
+  filterState: React.PropTypes.object,
+  style: React.PropTypes.object,
+  handleChange: React.PropTypes.func
 };
 
 export default Radium(FilterCat);

@@ -47,12 +47,6 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
         </TableBody>
       </Table>
     );
-    // <TableHeader displaySelectAll={false}>
-    //   <TableRow style={{ height: 30 }}>
-    //     <TableHeaderColumn>Name</TableHeaderColumn>
-    //     <TableHeaderColumn>Description</TableHeaderColumn>
-    //   </TableRow>
-    // </TableHeader>
   }
   return (content);
 };

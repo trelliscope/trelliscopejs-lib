@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 export const pageNumSelector = state => state.layout.pageNum;
 export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;
 export const cogInterfaceSelector = state => state._cogInterface;
-export const filterSelector = state => state.filter;
+export const filterStateSelector = state => state.filter.state;
 export const sortSelector = state => state.sort;
 export const layoutSelector = state => state.layout;
 export const labelsSelector = state => state.labels;
@@ -63,14 +63,15 @@ const keepRecord = (rec, filt) => {
 };
 
 export const JSONFilterIndexSelector = createSelector(
-  cogInterfaceSelector, filterSelector,
+  cogInterfaceSelector, filterStateSelector,
   (ci, filter) => {
     const result = [];
+    const keys = Object.keys(filter);
     if (ci.iface && ci.info && ci.iface.type === 'JSON') {
       for (let i = 0; i < ci.info.panelKey.length; i++) {
         let keep = true;
-        for (let j = 0; j < filter.length; j++) {
-          keep = keep && keepRecord(ci.info[filter[j].name][i], filter[j]);
+        for (let j = 0; j < keys.length; j++) {
+          keep = keep && keepRecord(ci.info[filter[keys[j]].name][i], filter[keys[j]]);
         }
         if (keep) {
           result.push(i);

@@ -1,4 +1,5 @@
-import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER } from '../constants.js';
+import { combineReducers } from 'redux';
+import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants.js';
 
 export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }, action) => {
   switch (action.type) {
@@ -38,11 +39,26 @@ export const sort = (state = [], action) => {
   return state;
 };
 
-export const filter = (state = [], action) => {
+const filterState = (state = {}, action) => {
   switch (action.type) {
     case SET_FILTER:
-      return Object.assign([], state, action.filter);
+      return Object.assign({}, state, action.filter);
     default:
   }
   return state;
 };
+
+const filterView = (state = {}, action) => {
+  switch (action.type) {
+    case SET_FILTER_VIEW:
+      return Object.assign({}, state, action.filterView);
+    default:
+  }
+  return state;
+};
+
+export const filter = combineReducers({
+  state: filterState,
+  view: filterView
+});
+

@@ -3,6 +3,7 @@ export const SET_LAYOUT = 'SET_LAYOUT';
 export const SET_LABELS = 'SET_LABELS';
 export const SET_SORT = 'SET_SORT';
 export const SET_FILTER = 'SET_FILTER';
+export const SET_FILTER_VIEW = 'SET_FILTER_VIEW';
 export const SELECT_DISPLAY = 'SELECT_DISPLAY';
 export const REQUEST_DISPLAY = 'REQUEST_DISPLAY';
 export const RECEIVE_DISPLAY = 'RECEIVE_DISPLAY';

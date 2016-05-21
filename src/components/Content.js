@@ -60,8 +60,10 @@ const Content = ({ style, idx, ci, layout, labels, dims }) => {
             style={style.panel}
             iface={ci.iface}
             dimStyle={{
-              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad + dims.hOffset,
-              right: dims.pWidth * el.iColIndex + (el.iColIndex + 1) * dims.pPad + dims.wOffset
+              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad +
+                dims.hOffset + el.rowIndex * 2,
+              right: dims.pWidth * el.iColIndex + (el.iColIndex + 1) * dims.pPad +
+                dims.wOffset + el.iColIndex * 2 + 1
             }}
           />
         ))}
@@ -97,8 +99,9 @@ const styleSelector = createSelector(
     const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change
-    const wExtra = pPad * (layout.ncol + 1);
-    const hExtra = pPad * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
+    // for ppad + 2, "+ 2" is border
+    const wExtra = (pPad + 2) * (layout.ncol + 1);
+    const hExtra = (pPad + 2) * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
 
     // first try stretching panels across full width:
     let newW = Math.round((cw - wExtra) / layout.ncol, 0);
@@ -136,8 +139,8 @@ const styleSelector = createSelector(
             transitionTimingFunction: ui.trans.timing,
             position: 'fixed',
             overflow: 'hidden',
-            width: newW,
-            height: newH + nLabels * labelHeight,
+            width: newW + 2,
+            height: newH + nLabels * labelHeight + 2,
             padding: 0,
             boxSizing: 'border-box',
             border: '1px solid #ddd'

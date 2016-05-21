@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
-  SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
+  SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   REQUEST_COGIFACE, RECEIVE_COGIFACE } from '../constants.js';
 
@@ -22,6 +22,10 @@ export const setSort = (sort) => (
 
 export const setFilter = (filter) => (
   { type: SET_FILTER, filter }
+);
+
+export const setFilterView = (filterView) => (
+  { type: SET_FILTER_VIEW, filterView }
 );
 
 export const requestDisplayList = () => (
@@ -100,6 +104,19 @@ export const fetchDisplay = (name, group) =>
         dispatch(setLabels(json.state.labels));
         dispatch(setSort(json.state.sort));
         dispatch(setFilter(json.state.filter));
+        // initial filter view will be those that are active
+        const active = [];
+        const inactive = [];
+        for (let i = 0; i < json.cogInfo.length; i++) {
+          if (json.cogInfo[i].filterable) {
+            if (json.state.filter[json.cogInfo[i].name] !== undefined) {
+              active.push(json.cogInfo[i].name);
+            } else {
+              inactive.push(json.cogInfo[i].name);
+            }
+          }
+        }
+        dispatch(setFilterView({ active, inactive }));
         dispatch(setLayout(json.state.layout));
         fetchCogInterfaceInfo(dispatch, json.cogInterface);
       }
