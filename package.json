@@ -34,6 +34,7 @@
     "css-loader": "^0.23.1",
     "eslint": "^2.9.0",
     "eslint-config-airbnb": "^8.0.0",
+    "eslint-plugin-import": "^1.8.0",
     "eslint-plugin-jsx-a11y": "^1.0.4",
     "eslint-plugin-react": "^5.0.1",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -50,24 +51,27 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "d3": "^3.5.16",
+    "d3": "^3.5.17",
     "isomorphic-fetch": "^2.2.1",
     "katex": "^0.6.0",
     "marked": "^0.3.5",
     "material-ui": "^0.15.0",
     "mousetrap": "^1.5.3",
     "radium": "^0.17.1",
-    "react": "^15.0.2",
+    "react": "^15.1.0",
     "react-addons-css-transition-group": "^15.0.1",
+    "react-addons-shallow-compare": "^15.1.0",
     "react-custom-scrollbars": "^4.0.0-beta.1",
     "react-delay": "0.0.3",
-    "react-dom": "^15.0.1",
+    "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
     "react-tap-event-plugin": "^1.0.0",
+    "react-virtualized": "^7.1.1",
     "redux": "^3.5.2",
     "redux-immutable": "^3.0.6",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
-    "reselect": "^2.5.1"
+    "reselect": "^2.5.1",
+    "throttle-debounce": "^1.0.1"
   }
 }
