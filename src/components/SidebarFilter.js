@@ -8,7 +8,7 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
 
 const SidebarFilter = ({ style, filter, filterView, cogInfo,
-  handleViewChange, handleFilterChange }) => {
+  handleViewChange, handleFilterChange, handleFilterSortChange }) => {
   let content = <div></div>;
   if (filter) {
     content = (
@@ -22,6 +22,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
                   filterState={filter[d]}
                   style={style.catFilter}
                   handleChange={handleFilterChange}
+                  handleSortChange={handleFilterSortChange}
                 />
               );
             }
@@ -83,7 +84,8 @@ SidebarFilter.propTypes = {
   filterView: React.PropTypes.object,
   cogInfo: React.PropTypes.object,
   handleViewChange: React.PropTypes.func,
-  handleFilterChange: React.PropTypes.func
+  handleFilterChange: React.PropTypes.func,
+  handleFilterSortChange: React.PropTypes.func
 };
 
 // ------ redux container ------
@@ -239,6 +241,11 @@ const mapDispatchToProps = (dispatch) => ({
     obj[x.name] = x;
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
+  },
+  handleFilterSortChange: (x) => {
+    const obj = {};
+    obj[x.name] = x;
+    dispatch(setFilter(obj));
   }
 });
 
