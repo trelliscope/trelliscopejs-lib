@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
 import FilterCat from './FilterCat';
+import FilterNum from './FilterNum';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
@@ -23,6 +24,14 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
                   style={style.catFilter}
                   handleChange={handleFilterChange}
                   handleSortChange={handleFilterSortChange}
+                />
+              );
+            } else if (cogInfo[d].type === 'numeric') {
+              itemContent = (
+                <FilterNum
+                  filterState={filter[d]}
+                  style={style.numFilter}
+                  handleChange={handleFilterChange}
                 />
               );
             }
@@ -217,6 +226,39 @@ const stateSelector = createSelector(
           float: 'right',
           width: 28,
           marginTop: -6,
+          transform: 'scale(0.85)',
+          transformOrigin: '0 0'
+        }
+      },
+      numFilter: {
+        container: {
+          marginLeft: 5,
+          marginRight: 5,
+          marginTop: 5
+        },
+        plotContainer: {
+          width: ui.sidebar.width - 10,
+          height: 90, // make this a variable
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'default',
+          userSelect: 'none',
+          zIndex: 1000
+        },
+        inputContainer: {
+          width: ui.sidebar.width - 10,
+          marginBottom: -14,
+          zIndex: 100,
+          position: 'relative'
+        },
+        rangeInputText: {
+          lineHeight: '28px',
+          fontSize: 13
+        },
+        rangeInput: {
+          width: 80,
+          marginTop: -8,
+          fontSize: 16,
           transform: 'scale(0.85)',
           transformOrigin: '0 0'
         }
