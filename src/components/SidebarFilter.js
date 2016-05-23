@@ -261,6 +261,9 @@ const stateSelector = createSelector(
           fontSize: 16,
           transform: 'scale(0.85)',
           transformOrigin: '0 0'
+        },
+        rangeInputInvalid: {
+          color: 'red'
         }
       }
     },
