@@ -249,18 +249,23 @@ const stateSelector = createSelector(
           width: ui.sidebar.width - 10,
           marginBottom: -14,
           zIndex: 100,
-          position: 'relative'
+          position: 'relative',
+          verticalAlign: 'center'
         },
         rangeInputText: {
-          lineHeight: '28px',
-          fontSize: 13
+          fontSize: 13,
+          paddingRight: 10,
+          display: 'inline-block'
         },
         rangeInput: {
-          width: 80,
-          marginTop: -8,
+          width: 75,
+          marginTop: -10,
           fontSize: 16,
           transform: 'scale(0.85)',
           transformOrigin: '0 0'
+        },
+        underlineStyle: {
+          bottom: 10
         },
         rangeInputInvalid: {
           color: 'red'

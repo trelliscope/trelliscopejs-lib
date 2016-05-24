@@ -11,8 +11,7 @@ class FilterNum extends React.Component {
   setValidState(lower, upper, which) {
     const valid = this.checkValidNumber(lower, upper, which);
     if (this.props.filterState.valid === undefined ||
-      this.props.filterState.valid != valid) {
-
+      this.props.filterState.valid !== valid) {
       this.props.handleChange(Object.assign(this.props.filterState, { valid }));
     }
   }
@@ -45,8 +44,8 @@ class FilterNum extends React.Component {
     return true;
   }
   render() {
-    const validStyle = {};
-    if (!this.props.filterState.valid) {
+    const validStyle = { textAlign: 'center' };
+    if (this.props.filterState.valid !== undefined && !this.props.filterState.valid) {
       validStyle.color = 'red';
     }
     return (
@@ -56,12 +55,14 @@ class FilterNum extends React.Component {
         >
         </div>
         <div style={this.props.style.inputContainer}>
-          <span style={this.props.style.rangeInputText}>Range: </span>
+          <div style={this.props.style.rangeInputText}>Range:</div>
           <TextField
             hintText="from"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
+            underlineStyle={this.props.style.underlineStyle}
             desktop
+            type="number"
             defaultValue={this.props.filterState.value.from}
             onChange={(e) => this.handleInput(e.target.value, 'from')}
             onKeyDown={(e) => this.setValidState(
@@ -70,12 +71,14 @@ class FilterNum extends React.Component {
               'from'
             )}
           />
-          <span style={this.props.style.rangeInputText}> - </span>
+          <div style={this.props.style.rangeInputText}>&ndash;</div>
           <TextField
             hintText="to"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
+            underlineStyle={this.props.style.underlineStyle}
             desktop
+            type="number"
             defaultValue={this.props.filterState.value.to}
             onChange={(e) => this.handleInput(e.target.value, 'to')}
             onKeyDown={(e) => this.setValidState(
