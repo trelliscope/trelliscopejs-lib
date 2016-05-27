@@ -5,7 +5,6 @@ import { uiConstsSelector, windowWidthSelector } from '../selectors';
 
 const Footer = ({ style }) => (
   <div style={style}>
-    Footer
   </div>
 );
 
