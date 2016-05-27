@@ -109,7 +109,7 @@ export const fetchDisplay = (name, group) =>
         const inactive = [];
         for (let i = 0; i < json.cogInfo.length; i++) {
           if (json.cogInfo[i].filterable) {
-            if (json.state.filter[json.cogInfo[i].name] !== undefined) {
+            if (json.state.filter && json.state.filter[json.cogInfo[i].name] !== undefined) {
               active.push(json.cogInfo[i].name);
             } else {
               inactive.push(json.cogInfo[i].name);

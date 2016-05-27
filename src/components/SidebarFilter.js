@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
+import { cogInfoObjSelector } from '../selectors/display';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
 
@@ -16,20 +17,42 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
       <div>
         <div style={style.filtersContainer}>
           {filterView.active.map((d, i) => {
+            let filterState = filter[d];
+
             let itemContent = <div key={i}>{d}</div>;
-            if (cogInfo[d].type === 'factor') {
+            if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
+               || cogInfo[d].type === 'date') {
+
+              if (!filterState) {
+                filterState = {
+                  name: d,
+                  orderValue: 'idx,asc',
+                  type: 'regex',
+                  value: ''
+                };
+              }
+
               itemContent = (
                 <FilterCat
-                  filterState={filter[d]}
+                  filterState={filterState}
                   style={style.catFilter}
                   handleChange={handleFilterChange}
                   handleSortChange={handleFilterSortChange}
                 />
               );
             } else if (cogInfo[d].type === 'numeric') {
+              if (!filterState) {
+                filterState = {
+                  name: d,
+                  orderValue: 'idx,asc',
+                  type: 'range',
+                  value: {}
+                };
+              }
+
               itemContent = (
                 <FilterNum
-                  filterState={filter[d]}
+                  filterState={filterState}
                   style={style.numFilter}
                   handleChange={handleFilterChange}
                 />
@@ -101,23 +124,11 @@ SidebarFilter.propTypes = {
 
 const filterStateSelector = state => state.filter.state;
 const filterViewSelector = state => state.filter.view;
-const displayInfoSelector = state => state._displayInfo;
-
-const cogInfoSelector = createSelector(
-  displayInfoSelector,
-  (di) => {
-    const res = {};
-    for (let i = 0; i < di.info.cogInfo.length; i++) {
-      res[di.info.cogInfo[i].name] = di.info.cogInfo[i];
-    }
-    return (res);
-  }
-);
 
 // the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
 const stateSelector = createSelector(
   uiConstsSelector, filterStateSelector, filterViewSelector,
-  cogInfoSelector, sidebarHeightSelector,
+  cogInfoObjSelector, sidebarHeightSelector,
   (ui, filter, filterView, cogInfo, sh) => ({
     style: {
       notUsedContainer: {

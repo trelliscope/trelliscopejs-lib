@@ -43,26 +43,44 @@ class Panel extends React.Component {
         <div>
           <table style={this.props.style.labelTable}>
             <tbody>
-            {this.props.labels.map((d, i) => (
-              <tr key={`label${i}`} style={this.props.style.labelRow}>
-                <td
-                  style={[this.props.style.labelCell,
-                  this.props.style.labelNameCell]}
-                >
-                  <div style={this.props.style.labelOverflow}>
-                    {d.name}
-                  </div>
-                </td>
-                <td
-                  style={[this.props.style.labelCell,
-                  this.props.style.labelValueCell]}
-                >
-                  <div style={this.props.style.labelOverflow}>
+            {this.props.labels.map((d, i) => {
+              let labelDiv;
+              if (d.type === 'href') {
+                labelDiv = (
+                  <div
+                    dangerouslySetInnerHTML={{__html: d.value}}
+                    style={this.props.style.labelOverflow}
+                  />
+                );
+              } else {
+                labelDiv = (
+                  <div
+                    style={this.props.style.labelOverflow}
+                    title={d.value}
+                  >
                     {d.value}
                   </div>
-                </td>
-              </tr>
-            ))}
+                );
+              }
+              return (
+                <tr key={`label${i}`} style={this.props.style.labelRow}>
+                  <td
+                    style={[this.props.style.labelCell,
+                    this.props.style.labelNameCell]}
+                  >
+                    <div style={this.props.style.labelOverflow}>
+                      {d.name}
+                    </div>
+                  </td>
+                  <td
+                    style={[this.props.style.labelCell,
+                    this.props.style.labelValueCell]}
+                  >
+                    {labelDiv}
+                  </td>
+                </tr>
+              );
+            })}
             </tbody>
           </table>
         </div>

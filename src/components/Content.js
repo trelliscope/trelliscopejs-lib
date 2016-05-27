@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Panel from './Panel';
 import { uiConstsSelector, contentWidthSelector, contentHeightSelector } from '../selectors';
+import { cogInfoObjSelector } from '../selectors/display';
 import { currentJSONIndexSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
 
-const Content = ({ style, idx, ci, layout, labels, dims }) => {
+const Content = ({ style, idx, ci, cinfo, layout, labels, dims }) => {
   let ret = <div></div>;
 
   if (ci.iface && ci.info) {
@@ -19,7 +20,11 @@ const Content = ({ style, idx, ci, layout, labels, dims }) => {
       panelKeys.push(ci.info.panelKey[idx[i]]);
       const curLabels = [];
       for (let j = 0; j < labels.length; j++) {
-        curLabels.push({ name: labels[j], value: ci.info[labels[j]][idx[i]] });
+        curLabels.push({
+          name: labels[j],
+          value: ci.info[labels[j]][idx[i]],
+          type: cinfo[labels[j]].type
+        });
       }
       panelLabels.push(curLabels);
     }
@@ -78,6 +83,7 @@ Content.propTypes = {
   style: React.PropTypes.object,
   idx: React.PropTypes.array,
   ci: React.PropTypes.object,
+  cinfo: React.PropTypes.object,
   layout: React.PropTypes.object,
   labels: React.PropTypes.array,
   dims: React.PropTypes.object
@@ -88,8 +94,8 @@ Content.propTypes = {
 const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
   currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector,
-  (cw, ch, ui, idx, ci, layout, aspect, labels) => {
+  aspectSelector, labelsSelector, cogInfoObjSelector,
+  (cw, ch, ui, idx, ci, layout, aspect, labels, cinfo) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -208,6 +214,7 @@ const styleSelector = createSelector(
       },
       idx,
       ci,
+      cinfo,
       layout,
       labels,
       dims: {
