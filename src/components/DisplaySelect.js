@@ -9,7 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplayList, fetchDisplay } from '../actions';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector, configSelector } from '../selectors';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class DisplaySelect extends React.Component {
     this.setState({ open: false });
   }
   handleSelect = (name, group) => {
-    this.props.handleClick(name, group);
+    this.props.handleClick(name, group, this.props.cfg);
     this.setState({ open: false });
   }
   render() {
@@ -101,6 +101,7 @@ class DisplaySelect extends React.Component {
           <DisplayList
             displayInfo={this.props.displayList.list}
             handleClick={this.handleSelect}
+            cfg={this.props.cfg}
           />
         </Dialog>
       </div>
@@ -112,6 +113,7 @@ DisplaySelect.propTypes = {
   style: React.PropTypes.object,
   handleClick: React.PropTypes.func,
   loadDisplayList: React.PropTypes.func,
+  cfg: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object
 };
@@ -123,7 +125,8 @@ const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
   uiConstsSelector, selectedDisplaySelector, displayListSelector,
-  (ui, selectedDisplay, displayList) => ({
+  configSelector,
+  (ui, selectedDisplay, displayList, cfg) => ({
     style: {
       attn: {
         outer: {
@@ -174,7 +177,7 @@ const styleSelector = createSelector(
         borderRight: '1px solid',
         borderColor: ui.header.button.active.background,
         // borderColor: ui.header.borderColor,
-        transition: 'background 250ms',
+        transition: 'all 500ms ease-in',
         ':hover': {
           transition: 'background 250ms',
           background: emphasize(ui.header.button.active.background, 0.4),
@@ -184,6 +187,7 @@ const styleSelector = createSelector(
         }
       }
     },
+    cfg,
     selectedDisplay,
     displayList
   })
@@ -194,9 +198,9 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  handleClick: (name, group) => {
+  handleClick: (name, group, cfg) => {
     dispatch(setSelectedDisplay(name, group));
-    dispatch(fetchDisplay(name, group));
+    dispatch(fetchDisplay(name, group, cfg));
   },
   loadDisplayList: () => {
     dispatch(fetchDisplayList());

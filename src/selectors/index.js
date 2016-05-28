@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 
 // http://paletton.com/#uid=33u0u0kv2ZgiPYEo+ZaOjYmVwBx
 
+export const configSelector = state => state._config.config;
+
 export const uiConstsSelector = () => (
   {
     fontFamily: '"Open Sans", sans-serif',

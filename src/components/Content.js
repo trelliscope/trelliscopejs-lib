@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Panel from './Panel';
-import { uiConstsSelector, contentWidthSelector, contentHeightSelector } from '../selectors';
+import { uiConstsSelector, contentWidthSelector,
+  contentHeightSelector, configSelector } from '../selectors';
 import { cogInfoObjSelector } from '../selectors/display';
 import { currentJSONIndexSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
 
-const Content = ({ style, idx, ci, cinfo, layout, labels, dims }) => {
+const Content = ({ style, idx, ci, cinfo, cfg, layout, labels, dims }) => {
   let ret = <div></div>;
 
   if (ci.iface && ci.info) {
@@ -60,6 +61,7 @@ const Content = ({ style, idx, ci, cinfo, layout, labels, dims }) => {
         {panelMatrix.map((el) => (
           <Panel
             key={el.key}
+            cfg={cfg}
             panelKey={el.key}
             labels={el.labels}
             style={style.panel}
@@ -84,6 +86,7 @@ Content.propTypes = {
   idx: React.PropTypes.array,
   ci: React.PropTypes.object,
   cinfo: React.PropTypes.object,
+  cfg: React.PropTypes.object,
   layout: React.PropTypes.object,
   labels: React.PropTypes.array,
   dims: React.PropTypes.object
@@ -94,8 +97,8 @@ Content.propTypes = {
 const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
   currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector, cogInfoObjSelector,
-  (cw, ch, ui, idx, ci, layout, aspect, labels, cinfo) => {
+  aspectSelector, labelsSelector, cogInfoObjSelector, configSelector,
+  (cw, ch, ui, idx, ci, layout, aspect, labels, cinfo, cfg) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -215,6 +218,7 @@ const styleSelector = createSelector(
       idx,
       ci,
       cinfo,
+      cfg,
       layout,
       labels,
       dims: {

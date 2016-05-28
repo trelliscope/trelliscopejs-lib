@@ -1,0 +1,9 @@
+{
+  "display_base" : "vdb",
+  "cog_server" : {
+    "type" : "json",
+    "info" : {
+      "base" : "vdb"
+    }
+  }
+}

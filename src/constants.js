@@ -12,6 +12,8 @@ export const RECEIVE_DISPLAY_LIST = 'RECEIVE_DISPLAY_LIST';
 export const REQUEST_COGIFACE = 'REQUEST_COGIFACE';
 export const RECEIVE_COGIFACE = 'RECEIVE_COGIFACE';
 export const WINDOW_RESIZE = 'WINDOW_RESIZE';
+export const REQUEST_CONFIG = 'REQUEST_CONFIG';
+export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';

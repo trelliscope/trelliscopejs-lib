@@ -4,7 +4,7 @@ import Subheader from 'material-ui/Subheader';
 import Radium from 'radium';
 import { redA200 } from 'material-ui/styles/colors';
 
-const DisplayList = ({ displayInfo, handleClick }) => {
+const DisplayList = ({ displayInfo, handleClick, cfg }) => {
   // get unique display groups
   const dispGroups = {};
   for (let ii = 0; ii < displayInfo.length; ii++) {
@@ -65,7 +65,7 @@ const DisplayList = ({ displayInfo, handleClick }) => {
             onClick={() => handleClick(displayInfo[i].name, displayInfo[i].group)}
             children={[
               <img
-                src={`vdb/displays/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
+                src={`${cfg.display_base}/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
                 alt={displayInfo[i].name}
                 style={styles.img}
                 key={`img${i}`}
@@ -86,7 +86,8 @@ const DisplayList = ({ displayInfo, handleClick }) => {
 
 DisplayList.propTypes = {
   displayInfo: React.PropTypes.array,
-  handleClick: React.PropTypes.func
+  handleClick: React.PropTypes.func,
+  cfg: React.PropTypes.object
 };
 
 export default Radium(DisplayList);

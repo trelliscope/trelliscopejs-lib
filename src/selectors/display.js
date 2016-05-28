@@ -27,7 +27,7 @@ export const cogInfoObjSelector = createSelector(
   displayInfoSelector,
   (di) => {
     const res = {};
-    if(di.info.cogInfo) {
+    if (di.info.cogInfo) {
       for (let i = 0; i < di.info.cogInfo.length; i++) {
         res[di.info.cogInfo[i].name] = di.info.cogInfo[i];
       }

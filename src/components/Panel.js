@@ -10,7 +10,8 @@ class Panel extends React.Component {
     this.state = { loaded: false, panelContent: null };
   }
   componentDidMount() {
-    const filebase = `vdb/displays/${this.props.iface.group}/${this.props.iface.name}`;
+    let filebase = `${this.props.cfg.display_base}/${this.props.iface.group}`;
+    filebase = `${filebase}/${this.props.iface.name}`;
     this.serverRequest = fetch(`${filebase}/png/${this.props.panelKey}.json`)
       .then(response => response.json())
       .then(json => {
@@ -48,7 +49,7 @@ class Panel extends React.Component {
               if (d.type === 'href') {
                 labelDiv = (
                   <div
-                    dangerouslySetInnerHTML={{__html: d.value}}
+                    dangerouslySetInnerHTML={{ __html: d.value }}
                     style={this.props.style.labelOverflow}
                   />
                 );
@@ -93,6 +94,7 @@ Panel.propTypes = {
   style: React.PropTypes.object,
   labels: React.PropTypes.array,
   iface: React.PropTypes.object,
+  cfg: React.PropTypes.object,
   panelKey: React.PropTypes.string,
   dimStyle: React.PropTypes.object
 };

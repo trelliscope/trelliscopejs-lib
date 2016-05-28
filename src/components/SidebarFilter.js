@@ -21,8 +21,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
 
             let itemContent = <div key={i}>{d}</div>;
             if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
-               || cogInfo[d].type === 'date') {
-
+              || cogInfo[d].type === 'date') {
               if (!filterState) {
                 filterState = {
                   name: d,

@@ -2,78 +2,83 @@ import fetch from 'isomorphic-fetch';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
-  REQUEST_COGIFACE, RECEIVE_COGIFACE } from '../constants.js';
+  REQUEST_COGIFACE, RECEIVE_COGIFACE, REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants.js';
 
-export const setActiveSidebar = (active) => (
-  { type: ACTIVE_SIDEBAR, active }
-);
+export const requestConfig = () => ({
+  type: REQUEST_CONFIG
+});
 
-export const setLayout = (layout) => (
-  { type: SET_LAYOUT, layout }
-);
+export const receiveConfig = (json) => ({
+  type: RECEIVE_CONFIG,
+  config: json,
+  receivedAt: Date.now()
+});
 
-export const setLabels = (labels) => (
-  { type: SET_LABELS, labels }
-);
+export const setActiveSidebar = (active) => ({
+  type: ACTIVE_SIDEBAR, active
+});
 
-export const setSort = (sort) => (
-  { type: SET_SORT, sort }
-);
+export const setLayout = (layout) => ({
+  type: SET_LAYOUT, layout
+});
 
-export const setFilter = (filter) => (
-  { type: SET_FILTER, filter }
-);
+export const setLabels = (labels) => ({
+  type: SET_LABELS, labels
+});
 
-export const setFilterView = (filterView) => (
-  { type: SET_FILTER_VIEW, filterView }
-);
+export const setSort = (sort) => ({
+  type: SET_SORT, sort
+});
 
-export const requestDisplayList = () => (
-  { type: REQUEST_DISPLAY_LIST }
-);
+export const setFilter = (filter) => ({
+  type: SET_FILTER, filter
+});
 
-export const receiveDisplayList = (json) => (
-  {
-    type: RECEIVE_DISPLAY_LIST,
-    list: json,
-    receivedAt: Date.now()
-  }
-);
+export const setFilterView = (filterView) => ({
+  type: SET_FILTER_VIEW, filterView
+});
 
-export const setSelectedDisplay = (name, group) => (
-  { type: SELECT_DISPLAY, name, group }
-);
+export const requestDisplayList = () => ({
+  type: REQUEST_DISPLAY_LIST
+});
 
-export const requestDisplay = (name, group) => (
-  { type: REQUEST_DISPLAY, name, group }
-);
+export const receiveDisplayList = (json) => ({
+  type: RECEIVE_DISPLAY_LIST,
+  list: json,
+  receivedAt: Date.now()
+});
 
-export const receiveDisplay = (name, group, json) => (
-  {
-    type: RECEIVE_DISPLAY,
-    name, group,
-    info: json,
-    receivedAt: Date.now()
-  }
-);
+export const setSelectedDisplay = (name, group) => ({
+  type: SELECT_DISPLAY, name, group
+});
 
-export const requestCogInterfaceInfo = (iface) => (
-  { type: REQUEST_COGIFACE, iface }
-);
+export const requestDisplay = (name, group) => ({
+  type: REQUEST_DISPLAY, name, group
+});
 
-export const receiveCogInterfaceInfo = (iface, json) => (
-  {
-    type: RECEIVE_COGIFACE,
-    iface,
-    info: json,
-    receivedAt: Date.now()
-  }
-);
+export const receiveDisplay = (name, group, json) => ({
+  type: RECEIVE_DISPLAY,
+  name, group,
+  info: json,
+  receivedAt: Date.now()
+});
 
-export const fetchCogInterfaceInfo = (dispatch, iface) => {
+export const requestCogInterfaceInfo = (iface) => ({
+  type: REQUEST_COGIFACE, iface
+});
+
+export const receiveCogInterfaceInfo = (iface, json) => ({
+  type: RECEIVE_COGIFACE,
+  iface,
+  info: json,
+  receivedAt: Date.now()
+});
+
+export const fetchCogInterfaceInfo = (dispatch, iface, cfg) => {
   dispatch(receiveCogInterfaceInfo(iface));
 
-  return fetch(`vdb/displays/${iface.group}/${iface.name}/cogData.json`)
+  // TODO: when a more robust back-end API is spec'd out, rework this
+  return fetch(`${cfg.display_base}/${iface.group}/${iface.name}/cogData.json`)
     .then(response => response.json())
     .then(json => {
       dispatch(receiveCogInterfaceInfo(iface, json));
@@ -81,23 +86,30 @@ export const fetchCogInterfaceInfo = (dispatch, iface) => {
   );
 };
 
+// the display list is only loaded once at the beginning
+// but it needs the config so we'll load config first
 export const fetchDisplayList = () =>
   (dispatch) => {
-    dispatch(requestDisplayList());
+    dispatch(requestConfig());
 
-    return fetch('vdb/displays/displayList.json')
-      .then(response => response.json())
-      .then(json => {
-        dispatch(receiveDisplayList(json));
-      }
-    );
+    return fetch('config.json')
+    .then(response => response.json())
+    .then(json => {
+      dispatch(receiveConfig(json));
+      fetch(`${json.display_base}/displayList.json`)
+        .then(response => response.json())
+        .then(json2 => {
+          dispatch(receiveDisplayList(json2));
+        }
+      );
+    });
   };
 
-export const fetchDisplay = (name, group) =>
+export const fetchDisplay = (name, group, cfg) =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
-    return fetch(`vdb/displays/${group}/${name}/displayObj.json`)
+    return fetch(`${cfg.display_base}/${group}/${name}/displayObj.json`)
       .then(response => response.json())
       .then(json => {
         dispatch(receiveDisplay(name, group, json));
@@ -118,7 +130,7 @@ export const fetchDisplay = (name, group) =>
         }
         dispatch(setFilterView({ active, inactive }));
         dispatch(setLayout(json.state.layout));
-        fetchCogInterfaceInfo(dispatch, json.cogInterface);
+        fetchCogInterfaceInfo(dispatch, json.cogInterface, cfg);
       }
     );
   };
