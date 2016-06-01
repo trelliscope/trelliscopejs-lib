@@ -1,9 +1,9 @@
 {
-  "display_base" : "vdb",
+  "display_base" : "https://cdn.rawgit.com/hafen/trelliscopejs_vdb_housing/master/",
   "cog_server" : {
     "type" : "json",
     "info" : {
-      "base" : "vdb"
+      "base" : "https://cdn.rawgit.com/hafen/trelliscopejs_vdb_housing/master/"
     }
   }
 }
