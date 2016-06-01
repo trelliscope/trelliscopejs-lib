@@ -65,7 +65,7 @@ const DisplayList = ({ displayInfo, handleClick, cfg }) => {
             onClick={() => handleClick(displayInfo[i].name, displayInfo[i].group)}
             children={[
               <img
-                src={`${cfg.display_base}/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
+                src={`${cfg.display_base}/displays/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
                 alt={displayInfo[i].name}
                 style={styles.img}
                 key={`img${i}`}

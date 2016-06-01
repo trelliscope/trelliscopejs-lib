@@ -78,7 +78,7 @@ export const fetchCogInterfaceInfo = (dispatch, iface, cfg) => {
   dispatch(receiveCogInterfaceInfo(iface));
 
   // TODO: when a more robust back-end API is spec'd out, rework this
-  return fetch(`${cfg.display_base}/${iface.group}/${iface.name}/cogData.json`)
+  return fetch(`${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`)
     .then(response => response.json())
     .then(json => {
       dispatch(receiveCogInterfaceInfo(iface, json));
@@ -96,7 +96,7 @@ export const fetchDisplayList = () =>
     .then(response => response.json())
     .then(json => {
       dispatch(receiveConfig(json));
-      fetch(`${json.display_base}/displayList.json`)
+      fetch(`${json.display_base}/displays/displayList.json`)
         .then(response => response.json())
         .then(json2 => {
           dispatch(receiveDisplayList(json2));
@@ -109,7 +109,7 @@ export const fetchDisplay = (name, group, cfg) =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
-    return fetch(`${cfg.display_base}/${group}/${name}/displayObj.json`)
+    return fetch(`${cfg.display_base}/displays/${group}/${name}/displayObj.json`)
       .then(response => response.json())
       .then(json => {
         dispatch(receiveDisplay(name, group, json));

@@ -10,7 +10,7 @@ class Panel extends React.Component {
     this.state = { loaded: false, panelContent: null };
   }
   componentDidMount() {
-    let filebase = `${this.props.cfg.display_base}/${this.props.iface.group}`;
+    let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
     this.serverRequest = fetch(`${filebase}/png/${this.props.panelKey}.json`)
       .then(response => response.json())
