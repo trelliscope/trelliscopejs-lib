@@ -48,13 +48,34 @@ export const uiConstsSelector = () => (
       }
     },
     sidebar: {
-      width: 240,
+      width: 230,
       borderColor: '#eaedf0',
       header: {
         fontSize: 15,
         height: 25,
         background: '#c1c1c1',
         color: 'white'
+      },
+      filter: {
+        margin: 5,
+        cat: {
+          height: 100,
+          bar: {
+            width: 20,
+            color: {
+              default: '#FFBB78',
+              hover: '#FFA958',
+              select: '#FF7F0E'
+            }
+          }
+        },
+        num: {
+          color: {
+            default: '#aec7e8',
+            hover: '#83AFD8',
+            select: '#1f77b4'
+          }
+        }
       }
     },
     content: {

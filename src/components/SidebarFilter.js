@@ -5,16 +5,17 @@ import { createSelector } from 'reselect';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
-import { cogInfoObjSelector } from '../selectors/display';
+import { cogInfoObjSelector, displayInfoSelector } from '../selectors/display';
+import { JSONFiltDistSelector } from '../selectors/cogInterface';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
 
-const SidebarFilter = ({ style, filter, filterView, cogInfo,
-  handleViewChange, handleFilterChange, handleFilterSortChange }) => {
+const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
+  handleViewChange, handleFilterChange, handleFilterSortChange, filtDist }) => {
   let content = <div></div>;
   if (filter) {
     content = (
-      <div>
+      <div style={style.allContainer}>
         <div style={style.filtersContainer}>
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
@@ -25,7 +26,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
               if (!filterState) {
                 filterState = {
                   name: d,
-                  orderValue: 'idx,asc',
+                  orderValue: 'ct,desc',
                   type: 'regex',
                   value: ''
                 };
@@ -35,6 +36,8 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
                 <FilterCat
                   filterState={filterState}
                   style={style.catFilter}
+                  dist={displayInfo.info.cogDistns[d]}
+                  condDist={filtDist[d]}
                   handleChange={handleFilterChange}
                   handleSortChange={handleFilterSortChange}
                 />
@@ -43,7 +46,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo,
               if (!filterState) {
                 filterState = {
                   name: d,
-                  orderValue: 'idx,asc',
+                  orderValue: 'ct,desc',
                   type: 'range',
                   value: {}
                 };
@@ -114,9 +117,11 @@ SidebarFilter.propTypes = {
   filter: React.PropTypes.object,
   filterView: React.PropTypes.object,
   cogInfo: React.PropTypes.object,
+  displayInfo: React.PropTypes.object,
   handleViewChange: React.PropTypes.func,
   handleFilterChange: React.PropTypes.func,
-  handleFilterSortChange: React.PropTypes.func
+  handleFilterSortChange: React.PropTypes.func,
+  filtDist: React.PropTypes.object
 };
 
 // ------ redux container ------
@@ -127,12 +132,13 @@ const filterViewSelector = state => state.filter.view;
 // the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
 const stateSelector = createSelector(
   uiConstsSelector, filterStateSelector, filterViewSelector,
-  cogInfoObjSelector, sidebarHeightSelector,
-  (ui, filter, filterView, cogInfo, sh) => ({
+  cogInfoObjSelector, sidebarHeightSelector, displayInfoSelector,
+  JSONFiltDistSelector,
+  (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist) => ({
     style: {
       notUsedContainer: {
         width: ui.sidebar.width,
-        height: sh - 30,
+        // height: sh - 30, // need to take number of filters and total height into account
         overflowY: 'auto',
         boxSizing: 'border-box',
         paddingLeft: 10,
@@ -164,10 +170,16 @@ const stateSelector = createSelector(
           background: emphasize('#ffa500', 0.2)
         }
       },
+      allContainer: {
+        width: ui.sidebar.width,
+        height: sh,
+        boxSizing: 'border-box'
+      },
       container: {
-        width: ui.sidebar.width - 10,
+        width: ui.sidebar.width,
         // display: 'inline-block',
         // for dropdowns to not be hidden under other elements:
+        boxSizing: 'border-box',
         zIndex: 100, // + this.props.index,
         position: 'relative'
       },
@@ -206,13 +218,17 @@ const stateSelector = createSelector(
       },
       catFilter: {
         container: {
-          marginLeft: 5,
-          marginRight: 5,
-          marginTop: 5
+          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          height: 30 + ui.sidebar.filter.cat.height,
+          boxSizing: 'border-box',
+          paddingLeft: ui.sidebar.filter.margin,
+          paddingRight: ui.sidebar.filter.margin,
+          paddingTop: ui.sidebar.filter.margin
         },
         plotContainer: {
-          width: ui.sidebar.width - 10,
-          height: 90, // make this a variable
+          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          height: ui.sidebar.filter.cat.height,
+          boxSizing: 'border-box',
           position: 'relative',
           overflow: 'hidden',
           cursor: 'default',
@@ -220,7 +236,7 @@ const stateSelector = createSelector(
           zIndex: 1000
         },
         inputContainer: {
-          width: ui.sidebar.width - 10,
+          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
           marginBottom: -14,
           zIndex: 100,
           position: 'relative'
@@ -247,7 +263,7 @@ const stateSelector = createSelector(
           marginTop: 5
         },
         plotContainer: {
-          width: ui.sidebar.width - 10,
+          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
           height: 90, // make this a variable
           position: 'relative',
           overflow: 'hidden',
@@ -256,7 +272,7 @@ const stateSelector = createSelector(
           zIndex: 1000
         },
         inputContainer: {
-          width: ui.sidebar.width - 10,
+          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
           marginBottom: -14,
           zIndex: 100,
           position: 'relative',
@@ -284,7 +300,9 @@ const stateSelector = createSelector(
     },
     filter,
     filterView,
-    cogInfo
+    cogInfo,
+    displayInfo,
+    filtDist
   })
 );
 

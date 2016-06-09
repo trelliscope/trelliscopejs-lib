@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { displayInfoSelector } from './display';
 
 export const pageNumSelector = state => state.layout.pageNum;
 export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;
@@ -75,6 +76,74 @@ export const JSONFilterIndexSelector = createSelector(
         }
         if (keep) {
           result.push(i);
+        }
+      }
+    }
+    return result;
+  }
+);
+
+export const JSONFiltDistSelector = createSelector(
+  cogInterfaceSelector, JSONFilterIndexSelector, filterStateSelector,
+  displayInfoSelector,
+  (ci, idx, filter, di) => {
+    const result = {};
+    if (ci.iface && ci.info && ci.iface.type === 'JSON') {
+      // for every active filter, calculate the conditional distribution
+      const keys = Object.keys(filter);
+      for (let i = 0; i < keys.length; i++) {
+        if (filter[keys[i]].varType === 'factor') {
+          const cur = {};
+          let maxVal = 0;
+          for (let j = 0; j < idx.length; j++) {
+            if (!cur[ci.info[keys[i]][idx[j]]]) {
+              cur[ci.info[keys[i]][idx[j]]] = 1;
+            } else {
+              cur[ci.info[keys[i]][idx[j]]]++;
+            }
+            if (cur[ci.info[keys[i]][idx[j]]] > maxVal) {
+              maxVal = cur[ci.info[keys[i]][idx[j]]];
+            }
+          }
+          const orderValue = filter[keys[i]].orderValue ?
+            filter[keys[i]].orderValue : 'ct,desc';
+          let orderKeys = [];
+          let morderKeys = [];
+          const curKeys = Object.keys(cur);
+          const mdist = di.info.cogDistns[keys[i]].dist;
+          const mdistKeys = Object.keys(mdist);
+          for (let j = 0; j < curKeys.length; j++) {
+            mdistKeys.pop(curKeys[j]);
+          }
+
+          switch (orderValue) {
+            case 'ct,desc':
+              orderKeys = curKeys.sort((a, b) => cur[b] - cur[a]);
+              morderKeys = mdistKeys.sort((a, b) => mdist[b] - mdist[a]);
+              break;
+            case 'ct,asc':
+              orderKeys = curKeys.sort((a, b) => cur[a] - cur[b]);
+              morderKeys = mdistKeys.sort((a, b) => mdist[a] - mdist[b]);
+              break;
+            case 'id,desc':
+              orderKeys = curKeys.sort().reverse();
+              morderKeys = mdistKeys.sort().reverse();
+              break;
+            case 'id,asc':
+              orderKeys = curKeys.sort();
+              morderKeys = mdistKeys.sort();
+              break;
+            default:
+              break;
+          }
+
+          result[keys[i]] = {
+            dist: cur,
+            orderKeys,
+            morderKeys,
+            max: maxVal,
+            orderValue
+          };
         }
       }
     }

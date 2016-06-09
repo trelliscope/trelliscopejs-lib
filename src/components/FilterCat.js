@@ -20,9 +20,10 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
+import FilterCatPlot from './FilterCatPlot';
 
 const sortOptions = [
-  { payload: 'idx,asc', text: 'Order: default' },
+  // { payload: 'idx,asc', text: 'Order: default' },
   { payload: 'ct,asc', text: 'Order: count ascending' },
   { payload: 'ct,desc', text: 'Order: count descending' },
   { payload: 'id,asc', text: 'Order: label ascending' },
@@ -34,23 +35,25 @@ class FilterCat extends React.Component {
     super(props);
     this.handleRegex = debounce(400, this.handleRegex);
     this.sortOrder = this.props.filterState.orderValue ?
-      this.props.filterState.orderValue : 'idx,asc';
+      this.props.filterState.orderValue : 'ct,desc';
   }
   componentWillUpdate() {
     this.sortOrder = this.props.filterState.orderValue ?
-      this.props.filterState.orderValue : 'idx,asc';
+      this.props.filterState.orderValue : 'ct,desc';
   }
   handleRegex(val) {
     let newState = {};
     if (val === '') {
       newState = {
         name: this.props.filterState.name,
+        varType: this.props.filterState.varType,
         orderValue: this.sortOrder
       };
     } else {
       newState = {
         name: this.props.filterState.name,
         type: 'regex',
+        varType: this.props.filterState.varType,
         value: val,
         orderValue: this.sortOrder
       };
@@ -81,6 +84,11 @@ class FilterCat extends React.Component {
         <div
           style={this.props.style.plotContainer}
         >
+          <FilterCatPlot
+            style={this.props.style.plotContainer}
+            dist={this.props.dist}
+            condDist={this.props.condDist}
+          />
         </div>
         <div style={this.props.style.inputContainer}>
           <TextField
@@ -98,27 +106,11 @@ class FilterCat extends React.Component {
   }
 }
 
-// {bars}
-// <CatScroll
-//   side={'left'}
-//   setScroll={this._handleScroll}
-//   key='leftScroll'
-//   width={this.state.cfg.filter.scrollWidth}
-//   startIndex={this.state.filter.startIndex}
-//   endIndex={endIndex}
-// />
-// <CatScroll
-//   side={'right'}
-//   setScroll={this._handleScroll}
-//   key='rightScroll'
-//   width={this.state.cfg.filter.scrollWidth}
-//   startIndex={this.state.filter.startIndex}
-//   endIndex={endIndex}
-// />
-
 FilterCat.propTypes = {
   filterState: React.PropTypes.object,
   style: React.PropTypes.object,
+  dist: React.PropTypes.object,
+  condDist: React.PropTypes.object,
   handleChange: React.PropTypes.func,
   handleSortChange: React.PropTypes.func
 };
