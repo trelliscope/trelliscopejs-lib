@@ -28,7 +28,6 @@ class FilterCatPlot extends React.Component {
     const ridx2 = rowIndex - 2;
 
     if (rowIndex === 0) {
-
       return (
         <div
           key="activeDivider"

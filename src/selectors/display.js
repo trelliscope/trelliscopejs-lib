@@ -23,15 +23,9 @@ export const relatedDisplaysSelector = createSelector(
   }
 );
 
-export const cogInfoObjSelector = createSelector(
+export const cogInfoSelector = createSelector(
   displayInfoSelector,
-  (di) => {
-    const res = {};
-    if (di.info.cogInfo) {
-      for (let i = 0; i < di.info.cogInfo.length; i++) {
-        res[di.info.cogInfo[i].name] = di.info.cogInfo[i];
-      }
-    }
-    return (res);
-  }
+  (di) => (
+    di.info.cogInfo ? di.info.cogInfo : {}
+  )
 );

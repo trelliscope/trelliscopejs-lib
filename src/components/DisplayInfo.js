@@ -51,6 +51,9 @@ class DisplayInfo extends React.Component {
     if (this.props.displayInfo.isLoaded) {
       const mdDesc = marked(this.props.displayInfo.info.mdDesc);
       // mdDesc = katex.renderToString(mdDesc);
+      const ci = this.props.displayInfo.info.cogInfo;
+      const ciKeys = Object.keys(ci);
+
       dialogContent = (
         <Dialog
           title="Information About This Display"
@@ -79,9 +82,9 @@ class DisplayInfo extends React.Component {
             <h3>Cognostics</h3>
             <p>To help navigate the panels, the following cognostics have been computed:</p>
             <ul>
-              {this.props.displayInfo.info.cogInfo.map((d, i) => (
+              {ciKeys.map((d, i) => (
                 <li key={i}>
-                  <strong>{d.name}</strong>: {d.desc}
+                  <strong>{ci[d].name}</strong>: {ci[d].desc}
                 </li>
               ))}
             </ul>

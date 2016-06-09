@@ -107,8 +107,6 @@ export const JSONFiltDistSelector = createSelector(
           }
           const orderValue = filter[keys[i]].orderValue ?
             filter[keys[i]].orderValue : 'ct,desc';
-          let orderKeys = [];
-          let morderKeys = [];
 
           // if filter is 'select' type and some selections are
           // completely filtered out, they need to be captured here
@@ -122,6 +120,10 @@ export const JSONFiltDistSelector = createSelector(
                 newKeys.push(curKey);
               }
             }
+          } else if (filter[keys[i]].type === 'regex') {
+            debugger;
+            di.info.cogInfo[keys[i]]
+            // for (let j = 0; j < )
           }
           const curKeys = interKeys.concat(newKeys);
           const mdist = di.info.cogDistns[keys[i]].dist;
@@ -144,12 +146,12 @@ export const JSONFiltDistSelector = createSelector(
               mdistKeys.sort((a, b) => mdist[a] - mdist[b]);
               break;
             case 'id,desc':
-              orderKeys = curKeys.sort().reverse();
-              morderKeys = mdistKeys.sort().reverse();
+              curKeys.sort().reverse();
+              mdistKeys.sort().reverse();
               break;
             case 'id,asc':
-              orderKeys = curKeys.sort();
-              morderKeys = mdistKeys.sort();
+              curKeys.sort();
+              mdistKeys.sort();
               break;
             default:
               break;

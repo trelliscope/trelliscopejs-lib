@@ -104,8 +104,9 @@ const cogDescSelector = createSelector(
   displayInfoSelector,
   (di) => {
     const res = {};
-    for (let i = 0; i < di.info.cogInfo.length; i++) {
-      res[di.info.cogInfo[i].name] = di.info.cogInfo[i].desc;
+    const ciKeys = Object.keys(di.info.cogInfo);
+    for (let i = 0; i < ciKeys.length; i++) {
+      res[ciKeys[i]] = di.info.cogInfo[ciKeys[i]].desc;
     }
     return (res);
   }

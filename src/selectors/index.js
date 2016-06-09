@@ -59,13 +59,13 @@ export const uiConstsSelector = () => (
       filter: {
         margin: 5,
         cat: {
-          height: 100,
+          height: 130,
           bar: {
             width: 20,
             color: {
-              default: '#FFBB78',
-              hover: '#FFA958',
-              select: '#FF7F0E'
+              default: 'rgb(255, 210, 127)',
+              hover: 'rgb(255, 192, 76)',
+              select: 'rgb(255, 170, 10)'
             }
           }
         },

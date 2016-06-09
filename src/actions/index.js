@@ -119,12 +119,14 @@ export const fetchDisplay = (name, group, cfg) =>
         // initial filter view will be those that are active
         const active = [];
         const inactive = [];
-        for (let i = 0; i < json.cogInfo.length; i++) {
-          if (json.cogInfo[i].filterable) {
-            if (json.state.filter && json.state.filter[json.cogInfo[i].name] !== undefined) {
-              active.push(json.cogInfo[i].name);
+        const ciKeys = Object.keys(json.cogInfo);
+        for (let i = 0; i < ciKeys.length; i++) {
+          if (json.cogInfo[ciKeys[i]].filterable) {
+            if (json.state.filter &&
+              json.state.filter[ciKeys[i]] !== undefined) {
+              active.push(ciKeys[i]);
             } else {
-              inactive.push(json.cogInfo[i].name);
+              inactive.push(ciKeys[i]);
             }
           }
         }

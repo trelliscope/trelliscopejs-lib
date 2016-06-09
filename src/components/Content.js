@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import Panel from './Panel';
 import { uiConstsSelector, contentWidthSelector,
   contentHeightSelector, configSelector } from '../selectors';
-import { cogInfoObjSelector } from '../selectors/display';
+import { cogInfoSelector } from '../selectors/display';
 import { currentJSONIndexSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
 
@@ -97,7 +97,7 @@ Content.propTypes = {
 const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
   currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector, cogInfoObjSelector, configSelector,
+  aspectSelector, labelsSelector, cogInfoSelector, configSelector,
   (cw, ch, ui, idx, ci, layout, aspect, labels, cinfo, cfg) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows

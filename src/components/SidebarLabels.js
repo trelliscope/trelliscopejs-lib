@@ -10,11 +10,12 @@ import { Table, TableRow,
 
 const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
   let content = <div></div>;
-  if (cogInfo.length > 0) {
-    const tableData = cogInfo.map((d) => ({
-      name: d.name,
-      desc: d.desc,
-      selected: labels.indexOf(d.name) > -1
+  const ciKeys = Object.keys(cogInfo);
+  if (ciKeys.length > 0) {
+    const tableData = ciKeys.map((d) => ({
+      name: cogInfo[d].name,
+      desc: cogInfo[d].desc,
+      selected: labels.indexOf(cogInfo[d].name) > -1
     }));
 
     content = (
@@ -25,7 +26,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
         onRowSelection={(rows) => {
           const newLabels = [];
           for (let ii = 0; ii < rows.length; ii++) {
-            newLabels.push(cogInfo[rows[ii]].name);
+            newLabels.push(ciKeys[rows[ii]]);
           }
           handleChange(newLabels);
         }}
@@ -54,7 +55,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
 SidebarLabels.propTypes = {
   style: React.PropTypes.object,
   labels: React.PropTypes.array,
-  cogInfo: React.PropTypes.array,
+  cogInfo: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 

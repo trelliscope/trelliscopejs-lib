@@ -11,9 +11,6 @@ class CatBar extends React.Component {
   }
   mouseOver = () => {
     this.setState({ hover: true });
-    // if (this.props.mousedown) {
-    //   this.props.toggle({ id: this.props.d.id, set: true });
-    // }
   }
   mouseOut = () => {
     this.setState({ hover: false });
@@ -23,19 +20,7 @@ class CatBar extends React.Component {
     // this.props.toggle({id: this.props.d.id, set: false});
     e.stopPropagation();
   }
-  mouseUp = (e) => {
-    // this.props.setmousedown(false);
-    e.stopPropagation();
-  }
   render() {
-    let barClass = 'cat-bar';
-    if (this.state.hover) {
-      barClass = `${barClass} hover`;
-    }
-    // if (this.props.selected) {
-    //   barClass = `${barClass} selected`;
-    // }
-
     const fontSize = Math.min(10, this.props.height - 6);
     const labelFontSize = Math.min(9, this.props.height - 7);
 
@@ -61,8 +46,8 @@ class CatBar extends React.Component {
               width: this.props.width,
               height: this.props.height - 1
             },
-            this.state.hover && this.props.style.barHover,
-            this.props.selected && this.props.style.barSelect
+            this.props.active && this.props.style.barActive,
+            this.state.hover && this.props.style.barHover
           ]}
         >
           <div
@@ -99,7 +84,7 @@ class CatBar extends React.Component {
 
 CatBar.propTypes = {
   style: React.PropTypes.object,
-  selected: React.PropTypes.bool,
+  active: React.PropTypes.bool,
   width: React.PropTypes.number,
   totWidth: React.PropTypes.number,
   height: React.PropTypes.number,
@@ -127,7 +112,7 @@ const stateSelector = createSelector(
       barHover: {
         background: ui.sidebar.filter.cat.bar.color.hover
       },
-      barSelect: {
+      barActive: {
         background: ui.sidebar.filter.cat.bar.color.select
       },
       barLabel: {
@@ -154,8 +139,7 @@ const stateSelector = createSelector(
         left: 5,
         bottom: 0
       }
-    },
-    selected: false
+    }
   })
 );
 

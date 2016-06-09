@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
-import { cogInfoObjSelector, displayInfoSelector } from '../selectors/display';
+import { cogInfoSelector, displayInfoSelector } from '../selectors/display';
 import { JSONFiltDistSelector } from '../selectors/cogInterface';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
@@ -132,7 +132,7 @@ const filterViewSelector = state => state.filter.view;
 // the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
 const stateSelector = createSelector(
   uiConstsSelector, filterStateSelector, filterViewSelector,
-  cogInfoObjSelector, sidebarHeightSelector, displayInfoSelector,
+  cogInfoSelector, sidebarHeightSelector, displayInfoSelector,
   JSONFiltDistSelector,
   (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist) => ({
     style: {
