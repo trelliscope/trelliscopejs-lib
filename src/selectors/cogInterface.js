@@ -109,21 +109,39 @@ export const JSONFiltDistSelector = createSelector(
             filter[keys[i]].orderValue : 'ct,desc';
           let orderKeys = [];
           let morderKeys = [];
-          const curKeys = Object.keys(cur);
+
+          // if filter is 'select' type and some selections are
+          // completely filtered out, they need to be captured here
+          const interKeys = Object.keys(cur);
+          const newKeys = [];
+          if (filter[keys[i]].type === 'select') {
+            for (let j = 0; j < filter[keys[i]].value.length; j++) {
+              const curKey = filter[keys[i]].value[j];
+              if (interKeys.indexOf(curKey) < 0) {
+                cur[curKey] = 0;
+                newKeys.push(curKey);
+              }
+            }
+          }
+          const curKeys = interKeys.concat(newKeys);
           const mdist = di.info.cogDistns[keys[i]].dist;
           const mdistKeys = Object.keys(mdist);
+
           for (let j = 0; j < curKeys.length; j++) {
-            mdistKeys.pop(curKeys[j]);
+            const kIndex = mdistKeys.indexOf(curKeys[j]);
+            if (kIndex > -1) {
+              mdistKeys.splice(kIndex, 1);
+            }
           }
 
           switch (orderValue) {
             case 'ct,desc':
-              orderKeys = curKeys.sort((a, b) => cur[b] - cur[a]);
-              morderKeys = mdistKeys.sort((a, b) => mdist[b] - mdist[a]);
+              curKeys.sort((a, b) => cur[b] - cur[a]);
+              mdistKeys.sort((a, b) => mdist[b] - mdist[a]);
               break;
             case 'ct,asc':
-              orderKeys = curKeys.sort((a, b) => cur[a] - cur[b]);
-              morderKeys = mdistKeys.sort((a, b) => mdist[a] - mdist[b]);
+              curKeys.sort((a, b) => cur[a] - cur[b]);
+              mdistKeys.sort((a, b) => mdist[a] - mdist[b]);
               break;
             case 'id,desc':
               orderKeys = curKeys.sort().reverse();
@@ -139,10 +157,11 @@ export const JSONFiltDistSelector = createSelector(
 
           result[keys[i]] = {
             dist: cur,
-            orderKeys,
-            morderKeys,
+            orderKeys: curKeys,
+            morderKeys: mdistKeys,
             max: maxVal,
-            orderValue
+            orderValue,
+            activeTot: idx.length
           };
         }
       }
