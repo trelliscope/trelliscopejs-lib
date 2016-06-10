@@ -37,9 +37,17 @@ class FilterCat extends React.Component {
     this.sortOrder = this.props.filterState.orderValue ?
       this.props.filterState.orderValue : 'ct,desc';
   }
-  componentWillUpdate() {
+  componentWillUpdate(nextProps) {
     this.sortOrder = this.props.filterState.orderValue ?
       this.props.filterState.orderValue : 'ct,desc';
+
+    if (nextProps.filterState.type !== 'regex') {
+      // hacky way to clear regex field after it switches to selection
+      // until material-ui is fixed and we can change to controlled input
+      // https://github.com/callemall/material-ui/pull/3673
+      this.refs.TextField.input.value = '';
+      this.refs.TextField.state.hasValue = false;
+    }
   }
   handleRegex(val) {
     let newState = {};
@@ -50,11 +58,19 @@ class FilterCat extends React.Component {
         orderValue: this.sortOrder
       };
     } else {
+      const vals = [];
+      const rval = new RegExp(val, 'i');
+      for (let j = 0; j < this.props.levels.length; j++) {
+        if (this.props.levels[j].match(rval) !== null) {
+          vals.push(this.props.levels[j]);
+        }
+      }
       newState = {
         name: this.props.filterState.name,
         type: 'regex',
         varType: this.props.filterState.varType,
         value: val,
+        vals,
         orderValue: this.sortOrder
       };
     }
@@ -88,10 +104,13 @@ class FilterCat extends React.Component {
             style={this.props.style.plotContainer}
             dist={this.props.dist}
             condDist={this.props.condDist}
+            filterState={this.props.filterState}
+            handleChange={this.props.handleChange}
           />
         </div>
         <div style={this.props.style.inputContainer}>
           <TextField
+            ref="TextField"
             hintText="regex"
             style={this.props.style.regexInput}
             desktop
@@ -111,6 +130,7 @@ FilterCat.propTypes = {
   style: React.PropTypes.object,
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
+  levels: React.PropTypes.array,
   handleChange: React.PropTypes.func,
   handleSortChange: React.PropTypes.func
 };

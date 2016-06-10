@@ -19,6 +19,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
         <div style={style.filtersContainer}>
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
+            let handleReset = () => ( undefined );
 
             let itemContent = <div key={i}>{d}</div>;
             if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
@@ -32,12 +33,22 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 };
               }
 
+              handleReset = () => {
+                const newState = {
+                  name: filterState.name,
+                  varType: filterState.varType,
+                  orderValue: filterState.orderValue
+                };
+                handleFilterChange(newState);
+              };
+
               itemContent = (
                 <FilterCat
                   filterState={filterState}
                   style={style.catFilter}
                   dist={displayInfo.info.cogDistns[d]}
                   condDist={filtDist[d]}
+                  levels={displayInfo.info.cogInfo[d].levels}
                   handleChange={handleFilterChange}
                   handleSortChange={handleFilterSortChange}
                 />
@@ -77,7 +88,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   </div>
                   <div
                     style={[style.footerIcon, style.footerReset]}
-                    // onMouseDown={}
+                    onMouseDown={handleReset}
                   >
                     <i className="icon-undo"></i>
                   </div>

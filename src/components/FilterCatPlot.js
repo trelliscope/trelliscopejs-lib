@@ -9,6 +9,42 @@ class FilterCatPlot extends React.Component {
     // this.cellHeight = Math.max(15,
     //   this.props.style.height / this.props.condDist.orderKeys.length);
   }
+  handleSelect(val, active) {
+    let selectArr = [];
+    if (this.props.filterState.type === 'regex') {
+      selectArr = this.props.filterState.vals;
+    } else {
+      selectArr = Object.assign([], this.props.filterState.value);
+    }
+    if (active) {
+      // remove "val" from the array
+      const vIndex = selectArr.indexOf(val);
+      if (vIndex > -1) {
+        selectArr.splice(vIndex, 1);
+      }
+    } else {
+      selectArr.push(val);
+    }
+
+    let newState = {};
+    if (selectArr.length === 0) {
+      newState = {
+        name: this.props.filterState.name,
+        varType: this.props.filterState.varType,
+        orderValue: this.sortOrder
+      };
+    } else {
+      newState = {
+        name: this.props.filterState.name,
+        type: 'select',
+        varType: this.props.filterState.varType,
+        value: selectArr,
+        orderValue: this.sortOrder
+      };
+    }
+
+    this.props.handleChange(newState);
+  }
   barCellRenderer = ({ columnIndex, isScrolling, rowIndex }) => {
     // let barSize = 0;
     // let barName = '';
@@ -77,6 +113,7 @@ class FilterCatPlot extends React.Component {
         height={this.cellHeight}
         width={barSize / barMax * this.props.style.width}
         totWidth={this.props.style.width}
+        handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: this.props.dist.dist[barName], id: barName }}
       />
     );
@@ -106,7 +143,9 @@ class FilterCatPlot extends React.Component {
 FilterCatPlot.propTypes = {
   style: React.PropTypes.object,
   dist: React.PropTypes.object,
-  condDist: React.PropTypes.object
+  condDist: React.PropTypes.object,
+  filterState: React.PropTypes.object,
+  handleChange: React.PropTypes.func
 };
 
 export default FilterCatPlot;

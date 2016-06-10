@@ -41,9 +41,12 @@ const keepRecord = (rec, filt) => {
   let keep = true;
   switch (filt.type) {
     case 'regex':
-      if (rec.match(filt.value) === null) {
+      if (filt.vals.indexOf(rec) < 0) {
         keep = false;
       }
+      // if (rec.match(filt.value) === null) {
+      //   keep = false;
+      // }
       break;
     case 'range':
       if (filt.value.from && rec < filt.value.from) {
@@ -93,39 +96,44 @@ export const JSONFiltDistSelector = createSelector(
       const keys = Object.keys(filter);
       for (let i = 0; i < keys.length; i++) {
         if (filter[keys[i]].varType === 'factor') {
+          let curVals = [];
+          if (filter[keys[i]].type === 'select') {
+            curVals = filter[keys[i]].value;
+          } else if (filter[keys[i]].type === 'regex') {
+            curVals = filter[keys[i]].vals;
+          } else {
+            curVals = [];
+          }
+
           const cur = {};
           let maxVal = 0;
-          for (let j = 0; j < idx.length; j++) {
-            if (!cur[ci.info[keys[i]][idx[j]]]) {
-              cur[ci.info[keys[i]][idx[j]]] = 1;
-            } else {
-              cur[ci.info[keys[i]][idx[j]]]++;
-            }
-            if (cur[ci.info[keys[i]][idx[j]]] > maxVal) {
-              maxVal = cur[ci.info[keys[i]][idx[j]]];
-            }
-          }
-          const orderValue = filter[keys[i]].orderValue ?
-            filter[keys[i]].orderValue : 'ct,desc';
 
-          // if filter is 'select' type and some selections are
-          // completely filtered out, they need to be captured here
-          const interKeys = Object.keys(cur);
-          const newKeys = [];
-          if (filter[keys[i]].type === 'select') {
-            for (let j = 0; j < filter[keys[i]].value.length; j++) {
-              const curKey = filter[keys[i]].value[j];
-              if (interKeys.indexOf(curKey) < 0) {
-                cur[curKey] = 0;
-                newKeys.push(curKey);
+          if (curVals.length > 0) {
+            for (let j = 0; j < idx.length; j++) {
+              if (curVals.indexOf(ci.info[keys[i]][idx[j]]) > -1) {
+                if (!cur[ci.info[keys[i]][idx[j]]]) {
+                  cur[ci.info[keys[i]][idx[j]]] = 1;
+                } else {
+                  cur[ci.info[keys[i]][idx[j]]]++;
+                }
+                if (cur[ci.info[keys[i]][idx[j]]] > maxVal) {
+                  maxVal = cur[ci.info[keys[i]][idx[j]]];
+                }
               }
             }
-          } else if (filter[keys[i]].type === 'regex') {
-            debugger;
-            di.info.cogInfo[keys[i]]
-            // for (let j = 0; j < )
           }
-          const curKeys = interKeys.concat(newKeys);
+
+          // if user has explicitly selected things, they need to all be there
+          if (filter[keys[i]].type === 'select') {
+            for (let j = 0; j < curVals.length; j++) {
+              if (!cur[curVals[j]]) {
+                cur[curVals[j]] = 0;
+              }
+            }
+          }
+
+          const curKeys = Object.keys(cur);
+
           const mdist = di.info.cogDistns[keys[i]].dist;
           const mdistKeys = Object.keys(mdist);
 
@@ -135,6 +143,9 @@ export const JSONFiltDistSelector = createSelector(
               mdistKeys.splice(kIndex, 1);
             }
           }
+
+          const orderValue = filter[keys[i]].orderValue ?
+            filter[keys[i]].orderValue : 'ct,desc';
 
           switch (orderValue) {
             case 'ct,desc':
