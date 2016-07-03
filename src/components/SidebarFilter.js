@@ -19,7 +19,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
         <div style={style.filtersContainer}>
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
-            let handleReset = () => ( undefined );
+            let handleReset = () => (undefined);
 
             let itemContent = <div key={i}>{d}</div>;
             if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
