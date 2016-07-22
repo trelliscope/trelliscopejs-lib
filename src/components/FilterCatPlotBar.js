@@ -142,24 +142,6 @@ const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-// const mapDispatchToProps = (dispatch) => ({
-//   handleViewChange: (x) => {
-//     dispatch(setFilterView(x));
-//   },
-//   handleFilterChange: (x) => {
-//     const obj = {};
-//     obj[x.name] = x;
-//     dispatch(setFilter(obj));
-//     dispatch(setLayout({ pageNum: 1 }));
-//   },
-//   handleFilterSortChange: (x) => {
-//     const obj = {};
-//     obj[x.name] = x;
-//     dispatch(setFilter(obj));
-//   }
-// });
-
 export default connect(
-  mapStateToProps,
-  // mapDispatchToProps
+  mapStateToProps
 )(Radium(CatBar));
