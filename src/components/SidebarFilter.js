@@ -67,6 +67,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 <FilterNum
                   filterState={filterState}
                   style={style.numFilter}
+                  dist={displayInfo.info.cogDistns[d]}
                   handleChange={handleFilterChange}
                 />
               );
