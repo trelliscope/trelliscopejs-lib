@@ -4,14 +4,15 @@ import Subheader from 'material-ui/Subheader';
 import Radium from 'radium';
 import { redA200 } from 'material-ui/styles/colors';
 
-const DisplayList = ({ displayInfo, handleClick, cfg }) => {
+// di is display info
+const DisplayList = ({ di, handleClick, cfg }) => {
   // get unique display groups
   const dispGroups = {};
-  for (let ii = 0; ii < displayInfo.length; ii++) {
-    if (!dispGroups[displayInfo[ii].group]) {
-      dispGroups[displayInfo[ii].group] = [];
+  for (let ii = 0; ii < di.length; ii++) {
+    if (!dispGroups[di[ii].group]) {
+      dispGroups[di[ii].group] = [];
     }
-    dispGroups[displayInfo[ii].group].push(ii);
+    dispGroups[di[ii].group].push(ii);
   }
 
   const styles = {
@@ -49,24 +50,24 @@ const DisplayList = ({ displayInfo, handleClick, cfg }) => {
             style={styles.gridTile}
             title={
               <span style={{ fontWeight: 400, color: redA200 }}>
-                {displayInfo[i].name}
+                {di[i].name}
               </span>
             }
             subtitle={
               <span style={{ fontSize: 13 }}>
-                {displayInfo[i].desc}<br />
+                {di[i].desc}<br />
                 <span style={{ fontStyle: 'italic', fontSize: 11 }}>
-                  {displayInfo[i].n} panels,
-                  {displayInfo[i].updated.substring(0, displayInfo[i].updated.length - 3)}
+                  {di[i].n} panels,
+                  {di[i].updated.substring(0, di[i].updated.length - 3)}
                 </span>
               </span>
             }
             titleBackground="rgba(0, 0, 0, 0.65)"
-            onClick={() => handleClick(displayInfo[i].name, displayInfo[i].group)}
+            onClick={() => handleClick(di[i].name, di[i].group)}
             children={[
               <img
-                src={`${cfg.display_base}/displays/${displayInfo[i].group}/${displayInfo[i].name}/thumb.png`}
-                alt={displayInfo[i].name}
+                src={`${cfg.display_base}/displays/${di[i].group}/${di[i].name}/thumb.png`}
+                alt={di[i].name}
                 style={styles.img}
                 key={`img${i}`}
               />
@@ -85,7 +86,7 @@ const DisplayList = ({ displayInfo, handleClick, cfg }) => {
 };
 
 DisplayList.propTypes = {
-  displayInfo: React.PropTypes.array,
+  di: React.PropTypes.array,
   handleClick: React.PropTypes.func,
   cfg: React.PropTypes.object
 };

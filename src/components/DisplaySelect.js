@@ -99,7 +99,7 @@ class DisplaySelect extends React.Component {
           onRequestClose={this.handleClose}
         >
           <DisplayList
-            displayInfo={this.props.displayList.list}
+            di={this.props.displayList.list}
             handleClick={this.handleSelect}
             cfg={this.props.cfg}
           />
