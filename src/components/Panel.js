@@ -2,7 +2,7 @@ import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
 import { findDOMNode } from 'react-dom';
-import fetch from 'isomorphic-fetch';
+import { json as getJSON } from 'd3-request';
 
 class Panel extends React.Component {
   constructor(props) {
@@ -12,20 +12,18 @@ class Panel extends React.Component {
   componentDidMount() {
     let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
-    this.serverRequest = fetch(`${filebase}/png/${this.props.panelKey}.json`)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({ panelContent: json, loaded: true });
-      });
+
+    this.xhr = getJSON(`${filebase}/png/${this.props.panelKey}.json`, json => {
+      this.setState({ panelContent: json, loaded: true });
+    });
+
     // fade in on new component
     const elem = findDOMNode(this);
     elem.style.opacity = 0;
     setTimeout(() => (elem.style.opacity = 1), 10);
   }
   componentWillUnmount() {
-    // need to do something like:
-    // this.serverRequest.abort();
-    // but I can't find a single non-jQuery JS http library that supports aborting a request
+    this.xhr.abort();
   }
   render() {
     return (

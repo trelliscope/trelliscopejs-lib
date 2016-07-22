@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import { json as getJSON } from 'd3-request';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
@@ -78,12 +78,10 @@ export const fetchCogInterfaceInfo = (dispatch, iface, cfg) => {
   dispatch(receiveCogInterfaceInfo(iface));
 
   // TODO: when a more robust back-end API is spec'd out, rework this
-  return fetch(`${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`)
-    .then(response => response.json())
-    .then(json => {
-      dispatch(receiveCogInterfaceInfo(iface, json));
-    }
-  );
+  const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;
+  return getJSON(cf, json => {
+    dispatch(receiveCogInterfaceInfo(iface, json));
+  });
 };
 
 // the display list is only loaded once at the beginning
@@ -92,16 +90,11 @@ export const fetchDisplayList = () =>
   (dispatch) => {
     dispatch(requestConfig());
 
-    return fetch('config.json')
-    .then(response => response.json())
-    .then(json => {
+    return getJSON('config.json', json => {
       dispatch(receiveConfig(json));
-      fetch(`${json.display_base}/displays/displayList.json`)
-        .then(response => response.json())
-        .then(json2 => {
-          dispatch(receiveDisplayList(json2));
-        }
-      );
+      getJSON(`${json.display_base}/displays/displayList.json`, json2 => {
+        dispatch(receiveDisplayList(json2));
+      });
     });
   };
 
@@ -109,30 +102,28 @@ export const fetchDisplay = (name, group, cfg) =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
-    return fetch(`${cfg.display_base}/displays/${group}/${name}/displayObj.json`)
-      .then(response => response.json())
-      .then(json => {
-        dispatch(receiveDisplay(name, group, json));
-        dispatch(setLabels(json.state.labels));
-        dispatch(setSort(json.state.sort));
-        dispatch(setFilter(json.state.filter));
-        // initial filter view will be those that are active
-        const active = [];
-        const inactive = [];
-        const ciKeys = Object.keys(json.cogInfo);
-        for (let i = 0; i < ciKeys.length; i++) {
-          if (json.cogInfo[ciKeys[i]].filterable) {
-            if (json.state.filter &&
-              json.state.filter[ciKeys[i]] !== undefined) {
-              active.push(ciKeys[i]);
-            } else {
-              inactive.push(ciKeys[i]);
-            }
+    const dof = `${cfg.display_base}/displays/${group}/${name}/displayObj.json`;
+    return getJSON(dof, json => {
+      dispatch(receiveDisplay(name, group, json));
+      dispatch(setLabels(json.state.labels));
+      dispatch(setSort(json.state.sort));
+      dispatch(setFilter(json.state.filter));
+      // initial filter view will be those that are active
+      const active = [];
+      const inactive = [];
+      const ciKeys = Object.keys(json.cogInfo);
+      for (let i = 0; i < ciKeys.length; i++) {
+        if (json.cogInfo[ciKeys[i]].filterable) {
+          if (json.state.filter &&
+            json.state.filter[ciKeys[i]] !== undefined) {
+            active.push(ciKeys[i]);
+          } else {
+            inactive.push(ciKeys[i]);
           }
         }
-        dispatch(setFilterView({ active, inactive }));
-        dispatch(setLayout(json.state.layout));
-        fetchCogInterfaceInfo(dispatch, json.cogInterface, cfg);
       }
-    );
+      dispatch(setFilterView({ active, inactive }));
+      dispatch(setLayout(json.state.layout));
+      fetchCogInterfaceInfo(dispatch, json.cogInterface, cfg);
+    });
   };
