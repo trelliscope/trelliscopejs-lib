@@ -113,7 +113,6 @@ class FilterCat extends React.Component {
             ref="TextField"
             hintText="regex"
             style={this.props.style.regexInput}
-            desktop
             defaultValue={this.props.filterState.type === 'regex' ?
               this.props.filterState.value : ''}
             onChange={(e) => this.handleRegex(e.target.value)}

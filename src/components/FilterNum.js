@@ -2,6 +2,7 @@ import React from 'react';
 import Radium from 'radium';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
+import FilterNumPlot from './FilterNumPlot';
 
 class FilterNum extends React.Component {
   constructor(props) {
@@ -53,6 +54,12 @@ class FilterNum extends React.Component {
         <div
           style={this.props.style.plotContainer}
         >
+          <FilterNumPlot
+            style={this.props.style.plotContainer}
+            dist={this.props.dist}
+            filterState={this.props.filterState}
+            handleChange={this.props.handleChange}
+          />
         </div>
         <div style={this.props.style.inputContainer}>
           <div style={this.props.style.rangeInputText}>Range:</div>
@@ -61,7 +68,6 @@ class FilterNum extends React.Component {
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}
-            desktop
             type="number"
             defaultValue={this.props.filterState.value.from}
             onChange={(e) => this.handleInput(e.target.value, 'from')}
@@ -77,7 +83,6 @@ class FilterNum extends React.Component {
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}
-            desktop
             type="number"
             defaultValue={this.props.filterState.value.to}
             onChange={(e) => this.handleInput(e.target.value, 'to')}
@@ -96,6 +101,7 @@ class FilterNum extends React.Component {
 FilterNum.propTypes = {
   filterState: React.PropTypes.object,
   style: React.PropTypes.object,
+  dist: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 
