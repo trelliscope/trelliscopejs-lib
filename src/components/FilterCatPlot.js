@@ -45,12 +45,13 @@ class FilterCatPlot extends React.Component {
 
     this.props.handleChange(newState);
   }
-  barCellRenderer = ({ columnIndex, isScrolling, rowIndex }) => {
+  barCellRenderer = (x) => {
+    // { columnIndex, isScrolling, x.rowIndex }
     // let barSize = 0;
     // let barName = '';
     // if (this.props.dist.has_dist) {
-    //   barSize = this.props.dist.dist.freq[rowIndex];
-    //   barName = this.props.dist.dist.val[rowIndex];
+    //   barSize = this.props.dist.dist.freq[x.rowIndex];
+    //   barName = this.props.dist.dist.val[x.rowIndex];
     // }
     let barSize = 0;
     let barCt = 0;
@@ -60,10 +61,10 @@ class FilterCatPlot extends React.Component {
 
     const condLength = this.props.condDist.orderKeys.length;
     const margLength = this.props.condDist.morderKeys.length;
-    const ridx = rowIndex - 1;
-    const ridx2 = rowIndex - 2;
+    const ridx = x.rowIndex - 1;
+    const ridx2 = x.rowIndex - 2;
 
-    if (rowIndex === 0) {
+    if (x.rowIndex === 0) {
       return (
         <div
           key="activeDivider"
@@ -108,7 +109,7 @@ class FilterCatPlot extends React.Component {
 
     return (
       <CatBar
-        key={`${rowIndex}_${barCt}`}
+        key={`${x.rowIndex}_${barCt}`}
         active={active}
         height={this.cellHeight}
         width={barSize / barMax * this.props.style.width}
