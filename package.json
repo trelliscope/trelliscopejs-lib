@@ -4,7 +4,7 @@
   "description": "trelliscopejs",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp config.json dist/",
+    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp config.json dist/ && cp favicon.ico dist/",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "lint": "eslint src"
   },
@@ -48,8 +48,9 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "crossfilter2": "^1.3.14",
     "d3": "^4.1.1",
-    "isomorphic-fetch": "^2.2.1",
+    "jStat": "^1.5.3",
     "katex": "^0.6.0",
     "marked": "^0.3.5",
     "material-ui": "^0.15.2",
@@ -69,7 +70,6 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "reselect": "^2.5.3",
-    "throttle-debounce": "^1.0.1",
-    "jStat": "^1.5.3"
+    "throttle-debounce": "^1.0.1"
   }
 }
