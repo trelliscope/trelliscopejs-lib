@@ -2,7 +2,7 @@ import React from 'react';
 import Radium from 'radium';
 import { SB_CONFIG } from '../constants.js';
 
-const SideButton = ({ bstyle, isActive, icon, title, onClick }) => {
+const SideButton = ({ bstyle, isActive, icon, title, label, onClick }) => {
   const bottom = {
     position: 'absolute',
     bottom: 0,
@@ -17,7 +17,10 @@ const SideButton = ({ bstyle, isActive, icon, title, onClick }) => {
       style={[bstyle.base, isActive && bstyle.active, title === SB_CONFIG && bottom]}
       type={"button"} onClick={onClick}
     >
-      <i className={icon} style={bstyle.icon}></i>
+      <div style={bstyle.icon}>
+        <i className={icon}></i>
+      </div>
+      <div style={bstyle.label}>{label}</div>
     </div>
   );
 };
@@ -27,6 +30,7 @@ SideButton.propTypes = {
   isActive: React.PropTypes.bool,
   icon: React.PropTypes.string,
   title: React.PropTypes.string,
+  label: React.PropTypes.string,
   onClick: React.PropTypes.func
 };
 

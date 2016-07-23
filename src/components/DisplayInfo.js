@@ -137,7 +137,7 @@ const styleSelector = createSelector(
         boxSizing: 'border-box',
         top: 0,
         transition: 'left 0.5s ease, background 250ms',
-        left: selectedDisplay.name === '' ? -ui.header.height : ui.header.height,
+        left: selectedDisplay.name === '' ? -ui.sideButtons.width : ui.sideButtons.width,
         display: 'inline-block',
         height: ui.header.height,
         width: ui.header.height,

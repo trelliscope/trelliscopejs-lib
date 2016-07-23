@@ -11,11 +11,11 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants.js';
 
 const buttons = [
-  { icon: 'icon-th', title: SB_PANEL_LAYOUT, key: 'g' },
-  { icon: 'icon-list-ul', title: SB_PANEL_LABELS, key: 'l' },
-  { icon: 'icon-filter', title: SB_PANEL_FILTER, key: 'f' },
-  { icon: 'icon-sort-amount-asc', title: SB_PANEL_SORT, key: 's' },
-  { icon: 'icon-cog', title: SB_CONFIG, key: 'c' }
+  { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
+  { icon: 'icon-list-ul', label: 'Labels', title: SB_PANEL_LABELS, key: 'l' },
+  { icon: 'icon-filter', label: 'Filter', title: SB_PANEL_FILTER, key: 'f' },
+  { icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's' },
+  { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
 ];
 
 class SideButtons extends React.Component {
@@ -61,6 +61,7 @@ class SideButtons extends React.Component {
             isActive={d.title === this.props.active}
             icon={d.icon}
             title={d.title}
+            label={d.label}
             onClick={() => this.props.setActive(d.title)}
           />
         ))}
@@ -101,12 +102,13 @@ const stateSelector = createSelector(
     width: ui.sideButtons.width,
     buttonStyle: {
       base: {
+        position: 'relative',
         width: ui.sideButtons.width,
         height: ui.sideButtons.width,
         lineHeight: `${ui.sideButtons.width}px`,
         textAlign: 'center',
         verticalAlign: 'middle',
-        fontSize: ui.sideButtons.width * 0.5,
+        fontSize: ui.sideButtons.fontSize,
         color: ui.sideButtons.button.color,
         borderBottom: '1px solid',
         borderColor: ui.sideButtons.button.borderColor,
@@ -116,9 +118,6 @@ const stateSelector = createSelector(
           transition: 'color 0.2s, background 0.2s',
           background: ui.sideButtons.button.hover.background,
           cursor: 'pointer'
-        },
-        icon: {
-          lineHeight: `${ui.sideButtons.width}px`
         }
       },
       active: {
@@ -129,6 +128,23 @@ const stateSelector = createSelector(
           transition: 'color 0.2s, background 0.2s',
           background: ui.sideButtons.button.active.background
         }
+      },
+      icon: {
+        lineHeight: `${ui.sideButtons.fontSize}px`,
+        height: ui.sideButtons.fontSize,
+        width: ui.sideButtons.width,
+        position: 'absolute',
+        top: 10,
+        left: 0
+      },
+      label: {
+        fontSize: ui.sideButtons.labelFontSize,
+        lineHeight: `${ui.sideButtons.labelFontSize}px`,
+        width: ui.sideButtons.width,
+        opacity: 0.6,
+        position: 'absolute',
+        bottom: 3,
+        left: 0
       }
     },
     active

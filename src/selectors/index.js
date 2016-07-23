@@ -31,7 +31,9 @@ export const uiConstsSelector = () => (
       color: 'white'
     },
     sideButtons: {
-      width: 45,
+      width: 52,
+      fontSize: 23,
+      labelFontSize: 13,
       background: '#b3b3b3',
       spacerBackground: '#c1c1c1',
       button: {

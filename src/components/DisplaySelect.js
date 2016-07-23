@@ -135,7 +135,7 @@ const styleSelector = createSelector(
           height: 45,
           width: 45,
           top: 0,
-          left: 0,
+          left: (ui.sideButtons.width - ui.header.height) / 2,
           pointerEvents: 'none'
         },
         inner: {
@@ -167,7 +167,7 @@ const styleSelector = createSelector(
         top: 0,
         left: 0,
         height: ui.header.height,
-        width: ui.header.height,
+        width: ui.sideButtons.width,
         fontSize: 16,
         lineHeight: `${ui.header.height + 2}px`,
         background: ui.header.button.active.background,
