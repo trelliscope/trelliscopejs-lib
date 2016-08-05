@@ -37,21 +37,40 @@ class Pagination extends React.Component {
     return this.props.handleChange(n);
   }
   render() {
+    const pFrom = this.props.npp * (this.props.n - 1) + 1;
+    const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
+    const txt = `${pFrom} - ${pTo} of ${this.props.totPanels}`;
     return (
       <div style={this.props.style.outer}>
-        <IconButton
-          style={this.props.style.button}
-          iconStyle={this.props.style.icon}
-          iconClassName="icon-chevron-left"
-          onClick={() => this.pageLeft()}
-        />
-        {this.props.n} / {this.props.totPages}
-        <IconButton
-          style={this.props.style.button}
-          iconStyle={this.props.style.icon}
-          iconClassName="icon-chevron-right"
-          onClick={() => this.pageRight()}
-        />
+        <div style={this.props.style.label}>
+          {txt}
+        </div>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapLeft]}>
+          <div style={this.props.style.buttonDiv}>
+            <IconButton
+              style={this.props.style.button}
+              iconStyle={this.props.style.icon}
+              iconClassName="icon-chevron-left"
+              onClick={() => this.pageLeft()}
+            />
+          </div>
+          <div style={this.props.style.buttonText}>
+            Prev
+          </div>
+        </div>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapRight]}>
+          <div style={this.props.style.buttonDiv}>
+            <IconButton
+              style={this.props.style.button}
+              iconStyle={this.props.style.icon}
+              iconClassName="icon-chevron-right"
+              onClick={() => this.pageRight()}
+            />
+          </div>
+          <div style={this.props.style.buttonText}>
+            Next
+          </div>
+        </div>
       </div>
     );
   }
@@ -62,6 +81,7 @@ Pagination.propTypes = {
   n: React.PropTypes.number,
   npp: React.PropTypes.number,
   totPages: React.PropTypes.number,
+  totPanels: React.PropTypes.number,
   handleChange: React.PropTypes.func
 };
 
@@ -75,22 +95,58 @@ const stateSelector = createSelector(
         position: 'absolute',
         top: 0,
         right: ui.header.titleWidth + 50,
-        display: 'inline-block',
+        width: 400,
         height: ui.header.height
       },
-      button: {
-        width: ui.header.height,
+      buttonWrap: {
+        width: ui.header.height - 10,
         height: ui.header.height,
+        position: 'absolute',
+        top: 0
+      },
+      buttonWrapLeft: {
+        right: ui.header.height - 10
+      },
+      buttonWrapRight: {
+        right: 0
+      },
+      buttonDiv: {
+        width: ui.header.height - 10,
+        height: ui.header.height - 10,
+        position: 'absolute',
+        top: 0,
+        left: 0
+      },
+      button: {
+        width: ui.header.height - 10,
+        height: ui.header.height - 10,
+        position: 'absolute',
+        top: 0,
+        left: 5,
         border: 0,
         padding: 0
       },
+      buttonText: {
+        fontSize: 10,
+        position: 'absolute',
+        bottom: 5,
+        left: 0,
+        width: 48,
+        height: 10,
+        lineHeight: '10px',
+        textAlign: 'center'
+      },
       icon: {
-        fontSize: 16,
-        lineHeight: `${ui.header.height}px`,
-        padding: 0
+        fontSize: 18,
+        padding: 10
+      },
+      label: {
+        position: 'absolute',
+        right: (ui.header.height - 10) * 2 + 8
       }
     },
     n,
+    totPanels: card,
     totPages: Math.ceil(card / npp),
     npp
   })
