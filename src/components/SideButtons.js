@@ -134,16 +134,16 @@ const stateSelector = createSelector(
         height: ui.sideButtons.fontSize,
         width: ui.sideButtons.width,
         position: 'absolute',
-        top: 10,
+        top: 8,
         left: 0
       },
       label: {
         fontSize: ui.sideButtons.labelFontSize,
         lineHeight: `${ui.sideButtons.labelFontSize}px`,
         width: ui.sideButtons.width,
-        opacity: 0.6,
+        // opacity: 0.6,
         position: 'absolute',
-        bottom: 3,
+        bottom: 4,
         left: 0
       }
     },

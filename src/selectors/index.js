@@ -12,7 +12,7 @@ export const uiConstsSelector = () => (
   {
     fontFamily: '"Open Sans", sans-serif',
     header: {
-      height: 45,
+      height: 48,
       fontSize: 16,
       borderColor: '#eaedf0',
       background: 'white',
@@ -31,9 +31,9 @@ export const uiConstsSelector = () => (
       color: 'white'
     },
     sideButtons: {
-      width: 52,
-      fontSize: 23,
-      labelFontSize: 13,
+      width: 48,
+      fontSize: 22,
+      labelFontSize: 11,
       background: '#b3b3b3',
       spacerBackground: '#c1c1c1',
       button: {

@@ -132,16 +132,16 @@ const styleSelector = createSelector(
         outer: {
           position: 'absolute',
           overflow: 'hidden',
-          height: 45,
-          width: 45,
+          height: ui.header.height,
+          width: ui.header.height,
           top: 0,
           left: (ui.sideButtons.width - ui.header.height) / 2,
           pointerEvents: 'none'
         },
         inner: {
           position: 'absolute',
-          height: 45,
-          width: 45,
+          height: ui.header.height,
+          width: ui.header.height,
           top: 0,
           left: 0,
           transition: ['transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
@@ -151,7 +151,7 @@ const styleSelector = createSelector(
         },
         empty: {
           position: 'absolute',
-          height: 45, width: '100%',
+          height: ui.header.height, width: '100%',
           borderRadius: '50%',
           opacity: 0.16,
           transition: 'transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms',
@@ -168,7 +168,7 @@ const styleSelector = createSelector(
         left: 0,
         height: ui.header.height,
         width: ui.sideButtons.width,
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: `${ui.header.height + 2}px`,
         background: ui.header.button.active.background,
         color: 'white',

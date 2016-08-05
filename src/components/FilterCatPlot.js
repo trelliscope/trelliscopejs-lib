@@ -76,7 +76,7 @@ class FilterCatPlot extends React.Component {
             background: '#ddd'
           }}
         >
-          {`${condLength} active${condLength > 0 ? ' (click a bar to remove)' : ''}`}
+          {`${condLength} selected${condLength > 0 ? ' (click a bar to deselect)' : ''}`}
         </div>
       );
     } else if (ridx < condLength) {

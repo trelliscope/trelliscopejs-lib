@@ -37,31 +37,18 @@ class Pagination extends React.Component {
     return this.props.handleChange(n);
   }
   render() {
-    const style = {
-      button: {
-        width: 45,
-        height: 45,
-        border: 0,
-        padding: 0
-      },
-      icon: {
-        fontSize: 16,
-        lineHeight: '45px',
-        padding: 0
-      }
-    };
     return (
-      <div style={this.props.style}>
+      <div style={this.props.style.outer}>
         <IconButton
-          style={style.button}
-          iconStyle={style.icon}
+          style={this.props.style.button}
+          iconStyle={this.props.style.icon}
           iconClassName="icon-chevron-left"
           onClick={() => this.pageLeft()}
         />
         {this.props.n} / {this.props.totPages}
         <IconButton
-          style={style.button}
-          iconStyle={style.icon}
+          style={this.props.style.button}
+          iconStyle={this.props.style.icon}
           iconClassName="icon-chevron-right"
           onClick={() => this.pageRight()}
         />
@@ -84,11 +71,24 @@ const stateSelector = createSelector(
   uiConstsSelector, pageNumSelector, JSONFilterCardinalitySelector, nPerPageSelector,
   (ui, n, card, npp) => ({
     style: {
-      position: 'absolute',
-      top: 0,
-      right: ui.header.titleWidth + 50,
-      display: 'inline-block',
-      height: ui.header.height
+      outer: {
+        position: 'absolute',
+        top: 0,
+        right: ui.header.titleWidth + 50,
+        display: 'inline-block',
+        height: ui.header.height
+      },
+      button: {
+        width: ui.header.height,
+        height: ui.header.height,
+        border: 0,
+        padding: 0
+      },
+      icon: {
+        fontSize: 16,
+        lineHeight: `${ui.header.height}px`,
+        padding: 0
+      }
     },
     n,
     totPages: Math.ceil(card / npp),

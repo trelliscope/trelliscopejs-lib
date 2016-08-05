@@ -108,7 +108,7 @@ class DisplayInfo extends React.Component {
         onClick={this.handleOpen}
         style={this.props.style.button}
       >
-        <i className="icon-info" style={{ paddingLeft: 2, lineHeight: '45px' }}></i>
+        <i className="icon-info" style={this.props.style.icon}></i>
         {dialogContent}
       </div>
     );
@@ -141,7 +141,7 @@ const styleSelector = createSelector(
         display: 'inline-block',
         height: ui.header.height,
         width: ui.header.height,
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: `${ui.header.height}px`,
         color: ui.header.button.color,
         background: 'white',
@@ -154,6 +154,10 @@ const styleSelector = createSelector(
           background: '#eee',
           cursor: 'pointer'
         }
+      },
+      icon: {
+        paddingLeft: 2,
+        lineHeight: `${ui.header.height}px`
       },
       modal: {
         container: {
