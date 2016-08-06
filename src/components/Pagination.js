@@ -39,7 +39,7 @@ class Pagination extends React.Component {
   render() {
     const pFrom = this.props.npp * (this.props.n - 1) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
-    const txt = `${pFrom} - ${pTo} of ${this.props.totPanels}`;
+    const txt = `${pFrom} \u2013 ${pTo} of ${this.props.totPanels}`;
     return (
       <div style={this.props.style.outer}>
         <div style={this.props.style.label}>
