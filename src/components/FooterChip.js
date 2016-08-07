@@ -1,7 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import { connect } from 'react-redux';
-import { emphasize, fade } from 'material-ui/utils/colorManipulator';
+import { fade } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
 import { uiConstsSelector } from '../selectors';
 
@@ -38,7 +38,6 @@ const styleSelector = createSelector(
         border: 10,
         boxSizing: 'border-box',
         display: 'flex',
-        cursor: 'pointer',
         textDecoration: 'none',
         marginLeft: 3,
         marginTop: 4,
@@ -47,12 +46,13 @@ const styleSelector = createSelector(
         borderRadius: 10,
         whiteSpace: 'nowrap',
         width: '-webkit-fit-content',
-        height: 22,
-        transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
         backgroundColor: 'rgb(173, 216, 230)',
-        ':hover': {
-          backgroundColor: emphasize('rgb(173, 216, 230)', 0.08)
-        }
+        height: 22
+        // cursor: 'pointer',
+        // transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+        // ':hover': {
+        //   backgroundColor: emphasize('rgb(173, 216, 230)', 0.08)
+        // }
       },
       label: {
         color: 'white',
