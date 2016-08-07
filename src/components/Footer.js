@@ -90,7 +90,16 @@ const filterSelector = state => state.filter;
 
 const filterNamesSelector = createSelector(
   filterSelector,
-  filter => Object.keys(filter.state)
+  filter => {
+    const keys = Object.keys(filter.state)
+    const activeKeys = [];
+    for (let i = 0; i < keys.length; i++) {
+      if (filter.state[keys[i]].value !== undefined) {
+        activeKeys.push(keys[i]);
+      }
+    }
+    return activeKeys;
+  }
 );
 
 const styleSelector = createSelector(
