@@ -28,8 +28,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 filterState = {
                   name: d,
                   orderValue: 'ct,desc',
-                  type: 'regex',
-                  value: ''
+                  type: 'regex'
                 };
               }
 
@@ -58,8 +57,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 filterState = {
                   name: d,
                   orderValue: 'ct,desc',
-                  type: 'range',
-                  value: {}
+                  type: 'range'
                 };
               }
 
@@ -329,6 +327,12 @@ const mapDispatchToProps = (dispatch) => ({
   handleFilterChange: (x) => {
     const obj = {};
     obj[x.name] = x;
+    // if (x.value) {
+    //   obj = {};
+    //   obj[x.name] = x;
+    // } else {
+    //   obj = x.name;
+    // }
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },

@@ -49,15 +49,15 @@ const keepRecord = (rec, filt) => {
       // }
       break;
     case 'range':
-      if (filt.value.from && rec < filt.value.from) {
+      if (filt.value && filt.value.from && rec < filt.value.from) {
         keep = false;
       }
-      if (filt.value.to && rec > filt.value.to) {
+      if (filt.value && filt.value.to && rec > filt.value.to) {
         keep = false;
       }
       break;
     case 'select':
-      if (filt.value.indexOf(rec) < 0) {
+      if (filt.value && filt.value.indexOf(rec) < 0) {
         keep = false;
       }
       break;

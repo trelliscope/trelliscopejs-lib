@@ -8,6 +8,7 @@ class FilterNum extends React.Component {
   constructor(props) {
     super(props);
     this.handleInput = debounce(400, this.handleInput);
+    this.stateValue = {};
   }
   setValidState(lower, upper, which) {
     const valid = this.checkValidNumber(lower, upper, which);
@@ -19,17 +20,25 @@ class FilterNum extends React.Component {
   handleInput(val, which) {
     let newState = {};
     const newVal = val === '' ? undefined : parseFloat(val);
-    const lower = which === 'from' ? newVal : this.props.filterState.value.from;
-    const upper = which === 'to' ? newVal : this.props.filterState.value.to;
-    newState = {
-      name: this.props.filterState.name,
-      type: 'range',
-      value: {
-        from: lower,
-        to: upper
-      },
-      valid: this.checkValidNumber(lower, upper, which)
-    };
+    const lower = which === 'from' ? newVal : this.stateValue.from;
+    const upper = which === 'to' ? newVal : this.stateValue.to;
+    if (lower === undefined && upper === undefined) {
+      newState = {
+        name: this.props.filterState.name,
+        type: 'range',
+        valid: true
+      };
+    } else {
+      newState = {
+        name: this.props.filterState.name,
+        type: 'range',
+        value: {
+          from: lower,
+          to: upper
+        },
+        valid: this.checkValidNumber(lower, upper, which)
+      };
+    }
     this.props.handleChange(newState);
   }
   checkValidNumber(lower, upper, which) {
@@ -49,6 +58,11 @@ class FilterNum extends React.Component {
     if (this.props.filterState.valid !== undefined && !this.props.filterState.valid) {
       validStyle.color = 'red';
     }
+    this.stateValue = this.props.filterState.value;
+    if (this.stateValue === undefined) {
+      this.stateValue = {};
+    }
+
     return (
       <div style={this.props.style.container}>
         <div
@@ -69,11 +83,11 @@ class FilterNum extends React.Component {
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}
             type="number"
-            defaultValue={this.props.filterState.value.from}
+            defaultValue={this.stateValue.from}
             onChange={(e) => this.handleInput(e.target.value, 'from')}
             onKeyDown={(e) => this.setValidState(
               e.target.value,
-              this.props.filterState.value.to,
+              this.stateValue.to,
               'from'
             )}
           />
@@ -84,10 +98,10 @@ class FilterNum extends React.Component {
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}
             type="number"
-            defaultValue={this.props.filterState.value.to}
+            defaultValue={this.stateValue.to}
             onChange={(e) => this.handleInput(e.target.value, 'to')}
             onKeyDown={(e) => this.setValidState(
-              this.props.filterState.value.from,
+              this.stateValue.from,
               e.target.value,
               'to'
             )}
