@@ -102,7 +102,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
             <div
               style={[
                 style.variable,
-                filter[d] && filter[d].type ? style.variableActive : {}
+                filter[d] && filter[d].value !== undefined ? style.variableActive : {}
               ]}
               key={i}
               onMouseDown={() => {
