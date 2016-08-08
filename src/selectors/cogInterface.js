@@ -5,6 +5,7 @@ export const pageNumSelector = state => state.layout.pageNum;
 export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;
 export const cogInterfaceSelector = state => state._cogInterface;
 export const filterStateSelector = state => state.filter.state;
+export const filterViewStateSelector = state => state.filter.view;
 export const sortSelector = state => state.sort;
 export const layoutSelector = state => state.layout;
 export const labelsSelector = state => state.labels;
@@ -88,21 +89,20 @@ export const JSONFilterIndexSelector = createSelector(
 
 export const JSONFiltDistSelector = createSelector(
   cogInterfaceSelector, JSONFilterIndexSelector, filterStateSelector,
-  displayInfoSelector,
-  (ci, idx, filter, di) => {
+  filterViewStateSelector, displayInfoSelector,
+  (ci, idx, filter, filterView, di) => {
     const result = {};
     if (ci.iface && ci.info && ci.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
-      const keys = Object.keys(filter);
+      const keys = filterView.active;
       for (let i = 0; i < keys.length; i++) {
-        if (filter[keys[i]].varType === 'factor') {
+        const varType = di.info.cogInfo[keys[i]].type;
+        if (varType === 'factor') {
           let curVals = [];
-          if (filter[keys[i]].type === 'select') {
+          if (filter[keys[i]] && filter[keys[i]].type === 'select') {
             curVals = filter[keys[i]].value;
-          } else if (filter[keys[i]].type === 'regex') {
+          } else if (filter[keys[i]] && filter[keys[i]].type === 'regex') {
             curVals = filter[keys[i]].vals;
-          } else {
-            curVals = [];
           }
 
           const cur = {};
@@ -124,7 +124,7 @@ export const JSONFiltDistSelector = createSelector(
           }
 
           // if user has explicitly selected things, they need to all be there
-          if (filter[keys[i]].type === 'select') {
+          if (filter[keys[i]] && filter[keys[i]].type === 'select') {
             for (let j = 0; j < curVals.length; j++) {
               if (!cur[curVals[j]]) {
                 cur[curVals[j]] = 0;
@@ -144,7 +144,7 @@ export const JSONFiltDistSelector = createSelector(
             }
           }
 
-          const orderValue = filter[keys[i]].orderValue ?
+          const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ?
             filter[keys[i]].orderValue : 'ct,desc';
 
           switch (orderValue) {

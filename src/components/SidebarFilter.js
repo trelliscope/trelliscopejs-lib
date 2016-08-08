@@ -28,7 +28,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo, filtDi
                 filterState = {
                   name: d,
                   orderValue: 'ct,desc',
-                  type: 'regex'
+                  type: 'select'
                 };
               }
 

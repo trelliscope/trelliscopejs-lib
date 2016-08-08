@@ -72,17 +72,23 @@ const filterView = (state = {}, action) => {
         view.inactive = [];
       }
       if (action.which === 'remove') {
-        const idx = view.active.indexOf(action.name);
-        if (idx > -1) {
-          view.active.splice(idx, 1);
+        const idxA = view.active.indexOf(action.name);
+        if (idxA > -1) {
+          view.active.splice(idxA, 1);
         }
-        view.inactive.push(action.name);
+        const idxI = view.inactive.indexOf(action.name);
+        if (idxI < 0) {
+          view.inactive.push(action.name);
+        }
       } else if (action.which === 'add') {
-        const idx = view.inactive.indexOf(action.name);
-        if (idx > -1) {
-          view.inactive.splice(idx, 1);
+        const idxA = view.inactive.indexOf(action.name);
+        if (idxA > -1) {
+          view.inactive.splice(idxA, 1);
         }
-        view.active.push(action.name);
+        const idxI = view.active.indexOf(action.name);
+        if (idxI < 0) {
+          view.active.push(action.name);
+        }
       }
       return view;
     }
