@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { combineReducers } from 'redux';
 import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants.js';
 
@@ -32,8 +33,14 @@ export const labels = (state = [], action) => {
 
 export const sort = (state = [], action) => {
   switch (action.type) {
-    case SET_SORT:
+    case SET_SORT: {
+      if (typeof action.sort === 'number') {
+        const newState = Object.assign([], [], state);
+        newState.splice(action.sort, 1);
+        return newState;
+      }
       return Object.assign([], [], action.sort);
+    }
     default:
   }
   return state;
@@ -41,8 +48,14 @@ export const sort = (state = [], action) => {
 
 const filterState = (state = {}, action) => {
   switch (action.type) {
-    case SET_FILTER:
+    case SET_FILTER: {
+      // action.filter should be an object to replace the previous state
+      // but if it's a string, the filter with that name will be removed
+      if (typeof action.filter === 'string' || action.filter instanceof String) {
+        return omit(state, action.filter);
+      }
       return Object.assign({}, state, action.filter);
+    }
     default:
   }
   return state;
@@ -50,8 +63,29 @@ const filterState = (state = {}, action) => {
 
 const filterView = (state = {}, action) => {
   switch (action.type) {
-    case SET_FILTER_VIEW:
-      return Object.assign({}, state, action.filterView);
+    case SET_FILTER_VIEW: {
+      const view = Object.assign({}, state);
+      if (view.active === undefined) {
+        view.active = [];
+      }
+      if (view.inactive === undefined) {
+        view.inactive = [];
+      }
+      if (action.which === 'remove') {
+        const idx = view.active.indexOf(action.name);
+        if (idx > -1) {
+          view.active.splice(idx, 1);
+        }
+        view.inactive.push(action.name);
+      } else if (action.which === 'add') {
+        const idx = view.inactive.indexOf(action.name);
+        if (idx > -1) {
+          view.inactive.splice(idx, 1);
+        }
+        view.active.push(action.name);
+      }
+      return view;
+    }
     default:
   }
   return state;

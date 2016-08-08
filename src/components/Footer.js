@@ -18,10 +18,12 @@ const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
           Active sort variables:
         </div>
         <div style={style.chipWrapper}>
-          {sortNames.map((el) => (
+          {sortNames.map((el, i) => (
             <FooterChip
               key={`${el}_sortchip`}
               label={el}
+              index={i}
+              type="sort"
             />
           ))}
         </div>
@@ -36,10 +38,12 @@ const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
           Active filter variables:
         </div>
         <div style={style.chipWrapper}>
-          {filterNames.map((el) => (
+          {filterNames.map((el, i) => (
             <FooterChip
               key={`${el}_filterchip`}
               label={el}
+              index={i}
+              type="filter"
             />
           ))}
         </div>
@@ -91,7 +95,7 @@ const filterSelector = state => state.filter;
 const filterNamesSelector = createSelector(
   filterSelector,
   filter => {
-    const keys = Object.keys(filter.state)
+    const keys = Object.keys(filter.state);
     const activeKeys = [];
     for (let i = 0; i < keys.length; i++) {
       if (filter.state[keys[i]].value !== undefined) {

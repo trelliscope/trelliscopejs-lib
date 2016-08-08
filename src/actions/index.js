@@ -34,8 +34,8 @@ export const setFilter = (filter) => ({
   type: SET_FILTER, filter
 });
 
-export const setFilterView = (filterView) => ({
-  type: SET_FILTER_VIEW, filterView
+export const setFilterView = (name, which) => ({
+  type: SET_FILTER_VIEW, name, which
 });
 
 export const requestDisplayList = () => ({
@@ -108,21 +108,17 @@ export const fetchDisplay = (name, group, cfg) =>
       dispatch(setLabels(json.state.labels));
       dispatch(setSort(json.state.sort));
       dispatch(setFilter(json.state.filter));
-      // initial filter view will be those that are active
-      const active = [];
-      const inactive = [];
       const ciKeys = Object.keys(json.cogInfo);
       for (let i = 0; i < ciKeys.length; i++) {
         if (json.cogInfo[ciKeys[i]].filterable) {
           if (json.state.filter &&
             json.state.filter[ciKeys[i]] !== undefined) {
-            active.push(ciKeys[i]);
+            dispatch(setFilterView(ciKeys[i], 'add'));
           } else {
-            inactive.push(ciKeys[i]);
+            dispatch(setFilterView(ciKeys[i], 'remove'));
           }
         }
       }
-      dispatch(setFilterView({ active, inactive }));
       dispatch(setLayout(json.state.layout));
       fetchCogInterfaceInfo(dispatch, json.cogInterface, cfg);
     });

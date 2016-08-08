@@ -52,11 +52,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
                     <IconButton
                       iconStyle={{ fontSize: 16, color: '#aaa' }}
                       iconClassName="icon-times"
-                      onClick={() => {
-                        const sort2 = Object.assign([], sort);
-                        sort2.splice(i, 1);
-                        handleChange(sort2);
-                      }}
+                      onClick={() => handleChange(i)}
                     />
                   </td>
                 </tr>
@@ -66,7 +62,8 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
           </table>
         </div>
         <div style={style.notUsedHeader}>
-          {sort.length === 0 ? 'Select a variable:' : notUsed.length === 0 ? '' : 'More variables:'}
+          {sort.length === 0 ? 'Select a variable to sort on:' :
+            notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div style={style.notUsed}>
           {notUsed.map((d, i) => (

@@ -10,8 +10,8 @@ import { JSONFiltDistSelector } from '../selectors/cogInterface';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
 
-const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
-  handleViewChange, handleFilterChange, handleFilterSortChange, filtDist }) => {
+const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo, filtDist,
+  handleViewChange, handleFilterChange, handleFilterSortChange }) => {
   let content = <div></div>;
   if (filter) {
     content = (
@@ -76,12 +76,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 <div style={style.footer}>
                   <div
                     style={[style.footerIcon, style.footerClose]}
-                    onMouseDown={() => {
-                      const view = Object.assign({}, filterView);
-                      view.active.splice(view.active.indexOf(d), 1);
-                      view.inactive.push(d);
-                      handleViewChange(view);
-                    }}
+                    onMouseDown={() => handleViewChange(d, 'remove')}
                   >
                     <i className="icon-times-circle"></i>
                   </div>
@@ -97,6 +92,10 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
             );
           })}
         </div>
+        <div style={style.notUsedHeader}>
+          {filterView.active.length === 0 ? 'Select a variable to filter on:' :
+            filterView.inactive.length === 0 ? '' : 'More variables:'}
+        </div>
         <div style={style.notUsedContainer}>
           {filterView.inactive.map((d, i) => (
             <div
@@ -105,12 +104,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 filter[d] && filter[d].value !== undefined ? style.variableActive : {}
               ]}
               key={i}
-              onMouseDown={() => {
-                const view = Object.assign({}, filterView);
-                view.inactive.splice(view.inactive.indexOf(d), 1);
-                view.active.push(d);
-                handleViewChange(view);
-              }}
+              onMouseDown={() => handleViewChange(d, 'add')}
             >
               {d}
             </div>
@@ -128,10 +122,10 @@ SidebarFilter.propTypes = {
   filterView: React.PropTypes.object,
   cogInfo: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
+  filtDist: React.PropTypes.object,
   handleViewChange: React.PropTypes.func,
   handleFilterChange: React.PropTypes.func,
-  handleFilterSortChange: React.PropTypes.func,
-  filtDist: React.PropTypes.object
+  handleFilterSortChange: React.PropTypes.func
 };
 
 // ------ redux container ------
@@ -146,6 +140,14 @@ const stateSelector = createSelector(
   JSONFiltDistSelector,
   (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist) => ({
     style: {
+      notUsedHeader: {
+        height: 30,
+        lineHeight: '30px',
+        paddingLeft: 10,
+        boxSizing: 'border-box',
+        width: ui.sidebar.width,
+        fontSize: 14
+      },
       notUsedContainer: {
         width: ui.sidebar.width,
         // height: sh - 30, // need to take number of filters and total height into account
@@ -153,8 +155,7 @@ const stateSelector = createSelector(
         boxSizing: 'border-box',
         paddingLeft: 10,
         paddingRight: 10,
-        paddingBottom: 10,
-        paddingTop: 5
+        paddingBottom: 10
       },
       variable: {
         display: 'inline-block',
@@ -321,18 +322,12 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  handleViewChange: (x) => {
-    dispatch(setFilterView(x));
+  handleViewChange: (x, which) => {
+    dispatch(setFilterView(x, which));
   },
   handleFilterChange: (x) => {
     const obj = {};
     obj[x.name] = x;
-    // if (x.value) {
-    //   obj = {};
-    //   obj[x.name] = x;
-    // } else {
-    //   obj = x.name;
-    // }
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },

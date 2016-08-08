@@ -4,13 +4,19 @@ import { connect } from 'react-redux';
 import { fade } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
 import { uiConstsSelector } from '../selectors';
+import { setFilterView, setFilter, setLayout, setSort } from '../actions';
 
-const FooterChip = ({ label, style }) => (
+const FooterChip = ({ label, index, style, type, handleStateClose }) => (
   <div type="button" style={style.wrapper} key="label">
     <span style={style.label}>
       {label}
     </span>
-    <svg viewBox="0 0 24 24" style={style.icon} key="icon">
+    <svg
+      viewBox="0 0 24 24"
+      style={style.icon}
+      key="icon"
+      onClick={() => handleStateClose({ label, index, type })}
+    >
       <path
         d={
           'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 ' +
@@ -25,7 +31,10 @@ const FooterChip = ({ label, style }) => (
 
 FooterChip.propTypes = {
   label: React.PropTypes.string,
-  style: React.PropTypes.object
+  index: React.PropTypes.number,
+  style: React.PropTypes.object,
+  type: React.PropTypes.string,
+  handleStateClose: React.PropTypes.func
 };
 
 // ------ redux container ------
@@ -88,6 +97,19 @@ const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
+const mapDispatchToProps = (dispatch) => ({
+  handleStateClose: (x) => {
+    if (x.type === 'sort') {
+      dispatch(setSort(x.index));
+    } else if (x.type === 'filter') {
+      dispatch(setFilterView(x.label, 'remove'));
+      dispatch(setFilter(x.label));
+      dispatch(setLayout({ pageNum: 1 }));
+    }
+  }
+});
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Radium(FooterChip));
