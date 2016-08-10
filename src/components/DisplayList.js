@@ -36,22 +36,31 @@ const DisplayList = ({ di, handleClick, cfg }) => {
     }
   };
 
-  const displayList = Object.keys(dispGroups).map((k) => (
+  const groupKeys = Object.keys(dispGroups);
+
+  const makeSubheader = (groupName, n) => {
+    if (n > 1) {
+      return <Subheader style={{ fontSize: 20, color: 'black' }}>{groupName}</Subheader>;
+    }
+    return <Subheader />;
+  };
+
+  const displayList = groupKeys.map((k) => (
     <div style={styles.root} key={k}>
       <GridList
         cellHeight={200}
         cols={3}
         style={styles.gridList}
       >
-        <Subheader style={{ fontSize: 20 }}>{k}</Subheader>
+        {makeSubheader(k, groupKeys.length)}
         {dispGroups[k].map((i) => (
           <GridTile
             key={i}
             style={styles.gridTile}
             title={
-              <span style={{ fontWeight: 400, color: redA200 }}>
+              <div style={{ fontWeight: 400, color: redA200 }}>
                 {di[i].name}
-              </span>
+              </div>
             }
             subtitle={
               <span style={{ fontSize: 13 }}>
@@ -62,7 +71,7 @@ const DisplayList = ({ di, handleClick, cfg }) => {
                 </span>
               </span>
             }
-            titleBackground="rgba(0, 0, 0, 0.65)"
+            titleBackground="rgba(0, 0, 0, 0.80)"
             onClick={() => handleClick(di[i].name, di[i].group)}
             children={[
               <img
