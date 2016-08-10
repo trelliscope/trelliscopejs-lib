@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 
 export const configSelector = state => state._config.config;
 
+
 export const uiConstsSelector = () => (
   {
     fontFamily: '"Open Sans", sans-serif',
@@ -20,7 +21,7 @@ export const uiConstsSelector = () => (
       button: {
         color: '#9ba3af',
         active: {
-          background: '#15a4fa'
+          background: '#4285f4' // #15a4fa
         }
       },
       titleWidth: 120
@@ -40,12 +41,12 @@ export const uiConstsSelector = () => (
         color: 'white',
         borderColor: '#c0c0c0',
         active: {
-          color: '#15a4fa',
+          color: '#4285f4',
           background: 'white'
         },
         hover: {
           // background: '#999'
-          background: '#15a4fa'
+          background: '#4285f4'
         }
       }
     },

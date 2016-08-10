@@ -180,10 +180,10 @@ const styleSelector = createSelector(
         transition: 'all 500ms ease-in',
         ':hover': {
           transition: 'background 250ms',
-          background: emphasize(ui.header.button.active.background, 0.4),
+          background: emphasize(ui.header.button.active.background, 0.2),
           color: 'white',
           cursor: 'pointer',
-          borderColor: emphasize(ui.header.button.active.background, 0.4)
+          borderColor: emphasize(ui.header.button.active.background, 0.2)
         }
       }
     },
