@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
+import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
 import App from './App';
 
@@ -36,7 +37,7 @@ const loggerMiddleware = createLogger();
 
 const store = createStore(
   app,
-  applyMiddleware(thunkMiddleware, loggerMiddleware)
+  applyMiddleware(thunkMiddleware, loggerMiddleware, crossfilterMiddleware)
 );
 
 const windowResize = (dims) => (

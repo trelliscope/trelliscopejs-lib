@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+// import { omit } from 'lodash';
 import { combineReducers } from 'redux';
 import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants.js';
 

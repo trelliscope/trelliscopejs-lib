@@ -20,6 +20,9 @@ module.exports = {
       compress: {
         warnings: false
       }
+    }),
+    new webpack.ProvidePlugin({
+      crossfilter: 'crossfilter2'
     })
   ],
   module: {

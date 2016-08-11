@@ -7,6 +7,7 @@ import _config from './_config';
 import _displayList from './_displayList';
 import _displayInfo from './_displayInfo';
 import _cogInterface from './_cogInterface';
+import _cogDataMutable from './_cogDataMutable';
 
 const app = combineReducers({
   ui,
@@ -19,7 +20,8 @@ const app = combineReducers({
   _config,
   _displayList,
   _displayInfo,
-  _cogInterface
+  _cogInterface,
+  _cogDataMutable
 });
 
 export default app;
