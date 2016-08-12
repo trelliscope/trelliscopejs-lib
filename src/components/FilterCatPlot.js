@@ -46,66 +46,19 @@ class FilterCatPlot extends React.Component {
     this.props.handleChange(newState);
   }
   barCellRenderer = (x) => {
-    // { columnIndex, isScrolling, x.rowIndex }
-    // let barSize = 0;
-    // let barName = '';
-    // if (this.props.dist.has_dist) {
-    //   barSize = this.props.dist.dist.freq[x.rowIndex];
-    //   barName = this.props.dist.dist.val[x.rowIndex];
-    // }
     let barSize = 0;
     let barCt = 0;
     let barName = '';
     let barMax = 0;
     let active = true;
 
-    const condLength = this.props.condDist.orderKeys.length;
-    const margLength = this.props.condDist.morderKeys.length;
-    const ridx = x.rowIndex - 1;
-    const ridx2 = x.rowIndex - 2;
+    const ridx = this.props.condDist.reverseRows ?
+      x.rowIndex : this.props.condDist.dist.length - (x.rowIndex + 1);
 
-    if (x.rowIndex === 0) {
-      return (
-        <div
-          key="activeDivider"
-          style={{
-            width: this.props.style.width,
-            height: this.cellHeight - 1,
-            fontSize: 10,
-            textAlign: 'center',
-            background: '#ddd'
-          }}
-        >
-          {`${condLength} selected${condLength > 0 ? ' (click a bar to deselect)' : ''}`}
-        </div>
-      );
-    } else if (ridx < condLength) {
-      barSize = this.props.condDist.dist[this.props.condDist.orderKeys[ridx]];
-      barCt = barSize;
-      barName = this.props.condDist.orderKeys[ridx];
-      barMax = this.props.condDist.max;
-    } else if (ridx > condLength) {
-      barSize = this.props.dist.dist[this.props.condDist.morderKeys[ridx2 - condLength]];
-      barCt = 0;
-      barName = this.props.condDist.morderKeys[ridx2 - condLength];
-      barMax = this.props.dist.max;
-      active = false;
-    } else {
-      return (
-        <div
-          key="inactiveDivider"
-          style={{
-            width: this.props.style.width,
-            height: this.cellHeight - 1,
-            fontSize: 10,
-            textAlign: 'center',
-            background: '#ddd'
-          }}
-        >
-          {`${margLength} inactive${margLength > 0 ? ' (click a bar to add)' : ''}`}
-        </div>
-      );
-    }
+    barSize = this.props.condDist.dist[ridx].value;
+    barCt = barSize;
+    barName = this.props.condDist.dist[ridx].key;
+    barMax = this.props.condDist.max;
 
     return (
       <CatBar
@@ -120,20 +73,20 @@ class FilterCatPlot extends React.Component {
     );
   }
   render() {
-    const condLength = this.props.condDist.orderKeys.length;
-    const margLength = this.props.condDist.morderKeys.length;
+    // const condLength = this.props.condDist.orderKeys.length;
+    // const margLength = this.props.condDist.morderKeys.length;
     const orderValue = this.props.condDist.orderValue;
-    const activeTot = this.props.condDist.activeTot;
+    // const activeTot = this.props.condDist.activeTot;
 
     return (
       <Grid
-        key={`${orderValue}${condLength}_${margLength}_${activeTot}`}
+        key={`${orderValue}`}
         width={this.props.style.width}
         height={this.props.style.height}
         columnWidth={this.props.style.width}
         rowHeight={this.cellHeight}
         columnCount={1}
-        rowCount={condLength + margLength + 2}
+        rowCount={this.props.condDist.dist.length}
         cellRenderer={this.barCellRenderer}
         // cellRenderer={({ columnIndex, isScrolling, rowIndex }) => list[rowIndex][columnIndex]}
       />

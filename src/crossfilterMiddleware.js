@@ -4,13 +4,14 @@
 // middleware to mutate the crossfilter dimensions whenever
 // SET_SORT or SET_FILTER operations are performed
 
+const getNumVal = (d, name) => (isNaN(d[name]) ? null : d[name]);
+const getCatVal = (d, name) => d[name]; // TODO: what about NaN?
+
 const crossfilterMiddleware = store => next => action => {
   if (action.type === 'SET_FILTER') {
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
     const groups = store.getState()._cogDataMutable.groupRefs;
-    const getNumVal = (d, name) => (isNaN(d[name]) ? null : d[name]);
-    const getCatVal = (d, name) => d[name]; // TODO: what about NaN?
 
     if (typeof action.filter === 'string' || action.filter instanceof String) {
       dimensions[action.filter].filter(null); // .remove(), .filterAll() ?
@@ -53,6 +54,7 @@ const crossfilterMiddleware = store => next => action => {
         }
       }
     }
+
     // const size = store.getState()._cogDataMutable.allRef.value();
     // console.log(`Filtered... size is now ${size}`);
   } else if (action.type === 'SET_SORT') {
@@ -67,11 +69,30 @@ const crossfilterMiddleware = store => next => action => {
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
     if (dimensions.__sort !== undefined) {
       dimensions.__sort.remove();
-    } else if (action.type === 'SET_FILTER_VIEW') {
-      // need to make sure any filter in view has a dimension and group
-      // so we can create bar charts / histograms
-      // also if the filter is hidden and inactive, we should remove the dimension
-      // .remove() ?
+    }
+  } else if (action.type === 'SET_FILTER_VIEW') {
+    // need to make sure any filter in view has a dimension and group
+    // so we can create bar charts / histograms
+    // also if the filter is hidden and inactive, we should remove the dimension
+    // .remove() ?
+    if (action.which === 'add') {
+      const cf = store.getState()._cogDataMutable.crossfilter;
+      const dimensions = store.getState()._cogDataMutable.dimensionRefs;
+      const groups = store.getState()._cogDataMutable.groupRefs;
+
+      const type = store.getState()._displayInfo.info.cogInfo[action.name].type;
+
+      if (dimensions[action.name] === undefined) {
+        if (type === 'numeric') {
+          dimensions[action.name] = cf.dimension(d => getNumVal(d, action.name));
+        } else {
+          dimensions[action.name] = cf.dimension(d => getCatVal(d, action.name));
+        }
+      }
+
+      if (groups[action.name] === undefined) {
+        groups[action.name] = dimensions[action.name].group();
+      }
     }
   }
   return next(action);

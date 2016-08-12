@@ -6,12 +6,13 @@ import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
 import { cogInfoSelector, displayInfoSelector } from '../selectors/display';
-import { JSONFiltDistSelector } from '../selectors/cogInterface';
+// import { JSONFiltDistSelector } from '../selectors/cogInterface';
+import { cogFiltDistSelector } from '../selectors/cogData';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
 
-const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo, filtDist,
-  handleViewChange, handleFilterChange, handleFilterSortChange }) => {
+const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
+  filtDist, handleViewChange, handleFilterChange, handleFilterSortChange }) => {
   let content = <div></div>;
   if (filter) {
     content = (
@@ -139,7 +140,7 @@ const filterViewSelector = state => state.filter.view;
 const stateSelector = createSelector(
   uiConstsSelector, filterStateSelector, filterViewSelector,
   cogInfoSelector, sidebarHeightSelector, displayInfoSelector,
-  JSONFiltDistSelector,
+  cogFiltDistSelector,
   (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist) => ({
     style: {
       notUsedHeader: {
