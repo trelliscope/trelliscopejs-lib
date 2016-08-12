@@ -6,8 +6,9 @@ import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
 import { uiConstsSelector } from '../selectors';
 import { setLayout } from '../actions';
-import { JSONFilterCardinalitySelector, nPerPageSelector, pageNumSelector }
-  from '../selectors/cogInterface.js';
+import { nPerPageSelector, pageNumSelector }
+  from '../selectors/cogInterface.js'; // JSONFilterCardinalitySelector
+import { filterCardinalitySelector } from '../selectors/cogData.js';
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -89,7 +90,7 @@ Pagination.propTypes = {
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  uiConstsSelector, pageNumSelector, JSONFilterCardinalitySelector, nPerPageSelector,
+  uiConstsSelector, pageNumSelector, filterCardinalitySelector, nPerPageSelector,
   (ui, n, card, npp) => ({
     style: {
       outer: {

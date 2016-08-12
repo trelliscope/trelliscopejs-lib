@@ -3,8 +3,7 @@ import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants.js';
 const _cogDataMutable = (state = {
   isFetching: false,
   isLoaded: false,
-  didInvalidate: false,
-  info: []
+  didInvalidate: false
 }, action) => {
   switch (action.type) {
     case REQUEST_COGDATA:
@@ -20,6 +19,8 @@ const _cogDataMutable = (state = {
         isLoaded: true,
         crossfilter: action.crossfilter,
         dimensionRefs: {},
+        groupRefs: {},
+        allRef: action.crossfilter !== undefined ? action.crossfilter.groupAll() : undefined,
         iface: action.iface,
         lastUpdated: action.receivedAt
       });

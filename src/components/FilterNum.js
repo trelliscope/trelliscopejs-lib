@@ -26,12 +26,14 @@ class FilterNum extends React.Component {
       newState = {
         name: this.props.filterState.name,
         type: 'range',
+        varType: this.props.filterState.varType,
         valid: true
       };
     } else {
       newState = {
         name: this.props.filterState.name,
         type: 'range',
+        varType: this.props.filterState.varType,
         value: {
           from: lower,
           to: upper

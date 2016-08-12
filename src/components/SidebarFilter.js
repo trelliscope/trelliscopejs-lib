@@ -28,7 +28,8 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo, filtDi
                 filterState = {
                   name: d,
                   orderValue: 'ct,desc',
-                  type: 'select'
+                  type: 'select',
+                  varType: 'factor'
                 };
               }
 
@@ -57,7 +58,8 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo, filtDi
                 filterState = {
                   name: d,
                   orderValue: 'ct,desc',
-                  type: 'range'
+                  type: 'range',
+                  varType: 'numeric'
                 };
               }
 

@@ -37,7 +37,7 @@ const loggerMiddleware = createLogger();
 
 const store = createStore(
   app,
-  applyMiddleware(thunkMiddleware, loggerMiddleware, crossfilterMiddleware)
+  applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
 );
 
 const windowResize = (dims) => (

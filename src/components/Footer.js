@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { uiConstsSelector, windowWidthSelector } from '../selectors';
-import { JSONFilterCardinalitySelector } from '../selectors/cogInterface.js';
+// import { JSONFilterCardinalitySelector } from '../selectors/cogInterface.js';
+import { filterCardinalitySelector } from '../selectors/cogData.js';
 import { displayInfoSelector } from '../selectors/display.js';
 import FooterChip from './FooterChip';
 
@@ -108,7 +109,7 @@ const filterNamesSelector = createSelector(
 
 const styleSelector = createSelector(
   windowWidthSelector, uiConstsSelector, sortNamesSelector, filterNamesSelector,
-  JSONFilterCardinalitySelector, displayInfoSelector,
+  filterCardinalitySelector, displayInfoSelector,
   (ww, ui, sortNames, filterNames, nFilt, di) => ({
     style: {
       wrapper: {
