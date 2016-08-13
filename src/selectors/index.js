@@ -7,7 +7,7 @@ export const currentDisplaySelector = state => state.currentDisplay;
 export const selectedDisplaySelector = state => state.selectedDisplay;
 export const displayLoadedSelector = state => state._displayInfo.isLoaded;
 
-export const cogInterfaceSelector = state => state._cogInterface;
+export const cogInterfaceSelector = state => state._cogDataMutable.iface;
 export const cogDataSelector = state => state._cogDataMutable;
 
 export const pageNumSelector = state => state.layout.pageNum;

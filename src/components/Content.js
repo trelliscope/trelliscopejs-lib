@@ -5,27 +5,24 @@ import Panel from './Panel';
 import { uiConstsSelector, contentWidthSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
-import { currentJSONIndexSelector } from '../selectors/cogInterface';
 import { currentCogDataSelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector } from '../selectors';
 
-const Content = ({ style, idx, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
+const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
   let ret = <div />;
 
-  if (ci.iface && ci.info) {
-    // TODO: make this generalized to REST / websockets
-    // and make it async and go in componentDidMount
-    // it should only rely on idx and ci in the case of client-side JSON cog interface
+  if (ci && ccd && cinfo) {
     const panelKeys = [];
     const panelLabels = [];
-    for (let i = 0; i < idx.length; i++) {
-      panelKeys.push(ci.info.panelKey[idx[i]]);
+
+    for (let i = 0; i < ccd.length; i++) {
+      panelKeys.push(ccd[i].panelKey);
       const curLabels = [];
       for (let j = 0; j < labels.length; j++) {
         curLabels.push({
           name: labels[j],
-          value: ci.info[labels[j]][idx[i]],
+          value: ccd[i][labels[j]],
           type: cinfo[labels[j]].type
         });
       }
@@ -36,7 +33,7 @@ const Content = ({ style, idx, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
     // const dataMatrix = new Array(layout.nrow);
     const panelMatrix = [];
 
-    for (let i = 0; i < idx.length; i++) {
+    for (let i = 0; i < ccd.length; i++) {
       let rr;
       let cc;
       if (layout.arrange === 'row') {
@@ -67,7 +64,7 @@ const Content = ({ style, idx, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
             panelKey={el.key}
             labels={el.labels}
             style={style.panel}
-            iface={ci.iface}
+            iface={ci}
             dimStyle={{
               top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
                 dims.hOffset + (el.rowIndex * 2),
@@ -85,7 +82,6 @@ const Content = ({ style, idx, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
 
 Content.propTypes = {
   style: React.PropTypes.object,
-  idx: React.PropTypes.array,
   ccd: React.PropTypes.array,
   ci: React.PropTypes.object,
   cinfo: React.PropTypes.object,
@@ -99,10 +95,10 @@ Content.propTypes = {
 
 const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
-  currentJSONIndexSelector, currentCogDataSelector, cogInterfaceSelector,
+  currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
   configSelector,
-  (cw, ch, ui, idx, ccd, ci, layout, aspect, labels, cinfo, cfg) => {
+  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -220,7 +216,6 @@ const styleSelector = createSelector(
           }
         }
       },
-      idx,
       ccd,
       ci,
       cinfo,

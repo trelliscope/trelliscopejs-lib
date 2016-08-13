@@ -124,7 +124,7 @@ export const fetchDisplay = (name, group, cfg) =>
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, json));
        // TODO: remove when crossfilter is done
-      fetchCogInterfaceInfo(dispatch, iface, cfg);
+      // fetchCogInterfaceInfo(dispatch, iface, cfg);
       // set cog data state as pending while it loads
       dispatch(receiveCogData(iface));
       // TODO: perhaps do a quick load of initial panels while cog data is loading...

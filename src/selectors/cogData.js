@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { cogDataSelector, filterStateSelector, filterViewSelector,
-  displayInfoSelector, pageNumSelector, nPerPageSelector } from '.';
+  sortSelector, displayInfoSelector, pageNumSelector, nPerPageSelector } from '.';
 
 export const cogFiltDistSelector = createSelector(
   cogDataSelector, filterStateSelector,
@@ -75,10 +75,12 @@ export const cogFiltDistSelector = createSelector(
 
 export const currentCogDataSelector = createSelector(
   cogDataSelector, pageNumSelector, nPerPageSelector,
-  (cd, pnum, npp) => {
+  filterStateSelector, sortSelector,
+  (cd, pnum, npp, filt, sort) => {
     let result = [];
-    if (cd.dimensionRefs && cd.dimensionRefs.__sort) {
-      result = cd.dimensionRefs.__sort.bottom(npp);
+    if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
+      console.log("ahasdfhsadf")
+      result = cd.dimensionRefs.__sort.top(npp, (pnum - 1) * npp);
     }
     return result;
   }
