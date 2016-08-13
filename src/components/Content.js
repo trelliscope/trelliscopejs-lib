@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Panel from './Panel';
 import { uiConstsSelector, contentWidthSelector,
-  contentHeightSelector, configSelector } from '../selectors';
+  contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
-import { currentJSONIndexSelector, cogInterfaceSelector,
-  layoutSelector, aspectSelector, labelsSelector } from '../selectors/cogInterface.js';
+import { currentJSONIndexSelector } from '../selectors/cogInterface';
+import { configSelector, cogInterfaceSelector, layoutSelector,
+  aspectSelector, labelsSelector } from '../selectors';
 
 const Content = ({ style, idx, ci, cinfo, cfg, layout, labels, dims }) => {
-  let ret = <div></div>;
+  let ret = <div />;
 
   if (ci.iface && ci.info) {
     // TODO: make this generalized to REST / websockets
@@ -67,10 +68,10 @@ const Content = ({ style, idx, ci, cinfo, cfg, layout, labels, dims }) => {
             style={style.panel}
             iface={ci.iface}
             dimStyle={{
-              top: dims.pHeight * el.rowIndex + (el.rowIndex + 1) * dims.pPad +
-                dims.hOffset + el.rowIndex * 2,
-              right: dims.pWidth * el.iColIndex + (el.iColIndex + 1) * dims.pPad +
-                dims.wOffset + el.iColIndex * 2 + 1
+              top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
+                dims.hOffset + (el.rowIndex * 2),
+              right: (dims.pWidth * el.iColIndex) + ((el.iColIndex + 1) * dims.pPad) +
+                dims.wOffset + (el.iColIndex * 2) + 1
             }}
           />
         ))}
@@ -110,7 +111,8 @@ const styleSelector = createSelector(
     // these remain fixed while width and height can change
     // for ppad + 2, "+ 2" is border
     const wExtra = (pPad + 2) * (layout.ncol + 1);
-    const hExtra = (pPad + 2) * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
+    const hExtra = ((pPad + 2) * (layout.nrow + 1)) +
+      (nLabels * labelHeight * layout.nrow);
 
     // first try stretching panels across full width:
     let newW = Math.round((cw - wExtra) / layout.ncol, 0);
@@ -120,10 +122,10 @@ const styleSelector = createSelector(
 
     // check to see if this will make it too tall:
     // if so, do row-first full-height stretching
-    if ((newH * layout.nrow + hExtra) > ch) {
+    if (((newH * layout.nrow) + hExtra) > ch) {
       newH = Math.round((ch - hExtra) / layout.nrow, 0);
       newW = Math.round(newH / aspect, 0);
-      wOffset = (cw - (newW * layout.ncol + wExtra)) / 2;
+      wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
     }
 
     const hOffset = ui.header.height;
@@ -149,7 +151,7 @@ const styleSelector = createSelector(
             position: 'fixed',
             overflow: 'hidden',
             width: newW + 2,
-            height: newH + nLabels * labelHeight + 2,
+            height: newH + (nLabels * labelHeight) + 2,
             padding: 0,
             boxSizing: 'border-box',
             border: '1px solid #ddd'
@@ -223,7 +225,7 @@ const styleSelector = createSelector(
       labels,
       dims: {
         pWidth: newW,
-        pHeight: newH + nLabels * labelHeight,
+        pHeight: newH + (nLabels * labelHeight),
         wOffset,
         hOffset,
         pPad

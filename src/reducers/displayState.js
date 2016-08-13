@@ -9,7 +9,7 @@ export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 },
       // then we need to recompute pageNum
       const obj = Object.assign({}, action.layout, {});
       if (obj.nrow || obj.ncol) {
-        const prevPanelIndex = state.nrow * state.ncol * (state.pageNum - 1) + 1;
+        const prevPanelIndex = (state.nrow * state.ncol * (state.pageNum - 1)) + 1;
         obj.pageNum = Math.ceil(prevPanelIndex / (obj.nrow * obj.ncol));
         if (isNaN(obj.pageNum)) {
           obj.pageNum = 1;

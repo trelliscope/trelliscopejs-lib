@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import Radium from 'radium';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 
 class NumericInput extends React.Component {
   constructor(props) {
@@ -80,16 +80,14 @@ class NumericInput extends React.Component {
             style={[this.props.style.b, this.props.style.b1]}
             onClick={this.increment}
           >
-            <i style={[this.props.style.i, this.props.style.i1]}>
-            </i>
+            <i style={[this.props.style.i, this.props.style.i1]} />
           </b>
           <b
             key="down-button"
             style={[this.props.style.b, this.props.style.b2]}
             onClick={this.decrement}
           >
-            <i style={[this.props.style.i, this.props.style.i2]}>
-            </i>
+            <i style={[this.props.style.i, this.props.style.i2]} />
           </b>
         </span>
       );

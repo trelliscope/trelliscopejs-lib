@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
+import { Table, TableRow, TableRowColumn, TableBody } from 'material-ui/Table';
 import { setLabels } from '../actions';
-import { uiConstsSelector, contentHeightSelector } from '../selectors';
-
-import { Table, TableRow,
-  TableRowColumn, TableBody } from 'material-ui/Table';
+import { uiConstsSelector, contentHeightSelector } from '../selectors/ui';
+import { labelsSelector, displayInfoSelector } from '../selectors';
 
 const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
-  let content = <div></div>;
+  let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
     const tableData = ciKeys.map((d) => ({
@@ -61,11 +60,8 @@ SidebarLabels.propTypes = {
 
 // ------ redux container ------
 
-const labelsSelector = state => state.labels;
-const dispSelector = state => state._displayInfo;
-
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, labelsSelector, dispSelector,
+  contentHeightSelector, uiConstsSelector, labelsSelector, displayInfoSelector,
   (ch, ui, labels, di) => ({
     style: {
       width: ui.sidebar.width,

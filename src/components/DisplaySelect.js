@@ -9,7 +9,9 @@ import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplayList, fetchDisplay } from '../actions';
-import { uiConstsSelector, configSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
+import { configSelector, displayListSelector,
+  selectedDisplaySelector } from '../selectors';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
@@ -75,8 +77,7 @@ class DisplaySelect extends React.Component {
     let attnDiv = (
       <div style={this.props.style.attn.outer}>
         <div style={this.props.style.attn.inner}>
-          <div ref="attnCircle" style={this.props.style.attn.empty}>
-          </div>
+          <div ref="attnCircle" style={this.props.style.attn.empty} />
         </div>
       </div>
     );
@@ -90,7 +91,7 @@ class DisplaySelect extends React.Component {
         style={[this.props.style.button, styleOverride]}
       >
         {attnDiv}
-        <i className="icon-folder-open" style={{ paddingLeft: 3 }}></i>
+        <i className="icon-folder-open" style={{ paddingLeft: 3 }} />
         <Dialog
           title="Select a Display to Open"
           actions={actions}
@@ -120,9 +121,6 @@ DisplaySelect.propTypes = {
 
 // ------ redux container ------
 
-const displayListSelector = state => state._displayList;
-const selectedDisplaySelector = state => state.selectedDisplay;
-
 const styleSelector = createSelector(
   uiConstsSelector, selectedDisplaySelector, displayListSelector,
   configSelector,
@@ -151,7 +149,8 @@ const styleSelector = createSelector(
         },
         empty: {
           position: 'absolute',
-          height: ui.header.height, width: '100%',
+          height: ui.header.height,
+          width: '100%',
           borderRadius: '50%',
           opacity: 0.16,
           transition: 'transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms',

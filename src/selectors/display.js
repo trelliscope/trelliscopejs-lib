@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect';
-
-export const displayListSelector = state => state._displayList;
-export const displayInfoSelector = state => state._displayInfo;
-export const currentDisplaySelector = state => state.currentDisplay;
+import { displayListSelector, displayInfoSelector } from '.';
 
 export const relatedDisplaysSelector = createSelector(
   displayInfoSelector, displayListSelector,

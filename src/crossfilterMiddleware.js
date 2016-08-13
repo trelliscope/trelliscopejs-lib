@@ -42,14 +42,12 @@ const crossfilterMiddleware = store => next => action => {
           }
           if (action.filter[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
+          } else if (action.filter[names[i]].type === 'select') {
+            // handle select
+            const selectVals = action.filter[names[i]].value;
+            dimensions[names[i]].filter(d => selectVals.indexOf(d) > -1);
           } else {
             // handle regex
-            // ...
-            // handle select
-            if (action.filter[names[i]].type === 'select') {
-              const selectVals = action.filter[names[i]].value;
-              dimensions[names[i]].filter(d => selectVals.indexOf(d) > -1);
-            }
           }
         }
       }
@@ -57,19 +55,6 @@ const crossfilterMiddleware = store => next => action => {
 
     // const size = store.getState()._cogDataMutable.allRef.value();
     // console.log(`Filtered... size is now ${size}`);
-  } else if (action.type === 'SET_SORT') {
-    // if only sorting on one variable, make a sort dimension according to that variable
-    // if more than one variable, crossfilter can only handle sorting on one dimension
-    // so we have to get sort index of entire data set and create a new dimension
-    // that uses this information
-    // this isn't efficient but sorting is expected to happen at much lower frequency
-    // than filtering and the user can tolerate more latency with sorting than filtering
-
-    // const cf = store.getState()._cogDataMutable.crossfilter;
-    const dimensions = store.getState()._cogDataMutable.dimensionRefs;
-    if (dimensions.__sort !== undefined) {
-      dimensions.__sort.remove();
-    }
   } else if (action.type === 'SET_FILTER_VIEW') {
     // need to make sure any filter in view has a dimension and group
     // so we can create bar charts / histograms
@@ -93,6 +78,19 @@ const crossfilterMiddleware = store => next => action => {
       if (groups[action.name] === undefined) {
         groups[action.name] = dimensions[action.name].group();
       }
+    }
+  } else if (action.type === 'SET_SORT') {
+    // if only sorting on one variable, make a sort dimension according to that variable
+    // if more than one variable, crossfilter can only handle sorting on one dimension
+    // so we have to get sort index of entire data set and create a new dimension
+    // that uses this information
+    // this isn't efficient but sorting is expected to happen at much lower frequency
+    // than filtering and the user can tolerate more latency with sorting than filtering
+
+    // const cf = store.getState()._cogDataMutable.crossfilter;
+    const dimensions = store.getState()._cogDataMutable.dimensionRefs;
+    if (dimensions.__sort !== undefined) {
+      dimensions.__sort.remove();
     }
   }
   return next(action);

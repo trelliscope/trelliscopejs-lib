@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { NumericInput } from 'react-numeric-input';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
 import Radium from 'radium';
-import NumericInput from './NumericInput';
 import { createSelector } from 'reselect';
+import NumericInput from './NumericInput';
 import { setLayout } from '../actions';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
+import { layoutSelector, displayInfoSelector } from '../selectors';
 
 const SidebarLayout = ({ style, layout, handleChange }) => {
-  let content = <div></div>;
+  let content = <div />;
   if (layout.nrow) {
     content = (
       <div style={style.base}>
@@ -90,11 +90,8 @@ SidebarLayout.propTypes = {
 
 // ------ redux container ------
 
-const layoutSelector = state => state.layout;
-const dispSelector = state => state._displayInfo;
-
 const stateSelector = createSelector(
-  uiConstsSelector, layoutSelector, dispSelector,
+  uiConstsSelector, layoutSelector, displayInfoSelector,
   (ui, layout, di) => ({
     style: {
       base: {

@@ -2,18 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
+import { emphasize } from 'material-ui/utils/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
-import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
-import { cogInfoSelector, displayInfoSelector } from '../selectors/display';
-// import { JSONFiltDistSelector } from '../selectors/cogInterface';
-import { cogFiltDistSelector } from '../selectors/cogData';
-import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout } from '../actions';
+import { cogFiltDistSelector } from '../selectors/cogData';
+import { uiConstsSelector, sidebarHeightSelector } from '../selectors/ui';
+import { cogInfoSelector } from '../selectors/display';
+import { displayInfoSelector, filterStateSelector,
+  filterViewSelector } from '../selectors';
 
 const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   filtDist, handleViewChange, handleFilterChange, handleFilterSortChange }) => {
-  let content = <div></div>;
+  let content = <div />;
   if (filter) {
     content = (
       <div style={style.allContainer}>
@@ -81,13 +82,13 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                     style={[style.footerIcon, style.footerClose]}
                     onMouseDown={() => handleViewChange(d, 'remove')}
                   >
-                    <i className="icon-times-circle"></i>
+                    <i className="icon-times-circle" />
                   </div>
                   <div
                     style={[style.footerIcon, style.footerReset]}
                     onMouseDown={handleReset}
                   >
-                    <i className="icon-undo"></i>
+                    <i className="icon-undo" />
                   </div>
                   <div style={style.footerName}>{d}</div>
                 </div>
@@ -132,9 +133,6 @@ SidebarFilter.propTypes = {
 };
 
 // ------ redux container ------
-
-const filterStateSelector = state => state.filter.state;
-const filterViewSelector = state => state.filter.view;
 
 // the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
 const stateSelector = createSelector(
@@ -232,7 +230,7 @@ const stateSelector = createSelector(
       },
       catFilter: {
         container: {
-          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           height: 30 + ui.sidebar.filter.cat.height,
           boxSizing: 'border-box',
           paddingLeft: ui.sidebar.filter.margin,
@@ -240,7 +238,7 @@ const stateSelector = createSelector(
           paddingTop: ui.sidebar.filter.margin
         },
         plotContainer: {
-          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           height: ui.sidebar.filter.cat.height,
           boxSizing: 'border-box',
           position: 'relative',
@@ -250,7 +248,7 @@ const stateSelector = createSelector(
           zIndex: 1000
         },
         inputContainer: {
-          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           marginBottom: -14,
           zIndex: 100,
           position: 'relative'
@@ -277,7 +275,7 @@ const stateSelector = createSelector(
           marginTop: 5
         },
         plotContainer: {
-          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           height: 90, // make this a variable
           position: 'relative',
           overflow: 'hidden',
@@ -286,7 +284,7 @@ const stateSelector = createSelector(
           zIndex: 1000
         },
         inputContainer: {
-          width: ui.sidebar.width - ui.sidebar.filter.margin * 2,
+          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           marginBottom: -14,
           zIndex: 100,
           position: 'relative',

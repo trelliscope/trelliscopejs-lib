@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, windowWidthSelector } from '../selectors';
-// import { JSONFilterCardinalitySelector } from '../selectors/cogInterface.js';
+import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData.js';
-import { displayInfoSelector } from '../selectors/display.js';
+import { displayInfoSelector, filterSelector, sortSelector } from '../selectors';
 import FooterChip from './FooterChip';
 
 const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
@@ -56,7 +55,7 @@ const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
   }
 
   if (filterNames.length > 0 && sortNames.length > 0) {
-    spacerContent = <div style={style.spacer}></div>;
+    spacerContent = <div style={style.spacer} />;
   }
 
   return (
@@ -78,8 +77,6 @@ Footer.propTypes = {
 
 // ------ redux container ------
 
-const sortSelector = state => state.sort;
-
 const sortNamesSelector = createSelector(
   sortSelector,
   (sort) => {
@@ -90,8 +87,6 @@ const sortNamesSelector = createSelector(
     return names;
   }
 );
-
-const filterSelector = state => state.filter;
 
 const filterNamesSelector = createSelector(
   filterSelector,

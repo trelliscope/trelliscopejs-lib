@@ -48,10 +48,8 @@ class FilterNum extends React.Component {
       if (lower && parseFloat(lower) > parseFloat(upper)) {
         return false;
       }
-    } else {
-      if (upper && parseFloat(upper) < parseFloat(lower)) {
-        return false;
-      }
+    } else if (upper && parseFloat(upper) < parseFloat(lower)) {
+      return false;
     }
     return true;
   }

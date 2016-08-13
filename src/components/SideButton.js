@@ -18,7 +18,7 @@ const SideButton = ({ bstyle, isActive, icon, title, label, onClick }) => {
       type={"button"} onClick={onClick}
     >
       <div style={bstyle.icon}>
-        <i className={icon}></i>
+        <i className={icon} />
       </div>
       <div style={bstyle.label}>{label}</div>
     </div>

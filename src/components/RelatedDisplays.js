@@ -5,8 +5,9 @@ import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 import { relatedDisplaysSelector } from '../selectors/display';
+import { selectedDisplaySelector } from '../selectors';
 
 class RelatedDisplays extends React.Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class RelatedDisplays extends React.Component {
         onClick={this.handleOpen}
         style={this.props.style.button}
       >
-        <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }}></i>
+        <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
         <Dialog
           title="Add Related Displays"
           actions={actions}
@@ -77,8 +78,6 @@ RelatedDisplays.propTypes = {
 };
 
 // ------ redux container ------
-
-const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
   uiConstsSelector, relatedDisplaysSelector, selectedDisplaySelector,

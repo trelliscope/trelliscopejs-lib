@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, sidebarHeightSelector } from '../selectors';
-import { setSort } from '../actions';
-
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
+import { setSort } from '../actions';
+import { uiConstsSelector, sidebarHeightSelector } from '../selectors/ui';
+import { sortSelector, displayInfoSelector } from '../selectors';
 
 const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
-  let content = <div></div>;
+  let content = <div />;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
     for (let i = 0; i < sort.length; i++) {
@@ -39,7 +39,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
                         handleChange(sort2);
                       }}
                     >
-                      <i className={`icon-chevron-${ic}`}></i>
+                      <i className={`icon-chevron-${ic}`} />
                     </FloatingActionButton>
                   </td>
                   <td style={style.labels}>
@@ -95,8 +95,6 @@ SidebarSort.propTypes = {
 
 // ------ redux container ------
 
-const sortSelector = state => state.sort;
-const displayInfoSelector = state => state._displayInfo;
 const cogDescSelector = createSelector(
   displayInfoSelector,
   (di) => {
@@ -112,11 +110,11 @@ const cogDescSelector = createSelector(
 const stateSelector = createSelector(
   uiConstsSelector, sortSelector, cogDescSelector, sidebarHeightSelector,
   (ui, sort, cogDesc, sh) => {
-    const activeIsTaller = sort.length * 51 > sh - 2 * 51;
+    const activeIsTaller = sort.length * 51 > sh - (2 * 51);
     let activeHeight = 51 * sort.length;
     if (activeIsTaller) {
-      const n = Math.ceil(sh * 0.6 / 51);
-      activeHeight = n * 51 - 25;
+      const n = Math.ceil((sh * 0.6) / 51);
+      activeHeight = (n * 51) - 25;
     }
     return ({
       style: {

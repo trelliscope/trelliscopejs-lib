@@ -1,16 +1,7 @@
 import { createSelector } from 'reselect';
-import { displayInfoSelector } from './display';
-
-export const pageNumSelector = state => state.layout.pageNum;
-export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;
-export const cogInterfaceSelector = state => state._cogInterface;
-export const filterStateSelector = state => state.filter.state;
-export const filterViewStateSelector = state => state.filter.view;
-export const sortSelector = state => state.sort;
-export const layoutSelector = state => state.layout;
-export const labelsSelector = state => state.labels;
-export const aspectSelector = state =>
-  state._displayInfo.info.height / state._displayInfo.info.width;
+import { cogInterfaceSelector, sortSelector, filterStateSelector,
+  pageNumSelector, nPerPageSelector, filterViewSelector,
+  displayInfoSelector } from '.';
 
 const sortFn = (property) => {
   let sortOrder = 1;
@@ -89,7 +80,7 @@ export const JSONFilterIndexSelector = createSelector(
 
 export const JSONFiltDistSelector = createSelector(
   cogInterfaceSelector, JSONFilterIndexSelector, filterStateSelector,
-  filterViewStateSelector, displayInfoSelector,
+  filterViewSelector, displayInfoSelector,
   (ci, idx, filter, filterView, di) => {
     const result = {};
     if (ci.iface && ci.info && ci.iface.type === 'JSON') {

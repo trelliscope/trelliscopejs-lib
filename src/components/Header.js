@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, windowWidthSelector } from '../selectors';
 import DisplayInfo from './DisplayInfo';
 import RelatedDisplays from './RelatedDisplays';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
+import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector } from '../selectors/display';
+import { selectedDisplaySelector } from '../selectors';
 
 const Header = ({ style, selectedDisplay }) => {
   let displayName = '';
@@ -42,8 +43,6 @@ Header.propTypes = {
 };
 
 // ------ redux container ------
-
-const selectedDisplaySelector = state => state.selectedDisplay;
 
 const styleSelector = createSelector(
   windowWidthSelector, uiConstsSelector, selectedDisplaySelector, relatedDisplaysSelector,

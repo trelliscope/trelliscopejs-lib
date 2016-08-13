@@ -4,15 +4,15 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import crossfilterMiddleware from './crossfilterMiddleware';
-import app from './reducers';
-import App from './App';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { lightBlue500, lightBlue700, redA200 } from 'material-ui/styles/colors';
-
 import 'react-virtualized/styles.css'; // only needs to be imported once
+
+import crossfilterMiddleware from './crossfilterMiddleware';
+import app from './reducers';
+import App from './App';
 
 const muiTheme = getMuiTheme({
   fontFamily: '"Open Sans", sans-serif',

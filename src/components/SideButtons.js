@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
-import { setActiveSidebar } from '../actions';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
+import { setActiveSidebar } from '../actions';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js';
-import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors';
 import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants.js';
+import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 
 const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
@@ -32,28 +32,26 @@ class SideButtons extends React.Component {
   handleKey = (e, k) => {
     if (e.target.nodeName === 'INPUT') {
       e.stopPropagation();
-    } else {
+    } else if (k === 'esc' || k === 'enter') {
       // allow keyboard shortcuts for sidebars
       // if 'esc', close it, otherwise, open according to key code
-      if (k === 'esc' || k === 'enter') {
-        this.props.setActive('');
-      } else {
-        const which = [];
-        for (let ii = 0; ii < buttons.length; ii++) {
-          if (buttons[ii].key === k) {
-            which.push(buttons[ii].title);
-          }
+      this.props.setActive('');
+    } else {
+      const which = [];
+      for (let ii = 0; ii < buttons.length; ii++) {
+        if (buttons[ii].key === k) {
+          which.push(buttons[ii].title);
         }
-        if (which.length > 0) {
-          this.props.setActive(which[0]);
-        }
+      }
+      if (which.length > 0) {
+        this.props.setActive(which[0]);
       }
     }
   }
   render() {
     return (
       <div style={this.props.style.base}>
-        <div style={this.props.style.spacer}></div>
+        <div style={this.props.style.spacer} />
         {buttons.map((d, i) => (
           <SideButton
             key={`sidebutton-${i}`}

@@ -2,43 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, contentHeightSelector, sidebarActiveSelector } from '../selectors';
 import SidebarLabels from './SidebarLabels';
 import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
+import { uiConstsSelector, contentHeightSelector,
+  sidebarActiveSelector } from '../selectors/ui';
+import { displayLoadedSelector } from '../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants.js';
 
 const Sidebar = ({ style, active, displayLoaded }) => {
   if (active === '') {
-    return <div style={[style.base, style.hidden]} ref="side-container"></div>;
+    return <div style={[style.base, style.hidden]} ref="side-container" />;
   }
 
   const emptyStyle = { paddingLeft: 8, paddingTop: 5 };
   let content;
   if (active === SB_CONFIG) {
     content = <div style={emptyStyle} ref="side-container">Configuration...</div>;
+  } else if (!displayLoaded) {
+    content = <div style={emptyStyle} ref="side-container">Load a display...</div>;
   } else {
-    if (!displayLoaded) {
-      content = <div style={emptyStyle} ref="side-container">Load a display...</div>;
-    } else {
-      switch (active) {
-        case SB_PANEL_LAYOUT:
-          content = <div ref="side-container"><SidebarLayout /></div>;
-          break;
-        case SB_PANEL_FILTER :
-          content = <div ref="side-container"><SidebarFilter /></div>;
-          break;
-        case SB_PANEL_SORT :
-          content = <div ref="side-container"><SidebarSort /></div>;
-          break;
-        case SB_PANEL_LABELS :
-          content = <div ref="side-container"><SidebarLabels /></div>;
-          break;
-        default:
-          content = '';
-      }
+    switch (active) {
+      case SB_PANEL_LAYOUT:
+        content = <div ref="side-container"><SidebarLayout /></div>;
+        break;
+      case SB_PANEL_FILTER :
+        content = <div ref="side-container"><SidebarFilter /></div>;
+        break;
+      case SB_PANEL_SORT :
+        content = <div ref="side-container"><SidebarSort /></div>;
+        break;
+      case SB_PANEL_LABELS :
+        content = <div ref="side-container"><SidebarLabels /></div>;
+        break;
+      default:
+        content = '';
     }
   }
 
@@ -57,8 +57,6 @@ Sidebar.propTypes = {
 };
 
 // ------ redux container ------
-
-const displayLoadedSelector = state => state._displayInfo.isLoaded;
 
 const stateSelector = createSelector(
   contentHeightSelector, uiConstsSelector, sidebarActiveSelector, displayLoadedSelector,

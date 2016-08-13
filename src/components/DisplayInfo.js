@@ -7,7 +7,8 @@ import marked from 'marked';
 // import katex from 'katex';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { uiConstsSelector } from '../selectors';
+import { selectedDisplaySelector, displayInfoSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 
 class DisplayInfo extends React.Component {
   constructor(props) {
@@ -108,7 +109,7 @@ class DisplayInfo extends React.Component {
         onClick={this.handleOpen}
         style={this.props.style.button}
       >
-        <i className="icon-info" style={this.props.style.icon}></i>
+        <i className="icon-info" style={this.props.style.icon} />
         {dialogContent}
       </div>
     );
@@ -124,9 +125,6 @@ DisplayInfo.propTypes = {
 };
 
 // ------ redux container ------
-
-const selectedDisplaySelector = state => state.selectedDisplay;
-const displayInfoSelector = state => state._displayInfo;
 
 const styleSelector = createSelector(
   uiConstsSelector, selectedDisplaySelector, displayInfoSelector,

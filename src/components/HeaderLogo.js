@@ -5,7 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import Mousetrap from 'mousetrap';
 import FlatButton from 'material-ui/FlatButton';
 import { createSelector } from 'reselect';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 
 class HeaderLogo extends React.Component {
   constructor(props) {

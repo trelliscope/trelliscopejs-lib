@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 
 class CatBar extends React.Component {
   constructor(props) {

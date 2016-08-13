@@ -1,6 +1,6 @@
 import React from 'react';
-import CatBar from './FilterCatPlotBar';
 import { Grid } from 'react-virtualized';
+import CatBar from './FilterCatPlotBar';
 
 class FilterCatPlot extends React.Component {
   constructor(props) {
@@ -52,9 +52,11 @@ class FilterCatPlot extends React.Component {
     let barMax = 0;
     let active = true;
 
-    const ridx = this.props.condDist.reverseRows ?
+    let ridx = this.props.condDist.reverseRows ?
       x.rowIndex : this.props.condDist.dist.length - (x.rowIndex + 1);
+    ridx = this.props.condDist.idx[ridx];
 
+    active = x.rowIndex < this.props.condDist.totSelected;
     barSize = this.props.condDist.dist[ridx].value;
     barCt = barSize;
     barName = this.props.condDist.dist[ridx].key;
@@ -65,7 +67,7 @@ class FilterCatPlot extends React.Component {
         key={`${x.rowIndex}_${barCt}`}
         active={active}
         height={this.cellHeight}
-        width={barSize / barMax * this.props.style.width}
+        width={(barSize / barMax) * this.props.style.width}
         totWidth={this.props.style.width}
         handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: this.props.dist.dist[barName], id: barName }}
@@ -73,14 +75,14 @@ class FilterCatPlot extends React.Component {
     );
   }
   render() {
-    // const condLength = this.props.condDist.orderKeys.length;
-    // const margLength = this.props.condDist.morderKeys.length;
     const orderValue = this.props.condDist.orderValue;
-    // const activeTot = this.props.condDist.activeTot;
+    const totSelected = this.props.condDist.totSelected;
+    const sumSelected = this.props.condDist.sumSelected;
+    const maxVal = this.props.condDist.max;
 
     return (
       <Grid
-        key={`${orderValue}`}
+        key={`${orderValue}_${totSelected}_${sumSelected}_${maxVal}`}
         width={this.props.style.width}
         height={this.props.style.height}
         columnWidth={this.props.style.width}

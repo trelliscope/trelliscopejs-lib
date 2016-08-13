@@ -60,7 +60,8 @@ export const requestDisplay = (name, group) => ({
 
 export const receiveDisplay = (name, group, json) => ({
   type: RECEIVE_DISPLAY,
-  name, group,
+  name,
+  group,
   info: json,
   receivedAt: Date.now()
 });

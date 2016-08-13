@@ -4,11 +4,10 @@ import { createSelector } from 'reselect';
 import Radium from 'radium';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
-import { uiConstsSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 import { setLayout } from '../actions';
-import { nPerPageSelector, pageNumSelector }
-  from '../selectors/cogInterface.js'; // JSONFilterCardinalitySelector
-import { filterCardinalitySelector } from '../selectors/cogData.js';
+import { nPerPageSelector, pageNumSelector } from '../selectors';
+import { filterCardinalitySelector } from '../selectors/cogData';
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -26,19 +25,19 @@ class Pagination extends React.Component {
   pageLeft = () => {
     let n = this.props.n - 1;
     if (n < 1) {
-      n = n + 1;
+      n += 1;
     }
     return this.props.handleChange(n);
   }
   pageRight = () => {
     let n = this.props.n + 1;
     if (n > this.props.totPages) {
-      n = n - 1;
+      n -= 1;
     }
     return this.props.handleChange(n);
   }
   render() {
-    const pFrom = this.props.npp * (this.props.n - 1) + 1;
+    const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
     const pRange = pFrom === pTo ? pFrom : `${pFrom} \u2013 ${pTo}`;
     const txt = `${pRange} of ${this.props.totPanels}`;
@@ -144,7 +143,7 @@ const stateSelector = createSelector(
       },
       label: {
         position: 'absolute',
-        right: (ui.header.height - 10) * 2 + 8
+        right: ((ui.header.height - 10) * 2) + 8
       }
     },
     n,
