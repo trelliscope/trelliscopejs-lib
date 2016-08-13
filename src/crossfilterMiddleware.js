@@ -42,12 +42,10 @@ const crossfilterMiddleware = store => next => action => {
           }
           if (action.filter[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
-          } else if (action.filter[names[i]].type === 'select') {
-            // handle select
+          } else {
+            // handle select and regex (regex same as select as value is already populated)
             const selectVals = action.filter[names[i]].value;
             dimensions[names[i]].filter(d => selectVals.indexOf(d) > -1);
-          } else {
-            // handle regex
           }
         }
       }

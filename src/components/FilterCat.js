@@ -1,17 +1,8 @@
-// behaviors:
-// - click on a bar selects it
-// - multiple bars can be selected with additional clicks
-// - click on a selected bar deselects it
-// - click outside a bar deselects everything
-// - click and drag on bars selects everything the cursor comes across
-// - (click and drag to deselect is not an option)
-// - regex overrides manual selections
-// - if selections are made after regex, regex is cleared
-// - gray scroll boxes appear on either end if there are bars outside region
-// - hover on scroll boxes advances in the direction of the box
-// - click on scroll boxes advances to the beginning / end
-// - sorting resets scroll to start
-// - mousewheel scrolls boxes left and right
+// click on a bar selects it
+// multiple bars can be selected with additional clicks
+// click on a selected bar deselects it
+// regex overrides manual selections
+// if selections are made after regex, regex is cleared
 
 import React from 'react';
 import Radium from 'radium';
@@ -69,8 +60,8 @@ class FilterCat extends React.Component {
         name: this.props.filterState.name,
         type: 'regex',
         varType: this.props.filterState.varType,
-        value: val,
-        vals,
+        regex: val,
+        value: vals,
         orderValue: this.sortOrder
       };
     }
@@ -114,7 +105,7 @@ class FilterCat extends React.Component {
             hintText="regex"
             style={this.props.style.regexInput}
             defaultValue={this.props.filterState.type === 'regex' ?
-              this.props.filterState.value : ''}
+              this.props.filterState.regex : ''}
             onChange={(e) => this.handleRegex(e.target.value)}
           />
           {extraOptionsInput}

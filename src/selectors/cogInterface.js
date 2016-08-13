@@ -33,7 +33,7 @@ const keepRecord = (rec, filt) => {
   let keep = true;
   switch (filt.type) {
     case 'regex':
-      if (filt.vals.indexOf(rec) < 0) {
+      if (filt.value.indexOf(rec) < 0) {
         keep = false;
       }
       // if (rec.match(filt.value) === null) {
@@ -93,7 +93,7 @@ export const JSONFiltDistSelector = createSelector(
           if (filter[keys[i]] && filter[keys[i]].type === 'select') {
             curVals = filter[keys[i]].value;
           } else if (filter[keys[i]] && filter[keys[i]].type === 'regex') {
-            curVals = filter[keys[i]].vals;
+            curVals = filter[keys[i]].value;
           }
 
           const cur = {};

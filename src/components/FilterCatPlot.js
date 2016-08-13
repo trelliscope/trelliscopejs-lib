@@ -10,12 +10,7 @@ class FilterCatPlot extends React.Component {
     //   this.props.style.height / this.props.condDist.orderKeys.length);
   }
   handleSelect(val, active) {
-    let selectArr = [];
-    if (this.props.filterState.type === 'regex') {
-      selectArr = this.props.filterState.vals;
-    } else {
-      selectArr = Object.assign([], this.props.filterState.value);
-    }
+    const selectArr = Object.assign([], this.props.filterState.value);
     if (active) {
       // remove "val" from the array
       const vIndex = selectArr.indexOf(val);
