@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
-import { cogDataSelector, filterStateSelector,
-  filterViewSelector, displayInfoSelector } from '.';
+import { cogDataSelector, filterStateSelector, filterViewSelector,
+  displayInfoSelector, pageNumSelector, nPerPageSelector } from '.';
 
 export const cogFiltDistSelector = createSelector(
   cogDataSelector, filterStateSelector,
@@ -68,6 +68,17 @@ export const cogFiltDistSelector = createSelector(
           };
         }
       }
+    }
+    return result;
+  }
+);
+
+export const currentCogDataSelector = createSelector(
+  cogDataSelector, pageNumSelector, nPerPageSelector,
+  (cd, pnum, npp) => {
+    let result = [];
+    if (cd.dimensionRefs && cd.dimensionRefs.__sort) {
+      result = cd.dimensionRefs.__sort.bottom(npp);
     }
     return result;
   }

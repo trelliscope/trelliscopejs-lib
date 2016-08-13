@@ -6,10 +6,11 @@ import { uiConstsSelector, contentWidthSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { currentJSONIndexSelector } from '../selectors/cogInterface';
+import { currentCogDataSelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector } from '../selectors';
 
-const Content = ({ style, idx, ci, cinfo, cfg, layout, labels, dims }) => {
+const Content = ({ style, idx, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
   let ret = <div />;
 
   if (ci.iface && ci.info) {
@@ -85,6 +86,7 @@ const Content = ({ style, idx, ci, cinfo, cfg, layout, labels, dims }) => {
 Content.propTypes = {
   style: React.PropTypes.object,
   idx: React.PropTypes.array,
+  ccd: React.PropTypes.array,
   ci: React.PropTypes.object,
   cinfo: React.PropTypes.object,
   cfg: React.PropTypes.object,
@@ -97,9 +99,10 @@ Content.propTypes = {
 
 const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
-  currentJSONIndexSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector, cogInfoSelector, configSelector,
-  (cw, ch, ui, idx, ci, layout, aspect, labels, cinfo, cfg) => {
+  currentJSONIndexSelector, currentCogDataSelector, cogInterfaceSelector,
+  layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
+  configSelector,
+  (cw, ch, ui, idx, ccd, ci, layout, aspect, labels, cinfo, cfg) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -218,6 +221,7 @@ const styleSelector = createSelector(
         }
       },
       idx,
+      ccd,
       ci,
       cinfo,
       cfg,

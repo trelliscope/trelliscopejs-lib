@@ -50,7 +50,6 @@ const crossfilterMiddleware = store => next => action => {
         }
       }
     }
-
     // const size = store.getState()._cogDataMutable.allRef.value();
     // console.log(`Filtered... size is now ${size}`);
   } else if (action.type === 'SET_FILTER_VIEW') {
@@ -85,11 +84,17 @@ const crossfilterMiddleware = store => next => action => {
     // this isn't efficient but sorting is expected to happen at much lower frequency
     // than filtering and the user can tolerate more latency with sorting than filtering
 
-    // const cf = store.getState()._cogDataMutable.crossfilter;
+    const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
     if (dimensions.__sort !== undefined) {
       dimensions.__sort.remove();
     }
+    let newState = action.sort;
+    if (typeof action.sort === 'number') {
+      newState = Object.assign([], [], store.getState().sort);
+      newState.splice(action.sort, 1);
+    }
+    dimensions.__sort = cf.dimension(d => d[newState[0].name]);
   }
   return next(action);
 };
