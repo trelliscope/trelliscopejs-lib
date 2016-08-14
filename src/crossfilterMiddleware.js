@@ -95,8 +95,7 @@ const crossfilterMiddleware = store => next => action => {
       newState.splice(action.sort, 1);
     }
     if (newState.length === 0) {
-      // TODO: change this to index
-      dimensions.__sort = cf.dimension(d => d.panelKey);
+      dimensions.__sort = cf.dimension(d => d.__index);
     } else {
       dimensions.__sort = cf.dimension(d => d[newState[0].name]);
     }

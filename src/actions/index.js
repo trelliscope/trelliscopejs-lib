@@ -135,6 +135,11 @@ export const fetchDisplay = (name, group, cfg) =>
       const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData2.json`;
       getJSON(cf, json2 => {
         // once cog data is loaded, set the state with this data
+        // but first add an index column to the data so we can
+        // preserve original order or do multi-column sorts
+        for (let i = 0; i < json2.length; i++) {
+          json2[i].__index = i; // eslint-disable-line no-param-reassign
+        }
         dispatch(receiveCogData(iface, crossfilter(json2)));
         // now we can safely set several other default states that depend
         // on either display or cog data or can't be set until this data is loaded
