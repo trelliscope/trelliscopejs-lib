@@ -1,4 +1,5 @@
 import { json as getJSON } from 'd3-request';
+// import { crossfilter } from 'crossfilter2';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
