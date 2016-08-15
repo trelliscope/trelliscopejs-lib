@@ -50,6 +50,13 @@ const crossfilterMiddleware = store => next => action => {
           if (dimensions[names[i]] === undefined) {
             dimensions[names[i]] = cf.dimension(d => getNumVal(d, names[i]));
           }
+          if (groups[names[i]] === undefined) {
+            // group.dispose(); // to get rid of previous group
+            // create group that bins into histogram breaks
+            const ci = store.getState()._displayInfo.info.cogInfo[names[i]];
+            groups[names[i]] = dimensions[names[i]].group(d =>
+              (isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+          }
           if (action.filter[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
           } else {

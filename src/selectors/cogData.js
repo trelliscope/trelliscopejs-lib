@@ -66,6 +66,8 @@ export const cogFiltDistSelector = createSelector(
             sumSelected,
             idx: selectedIdx.concat(notSelectedIdx)
           };
+        } else if (di.info.cogInfo[keys[i]].type === 'numeric') {
+          const dist = cogData.groupRefs[keys[i]].all();
         }
       }
     }
