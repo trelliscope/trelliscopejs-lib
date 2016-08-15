@@ -79,7 +79,7 @@ export const currentCogDataSelector = createSelector(
   (cd, pnum, npp, filt, sort) => {
     let result = [];
     if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
-      if (sort.length > 0) {
+      if (sort.length === 1) {
         if (sort[0].dir === 'asc') {
           result = cd.dimensionRefs.__sort.bottom(npp, (pnum - 1) * npp);
         } else {

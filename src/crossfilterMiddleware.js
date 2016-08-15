@@ -7,6 +7,33 @@
 const getNumVal = (d, name) => (isNaN(d[name]) ? null : d[name]);
 const getCatVal = (d, name) => d[name]; // TODO: what about NaN?
 
+
+const sortFn = (property) => {
+  let sortOrder = 1;
+  let property2 = property;
+  if (property[0] === '!') {
+    sortOrder = -1;
+    property2 = property2.substr(1);
+  }
+  return (a, b) => {
+    const result = (a[property2] < b[property2]) ? -1 : (a[property2] > b[property2]) ? 1 : 0;
+    return result * sortOrder;
+  };
+};
+
+const multiSort = (args) => {
+  const props = args;
+  return (obj1, obj2) => {
+    let i = 0;
+    let result = 0;
+    while (result === 0 && i < props.length) {
+      result = sortFn(props[i])(obj1, obj2);
+      i++;
+    }
+    return result;
+  };
+};
+
 const crossfilterMiddleware = store => next => action => {
   if (action.type === 'SET_FILTER') {
     const cf = store.getState()._cogDataMutable.crossfilter;
@@ -96,8 +123,28 @@ const crossfilterMiddleware = store => next => action => {
     }
     if (newState.length === 0) {
       dimensions.__sort = cf.dimension(d => d.__index);
-    } else {
+    } else if (newState.length === 1) {
       dimensions.__sort = cf.dimension(d => d[newState[0].name]);
+    } else {
+      const dat = cf.all();
+      const sortDat = [];
+      for (let i = 0; i < dat.length; i++) {
+        const elem = { __index: dat[i].__index };
+        for (let j = 0; j < newState.length; j++) {
+          elem[newState[j].name] = dat[i][newState[j].name];
+        }
+        sortDat.push(elem);
+      }
+      const sortSpec = [];
+      for (let i = 0; i < newState.length; i++) {
+        sortSpec.push(`${newState[i].dir === 'asc' ? '' : '!'}${newState[i].name}`);
+      }
+      sortDat.sort(multiSort(sortSpec));
+      const idx = {};
+      for (let i = 0; i < sortDat.length; i++) {
+        idx[sortDat[i].__index] = i;
+      }
+      dimensions.__sort = cf.dimension(d => idx[d.__index]);
     }
   }
   return next(action);
