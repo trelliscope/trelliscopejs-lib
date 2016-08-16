@@ -11,20 +11,68 @@ const HistPlotD3 = {};
 
 class FilterNumPlot extends React.Component {
   componentDidMount() {
-    this.d3Node = select(ReactDOM.findDOMNode(this));
-    this.d3Node
-      .call(HistPlotD3.enter.bind(this, this.props));
+    const axisPad = 20;
+    const sidePad = 5;
+    const delta = this.props.condDist.delta;
+    const xrange = [this.props.condDist.breaks[0],
+      this.props.condDist.breaks[this.props.condDist.breaks.length - 1] + delta];
+    const xs = scaleLinear()
+      .domain(xrange)
+      .range([sidePad, this.props.style.width - sidePad]);
+    const ys = scaleLinear()
+      .domain([0, this.props.condDist.max])
+      .range([this.props.style.height - axisPad, 0]);
+    const axis = axisBottom(ys)
+      .scale(xs)
+      .ticks(5)
+      .tickSize(4);
+    const height = this.props.style.height - axisPad;
+    const barWidth = xs(delta) - xs(0);
+
+    const barPath = (dat, pars) => {
+      const path = [];
+      let i = -1;
+      const n = dat.length;
+      let d;
+      while (++i < n) {
+        d = dat[i];
+        path.push('M', pars.xs(d.key) + 1, ',', pars.height, 'V',
+          Math.max(pars.ys(d.value), 1),
+          'h', pars.barWidth - 1, 'V', pars.height);
+      }
+      return path.join('');
+    };
+
+    this.d3pars = {
+      axisPad,
+      sidePad,
+      delta,
+      xrange,
+      xs,
+      ys,
+      axis,
+      height,
+      barWidth,
+      barPath
+    };
+
+    this._d3node
+      .call(HistPlotD3.enter.bind(this, this.props, this.d3pars));
   }
   shouldComponentUpdate() {
     return true;
   }
   componentDidUpdate() {
-    this.d3Node
-      .call(HistPlotD3.update.bind(this, this.props));
+    this._d3node
+      .call(HistPlotD3.update.bind(this, this.props, this.d3pars));
   }
   render() {
     return (
-      <svg width={this.props.style.width} height={this.props.style.height} />
+      <svg
+        ref={d => { this._d3node = select(d); }}
+        width={this.props.style.width}
+        height={this.props.style.height}
+      />
     );
   }
 }
@@ -40,37 +88,7 @@ FilterNumPlot.propTypes = {
 
 export default FilterNumPlot;
 
-HistPlotD3.enter = (props, selection) => {
-  const axisPad = 20;
-  const sidePad = 5;
-  const delta = props.condDist.delta;
-  const xrange = [props.condDist.breaks[0],
-    props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
-  const xs = scaleLinear()
-    .domain(xrange)
-    .range([sidePad, props.style.width - sidePad]);
-  const ys = scaleLinear()
-    .domain([0, props.condDist.max])
-    .range([props.style.height - axisPad, 0]);
-  const axis = axisBottom(ys)
-    .scale(xs)
-    .ticks(5);
-  const height = props.style.height - axisPad;
-  const barWidth = xs(delta) - xs(0);
-
-  const barPath = (groups) => {
-    const path = [];
-    let i = -1;
-    const n = groups.length;
-    let d;
-    while (++i < n) {
-      d = groups[i];
-      path.push('M', xs(d.key) + 1, ',', height, 'V', ys(d.value), 'h',
-        barWidth - 1, 'V', height);
-    }
-    return path.join('');
-  };
-
+HistPlotD3.enter = (props, pars, selection) => {
   const brushClipMove = () => {
     const curRange = currentEvent.selection;
     selection.select('#cliprect')
@@ -88,27 +106,20 @@ HistPlotD3.enter = (props, selection) => {
   const brushed = () => {
     if (currentEvent.sourceEvent) {
       if (currentEvent.selection) {
-        const newRange = currentEvent.selection.map(d => fixNumber(xs.invert(d)));
+        const newRange = currentEvent.selection.map(d => fixNumber(pars.xs.invert(d)));
         props.handleChange(newRange);
       } else {
-        const fullRange = [props.condDist.breaks[0],
-          props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
         selection.select('#cliprect')
-          .attr('x', xs(fullRange[0]))
-          .attr('width', xs(fullRange[1]) - xs(fullRange[0]));
+          .attr('x', pars.xs(pars.xrange[0]))
+          .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
         props.handleChange(undefined);
       }
     }
   };
 
   const histBrush = brushX()
-    .extent([[sidePad, 0], [props.style.width - sidePad, height]])
+    .extent([[pars.sidePad, 0], [props.style.width - pars.sidePad, pars.height]])
     .handleSize(10);
-
-  // if (props.filterState.value === undefined) {
-  //   histBrush
-  //     .call(brushX().move, []);
-  // }
 
   histBrush
     .on('brush', brushClipMove)
@@ -116,7 +127,7 @@ HistPlotD3.enter = (props, selection) => {
 
   const plotArea = selection.append('g');
 
-  const selRange = xrange;
+  const selRange = Object.assign([], pars.xrange);
   if (props.filterState.value) {
     if (props.filterState.value.from) {
       selRange[0] = props.filterState.value.from;
@@ -126,74 +137,63 @@ HistPlotD3.enter = (props, selection) => {
     }
   }
 
+  // clipping region to match brush and hide foreground bars
   plotArea.append('clipPath')
     .attr('id', `clip-${props.name}`)
     .append('rect')
     .attr('id', 'cliprect')
-    // .attr('width', props.style.width) // this will control selection
-    .attr('x', xs(selRange[0]))
-    .attr('width', xs(selRange[1]) - xs(selRange[0]))
-    .attr('height', props.style.height - axisPad);
+    .attr('x', pars.xs(selRange[0]))
+    .attr('width', pars.xs(selRange[1]) - pars.xs(selRange[0]))
+    .attr('height', props.style.height - pars.axisPad);
 
+  // background bars
   plotArea.append('path')
     .attr('class', 'bar')
     .datum(props.condDist.dist)
-    .attr('fill', 'lightgray');
+    .attr('fill', '#ccc');
 
   plotArea.append('path')
     .attr('class', 'bar')
     .datum(props.condDist.dist)
     .attr('clip-path', `url(#clip-${props.name})`)
-    .attr('fill', 'steelblue');
+    .attr('fill', '#1f77b4');
 
-  selection.append('g')
+  const gAxis = selection.append('g')
     .attr('class', 'axis')
-    .attr('transform', `translate(0,${props.style.height - axisPad})`)
-    .call(axis);
+    .attr('transform', `translate(0,${(props.style.height - pars.axisPad) + 1})`)
+    .call(pars.axis);
+
+  // style the axis
+  gAxis.select('path')
+    .attr('fill', 'none')
+    .attr('stroke', '#000')
+    .attr('stroke-opacity', 0.4)
+    .attr('shape-rendering', 'crispEdges');
+  gAxis.selectAll('.tick')
+    .attr('opacity', 0.4);
+  // gAxis.selectAll('.tick text')
+  //   .attr('font', '10px');
 
   const gBrush = plotArea.append('g')
     .attr('class', 'brush')
     .call(histBrush)
-    .call(histBrush.move, [xs(selRange[0]), xs(selRange[1])]);
+    .call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
+
+  gBrush.select('rect.selection')
+    .attr('fill', '#1f77b4')
+    .attr('fill-opacity', '0.125');
 
   gBrush.selectAll('rect')
-    .attr('height', height);
+    .attr('height', pars.height);
 
-  selection.selectAll('.bar').attr('d', barPath);
+  selection.selectAll('.bar').attr('d', d => pars.barPath(d, pars));
 };
 
-HistPlotD3.update = (props, selection) => {
-  const axisPad = 20;
-  const sidePad = 5;
-  const delta = props.condDist.delta;
-  const xrange = [props.condDist.breaks[0],
-    props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
-  const xs = scaleLinear()
-    .domain(xrange)
-    .range([sidePad, props.style.width - sidePad]);
-  const ys = scaleLinear()
-    .domain([0, props.condDist.max])
-    .range([props.style.height - axisPad, 0]);
-  const height = props.style.height - axisPad;
-  const barWidth = xs(delta) - xs(0);
-
-  const barPath = (groups) => {
-    const path = [];
-    let i = -1;
-    const n = groups.length;
-    let d;
-    while (++i < n) {
-      d = groups[i];
-      path.push('M', xs(d.key) + 1, ',', height, 'V', ys(d.value), 'h',
-        barWidth - 1, 'V', height);
-    }
-    return path.join('');
-  };
-
+HistPlotD3.update = (props, pars, selection) => {
   selection.selectAll('.bar')
     .attr('d', null)
     .datum(props.condDist.dist)
-    .attr('d', barPath);
+    .attr('d', d => pars.barPath(d, pars));
 
   // brush needs to reflect updated range
   if (props.filterState.value !== undefined) {
@@ -202,19 +202,19 @@ HistPlotD3.update = (props, selection) => {
 
     // explicitly set from = min or to = max if not specified
     if (fFrom === undefined) {
-      fFrom = xrange[0];
+      fFrom = pars.xrange[0];
     }
     if (fTo === undefined) {
-      fTo = xrange[1];
+      fTo = pars.xrange[1];
     }
     //
     if (fTo > fFrom) {
       selection.select('.brush')
-        .call(brushX().move, [xs(fFrom), xs(fTo)]);
+        .call(brushX().move, [pars.xs(fFrom), pars.xs(fTo)]);
       // make sure the selection matches the new brush
       selection.select('#cliprect')
-        .attr('x', xs(fFrom))
-        .attr('width', xs(fTo) - xs(fFrom));
+        .attr('x', pars.xs(fFrom))
+        .attr('width', pars.xs(fTo) - pars.xs(fFrom));
     }
   } else {
     // we need to remove the brush
