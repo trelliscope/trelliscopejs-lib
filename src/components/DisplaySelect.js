@@ -78,7 +78,8 @@ class DisplaySelect extends React.Component {
         <div style={this.props.style.attn.inner}>
           <div
             ref={d => { this._atnnCircle = d; }}
-            style={this.props.style.attn.empty} />
+            style={this.props.style.attn.empty}
+          />
         </div>
       </div>
     );
