@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
@@ -17,11 +16,11 @@ class NumericInput extends React.Component {
     this.mousetrap = null;
   }
   componentDidMount() {
-    this.mousetrap = new Mousetrap(ReactDOM.findDOMNode(this));
+    this.mousetrap = new Mousetrap(this._NumericInput);
     this.mousetrap.bind(['up'], () => this.increment());
     this.mousetrap.bind(['down'], () => this.decrement());
     this.mousetrap.bind(['esc'], () => {
-      ReactDOM.findDOMNode(this.refs.numericinput).blur();
+      this._NumericInput.blur();
       return false;
     });
     this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
@@ -96,7 +95,7 @@ class NumericInput extends React.Component {
     return (
       <span style={this.props.style.span}>
         <input
-          ref="numericinput"
+          ref={d => { this._NumericInput = d; }}
           className="mousetrap"
           type="text"
           size={this.props.size ? this.props.size : 5}
