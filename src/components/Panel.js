@@ -1,7 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
-import { findDOMNode } from 'react-dom';
 import { json as getJSON } from 'd3-request';
 
 class Panel extends React.Component {
@@ -18,16 +17,18 @@ class Panel extends React.Component {
     });
 
     // fade in on new component
-    const elem = findDOMNode(this);
-    elem.style.opacity = 0;
-    setTimeout(() => (elem.style.opacity = 1), 10);
+    this._panel.style.opacity = 0;
+    setTimeout(() => (this._panel.style.opacity = 1), 10);
   }
   componentWillUnmount() {
     this.xhr.abort();
   }
   render() {
     return (
-      <div style={[this.props.style.bounding, this.props.dimStyle]}>
+      <div
+        style={[this.props.style.bounding, this.props.dimStyle]}
+        ref={d => { this._panel = d; }}
+      >
         <div style={this.props.style.panel}>
         {this.state.loaded ?
           <img
