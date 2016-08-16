@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Radium from 'radium';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -27,7 +26,7 @@ class DisplaySelect extends React.Component {
     Mousetrap.bind(['o'], this.handleKey);
 
     const attnInterval = setInterval(() => {
-      const elem = ReactDOM.findDOMNode(this.refs.attnCircle);
+      const elem = this._atnnCircle;
       if (this.props.selectedDisplay.name !== '') {
         clearInterval(attnInterval);
       }
@@ -77,7 +76,9 @@ class DisplaySelect extends React.Component {
     let attnDiv = (
       <div style={this.props.style.attn.outer}>
         <div style={this.props.style.attn.inner}>
-          <div ref="attnCircle" style={this.props.style.attn.empty} />
+          <div
+            ref={d => { this._atnnCircle = d; }}
+            style={this.props.style.attn.empty} />
         </div>
       </div>
     );
