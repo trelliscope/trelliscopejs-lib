@@ -67,9 +67,11 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
 
               itemContent = (
                 <FilterNum
+                  name={d}
                   filterState={filterState}
                   style={style.numFilter}
                   dist={displayInfo.info.cogDistns[d]}
+                  condDist={filtDist[d]}
                   handleChange={handleFilterChange}
                 />
               );
@@ -328,7 +330,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleFilterChange: (x) => {
     const obj = {};
-    obj[x.name] = x;
+    obj[x.name] = Object.assign({}, x);
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },

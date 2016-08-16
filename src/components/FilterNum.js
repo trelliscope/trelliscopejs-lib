@@ -69,8 +69,10 @@ class FilterNum extends React.Component {
           style={this.props.style.plotContainer}
         >
           <FilterNumPlot
+            name={this.props.name}
             style={this.props.style.plotContainer}
             dist={this.props.dist}
+            condDist={this.props.condDist}
             filterState={this.props.filterState}
             handleChange={this.props.handleChange}
           />
@@ -113,9 +115,11 @@ class FilterNum extends React.Component {
 }
 
 FilterNum.propTypes = {
+  name: React.PropTypes.string,
   filterState: React.PropTypes.object,
   style: React.PropTypes.object,
   dist: React.PropTypes.object,
+  condDist: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 

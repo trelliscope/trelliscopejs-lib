@@ -68,6 +68,20 @@ export const cogFiltDistSelector = createSelector(
           };
         } else if (di.info.cogInfo[keys[i]].type === 'numeric') {
           const dist = cogData.groupRefs[keys[i]].all();
+
+          let maxVal = 0;
+          for (let j = 0; j < dist.length; j++) {
+            if (dist[j].value > maxVal) {
+              maxVal = dist[j].value;
+            }
+          }
+
+          result[keys[i]] = {
+            dist,
+            max: maxVal,
+            breaks: di.info.cogInfo[keys[i]].breaks,
+            delta: di.info.cogInfo[keys[i]].delta
+          };
         }
       }
     }

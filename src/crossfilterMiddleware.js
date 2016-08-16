@@ -107,7 +107,13 @@ const crossfilterMiddleware = store => next => action => {
       }
 
       if (groups[action.name] === undefined) {
-        groups[action.name] = dimensions[action.name].group();
+        if (type === 'numeric') {
+          const ci = store.getState()._displayInfo.info.cogInfo[action.name];
+          groups[action.name] = dimensions[action.name].group(d =>
+            (isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+        } else {
+          groups[action.name] = dimensions[action.name].group();
+        }
       }
     }
   } else if (action.type === 'SET_SORT') {
