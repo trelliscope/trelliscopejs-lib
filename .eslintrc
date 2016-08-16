@@ -6,8 +6,6 @@
     "no-nested-ternary": 0,
     "comma-dangle": [2, "never"],
     "new-cap": [2, {"capIsNewExceptions": ["Radium"]}],
-    "react/no-string-refs": 0,
-    "react/no-find-dom-node": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   },
   'globals': {
