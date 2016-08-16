@@ -14,28 +14,28 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
 
 const Sidebar = ({ style, active, displayLoaded }) => {
   if (active === '') {
-    return <div style={[style.base, style.hidden]} ref="side-container" />;
+    return <div style={[style.base, style.hidden]} />;
   }
 
   const emptyStyle = { paddingLeft: 8, paddingTop: 5 };
   let content;
   if (active === SB_CONFIG) {
-    content = <div style={emptyStyle} ref="side-container">Configuration...</div>;
+    content = <div style={emptyStyle}>Configuration...</div>;
   } else if (!displayLoaded) {
-    content = <div style={emptyStyle} ref="side-container">Load a display...</div>;
+    content = <div style={emptyStyle}>Load a display...</div>;
   } else {
     switch (active) {
       case SB_PANEL_LAYOUT:
-        content = <div ref="side-container"><SidebarLayout /></div>;
+        content = <div><SidebarLayout /></div>;
         break;
       case SB_PANEL_FILTER :
-        content = <div ref="side-container"><SidebarFilter /></div>;
+        content = <div><SidebarFilter /></div>;
         break;
       case SB_PANEL_SORT :
-        content = <div ref="side-container"><SidebarSort /></div>;
+        content = <div><SidebarSort /></div>;
         break;
       case SB_PANEL_LABELS :
-        content = <div ref="side-container"><SidebarLabels /></div>;
+        content = <div><SidebarLabels /></div>;
         break;
       default:
         content = '';
