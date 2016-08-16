@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom';
 // import NumHist from './FilterNumPlotHist';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
-import { select, event } from 'd3-selection';
+import { select, event as currentEvent } from 'd3-selection';
 import { brushX } from 'd3-brush';
-import { arc } from 'd3-shape';
+// import { arc } from 'd3-shape';
 
 const HistPlotD3 = {};
 
 class FilterNumPlot extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     this.d3Node = select(ReactDOM.findDOMNode(this));
     this.d3Node
@@ -47,8 +44,8 @@ HistPlotD3.enter = (props, selection) => {
   const axisPad = 20;
   const sidePad = 5;
   const delta = props.condDist.delta;
-  const xrange = [props.condDist.dist[0].key,
-    props.condDist.dist[props.condDist.dist.length - 1].key + delta];
+  const xrange = [props.condDist.breaks[0],
+    props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
   const xs = scaleLinear()
     .domain(xrange)
     .range([sidePad, props.style.width - sidePad]);
@@ -75,20 +72,45 @@ HistPlotD3.enter = (props, selection) => {
   };
 
   const brushClipMove = () => {
-    const curRange = event.selection;
+    const curRange = currentEvent.selection;
     selection.select('#cliprect')
       .attr('x', curRange[0])
       .attr('width', curRange[1] - curRange[0]);
   };
 
+  // cut long decimals from the brush down to 5 significant digits
+  // or in the case of numbers that are 10^5 or higher, just omit decimals
+  const fixNumber = (x) => {
+    const prec = Math.max(Math.floor(Math.log10(Math.abs(x))), 5);
+    return parseFloat(x.toPrecision(prec));
+  };
+
   const brushed = () => {
-    const newRange = event.selection.map(xs.invert);
-    props.handleChange(newRange);
+    if (currentEvent.sourceEvent) {
+      if (currentEvent.selection) {
+        const newRange = currentEvent.selection.map(d => fixNumber(xs.invert(d)));
+        props.handleChange(newRange);
+      } else {
+        const fullRange = [props.condDist.breaks[0],
+          props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
+        selection.select('#cliprect')
+          .attr('x', xs(fullRange[0]))
+          .attr('width', xs(fullRange[1]) - xs(fullRange[0]));
+        props.handleChange(undefined);
+      }
+    }
   };
 
   const histBrush = brushX()
     .extent([[sidePad, 0], [props.style.width - sidePad, height]])
-    .handleSize(10)
+    .handleSize(10);
+
+  // if (props.filterState.value === undefined) {
+  //   histBrush
+  //     .call(brushX().move, []);
+  // }
+
+  histBrush
     .on('brush', brushClipMove)
     .on('end', brushed);
 
@@ -144,8 +166,8 @@ HistPlotD3.update = (props, selection) => {
   const axisPad = 20;
   const sidePad = 5;
   const delta = props.condDist.delta;
-  const xrange = [props.condDist.dist[0].key,
-    props.condDist.dist[props.condDist.dist.length - 1].key + delta];
+  const xrange = [props.condDist.breaks[0],
+    props.condDist.breaks[props.condDist.breaks.length - 1] + delta];
   const xs = scaleLinear()
     .domain(xrange)
     .range([sidePad, props.style.width - sidePad]);
@@ -173,11 +195,30 @@ HistPlotD3.update = (props, selection) => {
     .datum(props.condDist.dist)
     .attr('d', barPath);
 
-  const fFrom = props.filterState.value.from;
-  const fTo = props.filterState.value.to;
+  // brush needs to reflect updated range
+  if (props.filterState.value !== undefined) {
+    let fFrom = props.filterState.value.from;
+    let fTo = props.filterState.value.to;
 
-  if (fTo > fFrom) {
-    const gBrush = selection.select('.brush')
-      .call(brushX().move, [xs(fFrom), xs(fTo)]);
+    // explicitly set from = min or to = max if not specified
+    if (fFrom === undefined) {
+      fFrom = xrange[0];
+    }
+    if (fTo === undefined) {
+      fTo = xrange[1];
+    }
+    //
+    if (fTo > fFrom) {
+      selection.select('.brush')
+        .call(brushX().move, [xs(fFrom), xs(fTo)]);
+      // make sure the selection matches the new brush
+      selection.select('#cliprect')
+        .attr('x', xs(fFrom))
+        .attr('width', xs(fTo) - xs(fFrom));
+    }
+  } else {
+    // we need to remove the brush
+    selection.select('.brush')
+      .call(brushX().move, null);
   }
 };

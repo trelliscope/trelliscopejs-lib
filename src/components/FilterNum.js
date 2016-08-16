@@ -45,20 +45,37 @@ class FilterNum extends React.Component {
     this.props.handleChange(newState);
   }
   handleBrushInput(values) {
-    const newState = {
-      name: this.props.filterState.name,
-      type: 'range',
-      varType: this.props.filterState.varType,
-      value: {
-        from: values[0],
-        to: values[1]
-      },
-      valid: true
-    };
-    this.props.handleChange(newState);
-    // debugger;
-    // this.refs.FromField.input.value = values[0];
-    // this.refs.ToField.input.value = values[1];
+    if (values === undefined) {
+      const newState = {
+        name: this.props.filterState.name,
+        type: 'range',
+        varType: this.props.filterState.varType,
+        valid: true
+      };
+      this.props.handleChange(newState);
+
+      if (this._fromInput && this._toInput) {
+        this._fromInput.input.value = null;
+        this._toInput.input.value = null;
+      }
+    } else {
+      const newState = {
+        name: this.props.filterState.name,
+        type: 'range',
+        varType: this.props.filterState.varType,
+        value: {
+          from: values[0],
+          to: values[1]
+        },
+        valid: true
+      };
+      this.props.handleChange(newState);
+
+      if (this._fromInput && this._toInput) {
+        this._fromInput.input.value = values[0];
+        this._toInput.input.value = values[1];
+      }
+    }
   }
   checkValidNumber(lower, upper, which) {
     if (which === 'to') {
@@ -97,8 +114,9 @@ class FilterNum extends React.Component {
         <div style={this.props.style.inputContainer}>
           <div style={this.props.style.rangeInputText}>Range:</div>
           <TextField
-            ref="FromField"
-            hintText="from"
+            ref={d => { this._fromInput = d; }}
+            // hintText="from"
+            name="fromText"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}
@@ -113,8 +131,9 @@ class FilterNum extends React.Component {
           />
           <div style={this.props.style.rangeInputText}>&ndash;</div>
           <TextField
-            ref="ToField"
-            hintText="to"
+            ref={d => { this._toInput = d; }}
+            // hintText="to"
+            name="toText"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
             underlineStyle={this.props.style.underlineStyle}

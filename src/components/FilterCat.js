@@ -36,8 +36,8 @@ class FilterCat extends React.Component {
       // hacky way to clear regex field after it switches to selection
       // until material-ui is fixed and we can change to controlled input
       // https://github.com/callemall/material-ui/pull/3673
-      this.refs.TextField.input.value = '';
-      this.refs.TextField.state.hasValue = false;
+      this._TextField.input.value = '';
+      this._TextField.state.hasValue = false;
     }
   }
   handleRegex(val) {
@@ -101,7 +101,7 @@ class FilterCat extends React.Component {
         </div>
         <div style={this.props.style.inputContainer}>
           <TextField
-            ref="TextField"
+            ref={d => { this._TextField = d; }}
             hintText="regex"
             style={this.props.style.regexInput}
             defaultValue={this.props.filterState.type === 'regex' ?

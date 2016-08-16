@@ -80,7 +80,9 @@ export const cogFiltDistSelector = createSelector(
             dist,
             max: maxVal,
             breaks: di.info.cogInfo[keys[i]].breaks,
-            delta: di.info.cogInfo[keys[i]].delta
+            delta: di.info.cogInfo[keys[i]].delta,
+            range: di.info.cogInfo[keys[i]].range,
+            log: di.info.cogInfo[keys[i]].log
           };
         }
       }
