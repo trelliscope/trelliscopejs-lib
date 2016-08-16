@@ -132,7 +132,7 @@ export const fetchDisplay = (name, group, cfg) =>
       // (to do this, have displayObj store initial panel keys and cogs)
 
       // load the cog data
-      const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData2.json`;
+      const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;
       getJSON(cf, json2 => {
         // once cog data is loaded, set the state with this data
         // but first add an index column to the data so we can
