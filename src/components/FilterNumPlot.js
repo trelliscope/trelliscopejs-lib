@@ -44,7 +44,6 @@ FilterNumPlot.propTypes = {
 export default FilterNumPlot;
 
 HistPlotD3.enter = (props, selection) => {
-
   const axisPad = 20;
   const sidePad = 5;
   const delta = props.condDist.delta;
@@ -83,10 +82,8 @@ HistPlotD3.enter = (props, selection) => {
   };
 
   const brushed = () => {
-    props.handleChange(Object.assign(props.filterState,
-      {
-        value: event.selection.map(xs.invert)
-      }));
+    const newRange = event.selection.map(xs.invert);
+    props.handleChange(newRange);
   };
 
   const histBrush = brushX()
@@ -144,7 +141,6 @@ HistPlotD3.enter = (props, selection) => {
 };
 
 HistPlotD3.update = (props, selection) => {
-
   const axisPad = 20;
   const sidePad = 5;
   const delta = props.condDist.delta;
@@ -176,4 +172,12 @@ HistPlotD3.update = (props, selection) => {
     .attr('d', null)
     .datum(props.condDist.dist)
     .attr('d', barPath);
+
+  const fFrom = props.filterState.value.from;
+  const fTo = props.filterState.value.to;
+
+  if (fTo > fFrom) {
+    const gBrush = selection.select('.brush')
+      .call(brushX().move, [xs(fFrom), xs(fTo)]);
+  }
 };

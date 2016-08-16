@@ -9,6 +9,7 @@ class FilterNum extends React.Component {
     super(props);
     this.handleInput = debounce(400, this.handleInput);
     this.stateValue = {};
+    this.handleBrushInput = this.handleBrushInput.bind(this);
   }
   setValidState(lower, upper, which) {
     const valid = this.checkValidNumber(lower, upper, which);
@@ -43,6 +44,22 @@ class FilterNum extends React.Component {
     }
     this.props.handleChange(newState);
   }
+  handleBrushInput(values) {
+    const newState = {
+      name: this.props.filterState.name,
+      type: 'range',
+      varType: this.props.filterState.varType,
+      value: {
+        from: values[0],
+        to: values[1]
+      },
+      valid: true
+    };
+    this.props.handleChange(newState);
+    // debugger;
+    // this.refs.FromField.input.value = values[0];
+    // this.refs.ToField.input.value = values[1];
+  }
   checkValidNumber(lower, upper, which) {
     if (which === 'to') {
       if (lower && parseFloat(lower) > parseFloat(upper)) {
@@ -74,12 +91,13 @@ class FilterNum extends React.Component {
             dist={this.props.dist}
             condDist={this.props.condDist}
             filterState={this.props.filterState}
-            handleChange={this.props.handleChange}
+            handleChange={this.handleBrushInput}
           />
         </div>
         <div style={this.props.style.inputContainer}>
           <div style={this.props.style.rangeInputText}>Range:</div>
           <TextField
+            ref="FromField"
             hintText="from"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
@@ -95,6 +113,7 @@ class FilterNum extends React.Component {
           />
           <div style={this.props.style.rangeInputText}>&ndash;</div>
           <TextField
+            ref="ToField"
             hintText="to"
             style={this.props.style.rangeInput}
             inputStyle={validStyle}
