@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-// import NumHist from './FilterNumPlotHist';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
 import { select, event as currentEvent } from 'd3-selection';
