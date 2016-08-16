@@ -11,6 +11,9 @@ const HistPlotD3 = {};
 
 class FilterNumPlot extends React.Component {
   componentDidMount() {
+    // we don't expect most props to change so we'll set things here
+    // so we don't recompute every time the plots updates
+    // the one thing that can change is the domain of ys
     const axisPad = 20;
     const sidePad = 5;
     const delta = this.props.condDist.delta;
@@ -37,7 +40,7 @@ class FilterNumPlot extends React.Component {
       while (++i < n) {
         d = dat[i];
         path.push('M', pars.xs(d.key) + 1, ',', pars.height, 'V',
-          Math.max(pars.ys(d.value), 1),
+          pars.ys(d.value) - 1, // -1 will ensure bars are visible
           'h', pars.barWidth - 1, 'V', pars.height);
       }
       return path.join('');
@@ -63,6 +66,7 @@ class FilterNumPlot extends React.Component {
     return true;
   }
   componentDidUpdate() {
+    this.d3pars.ys.domain([0, this.props.condDist.max]);
     this._d3node
       .call(HistPlotD3.update.bind(this, this.props, this.d3pars));
   }
