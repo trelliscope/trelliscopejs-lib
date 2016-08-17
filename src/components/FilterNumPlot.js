@@ -60,9 +60,9 @@ class FilterNumPlot extends React.Component {
     this._d3node
       .call(HistPlotD3.enter.bind(this, this.props, this.d3pars));
   }
-  shouldComponentUpdate() {
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return true;
+  // }
   componentDidUpdate() {
     this.d3pars.ys.domain([0, this.props.condDist.max]);
     this._d3node
@@ -224,5 +224,9 @@ HistPlotD3.update = (props, pars, selection) => {
     // we need to remove the brush
     selection.select('.brush')
       .call(brushX().move, null);
+    // and clear the mask
+    selection.select('#cliprect')
+      .attr('x', pars.xs(pars.xrange[0]))
+      .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
   }
 };

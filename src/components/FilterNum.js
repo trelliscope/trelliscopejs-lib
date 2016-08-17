@@ -11,6 +11,13 @@ class FilterNum extends React.Component {
     this.stateValue = {};
     this.handleBrushInput = this.handleBrushInput.bind(this);
   }
+  componentDidUpdate() {
+    // if component is updated with empty state, make sure text fields are empty
+    if (this.props.filterState.value === undefined && this._fromInput && this._toInput) {
+      this._fromInput.input.value = null;
+      this._toInput.input.value = null;
+    }
+  }
   setValidState(lower, upper, which) {
     const valid = this.checkValidNumber(lower, upper, which);
     if (this.props.filterState.valid === undefined ||

@@ -21,7 +21,6 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
         <div style={style.filtersContainer}>
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
-            let handleReset = () => (undefined);
             let footerExtra = '';
 
             let itemContent = <div key={i}>{d}</div>;
@@ -35,14 +34,6 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   varType: 'factor'
                 };
               }
-              handleReset = () => {
-                const newState = {
-                  name: filterState.name,
-                  varType: filterState.varType,
-                  orderValue: filterState.orderValue
-                };
-                handleFilterChange(newState);
-              };
 
               itemContent = (
                 <FilterCat
@@ -89,7 +80,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   </div>
                   <div
                     style={[style.footerIcon, style.footerReset]}
-                    onMouseDown={handleReset}
+                    onMouseDown={() => handleFilterChange(filterState.name)}
                   >
                     <i className="icon-undo" />
                   </div>
@@ -339,8 +330,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setFilterView(x, which));
   },
   handleFilterChange: (x) => {
-    const obj = {};
-    obj[x.name] = Object.assign({}, x);
+    let obj;
+    if (typeof x === 'string' || x instanceof String) {
+      obj = x;
+    } else {
+      obj = {};
+      obj[x.name] = Object.assign({}, x);
+    }
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },
