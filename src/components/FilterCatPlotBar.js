@@ -18,7 +18,8 @@ class CatBar extends React.Component {
   render() {
     const fontSize = Math.min(10, this.props.height - 6);
     const labelFontSize = Math.min(9, this.props.height - 7);
-
+    const label = this.props.d.ct === this.props.d.mct ?
+      this.props.d.mct : `${this.props.d.ct} / ${this.props.d.mct}`;
     return (
       <div
         style={[
@@ -41,7 +42,8 @@ class CatBar extends React.Component {
               height: this.props.height - 1
             },
             this.props.active && this.props.style.barActive,
-            this.state.hover && this.props.style.barHover
+            this.state.hover && this.props.style.barHover,
+            (this.props.allActive && !this.state.hover) && this.props.style.barAllActive
           ]}
         >
           <div
@@ -69,7 +71,7 @@ class CatBar extends React.Component {
             !this.state.hover && this.props.style.hidden
           ]}
         >
-          {`${this.props.d.ct} / ${this.props.d.mct}`}
+          {label}
         </div>
       </div>
     );
@@ -79,6 +81,7 @@ class CatBar extends React.Component {
 CatBar.propTypes = {
   style: React.PropTypes.object,
   active: React.PropTypes.bool,
+  allActive: React.PropTypes.bool,
   width: React.PropTypes.number,
   totWidth: React.PropTypes.number,
   height: React.PropTypes.number,
@@ -101,14 +104,21 @@ const stateSelector = createSelector(
       },
       bar: {
         background: ui.sidebar.filter.cat.bar.color.default,
+        color: ui.sidebar.filter.cat.text.color.default,
         position: 'absolute',
         left: 0
       },
       barHover: {
-        background: ui.sidebar.filter.cat.bar.color.hover
+        background: ui.sidebar.filter.cat.bar.color.hover,
+        color: ui.sidebar.filter.cat.text.color.hover
       },
       barActive: {
-        background: ui.sidebar.filter.cat.bar.color.select
+        background: ui.sidebar.filter.cat.bar.color.select,
+        color: ui.sidebar.filter.cat.text.color.select
+      },
+      barAllActive: {
+        background: ui.sidebar.filter.cat.bar.color.noneSelect,
+        color: ui.sidebar.filter.cat.text.color.select
       },
       barLabel: {
         fontSize: 10,
