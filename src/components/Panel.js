@@ -17,8 +17,9 @@ class Panel extends React.Component {
     });
 
     // fade in on new component
-    this._panel.style.opacity = 0;
-    setTimeout(() => (this._panel.style.opacity = 1), 10);
+    const elem = this._panel;
+    elem.style.opacity = 0;
+    setTimeout(() => (elem.style.opacity = 1), 10);
   }
   componentWillUnmount() {
     this.xhr.abort();
