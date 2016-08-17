@@ -20,5 +20,5 @@ export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';
 export const SB_PANEL_SORT = 'Sort Panels';
-export const SB_PANEL_LABELS = 'Show/Hide Panel Labels';
+export const SB_PANEL_LABELS = 'Show/Hide Labels';
 export const SB_CONFIG = 'Configuration';
