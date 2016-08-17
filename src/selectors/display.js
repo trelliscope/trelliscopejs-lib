@@ -26,3 +26,19 @@ export const cogInfoSelector = createSelector(
     di.info.cogInfo ? di.info.cogInfo : {}
   )
 );
+
+export const displayGroupsSelector = createSelector(
+  displayListSelector,
+  (dl) => {
+    const dispGroups = {};
+    if (dl.list) {
+      for (let ii = 0; ii < dl.list.length; ii++) {
+        if (!dispGroups[dl.list[ii].group]) {
+          dispGroups[dl.list[ii].group] = [];
+        }
+        dispGroups[dl.list[ii].group].push(ii);
+      }
+    }
+    return dispGroups;
+  }
+);

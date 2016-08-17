@@ -10,6 +10,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { blueA200, lightBlue700, redA200 } from 'material-ui/styles/colors';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
+import { fetchDisplayList } from './actions';
+
 import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
 import App from './App';
@@ -50,6 +52,9 @@ window.addEventListener('resize', () => {
     width: window.innerWidth
   }));
 });
+
+// load the list of displays
+store.dispatch(fetchDisplayList());
 
 render(
   <MuiThemeProvider muiTheme={muiTheme}>

@@ -5,15 +5,7 @@ import Radium from 'radium';
 import { redA200 } from 'material-ui/styles/colors';
 
 // di is display info
-const DisplayList = ({ di, handleClick, cfg }) => {
-  // get unique display groups
-  const dispGroups = {};
-  for (let ii = 0; ii < di.length; ii++) {
-    if (!dispGroups[di[ii].group]) {
-      dispGroups[di[ii].group] = [];
-    }
-    dispGroups[di[ii].group].push(ii);
-  }
+const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
 
   const styles = {
     root: {
@@ -36,7 +28,7 @@ const DisplayList = ({ di, handleClick, cfg }) => {
     }
   };
 
-  const groupKeys = Object.keys(dispGroups);
+  const groupKeys = Object.keys(displayGroups);
 
   const makeSubheader = (groupName, n) => {
     if (n > 1) {
@@ -53,7 +45,7 @@ const DisplayList = ({ di, handleClick, cfg }) => {
         style={styles.gridList}
       >
         {makeSubheader(k, groupKeys.length)}
-        {dispGroups[k].map((i) => (
+        {displayGroups[k].map((i) => (
           <GridTile
             key={i}
             style={styles.gridTile}
@@ -96,6 +88,7 @@ const DisplayList = ({ di, handleClick, cfg }) => {
 
 DisplayList.propTypes = {
   di: React.PropTypes.array,
+  displayGroups: React.PropTypes.object,
   handleClick: React.PropTypes.func,
   cfg: React.PropTypes.object
 };

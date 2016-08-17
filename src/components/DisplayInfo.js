@@ -107,7 +107,10 @@ class DisplayInfo extends React.Component {
     return (
       <div
         onClick={this.handleOpen}
-        style={this.props.style.button}
+        style={[
+          this.props.style.button,
+          this.props.singleDisplay && this.props.style.single
+        ]}
       >
         <i className="icon-info" style={this.props.style.icon} />
         {dialogContent}
@@ -118,6 +121,7 @@ class DisplayInfo extends React.Component {
 
 DisplayInfo.propTypes = {
   style: React.PropTypes.object,
+  singleDisplay: React.PropTypes.bool,
   selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   handleClick: React.PropTypes.func,
@@ -152,6 +156,9 @@ const styleSelector = createSelector(
           background: '#eee',
           cursor: 'pointer'
         }
+      },
+      single: {
+        left: selectedDisplay.name === '' ? -ui.sideButtons.width : 0
       },
       icon: {
         paddingLeft: 2,

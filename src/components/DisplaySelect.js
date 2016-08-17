@@ -7,8 +7,9 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplayList, fetchDisplay } from '../actions';
+import { setSelectedDisplay, fetchDisplay } from '../actions';
 import { uiConstsSelector } from '../selectors/ui';
+import { displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
   selectedDisplaySelector } from '../selectors';
 
@@ -21,8 +22,6 @@ class DisplaySelect extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.loadDisplayList();
-
     Mousetrap.bind(['o'], this.handleKey);
 
     const attnInterval = setInterval(() => {
@@ -103,6 +102,7 @@ class DisplaySelect extends React.Component {
         >
           <DisplayList
             di={this.props.displayList.list}
+            displayGroups={this.props.displayGroups}
             handleClick={this.handleSelect}
             cfg={this.props.cfg}
           />
@@ -118,15 +118,16 @@ DisplaySelect.propTypes = {
   loadDisplayList: React.PropTypes.func,
   cfg: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
-  displayList: React.PropTypes.object
+  displayList: React.PropTypes.object,
+  displayGroups: React.PropTypes.object
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
   uiConstsSelector, selectedDisplaySelector, displayListSelector,
-  configSelector,
-  (ui, selectedDisplay, displayList, cfg) => ({
+  displayGroupsSelector, configSelector,
+  (ui, selectedDisplay, displayList, displayGroups, cfg) => ({
     style: {
       attn: {
         outer: {
@@ -190,7 +191,8 @@ const styleSelector = createSelector(
     },
     cfg,
     selectedDisplay,
-    displayList
+    displayList,
+    displayGroups
   })
 );
 
@@ -202,9 +204,6 @@ const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group, cfg) => {
     dispatch(setSelectedDisplay(name, group));
     dispatch(fetchDisplay(name, group, cfg));
-  },
-  loadDisplayList: () => {
-    dispatch(fetchDisplayList());
   }
 });
 
