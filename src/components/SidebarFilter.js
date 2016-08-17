@@ -290,7 +290,7 @@ const stateSelector = createSelector(
         },
         plotContainer: {
           width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          height: 30 + ui.sidebar.filter.num.height,
+          height: ui.sidebar.filter.num.height,
           position: 'relative',
           overflow: 'hidden',
           cursor: 'default',

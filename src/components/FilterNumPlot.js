@@ -12,7 +12,7 @@ class FilterNumPlot extends React.Component {
     // we don't expect most props to change so we'll set things here
     // so we don't recompute every time the plots updates
     // the one thing that can change is the domain of ys
-    const axisPad = 20;
+    const axisPad = 16;
     const sidePad = 5;
     const delta = this.props.condDist.delta;
     const xrange = [this.props.condDist.breaks[0],

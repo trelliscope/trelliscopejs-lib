@@ -15,7 +15,7 @@ const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
     sortContent = (
       <div style={style.sectionWrapper}>
         <div style={style.sectionText}>
-          Active sort variables:
+          Sorting on:
         </div>
         <div style={style.chipWrapper}>
           {sortNames.map((el, i) => (
@@ -35,7 +35,7 @@ const Footer = ({ style, sortNames, filterNames, nFilt, nPanels }) => {
     filterContent = (
       <div style={style.sectionWrapper}>
         <div style={style.sectionText}>
-          Active filter variables:
+          Filtering on:
         </div>
         <div style={style.chipWrapper}>
           {filterNames.map((el, i) => (

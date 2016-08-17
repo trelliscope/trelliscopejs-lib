@@ -81,7 +81,7 @@ export const uiConstsSelector = () => (
           }
         },
         num: {
-          height: 80,
+          height: 100,
           barColor: 'rgb(255, 210, 127)'
         }
       }
