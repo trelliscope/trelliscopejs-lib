@@ -181,9 +181,11 @@ HistPlotD3.enter = (props, pars, selection) => {
     .call(histBrush)
     .call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
 
+  // style the brush
   gBrush.select('rect.selection')
     .attr('fill', '#1f77b4')
-    .attr('fill-opacity', '0.125');
+    .attr('fill-opacity', '0.125')
+    .attr('stroke-opacity', '0.5');
 
   gBrush.selectAll('rect')
     .attr('height', pars.height);
