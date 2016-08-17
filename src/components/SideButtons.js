@@ -14,8 +14,8 @@ const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
   { icon: 'icon-list-ul', label: 'Labels', title: SB_PANEL_LABELS, key: 'l' },
   { icon: 'icon-filter', label: 'Filter', title: SB_PANEL_FILTER, key: 'f' },
-  { icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's' },
-  { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
+  { icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's' }
+  // { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
 ];
 
 class SideButtons extends React.Component {
