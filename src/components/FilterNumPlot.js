@@ -185,8 +185,12 @@ HistPlotD3.enter = (props, pars, selection) => {
 
   const gBrush = plotArea.append('g')
     .attr('class', 'brush')
-    .call(histBrush)
-    .call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
+    .call(histBrush);
+
+  if (props.filterState.value) {
+    gBrush
+      .call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
+  }
 
   // style the brush
   gBrush.select('rect.selection')
