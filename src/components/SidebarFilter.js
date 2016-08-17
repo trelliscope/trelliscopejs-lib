@@ -15,7 +15,7 @@ import { displayInfoSelector, filterStateSelector,
 const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   filtDist, handleViewChange, handleFilterChange, handleFilterSortChange }) => {
   let content = <div />;
-  if (filter) {
+  if (filter && filterView.active) {
     content = (
       <div style={style.allContainer}>
         <div style={style.filtersContainer}>
