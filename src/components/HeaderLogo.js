@@ -48,7 +48,7 @@ class HeaderLogo extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          stuff...
+          coming soon...
         </Dialog>
       </div>
     );
