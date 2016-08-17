@@ -22,6 +22,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
             let handleReset = () => (undefined);
+            let footerExtra = '';
 
             let itemContent = <div key={i}>{d}</div>;
             if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
@@ -34,7 +35,6 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   varType: 'factor'
                 };
               }
-
               handleReset = () => {
                 const newState = {
                   name: filterState.name,
@@ -55,6 +55,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   handleSortChange={handleFilterSortChange}
                 />
               );
+              footerExtra = `${filtDist[d].totSelected} of ${filtDist[d].dist.length} selected`;
             } else if (cogInfo[d].type === 'numeric') {
               if (!filterState) {
                 filterState = {
@@ -92,6 +93,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   >
                     <i className="icon-undo" />
                   </div>
+                  <div style={style.footerExtra}>{footerExtra}</div>
                   <div style={style.footerName}>{d}</div>
                 </div>
               </div>
@@ -206,6 +208,14 @@ const stateSelector = createSelector(
         fontSize: 12,
         position: 'relative',
         background: '#f8f8f8' // make this a variable
+      },
+      footerExtra: {
+        position: 'absolute',
+        left: 45,
+        height: 16,
+        lineHeight: '15px',
+        fontSize: 11,
+        color: '#777'
       },
       footerName: {
         height: 16,
