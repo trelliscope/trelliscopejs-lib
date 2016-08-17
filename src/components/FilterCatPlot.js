@@ -57,12 +57,16 @@ class FilterCatPlot extends React.Component {
     barName = this.props.condDist.dist[ridx].key;
     barMax = this.props.condDist.max;
 
+    // each bar will have width of at least 1 so we can see it is there
+    // allActive indicates that none are selected in the filter
+    // in which case we want them to show up in color rather than gray
     return (
       <CatBar
         key={`${x.rowIndex}_${barCt}`}
         active={active}
+        allActive={this.props.filterState.value === undefined}
         height={this.cellHeight}
-        width={(barSize / barMax) * this.props.style.width}
+        width={((barSize / barMax) * (this.props.style.width - 1)) + 1}
         totWidth={this.props.style.width}
         handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: this.props.dist.dist[barName], id: barName }}

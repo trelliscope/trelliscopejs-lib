@@ -58,9 +58,17 @@ export const uiConstsSelector = () => (
           bar: {
             width: 20,
             color: {
-              default: 'rgb(255, 210, 127)',
+              default: '#eee',
               hover: 'rgb(255, 192, 76)',
-              select: 'rgb(255, 170, 10)'
+              select: 'rgb(255, 170, 10)',
+              noneSelect: 'rgb(255, 210, 127)'
+            }
+          },
+          text: {
+            color: {
+              default: '#888',
+              hover: '#000',
+              select: '#000'
             }
           }
         },
