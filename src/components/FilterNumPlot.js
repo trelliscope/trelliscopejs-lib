@@ -120,7 +120,7 @@ HistPlotD3.enter = (props, pars, selection) => {
   };
 
   const histBrush = brushX()
-    .extent([[pars.sidePad, 0], [props.style.width - pars.sidePad, pars.height]])
+    .extent([[pars.sidePad, 1], [props.style.width - pars.sidePad, pars.height + 1]])
     .handleSize(10);
 
   histBrush
@@ -150,15 +150,22 @@ HistPlotD3.enter = (props, pars, selection) => {
 
   // background bars
   plotArea.append('path')
-    .attr('class', 'bar')
+    .attr('class', 'bar background')
     .datum(props.condDist.dist)
-    .attr('fill', '#ccc');
+    .attr('fill', '#ddd');
 
   plotArea.append('path')
-    .attr('class', 'bar')
+    .attr('class', 'bar foreground')
     .datum(props.condDist.dist)
-    .attr('clip-path', `url(#clip-${props.name})`)
-    .attr('fill', '#1f77b4');
+    .attr('clip-path', `url(#clip-${props.name})`);
+
+  if (props.filterState.value) {
+    plotArea.selectAll('.foreground')
+      .attr('fill', 'rgb(255, 170, 10)');
+  } else {
+    plotArea.selectAll('.foreground')
+      .attr('fill', 'rgb(255, 210, 127)');
+  }
 
   const gAxis = selection.append('g')
     .attr('class', 'axis')
@@ -183,9 +190,10 @@ HistPlotD3.enter = (props, pars, selection) => {
 
   // style the brush
   gBrush.select('rect.selection')
-    .attr('fill', '#1f77b4')
+    .attr('fill', 'rgb(255, 210, 127)')
     .attr('fill-opacity', '0.125')
-    .attr('stroke-opacity', '0.5');
+    .attr('stroke', 'rgb(255, 170, 10)')
+    .attr('stroke-opacity', '0.2');
 
   gBrush.selectAll('rect')
     .attr('height', pars.height);
@@ -219,11 +227,18 @@ HistPlotD3.update = (props, pars, selection) => {
       selection.select('#cliprect')
         .attr('x', pars.xs(fFrom))
         .attr('width', pars.xs(fTo) - pars.xs(fFrom));
+      // set foreground to darker color
+      selection.selectAll('path.foreground')
+        .attr('fill', 'rgb(255, 170, 10)');
     }
   } else {
     // we need to remove the brush
     selection.select('.brush')
       .call(brushX().move, null);
+    // set the foreground to a lighter orange
+    selection.selectAll('path.foreground')
+      .attr('fill', 'rgb(255, 210, 127)');
+
     // and clear the mask
     selection.select('#cliprect')
       .attr('x', pars.xs(pars.xrange[0]))

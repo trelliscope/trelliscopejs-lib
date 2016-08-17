@@ -4,7 +4,6 @@ import Radium from 'radium';
 import { createSelector } from 'reselect';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
 import { setSort } from '../actions';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector } from '../selectors';
@@ -173,20 +172,19 @@ const stateSelector = createSelector(
         },
         variable: {
           display: 'inline-block',
+          boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
           borderRadius: 10,
           paddingTop: 2,
           paddingBottom: 2,
           paddingLeft: 10,
           paddingRight: 10,
-          margin: 2,
+          margin: 3,
           fontSize: 13,
-          background: '#ffa500',
-          color: 'white',
           cursor: 'pointer',
           transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
           ':hover': {
             transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-            background: emphasize('#ffa500', 0.4)
+            background: '#ebebeb'
           }
         }
       },

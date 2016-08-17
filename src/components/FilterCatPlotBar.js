@@ -122,7 +122,7 @@ const stateSelector = createSelector(
       },
       barLabel: {
         fontSize: 10,
-        color: 'gray',
+        color: '#444',
         textAlign: 'center',
         cursor: 'default',
         position: 'absolute',

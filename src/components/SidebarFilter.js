@@ -22,6 +22,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
           {filterView.active.map((d, i) => {
             let filterState = filter[d];
             let footerExtra = '';
+            const filterActive = filterState && filterState.value !== undefined;
 
             let itemContent = <div key={i}>{d}</div>;
             if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
@@ -85,7 +86,14 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                     <i className="icon-undo" />
                   </div>
                   <div style={style.footerExtra}>{footerExtra}</div>
-                  <div style={style.footerName}>{d}</div>
+                  <div
+                    style={[
+                      style.footerName,
+                      filterActive && style.footerNameActive
+                    ]}
+                  >
+                    {d}
+                  </div>
                 </div>
               </div>
             );
@@ -155,26 +163,26 @@ const stateSelector = createSelector(
       },
       variable: {
         display: 'inline-block',
+        boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
         borderRadius: 10,
         paddingTop: 2,
         paddingBottom: 2,
         paddingLeft: 10,
         paddingRight: 10,
-        margin: 2,
+        margin: 3,
         fontSize: 13,
-        background: emphasize('#ffa500', 0.3),
-        color: 'white',
         cursor: 'pointer',
         transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
         ':hover': {
           transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          background: emphasize('#ffa500', 0.5)
+          background: '#ebebeb'
         }
       },
       variableActive: {
-        background: '#ffa500',
+        background: '#81C784',
+        color: 'white',
         ':hover': {
-          background: emphasize('#ffa500', 0.2)
+          background: emphasize('#81C784', 0.2)
         }
       },
       allContainer: {
@@ -194,11 +202,10 @@ const stateSelector = createSelector(
         height: 16,
         lineHeight: '15px',
         width: ui.sidebar.width,
-        borderBottom: '1px solid #ddd', // make this a variable
+        borderBottom: `1px solid ${ui.sidebar.borderColor}`,
         marginTop: 5,
         fontSize: 12,
-        position: 'relative',
-        background: '#f8f8f8' // make this a variable
+        position: 'relative'
       },
       footerExtra: {
         position: 'absolute',
@@ -213,10 +220,14 @@ const stateSelector = createSelector(
         paddingLeft: 5,
         paddingRight: 5,
         position: 'absolute',
-        right: 0,
+        right: 1,
         userSelect: 'none',
         cursor: 'default',
-        background: 'lightgray'
+        background: '#999',
+        color: 'white'
+      },
+      footerNameActive: {
+        background: '#81C784'
       },
       footerIcon: {
         height: 16,
@@ -279,7 +290,7 @@ const stateSelector = createSelector(
         },
         plotContainer: {
           width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          height: 90, // make this a variable
+          height: 30 + ui.sidebar.filter.num.height,
           position: 'relative',
           overflow: 'hidden',
           cursor: 'default',

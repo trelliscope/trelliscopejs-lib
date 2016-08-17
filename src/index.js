@@ -7,7 +7,7 @@ import createLogger from 'redux-logger';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { lightBlue500, lightBlue700, redA200 } from 'material-ui/styles/colors';
+import { blueA200, lightBlue700, redA200 } from 'material-ui/styles/colors';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 import crossfilterMiddleware from './crossfilterMiddleware';
@@ -17,7 +17,7 @@ import App from './App';
 const muiTheme = getMuiTheme({
   fontFamily: '"Open Sans", sans-serif',
   palette: {
-    primary1Color: lightBlue500,
+    primary1Color: blueA200, // '#4285f4', // lightBlue500,
     primary2Color: lightBlue700,
     accent1Color: redA200
   },

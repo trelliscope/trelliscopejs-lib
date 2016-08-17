@@ -74,8 +74,8 @@ const styleSelector = createSelector(
       textAlign: 'center',
       width: ui.header.titleWidth,
       fontSize: 17,
-      background: '#FF4308',
-      color: 'white'
+      background: ui.header.logo.background,
+      color: ui.header.logo.color
     }
   })
 );

@@ -54,7 +54,7 @@ const styleSelector = createSelector(
         borderRadius: 10,
         whiteSpace: 'nowrap',
         width: '-webkit-fit-content',
-        backgroundColor: 'rgb(173, 216, 230)',
+        background: ui.footer.button.background,
         height: 22
         // cursor: 'pointer',
         // transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
@@ -63,7 +63,7 @@ const styleSelector = createSelector(
         // }
       },
       label: {
-        color: 'white',
+        color: ui.footer.button.color,
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '20px',

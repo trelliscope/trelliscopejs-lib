@@ -13,15 +13,23 @@ export const uiConstsSelector = () => (
       button: {
         color: '#9ba3af',
         active: {
-          background: '#4285f4' // #15a4fa
+          background: '#448AFF'  // <- blueA200 // '#4285f4' // #15a4fa
         }
+      },
+      logo: {
+        background: '#FF4308',
+        color: 'white'
       },
       titleWidth: 120
     },
     footer: {
       height: 30,
       background: '#666666',
-      color: 'white'
+      color: 'white',
+      button: {
+        background: '#90CAF9',
+        color: 'white'
+      }
     },
     sideButtons: {
       width: 48,
@@ -33,18 +41,18 @@ export const uiConstsSelector = () => (
         color: 'white',
         borderColor: '#c0c0c0',
         active: {
-          color: '#4285f4',
+          color: '#448AFF', // '#4285f4',
           background: 'white'
         },
         hover: {
           // background: '#999'
-          background: '#4285f4'
+          background: '#448AFF' // '#4285f4'
         }
       }
     },
     sidebar: {
       width: 230,
-      borderColor: '#eaedf0',
+      borderColor: '#c1c1c1',
       header: {
         fontSize: 15,
         height: 25,
@@ -54,9 +62,9 @@ export const uiConstsSelector = () => (
       filter: {
         margin: 5,
         cat: {
-          height: 130,
+          height: 125,
           bar: {
-            width: 20,
+            height: 15,
             color: {
               default: '#eee',
               hover: 'rgb(255, 192, 76)',
@@ -73,11 +81,8 @@ export const uiConstsSelector = () => (
           }
         },
         num: {
-          color: {
-            default: '#aec7e8',
-            hover: '#83AFD8',
-            select: '#1f77b4'
-          }
+          height: 80,
+          barColor: 'rgb(255, 210, 127)'
         }
       }
     },
