@@ -35,11 +35,13 @@ class FilterNumPlot extends React.Component {
       let i = -1;
       const n = dat.length;
       let d;
+      let h;
       while (++i < n) {
         d = dat[i];
+        // will ensure bars with positive count are visible
+        h = d.value === 0 ? pars.ys(d.value) : pars.ys(d.value) - 1;
         path.push('M', pars.xs(d.key) + 1, ',', pars.height, 'V',
-          pars.ys(d.value) - 1, // -1 will ensure bars are visible
-          'h', pars.barWidth - 1, 'V', pars.height);
+          h, 'h', pars.barWidth - 1, 'V', pars.height);
       }
       return path.join('');
     };
