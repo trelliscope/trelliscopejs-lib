@@ -49,8 +49,8 @@ class DisplaySelect extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   }
-  handleSelect = (name, group) => {
-    this.props.handleClick(name, group, this.props.cfg);
+  handleSelect = (name, group, desc) => {
+    this.props.handleClick(name, group, desc, this.props.cfg);
     this.setState({ open: false });
   }
   render() {
@@ -201,8 +201,8 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  handleClick: (name, group, cfg) => {
-    dispatch(setSelectedDisplay(name, group));
+  handleClick: (name, group, desc, cfg) => {
+    dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg));
   }
 });

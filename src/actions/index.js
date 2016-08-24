@@ -51,8 +51,8 @@ export const receiveDisplayList = (json) => ({
   receivedAt: Date.now()
 });
 
-export const setSelectedDisplay = (name, group) => ({
-  type: SELECT_DISPLAY, name, group
+export const setSelectedDisplay = (name, group, desc) => ({
+  type: SELECT_DISPLAY, name, group, desc
 });
 
 export const requestDisplay = (name, group) => ({

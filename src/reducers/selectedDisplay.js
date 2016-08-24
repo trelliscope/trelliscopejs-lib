@@ -2,13 +2,15 @@ import { SELECT_DISPLAY } from '../constants.js';
 
 const selectedDisplayReducer = (state = {
   name: '',
-  group: ''
+  group: '',
+  desc: ''
 }, action) => {
   switch (action.type) {
     case SELECT_DISPLAY:
       return Object.assign({}, state, {
         name: action.name,
-        group: action.group
+        group: action.group,
+        desc: action.desc
       });
     default:
   }

@@ -25,13 +25,18 @@ class Header extends React.Component {
     if (!this.state.singleLoaded &&
       nprops.displayList.isLoaded &&
       nprops.displayList.list.length === 1) {
-      nprops.selectDisplay(nprops.displayList.list[0].name,
-        nprops.displayList.list[0].group, nprops.cfg);
+      nprops.selectDisplay(
+        nprops.displayList.list[0].name,
+        nprops.displayList.list[0].group,
+        nprops.displayList.list[0].desc,
+        nprops.cfg
+      );
       this.setState({ singleLoaded: true });
     }
   }
   render() {
     let displayName = '';
+    let displayDesc = '';
     let iconStyle = { visibility: 'hidden' };
     let pagination = '';
     let displaySelect = '';
@@ -55,6 +60,7 @@ class Header extends React.Component {
       if (!singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
       }
+      displayDesc = this.props.selectedDisplay.desc;
       pagination = <Pagination />;
     } else if (singleDisplay) {
       displayName = 'loading...';
@@ -68,7 +74,9 @@ class Header extends React.Component {
         {relatedDisplays}
         <DisplayInfo singleDisplay={singleDisplay} />
         <div style={this.props.style.displayName}>
-          {displayName} <i style={iconStyle} className="fa fa-info-circle" />
+          <i style={iconStyle} className="fa fa-info-circle" />
+          {displayName}
+          <span style={this.props.style.displayDesc}>{displayDesc}</span>
         </div>
         {pagination}
         <HeaderLogo />
@@ -114,9 +122,17 @@ const styleSelector = createSelector(
         paddingLeft: 18,
         position: 'fixed',
         top: 0,
+        fontSize: 17,
+        // fontWeight: 400,
         // transition: 'left 0.5s ease',
         left: ui.header.height *
           ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1))
+      },
+      displayDesc: {
+        fontWeight: 300,
+        paddingLeft: 8,
+        fontSize: 12,
+        fontStyle: 'italic'
       }
     },
     cfg,
@@ -131,8 +147,8 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  selectDisplay: (name, group, cfg) => {
-    dispatch(setSelectedDisplay(name, group));
+  selectDisplay: (name, group, desc, cfg) => {
+    dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg));
   }
 });
