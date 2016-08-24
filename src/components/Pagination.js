@@ -36,12 +36,8 @@ class Pagination extends React.Component {
     }
     return this.props.handleChange(n);
   }
-  pageFirst = () => {
-    return this.props.handleChange(1);
-  }
-  pageLast = () => {
-    return this.props.handleChange(this.props.totPages);
-  }
+  pageFirst = () => this.props.handleChange(1)
+  pageLast = () => this.props.handleChange(this.props.totPages)
   render() {
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
@@ -145,10 +141,10 @@ const stateSelector = createSelector(
         right: ui.header.height - 20
       },
       buttonWrapPrev: {
-        right: 3 * (ui.header.height - 20) + 10
+        right: (3 * (ui.header.height - 20)) + 10
       },
       buttonWrapNext: {
-        right: 2 * (ui.header.height - 20) + 10
+        right: (2 * (ui.header.height - 20)) + 10
       },
       buttonWrapLast: {
         right: 0

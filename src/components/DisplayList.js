@@ -6,7 +6,6 @@ import { redA200 } from 'material-ui/styles/colors';
 
 // di is display info
 const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
-
   const styles = {
     root: {
       display: 'flex',
