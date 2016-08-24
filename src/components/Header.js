@@ -114,7 +114,7 @@ const styleSelector = createSelector(
         paddingLeft: 18,
         position: 'fixed',
         top: 0,
-        transition: 'left 0.5s ease',
+        // transition: 'left 0.5s ease',
         left: ui.header.height *
           ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1))
       }
