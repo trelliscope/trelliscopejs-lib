@@ -36,6 +36,12 @@ class Pagination extends React.Component {
     }
     return this.props.handleChange(n);
   }
+  pageFirst = () => {
+    return this.props.handleChange(1);
+  }
+  pageLast = () => {
+    return this.props.handleChange(this.props.totPages);
+  }
   render() {
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
@@ -46,12 +52,13 @@ class Pagination extends React.Component {
         <div style={this.props.style.label}>
           {txt}
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapLeft]}>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapPrev]}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
+              disabled={this.props.n <= 1}
               style={this.props.style.button}
               iconStyle={this.props.style.icon}
-              iconClassName="icon-chevron-left"
+              iconClassName="icon-angle-left"
               onClick={() => this.pageLeft()}
             />
           </div>
@@ -59,17 +66,46 @@ class Pagination extends React.Component {
             Prev
           </div>
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapRight]}>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapNext]}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
+              disabled={this.props.n >= this.props.totPages}
               style={this.props.style.button}
               iconStyle={this.props.style.icon}
-              iconClassName="icon-chevron-right"
+              iconClassName="icon-angle-right"
               onClick={() => this.pageRight()}
             />
           </div>
           <div style={this.props.style.buttonText}>
             Next
+          </div>
+        </div>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapFirst]}>
+          <div style={this.props.style.buttonDiv}>
+            <IconButton
+              disabled={this.props.n <= 1}
+              style={this.props.style.button}
+              iconStyle={this.props.style.icon}
+              iconClassName="icon-angle-double-left"
+              onClick={() => this.pageFirst()}
+            />
+          </div>
+          <div style={this.props.style.buttonText}>
+            First
+          </div>
+        </div>
+        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapLast]}>
+          <div style={this.props.style.buttonDiv}>
+            <IconButton
+              disabled={this.props.n >= this.props.totPages}
+              style={this.props.style.button}
+              iconStyle={this.props.style.icon}
+              iconClassName="icon-angle-double-right"
+              onClick={() => this.pageLast()}
+            />
+          </div>
+          <div style={this.props.style.buttonText}>
+            Last
           </div>
         </div>
       </div>
@@ -95,7 +131,7 @@ const stateSelector = createSelector(
       outer: {
         position: 'absolute',
         top: 0,
-        right: ui.header.titleWidth + 50,
+        right: ui.header.titleWidth + 30,
         width: 400,
         height: ui.header.height
       },
@@ -105,10 +141,16 @@ const stateSelector = createSelector(
         position: 'absolute',
         top: 0
       },
-      buttonWrapLeft: {
-        right: ui.header.height - 10
+      buttonWrapFirst: {
+        right: ui.header.height - 20
       },
-      buttonWrapRight: {
+      buttonWrapPrev: {
+        right: 3 * (ui.header.height - 20) + 10
+      },
+      buttonWrapNext: {
+        right: 2 * (ui.header.height - 20) + 10
+      },
+      buttonWrapLast: {
         right: 0
       },
       buttonDiv: {
@@ -138,12 +180,12 @@ const stateSelector = createSelector(
         textAlign: 'center'
       },
       icon: {
-        fontSize: 18,
-        padding: 10
+        fontSize: 20,
+        padding: 6
       },
       label: {
         position: 'absolute',
-        right: ((ui.header.height - 10) * 2) + 8
+        right: ((ui.header.height - 20) * 4) + 22
       }
     },
     n,
