@@ -71,30 +71,35 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
             }
             return (
               <div key={i} style={style.container}>
-                {itemContent}
-                <div style={style.footer}>
+                <div style={style.header}>
                   <div
-                    style={[style.footerIcon, style.footerClose]}
+                    style={[
+                      style.headerName,
+                      filterActive && style.headerNameActive
+                    ]}
+                  >
+                    {d}
+                  </div>
+                  <div style={style.headerExtra}>{footerExtra}</div>
+                  <div
+                    key={`${d}-close-icon`}
+                    style={[style.headerIcon, style.headerClose]}
                     onMouseDown={() => handleViewChange(d, 'remove')}
                   >
                     <i className="icon-times-circle" />
                   </div>
                   <div
-                    style={[style.footerIcon, style.footerReset]}
+                    key={`${d}-reset-icon`}
+                    style={[
+                      style.headerIcon,
+                      style.headerReset,
+                      !filterActive && style.headerIconHide]}
                     onMouseDown={() => handleFilterChange(filterState.name)}
                   >
                     <i className="icon-undo" />
                   </div>
-                  <div style={style.footerExtra}>{footerExtra}</div>
-                  <div
-                    style={[
-                      style.footerName,
-                      filterActive && style.footerNameActive
-                    ]}
-                  >
-                    {d}
-                  </div>
                 </div>
+                {itemContent}
               </div>
             );
           })}
@@ -196,51 +201,59 @@ const stateSelector = createSelector(
         // for dropdowns to not be hidden under other elements:
         boxSizing: 'border-box',
         zIndex: 100, // + this.props.index,
-        position: 'relative'
+        position: 'relative',
+        paddingBottom: 6,
+        borderBottom: `1px solid ${ui.sidebar.borderColor}`
       },
-      footer: {
+      header: {
         height: 16,
         lineHeight: '15px',
         width: ui.sidebar.width,
-        borderBottom: `1px solid ${ui.sidebar.borderColor}`,
-        marginTop: 5,
+        marginTop: 1,
         fontSize: 12,
         position: 'relative'
       },
-      footerExtra: {
+      headerExtra: {
         position: 'absolute',
-        left: 45,
+        right: 38,
         height: 16,
         lineHeight: '15px',
         fontSize: 11,
         color: '#777'
       },
-      footerName: {
+      headerName: {
         height: 16,
         paddingLeft: 5,
         paddingRight: 5,
         position: 'absolute',
-        right: 1,
+        left: 1,
         userSelect: 'none',
         cursor: 'default',
         background: '#999',
         color: 'white'
       },
-      footerNameActive: {
+      headerNameActive: {
         background: '#81C784'
       },
-      footerIcon: {
+      headerIcon: {
         height: 16,
         color: '#666',
         cursor: 'pointer',
         position: 'absolute',
-        zIndex: 1000
+        zIndex: 1000,
+        ':hover': {
+          transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+          color: '#aaa'
+        }
       },
-      footerClose: {
-        left: 5
+      headerIconHide: {
+        visibility: 'hidden'
       },
-      footerReset: {
-        left: 18
+      headerClose: {
+        right: 5
+      },
+      headerReset: {
+        right: 18
       },
       catFilter: {
         container: {
