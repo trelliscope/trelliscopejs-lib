@@ -112,7 +112,7 @@ class DisplayInfo extends React.Component {
           this.props.singleDisplay && this.props.style.single
         ]}
       >
-        <i className="icon-info" style={this.props.style.icon} />
+        <i className="icon-info2" style={this.props.style.icon} />
         {dialogContent}
       </div>
     );

@@ -11,7 +11,7 @@ export const uiConstsSelector = () => (
       background: 'white',
       color: '#000',
       button: {
-        color: '#9ba3af',
+        color: '#bbb',
         active: {
           background: '#448AFF'  // <- blueA200 // '#4285f4' // #15a4fa
         }
