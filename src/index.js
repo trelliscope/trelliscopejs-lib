@@ -10,6 +10,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { blueA200, lightBlue700, redA200 } from 'material-ui/styles/colors';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
+import './styles/main.css';
+
 import { fetchDisplayList } from './actions';
 
 import crossfilterMiddleware from './crossfilterMiddleware';

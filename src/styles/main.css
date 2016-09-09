@@ -1,0 +1,36 @@
+html,body {
+  height: 100%;
+  margin: 0;
+  font-family: "Open Sans",
+  sans-serif;
+  font-weight: 300;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: 400;
+  color: black;
+}
+
+strong {
+  font-weight: 400;
+}
+
+th {
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+body {
+  overflow: hidden;
+}
+
+a {
+  color: #FF5252
+}
