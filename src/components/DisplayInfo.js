@@ -53,7 +53,7 @@ class DisplayInfo extends React.Component {
 
     let dialogContent = '';
     if (this.props.displayInfo.isLoaded) {
-      const mdDesc = marked(this.props.displayInfo.info.mdDesc);
+      const mdDesc = marked(this.props.displayInfo.info.mdDesc, { sanitize: true });
       // mdDesc = katex.renderToString(mdDesc);
       const ci = this.props.displayInfo.info.cogInfo;
       const ciKeys = Object.keys(ci);
@@ -67,7 +67,11 @@ class DisplayInfo extends React.Component {
           onRequestClose={this.handleClose}
         >
           <div style={this.props.style.modal.container}>
-            <div dangerouslySetInnerHTML={{ __html: mdDesc }} />
+            <div
+              // we can dangerously set because the HTML is generated from marked()
+              // with pure markdown (sanitize = TRUE so user HTML is not supported)
+              dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
+            />
             <h3>Display Attributes</h3>
             <ul>
               <li>

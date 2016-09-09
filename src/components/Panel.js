@@ -49,7 +49,8 @@ class Panel extends React.Component {
               if (d.type === 'href') {
                 labelDiv = (
                   <div
-                    dangerouslySetInnerHTML={{ __html: d.value }}
+                    // TODO? do we need to use dompurify here to be safe?
+                    dangerouslySetInnerHTML={{ __html: d.value }} // eslint-disable-line react/no-danger, max-len
                     style={this.props.style.labelOverflow}
                   />
                 );
