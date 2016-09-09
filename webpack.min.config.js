@@ -23,6 +23,9 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       crossfilter: 'crossfilter2'
+    }),
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(require('./package.json').version)
     })
   ],
   module: {

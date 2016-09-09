@@ -11,6 +11,7 @@
   'globals': {
     'crossfilter': true,
     'window': true,
-    'document': true
+    'document': true,
+    'VERSION': true
   }
 }
