@@ -11,7 +11,7 @@ export const uiConstsSelector = () => (
       background: 'white',
       color: '#000',
       button: {
-        color: '#bbb',
+        color: '#9ba3af',
         active: {
           background: '#448AFF'  // <- blueA200 // '#4285f4' // #15a4fa
         }
@@ -20,7 +20,7 @@ export const uiConstsSelector = () => (
         background: '#FF4308',
         color: 'white'
       },
-      titleWidth: 120
+      titleWidth: 130
     },
     footer: {
       height: 30,
