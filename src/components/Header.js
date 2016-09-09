@@ -16,6 +16,8 @@ import { configSelector, displayListSelector,
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    // this.singleDisplay = false;
+    this.singleDisplay = props.displayList.list.length <= 1;
     this.state = {
       singleLoaded: false
     };
@@ -24,7 +26,7 @@ class Header extends React.Component {
     // handle loading a single display if necessary
     if (!this.state.singleLoaded &&
       nprops.displayList.isLoaded &&
-      nprops.displayList.list.length === 1) {
+      this.singleDisplay) {
       nprops.selectDisplay(
         nprops.displayList.list[0].name,
         nprops.displayList.list[0].group,
@@ -41,12 +43,11 @@ class Header extends React.Component {
     let pagination = '';
     let displaySelect = '';
     let relatedDisplays = ''; // <RelatedDisplays setDialogOpen={this.props.setDialogOpen} />
-    const singleDisplay = this.props.displayList.list.length <= 1;
     const displayLoaded = this.props.selectedDisplay.name !== '';
     const nGroups = Object.keys(this.props.displayGroups).length;
     const listLoaded = this.props.displayList.isLoaded;
 
-    if (listLoaded && !singleDisplay) {
+    if (listLoaded && !this.singleDisplay) {
       displaySelect = <DisplaySelect setDialogOpen={this.props.setDialogOpen} />;
     }
 
@@ -57,12 +58,12 @@ class Header extends React.Component {
       } else {
         displayName = this.props.selectedDisplay.name;
       }
-      if (!singleDisplay) {
+      if (!this.singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
       }
       displayDesc = this.props.selectedDisplay.desc;
       pagination = <Pagination />;
-    } else if (singleDisplay) {
+    } else if (this.singleDisplay) {
       displayName = 'loading...';
     } else {
       displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
@@ -73,7 +74,7 @@ class Header extends React.Component {
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
-          singleDisplay={singleDisplay}
+          singleDisplay={this.singleDisplay}
           setDialogOpen={this.props.setDialogOpen}
         />
         <div style={this.props.style.displayName}>
@@ -82,7 +83,10 @@ class Header extends React.Component {
           <span style={this.props.style.displayDesc}>{displayDesc}</span>
         </div>
         {pagination}
-        <HeaderLogo setDialogOpen={this.props.setDialogOpen} />
+        <HeaderLogo
+          setDialogOpen={this.props.setDialogOpen}
+          singleDisplay={this.singleDisplay}
+        />
       </div>
     );
   }
