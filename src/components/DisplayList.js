@@ -63,7 +63,7 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
               </span>
             }
             titleBackground="rgba(0, 0, 0, 0.80)"
-            onClick={() => handleClick(di[i].name, di[i].group)}
+            onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
             children={[
               <img
                 src={`${cfg.display_base}/displays/${di[i].group}/${di[i].name}/thumb.png`}
