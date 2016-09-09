@@ -42,7 +42,7 @@ class Header extends React.Component {
     let iconStyle = { visibility: 'hidden' };
     let pagination = '';
     let displaySelect = '';
-    let relatedDisplays = ''; // <RelatedDisplays setDialogOpen={this.props.setDialogOpen} />
+    const relatedDisplays = ''; // <RelatedDisplays setDialogOpen={this.props.setDialogOpen} />
     const displayLoaded = this.props.selectedDisplay.name !== '';
     const nGroups = Object.keys(this.props.displayGroups).length;
     const listLoaded = this.props.displayList.isLoaded;
@@ -94,11 +94,11 @@ class Header extends React.Component {
 
 Header.propTypes = {
   style: React.PropTypes.object,
-  cfg: React.PropTypes.object,
+  cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
-  selectDisplay: React.PropTypes.func,
+  selectDisplay: React.PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   setDialogOpen: React.PropTypes.func
 };
 

@@ -21,7 +21,7 @@ class CatBar extends React.Component {
     const label = this.props.d.ct === this.props.d.mct ?
       this.props.d.mct : `${this.props.d.ct} / ${this.props.d.mct}`;
     return (
-      <div
+      <div // eslint-disable-line jsx-a11y/no-static-element-interactions
         style={[
           this.props.style.wrapper,
           this.state.hover && this.props.style.wrapperHover,

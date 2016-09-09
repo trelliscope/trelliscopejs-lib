@@ -24,7 +24,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
         multiSelectable
         onRowSelection={(rows) => {
           const newLabels = [];
-          for (let ii = 0; ii < rows.length; ii++) {
+          for (let ii = 0; ii < rows.length; ii += 1) {
             newLabels.push(ciKeys[rows[ii]]);
           }
           handleChange(newLabels);

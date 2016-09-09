@@ -32,16 +32,17 @@ class FilterNumPlot extends React.Component {
 
     const barPath = (dat, pars) => {
       const path = [];
-      let i = -1;
+      let i = 0;
       const n = dat.length;
       let d;
       let h;
-      while (++i < n) {
+      while (i < n) {
         d = dat[i];
         // will ensure bars with positive count are visible
         h = d.value === 0 ? pars.ys(d.value) : pars.ys(d.value) - 1;
         path.push('M', pars.xs(d.key) + 1, ',', pars.height, 'V',
           h, 'h', pars.barWidth - 1, 'V', pars.height);
+        i += 1;
       }
       return path.join('');
     };
@@ -82,12 +83,12 @@ class FilterNumPlot extends React.Component {
 }
 
 FilterNumPlot.propTypes = {
-  name: React.PropTypes.string,
+  name: React.PropTypes.string, // eslint-disable-line react/no-unused-prop-types
   style: React.PropTypes.object,
-  dist: React.PropTypes.object,
+  // dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
-  filterState: React.PropTypes.object,
-  handleChange: React.PropTypes.func
+  filterState: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+  handleChange: React.PropTypes.func // eslint-disable-line react/no-unused-prop-types
 };
 
 export default FilterNumPlot;

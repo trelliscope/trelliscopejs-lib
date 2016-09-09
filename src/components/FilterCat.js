@@ -51,7 +51,7 @@ class FilterCat extends React.Component {
     } else {
       const vals = [];
       const rval = new RegExp(val, 'i');
-      for (let j = 0; j < this.props.levels.length; j++) {
+      for (let j = 0; j < this.props.levels.length; j += 1) {
         if (this.props.levels[j].match(rval) !== null) {
           vals.push(this.props.levels[j]);
         }

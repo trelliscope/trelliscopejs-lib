@@ -91,7 +91,7 @@ class DisplaySelect extends React.Component {
     }
 
     return (
-      <div
+      <button
         onClick={this.handleOpen}
         style={[this.props.style.button, styleOverride]}
       >
@@ -111,7 +111,7 @@ class DisplaySelect extends React.Component {
             cfg={this.props.cfg}
           />
         </Dialog>
-      </div>
+      </button>
     );
   }
 }
@@ -119,7 +119,6 @@ class DisplaySelect extends React.Component {
 DisplaySelect.propTypes = {
   style: React.PropTypes.object,
   handleClick: React.PropTypes.func,
-  loadDisplayList: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
@@ -181,9 +180,7 @@ const styleSelector = createSelector(
         color: 'white',
         // color: ui.header.button.color,
         textAlign: 'center',
-        borderRight: '1px solid',
-        borderColor: ui.header.button.active.background,
-        // borderColor: ui.header.borderColor,
+        border: 'none',
         transition: 'all 500ms ease-in',
         ':hover': {
           transition: 'background 250ms',

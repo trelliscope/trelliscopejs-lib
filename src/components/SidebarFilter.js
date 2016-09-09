@@ -110,7 +110,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
         </div>
         <div style={style.notUsedContainer}>
           {filterView.inactive.map((d, i) => (
-            <div
+            <button
               style={[
                 style.variable,
                 filter[d] && filter[d].value !== undefined ? style.variableActive : {}
@@ -119,7 +119,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
               onMouseDown={() => handleViewChange(d, 'add')}
             >
               {d}
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -174,6 +174,8 @@ const stateSelector = createSelector(
         paddingBottom: 2,
         paddingLeft: 10,
         paddingRight: 10,
+        border: 0,
+        background: 'white',
         margin: 3,
         fontSize: 13,
         cursor: 'pointer',

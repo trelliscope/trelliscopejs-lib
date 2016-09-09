@@ -108,7 +108,7 @@ class DisplayInfo extends React.Component {
     }
 
     return (
-      <div
+      <button
         onClick={this.handleOpen}
         style={[
           this.props.style.button,
@@ -117,7 +117,7 @@ class DisplayInfo extends React.Component {
       >
         <i className="icon-info_outline" style={this.props.style.icon} />
         {dialogContent}
-      </div>
+      </button>
     );
   }
 }
@@ -125,9 +125,8 @@ class DisplayInfo extends React.Component {
 DisplayInfo.propTypes = {
   style: React.PropTypes.object,
   singleDisplay: React.PropTypes.bool,
-  selectedDisplay: React.PropTypes.object,
+  // selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
-  handleClick: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   active: React.PropTypes.bool
 };
@@ -146,15 +145,16 @@ const styleSelector = createSelector(
         left: selectedDisplay.name === '' ? -ui.sideButtons.width : ui.sideButtons.width,
         display: 'inline-block',
         height: ui.header.height,
-        width: ui.header.height,
+        width: ui.header.height + 1,
         fontSize: 18,
-        lineHeight: `${ui.header.height}px`,
+        paddingTop: 0,
         color: ui.header.button.color,
         background: 'white',
         textAlign: 'center',
-        borderRight: '1px solid',
-        borderBottom: '1px solid',
-        borderColor: ui.header.borderColor,
+        borderRight: `1px solid ${ui.header.borderColor}`,
+        borderBottom: `1px solid ${ui.header.borderColor}`,
+        borderTop: 'none',
+        borderLeft: 'none',
         ':hover': {
           transition: 'background 250ms',
           background: '#eee',
@@ -175,7 +175,7 @@ const styleSelector = createSelector(
         }
       }
     },
-    selectedDisplay,
+    // selectedDisplay,
     displayInfo,
     active: selectedDisplay.name !== ''
   })

@@ -85,7 +85,7 @@ const sortInfoSelector = createSelector(
   sortSelector, displayInfoSelector,
   (sort, di) => {
     const res = [];
-    for (let i = 0; i < sort.length; i++) {
+    for (let i = 0; i < sort.length; i += 1) {
       const name = sort[i].name;
       const type = di.info.cogInfo[name].type;
       let icon = 'icon-sort-amount';
@@ -106,7 +106,7 @@ const filterInfoSelector = createSelector(
   (filter, di) => {
     const keys = Object.keys(filter.state);
     const res = [];
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i += 1) {
       const curState = filter.state[keys[i]];
       if (curState.value !== undefined) {
         let text = '';
@@ -125,7 +125,7 @@ const filterInfoSelector = createSelector(
           let idx = 0;
           while (idx < n && textLength <= charLimit) {
             textLength = textLength + curState.value[idx].length + 2;
-            idx++;
+            idx += 1;
           }
           if (idx === n) {
             // build a string of selected values

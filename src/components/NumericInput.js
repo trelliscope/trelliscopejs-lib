@@ -74,20 +74,20 @@ class NumericInput extends React.Component {
     if (this.props.arrows) {
       arrowElements = (
         <span>
-          <b
+          <button
             key="up-button"
             style={[this.props.style.b, this.props.style.b1]}
             onClick={this.increment}
           >
             <i style={[this.props.style.i, this.props.style.i1]} />
-          </b>
-          <b
+          </button>
+          <button
             key="down-button"
             style={[this.props.style.b, this.props.style.b2]}
             onClick={this.decrement}
           >
             <i style={[this.props.style.i, this.props.style.i2]} />
-          </b>
+          </button>
         </span>
       );
     }
@@ -147,7 +147,7 @@ const styleSelector = createSelector(
       b: {
         position: 'absolute',
         right: 2,
-        width: '2.26ex',
+        width: 15,
         borderColor: 'rgba(0, 0, 0, 0.0980392)',
         borderStyle: 'solid',
         textAlign: 'center',

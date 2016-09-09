@@ -28,7 +28,7 @@ const multiSort = (args) => {
     let result = 0;
     while (result === 0 && i < props.length) {
       result = sortFn(props[i])(obj1, obj2);
-      i++;
+      i += 1;
     }
     return result;
   };
@@ -44,7 +44,7 @@ const crossfilterMiddleware = store => next => action => {
       dimensions[action.filter].filter(null); // .remove(), .filterAll() ?
     } else {
       const names = Object.keys(action.filter);
-      for (let i = 0; i < names.length; i++) {
+      for (let i = 0; i < names.length; i += 1) {
         // numeric is always 'range' type
         if (action.filter[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
@@ -141,20 +141,20 @@ const crossfilterMiddleware = store => next => action => {
     } else {
       const dat = cf.all();
       const sortDat = [];
-      for (let i = 0; i < dat.length; i++) {
+      for (let i = 0; i < dat.length; i += 1) {
         const elem = { __index: dat[i].__index };
-        for (let j = 0; j < newState.length; j++) {
+        for (let j = 0; j < newState.length; j += 1) {
           elem[newState[j].name] = dat[i][newState[j].name];
         }
         sortDat.push(elem);
       }
       const sortSpec = [];
-      for (let i = 0; i < newState.length; i++) {
+      for (let i = 0; i < newState.length; i += 1) {
         sortSpec.push(`${newState[i].dir === 'asc' ? '' : '!'}${newState[i].name}`);
       }
       sortDat.sort(multiSort(sortSpec));
       const idx = {};
-      for (let i = 0; i < sortDat.length; i++) {
+      for (let i = 0; i < sortDat.length; i += 1) {
         idx[sortDat[i].__index] = i;
       }
       dimensions.__sort = cf.dimension(d => idx[d.__index]);

@@ -11,7 +11,7 @@ export const cogFiltDistSelector = createSelector(
       cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
-      for (let i = 0; i < keys.length; i++) {
+      for (let i = 0; i < keys.length; i += 1) {
         if (di.info.cogInfo[keys[i]].type === 'factor') {
           const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ?
             filter[keys[i]].orderValue : 'ct,desc';
@@ -35,7 +35,7 @@ export const cogFiltDistSelector = createSelector(
           const reverseRows = ['ct,asc', 'id,desc'].indexOf(orderValue) < 0;
 
           let maxVal = 0;
-          for (let j = 0; j < dist.length; j++) {
+          for (let j = 0; j < dist.length; j += 1) {
             if (dist[j].value > maxVal) {
               maxVal = dist[j].value;
             }
@@ -48,7 +48,7 @@ export const cogFiltDistSelector = createSelector(
           const filterVals = filter[keys[i]] && filter[keys[i]].value ?
             filter[keys[i]].value : [];
           let sumSelected = 0;
-          for (let j = 0; j < dist.length; j++) {
+          for (let j = 0; j < dist.length; j += 1) {
             const val = filterVals.indexOf(dist[j].key);
             if (val < 0) {
               notSelectedIdx.push(j);
@@ -71,7 +71,7 @@ export const cogFiltDistSelector = createSelector(
           const dist = cogData.groupRefs[keys[i]].all();
 
           let maxVal = 0;
-          for (let j = 0; j < dist.length; j++) {
+          for (let j = 0; j < dist.length; j += 1) {
             if (dist[j].value > maxVal) {
               maxVal = dist[j].value;
             }

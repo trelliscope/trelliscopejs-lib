@@ -8,7 +8,7 @@ export const relatedDisplaysSelector = createSelector(
     if (di.isLoaded) {
       const keySig = di.info.keySig;
       const dispID = [di.info.group, di.info.name].join('/');
-      for (let i = 0; i < dl.list.length; i++) {
+      for (let i = 0; i < dl.list.length; i += 1) {
         const sameKey = dl.list[i].keySig === keySig;
         const curID = [dl.list[i].group, dl.list[i].name].join('/');
         if (sameKey && curID !== dispID) {
@@ -32,7 +32,7 @@ export const displayGroupsSelector = createSelector(
   (dl) => {
     const dispGroups = {};
     if (dl.list) {
-      for (let ii = 0; ii < dl.list.length; ii++) {
+      for (let ii = 0; ii < dl.list.length; ii += 1) {
         if (!dispGroups[dl.list[ii].group]) {
           dispGroups[dl.list[ii].group] = [];
         }

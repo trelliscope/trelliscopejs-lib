@@ -51,7 +51,7 @@ class HeaderLogo extends React.Component {
       );
     }
     return (
-      <div
+      <button
         onClick={this.handleOpen}
         style={this.props.style.logo}
       >
@@ -168,13 +168,17 @@ class HeaderLogo extends React.Component {
                   Source code available <a href="https://github.com/hafen/TrelliscopeJS/" target="_blank" rel="noopener noreferrer">on github</a> &ndash; submit issues and feature requests there.
                 </p>
                 <p>
-                  Thanks to Bill Cleveland for ideas upon which this is built, to Saptarshi Guha for creating a multi-panel plot viewer prototype many years ago that inspired initial work, and to Barret Schloerke for the introduction to React and discussions about the interface.
+                  Thanks to Bill Cleveland for ideas upon which this is built,
+                  to Saptarshi Guha for creating a multi-panel plot viewer prototype
+                  many years ago that inspired initial work,
+                  and to Barret Schloerke for the introduction to React
+                  and discussions about the interface.
                 </p>
               </div>
             </Tab>
           </Tabs>
         </Dialog>
-      </div>
+      </button>
     );
   }
 }
@@ -196,7 +200,8 @@ const styleSelector = createSelector(
         top: 0,
         right: 0,
         cursor: 'pointer',
-        borderColor: ui.header.borderColor,
+        border: 'none',
+        // borderColor: ui.header.borderColor,
         height: ui.header.height,
         textAlign: 'center',
         width: ui.header.titleWidth,

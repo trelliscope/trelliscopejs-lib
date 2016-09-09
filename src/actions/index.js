@@ -142,7 +142,7 @@ export const fetchDisplay = (name, group, cfg) =>
         // once cog data is loaded, set the state with this data
         // but first add an index column to the data so we can
         // preserve original order or do multi-column sorts
-        for (let i = 0; i < json2.length; i++) {
+        for (let i = 0; i < json2.length; i += 1) {
           json2[i].__index = i; // eslint-disable-line no-param-reassign
         }
         dispatch(receiveCogData(iface, crossfilter(json2)));
@@ -153,7 +153,7 @@ export const fetchDisplay = (name, group, cfg) =>
         dispatch(setSort(json.state.sort));
         dispatch(setFilter(json.state.filter));
         const ciKeys = Object.keys(json.cogInfo);
-        for (let i = 0; i < ciKeys.length; i++) {
+        for (let i = 0; i < ciKeys.length; i += 1) {
           if (json.cogInfo[ciKeys[i]].filterable) {
             if (json.state.filter &&
               json.state.filter[ciKeys[i]] !== undefined) {

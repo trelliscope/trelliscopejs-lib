@@ -47,7 +47,7 @@ class RelatedDisplays extends React.Component {
       />
     ];
     return (
-      <div
+      <button
         onClick={this.handleOpen}
         style={this.props.style.button}
       >
@@ -64,16 +64,14 @@ class RelatedDisplays extends React.Component {
             <div key={i}>{d.group} / {d.name}</div>
           ))}
         </Dialog>
-      </div>
+      </button>
     );
   }
 }
 
 RelatedDisplays.propTypes = {
   style: React.PropTypes.object,
-  selectedDisplay: React.PropTypes.object,
   relatedDisplays: React.PropTypes.array,
-  handleClick: React.PropTypes.func,
   active: React.PropTypes.bool
 };
 
@@ -98,9 +96,10 @@ const styleSelector = createSelector(
         color: ui.header.button.color,
         background: 'white',
         textAlign: 'center',
-        borderRight: '1px solid',
-        borderBottom: '1px solid',
-        borderColor: ui.header.borderColor,
+        borderRight: `1px solid ${ui.header.borderColor}`,
+        borderBottom: `1px solid ${ui.header.borderColor}`,
+        borderLeft: 'none',
+        borderTop: 'none',
         ':hover': {
           transition: 'background 250ms',
           background: '#eee',

@@ -16,10 +16,10 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
     const panelKeys = [];
     const panelLabels = [];
 
-    for (let i = 0; i < ccd.length; i++) {
+    for (let i = 0; i < ccd.length; i += 1) {
       panelKeys.push(ccd[i].panelKey);
       const curLabels = [];
-      for (let j = 0; j < labels.length; j++) {
+      for (let j = 0; j < labels.length; j += 1) {
         curLabels.push({
           name: labels[j],
           value: ccd[i][labels[j]],
@@ -33,7 +33,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
     // const dataMatrix = new Array(layout.nrow);
     const panelMatrix = [];
 
-    for (let i = 0; i < ccd.length; i++) {
+    for (let i = 0; i < ccd.length; i += 1) {
       let rr;
       let cc;
       if (layout.arrange === 'row') {

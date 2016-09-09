@@ -12,7 +12,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
   let content = <div />;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
-    for (let i = 0; i < sort.length; i++) {
+    for (let i = 0; i < sort.length; i += 1) {
       const index = notUsed.indexOf(sort[i].name);
       if (index > -1) {
         notUsed.splice(index, 1);
@@ -66,7 +66,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
         </div>
         <div style={style.notUsed}>
           {notUsed.map((d, i) => (
-            <div
+            <button
               style={style.variable}
               key={i}
               onClick={() => {
@@ -76,7 +76,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
               }}
             >
               {d}
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -99,7 +99,7 @@ const cogDescSelector = createSelector(
   (di) => {
     const res = {};
     const ciKeys = Object.keys(di.info.cogInfo);
-    for (let i = 0; i < ciKeys.length; i++) {
+    for (let i = 0; i < ciKeys.length; i += 1) {
       res[ciKeys[i]] = di.info.cogInfo[ciKeys[i]].desc;
     }
     return (res);
@@ -174,6 +174,8 @@ const stateSelector = createSelector(
           display: 'inline-block',
           boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
           borderRadius: 10,
+          border: 0,
+          background: 'none',
           paddingTop: 2,
           paddingBottom: 2,
           paddingLeft: 10,

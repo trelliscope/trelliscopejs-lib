@@ -39,7 +39,7 @@ class SideButtons extends React.Component {
       this.props.setActive('');
     } else {
       const which = [];
-      for (let ii = 0; ii < buttons.length; ii++) {
+      for (let ii = 0; ii < buttons.length; ii += 1) {
         if (buttons[ii].key === k) {
           which.push(buttons[ii].title);
         }
@@ -110,9 +110,12 @@ const stateSelector = createSelector(
         verticalAlign: 'middle',
         fontSize: ui.sideButtons.fontSize,
         color: ui.sideButtons.button.color,
-        borderBottom: '1px solid',
-        borderColor: ui.sideButtons.button.borderColor,
+        borderBottom: `1px solid ${ui.sideButtons.button.borderColor}`,
+        borderTop: 'none',
+        borderLeft: 'none',
+        borderRight: 'none',
         userSelect: 'none',
+        background: ui.sideButtons.background,
         transition: 'color 0.2s, background 0.2s',
         ':hover': {
           transition: 'color 0.2s, background 0.2s',
