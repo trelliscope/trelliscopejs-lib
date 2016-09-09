@@ -7,7 +7,7 @@ import DisplayInfo from './DisplayInfo';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
-import { setSelectedDisplay, fetchDisplay } from '../actions';
+import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
@@ -40,14 +40,14 @@ class Header extends React.Component {
     let iconStyle = { visibility: 'hidden' };
     let pagination = '';
     let displaySelect = '';
-    let relatedDisplays = ''; // <RelatedDisplays />
+    let relatedDisplays = ''; // <RelatedDisplays setDialogOpen={this.props.setDialogOpen} />
     const singleDisplay = this.props.displayList.list.length <= 1;
     const displayLoaded = this.props.selectedDisplay.name !== '';
     const nGroups = Object.keys(this.props.displayGroups).length;
     const listLoaded = this.props.displayList.isLoaded;
 
     if (listLoaded && !singleDisplay) {
-      displaySelect = <DisplaySelect />;
+      displaySelect = <DisplaySelect setDialogOpen={this.props.setDialogOpen} />;
     }
 
     if (displayLoaded) {
@@ -72,14 +72,17 @@ class Header extends React.Component {
       <div style={this.props.style.outer}>
         {displaySelect}
         {relatedDisplays}
-        <DisplayInfo singleDisplay={singleDisplay} />
+        <DisplayInfo
+          singleDisplay={singleDisplay}
+          setDialogOpen={this.props.setDialogOpen}
+        />
         <div style={this.props.style.displayName}>
           <i style={iconStyle} className="fa fa-info-circle" />
           {displayName}
           <span style={this.props.style.displayDesc}>{displayDesc}</span>
         </div>
         {pagination}
-        <HeaderLogo />
+        <HeaderLogo setDialogOpen={this.props.setDialogOpen} />
       </div>
     );
   }
@@ -91,7 +94,8 @@ Header.propTypes = {
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
-  selectDisplay: React.PropTypes.func
+  selectDisplay: React.PropTypes.func,
+  setDialogOpen: React.PropTypes.func
 };
 
 // ------ redux container ------
@@ -150,6 +154,9 @@ const mapDispatchToProps = (dispatch) => ({
   selectDisplay: (name, group, desc, cfg) => {
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg));
+  },
+  setDialogOpen: (isOpen) => {
+    dispatch(setDialogOpen(isOpen));
   }
 });
 

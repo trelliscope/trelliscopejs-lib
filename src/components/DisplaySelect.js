@@ -40,17 +40,21 @@ class DisplaySelect extends React.Component {
   }
   handleOpen = () => {
     if (this.props.displayList && this.props.displayList.isLoaded) {
+      this.props.setDialogOpen(true);
       this.setState({ open: true });
     }
   }
   handleKey = () => {
+    this.props.setDialogOpen(true);
     this.setState({ open: true });
   }
   handleClose = () => {
+    this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
   handleSelect = (name, group, desc) => {
     this.props.handleClick(name, group, desc, this.props.cfg);
+    this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
   render() {
@@ -116,6 +120,7 @@ DisplaySelect.propTypes = {
   style: React.PropTypes.object,
   handleClick: React.PropTypes.func,
   loadDisplayList: React.PropTypes.func,
+  setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object,

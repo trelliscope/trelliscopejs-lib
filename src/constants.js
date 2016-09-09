@@ -16,6 +16,7 @@ export const RECEIVE_COGDATA = 'RECEIVE_COGDATA';
 export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const REQUEST_CONFIG = 'REQUEST_CONFIG';
 export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
+export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';

@@ -5,7 +5,8 @@ import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   REQUEST_COGIFACE, RECEIVE_COGIFACE,
   REQUEST_COGDATA, RECEIVE_COGDATA,
-  REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants.js';
+  REQUEST_CONFIG, RECEIVE_CONFIG,
+  SET_DIALOG_OPEN } from '../constants.js';
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG
@@ -19,6 +20,10 @@ export const receiveConfig = (json) => ({
 
 export const setActiveSidebar = (active) => ({
   type: ACTIVE_SIDEBAR, active
+});
+
+export const setDialogOpen = (isOpen) => ({
+  type: SET_DIALOG_OPEN, isOpen
 });
 
 export const setLayout = (layout) => ({

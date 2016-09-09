@@ -31,12 +31,15 @@ class DisplayInfo extends React.Component {
     }
   }
   handleOpen = () => {
+    this.props.setDialogOpen(true);
     this.setState({ open: true });
   }
   handleKey = () => {
+    this.props.setDialogOpen(true);
     this.setState({ open: true });
   }
   handleClose = () => {
+    this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
   render() {
@@ -125,6 +128,7 @@ DisplayInfo.propTypes = {
   selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   handleClick: React.PropTypes.func,
+  setDialogOpen: React.PropTypes.func,
   active: React.PropTypes.bool
 };
 

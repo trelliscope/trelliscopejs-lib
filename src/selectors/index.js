@@ -22,5 +22,7 @@ export const labelsSelector = state => state.labels;
 
 export const configSelector = state => state._config.config;
 
+export const dialogOpenSelector = state => state.dialog;
+
 export const aspectSelector = state =>
   state._displayInfo.info.height / state._displayInfo.info.width;

@@ -4,9 +4,9 @@ import { createSelector } from 'reselect';
 import Radium from 'radium';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
-import { uiConstsSelector } from '../selectors/ui';
 import { setLayout } from '../actions';
-import { nPerPageSelector, pageNumSelector } from '../selectors';
+import { nPerPageSelector, pageNumSelector, dialogOpenSelector } from '../selectors';
+import { uiConstsSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 
 class Pagination extends React.Component {
@@ -15,8 +15,16 @@ class Pagination extends React.Component {
     this.state = { skip: 1 };
   }
   componentDidMount() {
-    Mousetrap.bind(['right'], () => this.pageRight());
-    Mousetrap.bind(['left'], () => this.pageLeft());
+    Mousetrap.bind(['right'], () => {
+      if (!this.props.dialogOpen) {
+        this.pageRight();
+      }
+    });
+    Mousetrap.bind(['left'], () => {
+      if (!this.props.dialogOpen) {
+        this.pageLeft();
+      }
+    });
   }
   componentWillUnmount() {
     Mousetrap.unbind(['right']);
@@ -115,14 +123,16 @@ Pagination.propTypes = {
   npp: React.PropTypes.number,
   totPages: React.PropTypes.number,
   totPanels: React.PropTypes.number,
+  dialogOpen: React.PropTypes.bool,
   handleChange: React.PropTypes.func
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  uiConstsSelector, pageNumSelector, filterCardinalitySelector, nPerPageSelector,
-  (ui, n, card, npp) => ({
+  uiConstsSelector, pageNumSelector, filterCardinalitySelector,
+  nPerPageSelector, dialogOpenSelector,
+  (ui, n, card, npp, dialogOpen) => ({
     style: {
       outer: {
         position: 'absolute',
@@ -187,7 +197,8 @@ const stateSelector = createSelector(
     n,
     totPanels: card,
     totPages: Math.ceil(card / npp),
-    npp
+    npp,
+    dialogOpen
   })
 );
 

@@ -9,6 +9,7 @@ import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS } from '../constants.js';
 import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
+import { dialogOpenSelector } from '../selectors';
 
 const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
@@ -30,7 +31,7 @@ class SideButtons extends React.Component {
     Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
   }
   handleKey = (e, k) => {
-    if (e.target.nodeName === 'INPUT') {
+    if (e.target.nodeName === 'INPUT' || this.props.dialogOpen) {
       e.stopPropagation();
     } else if (k === 'esc' || k === 'enter') {
       // allow keyboard shortcuts for sidebars
@@ -72,14 +73,15 @@ SideButtons.propTypes = {
   style: React.PropTypes.object,
   active: React.PropTypes.string,
   buttonStyle: React.PropTypes.object,
+  dialogOpen: React.PropTypes.bool,
   setActive: React.PropTypes.func
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, sidebarActiveSelector,
-  (ch, ui, active) => ({
+  contentHeightSelector, uiConstsSelector, sidebarActiveSelector, dialogOpenSelector,
+  (ch, ui, active, dialogOpen) => ({
     style: {
       base: {
         position: 'absolute',
@@ -145,7 +147,8 @@ const stateSelector = createSelector(
         left: 0
       }
     },
-    active
+    active,
+    dialogOpen
   })
 );
 

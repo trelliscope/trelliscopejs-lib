@@ -19,12 +19,15 @@ class HeaderLogo extends React.Component {
     Mousetrap.unbind(['a']);
   }
   handleOpen = () => {
+    this.props.setDialogOpen(true);
     this.setState({ open: true });
   }
   handleKey = () => {
+    this.props.setDialogOpen(true);
     this.setState({ open: true });
   }
   handleClose = () => {
+    this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
   render() {
@@ -56,7 +59,8 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  setDialogOpen: React.PropTypes.func
 };
 
 // ------ redux container ------
