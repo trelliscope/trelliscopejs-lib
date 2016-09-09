@@ -149,7 +149,7 @@ const styleSelector = createSelector(
         left: selectedDisplay.name === '' ? -ui.sideButtons.width : ui.sideButtons.width,
         display: 'inline-block',
         height: ui.header.height,
-        width: ui.header.height + 1,
+        width: ui.header.height,
         fontSize: 18,
         paddingTop: 0,
         color: ui.header.button.color,
