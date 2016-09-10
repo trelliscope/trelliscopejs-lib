@@ -1,4 +1,4 @@
-import { REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants.js';
+import { REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants';
 
 const _displayInfoReducer = (state = {
   isFetching: false,

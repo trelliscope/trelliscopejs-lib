@@ -1,4 +1,4 @@
-import { REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants.js';
+import { REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants';
 
 const _configReducer = (state = {
   isFetching: false,

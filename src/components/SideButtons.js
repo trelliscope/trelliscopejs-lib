@@ -7,7 +7,7 @@ import { setActiveSidebar } from '../actions';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js';
 import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
-  SB_PANEL_LABELS } from '../constants.js';
+  SB_PANEL_LABELS } from '../constants';
 import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { dialogOpenSelector } from '../selectors';
 

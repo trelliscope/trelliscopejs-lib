@@ -7,10 +7,10 @@ import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
 import { uiConstsSelector, contentHeightSelector,
-  sidebarActiveSelector } from '../selectors/ui';
+  sidebarActiveSelector, filterColSplitSelector } from '../selectors/ui';
 import { displayLoadedSelector } from '../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
-  SB_PANEL_LABELS, SB_CONFIG } from '../constants.js';
+  SB_PANEL_LABELS, SB_CONFIG } from '../constants';
 
 const Sidebar = ({ style, active, displayLoaded }) => {
   if (active === '') {
@@ -59,8 +59,9 @@ Sidebar.propTypes = {
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, sidebarActiveSelector, displayLoadedSelector,
-  (ch, ui, active, displayLoaded) => ({
+  contentHeightSelector, uiConstsSelector, sidebarActiveSelector,
+  displayLoadedSelector, filterColSplitSelector,
+  (ch, ui, active, displayLoaded, colSplit) => ({
     style: {
       base: {
         transitionProperty: 'left',
@@ -69,7 +70,7 @@ const stateSelector = createSelector(
         position: 'absolute',
         left: ui.sideButtons.width,
         top: ui.header.height,
-        width: ui.sidebar.width,
+        width: ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit !== null)),
         boxSizing: 'border-box',
         height: ch,
         borderRight: '1px solid',

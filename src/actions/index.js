@@ -6,7 +6,7 @@ import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   REQUEST_COGIFACE, RECEIVE_COGIFACE,
   REQUEST_COGDATA, RECEIVE_COGDATA,
   REQUEST_CONFIG, RECEIVE_CONFIG,
-  SET_DIALOG_OPEN } from '../constants.js';
+  SET_DIALOG_OPEN } from '../constants';
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG

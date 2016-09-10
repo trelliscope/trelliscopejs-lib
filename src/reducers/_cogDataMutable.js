@@ -1,4 +1,4 @@
-import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants.js';
+import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants';
 
 const _cogDataMutable = (state = {
   isFetching: false,

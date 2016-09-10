@@ -1,4 +1,4 @@
-import { WINDOW_RESIZE } from '../constants.js';
+import { WINDOW_RESIZE } from '../constants';
 
 const windowHeight = typeof window === 'object' ? window.innerHeight : null;
 const windowWidth = typeof window === 'object' ? window.innerWidth : null;

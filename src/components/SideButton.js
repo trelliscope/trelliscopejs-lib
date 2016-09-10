@@ -1,6 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
-import { SB_CONFIG } from '../constants.js';
+import { SB_CONFIG } from '../constants';
 
 const SideButton = ({ bstyle, isActive, icon, title, label, onClick }) => {
   const bottom = {

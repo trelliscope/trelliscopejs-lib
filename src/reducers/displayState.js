@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import { combineReducers } from 'redux';
-import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants.js';
+import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants';
 
 export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }, action) => {
   switch (action.type) {

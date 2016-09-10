@@ -1,4 +1,4 @@
-import { SELECT_DISPLAY } from '../constants.js';
+import { SELECT_DISPLAY } from '../constants';
 
 const selectedDisplayReducer = (state = {
   name: '',

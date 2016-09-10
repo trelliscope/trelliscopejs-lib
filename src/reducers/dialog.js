@@ -1,4 +1,4 @@
-import { SET_DIALOG_OPEN } from '../constants.js';
+import { SET_DIALOG_OPEN } from '../constants';
 
 const dialogReducer = (state = false, action) => {
   switch (action.type) {

@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect';
+import { SB_PANEL_FILTER } from '../constants';
+import { filterViewSelector, displayInfoSelector } from '.';
 
 // http://paletton.com/#uid=33u0u0kv2ZgiPYEo+ZaOjYmVwBx
 export const uiConstsSelector = () => (
@@ -83,6 +85,9 @@ export const uiConstsSelector = () => (
         num: {
           height: 100,
           barColor: 'rgb(255, 210, 127)'
+        },
+        variables: {
+          height: 100
         }
       }
     },
@@ -106,18 +111,53 @@ export const windowWidthSelector = state => state.ui.windowWidth;
 export const windowHeightSelector = state => state.ui.windowHeight;
 export const sidebarActiveSelector = state => state.sidebar.active;
 
+export const sidebarHeightSelector = createSelector(
+  windowHeightSelector, uiConstsSelector,
+  (wh, ui) => wh - ui.header.height - ui.footer.height - ui.sidebar.header.height
+);
+
+// keep track of how high each filter entry is so we can spill over into a new column
+export const filterColSplitSelector = createSelector(
+  filterViewSelector, displayInfoSelector, uiConstsSelector, sidebarHeightSelector,
+  (filt, di, ui, sh) => {
+    const keys = filt.active;
+    if (keys === undefined) {
+      return null;
+    }
+    const heights = keys.map(d => {
+      if (di.info.cogInfo[d].type === 'factor') {
+        return ui.sidebar.filter.num.height + 53;
+      } else if (di.info.cogInfo[d].type === 'numeric') {
+        return ui.sidebar.filter.cat.height + 53;
+      }
+      return 0;
+    });
+    let cutoff = null;
+    let csum = 0;
+    let i = 0;
+    while (csum < sh - ui.sidebar.filter.variables.height && i < heights.length) {
+      csum += heights[i];
+      i += 1;
+    }
+    if (i < heights.length || csum > sh - ui.sidebar.filter.variables.height) {
+      cutoff = i - 1;
+    }
+
+    return cutoff;
+  }
+);
+
 export const contentWidthSelector = createSelector(
   windowWidthSelector, sidebarActiveSelector, uiConstsSelector,
-  (ww, active, ui) => ww - ui.sideButtons.width -
-    (active === '' ? 0 : (ui.sidebar.width + 1))
+  filterColSplitSelector,
+  (ww, active, ui, colSplit) => {
+    const sw = ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit !== null));
+    return ww - ui.sideButtons.width -
+      (active === '' ? 0 : (sw + 1));
+  }
 );
 
 export const contentHeightSelector = createSelector(
   windowHeightSelector, uiConstsSelector,
   (wh, ui) => wh - ui.header.height - ui.footer.height
-);
-
-export const sidebarHeightSelector = createSelector(
-  windowHeightSelector, uiConstsSelector,
-  (wh, ui) => wh - ui.header.height - ui.footer.height - ui.sidebar.header.height
 );

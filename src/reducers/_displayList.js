@@ -1,4 +1,4 @@
-import { REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST } from '../constants.js';
+import { REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST } from '../constants';
 
 const _displayListReducer = (state = {
   isFetching: false,
