@@ -135,12 +135,16 @@ export const filterColSplitSelector = createSelector(
     let cutoff = null;
     let csum = 0;
     let i = 0;
-    while (csum < sh - ui.sidebar.filter.variables.height && i < heights.length) {
+    while (csum < sh && i < heights.length) {
       csum += heights[i];
       i += 1;
     }
-    if (i < heights.length || csum > sh - ui.sidebar.filter.variables.height) {
+    if (i < heights.length || csum > sh) {
       cutoff = i - 1;
+    }
+    // case where it's one column but not enough space for extra variables
+    if (cutoff === null && csum + ui.sidebar.filter.variables.height > sh) {
+      cutoff = i;
     }
 
     return cutoff;
