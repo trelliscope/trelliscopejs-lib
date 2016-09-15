@@ -12,7 +12,7 @@ class Panel extends React.Component {
     let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
 
-    this.xhr = getJSON(`${filebase}/png/${this.props.panelKey}.json`, json => {
+    this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, json => {
       this.setState({ panelContent: json, loaded: true });
     });
 
