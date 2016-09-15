@@ -1,9 +1,8 @@
 import { json as getJSON } from 'd3-request';
-// import { crossfilter } from 'crossfilter2';
+import loadAssetsSequential from '../loadAssets';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
-  REQUEST_COGIFACE, RECEIVE_COGIFACE,
   REQUEST_COGDATA, RECEIVE_COGDATA,
   REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN } from '../constants';
@@ -72,28 +71,6 @@ export const receiveDisplay = (name, group, json) => ({
   receivedAt: Date.now()
 });
 
-export const requestCogInterfaceInfo = (iface) => ({
-  type: REQUEST_COGIFACE, iface
-});
-
-export const receiveCogInterfaceInfo = (iface, json) => ({
-  type: RECEIVE_COGIFACE,
-  iface,
-  info: json,
-  receivedAt: Date.now()
-});
-
-export const fetchCogInterfaceInfo = (dispatch, iface, cfg) => {
-  dispatch(receiveCogInterfaceInfo(iface));
-
-  // TODO: when a more robust back-end API is spec'd out, rework this
-  const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;
-  return getJSON(cf, json => {
-    dispatch(receiveCogInterfaceInfo(iface, json));
-  });
-};
-
-
 export const requestCogData = (iface) => ({
   type: REQUEST_COGDATA, iface
 });
@@ -129,8 +106,6 @@ export const fetchDisplay = (name, group, cfg) =>
       const iface = json.cogInterface;
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, json));
-       // TODO: remove when crossfilter is done
-      // fetchCogInterfaceInfo(dispatch, iface, cfg);
       // set cog data state as pending while it loads
       dispatch(receiveCogData(iface));
       // TODO: perhaps do a quick load of initial panels while cog data is loading...
@@ -166,3 +141,28 @@ export const fetchDisplay = (name, group, cfg) =>
       });
     });
   };
+
+
+// const widgetAssets = {
+//   name: 'rbokeh',
+//   assets: [
+//     {
+//       type: 'script',
+//       url: 'lib/htmlwidgets-0.7/htmlwidgets.js'
+//     },
+//     {
+//       type: 'script',
+//       url: 'lib/bokehjs-0.12.1/bokeh.min.js'
+//     },
+//     {
+//       type: 'stylesheet',
+//       url: 'lib/bokehjs-0.12.1/bokeh.min.css'
+//     },
+//     {
+//       type: 'script',
+//       url: 'lib/rbokeh-binding-0.4.5/rbokeh.js'
+//     }
+//   ]
+// };
+
+// loadAssetsSequential(widgetAssets);
