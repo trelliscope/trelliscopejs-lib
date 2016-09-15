@@ -1,11 +1,11 @@
+import React from 'react';
 import { json as getJSON } from 'd3-request';
-
+import loadAssetsSequential from '../loadAssets';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
-  REQUEST_COGDATA, RECEIVE_COGDATA,
-  REQUEST_CONFIG, RECEIVE_CONFIG,
-  SET_DIALOG_OPEN } from '../constants';
+  RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
+  SET_DIALOG_OPEN, SET_PANEL_RENDERER } from '../constants';
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG
@@ -71,15 +71,15 @@ export const receiveDisplay = (name, group, json) => ({
   receivedAt: Date.now()
 });
 
-export const requestCogData = (iface) => ({
-  type: REQUEST_COGDATA, iface
-});
-
-export const receiveCogData = (iface, json) => ({
+const receiveCogData = (iface, json) => ({
   type: RECEIVE_COGDATA,
   iface,
   crossfilter: json,
   receivedAt: Date.now()
+});
+
+const setPanelRenderer = (fn) => ({
+  type: SET_PANEL_RENDERER, fn
 });
 
 // the display list is only loaded once at the beginning
@@ -110,6 +110,21 @@ export const fetchDisplay = (name, group, cfg) =>
       dispatch(receiveCogData(iface));
       // TODO: perhaps do a quick load of initial panels while cog data is loading...
       // (to do this, have displayObj store initial panel keys and cogs)
+
+      if (json.panelInterface.type === 'image') {
+        dispatch(setPanelRenderer((x, style) => (
+          <img
+            src={x}
+            alt="panel"
+            style={style}
+          />
+        )));
+      } else if (json.panelInterface.type === 'htmlwidget') {
+        const callback = (widget) => dispatch(setPanelRenderer((x, style) => {
+          debugger;
+        }));
+        loadAssetsSequential(json.panelInterface.deps, callback);
+      }
 
       // load the cog data
       const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;

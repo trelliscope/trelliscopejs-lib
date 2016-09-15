@@ -7,12 +7,12 @@ import { uiConstsSelector, contentWidthSelector,
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector } from '../selectors';
+  aspectSelector, labelsSelector, panelRendererSelector } from '../selectors';
 
-const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
+const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims, panelRenderer }) => {
   let ret = <div />;
 
-  if (ci && ccd && cinfo) {
+  if (ci && ccd && cinfo && panelRenderer.fn !== null) {
     const panelKeys = [];
     const panelLabels = [];
 
@@ -65,6 +65,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims }) => {
             labels={el.labels}
             style={style.panel}
             iface={ci}
+            panelRenderer={panelRenderer}
             dimStyle={{
               top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
                 dims.hOffset + (el.rowIndex * 2),
@@ -88,7 +89,8 @@ Content.propTypes = {
   cfg: React.PropTypes.object,
   layout: React.PropTypes.object,
   labels: React.PropTypes.array,
-  dims: React.PropTypes.object
+  dims: React.PropTypes.object,
+  panelRenderer: React.PropTypes.object
 };
 
 // ------ redux container ------
@@ -97,8 +99,8 @@ const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
-  configSelector,
-  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg) => {
+  configSelector, panelRendererSelector,
+  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -228,7 +230,8 @@ const styleSelector = createSelector(
         wOffset,
         hOffset,
         pPad
-      }
+      },
+      panelRenderer
     });
   }
 );

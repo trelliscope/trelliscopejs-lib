@@ -3,6 +3,7 @@ import sidebar from './sidebar';
 import ui from './ui';
 import dialog from './dialog';
 import selectedDisplay from './selectedDisplay';
+import panelRenderer from './panelRenderer';
 import { layout, labels, sort, filter } from './displayState';
 import _config from './_config';
 import _displayList from './_displayList';
@@ -14,6 +15,7 @@ const app = combineReducers({
   ui,
   sidebar,
   selectedDisplay,
+  panelRenderer,
   layout,
   labels,
   sort,

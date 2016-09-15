@@ -7,13 +7,16 @@ class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loaded: false, panelContent: null };
+    this.panelContent = null;
   }
   componentDidMount() {
     let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
 
     this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, json => {
-      this.setState({ panelContent: json, loaded: true });
+      this.setState({
+        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent),
+        loaded: true });
     });
 
     // fade in on new component
@@ -32,11 +35,7 @@ class Panel extends React.Component {
       >
         <div style={this.props.style.panel}>
         {this.state.loaded ?
-          <img
-            src={this.state.panelContent}
-            alt="panel"
-            style={this.props.style.panelContent}
-          /> :
+          this.state.panelContent :
           <Delay wait={500}>
             <div>'loading...'</div>
           </Delay>}
@@ -97,7 +96,8 @@ Panel.propTypes = {
   iface: React.PropTypes.object,
   cfg: React.PropTypes.object,
   panelKey: React.PropTypes.string,
-  dimStyle: React.PropTypes.object
+  dimStyle: React.PropTypes.object,
+  panelRenderer: React.PropTypes.object
 };
 
 export default Radium(Panel);
