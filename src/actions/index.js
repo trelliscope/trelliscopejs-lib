@@ -1,5 +1,5 @@
 import { json as getJSON } from 'd3-request';
-import loadAssetsSequential from '../loadAssets';
+
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
@@ -141,28 +141,3 @@ export const fetchDisplay = (name, group, cfg) =>
       });
     });
   };
-
-
-// const widgetAssets = {
-//   name: 'rbokeh',
-//   assets: [
-//     {
-//       type: 'script',
-//       url: 'lib/htmlwidgets-0.7/htmlwidgets.js'
-//     },
-//     {
-//       type: 'script',
-//       url: 'lib/bokehjs-0.12.1/bokeh.min.js'
-//     },
-//     {
-//       type: 'stylesheet',
-//       url: 'lib/bokehjs-0.12.1/bokeh.min.css'
-//     },
-//     {
-//       type: 'script',
-//       url: 'lib/rbokeh-binding-0.4.5/rbokeh.js'
-//     }
-//   ]
-// };
-
-// loadAssetsSequential(widgetAssets);
