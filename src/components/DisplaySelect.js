@@ -17,9 +17,12 @@ class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      open: props.selectedDisplay.name === '',
       btnScale: 1
     };
+    if (props.selectedDisplay.name === '') {
+      props.setDialogOpen(true);
+    }
   }
   componentDidMount() {
     Mousetrap.bind(['o'], this.handleKey);
@@ -186,8 +189,7 @@ const styleSelector = createSelector(
           transition: 'background 250ms',
           background: emphasize(ui.header.button.active.background, 0.2),
           color: 'white',
-          cursor: 'pointer',
-          borderColor: emphasize(ui.header.button.active.background, 0.2)
+          cursor: 'pointer'
         }
       }
     },

@@ -11,13 +11,13 @@ import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
-  selectedDisplaySelector } from '../selectors';
+  selectedDisplaySelector, dialogOpenSelector } from '../selectors';
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
     // this.singleDisplay = false;
-    this.singleDisplay = props.displayList.list.length <= 1;
+    this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
     this.state = {
       singleLoaded: false
     };
@@ -65,7 +65,7 @@ class Header extends React.Component {
       pagination = <Pagination />;
     } else if (this.singleDisplay) {
       displayName = 'loading...';
-    } else {
+    } else if (!this.props.dialogOpen) {
       displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
     }
 
@@ -98,6 +98,7 @@ Header.propTypes = {
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
+  dialogOpen: React.PropTypes.bool,
   selectDisplay: React.PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   setDialogOpen: React.PropTypes.func
 };
@@ -106,8 +107,8 @@ Header.propTypes = {
 
 const styleSelector = createSelector(
   windowWidthSelector, uiConstsSelector, displayListSelector, displayGroupsSelector,
-  selectedDisplaySelector, relatedDisplaysSelector, configSelector,
-  (ww, ui, dl, dg, sd, rd, cfg) => ({
+  selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
+  (ww, ui, dl, dg, sd, rd, cfg, dialogOpen) => ({
     style: {
       outer: {
         position: 'fixed',
@@ -134,7 +135,7 @@ const styleSelector = createSelector(
         // fontWeight: 400,
         // transition: 'left 0.5s ease',
         left: ui.header.height *
-          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1))
+          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)) //  + (rd.length === 0 ? 0 : 1)
       },
       displayDesc: {
         fontWeight: 300,
@@ -146,7 +147,8 @@ const styleSelector = createSelector(
     cfg,
     displayList: dl,
     displayGroups: dg,
-    selectedDisplay: sd
+    selectedDisplay: sd,
+    dialogOpen
   })
 );
 
