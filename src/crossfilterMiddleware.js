@@ -35,7 +35,7 @@ const multiSort = (args) => {
 };
 
 const crossfilterMiddleware = store => next => action => {
-  if (action.type === 'SET_FILTER') {
+  if (action.type === 'SET_FILTER' && action.sort) {
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
     const groups = store.getState()._cogDataMutable.groupRefs;
@@ -116,7 +116,7 @@ const crossfilterMiddleware = store => next => action => {
         }
       }
     }
-  } else if (action.type === 'SET_SORT') {
+  } else if (action.type === 'SET_SORT' && action.sort) {
     // if only sorting on one variable, make a sort dimension according to that variable
     // if more than one variable, crossfilter can only handle sorting on one dimension
     // so we have to get sort index of entire data set and create a new dimension
