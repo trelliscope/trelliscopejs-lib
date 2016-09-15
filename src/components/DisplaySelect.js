@@ -20,8 +20,10 @@ class DisplaySelect extends React.Component {
       open: props.selectedDisplay.name === '',
       btnScale: 1
     };
-    if (props.selectedDisplay.name === '') {
-      props.setDialogOpen(true);
+  }
+  componentWillMount() {
+    if (this.props.selectedDisplay.name === '') {
+      this.props.setDialogOpen(true);
     }
   }
   componentDidMount() {
