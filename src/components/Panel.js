@@ -6,7 +6,7 @@ import { json as getJSON } from 'd3-request';
 class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false, panelContent: null };
+    this.state = { loaded: false, panelContent: null, panelData: null };
     this.panelContent = null;
   }
   componentDidMount() {
@@ -15,7 +15,8 @@ class Panel extends React.Component {
 
     this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, json => {
       this.setState({
-        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent),
+        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent, false),
+        panelData: json,
         loaded: true });
     });
 
@@ -23,6 +24,11 @@ class Panel extends React.Component {
     const elem = this._panel;
     elem.style.opacity = 0;
     setTimeout(() => (elem.style.opacity = 1), 10);
+  }
+  componentDidUpdate() {
+    if (this.state.loaded) {
+      this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent, true);
+    }
   }
   componentWillUnmount() {
     this.xhr.abort();

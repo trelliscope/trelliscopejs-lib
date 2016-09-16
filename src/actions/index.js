@@ -120,9 +120,25 @@ export const fetchDisplay = (name, group, cfg) =>
           />
         )));
       } else if (json.panelInterface.type === 'htmlwidget') {
-        const callback = (widget) => dispatch(setPanelRenderer((x, style) => {
-          debugger;
-        }));
+        const callback = (binding) => {
+          const renderFn = (x, style, post) => {
+            const el = document.getElementById(x.x.elementid);
+            if (post && el) {
+              el.innerHTML = '';
+              let initResult;
+              if (binding.initialize) {
+                initResult = binding.initialize(el, style.width, style.height);
+                binding.renderValue(el, x.x, initResult);
+                // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
+              }
+            } else {
+              return <div id={x.x.elementid} />;
+            }
+            return null;
+          };
+          const renderFn2 = renderFn.bind({ binding });
+          dispatch(setPanelRenderer(renderFn2));
+        };
         loadAssetsSequential(json.panelInterface.deps, callback);
       }
 
