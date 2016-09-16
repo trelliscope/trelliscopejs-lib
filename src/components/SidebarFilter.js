@@ -31,7 +31,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
 
     const colContent = colFilters.map(curFilters => (
       curFilters.map((d, i) => {
-        if (filter[d] && filtDist[d]) {
+        if (filtDist[d]) {
           let filterState = filter[d];
           let footerExtra = '';
           const filterActive = filterState && filterState.value !== undefined;
