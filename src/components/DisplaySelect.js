@@ -7,7 +7,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplay } from '../actions';
+import { setSelectedDisplay, fetchDisplay, setPanelRenderer,
+  setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { uiConstsSelector } from '../selectors/ui';
 import { displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
@@ -208,6 +209,14 @@ const mapStateToProps = (state) => (
 
 const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group, desc, cfg) => {
+    // need to clear out state for new display...
+    dispatch(setPanelRenderer(null));
+    dispatch(setLabels([]));
+    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }));
+    dispatch(setFilter({}));
+    dispatch(setFilterView({}));
+    dispatch(setSort([]));
+
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg));
   }

@@ -126,38 +126,40 @@ const crossfilterMiddleware = store => next => action => {
 
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
-    if (dimensions.__sort !== undefined) {
-      dimensions.__sort.remove();
-    }
-    let newState = action.sort;
-    if (typeof action.sort === 'number') {
-      newState = Object.assign([], [], store.getState().sort);
-      newState.splice(action.sort, 1);
-    }
-    if (newState.length === 0) {
-      dimensions.__sort = cf.dimension(d => d.__index);
-    } else if (newState.length === 1) {
-      dimensions.__sort = cf.dimension(d => d[newState[0].name]);
-    } else {
-      const dat = cf.all();
-      const sortDat = [];
-      for (let i = 0; i < dat.length; i += 1) {
-        const elem = { __index: dat[i].__index };
-        for (let j = 0; j < newState.length; j += 1) {
-          elem[newState[j].name] = dat[i][newState[j].name];
+    if (dimensions) {
+      if (dimensions.__sort) {
+        dimensions.__sort.remove();
+      }
+      let newState = action.sort;
+      if (typeof action.sort === 'number') {
+        newState = Object.assign([], [], store.getState().sort);
+        newState.splice(action.sort, 1);
+      }
+      if (newState.length === 0) {
+        dimensions.__sort = cf.dimension(d => d.__index);
+      } else if (newState.length === 1) {
+        dimensions.__sort = cf.dimension(d => d[newState[0].name]);
+      } else {
+        const dat = cf.all();
+        const sortDat = [];
+        for (let i = 0; i < dat.length; i += 1) {
+          const elem = { __index: dat[i].__index };
+          for (let j = 0; j < newState.length; j += 1) {
+            elem[newState[j].name] = dat[i][newState[j].name];
+          }
+          sortDat.push(elem);
         }
-        sortDat.push(elem);
+        const sortSpec = [];
+        for (let i = 0; i < newState.length; i += 1) {
+          sortSpec.push(`${newState[i].dir === 'asc' ? '' : '!'}${newState[i].name}`);
+        }
+        sortDat.sort(multiSort(sortSpec));
+        const idx = {};
+        for (let i = 0; i < sortDat.length; i += 1) {
+          idx[sortDat[i].__index] = i;
+        }
+        dimensions.__sort = cf.dimension(d => idx[d.__index]);
       }
-      const sortSpec = [];
-      for (let i = 0; i < newState.length; i += 1) {
-        sortSpec.push(`${newState[i].dir === 'asc' ? '' : '!'}${newState[i].name}`);
-      }
-      sortDat.sort(multiSort(sortSpec));
-      const idx = {};
-      for (let i = 0; i < sortDat.length; i += 1) {
-        idx[sortDat[i].__index] = i;
-      }
-      dimensions.__sort = cf.dimension(d => idx[d.__index]);
     }
   }
   return next(action);

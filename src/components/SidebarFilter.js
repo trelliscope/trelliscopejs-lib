@@ -17,7 +17,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   filtDist, colSplit, handleViewChange, handleFilterChange,
   handleFilterSortChange }) => {
   let content = <div />;
-  if (filter && filterView.active) {
+  if (filter && filterView.active && Object.keys(filtDist).length > 0) {
     let col1filters = [];
     let col2filters = [];
     if (colSplit === null) {

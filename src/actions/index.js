@@ -78,7 +78,7 @@ const receiveCogData = (iface, json) => ({
   receivedAt: Date.now()
 });
 
-const setPanelRenderer = (fn) => ({
+export const setPanelRenderer = (fn) => ({
   type: SET_PANEL_RENDERER, fn
 });
 
