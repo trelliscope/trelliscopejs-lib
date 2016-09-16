@@ -17,6 +17,7 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     // this.singleDisplay = false;
+    // this.singleDisplay = true;
     this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
     this.state = {
       singleLoaded: false
