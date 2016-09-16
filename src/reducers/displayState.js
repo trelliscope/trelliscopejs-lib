@@ -38,6 +38,8 @@ export const sort = (state = [], action) => {
         const newState = Object.assign([], [], state);
         newState.splice(action.sort, 1);
         return newState;
+      } else if (action.sort === undefined) {
+        return [];
       }
       return Object.assign([], [], action.sort);
     }
@@ -53,6 +55,10 @@ const filterState = (state = {}, action) => {
       // but if it's a string, the filter with that name will be removed
       if (typeof action.filter === 'string' || action.filter instanceof String) {
         return omit(state, action.filter);
+      } else if (action.filter === undefined) {
+        return {};
+      } else if (Object.keys(action.filter).length === 0 && action.filter.constructor === Object) {
+        return {};
       }
       return Object.assign({}, state, action.filter);
     }
