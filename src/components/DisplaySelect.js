@@ -7,7 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplay, setPanelRenderer,
+import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { uiConstsSelector } from '../selectors/ui';
 import { displayGroupsSelector } from '../selectors/display';
@@ -210,11 +210,14 @@ const mapStateToProps = (state) => (
 const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group, desc, cfg) => {
     // need to clear out state for new display...
+    // first close sidebars for safety
+    // (there is an issue when the filter sidebar stays open when changing - revisit this)
+    dispatch(setActiveSidebar(''));
     dispatch(setPanelRenderer(null));
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }));
-    dispatch(setFilter({}));
     dispatch(setFilterView({}));
+    dispatch(setFilter({}));
     dispatch(setSort([]));
 
     dispatch(setSelectedDisplay(name, group, desc));

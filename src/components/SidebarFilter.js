@@ -17,7 +17,8 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   filtDist, colSplit, handleViewChange, handleFilterChange,
   handleFilterSortChange }) => {
   let content = <div />;
-  if (filter && filterView.active && Object.keys(filtDist).length > 0) {
+  const displId = displayInfo.info.name;
+  if (filter && filterView.active) {
     let col1filters = [];
     let col2filters = [];
     if (colSplit === null) {
@@ -30,107 +31,110 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
 
     const colContent = colFilters.map(curFilters => (
       curFilters.map((d, i) => {
-        let filterState = filter[d];
-        let footerExtra = '';
-        const filterActive = filterState && filterState.value !== undefined;
+        if (filter[d] && filtDist[d]) {
+          let filterState = filter[d];
+          let footerExtra = '';
+          const filterActive = filterState && filterState.value !== undefined;
 
-        let itemContent = <div key={i}>{d}</div>;
-        if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
-          || cogInfo[d].type === 'date') {
-          if (!filterState) {
-            filterState = {
-              name: d,
-              orderValue: 'ct,desc',
-              type: 'select',
-              varType: 'factor'
-            };
+          let itemContent = <div key={`${i}_${displId}`}>{d}</div>;
+          if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
+            || cogInfo[d].type === 'date') {
+            if (!filterState) {
+              filterState = {
+                name: d,
+                orderValue: 'ct,desc',
+                type: 'select',
+                varType: 'factor'
+              };
+            }
+
+            itemContent = (
+              <FilterCat
+                filterState={filterState}
+                style={style.catFilter}
+                dist={displayInfo.info.cogDistns[d]}
+                condDist={filtDist[d]}
+                levels={displayInfo.info.cogInfo[d].levels}
+                handleChange={handleFilterChange}
+                handleSortChange={handleFilterSortChange}
+              />
+            );
+            footerExtra = `${filtDist[d].totSelected} of ${filtDist[d].dist.length} selected`;
+          } else if (cogInfo[d].type === 'numeric') {
+            if (!filterState) {
+              filterState = {
+                name: d,
+                orderValue: 'ct,desc',
+                type: 'range',
+                varType: 'numeric'
+              };
+            }
+
+            itemContent = (
+              <FilterNum
+                name={d}
+                filterState={filterState}
+                style={style.numFilter}
+                dist={displayInfo.info.cogDistns[d]}
+                condDist={filtDist[d]}
+                handleChange={handleFilterChange}
+              />
+            );
           }
-
-          itemContent = (
-            <FilterCat
-              filterState={filterState}
-              style={style.catFilter}
-              dist={displayInfo.info.cogDistns[d]}
-              condDist={filtDist[d]}
-              levels={displayInfo.info.cogInfo[d].levels}
-              handleChange={handleFilterChange}
-              handleSortChange={handleFilterSortChange}
-            />
-          );
-          footerExtra = `${filtDist[d].totSelected} of ${filtDist[d].dist.length} selected`;
-        } else if (cogInfo[d].type === 'numeric') {
-          if (!filterState) {
-            filterState = {
-              name: d,
-              orderValue: 'ct,desc',
-              type: 'range',
-              varType: 'numeric'
-            };
-          }
-
-          itemContent = (
-            <FilterNum
-              name={d}
-              filterState={filterState}
-              style={style.numFilter}
-              dist={displayInfo.info.cogDistns[d]}
-              condDist={filtDist[d]}
-              handleChange={handleFilterChange}
-            />
+          return (
+            <div key={`${i}_${displId}`} style={style.container}>
+              <div style={style.header}>
+                <div
+                  style={[
+                    style.headerName,
+                    filterActive && style.headerNameActive
+                  ]}
+                >
+                  {d}
+                </div>
+                <div style={style.headerExtra}>{footerExtra}</div>
+                <div
+                  key={`${i}_${displId}-close-icon`}
+                  style={[style.headerIcon, style.headerClose]}
+                  onMouseDown={() => handleViewChange(d, 'remove')}
+                >
+                  <i className="icon-times-circle" />
+                </div>
+                <div
+                  key={`${i}_${displId}-reset-icon`}
+                  style={[
+                    style.headerIcon,
+                    style.headerReset,
+                    !filterActive && style.headerIconHide]}
+                  onMouseDown={() => handleFilterChange(filterState.name)}
+                >
+                  <i className="icon-undo" />
+                </div>
+              </div>
+              {itemContent}
+            </div>
           );
         }
-        return (
-          <div key={i} style={style.container}>
-            <div style={style.header}>
-              <div
-                style={[
-                  style.headerName,
-                  filterActive && style.headerNameActive
-                ]}
-              >
-                {d}
-              </div>
-              <div style={style.headerExtra}>{footerExtra}</div>
-              <div
-                key={`${d}-close-icon`}
-                style={[style.headerIcon, style.headerClose]}
-                onMouseDown={() => handleViewChange(d, 'remove')}
-              >
-                <i className="icon-times-circle" />
-              </div>
-              <div
-                key={`${d}-reset-icon`}
-                style={[
-                  style.headerIcon,
-                  style.headerReset,
-                  !filterActive && style.headerIconHide]}
-                onMouseDown={() => handleFilterChange(filterState.name)}
-              >
-                <i className="icon-undo" />
-              </div>
-            </div>
-            {itemContent}
-          </div>
-        );
+        return '';
       })
     ));
 
     const extraIdx = colSplit === null ? 0 : 1;
     colContent[extraIdx].push(
-      <div style={style.notUsedHeader}>
+      <div key="notUsedHeader" style={style.notUsedHeader}>
         {filterView.active.length === 0 ? 'Select a variable to filter on:' :
           filterView.inactive.length === 0 ? '' : 'More variables:'}
       </div>
     );
     colContent[extraIdx].push(
-      <div style={style.notUsedContainer}>
+      <div key="notUsed" style={style.notUsedContainer}>
         {filterView.inactive.map((d, i) => (
           <button
             style={[
               style.variable,
               filter[d] && filter[d].value !== undefined ? style.variableActive : {}
             ]}
-            key={i}
+            key={`${i}_${displId}`}
             onMouseDown={() => handleViewChange(d, 'add')}
           >
             {d}
