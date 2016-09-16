@@ -110,7 +110,7 @@ export const fetchDisplay = (name, group, cfg) =>
       dispatch(receiveCogData(iface));
       // TODO: perhaps do a quick load of initial panels while cog data is loading...
       // (to do this, have displayObj store initial panel keys and cogs)
-debugger;
+
       if (json.panelInterface.type === 'image') {
         dispatch(setPanelRenderer((x, style) => (
           <img
