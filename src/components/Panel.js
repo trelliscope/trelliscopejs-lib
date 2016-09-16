@@ -2,11 +2,16 @@ import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
 import { json as getJSON } from 'd3-request';
+import { findWidget } from '../loadAssets';
 
 class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false, panelContent: null, panelData: null };
+    this.state = {
+      loaded: false,
+      panelContent: null,
+      panelData: null
+    };
     this.panelContent = null;
   }
   componentDidMount() {
@@ -15,9 +20,13 @@ class Panel extends React.Component {
 
     this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, json => {
       this.setState({
-        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent, false),
+        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent,
+          false, this.props.panelKey),
         panelData: json,
         loaded: true });
+      // do post-rendering (if any)
+      this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent,
+        true, this.props.panelKey);
     });
 
     // fade in on new component
@@ -25,11 +34,36 @@ class Panel extends React.Component {
     elem.style.opacity = 0;
     setTimeout(() => (elem.style.opacity = 1), 10);
   }
-  componentDidUpdate() {
-    if (this.state.loaded) {
-      this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent, true);
+  componentWillReceiveProps(nprops) {
+    // when there is an update, if the size changed, update
+    const dh = nprops.style.panelContent.width !== this.props.style.panelContent.width;
+    if (this.state.loaded && dh) {
+      if (this.props.panelInterface.type === 'image') {
+        this.setState({
+          panelContent: this.props.panelRenderer.fn(this.state.panelData,
+            nprops.style.panelContent, false, this.props.panelKey)
+        });
+      } else if (this.props.panelInterface.type === 'htmlwidget') {
+        const widget = findWidget(this.props.panelInterface.deps.name);
+        if (widget) {
+          const el = document.getElementById(`widget_${this.props.panelKey}`);
+          // this.state.panelData.x.elementid
+          if (el) {
+            el.style.width = `${this.props.style.panelContent.width}px`;
+            el.style.height = `${this.props.style.panelContent.height}px`;
+            widget.resize(el, nprops.style.panelContent.width,
+              nprops.style.panelContent.height);
+          }
+        }
+      }
     }
   }
+  // componentDidUpdate() {
+  //   if (this.state.loaded) {
+  //     this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent,
+  //       true, this.props.panelKey);
+  //   }
+  // }
   componentWillUnmount() {
     this.xhr.abort();
   }
@@ -103,7 +137,8 @@ Panel.propTypes = {
   cfg: React.PropTypes.object,
   panelKey: React.PropTypes.string,
   dimStyle: React.PropTypes.object,
-  panelRenderer: React.PropTypes.object
+  panelRenderer: React.PropTypes.object,
+  panelInterface: React.PropTypes.object
 };
 
 export default Radium(Panel);

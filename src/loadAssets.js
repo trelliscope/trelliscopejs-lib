@@ -1,4 +1,15 @@
-const loadAssetsSequential = (widgetAssets, callback) => {
+export const findWidget = (name) => {
+  const widgets = window.HTMLWidgets.widgets;
+  // console.log(widgets);
+  for (let i = 0; i < widgets.length; i += 1) {
+    if (widgets[i].name === name) {
+      return (widgets[i]);
+    }
+  }
+  return undefined;
+};
+
+export const loadAssetsSequential = (widgetAssets, callback) => {
   const assets = Object.assign([], widgetAssets.assets);
   const loadNextAsset = () => {
     let done = false;
@@ -24,13 +35,9 @@ const loadAssetsSequential = (widgetAssets, callback) => {
         if (assets.length !== 0) {
           loadNextAsset();
         } else {
-          const widgets = window.HTMLWidgets.widgets;
-          // console.log(widgets);
-          for (let i = 0; i < widgets.length; i += 1) {
-            if (widgets[i].name === widgetAssets.name) {
-              callback(widgets[i]);
-              break;
-            }
+          const widget = findWidget(widgetAssets.name);
+          if (widget) {
+            callback(widget);
           }
         }
       }
@@ -46,5 +53,3 @@ const loadAssetsSequential = (widgetAssets, callback) => {
   };
   loadNextAsset();
 };
-
-export default loadAssetsSequential;

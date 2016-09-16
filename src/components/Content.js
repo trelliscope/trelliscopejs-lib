@@ -7,9 +7,11 @@ import { uiConstsSelector, contentWidthSelector,
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector, panelRendererSelector } from '../selectors';
+  aspectSelector, labelsSelector, panelRendererSelector,
+  displayInfoSelector } from '../selectors';
 
-const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims, panelRenderer }) => {
+const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
+  panelRenderer, panelInterface }) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {
@@ -66,6 +68,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims, panelRender
             style={style.panel}
             iface={ci}
             panelRenderer={panelRenderer}
+            panelInterface={panelInterface}
             dimStyle={{
               top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
                 dims.hOffset + (el.rowIndex * 2),
@@ -90,7 +93,8 @@ Content.propTypes = {
   layout: React.PropTypes.object,
   labels: React.PropTypes.array,
   dims: React.PropTypes.object,
-  panelRenderer: React.PropTypes.object
+  panelRenderer: React.PropTypes.object,
+  panelInterface: React.PropTypes.object
 };
 
 // ------ redux container ------
@@ -99,8 +103,8 @@ const styleSelector = createSelector(
   contentWidthSelector, contentHeightSelector, uiConstsSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
-  configSelector, panelRendererSelector,
-  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer) => {
+  configSelector, panelRendererSelector, displayInfoSelector,
+  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -231,7 +235,8 @@ const styleSelector = createSelector(
         hOffset,
         pPad
       },
-      panelRenderer
+      panelRenderer,
+      panelInterface: di.info.panelInterface
     });
   }
 );

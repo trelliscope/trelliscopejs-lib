@@ -1,6 +1,6 @@
 import React from 'react';
 import { json as getJSON } from 'd3-request';
-import loadAssetsSequential from '../loadAssets';
+import { loadAssetsSequential } from '../loadAssets';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
@@ -121,18 +121,24 @@ export const fetchDisplay = (name, group, cfg) =>
         )));
       } else if (json.panelInterface.type === 'htmlwidget') {
         const callback = (binding) => {
-          const renderFn = (x, style, post) => {
-            const el = document.getElementById(x.x.elementid);
+          const renderFn = (x, style, post, key) => {
+            const el = document.getElementById(`widget_outer_${key}`);
             if (post && el) {
-              el.innerHTML = '';
+              // need to create a child div that is not bound to react
+              const dv = document.createElement('div');
+              dv.style.width = `${style.width}px`;
+              dv.style.height = `${style.height}px`;
+              dv.setAttribute('id', `widget_${key}`);
+              el.appendChild(dv);
+
               let initResult;
               if (binding.initialize) {
                 initResult = binding.initialize(el, style.width, style.height);
-                binding.renderValue(el, x.x, initResult);
-                // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
               }
+              binding.renderValue(dv, x.x, initResult);
+              // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
             } else {
-              return <div id={x.x.elementid} />;
+              return <div id={`widget_outer_${key}`} />;
             }
             return null;
           };
