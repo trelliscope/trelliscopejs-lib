@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Panel from './Panel';
-import { uiConstsSelector, contentWidthSelector,
+import { uiConstsSelector, contentWidthSelector, sidebarActiveSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector } from '../selectors/cogData';
@@ -11,7 +11,7 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
   displayInfoSelector } from '../selectors';
 
 const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
-  panelRenderer, panelInterface }) => {
+  panelRenderer, panelInterface, sidebar }) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {
@@ -57,11 +57,18 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
     }
     panelMatrix.sort((a, b) => ((a.key > b.key) ? 1 : ((b.key > a.key) ? -1 : 0)));
 
+    // HACK: htmlwidget panels won't resize properly when layout or sidebar is toggled
+    // so we need to add this to key to force it to re-draw
+    let keyExtra = '';
+    if (panelInterface.type === 'htmlwidget') {
+      keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}`;
+    }
+
     ret = (
       <div style={style.bounding}>
         {panelMatrix.map((el) => (
           <Panel
-            key={el.key}
+            key={`${el.key}${keyExtra}`}
             cfg={cfg}
             panelKey={el.key}
             labels={el.labels}
@@ -94,7 +101,8 @@ Content.propTypes = {
   labels: React.PropTypes.array,
   dims: React.PropTypes.object,
   panelRenderer: React.PropTypes.object,
-  panelInterface: React.PropTypes.object
+  panelInterface: React.PropTypes.object,
+  sidebar: React.PropTypes.string
 };
 
 // ------ redux container ------
@@ -104,7 +112,8 @@ const styleSelector = createSelector(
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
   configSelector, panelRendererSelector, displayInfoSelector,
-  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di) => {
+  sidebarActiveSelector,
+  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar) => {
     const pPad = ui.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -168,7 +177,7 @@ const styleSelector = createSelector(
             width: newW,
             height: newH,
             boxSizing: 'border-box',
-            background: '#f6f6f6',
+            // background: '#f6f6f6',
             textAlign: 'center',
             lineHeight: `${newH}px`,
             color: '#bbb'
@@ -236,7 +245,8 @@ const styleSelector = createSelector(
         pPad
       },
       panelRenderer,
-      panelInterface: di.info.panelInterface
+      panelInterface: di.info.panelInterface,
+      sidebar
     });
   }
 );

@@ -133,7 +133,7 @@ export const fetchDisplay = (name, group, cfg) =>
 
               let initResult;
               if (binding.initialize) {
-                initResult = binding.initialize(el, style.width, style.height);
+                initResult = binding.initialize(dv, style.width, style.height);
               }
               binding.renderValue(dv, x.x, initResult);
               // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);

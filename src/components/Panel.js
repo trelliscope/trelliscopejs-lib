@@ -49,8 +49,8 @@ class Panel extends React.Component {
           const el = document.getElementById(`widget_${this.props.panelKey}`);
           // this.state.panelData.x.elementid
           if (el) {
-            el.style.width = `${this.props.style.panelContent.width}px`;
-            el.style.height = `${this.props.style.panelContent.height}px`;
+            el.style.width = `${nprops.style.panelContent.width}px`;
+            el.style.height = `${nprops.style.panelContent.height}px`;
             widget.resize(el, nprops.style.panelContent.width,
               nprops.style.panelContent.height);
           }
@@ -59,12 +59,22 @@ class Panel extends React.Component {
     }
   }
   // componentDidUpdate() {
-  //   if (this.state.loaded) {
-  //     this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent,
-  //       true, this.props.panelKey);
+  //   if (this.state.loaded && this.props.panelInterface.type === 'htmlwidget') {
+  //     const widget = findWidget(this.props.panelInterface.deps.name);
+  //     if (widget) {
+  //       const el = document.getElementById(`widget_${this.props.panelKey}`);
+  //       // this.state.panelData.x.elementid
+  //       if (el) {
+  //         el.style.width = `${this.props.style.panelContent.width}px`;
+  //         el.style.height = `${this.props.style.panelContent.height}px`;
+  //         widget.resize(el, this.props.style.panelContent.width,
+  //           this.props.style.panelContent.height);
+  //       }
+  //     }
   //   }
   // }
   componentWillUnmount() {
+    // stop requesting panel assets
     this.xhr.abort();
   }
   render() {
