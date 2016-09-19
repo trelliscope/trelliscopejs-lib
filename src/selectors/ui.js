@@ -87,7 +87,7 @@ export const uiConstsSelector = () => (
           barColor: 'rgb(255, 210, 127)'
         },
         variables: {
-          height: 100
+          height: 50
         }
       }
     },
@@ -125,29 +125,50 @@ export const filterColSplitSelector = createSelector(
       return null;
     }
     const heights = keys.map(d => {
+      // 53 is the extra height of header/footer
       if (di.info.cogInfo[d].type === 'factor') {
-        return ui.sidebar.filter.num.height + 53;
+        return ui.sidebar.filter.cat.height + 54;
       } else if (di.info.cogInfo[d].type === 'numeric') {
-        return ui.sidebar.filter.cat.height + 53;
+        return ui.sidebar.filter.num.height + 54;
       }
       return 0;
     });
+
     let cutoff = null;
-    let csum = 0;
-    let i = 0;
-    while (csum < sh && i < heights.length) {
-      csum += heights[i];
-      i += 1;
-    }
-    if (i < heights.length || csum > sh) {
-      cutoff = i - 1;
-    }
-    // case where it's one column but not enough space for extra variables
-    if (cutoff === null && csum + ui.sidebar.filter.variables.height > sh) {
-      cutoff = i;
+    let csum1 = 0;
+    let csum2 = 0;
+
+    for (let i = 0; i < heights.length; i += 1) {
+      if (cutoff === null) { // we're in the first column
+        if (csum1 + heights[i] > sh) {
+          cutoff = i;
+        } else {
+          csum1 += heights[i];
+        }
+      } else {
+        csum2 += heights[i];
+      }
     }
 
-    return cutoff;
+    // let cutoff = null;
+    // let csum = 0;
+    // let i = 0;
+    // while (csum < sh && i < heights.length) {
+    //   csum += heights[i];
+    //   i += 1;
+    // }
+    // if (i < heights.length || csum > sh) {
+    //   cutoff = i - 1;
+    // }
+    // case where it's one column but not enough space for extra variables
+    if (cutoff === null && csum1 + 30 + ui.sidebar.filter.variables.height > sh) {
+      cutoff = heights.length;
+    }
+
+    return {
+      cutoff,
+      heights: [csum1, csum2]
+    };
   }
 );
 
@@ -155,7 +176,7 @@ export const contentWidthSelector = createSelector(
   windowWidthSelector, sidebarActiveSelector, uiConstsSelector,
   filterColSplitSelector,
   (ww, active, ui, colSplit) => {
-    const sw = ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit !== null));
+    const sw = ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit.cutoff !== null));
     return ww - ui.sideButtons.width -
       (active === '' ? 0 : (sw + 1));
   }

@@ -70,7 +70,7 @@ const stateSelector = createSelector(
         position: 'absolute',
         left: ui.sideButtons.width,
         top: ui.header.height,
-        width: ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit !== null)),
+        width: ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit.cutoff !== null)),
         boxSizing: 'border-box',
         height: ch,
         borderRight: '1px solid',

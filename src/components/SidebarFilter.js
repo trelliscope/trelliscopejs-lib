@@ -21,11 +21,11 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   if (filter && filterView.active) {
     let col1filters = [];
     let col2filters = [];
-    if (colSplit === null) {
+    if (colSplit.cutoff === null) {
       col1filters = filterView.active;
     } else {
-      col1filters = filterView.active.slice(0, colSplit);
-      col2filters = filterView.active.slice(colSplit, filterView.active.length);
+      col1filters = filterView.active.slice(0, colSplit.cutoff);
+      col2filters = filterView.active.slice(colSplit.cutoff, filterView.active.length);
     }
     const colFilters = [col1filters, col2filters];
 
@@ -36,7 +36,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
           let footerExtra = '';
           const filterActive = filterState && filterState.value !== undefined;
 
-          let itemContent = <div key={`${i}_${displId}`}>{d}</div>;
+          let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
           if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
             || cogInfo[d].type === 'date') {
             if (!filterState) {
@@ -82,7 +82,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
             );
           }
           return (
-            <div key={`${i}_${displId}`} style={style.container}>
+            <div key={`${d}_${displId}`} style={style.container}>
               <div style={style.header}>
                 <div
                   style={[
@@ -94,14 +94,14 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 </div>
                 <div style={style.headerExtra}>{footerExtra}</div>
                 <div
-                  key={`${i}_${displId}-close-icon`}
+                  key={`${d}_${displId}-close-icon`}
                   style={[style.headerIcon, style.headerClose]}
                   onMouseDown={() => handleViewChange(d, 'remove')}
                 >
                   <i className="icon-times-circle" />
                 </div>
                 <div
-                  key={`${i}_${displId}-reset-icon`}
+                  key={`${d}_${displId}-reset-icon`}
                   style={[
                     style.headerIcon,
                     style.headerReset,
@@ -119,7 +119,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
       })
     ));
 
-    const extraIdx = colSplit === null ? 0 : 1;
+    const extraIdx = colSplit.cutoff === null ? 0 : 1;
     colContent[extraIdx].push(
       <div key="notUsedHeader" style={style.notUsedHeader}>
         {filterView.active.length === 0 ? 'Select a variable to filter on:' :
@@ -134,7 +134,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
               style.variable,
               filter[d] && filter[d].value !== undefined ? style.variableActive : {}
             ]}
-            key={`${i}_${displId}`}
+            key={`${d}_${displId}`}
             onMouseDown={() => handleViewChange(d, 'add')}
           >
             {d}
@@ -164,7 +164,7 @@ SidebarFilter.propTypes = {
   cogInfo: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   filtDist: React.PropTypes.object,
-  colSplit: React.PropTypes.number,
+  colSplit: React.PropTypes.object,
   handleViewChange: React.PropTypes.func,
   handleFilterChange: React.PropTypes.func,
   handleFilterSortChange: React.PropTypes.func
@@ -191,7 +191,7 @@ const stateSelector = createSelector(
         left: ui.sidebar.width,
         height: sh,
         borderLeft: `1px solid ${ui.sidebar.borderColor}`,
-        display: colSplit === null ? 'none' : 'inline'
+        display: colSplit.cutoff === null ? 'none' : 'inline'
       },
       notUsedHeader: {
         height: 30,
@@ -203,7 +203,7 @@ const stateSelector = createSelector(
       },
       notUsedContainer: {
         width: ui.sidebar.width,
-        // height: sh - 30, // need to take number of filters and total height into account
+        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1],
         overflowY: 'auto',
         boxSizing: 'border-box',
         paddingLeft: 10,
