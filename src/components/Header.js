@@ -18,13 +18,14 @@ class Header extends React.Component {
     super(props);
     // this.singleDisplay = false;
     // this.singleDisplay = true;
-    this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
+    // this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
     this.state = {
       singleLoaded: false
     };
   }
   componentWillReceiveProps(nprops) {
     // handle loading a single display if necessary
+    this.singleDisplay = nprops.displayList.isLoaded && nprops.displayList.list.length <= 1;
     if (!this.state.singleLoaded &&
       nprops.displayList.isLoaded &&
       this.singleDisplay) {
