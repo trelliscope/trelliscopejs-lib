@@ -61,7 +61,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
     // so we need to add this to key to force it to re-draw
     let keyExtra = '';
     if (panelInterface.type === 'htmlwidget') {
-      keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}`;
+      keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
     }
 
     ret = (
