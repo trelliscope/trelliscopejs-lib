@@ -136,14 +136,27 @@ const crossfilterMiddleware = store => next => action => {
       if (newState.length === 0) {
         dimensions.__sort = cf.dimension(d => d.__index);
       } else if (newState.length === 1) {
-        dimensions.__sort = cf.dimension(d => d[newState[0].name]);
+        // if (action.filter[names[i]].varType === 'numeric') {
+        const ci = store.getState()._displayInfo.info.cogInfo[newState[0].name];
+        if (ci.type === 'factor') {
+          dimensions.__sort = cf.dimension(d => getCatVal(d, newState[0].name));
+        } else if (ci.type === 'numeric') {
+          dimensions.__sort = cf.dimension(d => getNumVal(d, newState[0].name));
+        }
       } else {
         const dat = cf.all();
         const sortDat = [];
         for (let i = 0; i < dat.length; i += 1) {
           const elem = { __index: dat[i].__index };
           for (let j = 0; j < newState.length; j += 1) {
-            elem[newState[j].name] = dat[i][newState[j].name];
+            const ci = store.getState()._displayInfo.info.cogInfo[newState[j].name];
+            if (ci.type === 'factor') {
+              // TODO: make custom getCatVal that returns first and last ascii value
+              // otherwise NA panels can show up in between other panels
+              elem[newState[j].name] = getCatVal(dat[i], newState[j].name);
+            } else if (ci.type === 'numeric') {
+              elem[newState[j].name] = getNumVal(dat[i], newState[j].name);
+            }
           }
           sortDat.push(elem);
         }
