@@ -5,8 +5,7 @@
 // SET_SORT or SET_FILTER operations are performed
 
 const getNumVal = (d, name) => (isNaN(d[name]) ? null : d[name]);
-const getCatVal = (d, name) => d[name]; // TODO: what about NaN?
-
+const getCatVal = (d, name) => (d[name] ? d[name] : 'NA');
 
 const sortFn = (property) => {
   let sortOrder = 1;
