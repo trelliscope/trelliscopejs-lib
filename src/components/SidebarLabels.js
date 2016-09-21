@@ -11,7 +11,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
-    const tableData = ciKeys.map((d) => ({
+    const tableData = ciKeys.map(d => ({
       name: cogInfo[d].name,
       desc: cogInfo[d].desc,
       selected: labels.indexOf(cogInfo[d].name) > -1
@@ -35,7 +35,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
           deselectOnClickaway={false}
           style={{ cursor: 'pointer' }}
         >
-          {tableData.map((row) => (
+          {tableData.map(row => (
             <TableRow key={row.name} selected={row.selected}>
               <TableRowColumn>{row.name}<br />
                 <span style={{ color: '#888', fontStyle: 'italic' }}>
@@ -73,11 +73,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleChange: (labels) => {
     dispatch(setLabels(labels));
   }

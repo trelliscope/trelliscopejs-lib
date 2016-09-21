@@ -99,12 +99,12 @@ class DisplayInfo extends React.Component {
             <h3>Data</h3>
             <p>The data for one subset has the following structure:</p>
             <pre><code>
-            {this.props.displayInfo.info.example}
+              {this.props.displayInfo.info.example}
             </code></pre>
             <h3>Panel Function</h3>
             The R code that generates each panel:
             <pre><code>
-            {this.props.displayInfo.info.panelFn}
+              {this.props.displayInfo.info.panelFn}
             </code></pre>
           </div>
         </Dialog>
@@ -185,7 +185,7 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 

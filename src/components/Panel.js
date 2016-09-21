@@ -18,7 +18,7 @@ class Panel extends React.Component {
     let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
 
-    this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, json => {
+    this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, (json) => {
       this.setState({
         panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent,
           false, this.props.panelKey),
@@ -81,57 +81,57 @@ class Panel extends React.Component {
     return (
       <div
         style={[this.props.style.bounding, this.props.dimStyle]}
-        ref={d => { this._panel = d; }}
+        ref={(d) => { this._panel = d; }}
       >
         <div style={this.props.style.panel}>
-        {this.state.loaded ?
-          this.state.panelContent :
-          <Delay wait={500}>
-            <div>'loading...'</div>
-          </Delay>}
+          {this.state.loaded ?
+            this.state.panelContent :
+            <Delay wait={500}>
+              <div>'loading...'</div>
+            </Delay>}
         </div>
         <div>
           <table style={this.props.style.labelTable}>
             <tbody>
-            {this.props.labels.map((d, i) => {
-              let labelDiv;
-              if (d.type === 'href') {
-                labelDiv = (
-                  <div
-                    // TODO? do we need to use dompurify here to be safe?
-                    dangerouslySetInnerHTML={{ __html: d.value }} // eslint-disable-line react/no-danger, max-len
-                    style={this.props.style.labelOverflow}
-                  />
-                );
-              } else {
-                labelDiv = (
-                  <div
-                    style={this.props.style.labelOverflow}
-                    title={d.value}
-                  >
-                    {d.value}
-                  </div>
-                );
-              }
-              return (
-                <tr key={`label${i}`} style={this.props.style.labelRow}>
-                  <td
-                    style={[this.props.style.labelCell,
-                    this.props.style.labelNameCell]}
-                  >
-                    <div style={this.props.style.labelOverflow}>
-                      {d.name}
+              {this.props.labels.map((d, i) => {
+                let labelDiv;
+                if (d.type === 'href') {
+                  labelDiv = (
+                    <div
+                      // TODO? do we need to use dompurify here to be safe?
+                      dangerouslySetInnerHTML={{ __html: d.value }} // eslint-disable-line react/no-danger, max-len
+                      style={this.props.style.labelOverflow}
+                    />
+                  );
+                } else {
+                  labelDiv = (
+                    <div
+                      style={this.props.style.labelOverflow}
+                      title={d.value}
+                    >
+                      {d.value}
                     </div>
-                  </td>
-                  <td
-                    style={[this.props.style.labelCell,
-                    this.props.style.labelValueCell]}
-                  >
-                    {labelDiv}
-                  </td>
-                </tr>
-              );
-            })}
+                  );
+                }
+                return (
+                  <tr key={`label${i}`} style={this.props.style.labelRow}>
+                    <td
+                      style={[this.props.style.labelCell,
+                      this.props.style.labelNameCell]}
+                    >
+                      <div style={this.props.style.labelOverflow}>
+                        {d.name}
+                      </div>
+                    </td>
+                    <td
+                      style={[this.props.style.labelCell,
+                      this.props.style.labelValueCell]}
+                    >
+                      {labelDiv}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

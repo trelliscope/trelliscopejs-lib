@@ -86,7 +86,7 @@ class DisplaySelect extends React.Component {
       <div style={this.props.style.attn.outer}>
         <div style={this.props.style.attn.inner}>
           <div
-            ref={d => { this._atnnCircle = d; }}
+            ref={(d) => { this._atnnCircle = d; }}
             style={this.props.style.attn.empty}
           />
         </div>
@@ -203,11 +203,11 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleClick: (name, group, desc, cfg) => {
     // need to clear out state for new display...
     // first close sidebars for safety

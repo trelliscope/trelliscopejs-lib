@@ -33,7 +33,7 @@ const multiSort = (args) => {
   };
 };
 
-const crossfilterMiddleware = store => next => action => {
+const crossfilterMiddleware = store => next => (action) => {
   if (action.type === 'SET_FILTER' && action.filter) {
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;

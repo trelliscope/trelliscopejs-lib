@@ -74,7 +74,7 @@ class FilterNumPlot extends React.Component {
   render() {
     return (
       <svg
-        ref={d => { this._d3node = select(d); }}
+        ref={(d) => { this._d3node = select(d); }}
         width={this.props.style.width}
         height={this.props.style.height}
       />

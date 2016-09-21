@@ -124,7 +124,7 @@ export const filterColSplitSelector = createSelector(
     if (keys === undefined) {
       return null;
     }
-    const heights = keys.map(d => {
+    const heights = keys.map((d) => {
       // 53 is the extra height of header/footer
       if (di.info.cogInfo[d].type === 'factor') {
         return ui.sidebar.filter.cat.height + 54;

@@ -55,7 +55,7 @@ FooterChip.propTypes = {
 
 const styleSelector = createSelector(
   uiConstsSelector,
-  (ui) => ({
+  ui => ({
     style: {
       wrapper: {
         border: 10,
@@ -116,11 +116,11 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleStateClose: (x) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));

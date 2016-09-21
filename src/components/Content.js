@@ -66,7 +66,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
 
     ret = (
       <div style={style.bounding}>
-        {panelMatrix.map((el) => (
+        {panelMatrix.map(el => (
           <Panel
             key={`${el.key}${keyExtra}`}
             cfg={cfg}
@@ -251,7 +251,7 @@ const styleSelector = createSelector(
   }
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 

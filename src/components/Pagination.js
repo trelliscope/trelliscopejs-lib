@@ -202,11 +202,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleChange: (n) => {
     dispatch(setLayout({ pageNum: n }));
   }

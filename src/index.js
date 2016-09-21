@@ -44,7 +44,7 @@ const store = createStore(
   applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
 );
 
-const windowResize = (dims) => (
+const windowResize = dims => (
   { type: 'WINDOW_RESIZE', dims }
 );
 

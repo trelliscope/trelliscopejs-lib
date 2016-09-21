@@ -128,7 +128,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
     );
     colContent[extraIdx].push(
       <div key="notUsed" style={style.notUsedContainer}>
-        {filterView.inactive.map((d, i) => (
+        {filterView.inactive.map(d => (
           <button
             style={[
               style.variable,
@@ -392,11 +392,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleViewChange: (x, which) => {
     dispatch(setFilterView(x, which));
   },

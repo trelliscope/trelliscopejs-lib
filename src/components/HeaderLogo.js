@@ -69,9 +69,7 @@ class HeaderLogo extends React.Component {
           <Tabs>
             <Tab label="How to Use" >
               <div style={this.props.style.dialog.div}>
-                <p>
-                  TODO
-                </p>
+                coming soon...
               </div>
             </Tab>
             <Tab label="Keyboard Shortcuts" >
@@ -193,7 +191,7 @@ HeaderLogo.propTypes = {
 
 const styleSelector = createSelector(
   uiConstsSelector,
-  (ui) => ({
+  ui => ({
     style: {
       logo: {
         position: 'fixed',
@@ -243,7 +241,7 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 

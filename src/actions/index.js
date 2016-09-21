@@ -11,33 +11,33 @@ export const requestConfig = () => ({
   type: REQUEST_CONFIG
 });
 
-export const receiveConfig = (json) => ({
+export const receiveConfig = json => ({
   type: RECEIVE_CONFIG,
   config: json,
   receivedAt: Date.now()
 });
 
-export const setActiveSidebar = (active) => ({
+export const setActiveSidebar = active => ({
   type: ACTIVE_SIDEBAR, active
 });
 
-export const setDialogOpen = (isOpen) => ({
+export const setDialogOpen = isOpen => ({
   type: SET_DIALOG_OPEN, isOpen
 });
 
-export const setLayout = (layout) => ({
+export const setLayout = layout => ({
   type: SET_LAYOUT, layout
 });
 
-export const setLabels = (labels) => ({
+export const setLabels = labels => ({
   type: SET_LABELS, labels
 });
 
-export const setSort = (sort) => ({
+export const setSort = sort => ({
   type: SET_SORT, sort
 });
 
-export const setFilter = (filter) => ({
+export const setFilter = filter => ({
   type: SET_FILTER, filter
 });
 
@@ -49,7 +49,7 @@ export const requestDisplayList = () => ({
   type: REQUEST_DISPLAY_LIST
 });
 
-export const receiveDisplayList = (json) => ({
+export const receiveDisplayList = json => ({
   type: RECEIVE_DISPLAY_LIST,
   list: json,
   receivedAt: Date.now()
@@ -78,7 +78,7 @@ const receiveCogData = (iface, json) => ({
   receivedAt: Date.now()
 });
 
-export const setPanelRenderer = (fn) => ({
+export const setPanelRenderer = fn => ({
   type: SET_PANEL_RENDERER, fn
 });
 
@@ -88,9 +88,9 @@ export const fetchDisplayList = () =>
   (dispatch) => {
     dispatch(requestConfig());
 
-    return getJSON('config.json', json => {
+    return getJSON('config.json', (json) => {
       dispatch(receiveConfig(json));
-      getJSON(`${json.display_base}/displays/displayList.json`, json2 => {
+      getJSON(`${json.display_base}/displays/displayList.json`, (json2) => {
         dispatch(receiveDisplayList(json2));
       });
     });
@@ -102,7 +102,7 @@ export const fetchDisplay = (name, group, cfg) =>
 
     // first get displayObj.json so we can find the cog data, etc.
     const dof = `${cfg.display_base}/displays/${group}/${name}/displayObj.json`;
-    return getJSON(dof, json => {
+    return getJSON(dof, (json) => {
       const iface = json.cogInterface;
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, json));
@@ -150,7 +150,7 @@ export const fetchDisplay = (name, group, cfg) =>
 
       // load the cog data
       const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;
-      getJSON(cf, json2 => {
+      getJSON(cf, (json2) => {
         // once cog data is loaded, set the state with this data
         // but first add an index column to the data so we can
         // preserve original order or do multi-column sorts

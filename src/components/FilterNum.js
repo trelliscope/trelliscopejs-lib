@@ -121,7 +121,7 @@ class FilterNum extends React.Component {
         <div style={this.props.style.inputContainer}>
           <div style={this.props.style.rangeInputText}>Range:</div>
           <TextField
-            ref={d => { this._fromInput = d; }}
+            ref={(d) => { this._fromInput = d; }}
             // hintText="from"
             name="fromText"
             style={this.props.style.rangeInput}
@@ -129,8 +129,8 @@ class FilterNum extends React.Component {
             underlineStyle={this.props.style.underlineStyle}
             type="number"
             defaultValue={this.stateValue.from}
-            onChange={(e) => this.handleInput(e.target.value, 'from')}
-            onKeyDown={(e) => this.setValidState(
+            onChange={e => this.handleInput(e.target.value, 'from')}
+            onKeyDown={e => this.setValidState(
               e.target.value,
               this.stateValue.to,
               'from'
@@ -138,7 +138,7 @@ class FilterNum extends React.Component {
           />
           <div style={this.props.style.rangeInputText}>&ndash;</div>
           <TextField
-            ref={d => { this._toInput = d; }}
+            ref={(d) => { this._toInput = d; }}
             // hintText="to"
             name="toText"
             style={this.props.style.rangeInput}
@@ -146,8 +146,8 @@ class FilterNum extends React.Component {
             underlineStyle={this.props.style.underlineStyle}
             type="number"
             defaultValue={this.stateValue.to}
-            onChange={(e) => this.handleInput(e.target.value, 'to')}
-            onKeyDown={(e) => this.setValidState(
+            onChange={e => this.handleInput(e.target.value, 'to')}
+            onKeyDown={e => this.setValidState(
               this.stateValue.from,
               e.target.value,
               'to'

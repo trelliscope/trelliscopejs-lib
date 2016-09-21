@@ -24,7 +24,7 @@ class NumericInput extends React.Component {
       return false;
     });
     this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
-      (event) => event.stopPropagation());
+      event => event.stopPropagation());
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ value: nextProps.value });
@@ -95,7 +95,7 @@ class NumericInput extends React.Component {
     return (
       <span style={this.props.style.span}>
         <input
-          ref={d => { this._NumericInput = d; }}
+          ref={(d) => { this._NumericInput = d; }}
           className="mousetrap"
           type="text"
           size={this.props.size ? this.props.size : 5}
@@ -124,7 +124,7 @@ NumericInput.propTypes = {
 
 const styleSelector = createSelector(
   uiConstsSelector,
-  (ui) => ({
+  ui => ({
     style: {
       span: {
         position: 'relative',
@@ -196,7 +196,7 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   styleSelector(state)
 );
 

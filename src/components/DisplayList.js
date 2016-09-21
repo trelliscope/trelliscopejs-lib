@@ -36,7 +36,7 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
     return <Subheader />;
   };
 
-  const displayList = groupKeys.map((k) => (
+  const displayList = groupKeys.map(k => (
     <div style={styles.root} key={k}>
       <GridList
         cellHeight={200}
@@ -44,7 +44,7 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
         style={styles.gridList}
       >
         {makeSubheader(k, groupKeys.length)}
-        {displayGroups[k].map((i) => (
+        {displayGroups[k].map(i => (
           <GridTile
             key={i}
             style={styles.gridTile}

@@ -80,7 +80,7 @@ class FilterCat extends React.Component {
         iconButtonElement={iconButtonElement}
         desktop
       >
-        {sortOptions.map((d) => (
+        {sortOptions.map(d => (
           <MenuItem primaryText={d.text} value={d.payload} key={d.payload} />
         ))}
       </IconMenu>
@@ -101,12 +101,12 @@ class FilterCat extends React.Component {
         </div>
         <div style={this.props.style.inputContainer}>
           <TextField
-            ref={d => { this._TextField = d; }}
+            ref={(d) => { this._TextField = d; }}
             hintText="regex"
             style={this.props.style.regexInput}
             defaultValue={this.props.filterState.type === 'regex' ?
               this.props.filterState.regex : ''}
-            onChange={(e) => this.handleRegex(e.target.value)}
+            onChange={e => this.handleRegex(e.target.value)}
           />
           {extraOptionsInput}
         </div>

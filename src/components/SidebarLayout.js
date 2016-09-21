@@ -21,7 +21,7 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               arrows
               value={layout.nrow}
               size={5} min={1} step={1}
-              onChange={(nr) =>
+              onChange={nr =>
                 handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
               }
             />
@@ -35,7 +35,7 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
               arrows
               value={layout.ncol}
               size={5} min={1} step={1}
-              onChange={(nc) =>
+              onChange={nc =>
                 handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
               }
             />
@@ -134,11 +134,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleChange: (layout) => {
     dispatch(setLayout(layout));
   }

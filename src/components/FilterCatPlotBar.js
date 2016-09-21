@@ -94,7 +94,7 @@ CatBar.propTypes = {
 
 const stateSelector = createSelector(
   uiConstsSelector,
-  (ui) => ({
+  ui => ({
     style: {
       wrapper: {
         background: 'white'
@@ -148,7 +148,7 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 

@@ -23,40 +23,40 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
         <div style={style.tableWrap}>
           <table style={style.table}>
             <tbody>
-            {sort.map((d, i) => {
-              const ic = d.dir === 'asc' ? 'up' : 'down';
-              return (
-                <tr style={style.tr} key={i}>
-                  <td style={style.sortButton}>
-                    <FloatingActionButton
-                      mini
-                      key={i}
-                      zDepth={1}
-                      onClick={() => {
-                        const sort2 = Object.assign([], sort);
-                        sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
-                        handleChange(sort2);
-                      }}
-                    >
-                      <i className={`icon-chevron-${ic}`} />
-                    </FloatingActionButton>
-                  </td>
-                  <td style={style.labels}>
-                    {d.name}<br />
-                    <span style={{ color: '#888', fontStyle: 'italic' }}>
-                      {cogDesc[d.name]}
-                    </span>
-                  </td>
-                  <td style={style.closeButton}>
-                    <IconButton
-                      iconStyle={{ fontSize: 16, color: '#aaa' }}
-                      iconClassName="icon-times"
-                      onClick={() => handleChange(i)}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
+              {sort.map((d, i) => {
+                const ic = d.dir === 'asc' ? 'up' : 'down';
+                return (
+                  <tr style={style.tr} key={i}>
+                    <td style={style.sortButton}>
+                      <FloatingActionButton
+                        mini
+                        key={i}
+                        zDepth={1}
+                        onClick={() => {
+                          const sort2 = Object.assign([], sort);
+                          sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
+                          handleChange(sort2);
+                        }}
+                      >
+                        <i className={`icon-chevron-${ic}`} />
+                      </FloatingActionButton>
+                    </td>
+                    <td style={style.labels}>
+                      {d.name}<br />
+                      <span style={{ color: '#888', fontStyle: 'italic' }}>
+                        {cogDesc[d.name]}
+                      </span>
+                    </td>
+                    <td style={style.closeButton}>
+                      <IconButton
+                        iconStyle={{ fontSize: 16, color: '#aaa' }}
+                        iconClassName="icon-times"
+                        onClick={() => handleChange(i)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -196,11 +196,11 @@ const stateSelector = createSelector(
   }
 );
 
-const mapStateToProps = (state) => (
+const mapStateToProps = state => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleChange: (layout) => {
     dispatch(setSort(layout));
   }
