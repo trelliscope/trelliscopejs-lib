@@ -179,7 +179,7 @@ const styleSelector = createSelector(
             boxSizing: 'border-box',
             // background: '#f6f6f6',
             textAlign: 'center',
-            lineHeight: `${newH}px`,
+            // lineHeight: `${newH}px`,
             color: '#bbb'
           },
           panelContent: {
