@@ -4,7 +4,7 @@
   "description": "trelliscopejs",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp config.json dist/ && cp favicon.ico dist/",
+    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp config.jsonp dist/ && cp favicon.ico dist/",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "lint": "eslint src"
   },
@@ -49,6 +49,7 @@
     "webpack-dev-server": "^1.16.1"
   },
   "dependencies": {
+    "browser-jsonp": "^1.1.5",
     "crossfilter2": "^1.4.0-alpha.06",
     "d3": "^4.2.5",
     "d3-axis": "^1.0.3",
@@ -57,6 +58,7 @@
     "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
     "dompurify": "^0.8.3",
+    "fetch-jsonp": "^1.0.1",
     "lodash": "^4.16.1",
     "marked": "^0.3.6",
     "material-ui": "^0.15.4",

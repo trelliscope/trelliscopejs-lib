@@ -1,11 +1,16 @@
 import React from 'react';
-import { json as getJSON } from 'd3-request';
+import { json as d3json } from 'd3-request';
+// import fetchJsonp from 'fetch-jsonp';
+import { default as getJSONP } from 'browser-jsonp';
 import { loadAssetsSequential } from '../loadAssets';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,
   SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY, RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER } from '../constants';
+
+const getJSON = obj =>
+  d3json(obj.url, json => obj.callback(json));
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG
@@ -88,11 +93,28 @@ export const fetchDisplayList = () =>
   (dispatch) => {
     dispatch(requestConfig());
 
-    return getJSON('config.json', (json) => {
+    window.__loadDisplayList__ = (json) => {
+      dispatch(receiveDisplayList(json));
+    };
+
+    window.__loadTrscopeConfig__ = (json) => {
       dispatch(receiveConfig(json));
-      getJSON(`${json.display_base}/displays/displayList.json`, (json2) => {
-        dispatch(receiveDisplayList(json2));
-      });
+      if (json.data_type === 'jsonp') {
+        getJSONP({
+          url: `${json.display_base}/displayList.jsonp`,
+          callbackName: '__loadDisplayList__'
+        });
+      } else {
+        getJSON({
+          url: `${json.display_base}/displayList.json`,
+          callback: window.__loadDisplayList__
+        });
+      }
+    };
+
+    getJSONP({
+      url: 'config.jsonp',
+      callbackName: '__loadTrscopeConfig__'
     });
   };
 
@@ -100,9 +122,7 @@ export const fetchDisplay = (name, group, cfg) =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
-    // first get displayObj.json so we can find the cog data, etc.
-    const dof = `${cfg.display_base}/displays/${group}/${name}/displayObj.json`;
-    return getJSON(dof, (json) => {
+    window.__loadDisplayObj__ = (json) => {
       const iface = json.cogInterface;
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, json));
@@ -110,6 +130,33 @@ export const fetchDisplay = (name, group, cfg) =>
       dispatch(receiveCogData(iface));
       // TODO: perhaps do a quick load of initial panels while cog data is loading...
       // (to do this, have displayObj store initial panel keys and cogs)
+
+      window.__loadCogData__ = (json2) => {
+        // once cog data is loaded, set the state with this data
+        // but first add an index column to the data so we can
+        // preserve original order or do multi-column sorts
+        for (let i = 0; i < json2.length; i += 1) {
+          json2[i].__index = i; // eslint-disable-line no-param-reassign
+        }
+        dispatch(receiveCogData(iface, crossfilter(json2)));
+        // now we can safely set several other default states that depend
+        // on either display or cog data or can't be set until this data is loaded
+        dispatch(setLabels(json.state.labels));
+        dispatch(setLayout(json.state.layout));
+        dispatch(setSort(json.state.sort));
+        dispatch(setFilter(json.state.filter));
+        const ciKeys = Object.keys(json.cogInfo);
+        for (let i = 0; i < ciKeys.length; i += 1) {
+          if (json.cogInfo[ciKeys[i]].filterable) {
+            if (json.state.filter &&
+              json.state.filter[ciKeys[i]] !== undefined) {
+              dispatch(setFilterView(ciKeys[i], 'add'));
+            } else {
+              dispatch(setFilterView(ciKeys[i], 'remove'));
+            }
+          }
+        }
+      };
 
       if (json.panelInterface.type === 'image') {
         dispatch(setPanelRenderer((x, style) => (
@@ -149,32 +196,29 @@ export const fetchDisplay = (name, group, cfg) =>
       }
 
       // load the cog data
-      const cf = `${cfg.display_base}/displays/${iface.group}/${iface.name}/cogData.json`;
-      getJSON(cf, (json2) => {
-        // once cog data is loaded, set the state with this data
-        // but first add an index column to the data so we can
-        // preserve original order or do multi-column sorts
-        for (let i = 0; i < json2.length; i += 1) {
-          json2[i].__index = i; // eslint-disable-line no-param-reassign
-        }
-        dispatch(receiveCogData(iface, crossfilter(json2)));
-        // now we can safely set several other default states that depend
-        // on either display or cog data or can't be set until this data is loaded
-        dispatch(setLabels(json.state.labels));
-        dispatch(setLayout(json.state.layout));
-        dispatch(setSort(json.state.sort));
-        dispatch(setFilter(json.state.filter));
-        const ciKeys = Object.keys(json.cogInfo);
-        for (let i = 0; i < ciKeys.length; i += 1) {
-          if (json.cogInfo[ciKeys[i]].filterable) {
-            if (json.state.filter &&
-              json.state.filter[ciKeys[i]] !== undefined) {
-              dispatch(setFilterView(ciKeys[i], 'add'));
-            } else {
-              dispatch(setFilterView(ciKeys[i], 'remove'));
-            }
-          }
-        }
+      if (cfg.data_type === 'jsonp') {
+        getJSONP({
+          url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.jsonp`,
+          callbackName: '__loadCogData__'
+        });
+      } else {
+        getJSON({
+          url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.json`,
+          callback: window.__loadCogData__
+        });
+      }
+    };
+
+    // get displayObj.json so we can find the cog data, etc.
+    if (cfg.data_type === 'jsonp') {
+      getJSONP({
+        url: `${cfg.display_base}/${group}/${name}/displayObj.jsonp`,
+        callbackName: '__loadDisplayObj__'
       });
-    });
+    } else {
+      getJSON({
+        url: `${cfg.display_base}/${group}/${name}/displayObj.json`,
+        callback: window.__loadDisplayObj__
+      });
+    }
   };

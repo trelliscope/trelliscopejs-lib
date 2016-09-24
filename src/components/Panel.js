@@ -1,8 +1,12 @@
 import React from 'react';
 import Radium from 'radium';
 import Delay from 'react-delay';
-import { json as getJSON } from 'd3-request';
+import { json as d3json } from 'd3-request';
+import { default as getJSONP } from 'browser-jsonp';
 import { findWidget } from '../loadAssets';
+
+const getJSON = obj =>
+  d3json(obj.url, json => obj.callback(json));
 
 class Panel extends React.Component {
   constructor(props) {
@@ -15,19 +19,35 @@ class Panel extends React.Component {
     this.panelContent = null;
   }
   componentDidMount() {
-    let filebase = `${this.props.cfg.display_base}/displays/${this.props.iface.group}`;
+    let filebase = `${this.props.cfg.cog_server.info.base}/${this.props.iface.group}`;
     filebase = `${filebase}/${this.props.iface.name}`;
 
-    this.xhr = getJSON(`${filebase}/json/${this.props.panelKey}.json`, (json) => {
+    if (!window.__panel__) {
+      window.__panel__ = {};
+    }
+
+    window.__panel__[`_${this.props.panelKey}`] = (json2) => {
       this.setState({
-        panelContent: this.props.panelRenderer.fn(json, this.props.style.panelContent,
+        panelContent: this.props.panelRenderer.fn(json2, this.props.style.panelContent,
           false, this.props.panelKey),
-        panelData: json,
+        panelData: json2,
         loaded: true });
       // do post-rendering (if any)
       this.props.panelRenderer.fn(this.state.panelData, this.props.style.panelContent,
         true, this.props.panelKey);
-    });
+    };
+
+    if (this.props.cfg.cog_server.type === 'jsonp') {
+      this.xhr = getJSONP({
+        url: `${filebase}/jsonp/${this.props.panelKey}.jsonp`,
+        callbackName: `__panel_${this.props.panelKey}__`
+      });
+    } else {
+      this.xhr = getJSON({
+        url: `${filebase}/json/${this.props.panelKey}.json`,
+        callback: window.__panel__[`_${this.props.panelKey}`]
+      });
+    }
 
     // fade in on new component
     const elem = this._panel;
@@ -75,7 +95,11 @@ class Panel extends React.Component {
   // }
   componentWillUnmount() {
     // stop requesting panel assets
-    this.xhr.abort();
+    if (this.xhr) {
+      this.xhr.abort();
+    }
+    // remove callback
+    window.__panel__[`_${this.props.panelKey}`] = null;
   }
   render() {
     return (
