@@ -1,0 +1,10 @@
+__loadTrscopeConfig__({
+  "display_base" : "vdb_gates",
+  "data_type": "json",
+  "cog_server" : {
+    "type" : "json",
+    "info" : {
+      "base" : "vdb_gates"
+    }
+  }
+})
