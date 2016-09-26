@@ -64,15 +64,14 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
             }
             titleBackground="rgba(0, 0, 0, 0.80)"
             onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
-            children={[
-              <img
-                src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}
-                alt={di[i].name}
-                style={styles.img}
-                key={`img${i}`}
-              />
-            ]}
-          />
+          >
+            <img
+              src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}
+              alt={di[i].name}
+              style={styles.img}
+              key={`img${i}`}
+            />
+          </GridTile>
         ))}
       </GridList>
     </div>

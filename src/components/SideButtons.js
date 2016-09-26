@@ -4,7 +4,7 @@ import Radium from 'radium';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import { setActiveSidebar } from '../actions';
-import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js';
+import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind';
 import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS } from '../constants';

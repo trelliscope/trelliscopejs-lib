@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
-import { filterCardinalitySelector } from '../selectors/cogData.js';
+import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector } from '../selectors';
 import FooterChip from './FooterChip';
 

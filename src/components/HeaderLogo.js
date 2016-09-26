@@ -46,7 +46,7 @@ class HeaderLogo extends React.Component {
       openDisplayTags = (
         <li>
           <code style={this.props.style.dialog.code}>o</code>
-          &ensp;open "Select Display" dialog
+          &ensp;open &quot;Select Display&quot; dialog
         </li>
       );
     }
@@ -80,19 +80,19 @@ class HeaderLogo extends React.Component {
                     <ul style={this.props.style.dialog.ul}>
                       <li>
                         <code style={this.props.style.dialog.code}>g</code>
-                        &ensp;open "Grid" sidebar
+                        &ensp;open &quot;Grid&quot; sidebar
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>l</code>
-                        &ensp;open "Labels" sidebar
+                        &ensp;open &quot;Labels&quot; sidebar
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>f</code>
-                        &ensp;open "Filter" sidebar
+                        &ensp;open &quot;Filter&quot; sidebar
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>s</code>
-                        &ensp;open "Sort" sidebar
+                        &ensp;open &quot;Sort&quot; sidebar
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>esc</code>
@@ -117,11 +117,11 @@ class HeaderLogo extends React.Component {
                       {openDisplayTags}
                       <li>
                         <code style={this.props.style.dialog.code}>i</code>
-                        &ensp;open "Display Info" dialog
+                        &ensp;open &quot;Display Info&quot; dialog
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>a</code>
-                        &ensp;open "About" dialog
+                        &ensp;open &quot;About&quot; dialog
                       </li>
                       <li>
                         <code style={this.props.style.dialog.code}>esc</code>

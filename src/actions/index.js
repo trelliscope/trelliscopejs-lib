@@ -1,6 +1,5 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
-// import fetchJsonp from 'fetch-jsonp';
 import { default as getJSONP } from 'browser-jsonp';
 import { loadAssetsSequential } from '../loadAssets';
 import { ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER,

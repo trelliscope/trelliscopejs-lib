@@ -111,7 +111,7 @@ class Panel extends React.Component {
           {this.state.loaded ?
             this.state.panelContent :
             <Delay wait={500}>
-              <div>'loading...'</div>
+              <div>&apos;loading...&apos;</div>
             </Delay>}
         </div>
         <div>

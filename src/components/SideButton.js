@@ -15,7 +15,7 @@ const SideButton = ({ bstyle, isActive, icon, title, label, onClick }) => {
   return (
     <button
       style={[bstyle.base, isActive && bstyle.active, title === SB_CONFIG && bottom]}
-      type={"button"}
+      type={'button'}
       onClick={onClick}
     >
       <div style={bstyle.icon}>
