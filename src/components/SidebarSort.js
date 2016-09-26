@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
+import ReactTooltip from 'react-tooltip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import { setSort } from '../actions';
@@ -66,17 +67,24 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
         </div>
         <div style={style.notUsed}>
           {notUsed.map((d, i) => (
-            <button
-              style={style.variable}
-              key={i}
-              onClick={() => {
-                const sort2 = Object.assign([], sort);
-                sort2.push({ name: d, dir: 'asc' });
-                handleChange(sort2);
-              }}
-            >
-              {d}
-            </button>
+            <span key={i}>
+              <a data-tip data-for={`tooltip_${d}`}>
+                <button
+                  style={style.variable}
+                  key={`button_${i}`}
+                  onClick={() => {
+                    const sort2 = Object.assign([], sort);
+                    sort2.push({ name: d, dir: 'asc' });
+                    handleChange(sort2);
+                  }}
+                >
+                  {d}
+                </button>
+              </a>
+              <ReactTooltip place="right" id={`tooltip_${d}`}>
+                <span>{cogDesc[d]}</span>
+              </ReactTooltip>
+            </span>
           ))}
         </div>
       </div>

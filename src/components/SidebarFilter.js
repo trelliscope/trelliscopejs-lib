@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Radium from 'radium';
 import { createSelector } from 'reselect';
+import ReactTooltip from 'react-tooltip';
+import { intersection } from 'lodash';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
@@ -33,7 +35,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
       curFilters.map((d, i) => {
         if (filtDist[d]) {
           let filterState = filter[d];
-          let footerExtra = '';
+          let headerExtra = '';
           const filterActive = filterState && filterState.value !== undefined;
 
           let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
@@ -59,7 +61,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                 handleSortChange={handleFilterSortChange}
               />
             );
-            footerExtra = `${filtDist[d].totSelected} of ${filtDist[d].dist.length} selected`;
+            headerExtra = `${filtDist[d].totSelected} of ${filtDist[d].dist.length}`;
           } else if (cogInfo[d].type === 'numeric') {
             if (!filterState) {
               filterState = {
@@ -90,9 +92,14 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                     filterActive && style.headerNameActive
                   ]}
                 >
-                  {d}
+                  <a data-tip data-for={`hdtooltip_${d}`}>
+                    <span style={style.headerNameText}>{d}</span>
+                  </a>
                 </div>
-                <div style={style.headerExtra}>{footerExtra}</div>
+                <ReactTooltip place="right" id={`hdtooltip_${d}`}>
+                  <span>{cogInfo[d].desc}</span>
+                </ReactTooltip>
+                <div style={style.headerExtra}>{headerExtra}</div>
                 <div
                   key={`${d}_${displId}-close-icon`}
                   style={[style.headerIcon, style.headerClose]}
@@ -126,19 +133,28 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
           filterView.inactive.length === 0 ? '' : 'More variables:'}
       </div>
     );
+    const cogNames = Object.keys(cogInfo);
+    const inames = intersection(cogNames, filterView.inactive);
     colContent[extraIdx].push(
       <div key="notUsed" style={style.notUsedContainer}>
-        {filterView.inactive.map(d => (
-          <button
-            style={[
-              style.variable,
-              filter[d] && filter[d].value !== undefined ? style.variableActive : {}
-            ]}
-            key={`${d}_${displId}`}
-            onMouseDown={() => handleViewChange(d, 'add')}
-          >
-            {d}
-          </button>
+        {inames.map(d => (
+          <span key={`${d}_${displId}`}>
+            <a data-tip data-for={`tooltip_${d}`}>
+              <button
+                style={[
+                  style.variable,
+                  filter[d] && filter[d].value !== undefined ? style.variableActive : {}
+                ]}
+                key={`${d}_${displId}_button`}
+                onMouseDown={() => handleViewChange(d, 'add')}
+              >
+                {d}
+              </button>
+            </a>
+            <ReactTooltip place="right" id={`tooltip_${d}`}>
+              <span>{cogInfo[d].desc}</span>
+            </ReactTooltip>
+          </span>
         ))}
       </div>
     );
@@ -161,6 +177,7 @@ SidebarFilter.propTypes = {
   style: React.PropTypes.object,
   filter: React.PropTypes.object,
   filterView: React.PropTypes.object,
+  filterI: React.PropTypes.array,
   cogInfo: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   filtDist: React.PropTypes.object,
@@ -275,11 +292,13 @@ const stateSelector = createSelector(
         left: 1,
         userSelect: 'none',
         cursor: 'default',
-        background: '#999',
-        color: 'white'
+        background: '#999'
       },
       headerNameActive: {
         background: '#81C784'
+      },
+      headerNameText: {
+        color: 'white'
       },
       headerIcon: {
         height: 16,
