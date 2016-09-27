@@ -15,7 +15,7 @@ class Panel extends React.Component {
       loaded: false,
       panelContent: null,
       panelData: null,
-      hover: false
+      hover: ''
     };
     this.panelContent = null;
   }
