@@ -58,6 +58,24 @@ class DisplayInfo extends React.Component {
       const ci = this.props.displayInfo.info.cogInfo;
       const ciKeys = Object.keys(ci);
 
+      let descText = '';
+      if (this.props.displayInfo.info.desc) {
+        descText = (
+          <p>
+            <strong>Description:</strong> {this.props.displayInfo.info.desc}
+          </p>
+        );
+      }
+
+      let panelUnitText = '';
+      if (this.props.displayInfo.info.panelUnitDesc) {
+        panelUnitText = (
+          <p>
+            Each panel of this display represents a {this.props.displayInfo.info.panelUnitDesc}
+          </p>
+        );
+      }
+
       dialogContent = (
         <Dialog
           title="Information About This Display"
@@ -72,23 +90,24 @@ class DisplayInfo extends React.Component {
               // with pure markdown (sanitize = TRUE so user HTML is not supported)
               dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
             />
-            <h3>Display Attributes</h3>
-            <ul>
-              <li>
-                <strong>name</strong>: {this.props.displayInfo.info.name}
-              </li>
-              <li>
-                <strong>description</strong>: {this.props.displayInfo.info.desc}
-              </li>
-              <li>
-                <strong>updated</strong>: {this.props.displayInfo.info.updated}
-              </li>
-              <li>
-                <strong># panels</strong>: {this.props.displayInfo.info.n}
-              </li>
-            </ul>
+            <p>
+              <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
+            </p>
+            {descText}
+            <p>
+              <strong>Last updated</strong>: {this.props.displayInfo.info.updated}
+            </p>
+            <p>
+              <strong>Number of panels</strong>: {this.props.displayInfo.info.n}
+            </p>
+            {panelUnitText}
             <h3>Cognostics</h3>
-            <p>To help navigate the panels, the following cognostics have been computed:</p>
+            <p>
+              To help navigate the panels, the following cognostics have been computed.
+              For information on how to use these metrics to interact with the panels,
+              please click the &quot;?&quot; icon in the top right corner of the
+              application or hit the key &quot;a&quot;.
+            </p>
             <ul>
               {ciKeys.map((d, i) => (
                 <li key={i}>
@@ -96,20 +115,21 @@ class DisplayInfo extends React.Component {
                 </li>
               ))}
             </ul>
-            <h3>Data</h3>
-            <p>The data for one subset has the following structure:</p>
-            <pre><code>
-              {this.props.displayInfo.info.example}
-            </code></pre>
-            <h3>Panel Function</h3>
-            The R code that generates each panel:
-            <pre><code>
-              {this.props.displayInfo.info.panelFn}
-            </code></pre>
           </div>
         </Dialog>
       );
     }
+
+    // <h3>Data</h3>
+    // <p>The data for one subset has the following structure:</p>
+    // <pre><code>
+    //   {this.props.displayInfo.info.example}
+    // </code></pre>
+    // <h3>Panel Function</h3>
+    // The R code that generates each panel:
+    // <pre><code>
+    //   {this.props.displayInfo.info.panelFn}
+    // </code></pre>
 
     return (
       <button
