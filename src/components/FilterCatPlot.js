@@ -83,7 +83,7 @@ class FilterCatPlot extends React.Component {
       <Grid
         key={`${orderValue}_${totSelected}_${sumSelected}_${maxVal}`}
         width={this.props.style.width}
-        height={this.props.style.height}
+        height={this.props.height}
         columnWidth={this.props.style.width}
         rowHeight={this.cellHeight}
         columnCount={1}
@@ -97,6 +97,7 @@ class FilterCatPlot extends React.Component {
 
 FilterCatPlot.propTypes = {
   style: React.PropTypes.object,
+  height: React.PropTypes.number,
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   filterState: React.PropTypes.object,

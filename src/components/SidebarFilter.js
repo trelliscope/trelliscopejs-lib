@@ -15,7 +15,7 @@ import { cogInfoSelector } from '../selectors/display';
 import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
 
-const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
+const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayInfo,
   filtDist, colSplit, handleViewChange, handleFilterChange,
   handleFilterSortChange, labels }) => {
   let content = <div />;
@@ -50,10 +50,13 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
               };
             }
 
+            const nlvl = cogInfo[d].levels ? cogInfo[d].levels.length : 1000;
+
             itemContent = (
               <FilterCat
                 filterState={filterState}
                 style={style.catFilter}
+                height={Math.min(catHeight, nlvl * 15)}
                 dist={displayInfo.info.cogDistns[d]}
                 condDist={filtDist[d]}
                 levels={displayInfo.info.cogInfo[d].levels}
@@ -127,37 +130,45 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
     ));
 
     const extraIdx = colSplit.cutoff === null ? 0 : 1;
-    colContent[extraIdx].push(
-      <div key="notUsedHeader" style={style.notUsedHeader}>
-        {filterView.active.length === 0 ? 'Select a variable to filter on:' :
-          filterView.inactive.length === 0 ? '' : 'More variables:'}
-      </div>
-    );
     const cogNames = Object.keys(cogInfo);
     const inames = intersection(cogNames, filterView.inactive);
-    colContent[extraIdx].push(
-      <div key="notUsed" style={style.notUsedContainer}>
-        {inames.map(d => (
-          <span key={`${d}_${displId}`}>
-            <a data-tip data-for={`tooltip_${d}`}>
-              <button
-                style={[
-                  style.variable,
-                  filter[d] && filter[d].value !== undefined ? style.variableActive : {}
-                ]}
-                key={`${d}_${displId}_button`}
-                onMouseDown={() => handleViewChange(d, 'add', labels)}
-              >
-                {d}
-              </button>
-            </a>
-            <ReactTooltip place="right" id={`tooltip_${d}`}>
-              <span>{cogInfo[d].desc}</span>
-            </ReactTooltip>
-          </span>
-        ))}
-      </div>
-    );
+    if (style.notUsedContainer.height < 170) {
+      colContent[extraIdx].push(
+        <div key="notUsedHeader" style={style.notUsedHeader}>
+          Remove filters to select more.
+        </div>
+      );
+    } else {
+      colContent[extraIdx].push(
+        <div key="notUsedHeader" style={style.notUsedHeader}>
+          {filterView.active.length === 0 ? 'Select a variable to filter on:' :
+            filterView.inactive.length === 0 ? '' : 'More variables:'}
+        </div>
+      );
+      colContent[extraIdx].push(
+        <div key="notUsed" style={style.notUsedContainer}>
+          {inames.map(d => (
+            <span key={`${d}_${displId}`}>
+              <a data-tip data-for={`tooltip_${d}`}>
+                <button
+                  style={[
+                    style.variable,
+                    filter[d] && filter[d].value !== undefined ? style.variableActive : {}
+                  ]}
+                  key={`${d}_${displId}_button_${inames.length}`}
+                  onMouseDown={() => handleViewChange(d, 'add', labels)}
+                >
+                  {d}
+                </button>
+              </a>
+              <ReactTooltip place="right" id={`tooltip_${d}`}>
+                <span>{cogInfo[d].desc}</span>
+              </ReactTooltip>
+            </span>
+          ))}
+        </div>
+      );
+    }
 
     content = (
       <div style={style.allContainer}>
@@ -175,6 +186,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
 
 SidebarFilter.propTypes = {
   style: React.PropTypes.object,
+  catHeight: React.PropTypes.number,
   filter: React.PropTypes.object,
   filterView: React.PropTypes.object,
   filterI: React.PropTypes.array,
@@ -324,7 +336,6 @@ const stateSelector = createSelector(
       catFilter: {
         container: {
           width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          height: 30 + ui.sidebar.filter.cat.height,
           boxSizing: 'border-box',
           paddingLeft: ui.sidebar.filter.margin,
           paddingRight: ui.sidebar.filter.margin,
@@ -332,7 +343,7 @@ const stateSelector = createSelector(
         },
         plotContainer: {
           width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          height: ui.sidebar.filter.cat.height,
+          // height: ui.sidebar.filter.cat.height,
           boxSizing: 'border-box',
           position: 'relative',
           overflow: 'hidden',
@@ -341,6 +352,7 @@ const stateSelector = createSelector(
           zIndex: 1000
         },
         inputContainer: {
+          height: 39,
           width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
           marginBottom: -14,
           zIndex: 100,
@@ -403,6 +415,7 @@ const stateSelector = createSelector(
         }
       }
     },
+    catHeight: ui.sidebar.filter.cat.height,
     filter,
     filterView,
     cogInfo,

@@ -93,6 +93,7 @@ class FilterCat extends React.Component {
         >
           <FilterCatPlot
             style={this.props.style.plotContainer}
+            height={this.props.height}
             dist={this.props.dist}
             condDist={this.props.condDist}
             filterState={this.props.filterState}
@@ -121,6 +122,7 @@ FilterCat.propTypes = {
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   levels: React.PropTypes.array,
+  height: React.PropTypes.number,
   handleChange: React.PropTypes.func,
   handleSortChange: React.PropTypes.func
 };

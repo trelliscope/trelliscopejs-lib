@@ -127,7 +127,9 @@ export const filterColSplitSelector = createSelector(
     const heights = keys.map((d) => {
       // 53 is the extra height of header/footer
       if (di.info.cogInfo[d].type === 'factor') {
-        return ui.sidebar.filter.cat.height + 54;
+        // if the number of levels is small then only make the box that tall
+        const nlvl = di.info.cogInfo[d].levels ? di.info.cogInfo[d].levels.length : 1000;
+        return Math.min(ui.sidebar.filter.cat.height, nlvl * 15) + 54;
       } else if (di.info.cogInfo[d].type === 'numeric') {
         return ui.sidebar.filter.num.height + 54;
       }
@@ -142,6 +144,7 @@ export const filterColSplitSelector = createSelector(
       if (cutoff === null) { // we're in the first column
         if (csum1 + heights[i] > sh) {
           cutoff = i;
+          csum2 += heights[i];
         } else {
           csum1 += heights[i];
         }
@@ -150,16 +153,6 @@ export const filterColSplitSelector = createSelector(
       }
     }
 
-    // let cutoff = null;
-    // let csum = 0;
-    // let i = 0;
-    // while (csum < sh && i < heights.length) {
-    //   csum += heights[i];
-    //   i += 1;
-    // }
-    // if (i < heights.length || csum > sh) {
-    //   cutoff = i - 1;
-    // }
     // case where it's one column but not enough space for extra variables
     if (cutoff === null && csum1 + 30 + ui.sidebar.filter.variables.height > sh) {
       cutoff = heights.length;
