@@ -7,7 +7,7 @@ import Mousetrap from 'mousetrap';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
-import { uiConstsSelector } from '../selectors/ui';
+import { uiConstsSelector, windowHeightSelector } from '../selectors/ui';
 
 class HeaderLogo extends React.Component {
   constructor(props) {
@@ -63,7 +63,6 @@ class HeaderLogo extends React.Component {
           title={`Trelliscope Viewer v${VERSION}`}
           actions={actions}
           open={this.state.open}
-          autoScrollBodyContent
           onRequestClose={this.handleClose}
         >
           <Tabs>
@@ -95,11 +94,12 @@ class HeaderLogo extends React.Component {
                 <p>
                   There are multiple modes of interaction with panels, indicated
                   by the four buttons on the left sidebar of the application:
-                  <strong>Grid</strong>, <strong>Labels</strong>,
+                  &nbsp;
+                  <strong>Grid</strong>, <strong>Labels</strong>,&nbsp;
                   <strong>Filter</strong>, and <strong>Sort</strong>.
                 </p>
                 <p style={this.props.style.dialog.p}>
-                  <i className="icon-th" />&nbsp;
+                  <i className="icon-th" style={this.props.style.dialog.hi} />&nbsp;
                   <strong>Grid:</strong>&nbsp;
                   In the &quot;Grid&quot; sidebar, you can specify the layout of
                   the grid of panels you wish to display, specifying the number
@@ -107,7 +107,7 @@ class HeaderLogo extends React.Component {
                   panels in order by row or by column.
                 </p>
                 <p style={this.props.style.dialog.p}>
-                  <i className="icon-list-ul" />&nbsp;
+                  <i className="icon-list-ul" style={this.props.style.dialog.hi} />&nbsp;
                   <strong>Labels:</strong>&nbsp;
                   In the &quot;Labels&quot; sidebar, you can specify the panel
                   metrics that you wish to see displayed under each panel
@@ -120,7 +120,7 @@ class HeaderLogo extends React.Component {
                   a new variable to sort or filter on.
                 </p>
                 <p style={this.props.style.dialog.p}>
-                  <i className="icon-filter" />&nbsp;
+                  <i className="icon-filter" style={this.props.style.dialog.hi} />&nbsp;
                   <strong>Filter:</strong>&nbsp;
                   The &quot;Filter&quot; sidebar provides various ways
                   to filter the panels being displayed based on the panel
@@ -173,7 +173,7 @@ class HeaderLogo extends React.Component {
                   </p>
                 </p>
                 <p style={this.props.style.dialog.p}>
-                  <i className="icon-sort-amount-asc" />&nbsp;
+                  <i className="icon-sort-amount-asc" style={this.props.style.dialog.hi} />&nbsp;
                   <strong>Sort:</strong>&nbsp;
                   In the &quot;Sort&quot; sidebar, a list of variables which are
                   currently being sorted by (if any) will be listed at the top,
@@ -188,7 +188,8 @@ class HeaderLogo extends React.Component {
                 </p>
                 <p>
                   The active filter and sort state are displayed at the bottom
-                  of the page in the footer.  Clicking the &quot;x&quot; icon
+                  of the page in the footer.  Clicking
+                  the <i className="icon-times-circle" /> button
                   for anything listed in the footer will remove the sorting or
                   filtering on that variable.
                 </p>
@@ -312,8 +313,8 @@ HeaderLogo.propTypes = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  uiConstsSelector,
-  ui => ({
+  uiConstsSelector, windowHeightSelector,
+  (ui, wh) => ({
     style: {
       logo: {
         position: 'fixed',
@@ -345,7 +346,9 @@ const styleSelector = createSelector(
         div: {
           fontSize: 18,
           paddingLeft: 10,
-          paddingRight: 10
+          paddingRight: 10,
+          maxHeight: Math.max(50, wh - 310),
+          overflowY: 'auto'
         },
         h4: {
           marginBottom: 5
@@ -368,6 +371,9 @@ const styleSelector = createSelector(
         p22: {
           textIndent: 0,
           paddingLeft: 20
+        },
+        hi: {
+          color: '#FF5252'
         }
       }
     }
