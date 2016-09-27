@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Panel from './Panel';
+import { setLabels } from '../actions';
 import { uiConstsSelector, contentWidthSelector, sidebarActiveSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
@@ -11,7 +12,7 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
   displayInfoSelector } from '../selectors';
 
 const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
-  panelRenderer, panelInterface, sidebar }) => {
+  panelRenderer, panelInterface, sidebar, removeLabel }) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {
@@ -72,10 +73,12 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
             cfg={cfg}
             panelKey={el.key}
             labels={el.labels}
+            labelArr={labels}
             style={style.panel}
             iface={ci}
             panelRenderer={panelRenderer}
             panelInterface={panelInterface}
+            removeLabel={removeLabel}
             dimStyle={{
               top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
                 dims.hOffset + (el.rowIndex * 2),
@@ -228,6 +231,15 @@ const styleSelector = createSelector(
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis'
+          },
+          labelClose: {
+            float: 'right',
+            cursor: 'pointer',
+            border: 'none',
+            background: 'none',
+            padding: 0,
+            margin: 0,
+            opacity: 0.5
           }
         }
       },
@@ -255,6 +267,18 @@ const mapStateToProps = state => (
   styleSelector(state)
 );
 
+const mapDispatchToProps = dispatch => ({
+  removeLabel: (name, labels) => {
+    const idx = labels.indexOf(name);
+    if (idx > -1) {
+      const newLabels = Object.assign([], labels);
+      newLabels.splice(idx, 1);
+      dispatch(setLabels(newLabels));
+    }
+  }
+});
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Content);

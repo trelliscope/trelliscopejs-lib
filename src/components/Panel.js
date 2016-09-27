@@ -14,7 +14,8 @@ class Panel extends React.Component {
     this.state = {
       loaded: false,
       panelContent: null,
-      panelData: null
+      panelData: null,
+      hover: false
     };
     this.panelContent = null;
   }
@@ -78,21 +79,6 @@ class Panel extends React.Component {
       }
     }
   }
-  // componentDidUpdate() {
-  //   if (this.state.loaded && this.props.panelInterface.type === 'htmlwidget') {
-  //     const widget = findWidget(this.props.panelInterface.deps.name);
-  //     if (widget) {
-  //       const el = document.getElementById(`widget_${this.props.panelKey}`);
-  //       // this.state.panelData.x.elementid
-  //       if (el) {
-  //         el.style.width = `${this.props.style.panelContent.width}px`;
-  //         el.style.height = `${this.props.style.panelContent.height}px`;
-  //         widget.resize(el, this.props.style.panelContent.width,
-  //           this.props.style.panelContent.height);
-  //       }
-  //     }
-  //   }
-  // }
   componentWillUnmount() {
     // stop requesting panel assets
     if (this.xhr) {
@@ -100,6 +86,9 @@ class Panel extends React.Component {
     }
     // remove callback
     window.__panel__[`_${this.props.panelKey}`] = null;
+  }
+  handleHover(val) {
+    this.setState({ hover: val });
   }
   render() {
     return (
@@ -119,13 +108,25 @@ class Panel extends React.Component {
             <tbody>
               {this.props.labels.map((d, i) => {
                 let labelDiv;
+                const removeLabelDiv = (
+                  <button
+                    style={[
+                      this.props.style.labelClose,
+                      this.state.hover !== d.name && { display: 'none' }
+                    ]}
+                    onClick={() => this.props.removeLabel(d.name, this.props.labelArr)}
+                  >
+                    <i className="icon-times-circle" />
+                  </button>
+                );
                 if (d.type === 'href') {
                   labelDiv = (
                     <div
-                      // TODO? do we need to use dompurify here to be safe?
-                      dangerouslySetInnerHTML={{ __html: d.value }} // eslint-disable-line react/no-danger, max-len
                       style={this.props.style.labelOverflow}
-                    />
+                    >
+                      <a href={d.value} rel="noopener noreferrer" target="_blank">link</a>
+                      {removeLabelDiv}
+                    </div>
                   );
                 } else {
                   labelDiv = (
@@ -134,6 +135,7 @@ class Panel extends React.Component {
                       title={d.value}
                     >
                       {d.value}
+                      {removeLabelDiv}
                     </div>
                   );
                 }
@@ -150,6 +152,8 @@ class Panel extends React.Component {
                     <td
                       style={[this.props.style.labelCell,
                       this.props.style.labelValueCell]}
+                      onMouseOver={() => this.handleHover(d.name)}
+                      onMouseOut={() => this.handleHover('')}
                     >
                       {labelDiv}
                     </td>
@@ -167,12 +171,14 @@ class Panel extends React.Component {
 Panel.propTypes = {
   style: React.PropTypes.object,
   labels: React.PropTypes.array,
+  labelArr: React.PropTypes.array,
   iface: React.PropTypes.object,
   cfg: React.PropTypes.object,
   panelKey: React.PropTypes.string,
   dimStyle: React.PropTypes.object,
   panelRenderer: React.PropTypes.object,
-  panelInterface: React.PropTypes.object
+  panelInterface: React.PropTypes.object,
+  removeLabel: React.PropTypes.func
 };
 
 export default Radium(Panel);
