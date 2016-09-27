@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { fade } from 'material-ui/utils/colorManipulator';
 import Panel from './Panel';
 import { setLabels } from '../actions';
 import { uiConstsSelector, contentWidthSelector, sidebarActiveSelector,
@@ -212,6 +213,9 @@ const styleSelector = createSelector(
             fontSize: labelHeight - 12,
             background: '#f6f6f6'
           },
+          labelRowHover: {
+            background: fade('#f6f6f6', 0.4)
+          },
           labelCell: {
             paddingTop: 0,
             paddingBottom: 0,
@@ -239,7 +243,8 @@ const styleSelector = createSelector(
             background: 'none',
             padding: 0,
             margin: 0,
-            opacity: 0.5
+            opacity: 0.5,
+            fontSize: 15
           }
         }
       },

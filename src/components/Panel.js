@@ -140,7 +140,15 @@ class Panel extends React.Component {
                   );
                 }
                 return (
-                  <tr key={`label${i}`} style={this.props.style.labelRow}>
+                  <tr
+                    key={`label${i}`}
+                    style={[
+                      this.props.style.labelRow,
+                      this.state.hover === d.name && this.props.style.labelRowHover
+                    ]}
+                    onMouseOver={() => this.handleHover(d.name)}
+                    onMouseOut={() => this.handleHover('')}
+                  >
                     <td
                       style={[this.props.style.labelCell,
                       this.props.style.labelNameCell]}
@@ -152,8 +160,6 @@ class Panel extends React.Component {
                     <td
                       style={[this.props.style.labelCell,
                       this.props.style.labelValueCell]}
-                      onMouseOver={() => this.handleHover(d.name)}
-                      onMouseOut={() => this.handleHover('')}
                     >
                       {labelDiv}
                     </td>
