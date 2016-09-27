@@ -5,11 +5,11 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
-import { setSort } from '../actions';
+import { setSort, setLabels } from '../actions';
 import { uiConstsSelector, sidebarHeightSelector } from '../selectors/ui';
-import { sortSelector, displayInfoSelector } from '../selectors';
+import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
 
-const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
+const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) => {
   let content = <div />;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
@@ -75,6 +75,7 @@ const SidebarSort = ({ style, sort, cogDesc, handleChange }) => {
                   onClick={() => {
                     const sort2 = Object.assign([], sort);
                     sort2.push({ name: d, dir: 'asc' });
+                    addLabel(d, labels);
                     handleChange(sort2);
                   }}
                 >
@@ -97,7 +98,9 @@ SidebarSort.propTypes = {
   style: React.PropTypes.object,
   sort: React.PropTypes.array,
   cogDesc: React.PropTypes.object,
-  handleChange: React.PropTypes.func
+  labels: React.PropTypes.array,
+  handleChange: React.PropTypes.func,
+  addLabel: React.PropTypes.func
 };
 
 // ------ redux container ------
@@ -115,8 +118,8 @@ const cogDescSelector = createSelector(
 );
 
 const stateSelector = createSelector(
-  uiConstsSelector, sortSelector, cogDescSelector, sidebarHeightSelector,
-  (ui, sort, cogDesc, sh) => {
+  uiConstsSelector, sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector,
+  (ui, sort, cogDesc, sh, labels) => {
     const activeIsTaller = sort.length * 51 > sh - (2 * 51);
     let activeHeight = 51 * sort.length;
     if (activeIsTaller) {
@@ -199,7 +202,8 @@ const stateSelector = createSelector(
         }
       },
       sort,
-      cogDesc
+      cogDesc,
+      labels
     });
   }
 );
@@ -211,6 +215,14 @@ const mapStateToProps = state => (
 const mapDispatchToProps = dispatch => ({
   handleChange: (layout) => {
     dispatch(setSort(layout));
+  },
+  addLabel: (name, labels) => {
+    // if a sort variable is being added, add a panel label for the variable
+    if (labels.indexOf(name) < 0) {
+      const newLabels = Object.assign([], labels);
+      newLabels.push(name);
+      dispatch(setLabels(newLabels));
+    }
   }
 });
 

@@ -7,17 +7,17 @@ import { intersection } from 'lodash';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
-import { setFilterView, setFilter, setLayout } from '../actions';
+import { setFilterView, setFilter, setLayout, setLabels } from '../actions';
 import { cogFiltDistSelector } from '../selectors/cogData';
 import { uiConstsSelector, sidebarHeightSelector,
   filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { displayInfoSelector, filterStateSelector,
-  filterViewSelector } from '../selectors';
+  filterViewSelector, labelsSelector } from '../selectors';
 
 const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
   filtDist, colSplit, handleViewChange, handleFilterChange,
-  handleFilterSortChange }) => {
+  handleFilterSortChange, labels }) => {
   let content = <div />;
   const displId = displayInfo.info.name;
   if (filter && filterView.active) {
@@ -146,7 +146,7 @@ const SidebarFilter = ({ style, filter, filterView, cogInfo, displayInfo,
                   filter[d] && filter[d].value !== undefined ? style.variableActive : {}
                 ]}
                 key={`${d}_${displId}_button`}
-                onMouseDown={() => handleViewChange(d, 'add')}
+                onMouseDown={() => handleViewChange(d, 'add', labels)}
               >
                 {d}
               </button>
@@ -184,7 +184,8 @@ SidebarFilter.propTypes = {
   colSplit: React.PropTypes.object,
   handleViewChange: React.PropTypes.func,
   handleFilterChange: React.PropTypes.func,
-  handleFilterSortChange: React.PropTypes.func
+  handleFilterSortChange: React.PropTypes.func,
+  labels: React.PropTypes.array
 };
 
 // ------ redux container ------
@@ -193,8 +194,8 @@ SidebarFilter.propTypes = {
 const stateSelector = createSelector(
   uiConstsSelector, filterStateSelector, filterViewSelector,
   cogInfoSelector, sidebarHeightSelector, displayInfoSelector,
-  cogFiltDistSelector, filterColSplitSelector,
-  (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist, colSplit) => ({
+  cogFiltDistSelector, filterColSplitSelector, labelsSelector,
+  (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist, colSplit, labels) => ({
     style: {
       col1: {
         position: 'absolute',
@@ -407,7 +408,8 @@ const stateSelector = createSelector(
     cogInfo,
     displayInfo,
     filtDist,
-    colSplit
+    colSplit,
+    labels
   })
 );
 
@@ -416,7 +418,15 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  handleViewChange: (x, which) => {
+  handleViewChange: (x, which, labels) => {
+    // if a filter is being added to the view, add a panel label for the variable
+    if (which === 'add') {
+      if (labels.indexOf(x) < 0) {
+        const newLabels = Object.assign([], labels);
+        newLabels.push(x);
+        dispatch(setLabels(newLabels));
+      }
+    }
     dispatch(setFilterView(x, which));
   },
   handleFilterChange: (x) => {
