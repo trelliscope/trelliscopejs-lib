@@ -85,11 +85,6 @@ class DisplayInfo extends React.Component {
           onRequestClose={this.handleClose}
         >
           <div style={this.props.style.modal.container}>
-            <div
-              // we can dangerously set because the HTML is generated from marked()
-              // with pure markdown (sanitize = TRUE so user HTML is not supported)
-              dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
-            />
             <p>
               <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
             </p>
@@ -101,6 +96,11 @@ class DisplayInfo extends React.Component {
               <strong>Number of panels</strong>: {this.props.displayInfo.info.n}
             </p>
             {panelUnitText}
+            <div
+              // we can dangerously set because the HTML is generated from marked()
+              // with pure markdown (sanitize = TRUE so user HTML is not supported)
+              dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
+            />
             <h3>Cognostics</h3>
             <p>
               To help navigate the panels, the following cognostics have been computed.
