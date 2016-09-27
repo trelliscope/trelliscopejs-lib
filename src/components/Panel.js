@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
@@ -154,7 +155,14 @@ class Panel extends React.Component {
                       this.props.style.labelNameCell]}
                     >
                       <div style={this.props.style.labelOverflow}>
-                        {d.name}
+                        <span>
+                          <a style={{ color: 'inherit' }} data-tip data-for={`ptooltip_${d.name}`}>
+                            <span>{d.name}</span>
+                          </a>
+                          <ReactTooltip place="right" id={`ptooltip_${d.name}`}>
+                            <span>{d.desc}</span>
+                          </ReactTooltip>
+                        </span>
                       </div>
                     </td>
                     <td

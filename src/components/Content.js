@@ -27,7 +27,8 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
         curLabels.push({
           name: labels[j],
           value: ccd[i][labels[j]],
-          type: cinfo[labels[j]].type
+          type: cinfo[labels[j]].type,
+          desc: cinfo[labels[j]].desc
         });
       }
       panelLabels.push(curLabels);
