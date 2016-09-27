@@ -163,7 +163,7 @@ class HeaderLogo extends React.Component {
                   </a>.
                 </p>
                 <p>
-                  Source code available <a href="https://github.com/hafen/TrelliscopeJS/" target="_blank" rel="noopener noreferrer">on github</a> &ndash; submit issues and feature requests there.
+                  Source code available on <a href="https://github.com/hafen/TrelliscopeJS/" target="_blank" rel="noopener noreferrer">github</a> &ndash; submit issues and feature requests there.
                 </p>
                 <p>
                   Thanks to Bill Cleveland for ideas upon which this is built,
