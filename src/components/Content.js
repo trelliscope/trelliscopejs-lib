@@ -245,7 +245,7 @@ const styleSelector = createSelector(
             padding: 0,
             margin: 0,
             opacity: 0.5,
-            fontSize: 15
+            fontSize: labelHeight - 12
           }
         }
       },
