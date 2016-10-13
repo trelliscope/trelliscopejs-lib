@@ -14,21 +14,8 @@ export const loadAssetsSequential = (widgetAssets, callback) => {
   const loadNextAsset = () => {
     let done = false;
     const head = document.getElementsByTagName('head')[0];
-
-    const curAsset = assets.shift();
-    let asset;
-    if (curAsset.type === 'script') {
-      asset = document.createElement('script');
-      asset.type = 'text/javascript';
-      asset.src = curAsset.url;
-    } else if (curAsset.type === 'stylesheet') {
-      asset = document.createElement('link');
-      asset.rel = 'stylesheet';
-      asset.type = 'text/css';
-      asset.href = curAsset.url;
-    }
-
-    const assetLoaded = () => {
+debugger;
+    const assetLoaded = (asset) => {
       if (!done) {
         asset.onreadystatechange = asset.onload = null;
         done = true;
@@ -43,13 +30,33 @@ export const loadAssetsSequential = (widgetAssets, callback) => {
       }
     };
 
-    asset.onreadystatechange = () => {
-      if (this.readyState === 'complete' || this.readyState === 'loaded') {
-        assetLoaded();
+    const curAsset = assets.shift();
+
+    if (curAsset.url.constructor === String) {
+      curAsset.url = [curAsset.url];
+    }
+
+    for (let i = 0; i < curAsset.url.length; i += 1) {
+      let asset;
+      if (curAsset.type === 'script') {
+        asset = document.createElement('script');
+        asset.type = 'text/javascript';
+        asset.src = curAsset.url[i];
+      } else if (curAsset.type === 'stylesheet') {
+        asset = document.createElement('link');
+        asset.rel = 'stylesheet';
+        asset.type = 'text/css';
+        asset.href = curAsset.url[i];
       }
-    };
-    asset.onload = assetLoaded;
-    head.appendChild(asset);
+
+      asset.onreadystatechange = () => {
+        if (this.readyState === 'complete' || this.readyState === 'loaded') {
+          assetLoaded(asset);
+        }
+      };
+      asset.onload = assetLoaded;
+      head.appendChild(asset);
+    }
   };
   loadNextAsset();
 };
