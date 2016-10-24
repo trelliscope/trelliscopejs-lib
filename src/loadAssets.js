@@ -14,10 +14,11 @@ export const loadAssetsSequential = (widgetAssets, callback) => {
   const loadNextAsset = () => {
     let done = false;
     const head = document.getElementsByTagName('head')[0];
-debugger;
+
     const assetLoaded = (asset) => {
       if (!done) {
-        asset.onreadystatechange = asset.onload = null;
+        const curAsset = asset;
+        curAsset.onreadystatechange = curAsset.onload = null;
         done = true;
         if (assets.length !== 0) {
           loadNextAsset();
@@ -48,7 +49,6 @@ debugger;
         asset.type = 'text/css';
         asset.href = curAsset.url[i];
       }
-
       asset.onreadystatechange = () => {
         if (this.readyState === 'complete' || this.readyState === 'loaded') {
           assetLoaded(asset);
