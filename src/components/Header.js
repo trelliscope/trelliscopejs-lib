@@ -79,12 +79,20 @@ class Header extends React.Component {
           singleDisplay={this.singleDisplay}
           setDialogOpen={this.props.setDialogOpen}
         />
-        <div style={this.props.style.displayName}>
-          <i style={iconStyle} className="fa fa-info-circle" />
-          {displayName}
-          <span style={this.props.style.displayDesc}>{displayDesc}</span>
+        <i style={iconStyle} className="fa fa-info-circle" />
+        <div style={this.props.style.headerSubContainer}>
+          <div style={this.props.style.nameDescContainer}>
+            <div style={this.props.style.displayName}>
+              {displayName}
+            </div>
+            <div style={this.props.style.displayDesc}>
+              {displayDesc}
+            </div>
+          </div>
+          <div style={this.props.style.paginationContainer}>
+            {pagination}
+          </div>
         </div>
-        {pagination}
         <HeaderLogo
           setDialogOpen={this.props.setDialogOpen}
           singleDisplay={this.singleDisplay}
@@ -124,26 +132,53 @@ const styleSelector = createSelector(
         borderBottom: '1px solid',
         borderColor: ui.header.borderColor,
         margin: 0,
-        lineHeight: `${ui.header.height}px`,
+        // lineHeight: `${ui.header.height}px`,
         fontSize: ui.header.fontSize,
         fontWeight: 300
       },
-      displayName: {
-        display: 'inline-block',
-        paddingLeft: 18,
+      headerSubContainer: {
+        display: 'flex',
         position: 'fixed',
         top: 0,
+        left: ui.header.height *
+          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)), //  + (rd.length === 0 ? 0 : 1)
+        height: ui.header.height,
+        width: ww - ((ui.header.height *
+          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1))) +
+          ui.header.logoWidth + 30)
+      },
+      nameDescContainer: {
+        flex: '1 0',
+        minWidth: 0,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      paginationContainer: {
+        flex: '0 0'
+      },
+      displayName: {
+        verticalAlign: 'top',
+        paddingLeft: 15,
         fontSize: 17,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        // paddingTop: 5
+        lineHeight: `${sd.desc === '' ? 48 : 32}px`
         // fontWeight: 400,
         // transition: 'left 0.5s ease',
-        left: ui.header.height *
-          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)) //  + (rd.length === 0 ? 0 : 1)
       },
       displayDesc: {
+        verticalAlign: 'top',
         fontWeight: 300,
-        paddingLeft: 8,
-        fontSize: 12,
-        fontStyle: 'italic'
+        paddingLeft: 15,
+        paddingRight: 8,
+        fontSize: 10,
+        fontStyle: 'italic',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       }
     },
     cfg,

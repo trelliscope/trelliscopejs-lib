@@ -22,7 +22,7 @@ export const uiConstsSelector = () => (
         background: '#FF4308',
         color: 'white'
       },
-      titleWidth: 130
+      logoWidth: 130
     },
     footer: {
       height: 30,

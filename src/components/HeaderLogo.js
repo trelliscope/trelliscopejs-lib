@@ -325,7 +325,7 @@ const styleSelector = createSelector(
         // borderColor: ui.header.borderColor,
         height: ui.header.height,
         textAlign: 'center',
-        width: ui.header.titleWidth,
+        width: ui.header.logoWidth,
         fontSize: 17,
         background: ui.header.logo.background,
         color: ui.header.logo.color

@@ -135,63 +135,58 @@ const stateSelector = createSelector(
   (ui, n, card, npp, dialogOpen) => ({
     style: {
       outer: {
-        position: 'absolute',
-        top: 0,
-        right: ui.header.titleWidth + 30,
-        width: 400,
-        height: ui.header.height
+        whiteSpace: 'nowrap'
+        // display: 'inline-block'
+        // position: 'absolute',
+        // top: 0,
+        // right: ui.header.logoWidth + 30,
+        // width: 400,
+        // height: ui.header.height
       },
       buttonWrap: {
         width: ui.header.height - 10,
         height: ui.header.height,
-        position: 'absolute',
-        top: 0
+        display: 'inline-block'
       },
       buttonWrapFirst: {
-        right: ui.header.height - 20
+        // right: ui.header.height - 20
       },
       buttonWrapPrev: {
-        right: (3 * (ui.header.height - 20)) + 10
+        // right: (3 * (ui.header.height - 20)) + 10
       },
       buttonWrapNext: {
-        right: (2 * (ui.header.height - 20)) + 10
+        // right: (2 * (ui.header.height - 20)) + 10
       },
       buttonWrapLast: {
-        right: 0
+        // right: 0
       },
       buttonDiv: {
         width: ui.header.height - 10,
         height: ui.header.height - 10,
-        position: 'absolute',
-        top: 0,
-        left: 0
+        paddingLeft: 5
       },
       button: {
         width: ui.header.height - 10,
         height: ui.header.height - 10,
-        position: 'absolute',
-        top: 0,
-        left: 5,
         border: 0,
         padding: 0
       },
       buttonText: {
         fontSize: 10,
-        position: 'absolute',
-        bottom: 5,
-        left: 0,
         width: 48,
         height: 10,
         lineHeight: '10px',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: -5
       },
       icon: {
         fontSize: 20,
         padding: 6
       },
       label: {
-        position: 'absolute',
-        right: ((ui.header.height - 20) * 4) + 22
+        verticalAlign: 'middle',
+        height: ui.header.height,
+        display: 'inline-block'
       }
     },
     n,
