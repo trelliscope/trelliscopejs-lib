@@ -56,7 +56,7 @@ class Pagination extends React.Component {
         <div style={this.props.style.label}>
           {txt}
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapPrev]}>
+        <div style={this.props.style.buttonWrap}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
@@ -70,7 +70,7 @@ class Pagination extends React.Component {
             Prev
           </div>
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapNext]}>
+        <div style={this.props.style.buttonWrap}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
@@ -84,7 +84,7 @@ class Pagination extends React.Component {
             Next
           </div>
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapFirst]}>
+        <div style={this.props.style.buttonWrap}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
@@ -98,7 +98,7 @@ class Pagination extends React.Component {
             First
           </div>
         </div>
-        <div style={[this.props.style.buttonWrap, this.props.style.buttonWrapLast]}>
+        <div style={this.props.style.buttonWrap}>
           <div style={this.props.style.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
@@ -136,29 +136,11 @@ const stateSelector = createSelector(
     style: {
       outer: {
         whiteSpace: 'nowrap'
-        // display: 'inline-block'
-        // position: 'absolute',
-        // top: 0,
-        // right: ui.header.logoWidth + 30,
-        // width: 400,
-        // height: ui.header.height
       },
       buttonWrap: {
         width: ui.header.height - 10,
         height: ui.header.height,
         display: 'inline-block'
-      },
-      buttonWrapFirst: {
-        // right: ui.header.height - 20
-      },
-      buttonWrapPrev: {
-        // right: (3 * (ui.header.height - 20)) + 10
-      },
-      buttonWrapNext: {
-        // right: (2 * (ui.header.height - 20)) + 10
-      },
-      buttonWrapLast: {
-        // right: 0
       },
       buttonDiv: {
         width: ui.header.height - 10,

@@ -132,7 +132,6 @@ const styleSelector = createSelector(
         borderBottom: '1px solid',
         borderColor: ui.header.borderColor,
         margin: 0,
-        // lineHeight: `${ui.header.height}px`,
         fontSize: ui.header.fontSize,
         fontWeight: 300
       },
@@ -164,8 +163,8 @@ const styleSelector = createSelector(
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        // paddingTop: 5
-        lineHeight: `${sd.desc === '' ? 48 : 32}px`
+        lineHeight: `${sd.desc === '' ? 48 : 26}px`,
+        paddingTop: sd.desc === '' ? 0 : 5
         // fontWeight: 400,
         // transition: 'left 0.5s ease',
       },
