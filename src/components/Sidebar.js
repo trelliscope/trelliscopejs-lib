@@ -17,8 +17,8 @@ const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
   if (active === '') {
     return (
       <div
-        className={`${classes.base} ${classes.hidden}`}
-        style={styles.base}
+        className={`${classes.sidebarContainer} ${classes.hidden}`}
+        style={styles.sidebarContainer}
       />
     );
   }
@@ -48,7 +48,7 @@ const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
   }
 
   return (
-    <div className={classes.base} style={styles.base}>
+    <div className={classes.sidebarContainer} style={styles.sidebarContainer}>
       <div className={classes.header}>{active}</div>
       {content}
     </div>
@@ -65,11 +65,11 @@ Sidebar.propTypes = {
 // ------ static styles ------
 
 const staticStyles = {
-  base: {
+  sidebarContainer: {
     transitionProperty: 'left',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    position: 'absolute',
+    position: 'fixed',
     left: uiConsts.sideButtons.width,
     top: uiConsts.header.height,
     boxSizing: 'border-box',
@@ -107,7 +107,7 @@ const stateSelector = createSelector(
   displayLoadedSelector, filterColSplitSelector,
   (ch, active, displayLoaded, colSplit) => ({
     styles: {
-      base: {
+      sidebarContainer: {
         width: uiConsts.sidebar.width * (1 +
           (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null)),
         height: ch
