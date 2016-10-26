@@ -86,7 +86,7 @@ Footer.propTypes = {
 
 const staticStyles = {
   wrapper: {
-    position: 'absolute',
+    position: 'fixed',
     boxSizing: 'border-box',
     bottom: 0,
     left: 0,
