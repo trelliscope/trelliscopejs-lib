@@ -158,28 +158,28 @@ export const fetchDisplay = (name, group, cfg) =>
       };
 
       if (json.panelInterface.type === 'image') {
-        dispatch(setPanelRenderer((x, style) => (
+        dispatch(setPanelRenderer((x, width, height) => (
           <img
             src={x}
             alt="panel"
-            style={style}
+            style={{ width, height }}
           />
         )));
       } else if (json.panelInterface.type === 'htmlwidget') {
         const callback = (binding) => {
-          const renderFn = (x, style, post, key) => {
+          const renderFn = (x, width, height, post, key) => {
             const el = document.getElementById(`widget_outer_${key}`);
             if (post && el) {
               // need to create a child div that is not bound to react
               const dv = document.createElement('div');
-              dv.style.width = `${style.width}px`;
-              dv.style.height = `${style.height}px`;
+              dv.style.width = `${width}px`;
+              dv.style.height = `${height}px`;
               dv.setAttribute('id', `widget_${key}`);
               el.appendChild(dv);
 
               let initResult;
               if (binding.initialize) {
-                initResult = binding.initialize(dv, style.width, style.height);
+                initResult = binding.initialize(dv, width, height);
               }
               binding.renderValue(dv, x.x, initResult);
               // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);

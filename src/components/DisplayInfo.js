@@ -1,5 +1,5 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
@@ -8,7 +8,7 @@ import marked from 'marked';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { selectedDisplaySelector, displayInfoSelector } from '../selectors';
-import { uiConstsSelector } from '../selectors/ui';
+import uiConsts from '../styles/uiConsts';
 
 class DisplayInfo extends React.Component {
   constructor(props) {
@@ -43,6 +43,8 @@ class DisplayInfo extends React.Component {
     this.setState({ open: false });
   }
   render() {
+    const { classes } = this.props.sheet;
+
     const actions = [
       <FlatButton
         label="Close"
@@ -84,7 +86,7 @@ class DisplayInfo extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <div style={this.props.style.modal.container}>
+          <div className={classes.modalContainer}>
             <p>
               <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
             </p>
@@ -134,12 +136,10 @@ class DisplayInfo extends React.Component {
     return (
       <button
         onClick={this.handleOpen}
-        style={[
-          this.props.style.button,
-          this.props.singleDisplay && this.props.style.single
-        ]}
+        className={classes.button}
+        style={this.props.singleDisplay ? this.props.styles.single : this.props.styles.button}
       >
-        <i className="icon-info_outline" style={this.props.style.icon} />
+        <i className={`${classes.icon} icon-info_outline`} />
         {dialogContent}
       </button>
     );
@@ -147,7 +147,8 @@ class DisplayInfo extends React.Component {
 }
 
 DisplayInfo.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   singleDisplay: React.PropTypes.bool,
   // selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
@@ -155,48 +156,53 @@ DisplayInfo.propTypes = {
   active: React.PropTypes.bool
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  button: {
+    position: 'fixed',
+    boxSizing: 'border-box',
+    top: 0,
+    // transition: 'left 0.5s ease, background 250ms',
+    display: 'inline-block',
+    height: uiConsts.header.height,
+    width: uiConsts.header.height,
+    fontSize: 18,
+    paddingTop: 0,
+    color: uiConsts.header.button.color,
+    background: 'white',
+    textAlign: 'center',
+    borderRight: `1px solid ${uiConsts.header.borderColor}`,
+    borderBottom: `1px solid ${uiConsts.header.borderColor}`,
+    borderTop: 'none',
+    borderLeft: 'none',
+    '&:hover': {
+      transition: 'background 250ms',
+      background: '#eee',
+      cursor: 'pointer'
+    }
+  },
+  icon: {
+    paddingLeft: 2,
+    lineHeight: `${uiConsts.header.height}px`
+  },
+  modalContainer: {
+    overflowY: 'auto',
+    maxHeight: 520
+  }
+};
+
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  uiConstsSelector, selectedDisplaySelector, displayInfoSelector,
-  (ui, selectedDisplay, displayInfo) => ({
-    style: {
+  selectedDisplaySelector, displayInfoSelector,
+  (selectedDisplay, displayInfo) => ({
+    styles: {
       button: {
-        position: 'fixed',
-        boxSizing: 'border-box',
-        top: 0,
-        // transition: 'left 0.5s ease, background 250ms',
-        left: selectedDisplay.name === '' ? -ui.sideButtons.width : ui.sideButtons.width,
-        display: 'inline-block',
-        height: ui.header.height,
-        width: ui.header.height,
-        fontSize: 18,
-        paddingTop: 0,
-        color: ui.header.button.color,
-        background: 'white',
-        textAlign: 'center',
-        borderRight: `1px solid ${ui.header.borderColor}`,
-        borderBottom: `1px solid ${ui.header.borderColor}`,
-        borderTop: 'none',
-        borderLeft: 'none',
-        ':hover': {
-          transition: 'background 250ms',
-          background: '#eee',
-          cursor: 'pointer'
-        }
+        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
       },
       single: {
-        left: selectedDisplay.name === '' ? -ui.sideButtons.width : 0
-      },
-      icon: {
-        paddingLeft: 2,
-        lineHeight: `${ui.header.height}px`
-      },
-      modal: {
-        container: {
-          overflowY: 'auto',
-          maxHeight: 520
-        }
+        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : 0
       }
     },
     // selectedDisplay,
@@ -211,4 +217,4 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps,
-)(Radium(DisplayInfo));
+)(injectSheet(staticStyles)(DisplayInfo));

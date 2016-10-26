@@ -3,12 +3,6 @@ import { Grid } from 'react-virtualized';
 import CatBar from './FilterCatPlotBar';
 
 class FilterCatPlot extends React.Component {
-  constructor(props) {
-    super(props);
-    this.cellHeight = 15;
-    // this.cellHeight = Math.max(15,
-    //   this.props.style.height / this.props.condDist.orderKeys.length);
-  }
   handleSelect(val, active) {
     const selectArr = Object.assign([], this.props.filterState.value);
     if (active) {
@@ -65,9 +59,9 @@ class FilterCatPlot extends React.Component {
         key={`${x.rowIndex}_${barCt}`}
         active={active}
         allActive={this.props.filterState.value === undefined}
-        height={this.cellHeight}
-        width={((barSize / barMax) * (this.props.style.width - 1)) + 1}
-        totWidth={this.props.style.width}
+        height={this.props.cellHeight}
+        width={((barSize / barMax) * (this.props.width - 1)) + 1}
+        totWidth={this.props.width}
         handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: this.props.dist.dist[barName], id: barName }}
       />
@@ -82,10 +76,10 @@ class FilterCatPlot extends React.Component {
     return (
       <Grid
         key={`${orderValue}_${totSelected}_${sumSelected}_${maxVal}`}
-        width={this.props.style.width}
+        width={this.props.width}
         height={this.props.height}
-        columnWidth={this.props.style.width}
-        rowHeight={this.cellHeight}
+        columnWidth={this.props.width}
+        rowHeight={this.props.cellHeight}
         columnCount={1}
         rowCount={this.props.condDist.dist.length}
         cellRenderer={this.barCellRenderer}
@@ -96,8 +90,9 @@ class FilterCatPlot extends React.Component {
 }
 
 FilterCatPlot.propTypes = {
-  style: React.PropTypes.object,
   height: React.PropTypes.number,
+  width: React.PropTypes.number,
+  cellHeight: React.PropTypes.number,
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   filterState: React.PropTypes.object,

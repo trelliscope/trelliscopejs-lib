@@ -19,15 +19,15 @@ class FilterNumPlot extends React.Component {
       this.props.condDist.breaks[this.props.condDist.breaks.length - 1] + delta];
     const xs = scaleLinear()
       .domain(xrange)
-      .range([sidePad, this.props.style.width - sidePad]);
+      .range([sidePad, this.props.width - sidePad]);
     const ys = scaleLinear()
       .domain([0, this.props.condDist.max])
-      .range([this.props.style.height - axisPad, 0]);
+      .range([this.props.height - axisPad, 0]);
     const axis = axisBottom(ys)
       .scale(xs)
       .ticks(5)
       .tickSize(4);
-    const height = this.props.style.height - axisPad;
+    const height = this.props.height - axisPad;
     const barWidth = xs(delta) - xs(0);
 
     const barPath = (dat, pars) => {
@@ -75,8 +75,8 @@ class FilterNumPlot extends React.Component {
     return (
       <svg
         ref={(d) => { this._d3node = select(d); }}
-        width={this.props.style.width}
-        height={this.props.style.height}
+        width={this.props.width}
+        height={this.props.height}
       />
     );
   }
@@ -84,7 +84,8 @@ class FilterNumPlot extends React.Component {
 
 FilterNumPlot.propTypes = {
   name: React.PropTypes.string, // eslint-disable-line react/no-unused-prop-types
-  style: React.PropTypes.object,
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
   // dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   filterState: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
@@ -123,7 +124,7 @@ HistPlotD3.enter = (props, pars, selection) => {
   };
 
   const histBrush = brushX()
-    .extent([[pars.sidePad, 1], [props.style.width - pars.sidePad, pars.height + 1]])
+    .extent([[pars.sidePad, 1], [props.width - pars.sidePad, pars.height + 1]])
     .handleSize(10);
 
   histBrush
@@ -149,7 +150,7 @@ HistPlotD3.enter = (props, pars, selection) => {
     .attr('id', 'cliprect')
     .attr('x', pars.xs(selRange[0]))
     .attr('width', pars.xs(selRange[1]) - pars.xs(selRange[0]))
-    .attr('height', props.style.height - pars.axisPad);
+    .attr('height', props.height - pars.axisPad);
 
   // background bars
   plotArea.append('path')
@@ -172,7 +173,7 @@ HistPlotD3.enter = (props, pars, selection) => {
 
   const gAxis = selection.append('g')
     .attr('class', 'axis')
-    .attr('transform', `translate(0,${(props.style.height - pars.axisPad) + 1})`)
+    .attr('transform', `translate(0,${(props.height - pars.axisPad) + 1})`)
     .call(pars.axis);
 
   // style the axis

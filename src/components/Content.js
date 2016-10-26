@@ -1,18 +1,19 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fade } from 'material-ui/utils/colorManipulator';
 import Panel from './Panel';
 import { setLabels } from '../actions';
-import { uiConstsSelector, contentWidthSelector, sidebarActiveSelector,
+import { contentWidthSelector, sidebarActiveSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector, panelRendererSelector,
   displayInfoSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
-const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
+const Content = ({ sheet: { classes }, ccd, ci, cinfo, cfg, layout, labels, dims,
   panelRenderer, panelInterface, sidebar, removeLabel }) => {
   let ret = <div />;
 
@@ -68,7 +69,7 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
     }
 
     ret = (
-      <div style={style.bounding}>
+      <div className={classes.content}>
         {panelMatrix.map(el => (
           <Panel
             key={`${el.key}${keyExtra}`}
@@ -76,17 +77,13 @@ const Content = ({ style, ccd, ci, cinfo, cfg, layout, labels, dims,
             panelKey={el.key}
             labels={el.labels}
             labelArr={labels}
-            style={style.panel}
             iface={ci}
             panelRenderer={panelRenderer}
             panelInterface={panelInterface}
             removeLabel={removeLabel}
-            dimStyle={{
-              top: (dims.pHeight * el.rowIndex) + ((el.rowIndex + 1) * dims.pPad) +
-                dims.hOffset + (el.rowIndex * 2),
-              right: (dims.pWidth * el.iColIndex) + ((el.iColIndex + 1) * dims.pPad) +
-                dims.wOffset + (el.iColIndex * 2) + 1
-            }}
+            dims={dims}
+            rowIndex={el.rowIndex}
+            iColIndex={el.iColIndex}
           />
         ))}
       </div>
@@ -110,16 +107,30 @@ Content.propTypes = {
   sidebar: React.PropTypes.string
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  content: {
+    // border: '3px solid red',
+    background: '#fdfdfd',
+    position: 'fixed',
+    top: uiConsts.header.height,
+    right: 0,
+    boxSizing: 'border-box',
+    padding: 0
+  }
+};
+
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  contentWidthSelector, contentHeightSelector, uiConstsSelector,
+  contentWidthSelector, contentHeightSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
   configSelector, panelRendererSelector, displayInfoSelector,
   sidebarActiveSelector,
-  (cw, ch, ui, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar) => {
-    const pPad = ui.content.panel.pad; // padding on either side of the panel
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar) => {
+    const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
     const labelHeightArr = [26, 24, 22, 19];
@@ -147,108 +158,9 @@ const styleSelector = createSelector(
       wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
     }
 
-    const hOffset = ui.header.height;
+    const hOffset = uiConsts.header.height;
 
     return ({
-      style: {
-        bounding: {
-          // border: '3px solid red',
-          background: '#fdfdfd',
-          position: 'fixed',
-          top: ui.header.height,
-          right: 0,
-          boxSizing: 'border-box',
-          padding: 0,
-          width: cw,
-          height: ch
-        },
-        panel: {
-          bounding: {
-            transitionProperty: 'all',
-            transitionDuration: ui.trans.duration,
-            transitionTimingFunction: ui.trans.timing,
-            position: 'fixed',
-            overflow: 'hidden',
-            width: newW + 2,
-            height: newH + (nLabels * labelHeight) + 2,
-            padding: 0,
-            boxSizing: 'border-box',
-            border: '1px solid #ddd'
-          },
-          panel: {
-            transitionProperty: 'all',
-            transitionDuration: ui.trans.duration,
-            transitionTimingFunction: ui.trans.timing,
-            width: newW,
-            height: newH,
-            boxSizing: 'border-box',
-            // background: '#f6f6f6',
-            textAlign: 'center',
-            // lineHeight: `${newH}px`,
-            color: '#bbb'
-          },
-          panelContent: {
-            transitionProperty: 'all',
-            transitionDuration: ui.trans.duration,
-            transitionTimingFunction: ui.trans.timing,
-            display: 'block',
-            width: newW,
-            height: newH
-          },
-          labelTable: {
-            transitionProperty: 'all',
-            transitionDuration: ui.trans.duration,
-            transitionTimingFunction: ui.trans.timing,
-            width: newW,
-            padding: 0,
-            tableLayout: 'fixed',
-            borderSpacing: 0,
-            boxSizing: 'border-box'
-          },
-          labelRow: {
-            transitionProperty: 'all',
-            transitionDuration: ui.trans.duration,
-            transitionTimingFunction: ui.trans.timing,
-            width: newW,
-            height: labelHeight,
-            fontSize: labelHeight - 12,
-            background: '#f6f6f6'
-          },
-          labelRowHover: {
-            background: fade('#f6f6f6', 0.4)
-          },
-          labelCell: {
-            paddingTop: 0,
-            paddingBottom: 0,
-            paddingLeft: 8,
-            paddingRight: 8
-            // borderTop: '1px solid white'
-          },
-          labelNameCell: {
-            width: '33%',
-            borderRight: '1px solid #fff',
-            fontWeight: 400
-          },
-          labelValueCell: {
-            width: '67%'
-          },
-          labelOverflow: {
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis'
-          },
-          labelClose: {
-            float: 'right',
-            cursor: 'pointer',
-            border: 'none',
-            background: 'none',
-            padding: 0,
-            margin: 0,
-            opacity: 0.5,
-            fontSize: labelHeight - 12
-          }
-        }
-      },
       ccd,
       ci,
       cinfo,
@@ -256,6 +168,10 @@ const styleSelector = createSelector(
       layout,
       labels,
       dims: {
+        ww: newW,
+        hh: newH,
+        labelHeight,
+        nLabels,
         pWidth: newW,
         pHeight: newH + (nLabels * labelHeight),
         wOffset,
@@ -287,4 +203,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Content);
+)(injectSheet(staticStyles)(Content));

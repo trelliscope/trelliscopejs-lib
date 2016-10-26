@@ -1,15 +1,17 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import { setSort, setLabels } from '../actions';
-import { uiConstsSelector, sidebarHeightSelector } from '../selectors/ui';
+import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
-const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) => {
+const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
+  handleChange, addLabel }) => {
   let content = <div />;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
@@ -21,14 +23,14 @@ const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) =
     }
     content = (
       <div>
-        <div style={style.tableWrap}>
-          <table style={style.table}>
+        <div className={classes.tableWrap} style={styles.tableWrap}>
+          <table className={classes.table}>
             <tbody>
               {sort.map((d, i) => {
                 const ic = d.dir === 'asc' ? 'up' : 'down';
                 return (
-                  <tr style={style.tr} key={i}>
-                    <td style={style.sortButton}>
+                  <tr className={classes.tr} key={i}>
+                    <td className={classes.sortButton}>
                       <FloatingActionButton
                         mini
                         key={i}
@@ -42,13 +44,13 @@ const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) =
                         <i className={`icon-chevron-${ic}`} />
                       </FloatingActionButton>
                     </td>
-                    <td style={style.labels}>
+                    <td className={classes.labels}>
                       {d.name}<br />
                       <span style={{ color: '#888', fontStyle: 'italic' }}>
                         {cogDesc[d.name]}
                       </span>
                     </td>
-                    <td style={style.closeButton}>
+                    <td className={classes.closeButton}>
                       <IconButton
                         iconStyle={{ fontSize: 16, color: '#aaa' }}
                         iconClassName="icon-times"
@@ -61,16 +63,16 @@ const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) =
             </tbody>
           </table>
         </div>
-        <div style={style.notUsedHeader}>
+        <div className={classes.notUsedHeader}>
           {sort.length === 0 ? 'Select a variable to sort on:' :
             notUsed.length === 0 ? '' : 'More variables:'}
         </div>
-        <div style={style.notUsed}>
+        <div className={classes.notUsed} style={styles.notUsed}>
           {notUsed.map((d, i) => (
             <span key={i}>
               <a data-tip data-for={`tooltip_${d}`}>
                 <button
-                  style={style.variable}
+                  className={classes.variable}
                   key={`button_${i}`}
                   onClick={() => {
                     const sort2 = Object.assign([], sort);
@@ -95,12 +97,87 @@ const SidebarSort = ({ style, sort, cogDesc, labels, handleChange, addLabel }) =
 };
 
 SidebarSort.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
   sort: React.PropTypes.array,
   cogDesc: React.PropTypes.object,
   labels: React.PropTypes.array,
   handleChange: React.PropTypes.func,
   addLabel: React.PropTypes.func
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  tableWrap: {
+    overflowY: 'auto',
+    overflowX: 'hidden'
+  },
+  table: {
+    width: uiConsts.sidebar.width - 5,
+    borderCollapse: 'collapse',
+    borderSpacing: 0,
+    tableLayout: 'fixed'
+  },
+  tr: {
+    width: uiConsts.sidebar.width - 5,
+    height: 48,
+    borderBottom: '1px solid rgb(224, 224, 224)'
+  },
+  sortButton: {
+    verticalAlign: 'middle',
+    width: 45,
+    textAlign: 'center'
+  },
+  labels: {
+    fontSize: 13,
+    height: 48,
+    width: uiConsts.sidebar.width - 45 - 45 - 5,
+    verticalAlign: 'middle',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis'
+  },
+  closeButton: {
+    height: 48,
+    width: 45,
+    textAlign: 'center',
+    verticalAlign: 'middle'
+  },
+  notUsedHeader: {
+    height: 30,
+    lineHeight: '30px',
+    paddingLeft: 10,
+    boxSizing: 'border-box',
+    width: uiConsts.sidebar.width,
+    fontSize: 14
+  },
+  notUsed: {
+    width: uiConsts.sidebar.width,
+    overflowY: 'auto',
+    boxSizing: 'border-box',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10
+  },
+  variable: {
+    display: 'inline-block',
+    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
+    borderRadius: 10,
+    border: 0,
+    background: 'none',
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 3,
+    fontSize: 13,
+    cursor: 'pointer',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    '&:hover': {
+      transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+      background: '#ebebeb'
+    }
+  }
 };
 
 // ------ redux container ------
@@ -118,8 +195,8 @@ const cogDescSelector = createSelector(
 );
 
 const stateSelector = createSelector(
-  uiConstsSelector, sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector,
-  (ui, sort, cogDesc, sh, labels) => {
+  sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector,
+  (sort, cogDesc, sh, labels) => {
     const activeIsTaller = sort.length * 51 > sh - (2 * 51);
     let activeHeight = 51 * sort.length;
     if (activeIsTaller) {
@@ -127,78 +204,12 @@ const stateSelector = createSelector(
       activeHeight = (n * 51) - 25;
     }
     return ({
-      style: {
+      styles: {
         tableWrap: {
-          maxHeight: activeHeight,
-          overflowY: 'auto',
-          overflowX: 'hidden'
-        },
-        table: {
-          width: ui.sidebar.width - 5,
-          borderCollapse: 'collapse',
-          borderSpacing: 0,
-          tableLayout: 'fixed'
-        },
-        tr: {
-          width: ui.sidebar.width - 5,
-          height: 48,
-          borderBottom: '1px solid rgb(224, 224, 224)'
-        },
-        sortButton: {
-          verticalAlign: 'middle',
-          width: 45,
-          textAlign: 'center'
-        },
-        labels: {
-          fontSize: 13,
-          height: 48,
-          width: ui.sidebar.width - 45 - 45 - 5,
-          verticalAlign: 'middle',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis'
-        },
-        closeButton: {
-          height: 48,
-          width: 45,
-          textAlign: 'center',
-          verticalAlign: 'middle'
-        },
-        notUsedHeader: {
-          height: 30,
-          lineHeight: '30px',
-          paddingLeft: 10,
-          boxSizing: 'border-box',
-          width: ui.sidebar.width,
-          fontSize: 14
+          maxHeight: activeHeight
         },
         notUsed: {
-          width: ui.sidebar.width,
-          height: sh - activeHeight - 30,
-          overflowY: 'auto',
-          boxSizing: 'border-box',
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingBottom: 10
-        },
-        variable: {
-          display: 'inline-block',
-          boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
-          borderRadius: 10,
-          border: 0,
-          background: 'none',
-          paddingTop: 2,
-          paddingBottom: 2,
-          paddingLeft: 10,
-          paddingRight: 10,
-          margin: 3,
-          fontSize: 13,
-          cursor: 'pointer',
-          transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          ':hover': {
-            transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-            background: '#ebebeb'
-          }
+          height: sh - activeHeight - 30
         }
       },
       sort,
@@ -229,5 +240,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(SidebarSort));
-
+)(injectSheet(staticStyles)(SidebarSort));

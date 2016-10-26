@@ -1,6 +1,7 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import Dialog from 'material-ui/Dialog';
@@ -9,10 +10,10 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
-import { uiConstsSelector } from '../selectors/ui';
 import { displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
   selectedDisplaySelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
@@ -64,6 +65,8 @@ class DisplaySelect extends React.Component {
     this.setState({ open: false });
   }
   render() {
+    const { classes } = this.props.sheet;
+
     const actions = [
       <FlatButton
         label="Close"
@@ -71,23 +74,13 @@ class DisplaySelect extends React.Component {
         onTouchTap={this.handleClose}
       />
     ];
-    let styleOverride = {
-      background: '#ddd',
-      borderColor: '#ddd',
-      ':hover': {
-        background: '#ccc',
-        borderColor: '#ccc'
-      }
-    };
-    if (this.props.displayList && this.props.displayList.isLoaded) {
-      styleOverride = { };
-    }
+    const isLoaded = this.props.displayList && this.props.displayList.isLoaded;
     let attnDiv = (
-      <div style={this.props.style.attn.outer}>
-        <div style={this.props.style.attn.inner}>
+      <div className={classes.attnOuter}>
+        <div className={classes.attnInner}>
           <div
             ref={(d) => { this._atnnCircle = d; }}
-            style={this.props.style.attn.empty}
+            className={classes.attnEmpty}
           />
         </div>
       </div>
@@ -99,10 +92,10 @@ class DisplaySelect extends React.Component {
     return (
       <button
         onClick={this.handleOpen}
-        style={[this.props.style.button, styleOverride]}
+        className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
       >
         {attnDiv}
-        <i className="icon-folder-open" style={{ paddingLeft: 3 }} />
+        <i className={`icon-folder-open ${classes.folderIcon}`} />
         <Dialog
           title="Select a Display to Open"
           actions={actions}
@@ -123,7 +116,7 @@ class DisplaySelect extends React.Component {
 }
 
 DisplaySelect.propTypes = {
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   handleClick: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
@@ -132,70 +125,82 @@ DisplaySelect.propTypes = {
   displayGroups: React.PropTypes.object
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  attnOuter: {
+    position: 'absolute',
+    overflow: 'hidden',
+    height: uiConsts.header.height,
+    width: uiConsts.header.height,
+    top: 0,
+    left: (uiConsts.sideButtons.width - uiConsts.header.height) / 2,
+    pointerEvents: 'none'
+  },
+  attnInner: {
+    position: 'absolute',
+    height: uiConsts.header.height,
+    width: uiConsts.header.height,
+    top: 0,
+    left: 0,
+    transition: ['transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
+      '0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'].join(' '),
+    opacity: 1,
+    transform: 'scale(0.85)'
+  },
+  attnEmpty: {
+    position: 'absolute',
+    height: uiConsts.header.height,
+    width: '100%',
+    borderRadius: '50%',
+    opacity: 0.16,
+    transition: 'transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms',
+    top: 0,
+    transform: 'scale(0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.870588)'
+  },
+  folderIcon: {
+    paddingLeft: 3
+  },
+  button: {
+    zIndex: 500,
+    position: 'fixed',
+    boxSizing: 'border-box',
+    top: 0,
+    left: 0,
+    height: uiConsts.header.height,
+    width: uiConsts.sideButtons.width,
+    fontSize: 18,
+    lineHeight: `${uiConsts.header.height + 2}px`,
+    background: uiConsts.header.button.active.background,
+    color: 'white',
+    // color: uiConsts.header.button.color,
+    textAlign: 'center',
+    border: 'none',
+    transition: 'all 500ms ease-in',
+    '&:hover': {
+      transition: 'background 250ms',
+      background: emphasize(uiConsts.header.button.active.background, 0.2),
+      color: 'white',
+      cursor: 'pointer'
+    }
+  },
+  buttonInactive: {
+    background: '#ddd',
+    borderColor: '#ddd',
+    '&:hover': {
+      background: '#ccc',
+      borderColor: '#ccc'
+    }
+  }
+};
+
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  uiConstsSelector, selectedDisplaySelector, displayListSelector,
+  selectedDisplaySelector, displayListSelector,
   displayGroupsSelector, configSelector,
-  (ui, selectedDisplay, displayList, displayGroups, cfg) => ({
-    style: {
-      attn: {
-        outer: {
-          position: 'absolute',
-          overflow: 'hidden',
-          height: ui.header.height,
-          width: ui.header.height,
-          top: 0,
-          left: (ui.sideButtons.width - ui.header.height) / 2,
-          pointerEvents: 'none'
-        },
-        inner: {
-          position: 'absolute',
-          height: ui.header.height,
-          width: ui.header.height,
-          top: 0,
-          left: 0,
-          transition: ['transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
-            '0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'].join(' '),
-          opacity: 1,
-          transform: 'scale(0.85)'
-        },
-        empty: {
-          position: 'absolute',
-          height: ui.header.height,
-          width: '100%',
-          borderRadius: '50%',
-          opacity: 0.16,
-          transition: 'transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms',
-          top: 0,
-          transform: 'scale(0.85)',
-          backgroundColor: 'rgba(0, 0, 0, 0.870588)'
-        }
-      },
-      button: {
-        zIndex: 500,
-        position: 'fixed',
-        boxSizing: 'border-box',
-        top: 0,
-        left: 0,
-        height: ui.header.height,
-        width: ui.sideButtons.width,
-        fontSize: 18,
-        lineHeight: `${ui.header.height + 2}px`,
-        background: ui.header.button.active.background,
-        color: 'white',
-        // color: ui.header.button.color,
-        textAlign: 'center',
-        border: 'none',
-        transition: 'all 500ms ease-in',
-        ':hover': {
-          transition: 'background 250ms',
-          background: emphasize(ui.header.button.active.background, 0.2),
-          color: 'white',
-          cursor: 'pointer'
-        }
-      }
-    },
+  (selectedDisplay, displayList, displayGroups, cfg) => ({
     cfg,
     selectedDisplay,
     displayList,
@@ -229,4 +234,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(DisplaySelect));
+)(injectSheet(staticStyles)(DisplaySelect));

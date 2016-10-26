@@ -1,23 +1,25 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
+import { windowWidthSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector } from '../selectors';
 import FooterChip from './FooterChip';
+import uiConsts from '../styles/uiConsts';
 
-const Footer = ({ style, sort, filter, nFilt, nPanels }) => {
+const Footer = ({ sheet: { classes }, width, sort, filter, nFilt, nPanels }) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
 
   if (sort.length > 0) {
     sortContent = (
-      <div style={style.sectionWrapper}>
-        <div style={style.sectionText}>
+      <div className={classes.sectionWrapper}>
+        <div className={classes.sectionText}>
           Sorting on:
         </div>
-        <div style={style.chipWrapper}>
+        <div className={classes.chipWrapper}>
           {sort.map((el, i) => (
             <FooterChip
               key={`${el.name}_sortchip`}
@@ -35,11 +37,11 @@ const Footer = ({ style, sort, filter, nFilt, nPanels }) => {
 
   if (filter.length > 0) {
     filterContent = (
-      <div style={style.sectionWrapper}>
-        <div style={style.sectionText}>
+      <div className={classes.sectionWrapper}>
+        <div className={classes.sectionText}>
           Filtering on:
         </div>
-        <div style={style.chipWrapper}>
+        <div className={classes.chipWrapper}>
           {filter.map((el, i) => (
             <FooterChip
               key={`${el.name}_filterchip`}
@@ -51,7 +53,7 @@ const Footer = ({ style, sort, filter, nFilt, nPanels }) => {
             />
           ))}
         </div>
-        <div style={style.filterText}>
+        <div className={classes.filterText}>
           ({nFilt} of {nPanels} panels)
         </div>
       </div>
@@ -59,11 +61,11 @@ const Footer = ({ style, sort, filter, nFilt, nPanels }) => {
   }
 
   if (filter.length > 0 && sort.length > 0) {
-    spacerContent = <div style={style.spacer} />;
+    spacerContent = <div className={classes.spacer} />;
   }
 
   return (
-    <div style={style.wrapper}>
+    <div className={classes.wrapper} style={{ width }}>
       {sortContent}
       {spacerContent}
       {filterContent}
@@ -72,11 +74,50 @@ const Footer = ({ style, sort, filter, nFilt, nPanels }) => {
 };
 
 Footer.propTypes = {
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
+  width: React.PropTypes.number,
   sort: React.PropTypes.array,
   filter: React.PropTypes.array,
   nFilt: React.PropTypes.number,
   nPanels: React.PropTypes.number
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  wrapper: {
+    position: 'absolute',
+    boxSizing: 'border-box',
+    bottom: 0,
+    left: 0,
+    height: uiConsts.footer.height,
+    paddingLeft: 10,
+    margin: 0,
+    lineHeight: `${uiConsts.footer.height}px`,
+    fontSize: uiConsts.footer.height * 0.5,
+    fontWeight: 300,
+    background: uiConsts.footer.background,
+    color: uiConsts.footer.color,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  sectionWrapper: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  chipWrapper: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  sectionText: {
+    marginRight: 3
+  },
+  spacer: {
+    width: 12
+  },
+  filterText: {
+    marginLeft: 5
+  }
 };
 
 // ------ redux container ------
@@ -143,46 +184,11 @@ const filterInfoSelector = createSelector(
   }
 );
 
-const styleSelector = createSelector(
-  windowWidthSelector, uiConstsSelector, sortInfoSelector, filterInfoSelector,
+const stateSelector = createSelector(
+  windowWidthSelector, sortInfoSelector, filterInfoSelector,
   filterCardinalitySelector, displayInfoSelector,
-  (ww, ui, sort, filter, nFilt, di) => ({
-    style: {
-      wrapper: {
-        position: 'absolute',
-        boxSizing: 'border-box',
-        bottom: 0,
-        left: 0,
-        width: ww,
-        height: ui.footer.height,
-        paddingLeft: 10,
-        margin: 0,
-        lineHeight: `${ui.footer.height}px`,
-        fontSize: ui.footer.height * 0.5,
-        fontWeight: 300,
-        background: ui.footer.background,
-        color: ui.footer.color,
-        display: 'flex',
-        flexDirection: 'row'
-      },
-      sectionWrapper: {
-        display: 'flex',
-        flexDirection: 'row'
-      },
-      chipWrapper: {
-        display: 'flex',
-        flexDirection: 'row'
-      },
-      sectionText: {
-        marginRight: 3
-      },
-      spacer: {
-        width: 12
-      },
-      filterText: {
-        marginLeft: 5
-      }
-    },
+  (ww, sort, filter, nFilt, di) => ({
+    width: ww,
     sort,
     filter,
     nFilt,
@@ -191,9 +197,9 @@ const styleSelector = createSelector(
 );
 
 const mapStateToProps = state => (
-  styleSelector(state)
+  stateSelector(state)
 );
 
 export default connect(
   mapStateToProps
-)(Footer);
+)(injectSheet(staticStyles)(Footer));

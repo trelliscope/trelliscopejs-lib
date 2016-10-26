@@ -1,10 +1,10 @@
 __loadTrscopeConfig__({
-  "display_base" : "vdb_housing",
-  "data_type": "json",
-  "cog_server" : {
-    "type" : "json",
-    "info" : {
-      "base" : "vdb_housing"
+  "display_base": "vdb_housing",
+  "data_type": "jsonp",
+  "cog_server": {
+    "type": "jsonp",
+    "info": {
+      "base": "vdb_housing"
     }
   }
 })

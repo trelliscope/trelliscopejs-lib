@@ -1,8 +1,9 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterNumPlot from './FilterNumPlot';
+import uiConsts from '../styles/uiConsts';
 
 class FilterNum extends React.Component {
   constructor(props) {
@@ -95,38 +96,55 @@ class FilterNum extends React.Component {
     return true;
   }
   render() {
+    const { classes } = this.props.sheet;
+
+    const underlineStyle = {
+      bottom: 10
+    };
+
     const validStyle = { textAlign: 'center' };
     if (this.props.filterState.valid !== undefined && !this.props.filterState.valid) {
       validStyle.color = 'red';
     }
+
+    const rangeInput = {
+      width: 75,
+      marginTop: -10,
+      fontSize: 16,
+      transform: 'scale(0.85)',
+      transformOrigin: '0 0'
+    };
+
     this.stateValue = this.props.filterState.value;
     if (this.stateValue === undefined) {
       this.stateValue = {};
     }
 
     return (
-      <div style={this.props.style.container}>
+      <div className={classes.container}>
         <div
-          style={this.props.style.plotContainer}
+          className={classes.plotContainer}
         >
           <FilterNumPlot
             name={this.props.name}
-            style={this.props.style.plotContainer}
+            className={classes.plotContainer}
+            width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
+            height={uiConsts.sidebar.filter.num.height}
             dist={this.props.dist}
             condDist={this.props.condDist}
             filterState={this.props.filterState}
             handleChange={this.handleBrushInput}
           />
         </div>
-        <div style={this.props.style.inputContainer}>
-          <div style={this.props.style.rangeInputText}>Range:</div>
+        <div className={classes.inputContainer}>
+          <div className={classes.rangeInputText}>Range:</div>
           <TextField
             ref={(d) => { this._fromInput = d; }}
             // hintText="from"
             name="fromText"
-            style={this.props.style.rangeInput}
+            style={rangeInput}
             inputStyle={validStyle}
-            underlineStyle={this.props.style.underlineStyle}
+            underlineStyle={underlineStyle}
             type="number"
             defaultValue={this.stateValue.from}
             onChange={e => this.handleInput(e.target.value, 'from')}
@@ -136,14 +154,14 @@ class FilterNum extends React.Component {
               'from'
             )}
           />
-          <div style={this.props.style.rangeInputText}>&ndash;</div>
+          <div className={classes.rangeInputText}>&ndash;</div>
           <TextField
             ref={(d) => { this._toInput = d; }}
             // hintText="to"
             name="toText"
-            style={this.props.style.rangeInput}
+            style={rangeInput}
             inputStyle={validStyle}
-            underlineStyle={this.props.style.underlineStyle}
+            underlineStyle={underlineStyle}
             type="number"
             defaultValue={this.stateValue.to}
             onChange={e => this.handleInput(e.target.value, 'to')}
@@ -162,10 +180,41 @@ class FilterNum extends React.Component {
 FilterNum.propTypes = {
   name: React.PropTypes.string,
   filterState: React.PropTypes.object,
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 
-export default Radium(FilterNum);
+// ------ static styles ------
+
+const staticStyles = {
+  container: {
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 5
+  },
+  plotContainer: {
+    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    height: uiConsts.sidebar.filter.num.height,
+    position: 'relative',
+    overflow: 'hidden',
+    cursor: 'default',
+    userSelect: 'none',
+    zIndex: 1000
+  },
+  inputContainer: {
+    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    marginBottom: -14,
+    zIndex: 100,
+    position: 'relative',
+    verticalAlign: 'center'
+  },
+  rangeInputText: {
+    fontSize: 13,
+    paddingRight: 10,
+    display: 'inline-block'
+  }
+};
+
+export default injectSheet(staticStyles)(FilterNum);

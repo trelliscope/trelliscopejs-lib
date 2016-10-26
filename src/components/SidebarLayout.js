@@ -1,22 +1,22 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import NumericInput from './NumericInput';
 import { setLayout } from '../actions';
-import { uiConstsSelector } from '../selectors/ui';
-import { layoutSelector, displayInfoSelector } from '../selectors';
+import { layoutSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
-const SidebarLayout = ({ style, layout, handleChange }) => {
+const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
   let content = <div />;
   if (layout.nrow) {
     content = (
-      <div style={style.base}>
-        <div style={style.row}>
-          <div style={style.label}>Rows:</div>
-          <div style={style.ninput}>
+      <div>
+        <div className={classes.row}>
+          <div className={classes.label}>Rows:</div>
+          <div className={classes.nInput}>
             <NumericInput
               arrows
               value={layout.nrow}
@@ -28,9 +28,9 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
           </div>
         </div>
         <Divider />
-        <div style={style.row}>
-          <div style={style.label}>Columns:</div>
-          <div style={style.ninput}>
+        <div className={classes.row}>
+          <div className={classes.label}>Columns:</div>
+          <div className={classes.nInput}>
             <NumericInput
               arrows
               value={layout.ncol}
@@ -42,10 +42,10 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
           </div>
         </div>
         <Divider />
-        <div style={style.row}>
+        <div className={classes.row}>
           Arrangement:
         </div>
-        <div style={style.row}>
+        <div className={classes.row}>
           <RadioButtonGroup
             name="arrangement"
             defaultSelected={layout.arrange}
@@ -56,23 +56,23 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
             <RadioButton
               value="row"
               label={
-                <span style={style.input.labelSpan}>
+                <span className={classes.inputLabelSpan}>
                   By row&nbsp;&nbsp;
-                  <i className="icon-byrow" style={style.input.icon} />
+                  <i className={`icon-byrow ${classes.inputIcon}`} />
                 </span>}
-              style={style.input.radio}
-              labelStyle={style.input.label}
+              className={classes.inputRadio}
+              labelStyle={{ marginTop: -8 }}
             />
             <RadioButton
               value="column"
               label={
-                <span style={style.input.labelSpan}>
+                <span className={classes.inputLabelSpan}>
                   By column&nbsp;&nbsp;
-                  <i className="icon-bycol" style={style.input.icon} />
+                  <i className={`icon-bycol ${classes.inputIcon}`} />
                 </span>
               }
-              style={style.input.radio}
-              labelStyle={style.input.label}
+              className={classes.inputRadio}
+              labelStyle={{ marginTop: -8 }}
             />
           </RadioButtonGroup>
         </div>
@@ -83,53 +83,48 @@ const SidebarLayout = ({ style, layout, handleChange }) => {
 };
 
 SidebarLayout.propTypes = {
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   layout: React.PropTypes.object,
   handleChange: React.PropTypes.func
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  row: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 8,
+    paddingBottom: 6,
+    width: uiConsts.sidebar.width - 30,
+    display: 'inline-block'
+  },
+  label: {
+    lineHeight: '28px',
+    float: 'left'
+  },
+  nInput: {
+    float: 'right'
+  },
+  inputRadio: {
+    marginBottom: 5,
+    marginTop: 0
+  },
+  inputLabelSpan: {
+    lineHeight: '40px',
+    verticalAlign: 'middle'
+  },
+  inputIcon: {
+    fontSize: 23,
+    verticalAlign: 'text-bottom'
+  }
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  uiConstsSelector, layoutSelector, displayInfoSelector,
-  (ui, layout, di) => ({
-    style: {
-      base: {
-        background: di.isFetching ? 'red' : 'white'
-      },
-      row: {
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingTop: 8,
-        paddingBottom: 6,
-        width: ui.sidebar.width - 30,
-        display: 'inline-block'
-      },
-      label: {
-        lineHeight: '28px',
-        float: 'left'
-      },
-      ninput: {
-        float: 'right'
-      },
-      input: {
-        radio: {
-          marginBottom: 5,
-          marginTop: 0
-        },
-        label: {
-          marginTop: -8
-        },
-        labelSpan: {
-          lineHeight: '40px',
-          verticalAlign: 'middle'
-        },
-        icon: {
-          fontSize: 23,
-          verticalAlign: 'text-bottom'
-        }
-      }
-    },
+  layoutSelector,
+  layout => ({
     layout
   })
 );
@@ -147,4 +142,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(SidebarLayout));
+)(injectSheet(staticStyles)(SidebarLayout));

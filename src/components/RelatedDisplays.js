@@ -1,13 +1,13 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { uiConstsSelector } from '../selectors/ui';
 import { relatedDisplaysSelector } from '../selectors/display';
 import { selectedDisplaySelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
 class RelatedDisplays extends React.Component {
   constructor(props) {
@@ -39,6 +39,8 @@ class RelatedDisplays extends React.Component {
     this.setState({ open: false });
   }
   render() {
+    const { classes } = this.props.sheet;
+
     const actions = [
       <FlatButton
         label="Close"
@@ -49,7 +51,8 @@ class RelatedDisplays extends React.Component {
     return (
       <button
         onClick={this.handleOpen}
-        style={this.props.style.button}
+        className={classes.button}
+        style={this.props.styles.button}
       >
         <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
         <Dialog
@@ -70,41 +73,49 @@ class RelatedDisplays extends React.Component {
 }
 
 RelatedDisplays.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   relatedDisplays: React.PropTypes.array,
   active: React.PropTypes.bool
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  button: {
+    position: 'fixed',
+    boxSizing: 'border-box',
+    top: 0,
+    transition: 'left 0.5s ease, background 250ms',
+    display: 'inline-block',
+    height: uiConsts.header.height,
+    width: uiConsts.header.height,
+    fontSize: 18,
+    lineHeight: `${uiConsts.header.height}px`,
+    color: uiConsts.header.button.color,
+    background: 'white',
+    textAlign: 'center',
+    borderRight: `1px solid ${uiConsts.header.borderColor}`,
+    borderBottom: `1px solid ${uiConsts.header.borderColor}`,
+    borderLeft: 'none',
+    borderTop: 'none',
+    '&:hover': {
+      transition: 'background 250ms',
+      background: '#eee',
+      cursor: 'pointer'
+    }
+  }
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  uiConstsSelector, relatedDisplaysSelector, selectedDisplaySelector,
-  (ui, rd, sd) => ({
-    style: {
+  relatedDisplaysSelector, selectedDisplaySelector,
+  (rd, sd) => ({
+    styles: {
       button: {
-        position: 'fixed',
-        boxSizing: 'border-box',
-        top: 0,
-        transition: 'left 0.5s ease, background 250ms',
-        left: ui.header.height *
-          (sd.name === '' || rd.length === 0 ? 0 : 2),
-        display: 'inline-block',
-        height: ui.header.height,
-        width: ui.header.height,
-        fontSize: 18,
-        lineHeight: `${ui.header.height}px`,
-        color: ui.header.button.color,
-        background: 'white',
-        textAlign: 'center',
-        borderRight: `1px solid ${ui.header.borderColor}`,
-        borderBottom: `1px solid ${ui.header.borderColor}`,
-        borderLeft: 'none',
-        borderTop: 'none',
-        ':hover': {
-          transition: 'background 250ms',
-          background: '#eee',
-          cursor: 'pointer'
-        }
+        left: uiConsts.header.height *
+          (sd.name === '' || rd.length === 0 ? 0 : 2)
       }
     },
     relatedDisplays: rd,
@@ -118,4 +129,4 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps,
-)(Radium(RelatedDisplays));
+)(injectSheet(staticStyles)(RelatedDisplays));

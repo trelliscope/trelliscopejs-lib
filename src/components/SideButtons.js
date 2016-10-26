@@ -1,6 +1,6 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import { setActiveSidebar } from '../actions';
@@ -8,8 +8,9 @@ import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind';
 import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS } from '../constants';
-import { uiConstsSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
+import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { dialogOpenSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
 const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
@@ -50,13 +51,14 @@ class SideButtons extends React.Component {
     }
   }
   render() {
+    const { classes } = this.props.sheet;
+
     return (
-      <div style={this.props.style.base}>
-        <div style={this.props.style.spacer} />
+      <div className={classes.base} style={this.props.styles.base}>
+        <div className={classes.spacer} />
         {buttons.map((d, i) => (
           <SideButton
             key={`sidebutton-${i}`}
-            bstyle={this.props.buttonStyle}
             isActive={d.title === this.props.active}
             icon={d.icon}
             title={d.title}
@@ -70,86 +72,43 @@ class SideButtons extends React.Component {
 }
 
 SideButtons.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   active: React.PropTypes.string,
-  buttonStyle: React.PropTypes.object,
   dialogOpen: React.PropTypes.bool,
   setActive: React.PropTypes.func
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  base: {
+    position: 'absolute',
+    left: 0,
+    top: uiConsts.header.height,
+    width: uiConsts.sideButtons.width,
+    background: uiConsts.sideButtons.background,
+    zIndex: 1000
+  },
+  spacer: {
+    transition: 'height 0.2s',
+    height: uiConsts.sidebar.header.height,
+    width: uiConsts.sideButtons.width,
+    background: uiConsts.sideButtons.spacerBackground
+  }
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, sidebarActiveSelector, dialogOpenSelector,
-  (ch, ui, active, dialogOpen) => ({
-    style: {
+  contentHeightSelector, sidebarActiveSelector, dialogOpenSelector,
+  (ch, active, dialogOpen) => ({
+    styles: {
       base: {
-        position: 'absolute',
-        left: 0,
-        top: ui.header.height,
-        width: ui.sideButtons.width,
-        height: ch,
-        background: ui.sideButtons.background,
-        zIndex: 1000
-      },
-      spacer: {
-        transition: 'height 0.2s',
-        height: ui.sidebar.header.height,
-        width: ui.sideButtons.width,
-        background: ui.sideButtons.spacerBackground
+        height: ch
       }
     },
-    width: ui.sideButtons.width,
-    buttonStyle: {
-      base: {
-        position: 'relative',
-        width: ui.sideButtons.width,
-        height: ui.sideButtons.width,
-        lineHeight: `${ui.sideButtons.width}px`,
-        textAlign: 'center',
-        verticalAlign: 'middle',
-        fontSize: ui.sideButtons.fontSize,
-        color: ui.sideButtons.button.color,
-        borderBottom: `1px solid ${ui.sideButtons.button.borderColor}`,
-        borderTop: 'none',
-        borderLeft: 'none',
-        borderRight: 'none',
-        userSelect: 'none',
-        background: ui.sideButtons.background,
-        transition: 'color 0.2s, background 0.2s',
-        ':hover': {
-          transition: 'color 0.2s, background 0.2s',
-          background: ui.sideButtons.button.hover.background,
-          cursor: 'pointer'
-        }
-      },
-      active: {
-        transition: 'color 0.2s, background 0.2s',
-        background: 'white',
-        color: ui.sideButtons.button.active.color,
-        ':hover': {
-          transition: 'color 0.2s, background 0.2s',
-          background: ui.sideButtons.button.active.background
-        }
-      },
-      icon: {
-        lineHeight: `${ui.sideButtons.fontSize}px`,
-        height: ui.sideButtons.fontSize,
-        width: ui.sideButtons.width,
-        position: 'absolute',
-        top: 8,
-        left: 0
-      },
-      label: {
-        fontSize: ui.sideButtons.labelFontSize,
-        lineHeight: `${ui.sideButtons.labelFontSize}px`,
-        width: ui.sideButtons.width,
-        // opacity: 0.6,
-        position: 'absolute',
-        bottom: 4,
-        left: 0
-      }
-    },
+    width: uiConsts.sideButtons.width,
     active,
     dialogOpen
   })
@@ -168,4 +127,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(SideButtons));
+)(injectSheet(staticStyles)(SideButtons));

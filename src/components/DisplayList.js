@@ -1,32 +1,10 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { GridList, GridTile } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
-import Radium from 'radium';
 import { redA200 } from 'material-ui/styles/colors';
 
-// di is display info
-const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
-  const styles = {
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around'
-    },
-    gridList: {
-      width: 700,
-      marginBottom: 24
-    },
-    gridTile: {
-      cursor: 'pointer'
-    },
-    img: {
-      opacity: 1,
-      ':hover': {
-        opacity: 0.7
-      }
-    }
-  };
-
+const DisplayList = ({ sheet: { classes }, di, displayGroups, handleClick, cfg }) => {
   const groupKeys = Object.keys(displayGroups);
 
   const makeSubheader = (groupName, n) => {
@@ -37,26 +15,26 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
   };
 
   const displayList = groupKeys.map(k => (
-    <div style={styles.root} key={k}>
+    <div className={classes.groupContainer} key={k}>
       <GridList
         cellHeight={200}
         cols={3}
-        style={styles.gridList}
+        className={classes.gridList}
       >
         {makeSubheader(k, groupKeys.length)}
         {displayGroups[k].map(i => (
           <GridTile
             key={i}
-            style={styles.gridTile}
+            className={classes.gridTile}
             title={
-              <div style={{ fontWeight: 400, color: redA200 }}>
+              <div className={classes.gridTitle}>
                 {di[i].name}
               </div>
             }
             subtitle={
               <span style={{ fontSize: 13 }}>
                 {di[i].desc}<br />
-                <span style={{ fontStyle: 'italic', fontSize: 11 }}>
+                <span className={classes.gridSubtitle}>
                   {di[i].n} panels,
                   {di[i].updated.substring(0, di[i].updated.length - 3)}
                 </span>
@@ -68,7 +46,7 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
             <img
               src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}
               alt={di[i].name}
-              style={styles.img}
+              className={classes.img}
               key={`img${i}`}
             />
           </GridTile>
@@ -78,17 +56,52 @@ const DisplayList = ({ di, displayGroups, handleClick, cfg }) => {
   ));
 
   return (
-    <div style={{ height: 400, overflowY: 'auto' }}>
+    <div className={classes.container}>
       {displayList}
     </div>
   );
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  container: {
+    height: 400,
+    overflowY: 'auto'
+  },
+  groupContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around'
+  },
+  gridList: {
+    width: 700,
+    marginBottom: 24
+  },
+  gridTile: {
+    cursor: 'pointer'
+  },
+  gridTitle: {
+    fontWeight: 400,
+    color: redA200
+  },
+  gridSubtitle: {
+    fontStyle: 'italic',
+    fontSize: 11 },
+  img: {
+    opacity: 1,
+    '&:hover': {
+      opacity: 0.7
+    }
+  }
+};
+
 DisplayList.propTypes = {
+  sheet: React.PropTypes.object,
   di: React.PropTypes.array,
   displayGroups: React.PropTypes.object,
   handleClick: React.PropTypes.func,
   cfg: React.PropTypes.object
 };
 
-export default Radium(DisplayList);
+export default injectSheet(staticStyles)(DisplayList);

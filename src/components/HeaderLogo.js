@@ -1,5 +1,5 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -7,7 +7,8 @@ import Mousetrap from 'mousetrap';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
-import { uiConstsSelector, windowHeightSelector } from '../selectors/ui';
+import { windowHeightSelector } from '../selectors/ui';
+import uiConsts from '../styles/uiConsts';
 
 class HeaderLogo extends React.Component {
   constructor(props) {
@@ -33,6 +34,8 @@ class HeaderLogo extends React.Component {
     this.setState({ open: false });
   }
   render() {
+    const { classes } = this.props.sheet;
+
     const actions = [
       <FlatButton
         label="Close"
@@ -45,7 +48,7 @@ class HeaderLogo extends React.Component {
     if (!this.props.singleDisplay) {
       openDisplayTags = (
         <li>
-          <code style={this.props.style.dialog.code}>o</code>
+          <code className={classes.dialogCode}>o</code>
           &ensp;open &quot;Select Display&quot; dialog
         </li>
       );
@@ -53,11 +56,11 @@ class HeaderLogo extends React.Component {
     return (
       <button
         onClick={this.handleOpen}
-        style={this.props.style.logo}
+        className={classes.logo}
       >
         Trelliscope
-        <div style={this.props.style.icon}>
-          <i className="icon-help" style={this.props.style.icon} />
+        <div className={classes.icon}>
+          <i className={`icon-help ${classes.icon}`} />
         </div>
         <Dialog
           title={`Trelliscope Viewer v${VERSION}`}
@@ -67,22 +70,25 @@ class HeaderLogo extends React.Component {
         >
           <Tabs>
             <Tab label="How to Use" >
-              <div style={this.props.style.dialog.div}>
-                <p style={this.props.style.dialog.p}>
+              <div
+                className={classes.dialogDiv}
+                style={{ maxHeight: Math.max(50, this.props.windowHeight - 310) }}
+              >
+                <p className={classes.dialogP}>
                   <strong>What:</strong>&nbsp;
                   Trelliscope is a tool for interactively viewing a large
                   collection of visualizations.  Each visualization in a
                   collection is called a <em>panel</em> and each panel typically
                   represents one slice of a large dataset.
                 </p>
-                <p style={this.props.style.dialog.p}>
+                <p className={classes.dialogP}>
                   <strong>Why:</strong>&nbsp;
                   Viewing multiple slices of a dataset simultaneously is a
                   simple  but very powerful visual technique and provides a way
                   to visualize data in greater detail, particularly when the
                   dataset is large.
                 </p>
-                <p style={this.props.style.dialog.p}>
+                <p className={classes.dialogP}>
                   <strong>Interactivity:</strong>&nbsp;
                   When there are many panels, it is useful to be able to
                   navigate to which panels you want to view and make
@@ -98,16 +104,16 @@ class HeaderLogo extends React.Component {
                   <strong>Grid</strong>, <strong>Labels</strong>,&nbsp;
                   <strong>Filter</strong>, and <strong>Sort</strong>.
                 </p>
-                <p style={this.props.style.dialog.p}>
-                  <i className="icon-th" style={this.props.style.dialog.hi} />&nbsp;
+                <p className={classes.dialogP}>
+                  <i className={`icon-th ${classes.dialogHi}`} />&nbsp;
                   <strong>Grid:</strong>&nbsp;
                   In the &quot;Grid&quot; sidebar, you can specify the layout of
                   the grid of panels you wish to display, specifying the number
                   of rows and columns of the grid, as well as whether to arrange
                   panels in order by row or by column.
                 </p>
-                <p style={this.props.style.dialog.p}>
-                  <i className="icon-list-ul" style={this.props.style.dialog.hi} />&nbsp;
+                <p className={classes.dialogP}>
+                  <i className={`icon-list-ul ${classes.dialogHi}`} />&nbsp;
                   <strong>Labels:</strong>&nbsp;
                   In the &quot;Labels&quot; sidebar, you can specify the panel
                   metrics that you wish to see displayed under each panel
@@ -119,15 +125,15 @@ class HeaderLogo extends React.Component {
                   appears.  Labels are also automatically added when you specify
                   a new variable to sort or filter on.
                 </p>
-                <p style={this.props.style.dialog.p}>
-                  <i className="icon-filter" style={this.props.style.dialog.hi} />&nbsp;
+                <p className={classes.dialogP}>
+                  <i className={`icon-filter ${classes.dialogHi}`} />&nbsp;
                   <strong>Filter:</strong>&nbsp;
                   The &quot;Filter&quot; sidebar provides various ways
                   to filter the panels being displayed based on the panel
                   metrics. A list of variables is available as
                   buttons.  Clicking a button will produce a visual distribution
                   of the variable.
-                  <p style={this.props.style.dialog.p2}>
+                  <p className={classes.dialogP2}>
                     <strong>Categorical filter:</strong>&nbsp;
                     For categorical variables, a bar chart is provided,
                     showing the the possible values of the variable
@@ -146,7 +152,7 @@ class HeaderLogo extends React.Component {
                     will be filtered accordingly.  This field can be plain text or
                     a <a href="http://regexr.com/" target="_blank" rel="noopener noreferrer">regular expression</a>.
                   </p>
-                  <p style={this.props.style.dialog.p2}>
+                  <p className={classes.dialogP2}>
                     <strong>Numeric filter:</strong>&nbsp;
                     For numeric variables, a histogram is provided, which shows
                     the distribution of the variable based on all other active
@@ -156,7 +162,7 @@ class HeaderLogo extends React.Component {
                     Alternatively, you can manually enter a range in the fields
                     provided below the histogram.
                   </p>
-                  <p style={this.props.style.dialog.p22}>
+                  <p className={classes.dialogP22}>
                     To reset a filter variable, you can either clear out the
                     fields, deselect the selections made in the distribution
                     plots, or click the <i className="icon-undo" /> button
@@ -164,7 +170,7 @@ class HeaderLogo extends React.Component {
                     variable.  This icon is only available if there is an active
                     filter for the variable.
                   </p>
-                  <p style={this.props.style.dialog.p22}>
+                  <p className={classes.dialogP22}>
                     To close a filter box, click
                     the <i className="icon-times-circle" /> button located at
                     the top right of the filter box.  Note that if there is an
@@ -172,8 +178,8 @@ class HeaderLogo extends React.Component {
                     variables&quot; section will be green to indicate this.
                   </p>
                 </p>
-                <p style={this.props.style.dialog.p}>
-                  <i className="icon-sort-amount-asc" style={this.props.style.dialog.hi} />&nbsp;
+                <p className={classes.dialogP}>
+                  <i className={`icon-sort-amount-asc ${classes.dialogHi}`} />&nbsp;
                   <strong>Sort:</strong>&nbsp;
                   In the &quot;Sort&quot; sidebar, a list of variables which are
                   currently being sorted by (if any) will be listed at the top,
@@ -196,58 +202,58 @@ class HeaderLogo extends React.Component {
               </div>
             </Tab>
             <Tab label="Keyboard Shortcuts" >
-              <div style={this.props.style.dialog.div}>
+              <div className={classes.dialogDiv}>
                 <div>
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
-                    <h4 style={this.props.style.dialog.h4}>Sidebar controls</h4>
-                    <ul style={this.props.style.dialog.ul}>
+                    <h4 className={classes.dialogH4}>Sidebar controls</h4>
+                    <ul className={classes.dialogUl}>
                       <li>
-                        <code style={this.props.style.dialog.code}>g</code>
+                        <code className={classes.dialogCode}>g</code>
                         &ensp;open &quot;Grid&quot; sidebar
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>l</code>
+                        <code className={classes.dialogCode}>l</code>
                         &ensp;open &quot;Labels&quot; sidebar
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>f</code>
+                        <code className={classes.dialogCode}>f</code>
                         &ensp;open &quot;Filter&quot; sidebar
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>s</code>
+                        <code className={classes.dialogCode}>s</code>
                         &ensp;open &quot;Sort&quot; sidebar
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>esc</code>
+                        <code className={classes.dialogCode}>esc</code>
                         &ensp;close sidebar
                       </li>
                     </ul>
-                    <h4 style={this.props.style.dialog.h4}>Panel navigation</h4>
-                    <ul style={this.props.style.dialog.ul}>
+                    <h4 className={classes.dialogH4}>Panel navigation</h4>
+                    <ul className={classes.dialogUl}>
                       <li>
-                        <code style={this.props.style.dialog.code}>left</code>
+                        <code className={classes.dialogCode}>left</code>
                         &ensp;page back
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>right</code>
+                        <code className={classes.dialogCode}>right</code>
                         &ensp;page forward
                       </li>
                     </ul>
                   </div>
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
-                    <h4 style={this.props.style.dialog.h4}>Dialog boxes</h4>
-                    <ul style={this.props.style.dialog.ul}>
+                    <h4 className={classes.dialogH4}>Dialog boxes</h4>
+                    <ul className={classes.dialogUl}>
                       {openDisplayTags}
                       <li>
-                        <code style={this.props.style.dialog.code}>i</code>
+                        <code className={classes.dialogCode}>i</code>
                         &ensp;open &quot;Display Info&quot; dialog
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>a</code>
+                        <code className={classes.dialogCode}>a</code>
                         &ensp;open &quot;About&quot; dialog
                       </li>
                       <li>
-                        <code style={this.props.style.dialog.code}>esc</code>
+                        <code className={classes.dialogCode}>esc</code>
                         &ensp;close dialog
                       </li>
                     </ul>
@@ -256,7 +262,7 @@ class HeaderLogo extends React.Component {
               </div>
             </Tab>
             <Tab label="Credits" >
-              <div style={this.props.style.dialog.div}>
+              <div className={classes.dialogDiv}>
                 <p>
                   &copy;&nbsp;
                   <a
@@ -305,78 +311,80 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
+  windowHeight: React.PropTypes.number,
   singleDisplay: React.PropTypes.bool,
   setDialogOpen: React.PropTypes.func
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  logo: {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    cursor: 'pointer',
+    border: 'none',
+    // borderColor: uiConsts.header.borderColor,
+    height: uiConsts.header.height,
+    textAlign: 'center',
+    width: uiConsts.header.logoWidth,
+    fontSize: 17,
+    background: uiConsts.header.logo.background,
+    color: uiConsts.header.logo.color
+  },
+  icon: {
+    position: 'absolute',
+    top: 1,
+    right: 1,
+    color: emphasize(uiConsts.header.logo.background, 0.4)
+  },
+  dialogHeadline: {
+    fontSize: 24,
+    paddingTop: 16,
+    marginBottom: 12,
+    fontWeight: 400
+  },
+  dialogDiv: {
+    fontSize: 18,
+    paddingLeft: 10,
+    paddingRight: 10,
+    overflowY: 'auto'
+  },
+  dialogH4: {
+    marginBottom: 5
+  },
+  dialogUl: {
+    marginTop: 0,
+    breakInside: 'avoid-column'
+  },
+  dialogCode: {
+    color: '#FF5252',
+    fontSize: 20
+  },
+  dialogP: {
+    textIndent: -20,
+    paddingLeft: 20
+  },
+  dialogP2: {
+    paddingLeft: 20
+  },
+  dialogP22: {
+    textIndent: 0,
+    paddingLeft: 20
+  },
+  dialogHi: {
+    color: '#FF5252'
+  }
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  uiConstsSelector, windowHeightSelector,
-  (ui, wh) => ({
-    style: {
-      logo: {
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        cursor: 'pointer',
-        border: 'none',
-        // borderColor: ui.header.borderColor,
-        height: ui.header.height,
-        textAlign: 'center',
-        width: ui.header.logoWidth,
-        fontSize: 17,
-        background: ui.header.logo.background,
-        color: ui.header.logo.color
-      },
-      icon: {
-        position: 'absolute',
-        top: 1,
-        right: 1,
-        color: emphasize(ui.header.logo.background, 0.4)
-      },
-      dialog: {
-        headline: {
-          fontSize: 24,
-          paddingTop: 16,
-          marginBottom: 12,
-          fontWeight: 400
-        },
-        div: {
-          fontSize: 18,
-          paddingLeft: 10,
-          paddingRight: 10,
-          maxHeight: Math.max(50, wh - 310),
-          overflowY: 'auto'
-        },
-        h4: {
-          marginBottom: 5
-        },
-        ul: {
-          marginTop: 0,
-          breakInside: 'avoid-column'
-        },
-        code: {
-          color: '#FF5252',
-          fontSize: 20
-        },
-        p: {
-          textIndent: -20,
-          paddingLeft: 20
-        },
-        p2: {
-          paddingLeft: 20
-        },
-        p22: {
-          textIndent: 0,
-          paddingLeft: 20
-        },
-        hi: {
-          color: '#FF5252'
-        }
-      }
-    }
+  windowHeightSelector,
+  wh => ({
+    windowHeight: wh
   })
 );
 
@@ -386,4 +394,4 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps,
-)(Radium(HeaderLogo));
+)(injectSheet(staticStyles)(HeaderLogo));

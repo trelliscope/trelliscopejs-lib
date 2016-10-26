@@ -1,28 +1,33 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import SidebarLabels from './SidebarLabels';
 import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
-import { uiConstsSelector, contentHeightSelector,
-  sidebarActiveSelector, filterColSplitSelector } from '../selectors/ui';
+import { contentHeightSelector, sidebarActiveSelector,
+  filterColSplitSelector } from '../selectors/ui';
 import { displayLoadedSelector } from '../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants';
+import uiConsts from '../styles/uiConsts';
 
-const Sidebar = ({ style, active, displayLoaded }) => {
+const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
   if (active === '') {
-    return <div style={[style.base, style.hidden]} />;
+    return (
+      <div
+        className={`${classes.base} ${classes.hidden}`}
+        style={styles.base}
+      />
+    );
   }
 
-  const emptyStyle = { paddingLeft: 8, paddingTop: 5 };
   let content;
   if (active === SB_CONFIG) {
-    content = <div style={emptyStyle}>Configuration...</div>;
+    content = <div className={classes.empty}>Configuration...</div>;
   } else if (!displayLoaded) {
-    content = <div style={emptyStyle}>Load a display...</div>;
+    content = <div className={classes.empty}>Load a display...</div>;
   } else {
     switch (active) {
       case SB_PANEL_LAYOUT:
@@ -43,56 +48,69 @@ const Sidebar = ({ style, active, displayLoaded }) => {
   }
 
   return (
-    <div style={style.base}>
-      <div style={style.header}>{active}</div>
+    <div className={classes.base} style={styles.base}>
+      <div className={classes.header}>{active}</div>
       {content}
     </div>
   );
 };
 
 Sidebar.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   active: React.PropTypes.string,
   displayLoaded: React.PropTypes.bool
+};
+
+// ------ static styles ------
+
+const staticStyles = {
+  base: {
+    transitionProperty: 'left',
+    transitionDuration: uiConsts.trans.duration,
+    transitionTimingFunction: uiConsts.trans.timing,
+    position: 'absolute',
+    left: uiConsts.sideButtons.width,
+    top: uiConsts.header.height,
+    boxSizing: 'border-box',
+    borderRight: '1px solid',
+    borderColor: uiConsts.sidebar.borderColor,
+    background: '#fff',
+    zIndex: 999
+  },
+  hidden: {
+    transitionProperty: 'left',
+    transitionDuration: uiConsts.trans.duration,
+    transitionTimingFunction: uiConsts.trans.timing,
+    left: uiConsts.sideButtons.width - uiConsts.sidebar.width
+  },
+  header: {
+    paddingLeft: 10,
+    boxSizing: 'border-box',
+    fontSize: uiConsts.sidebar.header.fontSize,
+    background: uiConsts.sidebar.header.background,
+    height: uiConsts.sidebar.header.height,
+    lineHeight: `${uiConsts.sidebar.header.height}px`,
+    color: uiConsts.sidebar.header.color,
+    borderLeft: '1px solid #ccc'
+  },
+  empty: {
+    paddingLeft: 8,
+    paddingTop: 5
+  }
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, sidebarActiveSelector,
+  contentHeightSelector, sidebarActiveSelector,
   displayLoadedSelector, filterColSplitSelector,
-  (ch, ui, active, displayLoaded, colSplit) => ({
-    style: {
+  (ch, active, displayLoaded, colSplit) => ({
+    styles: {
       base: {
-        transitionProperty: 'left',
-        transitionDuration: ui.trans.duration,
-        transitionTimingFunction: ui.trans.timing,
-        position: 'absolute',
-        left: ui.sideButtons.width,
-        top: ui.header.height,
-        width: ui.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit.cutoff !== null)),
-        boxSizing: 'border-box',
-        height: ch,
-        borderRight: '1px solid',
-        borderColor: ui.sidebar.borderColor,
-        background: '#fff',
-        zIndex: 999
-      },
-      hidden: {
-        transitionProperty: 'left',
-        transitionDuration: ui.trans.duration,
-        transitionTimingFunction: ui.trans.timing,
-        left: ui.sideButtons.width - ui.sidebar.width
-      },
-      header: {
-        paddingLeft: 10,
-        boxSizing: 'border-box',
-        fontSize: ui.sidebar.header.fontSize,
-        background: ui.sidebar.header.background,
-        height: ui.sidebar.header.height,
-        lineHeight: `${ui.sidebar.header.height}px`,
-        color: ui.sidebar.header.color,
-        borderLeft: '1px solid #ccc'
+        width: uiConsts.sidebar.width * (1 +
+          (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null)),
+        height: ch
       }
     },
     active,
@@ -106,4 +124,4 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps
-)(Radium(Sidebar));
+)(injectSheet(staticStyles)(Sidebar));

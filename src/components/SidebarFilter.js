@@ -1,6 +1,7 @@
 import React from 'react';
+import injectSheet from 'react-jss';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { intersection } from 'lodash';
@@ -9,18 +10,18 @@ import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 import { setFilterView, setFilter, setLayout, setLabels } from '../actions';
 import { cogFiltDistSelector } from '../selectors/cogData';
-import { uiConstsSelector, sidebarHeightSelector,
-  filterColSplitSelector } from '../selectors/ui';
+import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
-const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayInfo,
-  filtDist, colSplit, handleViewChange, handleFilterChange,
-  handleFilterSortChange, labels }) => {
+const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
+  filterView, cogInfo, displayInfo, filtDist, colSplit, handleViewChange,
+  handleFilterChange, handleFilterSortChange, labels }) => {
   let content = <div />;
   const displId = displayInfo.info.name;
-  if (filter && filterView.active) {
+  if (filter && filterView.active && colSplit) {
     let col1filters = [];
     let col2filters = [];
     if (colSplit.cutoff === null) {
@@ -55,7 +56,6 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
             itemContent = (
               <FilterCat
                 filterState={filterState}
-                style={style.catFilter}
                 height={Math.min(catHeight, nlvl * 15)}
                 dist={displayInfo.info.cogDistns[d]}
                 condDist={filtDist[d]}
@@ -79,7 +79,6 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
               <FilterNum
                 name={d}
                 filterState={filterState}
-                style={style.numFilter}
                 dist={displayInfo.info.cogDistns[d]}
                 condDist={filtDist[d]}
                 handleChange={handleFilterChange}
@@ -87,35 +86,36 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
             );
           }
           return (
-            <div key={`${d}_${displId}`} style={style.container}>
-              <div style={style.header}>
+            <div key={`${d}_${displId}`} className={classes.container}>
+              <div className={classes.header}>
                 <div
-                  style={[
-                    style.headerName,
-                    filterActive && style.headerNameActive
-                  ]}
+                  className={classNames({
+                    [classes.headerName]: true,
+                    [classes.headerNameActive]: filterActive
+                  })}
                 >
                   <a data-tip data-for={`hdtooltip_${d}`}>
-                    <span style={style.headerNameText}>{d}</span>
+                    <span className={classes.headerNameText}>{d}</span>
                   </a>
                 </div>
                 <ReactTooltip place="right" id={`hdtooltip_${d}`}>
                   <span>{cogInfo[d].desc}</span>
                 </ReactTooltip>
-                <div style={style.headerExtra}>{headerExtra}</div>
+                <div className={classes.headerExtra}>{headerExtra}</div>
                 <div
                   key={`${d}_${displId}-close-icon`}
-                  style={[style.headerIcon, style.headerClose]}
+                  className={`${classes.headerIcon} ${classes.headerClose}`}
                   onMouseDown={() => handleViewChange(d, 'remove')}
                 >
                   <i className="icon-times-circle" />
                 </div>
                 <div
                   key={`${d}_${displId}-reset-icon`}
-                  style={[
-                    style.headerIcon,
-                    style.headerReset,
-                    !filterActive && style.headerIconHide]}
+                  className={classNames({
+                    [classes.headerIcon]: true,
+                    [classes.headerReset]: true,
+                    [classes.headerIconHide]: !filterActive
+                  })}
                   onMouseDown={() => handleFilterChange(filterState.name)}
                 >
                   <i className="icon-undo" />
@@ -132,29 +132,33 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
     const extraIdx = colSplit.cutoff === null ? 0 : 1;
     const cogNames = Object.keys(cogInfo);
     const inames = intersection(cogNames, filterView.inactive);
-    if (style.notUsedContainer.height < 170) {
+    if (styles.notUsedContainer.height < 170 && extraIdx === 1) {
       colContent[extraIdx].push(
-        <div key="notUsedHeader" style={style.notUsedHeader}>
+        <div key="notUsedHeader" className={classes.notUsedHeader}>
           Remove filters to select more.
         </div>
       );
     } else {
       colContent[extraIdx].push(
-        <div key="notUsedHeader" style={style.notUsedHeader}>
+        <div key="notUsedHeader" className={classes.notUsedHeader}>
           {filterView.active.length === 0 ? 'Select a variable to filter on:' :
             filterView.inactive.length === 0 ? '' : 'More variables:'}
         </div>
       );
       colContent[extraIdx].push(
-        <div key="notUsed" style={style.notUsedContainer}>
+        <div
+          key="notUsed"
+          className={classes.notUsedContainer}
+          style={styles.notUsedContainer}
+        >
           {inames.map(d => (
             <span key={`${d}_${displId}`}>
               <a data-tip data-for={`tooltip_${d}`}>
                 <button
-                  style={[
-                    style.variable,
-                    filter[d] && filter[d].value !== undefined ? style.variableActive : {}
-                  ]}
+                  className={classNames({
+                    [classes.variable]: true,
+                    [classes.variableActive]: filter[d] && filter[d].value !== undefined
+                  })}
                   key={`${d}_${displId}_button_${inames.length}`}
                   onMouseDown={() => handleViewChange(d, 'add', labels)}
                 >
@@ -171,11 +175,11 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
     }
 
     content = (
-      <div style={style.allContainer}>
-        <div style={style.col1}>
+      <div className={classes.allContainer} style={styles.allContainer}>
+        <div className={classes.col1} style={styles.col1}>
           {colContent[0]}
         </div>
-        <div style={style.col2}>
+        <div className={classes.col2} style={styles.col2}>
           {colContent[1]}
         </div>
       </div>
@@ -185,7 +189,8 @@ const SidebarFilter = ({ style, catHeight, filter, filterView, cogInfo, displayI
 };
 
 SidebarFilter.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   catHeight: React.PropTypes.number,
   filter: React.PropTypes.object,
   filterView: React.PropTypes.object,
@@ -200,222 +205,154 @@ SidebarFilter.propTypes = {
   labels: React.PropTypes.array
 };
 
-// ------ redux container ------
+// ------ static styles ------
 
 // the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
+const staticStyles = {
+  col1: {
+    position: 'absolute',
+    top: uiConsts.sidebar.header.height,
+    left: 0
+  },
+  col2: {
+    position: 'absolute',
+    top: uiConsts.sidebar.header.height,
+    left: uiConsts.sidebar.width,
+    borderLeft: `1px solid ${uiConsts.sidebar.borderColor}`
+  },
+  notUsedHeader: {
+    height: 30,
+    lineHeight: '30px',
+    paddingLeft: 10,
+    boxSizing: 'border-box',
+    width: uiConsts.sidebar.width,
+    fontSize: 14
+  },
+  notUsedContainer: {
+    width: uiConsts.sidebar.width,
+    overflowY: 'auto',
+    boxSizing: 'border-box',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10
+  },
+  variable: {
+    display: 'inline-block',
+    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
+    borderRadius: 10,
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    border: 0,
+    background: 'white',
+    margin: 3,
+    fontSize: 13,
+    cursor: 'pointer',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    '&:hover': {
+      transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+      background: '#ebebeb'
+    }
+  },
+  variableActive: {
+    background: '#81C784',
+    color: 'white',
+    '&:hover': {
+      background: emphasize('#81C784', 0.2)
+    }
+  },
+  allContainer: {
+    width: uiConsts.sidebar.width,
+    boxSizing: 'border-box'
+  },
+  container: {
+    width: uiConsts.sidebar.width,
+    // display: 'inline-block',
+    // for dropdowns to not be hidden under other elements:
+    boxSizing: 'border-box',
+    zIndex: 100, // + this.props.index,
+    position: 'relative',
+    paddingBottom: 6,
+    borderBottom: `1px solid ${uiConsts.sidebar.borderColor}`
+  },
+  header: {
+    height: 16,
+    lineHeight: '15px',
+    width: uiConsts.sidebar.width,
+    marginTop: 1,
+    fontSize: 12,
+    position: 'relative'
+  },
+  headerExtra: {
+    position: 'absolute',
+    right: 38,
+    height: 16,
+    lineHeight: '15px',
+    fontSize: 11,
+    color: '#777'
+  },
+  headerName: {
+    height: 16,
+    paddingLeft: 5,
+    paddingRight: 5,
+    position: 'absolute',
+    left: 1,
+    userSelect: 'none',
+    cursor: 'default',
+    background: '#999'
+  },
+  headerNameActive: {
+    background: '#81C784'
+  },
+  headerNameText: {
+    color: 'white'
+  },
+  headerIcon: {
+    height: 16,
+    color: '#666',
+    cursor: 'pointer',
+    position: 'absolute',
+    zIndex: 1000,
+    '&:hover': {
+      transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+      color: '#aaa'
+    }
+  },
+  headerIconHide: {
+    visibility: 'hidden'
+  },
+  headerClose: {
+    right: 5
+  },
+  headerReset: {
+    right: 18
+  }
+};
+
+// ------ redux container ------
+
 const stateSelector = createSelector(
-  uiConstsSelector, filterStateSelector, filterViewSelector,
+  filterStateSelector, filterViewSelector,
   cogInfoSelector, sidebarHeightSelector, displayInfoSelector,
   cogFiltDistSelector, filterColSplitSelector, labelsSelector,
-  (ui, filter, filterView, cogInfo, sh, displayInfo, filtDist, colSplit, labels) => ({
-    style: {
+  (filter, filterView, cogInfo, sh, displayInfo, filtDist, colSplit, labels) => ({
+    styles: {
       col1: {
-        position: 'absolute',
-        top: ui.sidebar.header.height,
-        left: 0,
         height: sh
       },
       col2: {
-        position: 'absolute',
-        top: ui.sidebar.header.height,
-        left: ui.sidebar.width,
         height: sh,
-        borderLeft: `1px solid ${ui.sidebar.borderColor}`,
         display: colSplit.cutoff === null ? 'none' : 'inline'
       },
-      notUsedHeader: {
-        height: 30,
-        lineHeight: '30px',
-        paddingLeft: 10,
-        boxSizing: 'border-box',
-        width: ui.sidebar.width,
-        fontSize: 14
-      },
       notUsedContainer: {
-        width: ui.sidebar.width,
-        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1],
-        overflowY: 'auto',
-        boxSizing: 'border-box',
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10
-      },
-      variable: {
-        display: 'inline-block',
-        boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
-        borderRadius: 10,
-        paddingTop: 2,
-        paddingBottom: 2,
-        paddingLeft: 10,
-        paddingRight: 10,
-        border: 0,
-        background: 'white',
-        margin: 3,
-        fontSize: 13,
-        cursor: 'pointer',
-        transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-        ':hover': {
-          transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          background: '#ebebeb'
-        }
-      },
-      variableActive: {
-        background: '#81C784',
-        color: 'white',
-        ':hover': {
-          background: emphasize('#81C784', 0.2)
-        }
+        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1]
       },
       allContainer: {
-        width: ui.sidebar.width,
-        height: sh,
-        boxSizing: 'border-box'
-      },
-      container: {
-        width: ui.sidebar.width,
-        // display: 'inline-block',
-        // for dropdowns to not be hidden under other elements:
-        boxSizing: 'border-box',
-        zIndex: 100, // + this.props.index,
-        position: 'relative',
-        paddingBottom: 6,
-        borderBottom: `1px solid ${ui.sidebar.borderColor}`
-      },
-      header: {
-        height: 16,
-        lineHeight: '15px',
-        width: ui.sidebar.width,
-        marginTop: 1,
-        fontSize: 12,
-        position: 'relative'
-      },
-      headerExtra: {
-        position: 'absolute',
-        right: 38,
-        height: 16,
-        lineHeight: '15px',
-        fontSize: 11,
-        color: '#777'
-      },
-      headerName: {
-        height: 16,
-        paddingLeft: 5,
-        paddingRight: 5,
-        position: 'absolute',
-        left: 1,
-        userSelect: 'none',
-        cursor: 'default',
-        background: '#999'
-      },
-      headerNameActive: {
-        background: '#81C784'
-      },
-      headerNameText: {
-        color: 'white'
-      },
-      headerIcon: {
-        height: 16,
-        color: '#666',
-        cursor: 'pointer',
-        position: 'absolute',
-        zIndex: 1000,
-        ':hover': {
-          transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          color: '#aaa'
-        }
-      },
-      headerIconHide: {
-        visibility: 'hidden'
-      },
-      headerClose: {
-        right: 5
-      },
-      headerReset: {
-        right: 18
-      },
-      catFilter: {
-        container: {
-          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          boxSizing: 'border-box',
-          paddingLeft: ui.sidebar.filter.margin,
-          paddingRight: ui.sidebar.filter.margin,
-          paddingTop: ui.sidebar.filter.margin
-        },
-        plotContainer: {
-          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          // height: ui.sidebar.filter.cat.height,
-          boxSizing: 'border-box',
-          position: 'relative',
-          overflow: 'hidden',
-          cursor: 'default',
-          userSelect: 'none',
-          zIndex: 1000
-        },
-        inputContainer: {
-          height: 39,
-          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          marginBottom: -14,
-          zIndex: 100,
-          position: 'relative'
-        },
-        regexInput: {
-          width: ui.sidebar.width - 40,
-          marginTop: -8,
-          fontSize: 16,
-          transform: 'scale(0.85)',
-          transformOrigin: '0 0'
-        },
-        extraOptionsInput: {
-          float: 'right',
-          width: 28,
-          marginTop: -6,
-          transform: 'scale(0.85)',
-          transformOrigin: '0 0'
-        }
-      },
-      numFilter: {
-        container: {
-          marginLeft: 5,
-          marginRight: 5,
-          marginTop: 5
-        },
-        plotContainer: {
-          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          height: ui.sidebar.filter.num.height,
-          position: 'relative',
-          overflow: 'hidden',
-          cursor: 'default',
-          userSelect: 'none',
-          zIndex: 1000
-        },
-        inputContainer: {
-          width: ui.sidebar.width - (ui.sidebar.filter.margin * 2),
-          marginBottom: -14,
-          zIndex: 100,
-          position: 'relative',
-          verticalAlign: 'center'
-        },
-        rangeInputText: {
-          fontSize: 13,
-          paddingRight: 10,
-          display: 'inline-block'
-        },
-        rangeInput: {
-          width: 75,
-          marginTop: -10,
-          fontSize: 16,
-          transform: 'scale(0.85)',
-          transformOrigin: '0 0'
-        },
-        underlineStyle: {
-          bottom: 10
-        },
-        rangeInputInvalid: {
-          color: 'red'
-        }
+        height: sh
       }
     },
-    catHeight: ui.sidebar.filter.cat.height,
+    catHeight: uiConsts.sidebar.filter.cat.height,
     filter,
     filterView,
     cogInfo,
@@ -463,4 +400,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(SidebarFilter));
+)(injectSheet(staticStyles)(SidebarFilter));

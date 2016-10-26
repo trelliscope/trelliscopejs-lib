@@ -1,13 +1,13 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Radium from 'radium';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
 import { setLayout } from '../actions';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector } from '../selectors';
-import { uiConstsSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
+import uiConsts from '../styles/uiConsts';
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -47,68 +47,81 @@ class Pagination extends React.Component {
   pageFirst = () => this.props.handleChange(1)
   pageLast = () => this.props.handleChange(this.props.totPages)
   render() {
+    const { classes } = this.props.sheet;
+
+    const iconStyle = {
+      fontSize: 20,
+      padding: 6
+    };
+    const buttonStyle = {
+      width: uiConsts.header.height - 10,
+      height: uiConsts.header.height - 10,
+      border: 0,
+      padding: 0
+    };
+
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
     const pRange = pFrom === pTo ? pFrom : `${pFrom} \u2013 ${pTo}`;
     const txt = `${pRange} of ${this.props.totPanels}`;
     return (
-      <div style={this.props.style.outer}>
-        <div style={this.props.style.label}>
+      <div className={classes.outer}>
+        <div className={classes.label}>
           {txt}
         </div>
-        <div style={this.props.style.buttonWrap}>
-          <div style={this.props.style.buttonDiv}>
+        <div className={classes.buttonWrap}>
+          <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
-              style={this.props.style.button}
-              iconStyle={this.props.style.icon}
+              style={buttonStyle}
+              iconStyle={iconStyle}
               iconClassName="icon-angle-left"
               onClick={() => this.pageLeft()}
             />
           </div>
-          <div style={this.props.style.buttonText}>
+          <div className={classes.buttonText}>
             Prev
           </div>
         </div>
-        <div style={this.props.style.buttonWrap}>
-          <div style={this.props.style.buttonDiv}>
+        <div className={classes.buttonWrap}>
+          <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
-              style={this.props.style.button}
-              iconStyle={this.props.style.icon}
+              style={buttonStyle}
+              iconStyle={iconStyle}
               iconClassName="icon-angle-right"
               onClick={() => this.pageRight()}
             />
           </div>
-          <div style={this.props.style.buttonText}>
+          <div className={classes.buttonText}>
             Next
           </div>
         </div>
-        <div style={this.props.style.buttonWrap}>
-          <div style={this.props.style.buttonDiv}>
+        <div className={classes.buttonWrap}>
+          <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
-              style={this.props.style.button}
-              iconStyle={this.props.style.icon}
+              style={buttonStyle}
+              iconStyle={iconStyle}
               iconClassName="icon-angle-double-left"
               onClick={() => this.pageFirst()}
             />
           </div>
-          <div style={this.props.style.buttonText}>
+          <div className={classes.buttonText}>
             First
           </div>
         </div>
-        <div style={this.props.style.buttonWrap}>
-          <div style={this.props.style.buttonDiv}>
+        <div className={classes.buttonWrap}>
+          <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
-              style={this.props.style.button}
-              iconStyle={this.props.style.icon}
+              style={buttonStyle}
+              iconStyle={iconStyle}
               iconClassName="icon-angle-double-right"
               onClick={() => this.pageLast()}
             />
           </div>
-          <div style={this.props.style.buttonText}>
+          <div className={classes.buttonText}>
             Last
           </div>
         </div>
@@ -118,7 +131,7 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   n: React.PropTypes.number,
   npp: React.PropTypes.number,
   totPages: React.PropTypes.number,
@@ -127,50 +140,43 @@ Pagination.propTypes = {
   handleChange: React.PropTypes.func
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  outer: {
+    whiteSpace: 'nowrap'
+  },
+  buttonWrap: {
+    width: uiConsts.header.height - 10,
+    height: uiConsts.header.height,
+    display: 'inline-block'
+  },
+  buttonDiv: {
+    width: uiConsts.header.height - 10,
+    height: uiConsts.header.height - 10,
+    paddingLeft: 5
+  },
+  buttonText: {
+    fontSize: 10,
+    width: 48,
+    height: 10,
+    lineHeight: '10px',
+    textAlign: 'center',
+    marginTop: -5
+  },
+  label: {
+    verticalAlign: 'middle',
+    height: uiConsts.header.height,
+    display: 'inline-block'
+  }
+};
+
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  uiConstsSelector, pageNumSelector, filterCardinalitySelector,
+  pageNumSelector, filterCardinalitySelector,
   nPerPageSelector, dialogOpenSelector,
-  (ui, n, card, npp, dialogOpen) => ({
-    style: {
-      outer: {
-        whiteSpace: 'nowrap'
-      },
-      buttonWrap: {
-        width: ui.header.height - 10,
-        height: ui.header.height,
-        display: 'inline-block'
-      },
-      buttonDiv: {
-        width: ui.header.height - 10,
-        height: ui.header.height - 10,
-        paddingLeft: 5
-      },
-      button: {
-        width: ui.header.height - 10,
-        height: ui.header.height - 10,
-        border: 0,
-        padding: 0
-      },
-      buttonText: {
-        fontSize: 10,
-        width: 48,
-        height: 10,
-        lineHeight: '10px',
-        textAlign: 'center',
-        marginTop: -5
-      },
-      icon: {
-        fontSize: 20,
-        padding: 6
-      },
-      label: {
-        verticalAlign: 'middle',
-        height: ui.header.height,
-        display: 'inline-block'
-      }
-    },
+  (n, card, npp, dialogOpen) => ({
     n,
     totPanels: card,
     totPages: Math.ceil(card / npp),
@@ -192,5 +198,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(Pagination));
-
+)(injectSheet(staticStyles)(Pagination));

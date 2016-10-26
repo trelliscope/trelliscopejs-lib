@@ -1,31 +1,31 @@
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { fade } from 'material-ui/utils/colorManipulator';
-import { createSelector } from 'reselect';
-import { uiConstsSelector } from '../selectors/ui';
 import { setFilterView, setFilter, setLayout, setSort } from '../actions';
+import uiConsts from '../styles/uiConsts';
 
-const FooterChip = ({ label, icon, text, index, style, type, handleStateClose }) => {
+const FooterChip = ({ sheet: { classes }, label, icon, text, index,
+  type, handleStateClose }) => {
   let iconTag = '';
   if (icon !== '') {
-    iconTag = <i className={icon} style={style.indIcon} />;
+    iconTag = <i className={`${icon} ${classes.indIcon}`} />;
   }
   let textTag = '';
   if (text !== '') {
-    textTag = <span style={style.text}>({text})</span>;
+    textTag = <span className={classes.text}>({text})</span>;
   }
 
   return (
-    <div type="button" style={style.wrapper}>
-      <span style={style.label}>
+    <div type="button" className={classes.wrapper}>
+      <span className={classes.label}>
         {iconTag}
         {label}
         {textTag}
       </span>
       <svg
         viewBox="0 0 24 24"
-        style={style.closeIcon}
+        className={classes.closeIcon}
         key="icon"
         onClick={() => handleStateClose({ label, index, type })}
       >
@@ -46,79 +46,71 @@ FooterChip.propTypes = {
   icon: React.PropTypes.string,
   text: React.PropTypes.string,
   index: React.PropTypes.number,
-  style: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   type: React.PropTypes.string,
   handleStateClose: React.PropTypes.func
 };
 
-// ------ redux container ------
+// ------ static styles ------
 
-const styleSelector = createSelector(
-  uiConstsSelector,
-  ui => ({
-    style: {
-      wrapper: {
-        border: 10,
-        boxSizing: 'border-box',
-        display: 'flex',
-        textDecoration: 'none',
-        marginLeft: 3,
-        marginTop: 4,
-        padding: 0,
-        outline: 'none',
-        borderRadius: 10,
-        whiteSpace: 'nowrap',
-        width: '-webkit-fit-content',
-        background: ui.footer.button.background,
-        height: 22,
-        transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
-        // cursor: 'pointer',
-        // transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-        // ':hover': {
-        //   backgroundColor: emphasize('rgb(173, 216, 230)', 0.08)
-        // }
-      },
-      label: {
-        color: ui.footer.button.color,
-        fontSize: 12,
-        fontWeight: 400,
-        lineHeight: '20px',
-        paddingLeft: 12,
-        paddingRight: 12,
-        whiteSpace: 'nowrap',
-        WebkitUserSelect: 'none'
-      },
-      text: {
-        paddingLeft: 5,
-        fontSize: 11,
-        fontStyle: 'italic'
-      },
-      closeIcon: {
-        display: 'inline-block',
-        color: 'rgba(0, 0, 0, 0.22)',
-        fill: 'rgba(0, 0, 0, 0.22)',
-        height: 21,
-        width: 21,
-        transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-        cursor: 'pointer',
-        margin: '1px 1px 0px -8px',
-        WebkitUserSelect: 'none',
-        ':hover': {
-          color: fade('rgba(0, 0, 0, 0.22)', 0.4),
-          fill: fade('rgba(0, 0, 0, 0.22)', 0.4)
-        }
-      },
-      indIcon: {
-        paddingRight: 5
-      }
-    },
-    ui
-  })
-);
+const staticStyles = {
+  wrapper: {
+    border: 10,
+    boxSizing: 'border-box',
+    display: 'flex',
+    textDecoration: 'none',
+    marginLeft: 3,
+    marginTop: 4,
+    padding: 0,
+    outline: 'none',
+    borderRadius: 10,
+    whiteSpace: 'nowrap',
+    width: '-webkit-fit-content',
+    background: uiConsts.footer.button.background,
+    height: 22,
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+    // cursor: 'pointer',
+    // transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    // '&:hover': {
+    //   backgroundColor: emphasize('rgb(173, 216, 230)', 0.08)
+    // }
+  },
+  label: {
+    color: uiConsts.footer.button.color,
+    fontSize: 12,
+    fontWeight: 400,
+    lineHeight: '20px',
+    paddingLeft: 12,
+    paddingRight: 12,
+    whiteSpace: 'nowrap',
+    WebkitUserSelect: 'none'
+  },
+  text: {
+    paddingLeft: 5,
+    fontSize: 11,
+    fontStyle: 'italic'
+  },
+  closeIcon: {
+    display: 'inline-block',
+    color: 'rgba(0, 0, 0, 0.22)',
+    fill: 'rgba(0, 0, 0, 0.22)',
+    height: 21,
+    width: 21,
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    cursor: 'pointer',
+    margin: '1px 1px 0px -8px',
+    WebkitUserSelect: 'none',
+    '&:hover': {
+      color: fade('rgba(0, 0, 0, 0.22)', 0.4),
+      fill: fade('rgba(0, 0, 0, 0.22)', 0.4)
+    }
+  },
+  indIcon: {
+    paddingRight: 5
+  }
+};
 
-const mapStateToProps = state => (
-  styleSelector(state)
-);
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   handleStateClose: (x) => {
@@ -135,4 +127,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(FooterChip));
+)(injectSheet(staticStyles)(FooterChip));

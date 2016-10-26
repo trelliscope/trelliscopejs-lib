@@ -1,6 +1,6 @@
 import React from 'react';
+import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Radium from 'radium';
 import { createSelector } from 'reselect';
 import DisplayInfo from './DisplayInfo';
 // import RelatedDisplays from './RelatedDisplays';
@@ -8,10 +8,11 @@ import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
-import { uiConstsSelector, windowWidthSelector } from '../selectors/ui';
+import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
 import { configSelector, displayListSelector,
   selectedDisplaySelector, dialogOpenSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
 class Header extends React.Component {
   constructor(props) {
@@ -39,6 +40,8 @@ class Header extends React.Component {
     }
   }
   render() {
+    const { classes } = this.props.sheet;
+
     let displayName = '';
     let displayDesc = '';
     let iconStyle = { visibility: 'hidden' };
@@ -72,7 +75,7 @@ class Header extends React.Component {
     }
 
     return (
-      <div style={this.props.style.outer}>
+      <div className={classes.outer} style={this.props.styles.outer}>
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
@@ -80,16 +83,16 @@ class Header extends React.Component {
           setDialogOpen={this.props.setDialogOpen}
         />
         <i style={iconStyle} className="fa fa-info-circle" />
-        <div style={this.props.style.headerSubContainer}>
-          <div style={this.props.style.nameDescContainer}>
-            <div style={this.props.style.displayName}>
+        <div className={classes.headerSubContainer} style={this.props.styles.headerSubContainer}>
+          <div className={classes.nameDescContainer}>
+            <div className={classes.displayName} style={this.props.styles.displayName}>
               {displayName}
             </div>
-            <div style={this.props.style.displayDesc}>
+            <div className={classes.displayDesc}>
               {displayDesc}
             </div>
           </div>
-          <div style={this.props.style.paginationContainer}>
+          <div className={classes.paginationContainer}>
             {pagination}
           </div>
         </div>
@@ -103,7 +106,8 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  style: React.PropTypes.object,
+  styles: React.PropTypes.object,
+  sheet: React.PropTypes.object,
   cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
@@ -113,71 +117,81 @@ Header.propTypes = {
   setDialogOpen: React.PropTypes.func
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  outer: {
+    position: 'fixed',
+    boxSizing: 'border-box',
+    top: 0,
+    left: 0,
+    height: uiConsts.header.height,
+    background: uiConsts.header.background,
+    color: uiConsts.header.color,
+    borderBottom: `1px solid ${uiConsts.header.borderColor}`,
+    margin: 0,
+    fontSize: uiConsts.header.fontSize,
+    fontWeight: 300
+  },
+  headerSubContainer: {
+    display: 'flex',
+    position: 'fixed',
+    top: 0,
+    height: uiConsts.header.height
+  },
+  nameDescContainer: {
+    flex: '1 0',
+    minWidth: 0,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  paginationContainer: {
+    flex: '0 0'
+  },
+  displayName: {
+    verticalAlign: 'top',
+    paddingLeft: 15,
+    fontSize: 17,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+    // fontWeight: 400,
+    // transition: 'left 0.5s ease',
+  },
+  displayDesc: {
+    verticalAlign: 'top',
+    fontWeight: 300,
+    paddingLeft: 15,
+    paddingRight: 8,
+    fontSize: 10,
+    fontStyle: 'italic',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  }
+};
+
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  windowWidthSelector, uiConstsSelector, displayListSelector, displayGroupsSelector,
+  windowWidthSelector, displayListSelector, displayGroupsSelector,
   selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
-  (ww, ui, dl, dg, sd, rd, cfg, dialogOpen) => ({
-    style: {
+  (ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
+    styles: {
       outer: {
-        position: 'fixed',
-        boxSizing: 'border-box',
-        top: 0,
-        left: 0,
-        width: ww,
-        height: ui.header.height,
-        background: ui.header.background,
-        color: ui.header.color,
-        borderBottom: '1px solid',
-        borderColor: ui.header.borderColor,
-        margin: 0,
-        fontSize: ui.header.fontSize,
-        fontWeight: 300
+        width: ww
       },
       headerSubContainer: {
-        display: 'flex',
-        position: 'fixed',
-        top: 0,
-        left: ui.header.height *
+        left: uiConsts.header.height *
           ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)), //  + (rd.length === 0 ? 0 : 1)
-        height: ui.header.height,
-        width: ww - ((ui.header.height *
+        width: ww - ((uiConsts.header.height *
           ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1))) +
-          ui.header.logoWidth + 30)
-      },
-      nameDescContainer: {
-        flex: '1 0',
-        minWidth: 0,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
-      paginationContainer: {
-        flex: '0 0'
+          uiConsts.header.logoWidth + 30)
       },
       displayName: {
-        verticalAlign: 'top',
-        paddingLeft: 15,
-        fontSize: 17,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
         lineHeight: `${sd.desc === '' ? 48 : 26}px`,
         paddingTop: sd.desc === '' ? 0 : 5
-        // fontWeight: 400,
-        // transition: 'left 0.5s ease',
-      },
-      displayDesc: {
-        verticalAlign: 'top',
-        fontWeight: 300,
-        paddingLeft: 15,
-        paddingRight: 8,
-        fontSize: 10,
-        fontStyle: 'italic',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
       }
     },
     cfg,
@@ -205,4 +219,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(Header));
+)(injectSheet(staticStyles)(Header));

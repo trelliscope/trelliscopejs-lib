@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
 import { Table, TableRow, TableRowColumn, TableBody } from 'material-ui/Table';
 import { setLabels } from '../actions';
-import { uiConstsSelector, contentHeightSelector } from '../selectors/ui';
+import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
+import uiConsts from '../styles/uiConsts';
 
-const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
+const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChange }) => {
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
@@ -19,7 +20,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
 
     content = (
       <Table
-        height={`${style.height}px`}
+        height={`${height}px`}
         fixedHeader
         multiSelectable
         onRowSelection={(rows) => {
@@ -38,7 +39,7 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
           {tableData.map(row => (
             <TableRow key={row.name} selected={row.selected}>
               <TableRowColumn>{row.name}<br />
-                <span style={{ color: '#888', fontStyle: 'italic' }}>
+                <span className={classes.rowDesc}>
                   {row.desc}
                 </span>
               </TableRowColumn>
@@ -52,22 +53,29 @@ const SidebarLabels = ({ style, labels, cogInfo, handleChange }) => {
 };
 
 SidebarLabels.propTypes = {
-  style: React.PropTypes.object,
+  height: React.PropTypes.number,
+  sheet: React.PropTypes.object,
   labels: React.PropTypes.array,
   cogInfo: React.PropTypes.object,
   handleChange: React.PropTypes.func
 };
 
+// ------ static styles ------
+
+const staticStyles = {
+  rowDesc: {
+    color: '#888',
+    fontStyle: 'italic'
+  }
+};
+
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, uiConstsSelector, labelsSelector, displayInfoSelector,
-  (ch, ui, labels, di) => ({
-    style: {
-      width: ui.sidebar.width,
-      height: ch - ui.sidebar.header.height,
-      background: di.isFetching ? 'red' : 'white'
-    },
+  contentHeightSelector, labelsSelector, displayInfoSelector,
+  (ch, labels, di) => ({
+    width: uiConsts.sidebar.width,
+    height: ch - uiConsts.sidebar.header.height,
     labels,
     cogInfo: di.info.cogInfo
   })
@@ -86,4 +94,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Radium(SidebarLabels));
+)(injectSheet(staticStyles)(SidebarLabels));

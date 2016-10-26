@@ -5,13 +5,14 @@
 // if selections are made after regex, regex is cleared
 
 import React from 'react';
-import Radium from 'radium';
+import injectSheet from 'react-jss';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterCatPlot from './FilterCatPlot';
+import uiConsts from '../styles/uiConsts';
 
 const sortOptions = [
   // { payload: 'idx,asc', text: 'Order: default' },
@@ -68,6 +69,16 @@ class FilterCat extends React.Component {
     this.props.handleChange(newState);
   }
   render() {
+    const { classes } = this.props.sheet;
+
+    const regexInput = {
+      width: uiConsts.sidebar.width - 40,
+      marginTop: -8,
+      fontSize: 16,
+      transform: 'scale(0.85)',
+      transformOrigin: '0 0'
+    };
+
     const iconButtonElement = <IconButton iconClassName="icon-more_vert" />;
     const extraOptionsInput = (
       <IconMenu
@@ -76,7 +87,7 @@ class FilterCat extends React.Component {
           this.props.handleSortChange(Object.assign(this.props.filterState,
             { orderValue: value }));
         }}
-        style={this.props.style.extraOptionsInput}
+        className={classes.extraOptionsInput}
         iconButtonElement={iconButtonElement}
         desktop
       >
@@ -87,24 +98,26 @@ class FilterCat extends React.Component {
     );
 
     return (
-      <div style={this.props.style.container}>
+      <div className={classes.container}>
         <div
-          style={this.props.style.plotContainer}
+          className={classes.plotContainer}
         >
           <FilterCatPlot
-            style={this.props.style.plotContainer}
+            className={classes.plotContainer}
             height={this.props.height}
+            width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
+            cellHeight={15}
             dist={this.props.dist}
             condDist={this.props.condDist}
             filterState={this.props.filterState}
             handleChange={this.props.handleChange}
           />
         </div>
-        <div style={this.props.style.inputContainer}>
+        <div className={classes.inputContainer}>
           <TextField
             ref={(d) => { this._TextField = d; }}
             hintText="regex"
-            style={this.props.style.regexInput}
+            style={regexInput}
             defaultValue={this.props.filterState.type === 'regex' ?
               this.props.filterState.regex : ''}
             onChange={e => this.handleRegex(e.target.value)}
@@ -117,8 +130,8 @@ class FilterCat extends React.Component {
 }
 
 FilterCat.propTypes = {
+  sheet: React.PropTypes.object,
   filterState: React.PropTypes.object,
-  style: React.PropTypes.object,
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   levels: React.PropTypes.array,
@@ -127,4 +140,40 @@ FilterCat.propTypes = {
   handleSortChange: React.PropTypes.func
 };
 
-export default Radium(FilterCat);
+// ------ static styles ------
+
+const staticStyles = {
+  container: {
+    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    boxSizing: 'border-box',
+    paddingLeft: uiConsts.sidebar.filter.margin,
+    paddingRight: uiConsts.sidebar.filter.margin,
+    paddingTop: uiConsts.sidebar.filter.margin
+  },
+  plotContainer: {
+    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    // height: uiConsts.sidebar.filter.cat.height,
+    boxSizing: 'border-box',
+    position: 'relative',
+    overflow: 'hidden',
+    cursor: 'default',
+    userSelect: 'none',
+    zIndex: 1000
+  },
+  inputContainer: {
+    height: 39,
+    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    marginBottom: -14,
+    zIndex: 100,
+    position: 'relative'
+  },
+  extraOptionsInput: {
+    float: 'right',
+    width: 28,
+    marginTop: -6,
+    transform: 'scale(0.85)',
+    transformOrigin: '0 0'
+  }
+};
+
+export default injectSheet(staticStyles)(FilterCat);
