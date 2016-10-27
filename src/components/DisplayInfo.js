@@ -135,7 +135,6 @@ class DisplayInfo extends React.Component {
 
     return (
       <button
-        onClick={this.handleOpen}
         onTouchTap={this.handleOpen}
         className={classes.button}
         style={this.props.singleDisplay ? this.props.styles.single : this.props.styles.button}

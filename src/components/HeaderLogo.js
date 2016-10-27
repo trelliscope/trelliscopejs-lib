@@ -55,7 +55,7 @@ class HeaderLogo extends React.Component {
     }
     return (
       <button
-        onClick={this.handleOpen}
+        onTouchTap={this.handleOpen}
         className={classes.logo}
       >
         Trelliscope
@@ -201,7 +201,7 @@ class HeaderLogo extends React.Component {
                 </p>
               </div>
             </Tab>
-            <Tab label="Keyboard Shortcuts" >
+            <Tab label="Shortcuts" >
               <div className={classes.dialogDiv}>
                 <div>
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
@@ -257,6 +257,10 @@ class HeaderLogo extends React.Component {
                         &ensp;close dialog
                       </li>
                     </ul>
+                    <h4 className={classes.dialogH4}>Touchscreen devices</h4>
+                    <p className={classes.dialogUl}>
+                      Swiping left and right will page the panels forward and backward
+                    </p>
                   </div>
                 </div>
               </div>

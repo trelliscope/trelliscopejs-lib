@@ -50,7 +50,7 @@ class RelatedDisplays extends React.Component {
     ];
     return (
       <button
-        onClick={this.handleOpen}
+        onTouchTap={this.handleOpen}
         className={classes.button}
         style={this.props.styles.button}
       >

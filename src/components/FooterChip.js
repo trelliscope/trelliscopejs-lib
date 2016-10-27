@@ -27,7 +27,7 @@ const FooterChip = ({ sheet: { classes }, label, icon, text, index,
         viewBox="0 0 24 24"
         className={classes.closeIcon}
         key="icon"
-        onClick={() => handleStateClose({ label, index, type })}
+        onTouchTap={() => handleStateClose({ label, index, type })}
       >
         <path
           d={

@@ -33,7 +33,7 @@ class CatBar extends React.Component {
         }}
         onMouseOver={this.mouseOver}
         onMouseOut={this.mouseOut}
-        onClick={this.props.handleClick}
+        onTouchTap={this.props.handleClick}
       >
         <div
           className={classNames({

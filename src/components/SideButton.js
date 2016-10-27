@@ -12,7 +12,7 @@ const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick 
       [classes.bottom]: title === SB_CONFIG
     })}
     type={'button'}
-    onClick={onClick}
+    onTouchTap={onClick}
   >
     <div className={classes.icon}>
       <i className={icon} />

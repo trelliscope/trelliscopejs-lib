@@ -153,7 +153,7 @@ class Panel extends React.Component {
                     className={classes.labelClose}
                     style={Object.assign({}, styles.labelClose,
                       this.state.hover !== d.name && { display: 'none' })}
-                    onClick={() => this.props.removeLabel(d.name, this.props.labelArr)}
+                    onTouchTap={() => this.props.removeLabel(d.name, this.props.labelArr)}
                   >
                     <i className="icon-times-circle" />
                   </button>

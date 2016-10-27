@@ -75,7 +75,7 @@ class Header extends React.Component {
     }
 
     return (
-      <div className={classes.outer} style={this.props.styles.outer}>
+      <div className={classes.headerContainer} style={this.props.styles.headerContainer}>
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
@@ -120,7 +120,7 @@ Header.propTypes = {
 // ------ static styles ------
 
 const staticStyles = {
-  outer: {
+  headerContainer: {
     position: 'fixed',
     boxSizing: 'border-box',
     top: 0,
@@ -131,7 +131,8 @@ const staticStyles = {
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
     margin: 0,
     fontSize: uiConsts.header.fontSize,
-    fontWeight: 300
+    fontWeight: 300,
+    zIndex: 2000
   },
   headerSubContainer: {
     display: 'flex',
@@ -179,7 +180,7 @@ const styleSelector = createSelector(
   selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
   (ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
     styles: {
-      outer: {
+      headerContainer: {
         width: ww
       },
       headerSubContainer: {

@@ -54,7 +54,7 @@ class SideButtons extends React.Component {
     const { classes } = this.props.sheet;
 
     return (
-      <div className={classes.base} style={this.props.styles.base}>
+      <div className={classes.sideButtonsContainer} style={this.props.styles.sideButtonsContainer}>
         <div className={classes.spacer} />
         {buttons.map((d, i) => (
           <SideButton
@@ -82,10 +82,11 @@ SideButtons.propTypes = {
 // ------ static styles ------
 
 const staticStyles = {
-  base: {
-    position: 'absolute',
+  sideButtonsContainer: {
+    position: 'fixed',
     left: 0,
-    top: uiConsts.header.height,
+    top: 0,
+    paddingTop: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
     background: uiConsts.sideButtons.background,
     zIndex: 1000
@@ -104,7 +105,7 @@ const stateSelector = createSelector(
   contentHeightSelector, sidebarActiveSelector, dialogOpenSelector,
   (ch, active, dialogOpen) => ({
     styles: {
-      base: {
+      sideButtonsContainer: {
         height: ch
       }
     },

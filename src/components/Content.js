@@ -2,19 +2,21 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import Swipeable from 'react-swipeable';
 import Panel from './Panel';
-import { setLabels } from '../actions';
+import { setLabels, setLayout } from '../actions';
 import { contentWidthSelector, sidebarActiveSelector,
   contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
-import { currentCogDataSelector } from '../selectors/cogData';
+import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector, panelRendererSelector,
-  displayInfoSelector } from '../selectors';
+  displayInfoSelector, nPerPageSelector, pageNumSelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
-const Content = ({ sheet: { classes }, ccd, ci, cinfo, cfg, layout, labels, dims,
-  panelRenderer, panelInterface, sidebar, removeLabel }) => {
+const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
+  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages,
+  removeLabel, setPageNum }) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {
@@ -69,24 +71,29 @@ const Content = ({ sheet: { classes }, ccd, ci, cinfo, cfg, layout, labels, dims
     }
 
     ret = (
-      <div className={classes.content}>
-        {panelMatrix.map(el => (
-          <Panel
-            key={`${el.key}${keyExtra}`}
-            cfg={cfg}
-            panelKey={el.key}
-            labels={el.labels}
-            labelArr={labels}
-            iface={ci}
-            panelRenderer={panelRenderer}
-            panelInterface={panelInterface}
-            removeLabel={removeLabel}
-            dims={dims}
-            rowIndex={el.rowIndex}
-            iColIndex={el.iColIndex}
-          />
-        ))}
-      </div>
+      <Swipeable
+        onSwipedRight={() => setPageNum('right', curPage, totPages)}
+        onSwipedLeft={() => setPageNum('left', curPage, totPages)}
+      >
+        <div className={classes.content} style={contentStyle}>
+          {panelMatrix.map(el => (
+            <Panel
+              key={`${el.key}${keyExtra}`}
+              cfg={cfg}
+              panelKey={el.key}
+              labels={el.labels}
+              labelArr={labels}
+              iface={ci}
+              panelRenderer={panelRenderer}
+              panelInterface={panelInterface}
+              removeLabel={removeLabel}
+              dims={dims}
+              rowIndex={el.rowIndex}
+              iColIndex={el.iColIndex}
+            />
+          ))}
+        </div>
+      </Swipeable>
     );
   }
 
@@ -94,7 +101,7 @@ const Content = ({ sheet: { classes }, ccd, ci, cinfo, cfg, layout, labels, dims
 };
 
 Content.propTypes = {
-  style: React.PropTypes.object,
+  contentStyle: React.PropTypes.object,
   ccd: React.PropTypes.array,
   ci: React.PropTypes.object,
   cinfo: React.PropTypes.object,
@@ -104,7 +111,9 @@ Content.propTypes = {
   dims: React.PropTypes.object,
   panelRenderer: React.PropTypes.object,
   panelInterface: React.PropTypes.object,
-  sidebar: React.PropTypes.string
+  sidebar: React.PropTypes.string,
+  curPage: React.PropTypes.number,
+  totPages: React.PropTypes.number
 };
 
 // ------ static styles ------
@@ -128,8 +137,10 @@ const styleSelector = createSelector(
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
   configSelector, panelRendererSelector, displayInfoSelector,
-  sidebarActiveSelector,
-  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar) => {
+  sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
+  nPerPageSelector,
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar,
+    curPage, card, npp) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -161,6 +172,10 @@ const styleSelector = createSelector(
     const hOffset = uiConsts.header.height;
 
     return ({
+      contentStyle: {
+        width: cw,
+        height: ch
+      },
       ccd,
       ci,
       cinfo,
@@ -180,7 +195,9 @@ const styleSelector = createSelector(
       },
       panelRenderer,
       panelInterface: di.info.panelInterface,
-      sidebar
+      sidebar,
+      curPage,
+      totPages: Math.ceil(card / npp)
     });
   }
 );
@@ -197,6 +214,21 @@ const mapDispatchToProps = dispatch => ({
       newLabels.splice(idx, 1);
       dispatch(setLabels(newLabels));
     }
+  },
+  setPageNum: (dir, curPage, totPages) => {
+    let n = curPage;
+    if (dir === 'right') {
+      n -= 1;
+      if (n < 1) {
+        n += 1;
+      }
+    } else {
+      n += 1;
+      if (n > totPages) {
+        n -= 1;
+      }
+    }
+    dispatch(setLayout({ pageNum: n }));
   }
 });
 

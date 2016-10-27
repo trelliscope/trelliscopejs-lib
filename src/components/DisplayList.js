@@ -41,7 +41,7 @@ const DisplayList = ({ sheet: { classes }, di, displayGroups, handleClick, cfg }
               </span>
             }
             titleBackground="rgba(0, 0, 0, 0.80)"
-            onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
+            onTouchTap={() => handleClick(di[i].name, di[i].group, di[i].desc)}
           >
             <img
               src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}

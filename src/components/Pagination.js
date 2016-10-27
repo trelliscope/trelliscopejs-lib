@@ -76,7 +76,7 @@ class Pagination extends React.Component {
               style={buttonStyle}
               iconStyle={iconStyle}
               iconClassName="icon-angle-left"
-              onClick={() => this.pageLeft()}
+              onTouchTap={() => this.pageLeft()}
             />
           </div>
           <div className={classes.buttonText}>
@@ -90,7 +90,7 @@ class Pagination extends React.Component {
               style={buttonStyle}
               iconStyle={iconStyle}
               iconClassName="icon-angle-right"
-              onClick={() => this.pageRight()}
+              onTouchTap={() => this.pageRight()}
             />
           </div>
           <div className={classes.buttonText}>
@@ -104,7 +104,7 @@ class Pagination extends React.Component {
               style={buttonStyle}
               iconStyle={iconStyle}
               iconClassName="icon-angle-double-left"
-              onClick={() => this.pageFirst()}
+              onTouchTap={() => this.pageFirst()}
             />
           </div>
           <div className={classes.buttonText}>
@@ -118,7 +118,7 @@ class Pagination extends React.Component {
               style={buttonStyle}
               iconStyle={iconStyle}
               iconClassName="icon-angle-double-right"
-              onClick={() => this.pageLast()}
+              onTouchTap={() => this.pageLast()}
             />
           </div>
           <div className={classes.buttonText}>

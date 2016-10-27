@@ -77,7 +77,7 @@ class NumericInput extends React.Component {
           <button
             key="up-button"
             className={`${classes.b} ${classes.b1}`}
-            onClick={this.increment}
+            onTouchTap={this.increment}
             tabIndex="-1"
           >
             <i className={`${classes.i} ${classes.i1}`} />
@@ -85,7 +85,7 @@ class NumericInput extends React.Component {
           <button
             key="down-button"
             className={`${classes.b} ${classes.b2}`}
-            onClick={this.decrement}
+            onTouchTap={this.decrement}
             tabIndex="-1"
           >
             <i className={`${classes.i} ${classes.i2}`} />

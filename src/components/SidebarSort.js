@@ -35,7 +35,7 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
                         mini
                         key={i}
                         zDepth={1}
-                        onClick={() => {
+                        onTouchTap={() => {
                           const sort2 = Object.assign([], sort);
                           sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
                           handleChange(sort2);
@@ -54,7 +54,7 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
                       <IconButton
                         iconStyle={{ fontSize: 16, color: '#aaa' }}
                         iconClassName="icon-times"
-                        onClick={() => handleChange(i)}
+                        onTouchTap={() => handleChange(i)}
                       />
                     </td>
                   </tr>
@@ -74,7 +74,7 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
                 <button
                   className={classes.variable}
                   key={`button_${i}`}
-                  onClick={() => {
+                  onTouchTap={() => {
                     const sort2 = Object.assign([], sort);
                     sort2.push({ name: d, dir: 'asc' });
                     addLabel(d, labels);

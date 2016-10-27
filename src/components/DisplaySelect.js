@@ -91,7 +91,7 @@ class DisplaySelect extends React.Component {
 
     return (
       <button
-        onClick={this.handleOpen}
+        onTouchTap={this.handleOpen}
         className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
       >
         {attnDiv}

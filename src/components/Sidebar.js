@@ -72,11 +72,13 @@ const staticStyles = {
     position: 'fixed',
     left: uiConsts.sideButtons.width,
     top: uiConsts.header.height,
+    height: '100%',
     boxSizing: 'border-box',
     borderRight: '1px solid',
     borderColor: uiConsts.sidebar.borderColor,
     background: '#fff',
-    zIndex: 999
+    zIndex: 999,
+    overflow: 'hidden'
   },
   hidden: {
     transitionProperty: 'left',

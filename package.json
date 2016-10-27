@@ -4,7 +4,7 @@
   "description": "trelliscopejs",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp config.jsonp dist/ && cp favicon.ico dist/",
+    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp favicon.ico dist/",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "lint": "eslint src || true"
   },
@@ -71,6 +71,7 @@
     "react-dom": "^15.3",
     "react-jss": "^4.1.2",
     "react-redux": "^4.4.5",
+    "react-swipeable": "^3.7.0",
     "react-tap-event-plugin": "^1.0.0",
     "react-tooltip": "^3.2.1",
     "react-virtualized": "^7.23.0",
