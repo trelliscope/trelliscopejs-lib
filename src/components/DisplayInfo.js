@@ -83,6 +83,7 @@ class DisplayInfo extends React.Component {
           title="Information About This Display"
           actions={actions}
           modal={false}
+          style={{ zIndex: 8000 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
@@ -162,7 +163,7 @@ const staticStyles = {
   button: {
     position: 'absolute',
     boxSizing: 'border-box',
-    top: 0,
+    top: -1,
     // transition: 'left 0.5s ease, background 250ms',
     display: 'inline-block',
     height: uiConsts.header.height,
@@ -170,7 +171,7 @@ const staticStyles = {
     fontSize: 18,
     paddingTop: 0,
     color: uiConsts.header.button.color,
-    background: 'white',
+    background: 'none',
     textAlign: 'center',
     borderRight: `1px solid ${uiConsts.header.borderColor}`,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,

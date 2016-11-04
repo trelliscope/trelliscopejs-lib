@@ -1,3 +1,4 @@
+export const SET_APP_ID = 'SET_APP_ID';
 export const ACTIVE_SIDEBAR = 'ACTIVE_SIDEBAR';
 export const SET_LAYOUT = 'SET_LAYOUT';
 export const SET_LABELS = 'SET_LABELS';

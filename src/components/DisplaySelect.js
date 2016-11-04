@@ -11,7 +11,7 @@ import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
-import { configSelector, displayListSelector,
+import { appIdSelector, configSelector, displayListSelector,
   selectedDisplaySelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
@@ -60,7 +60,7 @@ class DisplaySelect extends React.Component {
     this.setState({ open: false });
   }
   handleSelect = (name, group, desc) => {
-    this.props.handleClick(name, group, desc, this.props.cfg);
+    this.props.handleClick(name, group, desc, this.props.cfg, this.props.appId);
     this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
@@ -100,6 +100,7 @@ class DisplaySelect extends React.Component {
           title="Select a Display to Open"
           actions={actions}
           modal={false}
+          style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
@@ -120,6 +121,7 @@ DisplaySelect.propTypes = {
   handleClick: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
+  appId: React.PropTypes.string,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object
@@ -166,7 +168,7 @@ const staticStyles = {
     zIndex: 500,
     position: 'absolute',
     boxSizing: 'border-box',
-    top: 0,
+    top: -1, // cover up top app border
     left: 0,
     height: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
@@ -199,8 +201,9 @@ const staticStyles = {
 
 const styleSelector = createSelector(
   selectedDisplaySelector, displayListSelector,
-  displayGroupsSelector, configSelector,
-  (selectedDisplay, displayList, displayGroups, cfg) => ({
+  displayGroupsSelector, configSelector, appIdSelector,
+  (selectedDisplay, displayList, displayGroups, cfg, appId) => ({
+    appId,
     cfg,
     selectedDisplay,
     displayList,
@@ -213,7 +216,7 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  handleClick: (name, group, desc, cfg) => {
+  handleClick: (name, group, desc, cfg, appId) => {
     // need to clear out state for new display...
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
@@ -227,7 +230,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setSort([]));
 
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg));
+    dispatch(fetchDisplay(name, group, cfg, appId));
   }
 });
 

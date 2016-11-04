@@ -22,6 +22,7 @@ export const layoutSelector = state => state.layout;
 export const labelsSelector = state => state.labels;
 
 export const configSelector = state => state._config.config;
+export const appIdSelector = state => state.appId;
 
 export const dialogOpenSelector = state => state.dialog;
 

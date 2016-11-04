@@ -64,6 +64,7 @@ class HeaderLogo extends React.Component {
         </div>
         <Dialog
           title={`Trelliscope Viewer v${VERSION}`}
+          style={{ zIndex: 8000, fontWeight: 300 }}
           actions={actions}
           open={this.state.open}
           onRequestClose={this.handleClose}
@@ -326,7 +327,7 @@ HeaderLogo.propTypes = {
 const staticStyles = {
   logo: {
     position: 'absolute',
-    top: 0,
+    top: -1, // cover up top app border
     right: 0,
     cursor: 'pointer',
     border: 'none',

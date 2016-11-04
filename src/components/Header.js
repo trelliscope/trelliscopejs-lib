@@ -10,7 +10,7 @@ import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
-import { configSelector, displayListSelector,
+import { appIdSelector, configSelector, displayListSelector,
   selectedDisplaySelector, dialogOpenSelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
@@ -34,7 +34,8 @@ class Header extends React.Component {
         nprops.displayList.list[0].name,
         nprops.displayList.list[0].group,
         nprops.displayList.list[0].desc,
-        nprops.cfg
+        nprops.cfg,
+        nprops.appId
       );
       this.setState({ singleLoaded: true });
     }
@@ -109,6 +110,7 @@ Header.propTypes = {
   styles: React.PropTypes.object,
   sheet: React.PropTypes.object,
   cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+  appId: React.PropTypes.string,
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
@@ -129,6 +131,7 @@ const staticStyles = {
     background: uiConsts.header.background,
     color: uiConsts.header.color,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
+    borderTop: `1px solid ${uiConsts.header.borderColor}`,
     margin: 0,
     fontSize: uiConsts.header.fontSize,
     fontWeight: 300,
@@ -176,9 +179,9 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  windowWidthSelector, displayListSelector, displayGroupsSelector,
+  appIdSelector, windowWidthSelector, displayListSelector, displayGroupsSelector,
   selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
-  (ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
+  (appId, ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
     styles: {
       headerContainer: {
         width: ww
@@ -195,6 +198,7 @@ const styleSelector = createSelector(
         paddingTop: sd.desc === '' ? 0 : 5
       }
     },
+    appId,
     cfg,
     displayList: dl,
     displayGroups: dg,
@@ -208,9 +212,9 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  selectDisplay: (name, group, desc, cfg) => {
+  selectDisplay: (name, group, desc, cfg, appId) => {
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg));
+    dispatch(fetchDisplay(name, group, cfg, appId));
   },
   setDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));
