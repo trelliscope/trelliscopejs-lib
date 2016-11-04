@@ -325,7 +325,7 @@ HeaderLogo.propTypes = {
 
 const staticStyles = {
   logo: {
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     right: 0,
     cursor: 'pointer',

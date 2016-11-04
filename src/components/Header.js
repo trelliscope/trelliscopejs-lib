@@ -121,7 +121,7 @@ Header.propTypes = {
 
 const staticStyles = {
   headerContainer: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     top: 0,
     left: 0,
@@ -132,11 +132,11 @@ const staticStyles = {
     margin: 0,
     fontSize: uiConsts.header.fontSize,
     fontWeight: 300,
-    zIndex: 2000
+    zIndex: 1010
   },
   headerSubContainer: {
     display: 'flex',
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     height: uiConsts.header.height
   },

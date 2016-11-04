@@ -88,7 +88,7 @@ export const setPanelRenderer = fn => ({
 
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
-export const fetchDisplayList = () =>
+export const fetchDisplayList = (config = 'config.jsonp') =>
   (dispatch) => {
     dispatch(requestConfig());
 
@@ -112,7 +112,7 @@ export const fetchDisplayList = () =>
     };
 
     getJSONP({
-      url: 'config.jsonp',
+      url: config,
       callbackName: '__loadTrscopeConfig__'
     });
   };

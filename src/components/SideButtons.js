@@ -83,7 +83,7 @@ SideButtons.propTypes = {
 
 const staticStyles = {
   sideButtonsContainer: {
-    position: 'fixed',
+    position: 'absolute',
     left: 0,
     top: 0,
     paddingTop: uiConsts.header.height,

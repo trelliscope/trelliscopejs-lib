@@ -83,7 +83,7 @@ RelatedDisplays.propTypes = {
 
 const staticStyles = {
   button: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     top: 0,
     transition: 'left 0.5s ease, background 250ms',

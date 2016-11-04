@@ -6,8 +6,16 @@
     <link href="static/fonts/OpenSans/stylesheet.css" rel="stylesheet" type="text/css">
     <link href="static/fonts/IcoMoon/style.css" rel="stylesheet" type="text/css">
   </head>
-  <body>
-    <div id="content"></div>
+  <body style="margin: 0px">
+    <div id="content" style="width:800px; height:500px;"></div>
+
+    <div id="content2" style="width:800px; height:500px;"></div>
     <script src="bundle.js"></script>
+    <script>
+      (function() {
+        trelliscopeApp('content', 'vdb_housing/config.jsonp');
+        // trelliscopeApp('content', 'vdb_gates/config.jsonp');
+      })();
+    </script>
   </body>
 </html>

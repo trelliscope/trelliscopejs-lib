@@ -86,7 +86,7 @@ Footer.propTypes = {
 
 const staticStyles = {
   wrapper: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     bottom: 0,
     left: 0,
@@ -99,7 +99,9 @@ const staticStyles = {
     background: uiConsts.footer.background,
     color: uiConsts.footer.color,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    overflowY: 'auto',
+    whiteSpace: 'nowrap'
   },
   sectionWrapper: {
     display: 'flex',

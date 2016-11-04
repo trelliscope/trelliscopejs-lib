@@ -104,9 +104,11 @@ class Panel extends React.Component {
         width: dims.ww + 2,
         height: dims.hh + (dims.nLabels * dims.labelHeight) + 2,
         top: (dims.pHeight * rowIndex) + ((rowIndex + 1) * dims.pPad) +
-          dims.hOffset + (rowIndex * 2),
+          // dims.hOffset +
+          (rowIndex * 2),
         right: (dims.pWidth * iColIndex) + ((iColIndex + 1) * dims.pPad) +
-          dims.wOffset + (iColIndex * 2) + 1
+          dims.wOffset +
+          (iColIndex * 2) + 1
       },
       panel: {
         width: dims.ww,
@@ -223,7 +225,7 @@ const staticStyles = {
     transitionProperty: 'all',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    position: 'fixed',
+    position: 'absolute',
     overflow: 'hidden',
     padding: 0,
     boxSizing: 'border-box',

@@ -69,7 +69,7 @@ const staticStyles = {
     transitionProperty: 'left',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    position: 'fixed',
+    position: 'absolute',
     left: uiConsts.sideButtons.width,
     top: uiConsts.header.height,
     height: '100%',

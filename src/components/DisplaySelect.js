@@ -164,7 +164,7 @@ const staticStyles = {
   },
   button: {
     zIndex: 500,
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     top: 0,
     left: 0,

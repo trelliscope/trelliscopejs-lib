@@ -122,7 +122,7 @@ const staticStyles = {
   content: {
     // border: '3px solid red',
     background: '#fdfdfd',
-    position: 'fixed',
+    position: 'absolute',
     top: uiConsts.header.height,
     right: 0,
     boxSizing: 'border-box',
