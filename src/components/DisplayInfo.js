@@ -83,7 +83,8 @@ class DisplayInfo extends React.Component {
           title="Information About This Display"
           actions={actions}
           modal={false}
-          style={{ zIndex: 8000 }}
+          className="trelliscope-app"
+          style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >

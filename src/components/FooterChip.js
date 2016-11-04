@@ -110,6 +110,8 @@ const staticStyles = {
   }
 };
 
+// ------ redux container ------
+
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({

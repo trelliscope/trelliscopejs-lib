@@ -68,6 +68,7 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
     let keyExtra = '';
     if (panelInterface.type === 'htmlwidget') {
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
+      keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
     }
 
     ret = (

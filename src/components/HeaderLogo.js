@@ -64,6 +64,7 @@ class HeaderLogo extends React.Component {
         </div>
         <Dialog
           title={`Trelliscope Viewer v${VERSION}`}
+          className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           actions={actions}
           open={this.state.open}

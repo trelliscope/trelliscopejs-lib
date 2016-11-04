@@ -1,5 +1,29 @@
+.trscope-body {
+  margin: 0;
+  overflow: hidden;
+  height: 100%;
+}
 
-button {
+.trscope-html {
+  height: 100%;
+}
+
+.trscope-fullscreen {
+  z-index:7000;
+  width: 100% !important;
+  height: 100% !important;
+  z-index:7000;
+  position: fixed !important;
+  // transition: all 500ms ease-in;
+  top: 0;
+  left: 0;
+}
+
+.trelliscope-app {
+  background: white;
+}
+
+.trelliscope-app button {
   font-family: "Open Sans",
   sans-serif;
   font-weight: 300;
@@ -9,7 +33,7 @@ button {
   margin: 0;
 }
 
-button:focus {
+.trelliscope-app button:focus {
   outline:0;
 }
 
@@ -18,23 +42,23 @@ h1,h2,h3,h4,h5,h6 {
   color: black;
 }
 
-strong {
+.trelliscope-app strong {
   color: black;
   font-weight: 400;
 }
 
-th {
+.trelliscope-app th {
   font-weight: 400;
 }
 
-h1 {
+.trelliscope-app h1 {
   font-size: 24px;
 }
 
-h2 {
+.trelliscope-app h2 {
   font-size: 20px;
 }
 
-a {
+.trelliscope-app a {
   color: #FF5252
 }

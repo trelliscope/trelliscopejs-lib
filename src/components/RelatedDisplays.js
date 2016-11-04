@@ -59,6 +59,7 @@ class RelatedDisplays extends React.Component {
           title="Add Related Displays"
           actions={actions}
           modal={false}
+          className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}

@@ -2,7 +2,8 @@ import React from 'react';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
 import { loadAssetsSequential } from '../loadAssets';
-import { SET_APP_ID, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
+import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE,
+  ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
@@ -14,6 +15,14 @@ const getJSON = obj =>
 export const setAppID = id => ({
   type: SET_APP_ID, id
 });
+
+export const setFullscreen = fullscreen => ({
+  type: SET_FULLSCREEN, fullscreen
+});
+
+export const windowResize = dims => (
+  { type: WINDOW_RESIZE, dims }
+);
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG

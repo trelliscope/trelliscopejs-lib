@@ -12,19 +12,19 @@ import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
 import { appIdSelector, configSelector, displayListSelector,
-  selectedDisplaySelector } from '../selectors';
+  selectedDisplaySelector, singlePageAppSelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: props.selectedDisplay.name === '',
+      open: props.selectedDisplay.name === '' && props.singlePageApp,
       btnScale: 1
     };
   }
   componentWillMount() {
-    if (this.props.selectedDisplay.name === '') {
+    if (this.props.selectedDisplay.name === '' && this.props.singlePageApp) {
       this.props.setDialogOpen(true);
     }
   }
@@ -100,6 +100,7 @@ class DisplaySelect extends React.Component {
           title="Select a Display to Open"
           actions={actions}
           modal={false}
+          className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
@@ -121,6 +122,7 @@ DisplaySelect.propTypes = {
   handleClick: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
+  singlePageApp: React.PropTypes.bool,
   appId: React.PropTypes.string,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object,
@@ -202,12 +204,14 @@ const staticStyles = {
 const styleSelector = createSelector(
   selectedDisplaySelector, displayListSelector,
   displayGroupsSelector, configSelector, appIdSelector,
-  (selectedDisplay, displayList, displayGroups, cfg, appId) => ({
+  singlePageAppSelector,
+  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp) => ({
     appId,
     cfg,
     selectedDisplay,
     displayList,
-    displayGroups
+    displayGroups,
+    singlePageApp
   })
 );
 

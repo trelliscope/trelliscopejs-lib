@@ -10,9 +10,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { blueA200, lightBlue700, redA200 } from 'material-ui/styles/colors';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
+import { addClass } from './classManipulation';
+
 import './styles/main.css';
 
-import { fetchDisplayList } from './actions';
+import { fetchDisplayList, windowResize } from './actions';
 
 import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
@@ -21,19 +23,9 @@ import App from './App';
 class Root extends Component {
   constructor(props) {
     super(props);
-    const loggerMiddleware = createLogger();
-
-    this.store = createStore(
-      app,
-      { appId: this.props.id },
-      applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
-    );
-
-    const windowResize = dims => (
-      { type: 'WINDOW_RESIZE', dims }
-    );
 
     const el = document.getElementById(this.props.id);
+    addClass(el, 'trelliscope-app');
     if (el.style.position !== 'relative') {
       el.style.position = 'relative';
     }
@@ -46,56 +38,60 @@ class Root extends Component {
 
     // if there is only one div in the whole document and it doesn't have dimensions
     // then we treat this as a single-page application
-    const noHeight = el.style.height === undefined || el.style.height === '';
-    const noWidth = el.style.width === undefined || el.style.width === '';
+    const noHeight = el.style.height === undefined || el.style.height === '' ||
+      el.style.height === '100%';
+    const noWidth = el.style.width === undefined || el.style.width === '' ||
+      el.style.width === '100%';
+
+    let singlePageApp = false;
+    let fullscreen = false;
 
     if (document.getElementsByTagName('div').length === 1 && (noHeight || noWidth)) {
+      singlePageApp = true;
+      fullscreen = true;
       // el.parentNode.nodeName === 'BODY'
       el.style.width = '100%';
       el.style.height = '100%';
-      document.body.style.margin = 0;
-      document.body.style.overflow = 'hidden';
-      document.body.style.height = '100%';
-      document.getElementsByTagName('html')[0].style.height = '100%';
+      addClass(document.body, 'trscope-body');
+      addClass(document.getElementsByTagName('html')[0], 'trscope-html');
+    } else {
+      // if (el.style.height === undefined) {
+      //   el.style.height = ?
+      // }
+      // if (el.style.width === undefined) {
+      //   el.style.width = ?
+      // }
+    }
 
-      // set size of app
-      this.store.dispatch(windowResize({
-        height: window.innerHeight,
-        width: window.innerWidth
-      }));
+    const appDims = {};
 
-      // handler to resize app if div dimensions change...
-      window.addEventListener('resize', () => {
+    // set size of app
+    if (singlePageApp) {
+      appDims.width = window.innerWidth;
+      appDims.height = window.innerHeight;
+    } else {
+      appDims.width = document.getElementById(this.props.id).clientWidth;
+      appDims.height = document.getElementById(this.props.id).clientHeight;
+    }
+
+    const loggerMiddleware = createLogger();
+    this.store = createStore(
+      app,
+      { appId: this.props.id, singlePageApp, fullscreen, appDims }, // initial state
+      applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
+    );
+
+    // resize handler only when in fullscreen mode (which is always for SPA)
+    window.addEventListener('resize', () => {
+      if (this.store.getState().fullscreen) {
         this.store.dispatch(windowResize({
           height: window.innerHeight,
           width: window.innerWidth
         }));
-      });
-    } else {
-      // if (el.style.height === undefined) {
-      //   el.style.height =
-      // }
-      // if (el.style.width === undefined) {
-      //   el.style.width =
-      // }
-      // set size of app
-      this.store.dispatch(windowResize({
-        height: document.getElementById(this.props.id).clientHeight,
-        width: document.getElementById(this.props.id).clientWidth
-      }));
+      }
+    });
 
-      // handler to resize app if div dimensions change...
-      window.addEventListener('resize', () => {
-        this.store.dispatch(windowResize({
-          height: document.getElementById(this.props.id).clientHeight,
-          width: document.getElementById(this.props.id).clientWidth
-        }));
-      });
-      // TODO: if it's not SPA and there's more than one display
-      // don't open the "open display" modal on load
-      // (need to set state accordingly so it knows)
-      // maybe have a top-level spa: true/false variable
-    }
+    this.store.dispatch(windowResize(appDims));
 
     this.muiTheme = getMuiTheme({
       fontFamily: '"Open Sans", sans-serif',

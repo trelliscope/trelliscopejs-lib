@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { windowWidthSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
-import { displayInfoSelector, filterSelector, sortSelector } from '../selectors';
+import { displayInfoSelector, filterSelector, sortSelector,
+  singlePageAppSelector } from '../selectors';
 import FooterChip from './FooterChip';
+import FullscreenButton from './FullscreenButton';
 import uiConsts from '../styles/uiConsts';
 
-const Footer = ({ sheet: { classes }, width, sort, filter, nFilt, nPanels }) => {
+const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels, singlePage }) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -64,22 +66,29 @@ const Footer = ({ sheet: { classes }, width, sort, filter, nFilt, nPanels }) => 
     spacerContent = <div className={classes.spacer} />;
   }
 
+  let fullscreenComponent = '';
+  if (!singlePage) {
+    fullscreenComponent = <FullscreenButton />;
+  }
+
   return (
-    <div className={classes.wrapper} style={{ width }}>
+    <div className={classes.wrapper} style={style}>
       {sortContent}
       {spacerContent}
       {filterContent}
+      {fullscreenComponent}
     </div>
   );
 };
 
 Footer.propTypes = {
   sheet: React.PropTypes.object,
-  width: React.PropTypes.number,
+  style: React.PropTypes.object,
   sort: React.PropTypes.array,
   filter: React.PropTypes.array,
   nFilt: React.PropTypes.number,
-  nPanels: React.PropTypes.number
+  nPanels: React.PropTypes.number,
+  singlePage: React.PropTypes.bool
 };
 
 // ------ static styles ------
@@ -188,13 +197,17 @@ const filterInfoSelector = createSelector(
 
 const stateSelector = createSelector(
   windowWidthSelector, sortInfoSelector, filterInfoSelector,
-  filterCardinalitySelector, displayInfoSelector,
-  (ww, sort, filter, nFilt, di) => ({
-    width: ww,
+  filterCardinalitySelector, displayInfoSelector, singlePageAppSelector,
+  (ww, sort, filter, nFilt, di, singlePage) => ({
+    style: {
+      width: ww,
+      paddingRight: singlePage ? 0 : uiConsts.footer.height
+    },
     sort,
     filter,
     nFilt,
-    nPanels: di.info.n
+    nPanels: di.info.n,
+    singlePage
   })
 );
 
