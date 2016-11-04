@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import sidebar from './sidebar';
 import ui from './ui';
-import { appId, dialog, singlePageApp, fullscreen } from './app';
+import { appId, appDims, dialog, singlePageApp, fullscreen } from './app';
 import selectedDisplay from './selectedDisplay';
 import panelRenderer from './panelRenderer';
 import { layout, labels, sort, filter } from './displayState';
@@ -12,6 +12,7 @@ import _cogDataMutable from './_cogDataMutable';
 
 const app = combineReducers({
   appId,
+  appDims,
   dialog,
   singlePageApp,
   fullscreen,

@@ -6,10 +6,14 @@ import { addClass, removeClass } from '../classManipulation';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../styles/uiConsts';
 
-const FullscreenButton = ({ sheet: { classes }, fullscreen, appId, toggleFullscreen }) => {
+const FullscreenButton = ({ sheet: { classes }, fullscreen, appId, appDims,
+  toggleFullscreen }) => {
   const cls = fullscreen ? 'icon-minimize' : 'icon-maximize';
   return (
-    <button className={classes.button} onClick={() => toggleFullscreen(!fullscreen, appId)}>
+    <button
+      className={classes.button}
+      onClick={() => toggleFullscreen(!fullscreen, appId, appDims)}
+    >
       <i className={`${cls} ${classes.icon}`} />
     </button>
   );
@@ -19,6 +23,7 @@ FullscreenButton.propTypes = {
   sheet: React.PropTypes.object,
   fullscreen: React.PropTypes.bool,
   appId: React.PropTypes.string,
+  appDims: React.PropTypes.object,
   toggleFullscreen: React.PropTypes.func
 };
 
@@ -49,11 +54,11 @@ const staticStyles = {
 // ------ redux container ------
 
 const mapStateToProps = state => (
-  { fullscreen: state.fullscreen, appId: state.appId }
+  { fullscreen: state.fullscreen, appId: state.appId, appDims: state.appDims }
 );
 
 const mapDispatchToProps = dispatch => ({
-  toggleFullscreen: (fullscreen, appId) => {
+  toggleFullscreen: (fullscreen, appId, appDims) => {
     const el = document.getElementById(appId);
     const newDims = {};
     if (fullscreen) {
@@ -66,8 +71,8 @@ const mapDispatchToProps = dispatch => ({
       removeClass(document.body, 'trscope-body');
       removeClass(document.getElementsByTagName('html')[0], 'trscope-html');
       removeClass(el, 'trscope-fullscreen');
-      newDims.width = 800;
-      newDims.height = 600;
+      newDims.width = appDims.width;
+      newDims.height = appDims.height;
     }
     dispatch(setFullscreen(fullscreen));
     dispatch(windowResize(newDims));

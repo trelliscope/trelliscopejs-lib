@@ -63,6 +63,8 @@ class Root extends Component {
       // }
     }
 
+    // need to store original app dims (constant) if it isn't a SPA
+    // this will only be used in that case, but store it always anyway
     const appDims = {};
 
     // set size of app
