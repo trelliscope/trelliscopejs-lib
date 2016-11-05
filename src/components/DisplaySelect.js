@@ -11,7 +11,7 @@ import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
-import { appIdSelector, configSelector, displayListSelector,
+import { appIdSelector, configSelector, displayListSelector, fullscreenSelector,
   selectedDisplaySelector, singlePageAppSelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
@@ -29,7 +29,9 @@ class DisplaySelect extends React.Component {
     }
   }
   componentDidMount() {
-    Mousetrap.bind(['o'], this.handleKey);
+    if (this.props.fullscreen) {
+      Mousetrap.bind(['o'], this.handleKey);
+    }
 
     const attnInterval = setInterval(() => {
       const elem = this._atnnCircle;
@@ -42,8 +44,15 @@ class DisplaySelect extends React.Component {
       }
     }, 750);
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bind(['o'], this.handleKey);
+    }
+  }
   componentWillUnmount() {
-    Mousetrap.unbind(['o']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['o']);
+    }
   }
   handleOpen = () => {
     if (this.props.displayList && this.props.displayList.isLoaded) {
@@ -123,6 +132,7 @@ DisplaySelect.propTypes = {
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
   singlePageApp: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
   appId: React.PropTypes.string,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object,
@@ -204,14 +214,15 @@ const staticStyles = {
 const styleSelector = createSelector(
   selectedDisplaySelector, displayListSelector,
   displayGroupsSelector, configSelector, appIdSelector,
-  singlePageAppSelector,
-  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp) => ({
+  singlePageAppSelector, fullscreenSelector,
+  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen) => ({
     appId,
     cfg,
     selectedDisplay,
     displayList,
     displayGroups,
-    singlePageApp
+    singlePageApp,
+    fullscreen
   })
 );
 

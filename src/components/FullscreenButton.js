@@ -6,24 +6,45 @@ import { addClass, removeClass } from '../classManipulation';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../styles/uiConsts';
 
-const FullscreenButton = ({ sheet: { classes }, fullscreen, appId, appDims,
-  toggleFullscreen }) => {
-  const cls = fullscreen ? 'icon-minimize' : 'icon-maximize';
-  return (
-    <button
-      className={classes.button}
-      onClick={() => toggleFullscreen(!fullscreen, appId, appDims)}
-    >
-      <i className={`${cls} ${classes.icon}`} />
-    </button>
-  );
-};
+class FullscreenButton extends React.Component {
+  constructor(props) {
+    super(props);
+    const el = document.getElementById(props.appId);
+    // store all these things so we can restore them
+    this.appDims = {
+      width: el.clientWidth,
+      height: el.clientHeight
+    };
+    this.yOffset = window.pageYOffset;
+  }
+  render() {
+    const { classes } = this.props.sheet;
+
+    const cls = this.props.fullscreen ? 'icon-minimize' : 'icon-maximize';
+    return (
+      <button
+        className={classes.button}
+        onClick={() => {
+          if (!this.props.fullscreen) { // toggling to fullscreen
+            this.yOffset = window.pageYOffset;
+          }
+          this.props.toggleFullscreen(
+            !this.props.fullscreen,
+            this.props.appId,
+            this.appDims,
+            this.yOffset);
+        }}
+      >
+        <i className={`${cls} ${classes.icon}`} />
+      </button>
+    );
+  }
+}
 
 FullscreenButton.propTypes = {
   sheet: React.PropTypes.object,
   fullscreen: React.PropTypes.bool,
   appId: React.PropTypes.string,
-  appDims: React.PropTypes.object,
   toggleFullscreen: React.PropTypes.func
 };
 
@@ -54,11 +75,11 @@ const staticStyles = {
 // ------ redux container ------
 
 const mapStateToProps = state => (
-  { fullscreen: state.fullscreen, appId: state.appId, appDims: state.appDims }
+  { fullscreen: state.fullscreen, appId: state.appId }
 );
 
 const mapDispatchToProps = dispatch => ({
-  toggleFullscreen: (fullscreen, appId, appDims) => {
+  toggleFullscreen: (fullscreen, appId, appDims, yOffset) => {
     const el = document.getElementById(appId);
     const newDims = {};
     if (fullscreen) {
@@ -73,6 +94,8 @@ const mapDispatchToProps = dispatch => ({
       removeClass(el, 'trscope-fullscreen');
       newDims.width = appDims.width;
       newDims.height = appDims.height;
+      // restore to y offset we were at before going fullscreen
+      window.scrollTo(window.pageXOffset, yOffset);
     }
     dispatch(setFullscreen(fullscreen));
     dispatch(windowResize(newDims));

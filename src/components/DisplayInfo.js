@@ -7,7 +7,8 @@ import marked from 'marked';
 // import katex from 'katex';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { selectedDisplaySelector, displayInfoSelector } from '../selectors';
+import { selectedDisplaySelector, displayInfoSelector,
+  fullscreenSelector } from '../selectors';
 import uiConsts from '../styles/uiConsts';
 
 class DisplayInfo extends React.Component {
@@ -16,17 +17,17 @@ class DisplayInfo extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    if (this.props.active) {
+    if (this.props.active && this.props.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.active) {
+    if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
     }
   }
   componentWillUnmount() {
-    if (this.props.active) {
+    if (this.props.active && this.props.fullscreen) {
       Mousetrap.unbind(['i']);
     }
   }
@@ -155,6 +156,7 @@ DisplayInfo.propTypes = {
   // selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   setDialogOpen: React.PropTypes.func,
+  fullscreen: React.PropTypes.bool,
   active: React.PropTypes.bool
 };
 
@@ -197,8 +199,8 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, displayInfoSelector,
-  (selectedDisplay, displayInfo) => ({
+  selectedDisplaySelector, displayInfoSelector, fullscreenSelector,
+  (selectedDisplay, displayInfo, fullscreen) => ({
     styles: {
       button: {
         left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
@@ -209,6 +211,7 @@ const styleSelector = createSelector(
     },
     // selectedDisplay,
     displayInfo,
+    fullscreen,
     active: selectedDisplay.name !== ''
   })
 );

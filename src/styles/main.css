@@ -12,14 +12,13 @@
   z-index:7000;
   width: 100% !important;
   height: 100% !important;
-  z-index:7000;
   position: fixed !important;
   // transition: all 500ms ease-in;
   top: 0;
   left: 0;
 }
 
-.trelliscope-app {
+.trelliscope-app-container {
   background: white;
 }
 

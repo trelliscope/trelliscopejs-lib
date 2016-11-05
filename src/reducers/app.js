@@ -10,15 +10,6 @@ export const appId = (state = 'app', action) => {
   return state;
 };
 
-export const appDims = (state = { width: 500, height: 500 }, action) => {
-  switch (action.type) {
-    case SET_APP_ID:
-      return action.dims;
-    default:
-  }
-  return state;
-};
-
 export const dialog = (state = false, action) => {
   switch (action.type) {
     case SET_DIALOG_OPEN:

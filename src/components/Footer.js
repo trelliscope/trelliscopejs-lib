@@ -7,10 +7,9 @@ import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector,
   singlePageAppSelector } from '../selectors';
 import FooterChip from './FooterChip';
-import FullscreenButton from './FullscreenButton';
 import uiConsts from '../styles/uiConsts';
 
-const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels, singlePage }) => {
+const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -66,17 +65,13 @@ const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels, singl
     spacerContent = <div className={classes.spacer} />;
   }
 
-  let fullscreenComponent = '';
-  if (!singlePage) {
-    fullscreenComponent = <FullscreenButton />;
-  }
-
   return (
     <div className={classes.wrapper} style={style}>
-      {sortContent}
-      {spacerContent}
-      {filterContent}
-      {fullscreenComponent}
+      <div className={classes.inner}>
+        {sortContent}
+        {spacerContent}
+        {filterContent}
+      </div>
     </div>
   );
 };
@@ -87,8 +82,7 @@ Footer.propTypes = {
   sort: React.PropTypes.array,
   filter: React.PropTypes.array,
   nFilt: React.PropTypes.number,
-  nPanels: React.PropTypes.number,
-  singlePage: React.PropTypes.bool
+  nPanels: React.PropTypes.number
 };
 
 // ------ static styles ------
@@ -109,8 +103,14 @@ const staticStyles = {
     color: uiConsts.footer.color,
     display: 'flex',
     flexDirection: 'row',
-    overflowY: 'auto',
-    whiteSpace: 'nowrap'
+    overflowX: 'auto',
+    overflowY: 'hidden'
+  },
+  inner: {
+    display: 'flex',
+    flexDirection: 'row',
+    whiteSpace: 'nowrap',
+    paddingRight: 10
   },
   sectionWrapper: {
     display: 'flex',
@@ -200,14 +200,12 @@ const stateSelector = createSelector(
   filterCardinalitySelector, displayInfoSelector, singlePageAppSelector,
   (ww, sort, filter, nFilt, di, singlePage) => ({
     style: {
-      width: ww,
-      paddingRight: singlePage ? 0 : uiConsts.footer.height
+      width: ww - (singlePage ? 0 : uiConsts.footer.height)
     },
     sort,
     filter,
     nFilt,
-    nPanels: di.info.n,
-    singlePage
+    nPanels: di.info.n
   })
 );
 

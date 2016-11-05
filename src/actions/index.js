@@ -2,7 +2,7 @@ import React from 'react';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
 import { loadAssetsSequential } from '../loadAssets';
-import { SET_APP_ID, SET_APP_DIMS, SET_FULLSCREEN, WINDOW_RESIZE,
+import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE,
   ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
@@ -18,10 +18,6 @@ export const setAppID = id => ({
 
 export const setFullscreen = fullscreen => ({
   type: SET_FULLSCREEN, fullscreen
-});
-
-export const setAppDims = dims => ({
-  type: SET_APP_DIMS, dims
 });
 
 export const windowResize = dims => (

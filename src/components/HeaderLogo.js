@@ -7,6 +7,7 @@ import Mousetrap from 'mousetrap';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
+import { fullscreenSelector } from '../selectors';
 import { windowHeightSelector } from '../selectors/ui';
 import uiConsts from '../styles/uiConsts';
 
@@ -16,10 +17,19 @@ class HeaderLogo extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    Mousetrap.bind(['a'], this.handleKey);
+    if (this.props.fullscreen) {
+      Mousetrap.bind(['a'], this.handleKey);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bind(['a'], this.handleKey);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['a']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['a']);
+    }
   }
   handleOpen = () => {
     this.props.setDialogOpen(true);
@@ -43,16 +53,6 @@ class HeaderLogo extends React.Component {
         onTouchTap={this.handleClose}
       />
     ];
-    // only show keyboard shortcut for open display if there is more than one display
-    let openDisplayTags = '';
-    if (!this.props.singleDisplay) {
-      openDisplayTags = (
-        <li>
-          <code className={classes.dialogCode}>o</code>
-          &ensp;open &quot;Select Display&quot; dialog
-        </li>
-      );
-    }
     return (
       <button
         onTouchTap={this.handleOpen}
@@ -245,7 +245,6 @@ class HeaderLogo extends React.Component {
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
                     <h4 className={classes.dialogH4}>Dialog boxes</h4>
                     <ul className={classes.dialogUl}>
-                      {openDisplayTags}
                       <li>
                         <code className={classes.dialogCode}>i</code>
                         &ensp;open &quot;Display Info&quot; dialog
@@ -319,7 +318,7 @@ class HeaderLogo extends React.Component {
 HeaderLogo.propTypes = {
   sheet: React.PropTypes.object,
   windowHeight: React.PropTypes.number,
-  singleDisplay: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
   setDialogOpen: React.PropTypes.func
 };
 
@@ -388,9 +387,10 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  windowHeightSelector,
-  wh => ({
-    windowHeight: wh
+  windowHeightSelector, fullscreenSelector,
+  (wh, fullscreen) => ({
+    windowHeight: wh,
+    fullscreen
   })
 );
 

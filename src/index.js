@@ -26,6 +26,7 @@ class Root extends Component {
 
     const el = document.getElementById(this.props.id);
     addClass(el, 'trelliscope-app');
+    addClass(el, 'trelliscope-app-container');
     if (el.style.position !== 'relative') {
       el.style.position = 'relative';
     }
@@ -72,14 +73,14 @@ class Root extends Component {
       appDims.width = window.innerWidth;
       appDims.height = window.innerHeight;
     } else {
-      appDims.width = document.getElementById(this.props.id).clientWidth;
-      appDims.height = document.getElementById(this.props.id).clientHeight;
+      appDims.width = el.clientWidth;
+      appDims.height = el.clientHeight;
     }
 
     const loggerMiddleware = createLogger();
     this.store = createStore(
       app,
-      { appId: this.props.id, singlePageApp, fullscreen, appDims }, // initial state
+      { appId: this.props.id, singlePageApp, fullscreen }, // initial state
       applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
     );
 

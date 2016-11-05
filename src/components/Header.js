@@ -110,7 +110,7 @@ Header.propTypes = {
   styles: React.PropTypes.object,
   sheet: React.PropTypes.object,
   cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  appId: React.PropTypes.string,
+  appId: React.PropTypes.string, // eslint-disable-line react/no-unused-prop-types
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
