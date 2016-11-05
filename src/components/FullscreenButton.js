@@ -1,8 +1,13 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import Mousetrap from 'mousetrap';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
+import { dialogOpenSelector, fullscreenSelector,
+  appIdSelector } from '../selectors';
+import { sidebarActiveSelector } from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../styles/uiConsts';
 
@@ -16,6 +21,26 @@ class FullscreenButton extends React.Component {
       height: el.clientHeight
     };
     this.yOffset = window.pageYOffset;
+  }
+  componentDidMount() {
+    if (this.props.fullscreen && this.props.sidebar === '' && !this.props.dialog) {
+      Mousetrap.bindGlobal(['esc'], () => this.props.toggleFullscreen(false,
+        this.props.appId, this.appDims, this.yOffset));
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
+      Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
+        nextProps.appId, this.appDims, this.yOffset));
+    }
+    if (nextProps.dialog) {
+      Mousetrap.unbind(['esc']);
+    }
+  }
+  componentWillUnmount() {
+    if (this.props.fullscreen && this.props.sidebar === '' && !this.props.dialog) {
+      Mousetrap.unbind(['esc']);
+    }
   }
   render() {
     const { classes } = this.props.sheet;
@@ -44,6 +69,8 @@ class FullscreenButton extends React.Component {
 FullscreenButton.propTypes = {
   sheet: React.PropTypes.object,
   fullscreen: React.PropTypes.bool,
+  dialog: React.PropTypes.bool,
+  sidebar: React.PropTypes.string,
   appId: React.PropTypes.string,
   toggleFullscreen: React.PropTypes.func
 };
@@ -74,8 +101,19 @@ const staticStyles = {
 
 // ------ redux container ------
 
+
+const stateSelector = createSelector(
+  sidebarActiveSelector, dialogOpenSelector, fullscreenSelector, appIdSelector,
+  (sidebar, dialog, fullscreen, appId) => ({
+    sidebar,
+    dialog,
+    fullscreen,
+    appId
+  })
+);
+
 const mapStateToProps = state => (
-  { fullscreen: state.fullscreen, appId: state.appId }
+  stateSelector(state)
 );
 
 const mapDispatchToProps = dispatch => ({

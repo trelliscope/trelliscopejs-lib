@@ -24,6 +24,8 @@ class DisplayInfo extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['i']);
     }
   }
   componentWillUnmount() {

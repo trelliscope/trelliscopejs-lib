@@ -24,6 +24,8 @@ class HeaderLogo extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
       Mousetrap.bind(['a'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['a']);
     }
   }
   componentWillUnmount() {
@@ -53,6 +55,15 @@ class HeaderLogo extends React.Component {
         onTouchTap={this.handleClose}
       />
     ];
+
+    let keyNote = '';
+    if (!this.props.fullscreen) {
+      keyNote = (
+        <p className={classes.keynote}>
+          Note: keyboard shortcuts are only available when the app is fullscreen.
+        </p>
+      );
+    }
     return (
       <button
         onTouchTap={this.handleOpen}
@@ -206,6 +217,7 @@ class HeaderLogo extends React.Component {
             <Tab label="Shortcuts" >
               <div className={classes.dialogDiv}>
                 <div>
+                  {keyNote}
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
                     <h4 className={classes.dialogH4}>Sidebar controls</h4>
                     <ul className={classes.dialogUl}>
@@ -381,6 +393,11 @@ const staticStyles = {
   },
   dialogHi: {
     color: '#FF5252'
+  },
+  keynote: {
+    marginBottom: 0,
+    color: '#888',
+    fontStyle: 'italic'
   }
 };
 

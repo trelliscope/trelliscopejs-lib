@@ -47,6 +47,8 @@ class DisplaySelect extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
       Mousetrap.bind(['o'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['o']);
     }
   }
   componentWillUnmount() {
