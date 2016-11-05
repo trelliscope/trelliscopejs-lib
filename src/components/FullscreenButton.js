@@ -6,7 +6,7 @@ import Mousetrap from 'mousetrap';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
 import { dialogOpenSelector, fullscreenSelector,
-  appIdSelector } from '../selectors';
+  appIdSelector, singlePageAppSelector } from '../selectors';
 import { sidebarActiveSelector } from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../styles/uiConsts';
@@ -23,29 +23,37 @@ class FullscreenButton extends React.Component {
     this.yOffset = window.pageYOffset;
   }
   componentDidMount() {
-    if (this.props.fullscreen && this.props.sidebar === '' && !this.props.dialog) {
+    if (!this.props.singlePageApp && this.props.fullscreen &&
+      this.props.sidebar === '' && !this.props.dialog) {
       Mousetrap.bindGlobal(['esc'], () => this.props.toggleFullscreen(false,
         this.props.appId, this.appDims, this.yOffset));
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
-      Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
-        nextProps.appId, this.appDims, this.yOffset));
-    }
-    if (nextProps.dialog) {
-      Mousetrap.unbind(['esc']);
+    if (!this.props.singlePageApp) {
+      if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
+        Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
+          nextProps.appId, this.appDims, this.yOffset));
+      }
+      if (nextProps.dialog) {
+        Mousetrap.unbind(['esc']);
+      }
     }
   }
   componentWillUnmount() {
-    if (this.props.fullscreen && this.props.sidebar === '' && !this.props.dialog) {
+    if (!this.props.singlePageApp && this.props.fullscreen &&
+      this.props.sidebar === '' && !this.props.dialog) {
       Mousetrap.unbind(['esc']);
     }
   }
   render() {
-    const { classes } = this.props.sheet;
+    if (this.props.singlePageApp) {
+      return null;
+    }
 
+    const { classes } = this.props.sheet;
     const cls = this.props.fullscreen ? 'icon-minimize' : 'icon-maximize';
+
     return (
       <button
         className={classes.button}
@@ -72,6 +80,7 @@ FullscreenButton.propTypes = {
   dialog: React.PropTypes.bool,
   sidebar: React.PropTypes.string,
   appId: React.PropTypes.string,
+  singlePageApp: React.PropTypes.bool,
   toggleFullscreen: React.PropTypes.func
 };
 
@@ -101,14 +110,15 @@ const staticStyles = {
 
 // ------ redux container ------
 
-
 const stateSelector = createSelector(
-  sidebarActiveSelector, dialogOpenSelector, fullscreenSelector, appIdSelector,
-  (sidebar, dialog, fullscreen, appId) => ({
+  sidebarActiveSelector, dialogOpenSelector, fullscreenSelector,
+  appIdSelector, singlePageAppSelector,
+  (sidebar, dialog, fullscreen, appId, singlePageApp) => ({
     sidebar,
     dialog,
     fullscreen,
-    appId
+    appId,
+    singlePageApp
   })
 );
 
