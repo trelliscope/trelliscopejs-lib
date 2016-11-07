@@ -8,7 +8,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'trelliscope.min.js'
   },
   plugins: [
     new webpack.DefinePlugin({
