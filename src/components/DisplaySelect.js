@@ -13,7 +13,7 @@ import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
 import { displayGroupsSelector } from '../selectors/display';
 import { appIdSelector, configSelector, displayListSelector, fullscreenSelector,
   selectedDisplaySelector, singlePageAppSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class DisplaySelect extends React.Component {
   constructor(props) {

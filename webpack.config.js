@@ -33,19 +33,20 @@ module.exports = {
           'sass?outputStyle=expanded'
         ]
       },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader'
-      },
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
       {
         test: /\.js$/,
         loaders: ['react-hot', 'babel'],
         include: path.join(__dirname, 'src')
       },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
+      { test: /\.json$/, loader: 'json-loader' },
+      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      // Font Definitions
+      { test: /\.svg(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=public/fonts/[name].[ext]' },
+      { test: /\.woff(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=public/fonts/[name].[ext]' },
+      { test: /\.woff2(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=public/fonts/[name].[ext]' },
+      { test: /\.[ot]tf(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=public/fonts/[name].[ext]' },
+      { test: /\.eot(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=public/fonts/[name].[ext]' }
     ]
   }
 };

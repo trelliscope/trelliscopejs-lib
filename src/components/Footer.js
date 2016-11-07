@@ -7,7 +7,7 @@ import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector,
   singlePageAppSelector } from '../selectors';
 import FooterChip from './FooterChip';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => {
   let sortContent = '';

@@ -12,7 +12,8 @@ import 'react-virtualized/styles.css'; // only needs to be imported once
 
 import { addClass } from './classManipulation';
 
-import './styles/main.css';
+import './assets/styles/main.css';
+import './assets/fonts/IcoMoon/style.css';
 
 import { fetchDisplayList, windowResize } from './actions';
 

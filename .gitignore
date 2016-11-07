@@ -3,5 +3,6 @@ node_modules
 .idea
 dist
 .publish
+_test
 _ignore
 *.sublime-*

@@ -14,7 +14,7 @@ import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
   filterView, cogInfo, displayInfo, filtDist, colSplit, handleViewChange,

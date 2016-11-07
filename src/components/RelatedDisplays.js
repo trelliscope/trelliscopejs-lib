@@ -7,7 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { relatedDisplaysSelector } from '../selectors/display';
 import { selectedDisplaySelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class RelatedDisplays extends React.Component {
   constructor(props) {

@@ -8,7 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import { setSort, setLabels } from '../actions';
 import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
   handleChange, addLabel }) => {

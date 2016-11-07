@@ -12,7 +12,7 @@ import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector, panelRendererSelector,
   displayInfoSelector, nPerPageSelector, pageNumSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
   labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages,

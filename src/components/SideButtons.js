@@ -10,7 +10,7 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS } from '../constants';
 import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },

@@ -9,7 +9,7 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
 import { fullscreenSelector } from '../selectors';
 import { windowHeightSelector } from '../selectors/ui';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class HeaderLogo extends React.Component {
   constructor(props) {

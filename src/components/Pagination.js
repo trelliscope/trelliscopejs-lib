@@ -8,7 +8,7 @@ import { setLayout } from '../actions';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector,
   fullscreenSelector } from '../selectors';
 import { filterCardinalitySelector } from '../selectors/cogData';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class Pagination extends React.Component {
   constructor(props) {

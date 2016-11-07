@@ -12,7 +12,7 @@ import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
 import { appIdSelector, configSelector, displayListSelector,
   selectedDisplaySelector, dialogOpenSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class Header extends React.Component {
   constructor(props) {

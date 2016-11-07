@@ -4,7 +4,8 @@
   "description": "trelliscopejs",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --config webpack.min.config.js --progress && cp index.html dist/index.html && cp -r static dist/ && cp favicon.ico dist/",
+    "build": "webpack --config webpack.min.config.js --progress",
+    "prepublish": "npm run build",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "lint": "eslint src || true"
   },
@@ -37,6 +38,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.10.1",
     "normalize.css": "^5.0.0",
@@ -44,6 +46,7 @@
     "redux-devtools": "^3.2.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
     "webpack-bundle-size-analyzer": "^2.2.0",
     "webpack-dev-server": "^1.16.2"

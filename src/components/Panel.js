@@ -7,7 +7,7 @@ import { fade } from 'material-ui/utils/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
 import { findWidget } from '../loadAssets';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const getJSON = obj =>
   d3json(obj.url, json => obj.callback(json));

@@ -6,7 +6,7 @@ import { Table, TableRow, TableRowColumn, TableBody } from 'material-ui/Table';
 import { setLabels } from '../actions';
 import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChange }) => {
   let content = <div />;

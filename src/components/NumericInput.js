@@ -1,7 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import Mousetrap from 'mousetrap';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class NumericInput extends React.Component {
   constructor(props) {

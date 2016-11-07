@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 import NumericInput from './NumericInput';
 import { setLayout } from '../actions';
 import { layoutSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
   let content = <div />;

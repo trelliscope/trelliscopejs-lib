@@ -9,7 +9,7 @@ import { dialogOpenSelector, fullscreenSelector,
   appIdSelector, singlePageAppSelector } from '../selectors';
 import { sidebarActiveSelector } from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class FullscreenButton extends React.Component {
   constructor(props) {
