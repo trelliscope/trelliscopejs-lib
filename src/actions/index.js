@@ -108,16 +108,26 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
     const dlCallback = `__loadDisplayList__${id}`;
     const cfgCallback = `__loadTrscopeConfig__${id}`;
 
+    const configBase = config.replace(/[^\/]*$/, '');
+
     window[dlCallback] = (json) => {
       dispatch(receiveDisplayList(json));
     };
 
     window[cfgCallback] = (json) => {
+      // if display_base is empty, we want to use same path as config
+      if (json.display_base === '') {
+        json.display_base = configBase; // eslint-disable-line no-param-reassign
+      }
+      if (json.cog_server.info.base === '') {
+        json.cog_server.info.base = configBase; // eslint-disable-line no-param-reassign
+      }
+
       dispatch(receiveConfig(json));
       if (json.data_type === 'jsonp') {
         getJSONP({
           url: `${json.display_base}/displayList.jsonp`,
-          callbackName: 'dlCallback'
+          callbackName: dlCallback
         });
       } else {
         getJSON({
@@ -129,7 +139,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
 
     getJSONP({
       url: config,
-      callbackName: 'cfgCallback'
+      callbackName: cfgCallback
     });
   };
 
@@ -210,7 +220,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
           const renderFn2 = renderFn.bind({ binding });
           dispatch(setPanelRenderer(renderFn2));
         };
-        loadAssetsSequential(json.panelInterface.deps, callback);
+        loadAssetsSequential(json.panelInterface.deps, cfg.display_base, callback);
       }
 
       // load the cog data
