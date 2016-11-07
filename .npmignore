@@ -1,9 +1,9 @@
 node_modules
 .tmp
 .idea
-dist
+src
 .publish
-_test
 _demo
+_test
 _ignore
 *.sublime-*
