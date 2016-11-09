@@ -26,6 +26,7 @@ class Root extends Component {
     super(props);
 
     const el = document.getElementById(this.props.id);
+
     addClass(el, 'trelliscope-app');
     addClass(el, 'trelliscope-app-container');
     if (el.style.position !== 'relative') {
@@ -48,14 +49,14 @@ class Root extends Component {
     let singlePageApp = false;
     let fullscreen = false;
 
-    if (document.getElementsByTagName('div').length === 1 && (noHeight || noWidth)) {
+    if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
       singlePageApp = true;
       fullscreen = true;
       // el.parentNode.nodeName === 'BODY'
       el.style.width = '100%';
       el.style.height = '100%';
-      addClass(document.body, 'trscope-body');
-      addClass(document.getElementsByTagName('html')[0], 'trscope-html');
+      addClass(document.body, 'trscope-fullscreen-body');
+      addClass(document.getElementsByTagName('html')[0], 'trscope-fullscreen-html');
     } else {
       // if (el.style.height === undefined) {
       //   el.style.height = ?

@@ -110,19 +110,27 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
 
     const configBase = config.replace(/[^\/]*$/, '');
 
+    const getConfigBase = (txt) => {
+      let res = txt;
+      if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
+        res = configBase;
+        if (txt !== '') {
+          res += `${txt}/`;
+        }
+      }
+      return res;
+    };
+
     window[dlCallback] = (json) => {
       dispatch(receiveDisplayList(json));
     };
 
     window[cfgCallback] = (json) => {
       // if display_base is empty, we want to use same path as config
-      if (json.display_base === '') {
-        json.display_base = configBase; // eslint-disable-line no-param-reassign
-      }
-      if (json.cog_server.info.base === '') {
-        json.cog_server.info.base = configBase; // eslint-disable-line no-param-reassign
-      }
-
+      json.display_base = getConfigBase(json.display_base); // eslint-disable-line no-param-reassign
+      json.config_base = configBase; // eslint-disable-line no-param-reassign
+      json.cog_server.info.base = // eslint-disable-line no-param-reassign
+        getConfigBase(json.cog_server.info.base);
       dispatch(receiveConfig(json));
       if (json.data_type === 'jsonp') {
         getJSONP({
@@ -147,8 +155,8 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
-    const ldCallback = `__loadDisplayObj__${id}`;
-    const cdCallback = `__loadCogData__${id}`;
+    const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
+    const cdCallback = `__loadCogData__${id}_${group}_${name}`;
 
     window[ldCallback] = (json) => {
       const iface = json.cogInterface;
@@ -220,7 +228,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
           const renderFn2 = renderFn.bind({ binding });
           dispatch(setPanelRenderer(renderFn2));
         };
-        loadAssetsSequential(json.panelInterface.deps, cfg.display_base, callback);
+        loadAssetsSequential(json.panelInterface.deps, cfg.config_base, callback);
       }
 
       // load the cog data

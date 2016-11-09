@@ -9,7 +9,7 @@ export const findWidget = (name) => {
   return undefined;
 };
 
-export const loadAssetsSequential = (widgetAssets, displayBase, callback) => {
+export const loadAssetsSequential = (widgetAssets, configBase, callback) => {
   const assets = Object.assign([], widgetAssets.assets);
   const loadNextAsset = () => {
     let done = false;
@@ -42,12 +42,12 @@ export const loadAssetsSequential = (widgetAssets, displayBase, callback) => {
       if (curAsset.type === 'script') {
         asset = document.createElement('script');
         asset.type = 'text/javascript';
-        asset.src = `${displayBase}/${curAsset.url[i]}`;
+        asset.src = `${configBase}/${curAsset.url[i]}`;
       } else if (curAsset.type === 'stylesheet') {
         asset = document.createElement('link');
         asset.rel = 'stylesheet';
         asset.type = 'text/css';
-        asset.href = `${displayBase}${curAsset.url[i]}`;
+        asset.href = `${configBase}/${curAsset.url[i]}`;
       }
       asset.onreadystatechange = () => {
         if (this.readyState === 'complete' || this.readyState === 'loaded') {
