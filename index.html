@@ -4,28 +4,31 @@
     <meta charset="utf-8">
     <title>Trelliscope</title>
   </head>
-  <body style="margin: 0px">
+  <body style="margin: 40px">
     <div id="app1" style="width:800px; height:500px;"></div>
-    <div style="height:15px;"></div>
+    <div style="height:25px;"></div>
     <div id="app2" style="width:800px; height:500px;"></div>
+    <div style="height:25px;"></div>
+    <div id="8b70e242" style="width:800px; height:500px;"></div>
     <script src="trelliscope.js"></script>
     <script>
       (function() {
         trelliscopeApp('app1', '_test/vdb_housing/config.jsonp');
         trelliscopeApp('app2', '_test/vdb_gates/config.jsonp');
+        trelliscopeApp('8b70e242', '_test/vdb_mpg/config.jsonp');
       })();
     </script>
   </body>
 </html>
-<!--
-<!doctype html>
+
+<!-- <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>Trelliscope</title>
   </head>
-  <body style="margin: 0px">
-    <div id="app1" style="width:100%; height:100%;"></div>
+  <body">
+    <div id="app1"></div>
     <script src="trelliscope.js"></script>
     <script>
       (function() {
