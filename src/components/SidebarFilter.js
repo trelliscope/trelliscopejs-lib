@@ -249,6 +249,7 @@ const staticStyles = {
     margin: '3px !important',
     fontSize: 13,
     cursor: 'pointer',
+    color: 'black',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     '&:hover': {
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',

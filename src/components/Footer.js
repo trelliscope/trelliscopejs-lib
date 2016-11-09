@@ -104,7 +104,8 @@ const staticStyles = {
     display: 'flex',
     flexDirection: 'row',
     overflowX: 'auto',
-    overflowY: 'hidden'
+    overflowY: 'hidden',
+    zIndex: 1001
   },
   inner: {
     display: 'flex',

@@ -132,6 +132,7 @@ const staticStyles = {
     color: uiConsts.header.color,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
     borderTop: `1px solid ${uiConsts.header.borderColor}`,
+    borderLeft: `1px solid ${uiConsts.header.borderColor}`,
     margin: 0,
     fontSize: uiConsts.header.fontSize,
     fontWeight: 300,

@@ -96,6 +96,7 @@ const staticStyles = {
     paddingRight: 15,
     paddingTop: 8,
     paddingBottom: 6,
+    fontSize: 16,
     width: uiConsts.sidebar.width - 30,
     display: 'inline-block'
   },

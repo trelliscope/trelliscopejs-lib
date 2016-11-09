@@ -172,7 +172,7 @@ const staticStyles = {
     // transition: 'left 0.5s ease, background 250ms',
     display: 'inline-block',
     height: uiConsts.header.height,
-    width: uiConsts.header.height,
+    width: uiConsts.header.height - 1,
     fontSize: 18,
     paddingTop: 0,
     color: uiConsts.header.button.color,

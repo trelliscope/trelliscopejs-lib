@@ -183,7 +183,7 @@ const staticStyles = {
     position: 'absolute',
     boxSizing: 'border-box',
     top: -1, // cover up top app border
-    left: 0,
+    left: -1,
     height: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
     fontSize: 18,

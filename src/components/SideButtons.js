@@ -107,6 +107,7 @@ const staticStyles = {
     paddingTop: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
     background: uiConsts.sideButtons.background,
+    boxSizing: 'border-box',
     zIndex: 1000
   },
   spacer: {
@@ -125,7 +126,7 @@ const stateSelector = createSelector(
   (ch, active, dialogOpen, fullscreen) => ({
     styles: {
       sideButtonsContainer: {
-        height: ch
+        height: ch + uiConsts.header.height
       }
     },
     width: uiConsts.sideButtons.width,

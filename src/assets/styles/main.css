@@ -1,14 +1,16 @@
-.trscope-body {
+.trscope-fullscreen-body {
   margin: 0;
   overflow: hidden;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 
-.trscope-html {
-  height: 100%;
+.trscope-fullscreen-html {
+  height: 100vh;
+  width: 100vw;
 }
 
-.trscope-fullscreen {
+.trscope-fullscreen-el {
   z-index:7000;
   width: 100% !important;
   height: 100% !important;
@@ -32,11 +34,19 @@
   margin: 0;
 }
 
+.trelliscope-app td, th {
+  box-sizing: content-box;
+}
+
+.trelliscope-app label {
+  font-weight: 300;
+}
+
 .trelliscope-app button:focus {
   outline:0;
 }
 
-h1,h2,h3,h4,h5,h6 {
+.trelliscope-app h1,h2,h3,h4,h5,h6 {
   font-weight: 400;
   color: black;
 }

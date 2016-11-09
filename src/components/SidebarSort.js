@@ -171,6 +171,7 @@ const staticStyles = {
     paddingRight: '10px !important',
     margin: '3px !important',
     fontSize: 13,
+    color: 'black',
     cursor: 'pointer',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     '&:hover': {
