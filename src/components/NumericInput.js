@@ -99,7 +99,7 @@ class NumericInput extends React.Component {
         <input
           ref={(d) => { this._NumericInput = d; }}
           type="text"
-          size={this.props.size ? this.props.size : 5}
+          size={this.props.size ? this.props.size : 4}
           className={`mousetrap ${classes.input}`}
           value={this.state.value}
           onChange={this.handleChange}
@@ -131,9 +131,11 @@ const staticStyles = {
     fontSize: 13
   },
   input: {
-    padding: '10px 10px 10px 4px',
+    padding: '3px 10px 3px 6px',
     boxSizing: 'border-box',
     height: 28,
+    width: 'auto',
+    // height: 28,
     fontSize: 15,
     borderRadius: 2,
     fontFamily: uiConsts.fontFamily,

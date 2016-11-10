@@ -17,19 +17,21 @@ import uiConsts from '../assets/styles/uiConsts';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    // this.singleDisplay = false;
-    // this.singleDisplay = true;
-    // this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
     this.state = {
-      singleLoaded: false
+      singleLoaded: props.selectedDisplay.name !== '',
+      singleDisplay: props.displayList.isLoaded && props.displayList.list.length <= 1
     };
   }
   componentWillReceiveProps(nprops) {
     // handle loading a single display if necessary
-    this.singleDisplay = nprops.displayList.isLoaded && nprops.displayList.list.length <= 1;
-    if (!this.state.singleLoaded &&
-      nprops.displayList.isLoaded &&
-      this.singleDisplay) {
+    const singleDisplay = nprops.displayList.isLoaded &&
+        nprops.displayList.list.length <= 1;
+    this.setState({ singleDisplay });
+
+    if (!this.state.singleLoaded && singleDisplay &&
+      nprops.selectedDisplay.name !== '') {
+      this.setState({ singleLoaded: true });
+    } else if (!this.state.singleLoaded && singleDisplay) {
       nprops.selectDisplay(
         nprops.displayList.list[0].name,
         nprops.displayList.list[0].group,
@@ -53,7 +55,7 @@ class Header extends React.Component {
     const nGroups = Object.keys(this.props.displayGroups).length;
     const listLoaded = this.props.displayList.isLoaded;
 
-    if (listLoaded && !this.singleDisplay) {
+    if (listLoaded && !this.state.singleDisplay) {
       displaySelect = <DisplaySelect setDialogOpen={this.props.setDialogOpen} />;
     }
 
@@ -64,12 +66,12 @@ class Header extends React.Component {
       } else {
         displayName = this.props.selectedDisplay.name;
       }
-      if (!this.singleDisplay) {
+      if (!this.state.singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
       }
       displayDesc = this.props.selectedDisplay.desc;
       pagination = <Pagination />;
-    } else if (this.singleDisplay) {
+    } else if (this.state.singleDisplay) {
       displayName = 'loading...';
     } else if (!this.props.dialogOpen) {
       displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
@@ -80,7 +82,7 @@ class Header extends React.Component {
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
-          singleDisplay={this.singleDisplay}
+          singleDisplay={this.state.singleDisplay}
           setDialogOpen={this.props.setDialogOpen}
         />
         <i style={iconStyle} className="fa fa-info-circle" />
@@ -99,7 +101,7 @@ class Header extends React.Component {
         </div>
         <HeaderLogo
           setDialogOpen={this.props.setDialogOpen}
-          singleDisplay={this.singleDisplay}
+          singleDisplay={this.state.singleDisplay}
         />
       </div>
     );

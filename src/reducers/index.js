@@ -9,6 +9,7 @@ import _config from './_config';
 import _displayList from './_displayList';
 import _displayInfo from './_displayInfo';
 import _cogDataMutable from './_cogDataMutable';
+import _localPanels from './_localPanels';
 
 const app = combineReducers({
   appId,
@@ -26,7 +27,8 @@ const app = combineReducers({
   _config,
   _displayList,
   _displayInfo,
-  _cogDataMutable
+  _cogDataMutable,
+  _localPanels
 });
 
 export default app;

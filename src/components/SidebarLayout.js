@@ -20,7 +20,7 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
             <NumericInput
               arrows
               value={layout.nrow}
-              size={5} min={1} step={1}
+              size={3} min={1} max={15} step={1}
               onChange={nr =>
                 handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
               }
@@ -34,7 +34,7 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
             <NumericInput
               arrows
               value={layout.ncol}
-              size={5} min={1} step={1}
+              size={3} min={1} max={15} step={1}
               onChange={nc =>
                 handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
               }
@@ -96,8 +96,10 @@ const staticStyles = {
     paddingRight: 15,
     paddingTop: 8,
     paddingBottom: 6,
+    height: 42,
+    boxSizing: 'border-box',
     fontSize: 16,
-    width: uiConsts.sidebar.width - 30,
+    width: uiConsts.sidebar.width,
     display: 'inline-block'
   },
   label: {

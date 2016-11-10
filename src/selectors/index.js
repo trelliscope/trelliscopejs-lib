@@ -10,6 +10,7 @@ export const displayLoadedSelector = state => state._displayInfo.isLoaded;
 export const cogInterfaceSelector = state => state._cogDataMutable.iface;
 export const cogDataSelector = state => state._cogDataMutable;
 export const panelRendererSelector = state => state.panelRenderer;
+export const localPanelsSelector = state => state._localPanels;
 
 export const pageNumSelector = state => state.layout.pageNum;
 export const nPerPageSelector = state => state.layout.nrow * state.layout.ncol;

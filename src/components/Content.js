@@ -11,11 +11,12 @@ import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
 import { configSelector, cogInterfaceSelector, layoutSelector,
   aspectSelector, labelsSelector, panelRendererSelector,
-  displayInfoSelector, nPerPageSelector, pageNumSelector } from '../selectors';
+  displayInfoSelector, nPerPageSelector, pageNumSelector,
+  localPanelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
-  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages,
+  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, localPanels,
   removeLabel, setPageNum }) => {
   let ret = <div />;
 
@@ -86,6 +87,7 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
               labelArr={labels}
               iface={ci}
               panelRenderer={panelRenderer}
+              panelData={localPanels[el.key]}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
@@ -114,7 +116,8 @@ Content.propTypes = {
   panelInterface: React.PropTypes.object,
   sidebar: React.PropTypes.string,
   curPage: React.PropTypes.number,
-  totPages: React.PropTypes.number
+  totPages: React.PropTypes.number,
+  localPanels: React.PropTypes.object
 };
 
 // ------ static styles ------
@@ -139,9 +142,9 @@ const styleSelector = createSelector(
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
   configSelector, panelRendererSelector, displayInfoSelector,
   sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector,
+  nPerPageSelector, localPanelsSelector,
   (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar,
-    curPage, card, npp) => {
+    curPage, card, npp, localPanels) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
@@ -198,7 +201,8 @@ const styleSelector = createSelector(
       panelInterface: di.info.panelInterface,
       sidebar,
       curPage,
-      totPages: Math.ceil(card / npp)
+      totPages: Math.ceil(card / npp),
+      localPanels
     });
   }
 );

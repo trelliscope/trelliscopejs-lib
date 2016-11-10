@@ -21,6 +21,8 @@ import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
 import App from './App';
 
+// import appData from './appData';
+
 class Root extends Component {
   constructor(props) {
     super(props);
@@ -117,7 +119,9 @@ class Root extends Component {
       }
     });
 
+
     // load the list of displays
+    // const cfgdat = appData;
     this.store.dispatch(fetchDisplayList(this.props.config, this.props.id));
   }
 

@@ -21,6 +21,7 @@ export const SET_PANEL_RENDERER = 'SET_PANEL_RENDERER';
 export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const REQUEST_CONFIG = 'REQUEST_CONFIG';
 export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
+export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';

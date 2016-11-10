@@ -19,34 +19,36 @@ const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChan
     }));
 
     content = (
-      <Table
-        height={`${height}px`}
-        fixedHeader
-        multiSelectable
-        onRowSelection={(rows) => {
-          const newLabels = [];
-          for (let ii = 0; ii < rows.length; ii += 1) {
-            newLabels.push(ciKeys[rows[ii]]);
-          }
-          handleChange(newLabels);
-        }}
-      >
-        <TableBody
-          displayRowCheckbox
-          deselectOnClickaway={false}
-          style={{ cursor: 'pointer' }}
+      <div style={{ height, overflowY: 'auto' }}>
+        <Table
+          height={`${ciKeys.length * 51}px`}
+          fixedHeader
+          multiSelectable
+          onRowSelection={(rows) => {
+            const newLabels = [];
+            for (let ii = 0; ii < rows.length; ii += 1) {
+              newLabels.push(ciKeys[rows[ii]]);
+            }
+            handleChange(newLabels);
+          }}
         >
-          {tableData.map(row => (
-            <TableRow key={row.name} selected={row.selected}>
-              <TableRowColumn>{row.name}<br />
-                <span className={classes.rowDesc}>
-                  {row.desc}
-                </span>
-              </TableRowColumn>
-            </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+          <TableBody
+            displayRowCheckbox
+            deselectOnClickaway={false}
+            style={{ cursor: 'pointer' }}
+          >
+            {tableData.map(row => (
+              <TableRow key={row.name} selected={row.selected}>
+                <TableRowColumn>{row.name}<br />
+                  <span className={classes.rowDesc}>
+                    {row.desc}
+                  </span>
+                </TableRowColumn>
+              </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
     );
   }
   return (content);
