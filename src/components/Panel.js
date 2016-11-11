@@ -142,10 +142,10 @@ class Panel extends React.Component {
       labelRow: {
         width: dims.ww,
         height: dims.labelHeight,
-        fontSize: dims.labelHeight - 12
+        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
       },
       labelClose: {
-        fontSize: dims.labelHeight - 12
+        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
       }
     };
 

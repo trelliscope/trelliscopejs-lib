@@ -149,7 +149,7 @@ const styleSelector = createSelector(
     // height of row of cog label depends on number of rows
     // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
     const labelHeightArr = [26, 24, 22, 19];
-    const maxDim = Math.max(layout.nrow, layout.ncol - 2);
+    const maxDim = Math.max(layout.nrow, layout.ncol - 4);
     const labelHeight = labelHeightArr[Math.min(maxDim - 1, 3)];
     const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted

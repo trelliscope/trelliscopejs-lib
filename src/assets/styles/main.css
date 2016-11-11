@@ -11,7 +11,7 @@
 }
 
 .trscope-fullscreen-el {
-  z-index:7000;
+  z-index: 7000;
   width: 100% !important;
   height: 100% !important;
   position: fixed !important;
