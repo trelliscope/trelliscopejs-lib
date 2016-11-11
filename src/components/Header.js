@@ -10,31 +10,34 @@ import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
-import { configSelector, displayListSelector,
+import { appIdSelector, configSelector, displayListSelector,
   selectedDisplaySelector, dialogOpenSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    // this.singleDisplay = false;
-    // this.singleDisplay = true;
-    // this.singleDisplay = props.displayList.isLoaded && props.displayList.list.length <= 1;
     this.state = {
-      singleLoaded: false
+      singleLoaded: props.selectedDisplay.name !== '',
+      singleDisplay: props.displayList.isLoaded && props.displayList.list.length <= 1
     };
   }
   componentWillReceiveProps(nprops) {
     // handle loading a single display if necessary
-    this.singleDisplay = nprops.displayList.isLoaded && nprops.displayList.list.length <= 1;
-    if (!this.state.singleLoaded &&
-      nprops.displayList.isLoaded &&
-      this.singleDisplay) {
+    const singleDisplay = nprops.displayList.isLoaded &&
+        nprops.displayList.list.length <= 1;
+    this.setState({ singleDisplay });
+
+    if (!this.state.singleLoaded && singleDisplay &&
+      nprops.selectedDisplay.name !== '') {
+      this.setState({ singleLoaded: true });
+    } else if (!this.state.singleLoaded && singleDisplay) {
       nprops.selectDisplay(
         nprops.displayList.list[0].name,
         nprops.displayList.list[0].group,
         nprops.displayList.list[0].desc,
-        nprops.cfg
+        nprops.cfg,
+        nprops.appId
       );
       this.setState({ singleLoaded: true });
     }
@@ -52,7 +55,7 @@ class Header extends React.Component {
     const nGroups = Object.keys(this.props.displayGroups).length;
     const listLoaded = this.props.displayList.isLoaded;
 
-    if (listLoaded && !this.singleDisplay) {
+    if (listLoaded && !this.state.singleDisplay) {
       displaySelect = <DisplaySelect setDialogOpen={this.props.setDialogOpen} />;
     }
 
@@ -63,12 +66,12 @@ class Header extends React.Component {
       } else {
         displayName = this.props.selectedDisplay.name;
       }
-      if (!this.singleDisplay) {
+      if (!this.state.singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
       }
       displayDesc = this.props.selectedDisplay.desc;
       pagination = <Pagination />;
-    } else if (this.singleDisplay) {
+    } else if (this.state.singleDisplay) {
       displayName = 'loading...';
     } else if (!this.props.dialogOpen) {
       displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
@@ -79,7 +82,7 @@ class Header extends React.Component {
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
-          singleDisplay={this.singleDisplay}
+          singleDisplay={this.state.singleDisplay}
           setDialogOpen={this.props.setDialogOpen}
         />
         <i style={iconStyle} className="fa fa-info-circle" />
@@ -98,7 +101,7 @@ class Header extends React.Component {
         </div>
         <HeaderLogo
           setDialogOpen={this.props.setDialogOpen}
-          singleDisplay={this.singleDisplay}
+          singleDisplay={this.state.singleDisplay}
         />
       </div>
     );
@@ -109,6 +112,7 @@ Header.propTypes = {
   styles: React.PropTypes.object,
   sheet: React.PropTypes.object,
   cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+  appId: React.PropTypes.string, // eslint-disable-line react/no-unused-prop-types
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object,
   selectedDisplay: React.PropTypes.object,
@@ -121,7 +125,7 @@ Header.propTypes = {
 
 const staticStyles = {
   headerContainer: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     top: 0,
     left: 0,
@@ -129,14 +133,16 @@ const staticStyles = {
     background: uiConsts.header.background,
     color: uiConsts.header.color,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
+    borderTop: `1px solid ${uiConsts.header.borderColor}`,
+    borderLeft: `1px solid ${uiConsts.header.borderColor}`,
     margin: 0,
     fontSize: uiConsts.header.fontSize,
     fontWeight: 300,
-    zIndex: 2000
+    zIndex: 1010
   },
   headerSubContainer: {
     display: 'flex',
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     height: uiConsts.header.height
   },
@@ -176,9 +182,9 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  windowWidthSelector, displayListSelector, displayGroupsSelector,
+  appIdSelector, windowWidthSelector, displayListSelector, displayGroupsSelector,
   selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
-  (ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
+  (appId, ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
     styles: {
       headerContainer: {
         width: ww
@@ -195,6 +201,7 @@ const styleSelector = createSelector(
         paddingTop: sd.desc === '' ? 0 : 5
       }
     },
+    appId,
     cfg,
     displayList: dl,
     displayGroups: dg,
@@ -208,9 +215,9 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  selectDisplay: (name, group, desc, cfg) => {
+  selectDisplay: (name, group, desc, cfg, appId) => {
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg));
+    dispatch(fetchDisplay(name, group, cfg, appId));
   },
   setDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));

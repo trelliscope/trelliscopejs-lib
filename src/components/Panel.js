@@ -7,7 +7,7 @@ import { fade } from 'material-ui/utils/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
 import { findWidget } from '../loadAssets';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const getJSON = obj =>
   d3json(obj.url, json => obj.callback(json));
@@ -15,43 +15,58 @@ const getJSON = obj =>
 class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loaded: false,
-      panelContent: null,
-      panelData: null,
-      hover: ''
-    };
-    this.panelContent = null;
+
+    if (props.panelData !== undefined && props.cfg.display_base === '__self__') {
+      this.state = {
+        panelContent: props.panelRenderer.fn(props.panelData,
+          props.dims.ww, props.dims.hh, false, props.panelKey),
+        panelData: props.panelData,
+        loaded: true
+      };
+    } else {
+      this.state = {
+        loaded: false,
+        panelContent: null,
+        panelData: null,
+        hover: ''
+      };
+    }
   }
   componentDidMount() {
-    let filebase = `${this.props.cfg.cog_server.info.base}/${this.props.iface.group}`;
-    filebase = `${filebase}/${this.props.iface.name}`;
+    // async stuff
+    if (!this.state.loaded) {
+      let filebase = `${this.props.cfg.cog_server.info.base}/${this.props.iface.group}`;
+      filebase = `${filebase}/${this.props.iface.name}`;
 
-    if (!window.__panel__) {
-      window.__panel__ = {};
-    }
+      if (!window.__panel__) {
+        window.__panel__ = {};
+      }
 
-    window.__panel__[`_${this.props.panelKey}`] = (json2) => {
-      this.setState({
-        panelContent: this.props.panelRenderer.fn(json2, this.props.dims.ww,
-          this.props.dims.hh, false, this.props.panelKey),
-        panelData: json2,
-        loaded: true });
-      // do post-rendering (if any)
-      this.props.panelRenderer.fn(this.state.panelData, this.props.dims.ww,
-        this.props.dims.hh, true, this.props.panelKey);
-    };
+      window.__panel__[`_${this.props.panelKey}`] = (json2) => {
+        this.setState({
+          panelContent: this.props.panelRenderer.fn(json2, this.props.dims.ww,
+            this.props.dims.hh, false, this.props.panelKey),
+          panelData: json2,
+          loaded: true });
+        // do post-rendering (if any)
+        this.props.panelRenderer.fn(this.state.panelData, this.props.dims.ww,
+          this.props.dims.hh, true, this.props.panelKey);
+      };
 
-    if (this.props.cfg.cog_server.type === 'jsonp') {
-      this.xhr = getJSONP({
-        url: `${filebase}/jsonp/${this.props.panelKey}.jsonp`,
-        callbackName: `__panel_${this.props.panelKey}__`
-      });
+      if (this.props.cfg.cog_server.type === 'jsonp') {
+        this.xhr = getJSONP({
+          url: `${filebase}/jsonp/${this.props.panelKey}.jsonp`,
+          callbackName: `__panel_${this.props.panelKey}__`
+        });
+      } else {
+        this.xhr = getJSON({
+          url: `${filebase}/json/${this.props.panelKey}.json`,
+          callback: window.__panel__[`_${this.props.panelKey}`]
+        });
+      }
     } else {
-      this.xhr = getJSON({
-        url: `${filebase}/json/${this.props.panelKey}.json`,
-        callback: window.__panel__[`_${this.props.panelKey}`]
-      });
+      this.props.panelRenderer.fn(this.props.panelData, this.props.dims.ww,
+        this.props.dims.hh, true, this.props.panelKey);
     }
 
     // fade in on new component
@@ -63,15 +78,15 @@ class Panel extends React.Component {
     // when there is an update, if the size changed, update
     const dh = nprops.dims.ww !== this.props.dims.ww;
     if (this.state.loaded && dh) {
-      if (this.props.panelInterface.type === 'image') {
+      if (nprops.panelInterface.type === 'image') {
         this.setState({
-          panelContent: this.props.panelRenderer.fn(this.state.panelData,
-            nprops.dims.ww, nprops.dims.hh, false, this.props.panelKey)
+          panelContent: nprops.panelRenderer.fn(this.state.panelData,
+            nprops.dims.ww, nprops.dims.hh, false, nprops.panelKey)
         });
-      } else if (this.props.panelInterface.type === 'htmlwidget') {
-        const widget = findWidget(this.props.panelInterface.deps.name);
+      } else if (nprops.panelInterface.type === 'htmlwidget') {
+        const widget = findWidget(nprops.panelInterface.deps.name);
         if (widget) {
-          const el = document.getElementById(`widget_${this.props.panelKey}`);
+          const el = document.getElementById(`widget_${nprops.panelKey}`);
           // this.state.panelData.x.elementid
           if (el) {
             el.style.width = `${nprops.dims.ww}px`;
@@ -88,7 +103,9 @@ class Panel extends React.Component {
       this.xhr.abort();
     }
     // remove callback
-    window.__panel__[`_${this.props.panelKey}`] = null;
+    if (this.props.cfg.display_base !== '__self__') {
+      window.__panel__[`_${this.props.panelKey}`] = null;
+    }
   }
   handleHover(val) {
     this.setState({ hover: val });
@@ -104,9 +121,11 @@ class Panel extends React.Component {
         width: dims.ww + 2,
         height: dims.hh + (dims.nLabels * dims.labelHeight) + 2,
         top: (dims.pHeight * rowIndex) + ((rowIndex + 1) * dims.pPad) +
-          dims.hOffset + (rowIndex * 2),
+          // dims.hOffset +
+          (rowIndex * 2),
         right: (dims.pWidth * iColIndex) + ((iColIndex + 1) * dims.pPad) +
-          dims.wOffset + (iColIndex * 2) + 1
+          dims.wOffset +
+          (iColIndex * 2) + 1
       },
       panel: {
         width: dims.ww,
@@ -123,10 +142,10 @@ class Panel extends React.Component {
       labelRow: {
         width: dims.ww,
         height: dims.labelHeight,
-        fontSize: dims.labelHeight - 12
+        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
       },
       labelClose: {
-        fontSize: dims.labelHeight - 12
+        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
       }
     };
 
@@ -216,6 +235,22 @@ class Panel extends React.Component {
   }
 }
 
+Panel.propTypes = {
+  labels: React.PropTypes.array,
+  labelArr: React.PropTypes.array,
+  iface: React.PropTypes.object,
+  cfg: React.PropTypes.object,
+  panelKey: React.PropTypes.string,
+  dims: React.PropTypes.object,
+  rowIndex: React.PropTypes.number,
+  iColIndex: React.PropTypes.number,
+  sheet: React.PropTypes.object,
+  panelRenderer: React.PropTypes.object,
+  panelInterface: React.PropTypes.object,
+  panelData: React.PropTypes.object,
+  removeLabel: React.PropTypes.func
+};
+
 // ------ static styles ------
 
 const staticStyles = {
@@ -223,7 +258,7 @@ const staticStyles = {
     transitionProperty: 'all',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    position: 'fixed',
+    position: 'absolute',
     overflow: 'hidden',
     padding: 0,
     boxSizing: 'border-box',
@@ -310,21 +345,6 @@ const staticStyles = {
     margin: 0,
     opacity: 0.5
   }
-};
-
-Panel.propTypes = {
-  labels: React.PropTypes.array,
-  labelArr: React.PropTypes.array,
-  iface: React.PropTypes.object,
-  cfg: React.PropTypes.object,
-  panelKey: React.PropTypes.string,
-  dims: React.PropTypes.object,
-  rowIndex: React.PropTypes.number,
-  iColIndex: React.PropTypes.number,
-  sheet: React.PropTypes.object,
-  panelRenderer: React.PropTypes.object,
-  panelInterface: React.PropTypes.object,
-  removeLabel: React.PropTypes.func
 };
 
 export default injectSheet(staticStyles)(Panel);

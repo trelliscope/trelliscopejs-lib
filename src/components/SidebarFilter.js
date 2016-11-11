@@ -14,7 +14,7 @@ import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
   filterView, cogInfo, displayInfo, filtDist, colSplit, handleViewChange,
@@ -160,7 +160,7 @@ const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
                     [classes.variableActive]: filter[d] && filter[d].value !== undefined
                   })}
                   key={`${d}_${displId}_button_${inames.length}`}
-                  onMouseDown={() => handleViewChange(d, 'add', labels)}
+                  onClick={() => handleViewChange(d, 'add', labels)}
                 >
                   {d}
                 </button>
@@ -240,15 +240,16 @@ const staticStyles = {
     display: 'inline-block',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
     borderRadius: 10,
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingTop: '2px !important',
+    paddingBottom: '2px !important',
+    paddingLeft: '10px !important',
+    paddingRight: '10px !important',
     border: 0,
     background: 'white',
-    margin: 3,
+    margin: '3px !important',
     fontSize: 13,
     cursor: 'pointer',
+    color: 'black',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     '&:hover': {
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',

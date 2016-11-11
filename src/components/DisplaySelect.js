@@ -11,25 +11,27 @@ import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
-import { configSelector, displayListSelector,
-  selectedDisplaySelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import { appIdSelector, configSelector, displayListSelector, fullscreenSelector,
+  selectedDisplaySelector, singlePageAppSelector } from '../selectors';
+import uiConsts from '../assets/styles/uiConsts';
 
 class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: props.selectedDisplay.name === '',
+      open: props.selectedDisplay.name === '' && props.singlePageApp,
       btnScale: 1
     };
   }
   componentWillMount() {
-    if (this.props.selectedDisplay.name === '') {
+    if (this.props.selectedDisplay.name === '' && this.props.singlePageApp) {
       this.props.setDialogOpen(true);
     }
   }
   componentDidMount() {
-    Mousetrap.bind(['o'], this.handleKey);
+    if (this.props.fullscreen) {
+      Mousetrap.bind(['o'], this.handleKey);
+    }
 
     const attnInterval = setInterval(() => {
       const elem = this._atnnCircle;
@@ -42,8 +44,17 @@ class DisplaySelect extends React.Component {
       }
     }, 750);
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bind(['o'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['o']);
+    }
+  }
   componentWillUnmount() {
-    Mousetrap.unbind(['o']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['o']);
+    }
   }
   handleOpen = () => {
     if (this.props.displayList && this.props.displayList.isLoaded) {
@@ -60,7 +71,7 @@ class DisplaySelect extends React.Component {
     this.setState({ open: false });
   }
   handleSelect = (name, group, desc) => {
-    this.props.handleClick(name, group, desc, this.props.cfg);
+    this.props.handleClick(name, group, desc, this.props.cfg, this.props.appId);
     this.props.setDialogOpen(false);
     this.setState({ open: false });
   }
@@ -100,6 +111,8 @@ class DisplaySelect extends React.Component {
           title="Select a Display to Open"
           actions={actions}
           modal={false}
+          className="trelliscope-app"
+          style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
@@ -120,6 +133,9 @@ DisplaySelect.propTypes = {
   handleClick: React.PropTypes.func,
   setDialogOpen: React.PropTypes.func,
   cfg: React.PropTypes.object,
+  singlePageApp: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
+  appId: React.PropTypes.string,
   selectedDisplay: React.PropTypes.object,
   displayList: React.PropTypes.object,
   displayGroups: React.PropTypes.object
@@ -164,10 +180,10 @@ const staticStyles = {
   },
   button: {
     zIndex: 500,
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
-    top: 0,
-    left: 0,
+    top: -1, // cover up top app border
+    left: -1,
     height: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
     fontSize: 18,
@@ -199,12 +215,16 @@ const staticStyles = {
 
 const styleSelector = createSelector(
   selectedDisplaySelector, displayListSelector,
-  displayGroupsSelector, configSelector,
-  (selectedDisplay, displayList, displayGroups, cfg) => ({
+  displayGroupsSelector, configSelector, appIdSelector,
+  singlePageAppSelector, fullscreenSelector,
+  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen) => ({
+    appId,
     cfg,
     selectedDisplay,
     displayList,
-    displayGroups
+    displayGroups,
+    singlePageApp,
+    fullscreen
   })
 );
 
@@ -213,7 +233,7 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  handleClick: (name, group, desc, cfg) => {
+  handleClick: (name, group, desc, cfg, appId) => {
     // need to clear out state for new display...
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
@@ -227,7 +247,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setSort([]));
 
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg));
+    dispatch(fetchDisplay(name, group, cfg, appId));
   }
 });
 

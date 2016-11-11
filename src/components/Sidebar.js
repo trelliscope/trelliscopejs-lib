@@ -11,7 +11,7 @@ import { contentHeightSelector, sidebarActiveSelector,
 import { displayLoadedSelector } from '../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
   if (active === '') {
@@ -69,7 +69,7 @@ const staticStyles = {
     transitionProperty: 'left',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    position: 'fixed',
+    position: 'absolute',
     left: uiConsts.sideButtons.width,
     top: uiConsts.header.height,
     height: '100%',

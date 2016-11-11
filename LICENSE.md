@@ -1,4 +1,4 @@
-Copyright (c) 2016, Hafen Consulting, LLC
+Copyright (c) 2016, Ryan Hafen
 
 All rights reserved.
 

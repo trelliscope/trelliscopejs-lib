@@ -1,7 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class CatBar extends React.Component {
   constructor(props) {

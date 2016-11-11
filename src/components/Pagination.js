@@ -5,9 +5,10 @@ import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
 import { setLayout } from '../actions';
-import { nPerPageSelector, pageNumSelector, dialogOpenSelector } from '../selectors';
+import { nPerPageSelector, pageNumSelector, dialogOpenSelector,
+  fullscreenSelector } from '../selectors';
 import { filterCardinalitySelector } from '../selectors/cogData';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -15,20 +16,41 @@ class Pagination extends React.Component {
     this.state = { skip: 1 };
   }
   componentDidMount() {
-    Mousetrap.bind(['right'], () => {
-      if (!this.props.dialogOpen) {
-        this.pageRight();
-      }
-    });
-    Mousetrap.bind(['left'], () => {
-      if (!this.props.dialogOpen) {
-        this.pageLeft();
-      }
-    });
+    if (this.props.fullscreen) {
+      Mousetrap.bind(['right'], () => {
+        if (!this.props.dialogOpen) {
+          this.pageRight();
+        }
+      });
+      Mousetrap.bind(['left'], () => {
+        if (!this.props.dialogOpen) {
+          this.pageLeft();
+        }
+      });
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bind(['right'], () => {
+        if (!this.props.dialogOpen) {
+          this.pageRight();
+        }
+      });
+      Mousetrap.bind(['left'], () => {
+        if (!this.props.dialogOpen) {
+          this.pageLeft();
+        }
+      });
+    } else {
+      Mousetrap.unbind(['right']);
+      Mousetrap.unbind(['left']);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['right']);
-    Mousetrap.unbind(['left']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['right']);
+      Mousetrap.unbind(['left']);
+    }
   }
   pageLeft = () => {
     let n = this.props.n - 1;
@@ -137,6 +159,7 @@ Pagination.propTypes = {
   totPages: React.PropTypes.number,
   totPanels: React.PropTypes.number,
   dialogOpen: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
   handleChange: React.PropTypes.func
 };
 
@@ -175,13 +198,14 @@ const staticStyles = {
 
 const stateSelector = createSelector(
   pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector, dialogOpenSelector,
-  (n, card, npp, dialogOpen) => ({
+  nPerPageSelector, dialogOpenSelector, fullscreenSelector,
+  (n, card, npp, dialogOpen, fullscreen) => ({
     n,
     totPanels: card,
     totPages: Math.ceil(card / npp),
     npp,
-    dialogOpen
+    dialogOpen,
+    fullscreen
   })
 );
 

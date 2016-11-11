@@ -2,7 +2,7 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import { SB_CONFIG } from '../constants';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick }) => (
   <button

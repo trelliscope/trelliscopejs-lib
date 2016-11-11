@@ -9,7 +9,7 @@ export const findWidget = (name) => {
   return undefined;
 };
 
-export const loadAssetsSequential = (widgetAssets, callback) => {
+export const loadAssetsSequential = (widgetAssets, configBase) => {
   const assets = Object.assign([], widgetAssets.assets);
   const loadNextAsset = () => {
     let done = false;
@@ -22,11 +22,6 @@ export const loadAssetsSequential = (widgetAssets, callback) => {
         done = true;
         if (assets.length !== 0) {
           loadNextAsset();
-        } else {
-          const widget = findWidget(widgetAssets.name);
-          if (widget) {
-            callback(widget);
-          }
         }
       }
     };
@@ -42,12 +37,12 @@ export const loadAssetsSequential = (widgetAssets, callback) => {
       if (curAsset.type === 'script') {
         asset = document.createElement('script');
         asset.type = 'text/javascript';
-        asset.src = curAsset.url[i];
+        asset.src = `${configBase}/${curAsset.url[i]}`;
       } else if (curAsset.type === 'stylesheet') {
         asset = document.createElement('link');
         asset.rel = 'stylesheet';
         asset.type = 'text/css';
-        asset.href = curAsset.url[i];
+        asset.href = `${configBase}/${curAsset.url[i]}`;
       }
       asset.onreadystatechange = () => {
         if (this.readyState === 'complete' || this.readyState === 'loaded') {

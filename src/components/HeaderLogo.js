@@ -7,8 +7,9 @@ import Mousetrap from 'mousetrap';
 import FlatButton from 'material-ui/FlatButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { createSelector } from 'reselect';
+import { fullscreenSelector } from '../selectors';
 import { windowHeightSelector } from '../selectors/ui';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class HeaderLogo extends React.Component {
   constructor(props) {
@@ -16,10 +17,21 @@ class HeaderLogo extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    Mousetrap.bind(['a'], this.handleKey);
+    if (this.props.fullscreen) {
+      Mousetrap.bind(['a'], this.handleKey);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bind(['a'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['a']);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['a']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['a']);
+    }
   }
   handleOpen = () => {
     this.props.setDialogOpen(true);
@@ -43,14 +55,13 @@ class HeaderLogo extends React.Component {
         onTouchTap={this.handleClose}
       />
     ];
-    // only show keyboard shortcut for open display if there is more than one display
-    let openDisplayTags = '';
-    if (!this.props.singleDisplay) {
-      openDisplayTags = (
-        <li>
-          <code className={classes.dialogCode}>o</code>
-          &ensp;open &quot;Select Display&quot; dialog
-        </li>
+
+    let keyNote = '';
+    if (!this.props.fullscreen) {
+      keyNote = (
+        <p className={classes.keynote}>
+          Note: keyboard shortcuts are only available when the app is fullscreen.
+        </p>
       );
     }
     return (
@@ -64,6 +75,8 @@ class HeaderLogo extends React.Component {
         </div>
         <Dialog
           title={`Trelliscope Viewer v${VERSION}`}
+          className="trelliscope-app"
+          style={{ zIndex: 8000, fontWeight: 300 }}
           actions={actions}
           open={this.state.open}
           onRequestClose={this.handleClose}
@@ -204,6 +217,7 @@ class HeaderLogo extends React.Component {
             <Tab label="Shortcuts" >
               <div className={classes.dialogDiv}>
                 <div>
+                  {keyNote}
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
                     <h4 className={classes.dialogH4}>Sidebar controls</h4>
                     <ul className={classes.dialogUl}>
@@ -243,7 +257,6 @@ class HeaderLogo extends React.Component {
                   <div style={{ width: '50%', display: 'block', float: 'left' }}>
                     <h4 className={classes.dialogH4}>Dialog boxes</h4>
                     <ul className={classes.dialogUl}>
-                      {openDisplayTags}
                       <li>
                         <code className={classes.dialogCode}>i</code>
                         &ensp;open &quot;Display Info&quot; dialog
@@ -317,7 +330,7 @@ class HeaderLogo extends React.Component {
 HeaderLogo.propTypes = {
   sheet: React.PropTypes.object,
   windowHeight: React.PropTypes.number,
-  singleDisplay: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
   setDialogOpen: React.PropTypes.func
 };
 
@@ -325,8 +338,8 @@ HeaderLogo.propTypes = {
 
 const staticStyles = {
   logo: {
-    position: 'fixed',
-    top: 0,
+    position: 'absolute',
+    top: -1, // cover up top app border
     right: 0,
     cursor: 'pointer',
     border: 'none',
@@ -380,15 +393,21 @@ const staticStyles = {
   },
   dialogHi: {
     color: '#FF5252'
+  },
+  keynote: {
+    marginBottom: 0,
+    color: '#888',
+    fontStyle: 'italic'
   }
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  windowHeightSelector,
-  wh => ({
-    windowHeight: wh
+  windowHeightSelector, fullscreenSelector,
+  (wh, fullscreen) => ({
+    windowHeight: wh,
+    fullscreen
   })
 );
 

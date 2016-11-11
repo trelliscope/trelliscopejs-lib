@@ -6,7 +6,6 @@ import { windowWidthSelector, windowHeightSelector } from '../selectors/ui';
 import SideButtons from './SideButtons';
 import Sidebar from './Sidebar';
 import Content from './Content';
-import uiConsts from '../styles/uiConsts';
 
 const Body = ({ sheet: { classes }, width, height }) => (
   <div className={classes.body} style={{ width, height }}>
@@ -26,9 +25,11 @@ Body.propTypes = {
 
 const staticStyles = {
   body: {
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
-    left: 0
+    left: 0,
+    borderRight: '1px solid #ddd',
+    boxSizing: 'border-box'
   }
 };
 

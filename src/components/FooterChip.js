@@ -3,7 +3,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { fade } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout, setSort } from '../actions';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const FooterChip = ({ sheet: { classes }, label, icon, text, index,
   type, handleStateClose }) => {
@@ -109,6 +109,8 @@ const staticStyles = {
     paddingRight: 5
   }
 };
+
+// ------ redux container ------
 
 const mapStateToProps = () => ({});
 

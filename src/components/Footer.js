@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { windowWidthSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
-import { displayInfoSelector, filterSelector, sortSelector } from '../selectors';
+import { displayInfoSelector, filterSelector, sortSelector,
+  singlePageAppSelector } from '../selectors';
 import FooterChip from './FooterChip';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
-const Footer = ({ sheet: { classes }, width, sort, filter, nFilt, nPanels }) => {
+const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -65,17 +66,19 @@ const Footer = ({ sheet: { classes }, width, sort, filter, nFilt, nPanels }) => 
   }
 
   return (
-    <div className={classes.wrapper} style={{ width }}>
-      {sortContent}
-      {spacerContent}
-      {filterContent}
+    <div className={classes.wrapper} style={style}>
+      <div className={classes.inner}>
+        {sortContent}
+        {spacerContent}
+        {filterContent}
+      </div>
     </div>
   );
 };
 
 Footer.propTypes = {
   sheet: React.PropTypes.object,
-  width: React.PropTypes.number,
+  style: React.PropTypes.object,
   sort: React.PropTypes.array,
   filter: React.PropTypes.array,
   nFilt: React.PropTypes.number,
@@ -86,7 +89,7 @@ Footer.propTypes = {
 
 const staticStyles = {
   wrapper: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     bottom: 0,
     left: 0,
@@ -99,7 +102,16 @@ const staticStyles = {
     background: uiConsts.footer.background,
     color: uiConsts.footer.color,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    zIndex: 1001
+  },
+  inner: {
+    display: 'flex',
+    flexDirection: 'row',
+    whiteSpace: 'nowrap',
+    paddingRight: 10
   },
   sectionWrapper: {
     display: 'flex',
@@ -186,9 +198,11 @@ const filterInfoSelector = createSelector(
 
 const stateSelector = createSelector(
   windowWidthSelector, sortInfoSelector, filterInfoSelector,
-  filterCardinalitySelector, displayInfoSelector,
-  (ww, sort, filter, nFilt, di) => ({
-    width: ww,
+  filterCardinalitySelector, displayInfoSelector, singlePageAppSelector,
+  (ww, sort, filter, nFilt, di, singlePage) => ({
+    style: {
+      width: ww - (singlePage ? 0 : uiConsts.footer.height)
+    },
     sort,
     filter,
     nFilt,

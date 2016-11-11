@@ -12,7 +12,7 @@ import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterCatPlot from './FilterCatPlot';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 const sortOptions = [
   // { payload: 'idx,asc', text: 'Order: default' },

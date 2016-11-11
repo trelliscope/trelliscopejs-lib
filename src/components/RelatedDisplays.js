@@ -7,7 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { relatedDisplaysSelector } from '../selectors/display';
 import { selectedDisplaySelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class RelatedDisplays extends React.Component {
   constructor(props) {
@@ -59,6 +59,8 @@ class RelatedDisplays extends React.Component {
           title="Add Related Displays"
           actions={actions}
           modal={false}
+          className="trelliscope-app"
+          style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
@@ -83,7 +85,7 @@ RelatedDisplays.propTypes = {
 
 const staticStyles = {
   button: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
     top: 0,
     transition: 'left 0.5s ease, background 250ms',

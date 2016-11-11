@@ -3,7 +3,7 @@ import injectSheet from 'react-jss';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterNumPlot from './FilterNumPlot';
-import uiConsts from '../styles/uiConsts';
+import uiConsts from '../assets/styles/uiConsts';
 
 class FilterNum extends React.Component {
   constructor(props) {

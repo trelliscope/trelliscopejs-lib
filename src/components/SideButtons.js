@@ -9,8 +9,8 @@ import SideButton from './SideButton';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS } from '../constants';
 import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
-import { dialogOpenSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import { dialogOpenSelector, fullscreenSelector } from '../selectors';
+import uiConsts from '../assets/styles/uiConsts';
 
 const buttons = [
   { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
@@ -26,10 +26,27 @@ class SideButtons extends React.Component {
     this.state = { loaded: false, displayList: [], open: false };
   }
   componentDidMount() {
-    Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'esc', 'enter'], this.handleKey);
+    if (this.props.fullscreen) {
+      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
+      if (this.props.active !== '') {
+        Mousetrap.bindGlobal(['esc'], this.handleKey);
+      }
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fullscreen) {
+      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
+      if (nextProps.active !== '') {
+        Mousetrap.bindGlobal(['esc'], this.handleKey);
+      }
+    } else {
+      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
+    }
   }
   componentWillUnmount() {
-    Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
+    if (this.props.fullscreen) {
+      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
+    }
   }
   handleKey = (e, k) => {
     if (e.target.nodeName === 'INPUT' || this.props.dialogOpen) {
@@ -76,6 +93,7 @@ SideButtons.propTypes = {
   sheet: React.PropTypes.object,
   active: React.PropTypes.string,
   dialogOpen: React.PropTypes.bool,
+  fullscreen: React.PropTypes.bool,
   setActive: React.PropTypes.func
 };
 
@@ -83,12 +101,13 @@ SideButtons.propTypes = {
 
 const staticStyles = {
   sideButtonsContainer: {
-    position: 'fixed',
+    position: 'absolute',
     left: 0,
     top: 0,
     paddingTop: uiConsts.header.height,
     width: uiConsts.sideButtons.width,
     background: uiConsts.sideButtons.background,
+    boxSizing: 'border-box',
     zIndex: 1000
   },
   spacer: {
@@ -103,15 +122,17 @@ const staticStyles = {
 
 const stateSelector = createSelector(
   contentHeightSelector, sidebarActiveSelector, dialogOpenSelector,
-  (ch, active, dialogOpen) => ({
+  fullscreenSelector,
+  (ch, active, dialogOpen, fullscreen) => ({
     styles: {
       sideButtonsContainer: {
-        height: ch
+        height: ch + uiConsts.header.height
       }
     },
     width: uiConsts.sideButtons.width,
     active,
-    dialogOpen
+    dialogOpen,
+    fullscreen
   })
 );
 

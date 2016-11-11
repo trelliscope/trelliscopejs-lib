@@ -7,8 +7,9 @@ import marked from 'marked';
 // import katex from 'katex';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { selectedDisplaySelector, displayInfoSelector } from '../selectors';
-import uiConsts from '../styles/uiConsts';
+import { selectedDisplaySelector, displayInfoSelector,
+  fullscreenSelector } from '../selectors';
+import uiConsts from '../assets/styles/uiConsts';
 
 class DisplayInfo extends React.Component {
   constructor(props) {
@@ -16,17 +17,19 @@ class DisplayInfo extends React.Component {
     this.state = { open: false };
   }
   componentDidMount() {
-    if (this.props.active) {
+    if (this.props.active && this.props.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.active) {
+    if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
+    } else {
+      Mousetrap.unbind(['i']);
     }
   }
   componentWillUnmount() {
-    if (this.props.active) {
+    if (this.props.active && this.props.fullscreen) {
       Mousetrap.unbind(['i']);
     }
   }
@@ -83,6 +86,8 @@ class DisplayInfo extends React.Component {
           title="Information About This Display"
           actions={actions}
           modal={false}
+          className="trelliscope-app"
+          style={{ zIndex: 8000, fontWeight: 300 }}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
@@ -153,6 +158,7 @@ DisplayInfo.propTypes = {
   // selectedDisplay: React.PropTypes.object,
   displayInfo: React.PropTypes.object,
   setDialogOpen: React.PropTypes.func,
+  fullscreen: React.PropTypes.bool,
   active: React.PropTypes.bool
 };
 
@@ -160,17 +166,17 @@ DisplayInfo.propTypes = {
 
 const staticStyles = {
   button: {
-    position: 'fixed',
+    position: 'absolute',
     boxSizing: 'border-box',
-    top: 0,
+    top: -1,
     // transition: 'left 0.5s ease, background 250ms',
     display: 'inline-block',
     height: uiConsts.header.height,
-    width: uiConsts.header.height,
+    width: uiConsts.header.height - 1,
     fontSize: 18,
     paddingTop: 0,
     color: uiConsts.header.button.color,
-    background: 'white',
+    background: 'none',
     textAlign: 'center',
     borderRight: `1px solid ${uiConsts.header.borderColor}`,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
@@ -195,8 +201,8 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, displayInfoSelector,
-  (selectedDisplay, displayInfo) => ({
+  selectedDisplaySelector, displayInfoSelector, fullscreenSelector,
+  (selectedDisplay, displayInfo, fullscreen) => ({
     styles: {
       button: {
         left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
@@ -207,6 +213,7 @@ const styleSelector = createSelector(
     },
     // selectedDisplay,
     displayInfo,
+    fullscreen,
     active: selectedDisplay.name !== ''
   })
 );

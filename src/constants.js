@@ -1,3 +1,9 @@
+export const SET_APP_ID = 'SET_APP_ID';
+export const SET_SINGLE_PAGE_APP = 'SET_SINGLE_PAGE_APP';
+export const SET_FULLSCREEN = 'SET_FULLSCREEN';
+export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN';
+export const SET_APP_DIMS = 'SET_APP_DIMS';
+
 export const ACTIVE_SIDEBAR = 'ACTIVE_SIDEBAR';
 export const SET_LAYOUT = 'SET_LAYOUT';
 export const SET_LABELS = 'SET_LABELS';
@@ -15,7 +21,7 @@ export const SET_PANEL_RENDERER = 'SET_PANEL_RENDERER';
 export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const REQUEST_CONFIG = 'REQUEST_CONFIG';
 export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
-export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN';
+export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';
