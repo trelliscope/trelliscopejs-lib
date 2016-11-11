@@ -160,7 +160,7 @@ const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
                     [classes.variableActive]: filter[d] && filter[d].value !== undefined
                   })}
                   key={`${d}_${displId}_button_${inames.length}`}
-                  onMouseDown={() => handleViewChange(d, 'add', labels)}
+                  onClick={() => handleViewChange(d, 'add', labels)}
                 >
                   {d}
                 </button>
