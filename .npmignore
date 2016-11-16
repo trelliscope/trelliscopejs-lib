@@ -7,3 +7,6 @@ _demo
 _test
 _ignore
 *.sublime-*
+webpack*
+index.html
+server.js
