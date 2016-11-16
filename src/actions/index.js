@@ -138,33 +138,35 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
     )));
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     if (cfg.config_base) {
-      loadAssetsSequential(dObjJson.panelInterface.deps, cfg.config_base);
+      const prCallback = () => {
+        const binding = findWidget(dObjJson.panelInterface.deps.name);
+
+        dispatch(setPanelRenderer((x, width, height, post, key) => {
+          const el = document.getElementById(`widget_outer_${key}`);
+
+          if (post && el) {
+            // need to create a child div that is not bound to react
+            const dv = document.createElement('div');
+            dv.style.width = `${width}px`;
+            dv.style.height = `${height}px`;
+            dv.setAttribute('id', `widget_${key}`);
+            el.appendChild(dv);
+
+            let initResult;
+            if (binding.initialize) {
+              initResult = binding.initialize(dv, width, height);
+            }
+            binding.renderValue(dv, x.x, initResult);
+            // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
+          } else {
+            return <div id={`widget_outer_${key}`} />;
+          }
+          return null;
+        }));
+      };
+
+      loadAssetsSequential(dObjJson.panelInterface.deps, cfg.config_base, prCallback);
     }
-
-    const binding = findWidget(dObjJson.panelInterface.deps.name);
-
-    dispatch(setPanelRenderer((x, width, height, post, key) => {
-      const el = document.getElementById(`widget_outer_${key}`);
-
-      if (post && el) {
-        // need to create a child div that is not bound to react
-        const dv = document.createElement('div');
-        dv.style.width = `${width}px`;
-        dv.style.height = `${height}px`;
-        dv.setAttribute('id', `widget_${key}`);
-        el.appendChild(dv);
-
-        let initResult;
-        if (binding.initialize) {
-          initResult = binding.initialize(dv, width, height);
-        }
-        binding.renderValue(dv, x.x, initResult);
-        // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
-      } else {
-        return <div id={`widget_outer_${key}`} />;
-      }
-      return null;
-    }));
   }
 };
 

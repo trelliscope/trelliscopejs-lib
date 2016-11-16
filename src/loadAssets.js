@@ -9,7 +9,7 @@ export const findWidget = (name) => {
   return undefined;
 };
 
-export const loadAssetsSequential = (widgetAssets, configBase) => {
+export const loadAssetsSequential = (widgetAssets, configBase, callback) => {
   const assets = Object.assign([], widgetAssets.assets);
   const loadNextAsset = () => {
     let done = false;
@@ -22,6 +22,8 @@ export const loadAssetsSequential = (widgetAssets, configBase) => {
         done = true;
         if (assets.length !== 0) {
           loadNextAsset();
+        } else {
+          callback();
         }
       }
     };
