@@ -246,7 +246,7 @@ Panel.propTypes = {
   iColIndex: React.PropTypes.number,
   sheet: React.PropTypes.object,
   panelRenderer: React.PropTypes.object,
-  panelInterface: React.PropTypes.object,
+  panelInterface: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   panelData: React.PropTypes.object,
   removeLabel: React.PropTypes.func
 };

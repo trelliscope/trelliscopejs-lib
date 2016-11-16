@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
   <head>
@@ -5,39 +6,37 @@
     <title>Trelliscope</title>
   </head>
   <body style="margin: 40px">
-    <div id="app1" style="width:800px; height:500px;"></div>
-    <div style="height:25px;"></div>
-    <div id="app2" style="width:800px; height:500px;"></div>
-    <div style="height:25px;"></div>
-    <div id="8b70e242" style="width:800px; height:500px;"></div>
+    <div id="ebbfa969" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
+        <div style="height:25px;"></div>
+    <div id="32b2482a" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
+        <div style="height:25px;"></div>
+    <div id="8a43f2dd" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
     <script src="trelliscope.js"></script>
-    <script type="text/javascript" src="_test/vdb_gates/lib/htmlwidgets-0.7/htmlwidgets.js"></script>
-    <script type="text/javascript" src="_test/vdb_gates/lib/bokehjs-0.12.2/bokeh.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="_test/vdb_gates//lib/bokehjs-0.12.2/bokeh.min.css">
-    <script type="text/javascript" src="_test/vdb_gates//lib/bokehjs-0.12.2/bokeh.min.js"></script>
-    <script type="text/javascript" src="_test/vdb_gates//lib/rbokeh-binding-0.4.5/rbokeh.js"></script>
     <script>
       (function() {
-        trelliscopeApp('app1', '_test/vdb_housing/config.jsonp');
-        // trelliscopeApp('app2', '_test/vdb_gates/config.jsonp');
-        // trelliscopeApp('8b70e242', '_test/vdb_mpg/config.jsonp');
+        trelliscopeApp('ebbfa969', '_test/example_mpg/config.jsonp');
+        trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp');
+        trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
       })();
     </script>
   </body>
 </html>
 
-<!-- <!doctype html>
+<!-- uncomment below and comment above for single page app mode -->
+
+<!--
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>Trelliscope</title>
   </head>
   <body">
-    <div id="app1"></div>
+    <div id="8a43f2dd"></div>
     <script src="trelliscope.js"></script>
     <script>
       (function() {
-        trelliscopeApp('app1', '_test/vdb_housing/config.jsonp');
+        trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
       })();
     </script>
   </body>
