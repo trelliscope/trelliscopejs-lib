@@ -14,6 +14,7 @@ import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
+import './assets/fonts/OpenSans/style.css';
 
 import { fetchDisplayList, windowResize } from './actions';
 
