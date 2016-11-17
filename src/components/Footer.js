@@ -6,6 +6,7 @@ import { windowWidthSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector,
   singlePageAppSelector } from '../selectors';
+import { contentHeightSelector } from '../selectors/ui';
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -91,7 +92,6 @@ const staticStyles = {
   wrapper: {
     position: 'absolute',
     boxSizing: 'border-box',
-    bottom: 0,
     left: 0,
     height: uiConsts.footer.height,
     paddingLeft: 10,
@@ -199,9 +199,11 @@ const filterInfoSelector = createSelector(
 const stateSelector = createSelector(
   windowWidthSelector, sortInfoSelector, filterInfoSelector,
   filterCardinalitySelector, displayInfoSelector, singlePageAppSelector,
-  (ww, sort, filter, nFilt, di, singlePage) => ({
+  contentHeightSelector,
+  (ww, sort, filter, nFilt, di, singlePage, ch) => ({
     style: {
-      width: ww - (singlePage ? 0 : uiConsts.footer.height)
+      width: ww - (singlePage ? 0 : uiConsts.footer.height),
+      top: ch + uiConsts.header.height
     },
     sort,
     filter,
