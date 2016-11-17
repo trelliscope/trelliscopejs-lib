@@ -131,15 +131,15 @@ const mapDispatchToProps = dispatch => ({
     const el = document.getElementById(appId);
     const newDims = {};
     if (fullscreen) {
-      addClass(document.body, 'trscope-fullscreen-body');
-      addClass(document.getElementsByTagName('html')[0], 'trscope-fullscreen-html');
-      addClass(el, 'trscope-fullscreen-el');
+      addClass(document.body, 'trelliscope-fullscreen-body');
+      addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
+      addClass(el, 'trelliscope-fullscreen-el');
       newDims.width = window.innerWidth;
       newDims.height = window.innerHeight;
     } else {
-      removeClass(document.body, 'trscope-fullscreen-body');
-      removeClass(document.getElementsByTagName('html')[0], 'trscope-fullscreen-html');
-      removeClass(el, 'trscope-fullscreen-el');
+      removeClass(document.body, 'trelliscope-fullscreen-body');
+      removeClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
+      removeClass(el, 'trelliscope-fullscreen-el');
       newDims.width = appDims.width;
       newDims.height = appDims.height;
       // restore to y offset we were at before going fullscreen

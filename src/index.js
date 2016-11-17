@@ -58,8 +58,8 @@ class Root extends Component {
       // el.parentNode.nodeName === 'BODY'
       el.style.width = '100%';
       el.style.height = '100%';
-      addClass(document.body, 'trscope-fullscreen-body');
-      addClass(document.getElementsByTagName('html')[0], 'trscope-fullscreen-html');
+      addClass(document.body, 'trelliscope-fullscreen-body');
+      addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
     } else {
       // if (el.style.height === undefined) {
       //   el.style.height = ?
