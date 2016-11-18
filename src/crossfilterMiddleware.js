@@ -62,7 +62,8 @@ const crossfilterMiddleware = store => next => (action) => {
             let toVal = action.filter[names[i]].value.to;
             fromVal = fromVal === undefined ? -Infinity : fromVal;
             toVal = toVal === undefined ? Infinity : toVal;
-            dimensions[names[i]].filter([fromVal, toVal]);
+            // want to be inclusive on both ends
+            dimensions[names[i]].filterFunction(d => d >= fromVal && d <= toVal);
           }
         } else if (action.filter[names[i]].varType === 'factor') {
           if (dimensions[names[i]] === undefined) {
@@ -114,7 +115,7 @@ const crossfilterMiddleware = store => next => (action) => {
         }
       }
     }
-  } else if (action.type === 'SET_SORT' && action.sort) {
+  } else if (action.type === 'SET_SORT' && action.sort !== undefined) {
     // if only sorting on one variable, make a sort dimension according to that variable
     // if more than one variable, crossfilter can only handle sorting on one dimension
     // so we have to get sort index of entire data set and create a new dimension
