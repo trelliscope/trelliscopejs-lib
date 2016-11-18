@@ -120,6 +120,11 @@ class FilterNum extends React.Component {
       this.stateValue = {};
     }
 
+    // calculate step value for numeric input
+    const breaks = this.props.dist.dist.raw.breaks;
+    const hspan = (breaks[1] - breaks[0]) * breaks.length;
+    const step = Math.pow(10, Math.round(Math.log10(hspan / 100) - 0.4));
+
     return (
       <div className={classes.container}>
         <div
@@ -146,6 +151,7 @@ class FilterNum extends React.Component {
             inputStyle={validStyle}
             underlineStyle={underlineStyle}
             type="number"
+            step={step}
             defaultValue={this.stateValue.from}
             onChange={e => this.handleInput(e.target.value, 'from')}
             onKeyDown={e => this.setValidState(
@@ -163,6 +169,7 @@ class FilterNum extends React.Component {
             inputStyle={validStyle}
             underlineStyle={underlineStyle}
             type="number"
+            step={step}
             defaultValue={this.stateValue.to}
             onChange={e => this.handleInput(e.target.value, 'to')}
             onKeyDown={e => this.setValidState(
