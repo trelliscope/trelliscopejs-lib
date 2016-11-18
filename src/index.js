@@ -61,6 +61,21 @@ class Root extends Component {
       addClass(document.body, 'trelliscope-fullscreen-body');
       addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
     } else {
+      const bodyEl = document.createElement('div');
+      bodyEl.style.width = '100%';
+      bodyEl.style.height = '100%';
+      bodyEl.style.background = 'red';
+      bodyEl.id = 'trelliscope-fullscreen-div';
+      document.getElementsByTagName('body')[0].appendChild(bodyEl);
+
+      // give 'el' a new parent so we know where to move div back to after fullscreen
+      const parent = el.parentNode;
+      const wrapper = document.createElement('div');
+      wrapper.id = `${el.id}-parent`;
+      parent.replaceChild(wrapper, el);
+      // set element as child of wrapper
+      wrapper.appendChild(el);
+
       // if (el.style.height === undefined) {
       //   el.style.height = ?
       // }
