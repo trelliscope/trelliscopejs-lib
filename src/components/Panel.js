@@ -141,7 +141,9 @@ class Panel extends React.Component {
       },
       labelRow: {
         width: dims.ww,
-        height: dims.labelHeight,
+        height: dims.labelHeight
+      },
+      labelSpan: {
         fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
       },
       labelClose: {
@@ -189,7 +191,7 @@ class Panel extends React.Component {
                       className={classes.labelInner}
                       title={d.value}
                     >
-                      <p className={classes.labelP}>{d.value}</p>
+                      <span className={classes.labelP} style={styles.labelSpan}>{d.value}</span>
                     </div>
                   );
                 }
@@ -213,10 +215,10 @@ class Panel extends React.Component {
                             style={{ color: 'inherit', textDecoration: 'none' }}
                             data-tip data-for={`ptooltip_${d.name}`}
                           >
-                            <span>{d.name}</span>
+                            <span style={styles.labelSpan}>{d.name}</span>
                           </a>
                           <ReactTooltip place="right" id={`ptooltip_${d.name}`}>
-                            <span>{d.desc}</span>
+                            <span style={styles.labelSpan}>{d.desc}</span>
                           </ReactTooltip>
                         </span>
                       </div>

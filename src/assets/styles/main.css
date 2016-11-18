@@ -46,6 +46,10 @@
   font-weight: 300;
 }
 
+.trelliscope-app {
+  line-height: normal;
+}
+
 .trelliscope-app button:focus {
   outline:0;
 }
