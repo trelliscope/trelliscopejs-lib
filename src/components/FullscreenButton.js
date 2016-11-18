@@ -137,7 +137,9 @@ const mapDispatchToProps = dispatch => ({
       newDims.width = window.innerWidth;
       newDims.height = window.innerHeight;
       // move the div to the outside of the document to make sure it's on top
-      document.getElementById('trelliscope-fullscreen-div').appendChild(el);
+      const bodyEl = document.getElementById('trelliscope-fullscreen-div');
+      bodyEl.style.display = 'block';
+      bodyEl.appendChild(el);
     } else {
       removeClass(document.body, 'trelliscope-fullscreen-body');
       removeClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
@@ -146,6 +148,7 @@ const mapDispatchToProps = dispatch => ({
       newDims.height = appDims.height;
       // move the div back to its parent element
       document.getElementById(`${el.id}-parent`).appendChild(el);
+      document.getElementById('trelliscope-fullscreen-div').style.display = 'none';
       // restore to y offset we were at before going fullscreen
       window.scrollTo(window.pageXOffset, yOffset);
     }

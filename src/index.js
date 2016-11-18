@@ -64,7 +64,7 @@ class Root extends Component {
       const bodyEl = document.createElement('div');
       bodyEl.style.width = '100%';
       bodyEl.style.height = '100%';
-      bodyEl.style.background = 'red';
+      bodyEl.style.display = 'none';
       bodyEl.id = 'trelliscope-fullscreen-div';
       document.getElementsByTagName('body')[0].appendChild(bodyEl);
 
