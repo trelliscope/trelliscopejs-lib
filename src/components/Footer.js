@@ -2,11 +2,10 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { windowWidthSelector } from '../selectors/ui';
+import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import { displayInfoSelector, filterSelector, sortSelector,
   singlePageAppSelector } from '../selectors';
-import { contentHeightSelector } from '../selectors/ui';
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
 

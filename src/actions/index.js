@@ -201,7 +201,8 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
 
       window[cfgCallback] = (json) => {
         // if display_base is empty, we want to use same path as config
-        json.display_base = getConfigBase(json.display_base); // eslint-disable-line no-param-reassign
+        json.display_base = // eslint-disable-line no-param-reassign
+          getConfigBase(json.display_base);
         json.config_base = configBase; // eslint-disable-line no-param-reassign
         json.cog_server.info.base = // eslint-disable-line no-param-reassign
           getConfigBase(json.cog_server.info.base);
