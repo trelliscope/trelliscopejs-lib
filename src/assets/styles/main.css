@@ -42,6 +42,10 @@
   font-weight: 300;
 }
 
+.trelliscope-app table {
+  font-weight: 300;
+}
+
 .trelliscope-app button:focus {
   outline:0;
 }
