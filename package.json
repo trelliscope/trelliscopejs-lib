@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "trelliscopejs-lib",
   "scripts": {
     "start": "node server.js",
