@@ -209,7 +209,10 @@ class Panel extends React.Component {
                     >
                       <div className={classes.labelInner}>
                         <span>
-                          <a style={{ color: 'inherit' }} data-tip data-for={`ptooltip_${d.name}`}>
+                          <a
+                            style={{ color: 'inherit', textDecoration: 'none' }}
+                            data-tip data-for={`ptooltip_${d.name}`}
+                          >
                             <span>{d.name}</span>
                           </a>
                           <ReactTooltip place="right" id={`ptooltip_${d.name}`}>
