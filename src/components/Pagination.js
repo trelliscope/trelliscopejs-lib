@@ -6,7 +6,7 @@ import Mousetrap from 'mousetrap';
 import IconButton from 'material-ui/IconButton';
 import { setLayout } from '../actions';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector,
-  fullscreenSelector } from '../selectors';
+  fullscreenSelector, cogDataSelector } from '../selectors';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -46,6 +46,9 @@ class Pagination extends React.Component {
       Mousetrap.unbind(['left']);
     }
   }
+  // shouldComponentUpdate(nextProps) {
+  //   return nextProps.cogData.isLoaded && nextProps.cogData.crossfilter !== undefined;
+  // }
   componentWillUnmount() {
     if (this.props.fullscreen) {
       Mousetrap.unbind(['right']);
@@ -71,16 +74,34 @@ class Pagination extends React.Component {
   render() {
     const { classes } = this.props.sheet;
 
-    const iconStyle = {
-      fontSize: 20,
-      padding: 6
+    const styles = {
+      icon: {
+        fontSize: 20,
+        padding: 6
+      },
+      button: {
+        width: uiConsts.header.height - 10,
+        height: uiConsts.header.height - 10,
+        border: 0,
+        padding: 0
+      },
+      progress: {
+        width: 120,
+        fontSize: 12,
+        color: '#444',
+
+        lineHeight: '48px'
+      }
     };
-    const buttonStyle = {
-      width: uiConsts.header.height - 10,
-      height: uiConsts.header.height - 10,
-      border: 0,
-      padding: 0
-    };
+
+    if (this.props.cogData.isFetching ||
+      (this.props.cogData.isLoaded && this.props.cogData.crossfilter === undefined)) {
+      return (
+        <div style={styles.progress}>loading panels...</div>
+      );
+    } else if (this.props.totPanels === 0) {
+      return <div />;
+    }
 
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
@@ -95,8 +116,8 @@ class Pagination extends React.Component {
           <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
-              style={buttonStyle}
-              iconStyle={iconStyle}
+              style={styles.button}
+              iconStyle={styles.icon}
               iconClassName="icon-angle-left"
               onTouchTap={() => this.pageLeft()}
             />
@@ -109,8 +130,8 @@ class Pagination extends React.Component {
           <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
-              style={buttonStyle}
-              iconStyle={iconStyle}
+              style={styles.button}
+              iconStyle={styles.icon}
               iconClassName="icon-angle-right"
               onTouchTap={() => this.pageRight()}
             />
@@ -123,8 +144,8 @@ class Pagination extends React.Component {
           <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n <= 1}
-              style={buttonStyle}
-              iconStyle={iconStyle}
+              style={styles.button}
+              iconStyle={styles.icon}
               iconClassName="icon-angle-double-left"
               onTouchTap={() => this.pageFirst()}
             />
@@ -137,8 +158,8 @@ class Pagination extends React.Component {
           <div className={classes.buttonDiv}>
             <IconButton
               disabled={this.props.n >= this.props.totPages}
-              style={buttonStyle}
-              iconStyle={iconStyle}
+              style={styles.button}
+              iconStyle={styles.icon}
               iconClassName="icon-angle-double-right"
               onTouchTap={() => this.pageLast()}
             />
@@ -160,7 +181,8 @@ Pagination.propTypes = {
   totPanels: React.PropTypes.number,
   dialogOpen: React.PropTypes.bool,
   fullscreen: React.PropTypes.bool,
-  handleChange: React.PropTypes.func
+  handleChange: React.PropTypes.func,
+  cogData: React.PropTypes.object
 };
 
 // ------ static styles ------
@@ -197,15 +219,16 @@ const staticStyles = {
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector, dialogOpenSelector, fullscreenSelector,
-  (n, card, npp, dialogOpen, fullscreen) => ({
+  pageNumSelector, filterCardinalitySelector, nPerPageSelector,
+  dialogOpenSelector, fullscreenSelector, cogDataSelector,
+  (n, card, npp, dialogOpen, fullscreen, cogData) => ({
     n,
     totPanels: card,
     totPages: Math.ceil(card / npp),
     npp,
     dialogOpen,
-    fullscreen
+    fullscreen,
+    cogData
   })
 );
 
