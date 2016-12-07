@@ -1,7 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
 import { fade } from 'material-ui/utils/colorManipulator';
 import { json as d3json } from 'd3-request';
@@ -114,7 +114,7 @@ class Panel extends React.Component {
       this.xhr.abort();
     }
     // remove callback
-    if (! (this.isSelfContained || this.isImageSrc)) {
+    if (!(this.isSelfContained || this.isImageSrc)) {
       window.__panel__[`_${this.props.panelKey}`] = null;
     }
   }
@@ -152,13 +152,32 @@ class Panel extends React.Component {
       },
       labelRow: {
         width: dims.ww,
-        height: dims.labelHeight
+        height: dims.labelHeight,
+        lineHeight: `${dims.labelHeight}px`
       },
       labelSpan: {
-        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
+        fontSize: dims.fontSize,
+        position: 'absolute'
       },
       labelClose: {
-        fontSize: dims.labelHeight - ((12 * dims.labelHeight) / 26)
+        fontSize: dims.fontSize,
+        lineHeight: `${dims.labelHeight}px`
+      },
+      labelInner: {
+        height: dims.labelHeight
+      },
+      labelNameCell: {
+        paddingLeft: (dims.labelPad / 2) + 2,
+        paddingRIght: (dims.labelPad / 2) + 2,
+        width: dims.labelWidth
+      },
+      labelValueCell: {
+        paddingLeft: (dims.labelPad / 2) + 2,
+        paddingRIght: (dims.labelPad / 2) + 2
+      },
+      linkIcon: {
+        textDecoration: 'none',
+        fontSize: dims.fontSize - 2
       }
     };
 
@@ -192,14 +211,22 @@ class Panel extends React.Component {
                 );
                 if (d.type === 'href') {
                   labelDiv = (
-                    <div className={classes.labelInner}>
-                      <a href={d.value} rel="noopener noreferrer" target="_blank">link</a>
+                    <div className={classes.labelInner} style={styles.labelInner}>
+                      <a
+                        style={{ ...styles.labelSpan, textDecoration: 'none' }}
+                        href={d.value}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <i className="icon-open" style={styles.linkIcon} />
+                      </a>
                     </div>
                   );
                 } else {
                   labelDiv = (
                     <div
                       className={classes.labelInner}
+                      style={styles.labelInner}
                       title={d.value}
                     >
                       <span className={classes.labelP} style={styles.labelSpan}>{d.value}</span>
@@ -219,22 +246,16 @@ class Panel extends React.Component {
                   >
                     <td
                       className={`${classes.labelCell} ${classes.labelNameCell}`}
+                      style={styles.labelNameCell}
                     >
-                      <div className={classes.labelInner}>
-                        <span>
-                          <a
-                            style={{ color: 'inherit', textDecoration: 'none' }}
-                            data-tip data-for={`ptooltip_${d.name}`}
-                          >
-                            <span style={styles.labelSpan}>{d.name}</span>
-                          </a>
-                          <ReactTooltip place="right" id={`ptooltip_${d.name}`}>
-                            <span style={styles.labelSpan}>{d.desc}</span>
-                          </ReactTooltip>
-                        </span>
+                      <div className={classes.labelInner} style={styles.labelInner}>
+                        <span style={styles.labelSpan}>{d.name}</span>
                       </div>
                     </td>
-                    <td className={`${classes.labelCell} ${classes.labelValueCell}`}>
+                    <td
+                      className={classes.labelCell}
+                      style={styles.labelValueCell}
+                    >
                       <div className={classes.labelOuter}>
                         {labelDiv}
                         {removeLabelDiv}
@@ -315,18 +336,12 @@ const staticStyles = {
   },
   labelCell: {
     paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 8,
-    paddingRight: 8
+    paddingBottom: 0
     // borderTop: '1px solid white'
   },
   labelNameCell: {
-    width: '33%',
     borderRight: '1px solid #fff',
     fontWeight: 400
-  },
-  labelValueCell: {
-    width: '67%'
   },
   labelOuter: {
     position: 'relative',
@@ -336,7 +351,8 @@ const staticStyles = {
     paddingRight: 3,
     overflow: 'hidden',
     whiteSpace: 'normal',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    position: 'relative'
     // overflow: 'hidden',
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis'

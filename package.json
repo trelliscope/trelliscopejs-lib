@@ -56,6 +56,7 @@
     "classnames": "^2.2.5",
     "crossfilter2": "^1.4.0-alpha.06",
     "d3": "^4.2.8",
+    "d3-array": "^1.0.2",
     "d3-axis": "^1.0.3",
     "d3-brush": "^1.0.3",
     "d3-request": "^1.0.2",

@@ -3,6 +3,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Swipeable from 'react-swipeable';
+import { max } from 'd3-array';
 import Panel from './Panel';
 import { setLabels, setLayout } from '../actions';
 import { contentWidthSelector, sidebarActiveSelector,
@@ -136,6 +137,22 @@ const staticStyles = {
 
 // ------ redux container ------
 
+// used to find the width of the tds holding the labels
+const getTextWidth = (labels, size) => {
+  const el = document.createElement('span');
+  el.style.fontWeight = 'normal';
+  el.style.fontSize = `${size}px`;
+  el.style.fontFamily = 'Open Sans';
+  el.style.visibility = 'hidden';
+  const docEl = document.body.appendChild(el);
+  const w = labels.map((lb) => {
+    docEl.innerHTML = lb;
+    return docEl.offsetWidth;
+  });
+  document.body.removeChild(docEl);
+  return max(w);
+};
+
 const stateSelector = createSelector(
   contentWidthSelector, contentHeightSelector,
   currentCogDataSelector, cogInterfaceSelector,
@@ -146,11 +163,19 @@ const stateSelector = createSelector(
   (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar,
     curPage, card, npp, localPanels) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
-    // height of row of cog label depends on number of rows
-    // based on font size decreasing wrt rows as 1->14, 2->12, 3->10, 4+->7
-    const labelHeightArr = [26, 24, 22, 19];
-    const maxDim = Math.max(layout.nrow, layout.ncol - 4);
-    const labelHeight = labelHeightArr[Math.min(maxDim - 1, 3)];
+    // height of row of cog label depends on overall panel height / width
+    // so start with rough estimate of panel height / width
+    let preW = Math.round(cw / layout.ncol, 0);
+    // given this, compute panel height
+    let preH = Math.round(preW * aspect, 0);
+    if ((preH * layout.nrow) > ch) {
+      preH = Math.round(ch / layout.nrow, 0);
+      preW = Math.round(preH / aspect, 0);
+    }
+    let labelHeight = (Math.min(preW, preH)) * 0.08;
+    labelHeight = Math.max(Math.min(labelHeight, 26), 13);
+    const labelPad = (labelHeight / 1.625) - 4;
+    const fontSize = labelHeight - labelPad;
     const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change
@@ -183,6 +208,8 @@ const stateSelector = createSelector(
       });
     }
 
+    const labelWidth = getTextWidth(labels, fontSize) + labelPad;
+
     const hOffset = uiConsts.header.height;
 
     return ({
@@ -200,6 +227,9 @@ const stateSelector = createSelector(
         ww: newW,
         hh: newH,
         labelHeight,
+        labelWidth,
+        labelPad,
+        fontSize,
         nLabels,
         pWidth: newW,
         pHeight: newH + (nLabels * labelHeight),
