@@ -141,7 +141,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
       <img
         src={x}
         alt="panel"
-        style={{ maxWidth: '100%', maxHeight: '100%' }}
+        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
         // style={{ width, height }}
       />
     )));
