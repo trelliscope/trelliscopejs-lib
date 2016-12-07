@@ -16,7 +16,18 @@ class Panel extends React.Component {
   constructor(props) {
     super(props);
 
-    if (props.panelData !== undefined && props.cfg.display_base === '__self__') {
+    this.isImageSrc = props.panelInterface.type === 'image_src';
+    this.isSelfContained = props.panelData !== undefined &&
+      props.cfg.display_base === '__self__';
+
+    if (this.isImageSrc) {
+      this.state = {
+        panelContent: props.panelRenderer.fn(props.panelData.url,
+          props.dims.ww, props.dims.hh, false, props.panelKey),
+        panelData: props.panelData,
+        loaded: true
+      };
+    } else if (this.isSelfContained) {
       this.state = {
         panelContent: props.panelRenderer.fn(props.panelData,
           props.dims.ww, props.dims.hh, false, props.panelKey),
@@ -103,7 +114,7 @@ class Panel extends React.Component {
       this.xhr.abort();
     }
     // remove callback
-    if (this.props.cfg.display_base !== '__self__') {
+    if (! (this.isSelfContained || this.isImageSrc)) {
       window.__panel__[`_${this.props.panelKey}`] = null;
     }
   }

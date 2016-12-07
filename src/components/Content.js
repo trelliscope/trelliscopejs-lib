@@ -16,7 +16,7 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
-  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, localPanels,
+  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, panelData,
   removeLabel, setPageNum }) => {
   let ret = <div />;
 
@@ -87,7 +87,7 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
               labelArr={labels}
               iface={ci}
               panelRenderer={panelRenderer}
-              panelData={localPanels[el.key]}
+              panelData={panelData[el.key]}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
@@ -117,7 +117,7 @@ Content.propTypes = {
   sidebar: React.PropTypes.string,
   curPage: React.PropTypes.number,
   totPages: React.PropTypes.number,
-  localPanels: React.PropTypes.object
+  panelData: React.PropTypes.object
 };
 
 // ------ static styles ------
@@ -136,7 +136,7 @@ const staticStyles = {
 
 // ------ redux container ------
 
-const styleSelector = createSelector(
+const stateSelector = createSelector(
   contentWidthSelector, contentHeightSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
@@ -173,6 +173,16 @@ const styleSelector = createSelector(
       wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
     }
 
+    let panelData = localPanels;
+    // if panel type is image_src, set panelData accordingly
+    if (di.info.panelInterface && di.info.panelInterface.type === 'image_src') {
+      panelData = {};
+      ccd.map((d) => {
+        panelData[d.panelKey] = { url: d[di.info.panelInterface.panelCol] };
+        return d;
+      });
+    }
+
     const hOffset = uiConsts.header.height;
 
     return ({
@@ -202,13 +212,13 @@ const styleSelector = createSelector(
       sidebar,
       curPage,
       totPages: Math.ceil(card / npp),
-      localPanels
+      panelData
     });
   }
 );
 
 const mapStateToProps = state => (
-  styleSelector(state)
+  stateSelector(state)
 );
 
 const mapDispatchToProps = dispatch => ({

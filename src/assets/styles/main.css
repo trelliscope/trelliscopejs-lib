@@ -24,6 +24,13 @@
   background: white;
 }
 
+.trelliscope-app {
+  font-family: "Open Sans",
+  sans-serif;
+  font-weight: 300;
+  line-height: normal;
+}
+
 .trelliscope-app button {
   font-family: "Open Sans",
   sans-serif;
@@ -44,10 +51,6 @@
 
 .trelliscope-app table {
   font-weight: 300;
-}
-
-.trelliscope-app {
-  line-height: normal;
 }
 
 .trelliscope-app button:focus {

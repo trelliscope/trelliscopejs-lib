@@ -136,6 +136,15 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
         style={{ width, height }}
       />
     )));
+  } else if (dObjJson.panelInterface.type === 'image_src') {
+    dispatch(setPanelRenderer(x => (
+      <img
+        src={x}
+        alt="panel"
+        style={{ maxWidth: '100%', maxHeight: '100%' }}
+        // style={{ width, height }}
+      />
+    )));
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     if (cfg.config_base) {
       const prCallback = () => {
@@ -225,6 +234,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
         callbackName: cfgCallback
       });
     } else {
+      // all data for rendering app is self-contained in document
       dispatch(receiveConfig(config.config));
       dispatch(receiveDisplayList(config.displayList));
       const name = config.displayList[0].name;
