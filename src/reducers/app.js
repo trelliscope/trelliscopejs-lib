@@ -1,5 +1,5 @@
 import { SET_APP_ID, SET_DIALOG_OPEN, SET_SINGLE_PAGE_APP,
-  SET_FULLSCREEN } from '../constants';
+  SET_FULLSCREEN, SET_ERROR_MESSAGE } from '../constants';
 
 export const appId = (state = 'app', action) => {
   switch (action.type) {
@@ -32,6 +32,15 @@ export const fullscreen = (state = true, action) => {
   switch (action.type) {
     case SET_FULLSCREEN:
       return action.fullscreen;
+    default:
+  }
+  return state;
+};
+
+export const errorMsg = (state = '', action) => {
+  switch (action.type) {
+    case SET_ERROR_MESSAGE:
+      return action.msg;
     default:
   }
   return state;

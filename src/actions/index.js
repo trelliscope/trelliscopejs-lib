@@ -2,7 +2,7 @@ import React from 'react';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp';
 import { loadAssetsSequential, findWidget } from '../loadAssets';
-import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE,
+import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, SET_ERROR_MESSAGE,
   ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
@@ -101,6 +101,10 @@ export const setPanelRenderer = fn => ({
 
 export const setLocalPanels = dat => ({
   type: SET_LOCAL_PANELS, dat
+});
+
+export const setErrorMessage = msg => ({
+  type: SET_ERROR_MESSAGE, msg
 });
 
 const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch) => {
@@ -219,7 +223,10 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
         if (json.data_type === 'jsonp') {
           getJSONP({
             url: `${json.display_base}/displayList.jsonp`,
-            callbackName: dlCallback
+            callbackName: dlCallback,
+            error: err => dispatch(setErrorMessage(
+              `Couldn't load display list: ${err.url}`
+            ))
           });
         } else {
           getJSON({
@@ -228,10 +235,12 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
           });
         }
       };
-
       getJSONP({
         url: config,
-        callbackName: cfgCallback
+        callbackName: cfgCallback,
+        error: err => dispatch(setErrorMessage(
+          `Couldn't load config: ${err.url}`
+        ))
       });
     } else {
       // all data for rendering app is self-contained in document
@@ -281,7 +290,10 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
       if (cfg.data_type === 'jsonp') {
         getJSONP({
           url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.jsonp`,
-          callbackName: 'cdCallback'
+          callbackName: 'cdCallback',
+          error: err => dispatch(setErrorMessage(
+            `Couldn't load cognostics data: ${err.url}`
+          ))
         });
       } else {
         getJSON({
@@ -295,7 +307,10 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
     if (cfg.data_type === 'jsonp') {
       getJSONP({
         url: `${cfg.display_base}/${group}/${name}/displayObj.jsonp`,
-        callbackName: 'ldCallback'
+        callbackName: 'ldCallback',
+        error: err => dispatch(setErrorMessage(
+          `Couldn't load display object: ${err.url}`
+        ))
       });
     } else {
       getJSON({

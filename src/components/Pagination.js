@@ -87,9 +87,8 @@ class Pagination extends React.Component {
       },
       progress: {
         width: 120,
-        fontSize: 12,
+        fontSize: 14,
         color: '#444',
-
         lineHeight: '48px'
       }
     };
