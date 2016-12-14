@@ -41,7 +41,8 @@
   margin: 0;
 }
 
-.trelliscope-app td, th {
+.trelliscope-app td,
+.trelliscope-app th {
   box-sizing: content-box;
 }
 
@@ -57,7 +58,12 @@
   outline:0;
 }
 
-.trelliscope-app h1,h2,h3,h4,h5,h6 {
+.trelliscope-app h1,
+.trelliscope-app h2,
+.trelliscope-app h3,
+.trelliscope-app h4,
+.trelliscope-app h5,
+.trelliscope-app h6 {
   font-weight: 400;
   color: black;
 }
