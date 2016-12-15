@@ -68,6 +68,16 @@ class Root extends Component {
       bodyEl.id = 'trelliscope-fullscreen-div';
       document.getElementsByTagName('body')[0].appendChild(bodyEl);
 
+      if (noHeight) {
+        const nSiblings = [].slice.call(el.parentNode.childNodes)
+          .map(d => d.nodeType !== 3)
+          .reduce((a, b) => a + b) - 1;
+        if (nSiblings === 0) {
+          el.style.height = `${el.parentNode.clientHeight}px`;
+          el.style.width = `${el.parentNode.clientWidth}px`;
+        }
+      }
+
       // give 'el' a new parent so we know where to move div back to after fullscreen
       const parent = el.parentNode;
       const wrapper = document.createElement('div');
