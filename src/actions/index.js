@@ -169,6 +169,14 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
             if (binding.initialize) {
               initResult = binding.initialize(dv, width, height);
             }
+
+            if (!(x.evals instanceof Array)) {
+              x.evals = [x.evals]; // eslint-disable-line no-param-reassign
+            }
+            for (let i = 0; x.evals && i < x.evals.length; i += 1) {
+              window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
+            }
+
             binding.renderValue(dv, x.x, initResult);
             // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
           } else {
