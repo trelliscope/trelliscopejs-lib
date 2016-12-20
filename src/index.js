@@ -70,7 +70,7 @@ class Root extends Component {
 
       if (noHeight) {
         const nSiblings = [].slice.call(el.parentNode.childNodes)
-          .map(d => d.nodeType !== 3)
+          .map(d => d.nodeType !== 3 && d.nodeType !== 8)
           .reduce((a, b) => a + b) - 1;
         if (nSiblings === 0) {
           el.style.height = `${el.parentNode.clientHeight}px`;
