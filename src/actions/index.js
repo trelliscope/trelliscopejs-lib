@@ -240,15 +240,24 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
           getJSON({
             url: `${json.display_base}/displayList.json`,
             callback: window[dlCallback]
-          });
+          }).on('error', err => dispatch(setErrorMessage(
+            `Couldn't load display list: ${err.target.responseURL}`
+          )));
         }
       };
-      getJSONP({
+      // load the config to start
+      // try json first and if the file isn't there, try jsonp
+      getJSON({
         url: config,
-        callbackName: cfgCallback,
-        error: err => dispatch(setErrorMessage(
-          `Couldn't load config: ${err.url}`
-        ))
+        callback: window[cfgCallback]
+      }).on('error', () => {
+        getJSONP({
+          url: config,
+          callbackName: cfgCallback,
+          error: err => dispatch(setErrorMessage(
+            `Couldn't load config: ${err.url}`
+          ))
+        });
       });
     } else {
       // all data for rendering app is self-contained in document
@@ -307,7 +316,9 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
         getJSON({
           url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.json`,
           callback: window[cdCallback]
-        });
+        }).on('error', err => dispatch(setErrorMessage(
+          `Couldn't load display list: ${err.target.responseURL}`
+        )));
       }
     };
 
@@ -324,6 +335,8 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
       getJSON({
         url: `${cfg.display_base}/${group}/${name}/displayObj.json`,
         callback: window[ldCallback]
-      });
+      }).on('error', err => dispatch(setErrorMessage(
+        `Couldn't load display list: ${err.target.responseURL}`
+      )));
     }
   };
