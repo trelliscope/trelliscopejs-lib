@@ -104,7 +104,7 @@ class Pagination extends React.Component {
 
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
-    const pRange = pFrom === pTo ? pFrom : `${pFrom} \u2013 ${pTo}`;
+    const pRange = pFrom === pTo ? pFrom : (pFrom + '\u2013' + pTo); // eslint-disable-line prefer-template
     const txt = `${pRange} of ${this.props.totPanels}`;
     return (
       <div className={classes.outer}>
