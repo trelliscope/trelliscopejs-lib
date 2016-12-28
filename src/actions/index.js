@@ -150,43 +150,47 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
       />
     )));
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
-    if (cfg.config_base) {
-      const prCallback = () => {
-        const binding = findWidget(dObjJson.panelInterface.deps.name);
+    const prCallback = () => {
+      const binding = findWidget(dObjJson.panelInterface.deps.name);
 
-        dispatch(setPanelRenderer((x, width, height, post, key) => {
-          const el = document.getElementById(`widget_outer_${key}`);
+      dispatch(setPanelRenderer((x, width, height, post, key) => {
+        const el = document.getElementById(`widget_outer_${key}`);
 
-          if (post && el) {
-            // need to create a child div that is not bound to react
-            const dv = document.createElement('div');
-            dv.style.width = `${width}px`;
-            dv.style.height = `${height}px`;
-            dv.setAttribute('id', `widget_${key}`);
-            el.appendChild(dv);
+        if (post && el) {
+          // need to create a child div that is not bound to react
+          const dv = document.createElement('div');
+          dv.style.width = `${width}px`;
+          dv.style.height = `${height}px`;
+          dv.setAttribute('id', `widget_${key}`);
+          el.appendChild(dv);
 
-            let initResult;
-            if (binding.initialize) {
-              initResult = binding.initialize(dv, width, height);
-            }
-
-            if (!(x.evals instanceof Array)) {
-              x.evals = [x.evals]; // eslint-disable-line no-param-reassign
-            }
-            for (let i = 0; x.evals && i < x.evals.length; i += 1) {
-              window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
-            }
-
-            binding.renderValue(dv, x.x, initResult);
-            // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
-          } else {
-            return <div id={`widget_outer_${key}`} />;
+          let initResult;
+          if (binding.initialize) {
+            initResult = binding.initialize(dv, width, height);
           }
-          return null;
-        }));
-      };
 
+          if (!(x.evals instanceof Array)) {
+            x.evals = [x.evals]; // eslint-disable-line no-param-reassign
+          }
+          for (let i = 0; x.evals && i < x.evals.length; i += 1) {
+            window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
+          }
+
+          binding.renderValue(dv, x.x, initResult);
+          // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
+        } else {
+          return <div id={`widget_outer_${key}`} />;
+        }
+        return null;
+      }));
+    };
+
+    if (cfg.config_base) {
+      // this will set the panelRenderer but only after assets have been loaded
       loadAssetsSequential(dObjJson.panelInterface.deps, cfg.config_base, prCallback);
+    } else if (cfg.display_base === '__self__') {
+      // if the widget is self-contained, we don't need to load assets
+      prCallback();
     }
   }
 };
