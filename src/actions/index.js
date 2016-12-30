@@ -251,10 +251,11 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
       };
       // load the config to start
       // try json first and if the file isn't there, try jsonp
-      getJSON({
-        url: config,
-        callback: window[cfgCallback]
-      }).on('error', () => {
+
+      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i;
+      const configExt = config.match(extRegex)[0];
+
+      if (configExt === '.jsonp') {
         getJSONP({
           url: config,
           callbackName: cfgCallback,
@@ -262,7 +263,16 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
             `Couldn't load config: ${err.url}`
           ))
         });
-      });
+      } else if (configExt === '.json') {
+        getJSON({
+          url: config,
+          callback: window[cfgCallback]
+        });
+      } else {
+        dispatch(setErrorMessage(
+          `Config specified as ${config} must have extension '.json' or '.jsonp'`
+        ));
+      }
     } else {
       // all data for rendering app is self-contained in document
       dispatch(receiveConfig(config.config));
