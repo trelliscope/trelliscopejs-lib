@@ -57,7 +57,7 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
               value="row"
               label={
                 <span className={classes.inputLabelSpan}>
-                  By row&nbsp;&nbsp;
+                  By row
                   <i className={`icon-byrow ${classes.inputIcon}`} />
                 </span>}
               className={classes.inputRadio}
@@ -67,7 +67,7 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
               value="column"
               label={
                 <span className={classes.inputLabelSpan}>
-                  By column&nbsp;&nbsp;
+                  By column
                   <i className={`icon-bycol ${classes.inputIcon}`} />
                 </span>
               }
@@ -119,6 +119,7 @@ const staticStyles = {
   },
   inputIcon: {
     fontSize: 23,
+    paddingLeft: 6,
     verticalAlign: 'text-bottom'
   }
 };
