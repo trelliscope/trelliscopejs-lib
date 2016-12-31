@@ -111,6 +111,7 @@ class FilterCat extends React.Component {
             condDist={this.props.condDist}
             filterState={this.props.filterState}
             handleChange={this.props.handleChange}
+            sortOrder={this.sortOrder}
           />
         </div>
         <div className={classes.inputContainer}>

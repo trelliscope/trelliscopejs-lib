@@ -27,10 +27,7 @@ class CatBar extends React.Component {
           [classes.wrapper]: true,
           [classes.wrapperHover]: this.state.hover
         })}
-        style={{
-          width: this.props.totWidth,
-          height: this.props.height - 1
-        }}
+        style={this.props.divStyle}
         onMouseOver={this.mouseOver}
         onMouseOut={this.mouseOut}
         onTouchTap={this.props.handleClick}
@@ -82,8 +79,8 @@ CatBar.propTypes = {
   active: React.PropTypes.bool,
   allActive: React.PropTypes.bool,
   width: React.PropTypes.number,
-  totWidth: React.PropTypes.number,
   height: React.PropTypes.number,
+  divStyle: React.PropTypes.object,
   d: React.PropTypes.object,
   handleClick: React.PropTypes.func
 };

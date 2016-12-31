@@ -20,7 +20,7 @@ class FilterCatPlot extends React.Component {
       newState = {
         name: this.props.filterState.name,
         varType: this.props.filterState.varType,
-        orderValue: this.sortOrder
+        orderValue: this.props.sortOrder
       };
     } else {
       newState = {
@@ -28,12 +28,17 @@ class FilterCatPlot extends React.Component {
         type: 'select',
         varType: this.props.filterState.varType,
         value: selectArr,
-        orderValue: this.sortOrder
+        orderValue: this.props.sortOrder
       };
     }
-
     this.props.handleChange(newState);
   }
+  // columnIndex, // Horizontal (column) index of cell
+  // isScrolling, // The Grid is currently being scrolled
+  // isVisible,   // This cell is visible within the grid (eg it is not an overscanned cell)
+  // key,         // Unique key within array of cells
+  // rowIndex,    // Vertical (row) index of cell
+  // style        // Style object to be applied to cell (to position it)
   barCellRenderer = (x) => {
     let barSize = 0;
     let barCt = 0;
@@ -41,11 +46,24 @@ class FilterCatPlot extends React.Component {
     let barMax = 0;
     let active = true;
 
-    let ridx = this.props.condDist.reverseRows ?
-      x.rowIndex : this.props.condDist.dist.length - (x.rowIndex + 1);
+    const totSel = this.props.condDist.totSelected;
+
+    // selected values always come first
+    // so if rowIndex is less than total selected, grab those from condDist
+    // so they show up first
+    // otherwise, grab the appropriate value from condDist
+    // we also have to take into account whether the rows should be reversed or not
+    let ridx;
+    if (x.rowIndex < totSel) {
+      ridx = this.props.condDist.reverseRows ?
+        x.rowIndex : totSel - (x.rowIndex + 1);
+    } else {
+      ridx = this.props.condDist.reverseRows ?
+        x.rowIndex : this.props.condDist.dist.length - ((x.rowIndex - totSel) + 1);
+    }
     ridx = this.props.condDist.idx[ridx];
 
-    active = x.rowIndex < this.props.condDist.totSelected;
+    active = x.rowIndex < totSel;
     barSize = this.props.condDist.dist[ridx].value;
     barCt = barSize;
     barName = this.props.condDist.dist[ridx].key;
@@ -56,12 +74,13 @@ class FilterCatPlot extends React.Component {
     // in which case we want them to show up in color rather than gray
     return (
       <CatBar
-        key={`${x.rowIndex}_${barCt}`}
+        key={`${x.rowIndex}_${barCt}_${this.props.sortOrder}`}
+        // key={x.key}
+        divStyle={x.style}
         active={active}
         allActive={this.props.filterState.value === undefined}
         height={this.props.cellHeight}
         width={((barSize / barMax) * (this.props.width - 1)) + 1}
-        totWidth={this.props.width}
         handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: this.props.dist.dist[barName], id: barName }}
       />
@@ -96,6 +115,7 @@ FilterCatPlot.propTypes = {
   dist: React.PropTypes.object,
   condDist: React.PropTypes.object,
   filterState: React.PropTypes.object,
+  sortOrder: React.PropTypes.string,
   handleChange: React.PropTypes.func
 };
 
