@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Delay from 'react-delay';
 import { fade } from 'material-ui/utils/colorManipulator';
 import { json as d3json } from 'd3-request';
-import { default as getJSONP } from 'browser-jsonp';
+import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -190,9 +190,9 @@ class Panel extends React.Component {
         <div className={classes.panel} style={styles.panel}>
           {this.state.loaded ?
             this.state.panelContent :
-              <Delay wait={500}>
-                <div>&apos;loading...&apos;</div>
-              </Delay>}
+            <Delay wait={500}>
+              <div>&apos;loading...&apos;</div>
+            </Delay>}
         </div>
         <div>
           <table className={classes.labelTable} style={styles.labelTable}>

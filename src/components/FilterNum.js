@@ -123,7 +123,7 @@ class FilterNum extends React.Component {
     // calculate step value for numeric input
     const breaks = this.props.dist.dist.raw.breaks;
     const hspan = (breaks[1] - breaks[0]) * breaks.length;
-    const step = Math.pow(10, Math.round(Math.log10(hspan / 100) - 0.4));
+    const step = 10 ** Math.round(Math.log10(hspan / 100) - 0.4);
 
     return (
       <div className={classes.container}>

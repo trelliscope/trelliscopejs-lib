@@ -1,6 +1,6 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
-import { default as getJSONP } from 'browser-jsonp';
+import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
 import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, SET_ERROR_MESSAGE,
   ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
@@ -207,7 +207,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
       const dlCallback = `__loadDisplayList__${id}`;
       const cfgCallback = `__loadTrscopeConfig__${id}`;
 
-      const configBase = config.replace(/[^\/]*$/, '');
+      const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
       const getConfigBase = (txt) => {
         let res = txt;
@@ -252,7 +252,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
       // load the config to start
       // try json first and if the file isn't there, try jsonp
 
-      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i;
+      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
       const configExt = config.match(extRegex)[0];
 
       if (configExt === '.jsonp') {
