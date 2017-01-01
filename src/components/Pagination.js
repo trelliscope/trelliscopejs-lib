@@ -104,8 +104,15 @@ class Pagination extends React.Component {
 
     const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
     const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
-    const pRange = pFrom === pTo ? pFrom : (pFrom + '\u2013' + pTo); // eslint-disable-line prefer-template
-    const txt = `${pRange} of ${this.props.totPanels}`;
+    let pRange = <span>{pFrom}</span>;
+    if (pFrom !== pTo) {
+      pRange = (
+        <span>
+          {pFrom} <span className={classes.pageDash}>-</span> {pTo}
+        </span>
+      );
+    }
+    const txt = <span>{pRange}<span>{` of ${this.props.totPanels}`}</span></span>;
     return (
       <div className={classes.outer}>
         <div className={classes.label}>
@@ -207,6 +214,10 @@ const staticStyles = {
     lineHeight: '10px',
     textAlign: 'center',
     marginTop: -5
+  },
+  pageDash: {
+    display: 'inline-block',
+    transform: 'scale(1.5,1)' // to deal with some browsers not being able to handle endash
   },
   label: {
     verticalAlign: 'middle',

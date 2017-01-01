@@ -160,7 +160,9 @@ class FilterNum extends React.Component {
               'from'
             )}
           />
-          <div className={classes.rangeInputText}>&ndash;</div>
+          <div className={`${classes.rangeInputText} ${classes.rangeInputTextDash}`}>
+            -
+          </div>
           <TextField
             ref={(d) => { this._toInput = d; }}
             // hintText="to"
@@ -221,6 +223,10 @@ const staticStyles = {
     fontSize: 13,
     paddingRight: 10,
     display: 'inline-block'
+  },
+  rangeInputTextDash: {
+    paddingLeft: 4,
+    transform: 'scale(2,1)' // to deal with some browsers not being able to handle endash
   }
 };
 

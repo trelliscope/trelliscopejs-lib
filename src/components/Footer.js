@@ -168,7 +168,7 @@ const filterInfoSelector = createSelector(
           } else if (curState.value.from !== undefined && curState.value.to === undefined) {
             text = `> ${curState.value.from}`;
           } else if (curState.value.from !== undefined && curState.value.to !== undefined) {
-            text = `${curState.value.from} \u2013 ${curState.value.to}`;
+            text = `${curState.value.from} -- ${curState.value.to}`;
           }
         } else if (curState.varType === 'factor') {
           const charLimit = 15;

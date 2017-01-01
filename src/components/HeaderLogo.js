@@ -88,21 +88,21 @@ class HeaderLogo extends React.Component {
                 style={{ maxHeight: Math.max(50, this.props.windowHeight - 310) }}
               >
                 <p className={classes.dialogP}>
-                  <strong>What:</strong>&nbsp;
+                  <strong>What: </strong>
                   Trelliscope is a tool for interactively viewing a large
                   collection of visualizations.  Each visualization in a
                   collection is called a <em>panel</em> and each panel typically
                   represents one slice of a large dataset.
                 </p>
                 <p className={classes.dialogP}>
-                  <strong>Why:</strong>&nbsp;
+                  <strong>Why: </strong>
                   Viewing multiple slices of a dataset simultaneously is a
                   simple  but very powerful visual technique and provides a way
                   to visualize data in greater detail, particularly when the
                   dataset is large.
                 </p>
                 <p className={classes.dialogP}>
-                  <strong>Interactivity:</strong>&nbsp;
+                  <strong>Interactivity: </strong>
                   When there are many panels, it is useful to be able to
                   navigate to which panels you want to view and make
                   panel-to-panel comparisons by
@@ -119,7 +119,7 @@ class HeaderLogo extends React.Component {
                 </p>
                 <p className={classes.dialogP}>
                   <i className={`icon-th ${classes.dialogHi}`} />&nbsp;
-                  <strong>Grid:</strong>&nbsp;
+                  <strong>Grid: </strong>
                   In the &quot;Grid&quot; sidebar, you can specify the layout of
                   the grid of panels you wish to display, specifying the number
                   of rows and columns of the grid, as well as whether to arrange
@@ -127,7 +127,7 @@ class HeaderLogo extends React.Component {
                 </p>
                 <p className={classes.dialogP}>
                   <i className={`icon-list-ul ${classes.dialogHi}`} />&nbsp;
-                  <strong>Labels:</strong>&nbsp;
+                  <strong>Labels: </strong>
                   In the &quot;Labels&quot; sidebar, you can specify the panel
                   metrics that you wish to see displayed under each panel
                   visualization in the grid by clicking the checkboxes.  This
@@ -140,14 +140,14 @@ class HeaderLogo extends React.Component {
                 </p>
                 <p className={classes.dialogP}>
                   <i className={`icon-filter ${classes.dialogHi}`} />&nbsp;
-                  <strong>Filter:</strong>&nbsp;
+                  <strong>Filter: </strong>
                   The &quot;Filter&quot; sidebar provides various ways
                   to filter the panels being displayed based on the panel
                   metrics. A list of variables is available as
                   buttons.  Clicking a button will produce a visual distribution
                   of the variable.
                   <p className={classes.dialogP2}>
-                    <strong>Categorical filter:</strong>&nbsp;
+                    <strong>Categorical filter: </strong>
                     For categorical variables, a bar chart is provided,
                     showing the the possible values of the variable
                     with the size of the bars relating to the count of panels
@@ -166,7 +166,7 @@ class HeaderLogo extends React.Component {
                     a <a href="http://regexr.com/" target="_blank" rel="noopener noreferrer">regular expression</a>.
                   </p>
                   <p className={classes.dialogP2}>
-                    <strong>Numeric filter:</strong>&nbsp;
+                    <strong>Numeric filter: </strong>
                     For numeric variables, a histogram is provided, which shows
                     the distribution of the variable based on all other active
                     filters. You can click
@@ -193,7 +193,7 @@ class HeaderLogo extends React.Component {
                 </p>
                 <p className={classes.dialogP}>
                   <i className={`icon-sort-amount-asc ${classes.dialogHi}`} />&nbsp;
-                  <strong>Sort:</strong>&nbsp;
+                  <strong>Sort: </strong>
                   In the &quot;Sort&quot; sidebar, a list of variables which are
                   currently being sorted by (if any) will be listed at the top,
                   followed by a list of &quot;More variables&quot; that can
