@@ -154,7 +154,7 @@ const staticStyles = {
     textOverflow: 'ellipsis'
   },
   paginationContainer: {
-    flex: '0 0'
+    // flex: '0 0'
   },
   displayName: {
     verticalAlign: 'top',
