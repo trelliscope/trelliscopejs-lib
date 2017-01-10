@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
-import { setSort, setLabels } from '../actions';
+import { setSort, setLabels, setLayout } from '../actions';
 import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
@@ -225,8 +225,9 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  handleChange: (layout) => {
-    dispatch(setSort(layout));
+  handleChange: (sortSpec) => {
+    dispatch(setSort(sortSpec));
+    dispatch(setLayout({ pageNum: 1 }));
   },
   addLabel: (name, labels) => {
     // if a sort variable is being added, add a panel label for the variable

@@ -118,6 +118,7 @@ const mapDispatchToProps = dispatch => ({
   handleStateClose: (x) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));
+      dispatch(setLayout({ pageNum: 1 }));
     } else if (x.type === 'filter') {
       dispatch(setFilterView(x.label, 'remove'));
       dispatch(setFilter(x.label));
