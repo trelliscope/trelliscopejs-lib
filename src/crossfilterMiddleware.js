@@ -4,7 +4,12 @@
 // middleware to mutate the crossfilter dimensions whenever
 // SET_SORT or SET_FILTER operations are performed
 
-const getNumVal = (d, name) => (isNaN(d[name]) ? null : d[name]);
+const MAX_VALUE = 9007199254740992; // we want NAs to always get pushed back in sort
+const getNumVal = (d, name) => (isNaN(d[name]) ? -MAX_VALUE : d[name]);
+const getNumValSign = (d, name, dir) => {
+  const sign = dir === 'asc' ? 1 : 0;
+  return (isNaN(d[name]) ? sign * MAX_VALUE : d[name]);
+};
 const getCatVal = (d, name) => (d[name] ? d[name] : 'NA');
 
 const sortFn = (property) => {
@@ -142,7 +147,8 @@ const crossfilterMiddleware = store => next => (action) => {
         if (ci.type === 'factor') {
           dimensions.__sort = cf.dimension(d => getCatVal(d, newState[0].name));
         } else if (ci.type === 'numeric') {
-          dimensions.__sort = cf.dimension(d => getNumVal(d, newState[0].name));
+          dimensions.__sort = cf.dimension(d => getNumValSign(d,
+            newState[0].name, newState[0].dir));
         }
       } else {
         const dat = cf.all();
@@ -156,7 +162,8 @@ const crossfilterMiddleware = store => next => (action) => {
               // otherwise NA panels can show up in between other panels
               elem[newState[j].name] = getCatVal(dat[i], newState[j].name);
             } else if (ci.type === 'numeric') {
-              elem[newState[j].name] = getNumVal(dat[i], newState[j].name);
+              elem[newState[j].name] = getNumValSign(dat[i],
+                newState[j].name, newState[j].dir);
             }
           }
           sortDat.push(elem);
