@@ -308,6 +308,7 @@ const staticStyles = {
     boxSizing: 'border-box',
     // background: '#f6f6f6',
     textAlign: 'center',
+    overflow: 'hidden',
     color: '#bbb'
   },
   panelContent: {
