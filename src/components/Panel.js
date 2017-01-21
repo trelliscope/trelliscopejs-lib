@@ -273,19 +273,19 @@ class Panel extends React.Component {
 }
 
 Panel.propTypes = {
-  labels: React.PropTypes.array,
-  labelArr: React.PropTypes.array,
-  iface: React.PropTypes.object,
-  cfg: React.PropTypes.object,
-  panelKey: React.PropTypes.string,
-  dims: React.PropTypes.object,
-  rowIndex: React.PropTypes.number,
-  iColIndex: React.PropTypes.number,
-  sheet: React.PropTypes.object,
-  panelRenderer: React.PropTypes.object,
+  labels: React.PropTypes.array.isRequired,
+  labelArr: React.PropTypes.array.isRequired,
+  iface: React.PropTypes.object.isRequired,
+  cfg: React.PropTypes.object.isRequired,
+  panelKey: React.PropTypes.string.isRequired,
+  dims: React.PropTypes.object.isRequired,
+  rowIndex: React.PropTypes.number.isRequired,
+  iColIndex: React.PropTypes.number.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  panelRenderer: React.PropTypes.object.isRequired,
   panelInterface: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  panelData: React.PropTypes.object,
-  removeLabel: React.PropTypes.func
+  panelData: React.PropTypes.object.isRequired,
+  removeLabel: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

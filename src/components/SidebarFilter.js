@@ -189,20 +189,20 @@ const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
 };
 
 SidebarFilter.propTypes = {
-  styles: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  catHeight: React.PropTypes.number,
-  filter: React.PropTypes.object,
-  filterView: React.PropTypes.object,
-  filterI: React.PropTypes.array,
-  cogInfo: React.PropTypes.object,
-  displayInfo: React.PropTypes.object,
-  filtDist: React.PropTypes.object,
-  colSplit: React.PropTypes.object,
-  handleViewChange: React.PropTypes.func,
-  handleFilterChange: React.PropTypes.func,
-  handleFilterSortChange: React.PropTypes.func,
-  labels: React.PropTypes.array
+  styles: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  catHeight: React.PropTypes.number.isRequired,
+  filter: React.PropTypes.object.isRequired,
+  filterView: React.PropTypes.object.isRequired,
+  filterI: React.PropTypes.array.isRequired,
+  cogInfo: React.PropTypes.object.isRequired,
+  displayInfo: React.PropTypes.object.isRequired,
+  filtDist: React.PropTypes.object.isRequired,
+  colSplit: React.PropTypes.object.isRequired,
+  handleViewChange: React.PropTypes.func.isRequired,
+  handleFilterChange: React.PropTypes.func.isRequired,
+  handleFilterSortChange: React.PropTypes.func.isRequired,
+  labels: React.PropTypes.array.isRequired
 };
 
 // ------ static styles ------

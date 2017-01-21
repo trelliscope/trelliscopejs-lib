@@ -16,9 +16,9 @@ const Body = ({ sheet: { classes }, width, height }) => (
 );
 
 Body.propTypes = {
-  sheet: React.PropTypes.object,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number
+  sheet: React.PropTypes.object.isRequired,
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired
 };
 
 // ------ static styles ------

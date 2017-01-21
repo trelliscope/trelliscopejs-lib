@@ -83,9 +83,9 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
 };
 
 SidebarLayout.propTypes = {
-  sheet: React.PropTypes.object,
-  layout: React.PropTypes.object,
-  handleChange: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired,
+  layout: React.PropTypes.object.isRequired,
+  handleChange: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

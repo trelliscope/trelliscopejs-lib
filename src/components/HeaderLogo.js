@@ -328,10 +328,10 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  sheet: React.PropTypes.object,
-  windowHeight: React.PropTypes.number,
-  fullscreen: React.PropTypes.bool,
-  setDialogOpen: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired.isRequired,
+  windowHeight: React.PropTypes.number.isRequired.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired.isRequired,
+  setDialogOpen: React.PropTypes.func.isRequired.isRequired
 };
 
 // ------ static styles ------

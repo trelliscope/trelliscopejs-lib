@@ -129,16 +129,16 @@ class DisplaySelect extends React.Component {
 }
 
 DisplaySelect.propTypes = {
-  sheet: React.PropTypes.object,
-  handleClick: React.PropTypes.func,
-  setDialogOpen: React.PropTypes.func,
-  cfg: React.PropTypes.object,
-  singlePageApp: React.PropTypes.bool,
-  fullscreen: React.PropTypes.bool,
-  appId: React.PropTypes.string,
-  selectedDisplay: React.PropTypes.object,
-  displayList: React.PropTypes.object,
-  displayGroups: React.PropTypes.object
+  sheet: React.PropTypes.object.isRequired,
+  handleClick: React.PropTypes.func.isRequired,
+  setDialogOpen: React.PropTypes.func.isRequired,
+  cfg: React.PropTypes.object.isRequired,
+  singlePageApp: React.PropTypes.bool.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  appId: React.PropTypes.string.isRequired,
+  selectedDisplay: React.PropTypes.object.isRequired,
+  displayList: React.PropTypes.object.isRequired,
+  displayGroups: React.PropTypes.object.isRequired
 };
 
 // ------ static styles ------

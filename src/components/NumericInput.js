@@ -111,14 +111,14 @@ class NumericInput extends React.Component {
 }
 
 NumericInput.propTypes = {
-  sheet: React.PropTypes.object,
-  arrows: React.PropTypes.bool,
-  value: React.PropTypes.number,
-  min: React.PropTypes.number,
-  max: React.PropTypes.number,
-  step: React.PropTypes.number,
-  size: React.PropTypes.number,
-  onChange: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired,
+  arrows: React.PropTypes.bool.isRequired,
+  value: React.PropTypes.number.isRequired,
+  min: React.PropTypes.number.isRequired,
+  max: React.PropTypes.number.isRequired,
+  step: React.PropTypes.number.isRequired,
+  size: React.PropTypes.number.isRequired,
+  onChange: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

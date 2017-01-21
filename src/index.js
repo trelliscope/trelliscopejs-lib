@@ -76,10 +76,9 @@ class Root extends Component {
 }
 
 Root.propTypes = {
-  id: React.PropTypes.string,
-  config: React.PropTypes.string,
-  logger: React.PropTypes.bool,
-  store: React.PropTypes.object
+  id: React.PropTypes.string.isRequired,
+  config: React.PropTypes.string.isRequired,
+  store: React.PropTypes.object.isRequired
 };
 
 const trelliscopeApp = (id, config, logger) => {
@@ -192,7 +191,7 @@ const trelliscopeApp = (id, config, logger) => {
   store.dispatch(setAppDims(appDims));
 
   render(
-    <Root id={id} config={config} store={store} logger={logger2} />,
+    <Root id={id} config={config} store={store} />,
     document.getElementById(id)
   );
 

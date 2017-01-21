@@ -71,15 +71,15 @@ class FullscreenButton extends React.Component {
 }
 
 FullscreenButton.propTypes = {
-  sheet: React.PropTypes.object,
-  fullscreen: React.PropTypes.bool,
-  dialog: React.PropTypes.bool,
-  sidebar: React.PropTypes.string,
-  appId: React.PropTypes.string,
-  singlePageApp: React.PropTypes.bool,
-  toggleFullscreen: React.PropTypes.func,
-  ww: React.PropTypes.number,
-  hh: React.PropTypes.number
+  sheet: React.PropTypes.object.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  dialog: React.PropTypes.bool.isRequired,
+  sidebar: React.PropTypes.string.isRequired,
+  appId: React.PropTypes.string.isRequired,
+  singlePageApp: React.PropTypes.bool.isRequired,
+  toggleFullscreen: React.PropTypes.func.isRequired,
+  ww: React.PropTypes.number.isRequired,
+  hh: React.PropTypes.number.isRequired
 };
 
 // ------ static styles ------

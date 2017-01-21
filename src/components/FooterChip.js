@@ -42,13 +42,13 @@ const FooterChip = ({ sheet: { classes }, label, icon, text, index,
 };
 
 FooterChip.propTypes = {
-  label: React.PropTypes.string,
-  icon: React.PropTypes.string,
-  text: React.PropTypes.string,
-  index: React.PropTypes.number,
-  sheet: React.PropTypes.object,
-  type: React.PropTypes.string,
-  handleStateClose: React.PropTypes.func
+  label: React.PropTypes.string.isRequired,
+  icon: React.PropTypes.string.isRequired,
+  text: React.PropTypes.string.isRequired,
+  index: React.PropTypes.number.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  type: React.PropTypes.string.isRequired,
+  handleStateClose: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

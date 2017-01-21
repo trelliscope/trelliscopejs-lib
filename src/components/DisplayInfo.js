@@ -152,14 +152,14 @@ class DisplayInfo extends React.Component {
 }
 
 DisplayInfo.propTypes = {
-  styles: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  singleDisplay: React.PropTypes.bool,
-  // selectedDisplay: React.PropTypes.object,
-  displayInfo: React.PropTypes.object,
-  setDialogOpen: React.PropTypes.func,
-  fullscreen: React.PropTypes.bool,
-  active: React.PropTypes.bool
+  styles: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  singleDisplay: React.PropTypes.bool.isRequired,
+  // selectedDisplay: React.PropTypes.object.isRequired,
+  displayInfo: React.PropTypes.object.isRequired,
+  setDialogOpen: React.PropTypes.func.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  active: React.PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

@@ -75,10 +75,10 @@ class RelatedDisplays extends React.Component {
 }
 
 RelatedDisplays.propTypes = {
-  styles: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  relatedDisplays: React.PropTypes.array,
-  active: React.PropTypes.bool
+  styles: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  relatedDisplays: React.PropTypes.array.isRequired,
+  active: React.PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

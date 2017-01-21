@@ -131,14 +131,14 @@ class FilterCat extends React.Component {
 }
 
 FilterCat.propTypes = {
-  sheet: React.PropTypes.object,
-  filterState: React.PropTypes.object,
-  dist: React.PropTypes.object,
-  condDist: React.PropTypes.object,
-  levels: React.PropTypes.array,
-  height: React.PropTypes.number,
-  handleChange: React.PropTypes.func,
-  handleSortChange: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired,
+  filterState: React.PropTypes.object.isRequired,
+  dist: React.PropTypes.object.isRequired,
+  condDist: React.PropTypes.object.isRequired,
+  levels: React.PropTypes.array.isRequired,
+  height: React.PropTypes.number.isRequired,
+  handleChange: React.PropTypes.func.isRequired,
+  handleSortChange: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

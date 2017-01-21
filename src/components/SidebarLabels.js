@@ -55,11 +55,11 @@ const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChan
 };
 
 SidebarLabels.propTypes = {
-  height: React.PropTypes.number,
-  sheet: React.PropTypes.object,
-  labels: React.PropTypes.array,
-  cogInfo: React.PropTypes.object,
-  handleChange: React.PropTypes.func
+  height: React.PropTypes.number.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  labels: React.PropTypes.array.isRequired,
+  cogInfo: React.PropTypes.object.isRequired,
+  handleChange: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

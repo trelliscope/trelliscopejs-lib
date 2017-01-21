@@ -187,12 +187,12 @@ class FilterNum extends React.Component {
 }
 
 FilterNum.propTypes = {
-  name: React.PropTypes.string,
-  filterState: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  dist: React.PropTypes.object,
-  condDist: React.PropTypes.object,
-  handleChange: React.PropTypes.func
+  name: React.PropTypes.string.isRequired,
+  filterState: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  dist: React.PropTypes.object.isRequired,
+  condDist: React.PropTypes.object.isRequired,
+  handleChange: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

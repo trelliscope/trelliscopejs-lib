@@ -109,14 +109,14 @@ class FilterCatPlot extends React.Component {
 }
 
 FilterCatPlot.propTypes = {
-  height: React.PropTypes.number,
-  width: React.PropTypes.number,
-  cellHeight: React.PropTypes.number,
-  dist: React.PropTypes.object,
-  condDist: React.PropTypes.object,
-  filterState: React.PropTypes.object,
-  sortOrder: React.PropTypes.string,
-  handleChange: React.PropTypes.func
+  height: React.PropTypes.number.isRequired,
+  width: React.PropTypes.number.isRequired,
+  cellHeight: React.PropTypes.number.isRequired,
+  dist: React.PropTypes.object.isRequired,
+  condDist: React.PropTypes.object.isRequired,
+  filterState: React.PropTypes.object.isRequired,
+  sortOrder: React.PropTypes.string.isRequired,
+  handleChange: React.PropTypes.func.isRequired
 };
 
 export default FilterCatPlot;

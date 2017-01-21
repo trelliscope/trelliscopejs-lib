@@ -24,8 +24,8 @@ const ErrorSnack = ({ errorMsg, handleClose }) => (
 );
 
 ErrorSnack.propTypes = {
-  errorMsg: React.PropTypes.string,
-  handleClose: React.PropTypes.func
+  errorMsg: React.PropTypes.string.isRequired,
+  handleClose: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

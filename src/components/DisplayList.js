@@ -97,11 +97,11 @@ const staticStyles = {
 };
 
 DisplayList.propTypes = {
-  sheet: React.PropTypes.object,
-  di: React.PropTypes.array,
-  displayGroups: React.PropTypes.object,
-  handleClick: React.PropTypes.func,
-  cfg: React.PropTypes.object
+  sheet: React.PropTypes.object.isRequired,
+  di: React.PropTypes.array.isRequired,
+  displayGroups: React.PropTypes.object.isRequired,
+  handleClick: React.PropTypes.func.isRequired,
+  cfg: React.PropTypes.object.isRequired
 };
 
 export default injectSheet(staticStyles)(DisplayList);

@@ -89,12 +89,12 @@ class SideButtons extends React.Component {
 }
 
 SideButtons.propTypes = {
-  styles: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  active: React.PropTypes.string,
-  dialogOpen: React.PropTypes.bool,
-  fullscreen: React.PropTypes.bool,
-  setActive: React.PropTypes.func
+  styles: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  active: React.PropTypes.string.isRequired,
+  dialogOpen: React.PropTypes.bool.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  setActive: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

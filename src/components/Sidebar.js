@@ -56,10 +56,10 @@ const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
 };
 
 Sidebar.propTypes = {
-  styles: React.PropTypes.object,
-  sheet: React.PropTypes.object,
-  active: React.PropTypes.string,
-  displayLoaded: React.PropTypes.bool
+  styles: React.PropTypes.object.isRequired,
+  sheet: React.PropTypes.object.isRequired,
+  active: React.PropTypes.string.isRequired,
+  displayLoaded: React.PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

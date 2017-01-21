@@ -97,12 +97,12 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
 };
 
 SidebarSort.propTypes = {
-  styles: React.PropTypes.object,
-  sort: React.PropTypes.array,
-  cogDesc: React.PropTypes.object,
-  labels: React.PropTypes.array,
-  handleChange: React.PropTypes.func,
-  addLabel: React.PropTypes.func
+  styles: React.PropTypes.object.isRequired,
+  sort: React.PropTypes.array.isRequired,
+  cogDesc: React.PropTypes.object.isRequired,
+  labels: React.PropTypes.array.isRequired,
+  handleChange: React.PropTypes.func.isRequired,
+  addLabel: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

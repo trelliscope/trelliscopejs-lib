@@ -22,12 +22,12 @@ const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick 
 );
 
 SideButton.propTypes = {
-  sheet: React.PropTypes.object,
-  isActive: React.PropTypes.bool,
-  icon: React.PropTypes.string,
-  title: React.PropTypes.string,
-  label: React.PropTypes.string,
-  onClick: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired,
+  isActive: React.PropTypes.bool.isRequired,
+  icon: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

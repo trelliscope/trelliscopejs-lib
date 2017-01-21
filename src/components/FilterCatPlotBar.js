@@ -75,14 +75,14 @@ class CatBar extends React.Component {
 }
 
 CatBar.propTypes = {
-  sheet: React.PropTypes.object,
-  active: React.PropTypes.bool,
-  allActive: React.PropTypes.bool,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  divStyle: React.PropTypes.object,
-  d: React.PropTypes.object,
-  handleClick: React.PropTypes.func
+  sheet: React.PropTypes.object.isRequired,
+  active: React.PropTypes.bool.isRequired,
+  allActive: React.PropTypes.bool.isRequired,
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired,
+  divStyle: React.PropTypes.object.isRequired,
+  d: React.PropTypes.object.isRequired,
+  handleClick: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------

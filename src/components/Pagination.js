@@ -180,15 +180,15 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  sheet: React.PropTypes.object,
-  n: React.PropTypes.number,
-  npp: React.PropTypes.number,
-  totPages: React.PropTypes.number,
-  totPanels: React.PropTypes.number,
-  dialogOpen: React.PropTypes.bool,
-  fullscreen: React.PropTypes.bool,
-  handleChange: React.PropTypes.func,
-  cogData: React.PropTypes.object
+  sheet: React.PropTypes.object.isRequired,
+  n: React.PropTypes.number.isRequired,
+  npp: React.PropTypes.number.isRequired,
+  totPages: React.PropTypes.number.isRequired,
+  totPanels: React.PropTypes.number.isRequired,
+  dialogOpen: React.PropTypes.bool.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  handleChange: React.PropTypes.func.isRequired,
+  cogData: React.PropTypes.object.isRequired
 };
 
 // ------ static styles ------
