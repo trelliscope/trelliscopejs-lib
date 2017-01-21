@@ -2,8 +2,8 @@ import React from 'react';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
-import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, SET_ERROR_MESSAGE,
-  ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
+import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
+  SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
@@ -22,6 +22,10 @@ export const setFullscreen = fullscreen => ({
 
 export const windowResize = dims => (
   { type: WINDOW_RESIZE, dims }
+);
+
+export const setAppDims = dims => (
+  { type: UPDATE_DIMS, dims }
 );
 
 export const requestConfig = () => ({

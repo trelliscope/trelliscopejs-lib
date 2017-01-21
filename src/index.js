@@ -16,7 +16,9 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { fetchDisplayList, windowResize } from './actions';
+import { fetchDisplayList, windowResize, setAppDims,
+  setLayout } from './actions';
+import { currentCogDataSelector } from './selectors/cogData';
 
 import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
@@ -28,103 +30,15 @@ class Root extends Component {
   constructor(props) {
     super(props);
 
-    const el = document.getElementById(this.props.id);
-
-    addClass(el, 'trelliscope-app');
-    addClass(el, 'trelliscope-app-container');
-    if (el.style.position !== 'relative') {
-      el.style.position = 'relative';
-    }
-    if (el.style.overflow !== 'hidden') {
-      el.style.overflow = 'hidden';
-    }
-    el.style['font-family'] = '"Open Sans", sans-serif';
-    el.style['font-weight'] = 300;
-    el.style['-webkit-tap-highlight-color'] = 'rgba(0,0,0,0)';
-
-    // if there is only one div in the whole document and it doesn't have dimensions
-    // then we treat this as a single-page application
-    const noHeight = el.style.height === undefined || el.style.height === '' ||
-      el.style.height === '100%';
-    const noWidth = el.style.width === undefined || el.style.width === '' ||
-      el.style.width === '100%';
-
-    let singlePageApp = false;
-    let fullscreen = false;
-
-    if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
-      singlePageApp = true;
-      fullscreen = true;
-      // el.parentNode.nodeName === 'BODY'
-      el.style.width = '100%';
-      el.style.height = '100%';
-      addClass(document.body, 'trelliscope-fullscreen-body');
-      addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-    } else {
-      const bodyEl = document.createElement('div');
-      bodyEl.style.width = '100%';
-      bodyEl.style.height = '100%';
-      bodyEl.style.display = 'none';
-      bodyEl.id = 'trelliscope-fullscreen-div';
-      document.getElementsByTagName('body')[0].appendChild(bodyEl);
-
-      if (noHeight) {
-        const nSiblings = [].slice.call(el.parentNode.childNodes)
-          .map(d => d.nodeType !== 3 && d.nodeType !== 8)
-          .reduce((a, b) => a + b) - 1;
-        if (nSiblings === 0) {
-          el.style.height = `${el.parentNode.clientHeight}px`;
-          el.style.width = `${el.parentNode.clientWidth}px`;
-        }
-      }
-
-      // give 'el' a new parent so we know where to move div back to after fullscreen
-      const parent = el.parentNode;
-      const wrapper = document.createElement('div');
-      wrapper.id = `${el.id}-parent`;
-      parent.replaceChild(wrapper, el);
-      // set element as child of wrapper
-      wrapper.appendChild(el);
-
-      // if (el.style.height === undefined) {
-      //   el.style.height = ?
-      // }
-      // if (el.style.width === undefined) {
-      //   el.style.width = ?
-      // }
-    }
-
-    // need to store original app dims (constant) if it isn't a SPA
-    // this will only be used in that case, but store it always anyway
-    const appDims = {};
-
-    // set size of app
-    if (singlePageApp) {
-      appDims.width = window.innerWidth;
-      appDims.height = window.innerHeight;
-    } else {
-      appDims.width = el.clientWidth;
-      appDims.height = el.clientHeight;
-    }
-
-    const loggerMiddleware = createLogger();
-    this.store = createStore(
-      app,
-      { appId: this.props.id, singlePageApp, fullscreen }, // initial state
-      applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
-    );
-
     // resize handler only when in fullscreen mode (which is always for SPA)
     window.addEventListener('resize', () => {
-      if (this.store.getState().fullscreen) {
-        this.store.dispatch(windowResize({
+      if (this.props.store.getState().fullscreen) {
+        this.props.store.dispatch(windowResize({
           height: window.innerHeight,
           width: window.innerWidth
         }));
       }
     });
-
-    this.store.dispatch(windowResize(appDims));
 
     this.muiTheme = getMuiTheme({
       fontFamily: '"Open Sans", sans-serif',
@@ -145,16 +59,15 @@ class Root extends Component {
       }
     });
 
-
     // load the list of displays
     // const cfgdat = appData;
-    this.store.dispatch(fetchDisplayList(this.props.config, this.props.id));
+    this.props.store.dispatch(fetchDisplayList(this.props.config, this.props.id));
   }
 
   render() {
     return (
       <MuiThemeProvider muiTheme={this.muiTheme}>
-        <Provider store={this.store}>
+        <Provider store={this.props.store}>
           <App />
         </Provider>
       </MuiThemeProvider>
@@ -164,14 +77,137 @@ class Root extends Component {
 
 Root.propTypes = {
   id: React.PropTypes.string,
-  config: React.PropTypes.string
+  config: React.PropTypes.string,
+  logger: React.PropTypes.bool,
+  store: React.PropTypes.object
 };
 
-const trelliscopeApp = (id, config) => {
+const trelliscopeApp = (id, config, logger) => {
+  let logger2 = logger;
+  if (logger2 === undefined || typeof logger2 !== 'boolean') {
+    logger2 = true;
+  }
+
+  const el = document.getElementById(id);
+
+  addClass(el, 'trelliscope-app');
+  addClass(el, 'trelliscope-app-container');
+  if (el.style.position !== 'relative') {
+    el.style.position = 'relative';
+  }
+  if (el.style.overflow !== 'hidden') {
+    el.style.overflow = 'hidden';
+  }
+  el.style['font-family'] = '"Open Sans", sans-serif';
+  el.style['font-weight'] = 300;
+  el.style['-webkit-tap-highlight-color'] = 'rgba(0,0,0,0)';
+
+  // if there is only one div in the whole document and it doesn't have dimensions
+  // then we treat this as a single-page application
+  const noHeight = el.style.height === undefined || el.style.height === '' ||
+    el.style.height === '100%';
+  const noWidth = el.style.width === undefined || el.style.width === '' ||
+    el.style.width === '100%';
+
+  let singlePageApp = false;
+  let fullscreen = false;
+
+  if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
+    singlePageApp = true;
+    fullscreen = true;
+    // el.parentNode.nodeName === 'BODY'
+    el.style.width = '100%';
+    el.style.height = '100%';
+    addClass(document.body, 'trelliscope-fullscreen-body');
+    addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
+  } else {
+    const bodyEl = document.createElement('div');
+    bodyEl.style.width = '100%';
+    bodyEl.style.height = '100%';
+    bodyEl.style.display = 'none';
+    bodyEl.id = 'trelliscope-fullscreen-div';
+    document.getElementsByTagName('body')[0].appendChild(bodyEl);
+
+    if (noHeight) {
+      const nSiblings = [].slice.call(el.parentNode.childNodes)
+        .map(d => d.nodeType !== 3 && d.nodeType !== 8)
+        .reduce((a, b) => a + b) - 1;
+      if (nSiblings === 0) {
+        el.style.height = `${el.parentNode.clientHeight}px`;
+        el.style.width = `${el.parentNode.clientWidth}px`;
+      }
+    }
+
+    // give 'el' a new parent so we know where to move div back to after fullscreen
+    const parent = el.parentNode;
+    const wrapper = document.createElement('div');
+    wrapper.id = `${el.id}-parent`;
+    parent.replaceChild(wrapper, el);
+    // set element as child of wrapper
+    wrapper.appendChild(el);
+
+    // if (el.style.height === undefined) {
+    //   el.style.height = ?
+    // }
+    // if (el.style.width === undefined) {
+    //   el.style.width = ?
+    // }
+  }
+
+  // need to store original app dims (constant) if it isn't a SPA
+  // this will only be used in that case, but store it always anyway
+  const appDims = {};
+
+  // set size of app
+  if (singlePageApp) {
+    appDims.width = window.innerWidth;
+    appDims.height = window.innerHeight;
+  } else {
+    appDims.width = el.clientWidth;
+    appDims.height = el.clientHeight;
+  }
+
+  if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
+    singlePageApp = true;
+    fullscreen = true;
+  }
+
+  let store;
+  if (logger2) {
+    const loggerMiddleware = createLogger();
+    store = createStore(
+      app,
+      { appId: id, singlePageApp, fullscreen }, // initial state
+      applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
+    );
+  } else {
+    store = createStore(
+      app,
+      { appId: id, singlePageApp, fullscreen }, // initial state
+      applyMiddleware(thunkMiddleware, crossfilterMiddleware)
+    );
+  }
+
+  store.dispatch(windowResize(appDims));
+  store.dispatch(setAppDims(appDims));
+
   render(
-    <Root id={id} config={config} />,
+    <Root id={id} config={config} store={store} logger={logger2} />,
     document.getElementById(id)
   );
+
+  return ({
+    resize: (width, height) => {
+      el.style.height = `${height}px`;
+      el.style.width = `${width}px`;
+      store.dispatch(setAppDims({ width, height }));
+      store.dispatch(windowResize({ width, height }));
+    },
+    setLayout: (nrow, ncol) => {
+      store.dispatch(setLayout({ nrow, ncol }));
+    },
+    currentCogs: () => currentCogDataSelector(store.getState())
+  });
 };
 
 window.trelliscopeApp = trelliscopeApp;

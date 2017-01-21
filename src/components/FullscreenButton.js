@@ -7,33 +7,29 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
 import { dialogOpenSelector, fullscreenSelector,
   appIdSelector, singlePageAppSelector } from '../selectors';
-import { sidebarActiveSelector } from '../selectors/ui';
+import { sidebarActiveSelector, origWidthSelector,
+  origHeightSelector } from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
 class FullscreenButton extends React.Component {
   constructor(props) {
     super(props);
-    const el = document.getElementById(props.appId);
     // store all these things so we can restore them
-    this.appDims = {
-      width: el.clientWidth,
-      height: el.clientHeight
-    };
     this.yOffset = window.pageYOffset;
   }
   componentDidMount() {
     if (!this.props.singlePageApp && this.props.fullscreen &&
       this.props.sidebar === '' && !this.props.dialog) {
       Mousetrap.bindGlobal(['esc'], () => this.props.toggleFullscreen(false,
-        this.props.appId, this.appDims, this.yOffset));
+        this.props.appId, { width: this.props.ww, height: this.props.hh }, this.yOffset));
     }
   }
   componentWillReceiveProps(nextProps) {
     if (!this.props.singlePageApp) {
       if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
         Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
-          nextProps.appId, this.appDims, this.yOffset));
+          nextProps.appId, { width: this.props.ww, height: this.props.hh }, this.yOffset));
       }
       if (nextProps.dialog) {
         Mousetrap.unbind(['esc']);
@@ -64,7 +60,7 @@ class FullscreenButton extends React.Component {
           this.props.toggleFullscreen(
             !this.props.fullscreen,
             this.props.appId,
-            this.appDims,
+            { width: this.props.ww, height: this.props.hh },
             this.yOffset);
         }}
       >
@@ -81,7 +77,9 @@ FullscreenButton.propTypes = {
   sidebar: React.PropTypes.string,
   appId: React.PropTypes.string,
   singlePageApp: React.PropTypes.bool,
-  toggleFullscreen: React.PropTypes.func
+  toggleFullscreen: React.PropTypes.func,
+  ww: React.PropTypes.number,
+  hh: React.PropTypes.number
 };
 
 // ------ static styles ------
@@ -113,12 +111,15 @@ const staticStyles = {
 const stateSelector = createSelector(
   sidebarActiveSelector, dialogOpenSelector, fullscreenSelector,
   appIdSelector, singlePageAppSelector,
-  (sidebar, dialog, fullscreen, appId, singlePageApp) => ({
+  origWidthSelector, origHeightSelector,
+  (sidebar, dialog, fullscreen, appId, singlePageApp, ww, hh) => ({
     sidebar,
     dialog,
     fullscreen,
     appId,
-    singlePageApp
+    singlePageApp,
+    ww,
+    hh
   })
 );
 
