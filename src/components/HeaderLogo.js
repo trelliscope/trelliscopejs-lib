@@ -87,21 +87,21 @@ class HeaderLogo extends React.Component {
                 className={classes.dialogDiv}
                 style={{ maxHeight: Math.max(50, this.props.windowHeight - 310) }}
               >
-                <p className={classes.dialogP}>
+                <div className={classes.dialogP}>
                   <strong>What: </strong>
                   Trelliscope is a tool for interactively viewing a large
                   collection of visualizations.  Each visualization in a
                   collection is called a <em>panel</em> and each panel typically
                   represents one slice of a large dataset.
-                </p>
-                <p className={classes.dialogP}>
+                </div>
+                <div className={classes.dialogP}>
                   <strong>Why: </strong>
                   Viewing multiple slices of a dataset simultaneously is a
                   simple  but very powerful visual technique and provides a way
                   to visualize data in greater detail, particularly when the
                   dataset is large.
-                </p>
-                <p className={classes.dialogP}>
+                </div>
+                <div className={classes.dialogP}>
                   <strong>Interactivity: </strong>
                   When there are many panels, it is useful to be able to
                   navigate to which panels you want to view and make
@@ -109,7 +109,7 @@ class HeaderLogo extends React.Component {
                   sorting and filtering the panels based on various criteria.
                   Trelliscope provides this interactivity through panel metrics
                   called <em>cognostics</em>.
-                </p>
+                </div>
                 <p>
                   There are multiple modes of interaction with panels, indicated
                   by the four buttons on the left sidebar of the application:
@@ -117,15 +117,15 @@ class HeaderLogo extends React.Component {
                   <strong>Grid</strong>, <strong>Labels</strong>,&nbsp;
                   <strong>Filter</strong>, and <strong>Sort</strong>.
                 </p>
-                <p className={classes.dialogP}>
+                <div className={classes.dialogP}>
                   <i className={`icon-th ${classes.dialogHi}`} />&nbsp;
                   <strong>Grid: </strong>
                   In the &quot;Grid&quot; sidebar, you can specify the layout of
                   the grid of panels you wish to display, specifying the number
                   of rows and columns of the grid, as well as whether to arrange
                   panels in order by row or by column.
-                </p>
-                <p className={classes.dialogP}>
+                </div>
+                <div className={classes.dialogP}>
                   <i className={`icon-list-ul ${classes.dialogHi}`} />&nbsp;
                   <strong>Labels: </strong>
                   In the &quot;Labels&quot; sidebar, you can specify the panel
@@ -137,8 +137,8 @@ class HeaderLogo extends React.Component {
                   in the grid view and clicking the &quot;x&quot; button that
                   appears.  Labels are also automatically added when you specify
                   a new variable to sort or filter on.
-                </p>
-                <p className={classes.dialogP}>
+                </div>
+                <div className={classes.dialogP}>
                   <i className={`icon-filter ${classes.dialogHi}`} />&nbsp;
                   <strong>Filter: </strong>
                   The &quot;Filter&quot; sidebar provides various ways
@@ -190,8 +190,8 @@ class HeaderLogo extends React.Component {
                     active filter on the variable, its button in the &quot;More
                     variables&quot; section will be green to indicate this.
                   </p>
-                </p>
-                <p className={classes.dialogP}>
+                </div>
+                <div className={classes.dialogP}>
                   <i className={`icon-sort-amount-asc ${classes.dialogHi}`} />&nbsp;
                   <strong>Sort: </strong>
                   In the &quot;Sort&quot; sidebar, a list of variables which are
@@ -204,14 +204,14 @@ class HeaderLogo extends React.Component {
                   For an active sortig variable, clicking the blue icon
                   with an arrow pointing up or down will change the order of the
                   sorting.
-                </p>
-                <p>
+                </div>
+                <div className={classes.dialogP}>
                   The active filter and sort state are displayed at the bottom
                   of the page in the footer.  Clicking
                   the <i className="icon-times-circle" /> button
                   for anything listed in the footer will remove the sorting or
                   filtering on that variable.
-                </p>
+                </div>
               </div>
             </Tab>
             <Tab label="Shortcuts" >
@@ -301,7 +301,7 @@ class HeaderLogo extends React.Component {
                   </a>
                   &nbsp;and several other awesome libraries listed&nbsp;
                   <a
-                    href="https://github.com/hafen/TrelliscopeJS/blob/master/package.json"
+                    href="https://github.com/hafen/trelliscopejs-lib/blob/master/package.json"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -309,7 +309,7 @@ class HeaderLogo extends React.Component {
                   </a>.
                 </p>
                 <p>
-                  Source code available on <a href="https://github.com/hafen/TrelliscopeJS/" target="_blank" rel="noopener noreferrer">github</a> &ndash; submit issues and feature requests there.
+                  Source code available on <a href="https://github.com/hafen/trelliscopejs-lib/" target="_blank" rel="noopener noreferrer">github</a> &ndash; submit issues and feature requests there.
                 </p>
                 <p>
                   Thanks to Bill Cleveland for ideas upon which this is built,
@@ -328,10 +328,10 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  sheet: React.PropTypes.object.isRequired.isRequired,
-  windowHeight: React.PropTypes.number.isRequired.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired.isRequired,
-  setDialogOpen: React.PropTypes.func.isRequired.isRequired
+  sheet: React.PropTypes.object.isRequired,
+  windowHeight: React.PropTypes.number.isRequired,
+  fullscreen: React.PropTypes.bool.isRequired,
+  setDialogOpen: React.PropTypes.func.isRequired
 };
 
 // ------ static styles ------
@@ -382,7 +382,8 @@ const staticStyles = {
   },
   dialogP: {
     textIndent: -20,
-    paddingLeft: 20
+    paddingLeft: 20,
+    marginTop: '1em'
   },
   dialogP2: {
     paddingLeft: 20
