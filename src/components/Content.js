@@ -107,19 +107,24 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
 Content.propTypes = {
   contentStyle: React.PropTypes.object.isRequired,
   ccd: React.PropTypes.array.isRequired,
-  ci: React.PropTypes.object.isRequired,
+  ci: React.PropTypes.object,
   cinfo: React.PropTypes.object.isRequired,
   cfg: React.PropTypes.object.isRequired,
   layout: React.PropTypes.object.isRequired,
   labels: React.PropTypes.array.isRequired,
   dims: React.PropTypes.object.isRequired,
   panelRenderer: React.PropTypes.object.isRequired,
-  panelInterface: React.PropTypes.object.isRequired,
+  panelInterface: React.PropTypes.object,
   sidebar: React.PropTypes.string.isRequired,
   curPage: React.PropTypes.number.isRequired,
   totPages: React.PropTypes.number.isRequired,
   panelData: React.PropTypes.object.isRequired
 };
+
+Content.defaultProps = () => ({
+  ci: undefined,
+  panelInterface: undefined
+});
 
 // ------ static styles ------
 

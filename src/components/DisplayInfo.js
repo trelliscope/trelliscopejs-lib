@@ -116,8 +116,8 @@ class DisplayInfo extends React.Component {
               application or hit the key &quot;a&quot;.
             </p>
             <ul>
-              {ciKeys.map((d, i) => (
-                <li key={i}>
+              {ciKeys.map(d => (
+                <li key={ci[d].name}>
                   <strong>{ci[d].name}</strong>: {ci[d].desc}
                 </li>
               ))}

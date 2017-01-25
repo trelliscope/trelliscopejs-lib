@@ -235,7 +235,7 @@ class Panel extends React.Component {
                 }
                 return (
                   <tr
-                    key={`label${i}`}
+                    key={`${d.name}`}
                     className={classNames({
                       [classes.labelRow]: true,
                       [classes.labelRowHover]: this.state.hover === d.name
@@ -284,9 +284,14 @@ Panel.propTypes = {
   sheet: React.PropTypes.object.isRequired,
   panelRenderer: React.PropTypes.object.isRequired,
   panelInterface: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  panelData: React.PropTypes.object.isRequired,
+  panelData: React.PropTypes.object,
   removeLabel: React.PropTypes.func.isRequired
 };
+
+Panel.defaultProps = () => ({
+  panelInterface: undefined,
+  panelData: undefined
+});
 
 // ------ static styles ------
 

@@ -29,11 +29,11 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
               {sort.map((d, i) => {
                 const ic = d.dir === 'asc' ? 'up' : 'down';
                 return (
-                  <tr className={classes.tr} key={i}>
+                  <tr className={classes.tr} key={`${d.name}_tr`}>
                     <td className={classes.sortButton}>
                       <FloatingActionButton
                         mini
-                        key={i}
+                        key={`${d.name}_button`}
                         zDepth={1}
                         onTouchTap={() => {
                           const sort2 = Object.assign([], sort);
@@ -68,12 +68,12 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
             notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div className={classes.notUsed} style={styles.notUsed}>
-          {notUsed.map((d, i) => (
-            <span key={i}>
+          {notUsed.map(d => (
+            <span key={`${d}_notused`}>
               <a data-tip data-for={`tooltip_${d}`}>
                 <button
                   className={classes.variable}
-                  key={`button_${i}`}
+                  key={`${d}_button`}
                   onTouchTap={() => {
                     const sort2 = Object.assign([], sort);
                     sort2.push({ name: d, dir: 'asc' });

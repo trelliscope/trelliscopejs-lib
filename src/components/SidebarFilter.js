@@ -194,7 +194,6 @@ SidebarFilter.propTypes = {
   catHeight: React.PropTypes.number.isRequired,
   filter: React.PropTypes.object.isRequired,
   filterView: React.PropTypes.object.isRequired,
-  filterI: React.PropTypes.array.isRequired,
   cogInfo: React.PropTypes.object.isRequired,
   displayInfo: React.PropTypes.object.isRequired,
   filtDist: React.PropTypes.object.isRequired,
@@ -388,6 +387,7 @@ const mapDispatchToProps = dispatch => ({
       obj = {};
       obj[x.name] = Object.assign({}, x);
     }
+    debugger;
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },

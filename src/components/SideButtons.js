@@ -73,9 +73,9 @@ class SideButtons extends React.Component {
     return (
       <div className={classes.sideButtonsContainer} style={this.props.styles.sideButtonsContainer}>
         <div className={classes.spacer} />
-        {buttons.map((d, i) => (
+        {buttons.map(d => (
           <SideButton
-            key={`sidebutton-${i}`}
+            key={`sidebutton_${d.title}`}
             isActive={d.title === this.props.active}
             icon={d.icon}
             title={d.title}

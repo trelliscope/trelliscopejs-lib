@@ -111,13 +111,16 @@ class Header extends React.Component {
 Header.propTypes = {
   styles: React.PropTypes.object.isRequired,
   sheet: React.PropTypes.object.isRequired,
-  cfg: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  appId: React.PropTypes.string, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  cfg: React.PropTypes.object.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  appId: React.PropTypes.string.isRequired,
   displayList: React.PropTypes.object.isRequired,
   displayGroups: React.PropTypes.object.isRequired,
   selectedDisplay: React.PropTypes.object.isRequired,
   dialogOpen: React.PropTypes.bool.isRequired,
-  selectDisplay: React.PropTypes.func, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  selectDisplay: React.PropTypes.func.isRequired,
   setDialogOpen: React.PropTypes.func.isRequired
 };
 

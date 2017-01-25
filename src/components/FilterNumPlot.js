@@ -83,13 +83,16 @@ class FilterNumPlot extends React.Component {
 }
 
 FilterNumPlot.propTypes = {
-  name: React.PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  name: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   // dist: React.PropTypes.object.isRequired,
   condDist: React.PropTypes.object.isRequired,
-  filterState: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  handleChange: React.PropTypes.func // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  filterState: React.PropTypes.object.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  handleChange: React.PropTypes.func.isRequired
 };
 
 export default FilterNumPlot;

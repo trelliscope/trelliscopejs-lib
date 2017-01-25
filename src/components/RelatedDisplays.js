@@ -65,8 +65,8 @@ class RelatedDisplays extends React.Component {
           onRequestClose={this.handleClose}
         >
           Under construction...
-          {this.props.relatedDisplays.map((d, i) => (
-            <div key={i}>{d.group} / {d.name}</div>
+          {this.props.relatedDisplays.map(d => (
+            <div key={`${d.group}_${d.name}`}>{d.group} / {d.name}</div>
           ))}
         </Dialog>
       </button>

@@ -82,8 +82,13 @@ Footer.propTypes = {
   sort: React.PropTypes.array.isRequired,
   filter: React.PropTypes.array.isRequired,
   nFilt: React.PropTypes.number.isRequired,
-  nPanels: React.PropTypes.number.isRequired
+  nPanels: React.PropTypes.number
 };
+
+Footer.defaultProps = () => ({
+  nPanels: 0
+});
+
 
 // ------ static styles ------
 
