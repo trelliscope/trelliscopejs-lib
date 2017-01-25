@@ -17,9 +17,10 @@ import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
 import { fetchDisplayList, windowResize, setAppDims,
-  setLayout } from './actions';
+  setLayout, setFilter } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
+import createCallbackMiddleware from './callbackMiddleware';
 import crossfilterMiddleware from './crossfilterMiddleware';
 import app from './reducers';
 import App from './App';
@@ -81,10 +82,19 @@ Root.propTypes = {
   store: React.PropTypes.object.isRequired
 };
 
-const trelliscopeApp = (id, config, logger) => {
-  let logger2 = logger;
-  if (logger2 === undefined || typeof logger2 !== 'boolean') {
-    logger2 = true;
+const trelliscopeApp = (id, config, options) => {
+  let useLogger = true;
+  let loggerOptions = {};
+  let useCallback = false;
+  if (options !== undefined) {
+    if (typeof options.logger === 'boolean') {
+      useLogger = options.logger;
+    } else if (options.logger !== undefined) {
+      loggerOptions = options.logger;
+    }
+    if (options.callbacks !== undefined) {
+      useCallback = true;
+    }
   }
 
   const el = document.getElementById(id);
@@ -171,21 +181,21 @@ const trelliscopeApp = (id, config, logger) => {
     fullscreen = true;
   }
 
-  let store;
-  if (logger2) {
-    const loggerMiddleware = createLogger();
-    store = createStore(
-      app,
-      { appId: id, singlePageApp, fullscreen }, // initial state
-      applyMiddleware(thunkMiddleware, crossfilterMiddleware, loggerMiddleware)
-    );
-  } else {
-    store = createStore(
-      app,
-      { appId: id, singlePageApp, fullscreen }, // initial state
-      applyMiddleware(thunkMiddleware, crossfilterMiddleware)
-    );
+  const middlewares = [thunkMiddleware, crossfilterMiddleware];
+  if (useLogger) {
+    const loggerMiddleware = createLogger(loggerOptions);
+    middlewares.push(loggerMiddleware);
   }
+  if (useCallback) {
+    const callbackMiddleware = createCallbackMiddleware(options.callbacks);
+    middlewares.push(callbackMiddleware);
+  }
+
+  const store = createStore(
+    app,
+    { appId: id, singlePageApp, fullscreen }, // initial state
+    applyMiddleware(...middlewares)
+  );
 
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
@@ -205,6 +215,9 @@ const trelliscopeApp = (id, config, logger) => {
     setLayout: (nrow, ncol) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
+    // setFilter: (x) => {
+    //   store.dispatch(setFilter(x));
+    // },
     currentCogs: () => currentCogDataSelector(store.getState())
   });
 };
