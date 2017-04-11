@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -56,10 +57,10 @@ const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
 };
 
 Sidebar.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  active: React.PropTypes.string.isRequired,
-  displayLoaded: React.PropTypes.bool.isRequired
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  active: PropTypes.string.isRequired,
+  displayLoaded: PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

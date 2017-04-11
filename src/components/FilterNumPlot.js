@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
 import { select, event as currentEvent } from 'd3-selection';
@@ -84,15 +85,15 @@ class FilterNumPlot extends React.Component {
 
 FilterNumPlot.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
-  name: React.PropTypes.string.isRequired,
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  // dist: React.PropTypes.object.isRequired,
-  condDist: React.PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  // dist: PropTypes.object.isRequired,
+  condDist: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  filterState: React.PropTypes.object.isRequired,
+  filterState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  handleChange: React.PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired
 };
 
 export default FilterNumPlot;

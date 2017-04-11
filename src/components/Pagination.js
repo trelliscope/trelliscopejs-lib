@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -180,15 +181,15 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  n: React.PropTypes.number.isRequired,
-  npp: React.PropTypes.number.isRequired,
-  totPages: React.PropTypes.number.isRequired,
-  totPanels: React.PropTypes.number.isRequired,
-  dialogOpen: React.PropTypes.bool.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  handleChange: React.PropTypes.func.isRequired,
-  cogData: React.PropTypes.object.isRequired
+  sheet: PropTypes.object.isRequired,
+  n: PropTypes.number.isRequired,
+  npp: PropTypes.number.isRequired,
+  totPages: PropTypes.number.isRequired,
+  totPanels: PropTypes.number.isRequired,
+  dialogOpen: PropTypes.bool.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  cogData: PropTypes.object.isRequired
 };
 
 // ------ static styles ------

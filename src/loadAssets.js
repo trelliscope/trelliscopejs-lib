@@ -18,7 +18,8 @@ export const loadAssetsSequential = (widgetAssets, configBase, callback) => {
     const assetLoaded = (asset) => {
       if (!done) {
         const curAsset = asset;
-        curAsset.onreadystatechange = curAsset.onload = null;
+        curAsset.onreadystatechange = null;
+        curAsset.onload = null;
         done = true;
         if (assets.length !== 0) {
           loadNextAsset();

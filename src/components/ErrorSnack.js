@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Snackbar from 'material-ui/Snackbar';
@@ -24,8 +25,8 @@ const ErrorSnack = ({ errorMsg, handleClose }) => (
 );
 
 ErrorSnack.propTypes = {
-  errorMsg: React.PropTypes.string.isRequired,
-  handleClose: React.PropTypes.func.isRequired
+  errorMsg: PropTypes.string.isRequired,
+  handleClose: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

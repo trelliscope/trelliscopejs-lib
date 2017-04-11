@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
@@ -83,9 +84,9 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
 };
 
 SidebarLayout.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  layout: React.PropTypes.object.isRequired,
-  handleChange: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

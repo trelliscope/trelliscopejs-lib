@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -152,14 +153,14 @@ class DisplayInfo extends React.Component {
 }
 
 DisplayInfo.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  singleDisplay: React.PropTypes.bool.isRequired,
-  // selectedDisplay: React.PropTypes.object.isRequired,
-  displayInfo: React.PropTypes.object.isRequired,
-  setDialogOpen: React.PropTypes.func.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  active: React.PropTypes.bool.isRequired
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  singleDisplay: PropTypes.bool.isRequired,
+  // selectedDisplay: PropTypes.object.isRequired,
+  displayInfo: PropTypes.object.isRequired,
+  setDialogOpen: PropTypes.func.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  active: PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -109,19 +110,19 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  cfg: React.PropTypes.object.isRequired,
+  cfg: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  appId: React.PropTypes.string.isRequired,
-  displayList: React.PropTypes.object.isRequired,
-  displayGroups: React.PropTypes.object.isRequired,
-  selectedDisplay: React.PropTypes.object.isRequired,
-  dialogOpen: React.PropTypes.bool.isRequired,
+  appId: PropTypes.string.isRequired,
+  displayList: PropTypes.object.isRequired,
+  displayGroups: PropTypes.object.isRequired,
+  selectedDisplay: PropTypes.object.isRequired,
+  dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  selectDisplay: React.PropTypes.func.isRequired,
-  setDialogOpen: React.PropTypes.func.isRequired
+  selectDisplay: PropTypes.func.isRequired,
+  setDialogOpen: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

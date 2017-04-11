@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -16,8 +17,7 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { fetchDisplayList, windowResize, setAppDims,
-  setLayout, setFilter } from './actions';
+import { fetchDisplayList, windowResize, setAppDims, setLayout } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
 import createCallbackMiddleware from './callbackMiddleware';
@@ -77,9 +77,9 @@ class Root extends Component {
 }
 
 Root.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  config: React.PropTypes.string.isRequired,
-  store: React.PropTypes.object.isRequired
+  id: PropTypes.string.isRequired,
+  config: PropTypes.string.isRequired,
+  store: PropTypes.object.isRequired
 };
 
 const trelliscopeApp = (id, config, options) => {

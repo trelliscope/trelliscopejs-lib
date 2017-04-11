@@ -5,6 +5,7 @@
 // if selections are made after regex, regex is cleared
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -131,14 +132,14 @@ class FilterCat extends React.Component {
 }
 
 FilterCat.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  filterState: React.PropTypes.object.isRequired,
-  dist: React.PropTypes.object.isRequired,
-  condDist: React.PropTypes.object.isRequired,
-  levels: React.PropTypes.array.isRequired,
-  height: React.PropTypes.number.isRequired,
-  handleChange: React.PropTypes.func.isRequired,
-  handleSortChange: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  filterState: PropTypes.object.isRequired,
+  dist: PropTypes.object.isRequired,
+  condDist: PropTypes.object.isRequired,
+  levels: PropTypes.array.isRequired,
+  height: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSortChange: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

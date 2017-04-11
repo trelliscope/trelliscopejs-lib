@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -75,10 +76,10 @@ class RelatedDisplays extends React.Component {
 }
 
 RelatedDisplays.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  relatedDisplays: React.PropTypes.array.isRequired,
-  active: React.PropTypes.bool.isRequired
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  relatedDisplays: PropTypes.array.isRequired,
+  active: PropTypes.bool.isRequired
 };
 
 // ------ static styles ------

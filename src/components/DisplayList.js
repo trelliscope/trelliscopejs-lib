@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { GridList, GridTile } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -97,11 +98,11 @@ const staticStyles = {
 };
 
 DisplayList.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  di: React.PropTypes.array.isRequired,
-  displayGroups: React.PropTypes.object.isRequired,
-  handleClick: React.PropTypes.func.isRequired,
-  cfg: React.PropTypes.object.isRequired
+  sheet: PropTypes.object.isRequired,
+  di: PropTypes.array.isRequired,
+  displayGroups: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  cfg: PropTypes.object.isRequired
 };
 
 export default injectSheet(staticStyles)(DisplayList);

@@ -22,31 +22,119 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.scss$/,
         include: /src/,
-        loaders: [
-          'style',
-          'css',
-          'autoprefixer?browsers=last 3 versions',
-          'sass?outputStyle=expanded'
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'autoprefixer',
+            options: {
+              browsers: 'last 3 versions'
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: 'expanded'
+            }
+          }
         ]
       },
-      { test: /\.css$/, loader: 'style-loader!css-loader' },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
       {
         test: /\.js$/,
-        loaders: ['react-hot', 'babel'],
-        include: path.join(__dirname, 'src')
+        include: path.join(__dirname, 'src'),
+        use: [
+          'react-hot-loader',
+          'babel-loader'
+        ]
       },
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader'
+        ]
+      },
       // Font Definitions
-      { test: /\.svg(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=public/fonts/[name].[ext]' },
-      { test: /\.woff(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=public/fonts/[name].[ext]' },
-      { test: /\.woff2(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=public/fonts/[name].[ext]' },
-      { test: /\.[ot]tf(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=public/fonts/[name].[ext]' },
-      { test: /\.eot(\?[\s\S]+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=public/fonts/[name].[ext]' }
+      {
+        test: /\.svg(\?[\s\S]+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+              mimetype: 'image/svg+xml',
+              name: 'public/fonts/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.woff(\?[\s\S]+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+              mimetype: 'application/font-woff',
+              name: 'public/fonts/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.woff2(\?[\s\S]+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+              mimetype: 'application/font-woff2',
+              name: 'public/fonts/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.[ot]tf(\?[\s\S]+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+              mimetype: 'application/octet-stream',
+              name: 'public/fonts/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.eot(\?[\s\S]+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+              mimetype: 'application/vnd.ms-fontobject',
+              name: 'public/fonts/[name].[ext]'
+            }
+          }
+        ]
+      }
     ]
   }
 };

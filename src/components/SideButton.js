@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import { SB_CONFIG } from '../constants';
@@ -22,12 +23,12 @@ const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick 
 );
 
 SideButton.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  isActive: React.PropTypes.bool.isRequired,
-  icon: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  label: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  icon: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

@@ -1,5 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { Grid } from 'react-virtualized';
+import { filterCardinalitySelector } from '../selectors/cogData';
 import CatBar from './FilterCatPlotBar';
 
 class FilterCatPlot extends React.Component {
@@ -90,11 +94,11 @@ class FilterCatPlot extends React.Component {
     const orderValue = this.props.condDist.orderValue;
     const totSelected = this.props.condDist.totSelected;
     const sumSelected = this.props.condDist.sumSelected;
-    const maxVal = this.props.condDist.max;
+    const fc = this.props.filterCardinality;
 
     return (
       <Grid
-        key={`${orderValue}_${totSelected}_${sumSelected}_${maxVal}`}
+        key={`${orderValue}_${totSelected}_${sumSelected}_${fc}`}
         width={this.props.width}
         height={this.props.height}
         columnWidth={this.props.width}
@@ -109,14 +113,30 @@ class FilterCatPlot extends React.Component {
 }
 
 FilterCatPlot.propTypes = {
-  height: React.PropTypes.number.isRequired,
-  width: React.PropTypes.number.isRequired,
-  cellHeight: React.PropTypes.number.isRequired,
-  dist: React.PropTypes.object.isRequired,
-  condDist: React.PropTypes.object.isRequired,
-  filterState: React.PropTypes.object.isRequired,
-  sortOrder: React.PropTypes.string.isRequired,
-  handleChange: React.PropTypes.func.isRequired
+  height: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  cellHeight: PropTypes.number.isRequired,
+  dist: PropTypes.object.isRequired,
+  condDist: PropTypes.object.isRequired,
+  filterState: PropTypes.object.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  filterCardinality: PropTypes.number.isRequired
 };
 
-export default FilterCatPlot;
+// ------ redux container ------
+
+const stateSelector = createSelector(
+  filterCardinalitySelector,
+  filterCardinality => ({
+    filterCardinality
+  })
+);
+
+const mapStateToProps = state => (
+  stateSelector(state)
+);
+
+export default connect(
+  mapStateToProps
+)(FilterCatPlot);

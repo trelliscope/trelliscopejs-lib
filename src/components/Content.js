@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -105,20 +106,20 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
 };
 
 Content.propTypes = {
-  contentStyle: React.PropTypes.object.isRequired,
-  ccd: React.PropTypes.array.isRequired,
-  ci: React.PropTypes.object,
-  cinfo: React.PropTypes.object.isRequired,
-  cfg: React.PropTypes.object.isRequired,
-  layout: React.PropTypes.object.isRequired,
-  labels: React.PropTypes.array.isRequired,
-  dims: React.PropTypes.object.isRequired,
-  panelRenderer: React.PropTypes.object.isRequired,
-  panelInterface: React.PropTypes.object,
-  sidebar: React.PropTypes.string.isRequired,
-  curPage: React.PropTypes.number.isRequired,
-  totPages: React.PropTypes.number.isRequired,
-  panelData: React.PropTypes.object.isRequired
+  contentStyle: PropTypes.object.isRequired,
+  ccd: PropTypes.array.isRequired,
+  ci: PropTypes.object,
+  cinfo: PropTypes.object.isRequired,
+  cfg: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
+  labels: PropTypes.array.isRequired,
+  dims: PropTypes.object.isRequired,
+  panelRenderer: PropTypes.object.isRequired,
+  panelInterface: PropTypes.object,
+  sidebar: PropTypes.string.isRequired,
+  curPage: PropTypes.number.isRequired,
+  totPages: PropTypes.number.isRequired,
+  panelData: PropTypes.object.isRequired
 };
 
 Content.defaultProps = () => ({

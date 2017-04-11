@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import TextField from 'material-ui/TextField';
 import { debounce } from 'throttle-debounce';
@@ -187,12 +188,12 @@ class FilterNum extends React.Component {
 }
 
 FilterNum.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  filterState: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  dist: React.PropTypes.object.isRequired,
-  condDist: React.PropTypes.object.isRequired,
-  handleChange: React.PropTypes.func.isRequired
+  name: PropTypes.string.isRequired,
+  filterState: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  dist: PropTypes.object.isRequired,
+  condDist: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

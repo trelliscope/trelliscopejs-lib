@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { fade } from 'material-ui/utils/colorManipulator';
@@ -42,13 +43,13 @@ const FooterChip = ({ sheet: { classes }, label, icon, text, index,
 };
 
 FooterChip.propTypes = {
-  label: React.PropTypes.string.isRequired,
-  icon: React.PropTypes.string.isRequired,
-  text: React.PropTypes.string.isRequired,
-  index: React.PropTypes.number.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  type: React.PropTypes.string.isRequired,
-  handleStateClose: React.PropTypes.func.isRequired
+  label: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  sheet: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
+  handleStateClose: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

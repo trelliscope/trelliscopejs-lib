@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import uiConsts from '../assets/styles/uiConsts';
@@ -75,14 +76,14 @@ class CatBar extends React.Component {
 }
 
 CatBar.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  active: React.PropTypes.bool.isRequired,
-  allActive: React.PropTypes.bool.isRequired,
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  divStyle: React.PropTypes.object.isRequired,
-  d: React.PropTypes.object.isRequired,
-  handleClick: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  active: PropTypes.bool.isRequired,
+  allActive: PropTypes.bool.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  divStyle: PropTypes.object.isRequired,
+  d: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

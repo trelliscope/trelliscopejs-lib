@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import Mousetrap from 'mousetrap';
 import uiConsts from '../assets/styles/uiConsts';
@@ -111,14 +112,14 @@ class NumericInput extends React.Component {
 }
 
 NumericInput.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  arrows: React.PropTypes.bool.isRequired,
-  value: React.PropTypes.number.isRequired,
-  min: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
-  step: React.PropTypes.number.isRequired,
-  size: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  arrows: PropTypes.bool.isRequired,
+  value: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  step: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

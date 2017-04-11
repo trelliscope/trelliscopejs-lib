@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -189,19 +190,19 @@ const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
 };
 
 SidebarFilter.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  catHeight: React.PropTypes.number.isRequired,
-  filter: React.PropTypes.object.isRequired,
-  filterView: React.PropTypes.object.isRequired,
-  cogInfo: React.PropTypes.object.isRequired,
-  displayInfo: React.PropTypes.object.isRequired,
-  filtDist: React.PropTypes.object.isRequired,
-  colSplit: React.PropTypes.object.isRequired,
-  handleViewChange: React.PropTypes.func.isRequired,
-  handleFilterChange: React.PropTypes.func.isRequired,
-  handleFilterSortChange: React.PropTypes.func.isRequired,
-  labels: React.PropTypes.array.isRequired
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  catHeight: PropTypes.number.isRequired,
+  filter: PropTypes.object.isRequired,
+  filterView: PropTypes.object.isRequired,
+  cogInfo: PropTypes.object.isRequired,
+  displayInfo: PropTypes.object.isRequired,
+  filtDist: PropTypes.object.isRequired,
+  colSplit: PropTypes.object.isRequired,
+  handleViewChange: PropTypes.func.isRequired,
+  handleFilterChange: PropTypes.func.isRequired,
+  handleFilterSortChange: PropTypes.func.isRequired,
+  labels: PropTypes.array.isRequired
 };
 
 // ------ static styles ------
@@ -387,7 +388,6 @@ const mapDispatchToProps = dispatch => ({
       obj = {};
       obj[x.name] = Object.assign({}, x);
     }
-    debugger;
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
   },

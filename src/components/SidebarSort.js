@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -97,12 +98,12 @@ const SidebarSort = ({ sheet: { classes }, styles, sort, cogDesc, labels,
 };
 
 SidebarSort.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sort: React.PropTypes.array.isRequired,
-  cogDesc: React.PropTypes.object.isRequired,
-  labels: React.PropTypes.array.isRequired,
-  handleChange: React.PropTypes.func.isRequired,
-  addLabel: React.PropTypes.func.isRequired
+  styles: PropTypes.object.isRequired,
+  sort: PropTypes.array.isRequired,
+  cogDesc: PropTypes.object.isRequired,
+  labels: PropTypes.array.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  addLabel: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

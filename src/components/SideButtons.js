@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -89,12 +90,12 @@ class SideButtons extends React.Component {
 }
 
 SideButtons.propTypes = {
-  styles: React.PropTypes.object.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  active: React.PropTypes.string.isRequired,
-  dialogOpen: React.PropTypes.bool.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  setActive: React.PropTypes.func.isRequired
+  styles: PropTypes.object.isRequired,
+  sheet: PropTypes.object.isRequired,
+  active: PropTypes.string.isRequired,
+  dialogOpen: PropTypes.bool.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  setActive: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

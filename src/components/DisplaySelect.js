@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -129,16 +130,16 @@ class DisplaySelect extends React.Component {
 }
 
 DisplaySelect.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  handleClick: React.PropTypes.func.isRequired,
-  setDialogOpen: React.PropTypes.func.isRequired,
-  cfg: React.PropTypes.object.isRequired,
-  singlePageApp: React.PropTypes.bool.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  appId: React.PropTypes.string.isRequired,
-  selectedDisplay: React.PropTypes.object.isRequired,
-  displayList: React.PropTypes.object.isRequired,
-  displayGroups: React.PropTypes.object.isRequired
+  sheet: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  setDialogOpen: PropTypes.func.isRequired,
+  cfg: PropTypes.object.isRequired,
+  singlePageApp: PropTypes.bool.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  appId: PropTypes.string.isRequired,
+  selectedDisplay: PropTypes.object.isRequired,
+  displayList: PropTypes.object.isRequired,
+  displayGroups: PropTypes.object.isRequired
 };
 
 // ------ static styles ------

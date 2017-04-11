@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -71,15 +72,15 @@ class FullscreenButton extends React.Component {
 }
 
 FullscreenButton.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  dialog: React.PropTypes.bool.isRequired,
-  sidebar: React.PropTypes.string.isRequired,
-  appId: React.PropTypes.string.isRequired,
-  singlePageApp: React.PropTypes.bool.isRequired,
-  toggleFullscreen: React.PropTypes.func.isRequired,
-  ww: React.PropTypes.number.isRequired,
-  hh: React.PropTypes.number.isRequired
+  sheet: PropTypes.object.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  dialog: PropTypes.bool.isRequired,
+  sidebar: PropTypes.string.isRequired,
+  appId: PropTypes.string.isRequired,
+  singlePageApp: PropTypes.bool.isRequired,
+  toggleFullscreen: PropTypes.func.isRequired,
+  ww: PropTypes.number.isRequired,
+  hh: PropTypes.number.isRequired
 };
 
 // ------ static styles ------

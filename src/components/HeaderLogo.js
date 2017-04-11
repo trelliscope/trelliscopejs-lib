@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
@@ -328,10 +329,10 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  windowHeight: React.PropTypes.number.isRequired,
-  fullscreen: React.PropTypes.bool.isRequired,
-  setDialogOpen: React.PropTypes.func.isRequired
+  sheet: PropTypes.object.isRequired,
+  windowHeight: PropTypes.number.isRequired,
+  fullscreen: PropTypes.bool.isRequired,
+  setDialogOpen: PropTypes.func.isRequired
 };
 
 // ------ static styles ------

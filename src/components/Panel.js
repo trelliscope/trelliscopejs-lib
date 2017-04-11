@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
 // import ReactTooltip from 'react-tooltip';
@@ -273,19 +274,19 @@ class Panel extends React.Component {
 }
 
 Panel.propTypes = {
-  labels: React.PropTypes.array.isRequired,
-  labelArr: React.PropTypes.array.isRequired,
-  iface: React.PropTypes.object.isRequired,
-  cfg: React.PropTypes.object.isRequired,
-  panelKey: React.PropTypes.string.isRequired,
-  dims: React.PropTypes.object.isRequired,
-  rowIndex: React.PropTypes.number.isRequired,
-  iColIndex: React.PropTypes.number.isRequired,
-  sheet: React.PropTypes.object.isRequired,
-  panelRenderer: React.PropTypes.object.isRequired,
-  panelInterface: React.PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-  panelData: React.PropTypes.object,
-  removeLabel: React.PropTypes.func.isRequired
+  labels: PropTypes.array.isRequired,
+  labelArr: PropTypes.array.isRequired,
+  iface: PropTypes.object.isRequired,
+  cfg: PropTypes.object.isRequired,
+  panelKey: PropTypes.string.isRequired,
+  dims: PropTypes.object.isRequired,
+  rowIndex: PropTypes.number.isRequired,
+  iColIndex: PropTypes.number.isRequired,
+  sheet: PropTypes.object.isRequired,
+  panelRenderer: PropTypes.object.isRequired,
+  panelInterface: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
+  panelData: PropTypes.object,
+  removeLabel: PropTypes.func.isRequired
 };
 
 Panel.defaultProps = () => ({

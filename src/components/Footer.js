@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -77,12 +78,12 @@ const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => 
 };
 
 Footer.propTypes = {
-  sheet: React.PropTypes.object.isRequired,
-  style: React.PropTypes.object.isRequired,
-  sort: React.PropTypes.array.isRequired,
-  filter: React.PropTypes.array.isRequired,
-  nFilt: React.PropTypes.number.isRequired,
-  nPanels: React.PropTypes.number
+  sheet: PropTypes.object.isRequired,
+  style: PropTypes.object.isRequired,
+  sort: PropTypes.array.isRequired,
+  filter: PropTypes.array.isRequired,
+  nFilt: PropTypes.number.isRequired,
+  nPanels: PropTypes.number
 };
 
 Footer.defaultProps = () => ({

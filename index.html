@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -23,7 +23,7 @@
     <script src="trelliscope.js"></script>
     <script>
       (function() {
-        window.aaa = trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', false);
+        trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp');
         trelliscopeApp('ebbfa969', '_test/example_mpg/config.jsonp');
         trelliscopeApp('c50c3713', '_test/example_plotly/config.jsonp');
         trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
@@ -33,10 +33,10 @@
     </script>
   </body>
 </html>
-
+ -->
 <!-- uncomment below and comment above for single page app mode -->
 
-<!--
+
 <!doctype html>
 <html>
   <head>
@@ -44,13 +44,15 @@
     <title>Trelliscope</title>
   </head>
   <body">
-    <div id="8a43f2dd"></div>
+    <div id="32b2482a"></div>
     <script src="trelliscope.js"></script>
     <script>
       (function() {
-        trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
+        trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp');
+        // trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: false });
+        // trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
       })();
     </script>
   </body>
 </html>
- -->
+
