@@ -18,8 +18,8 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
-  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, panelData,
-  removeLabel, setPageNum }) => {
+  labels, dims, panelRenderer, panelInterface, panelPort, sidebar, curPage, totPages,
+  panelData, removeLabel, setPageNum }) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {
@@ -91,6 +91,7 @@ const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout
               panelRenderer={panelRenderer}
               panelData={panelData[el.key]}
               panelInterface={panelInterface}
+              panelPort={panelPort}
               removeLabel={removeLabel}
               dims={dims}
               rowIndex={el.rowIndex}
@@ -116,6 +117,7 @@ Content.propTypes = {
   dims: PropTypes.object.isRequired,
   panelRenderer: PropTypes.object.isRequired,
   panelInterface: PropTypes.object,
+  panelPort: PropTypes.number,
   sidebar: PropTypes.string.isRequired,
   curPage: PropTypes.number.isRequired,
   totPages: PropTypes.number.isRequired,
@@ -245,6 +247,7 @@ const stateSelector = createSelector(
       },
       panelRenderer,
       panelInterface: di.info.panelInterface,
+      panelPort: di.info.panel_port,
       sidebar,
       curPage,
       totPages: Math.ceil(card / npp),

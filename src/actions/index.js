@@ -199,6 +199,18 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
   }
 };
 
+// check the base path for files to see if it starts with http
+const fixBase = (txt, dflt) => {
+  let res = txt;
+  if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
+    res = dflt;
+    if (txt !== '') {
+      res += `${txt}/`;
+    }
+  }
+  return res;
+};
+
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
 export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
@@ -213,17 +225,6 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
 
       const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
-      const getConfigBase = (txt) => {
-        let res = txt;
-        if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
-          res = configBase;
-          if (txt !== '') {
-            res += `${txt}/`;
-          }
-        }
-        return res;
-      };
-
       window[dlCallback] = (json) => {
         dispatch(receiveDisplayList(json));
       };
@@ -231,10 +232,8 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
       window[cfgCallback] = (json) => {
         // if display_base is empty, we want to use same path as config
         json.display_base = // eslint-disable-line no-param-reassign
-          getConfigBase(json.display_base);
+          fixBase(json.display_base, configBase);
         json.config_base = configBase; // eslint-disable-line no-param-reassign
-        json.cog_server.info.base = // eslint-disable-line no-param-reassign
-          getConfigBase(json.cog_server.info.base);
         dispatch(receiveConfig(json));
         if (json.data_type === 'jsonp') {
           getJSONP({
@@ -304,6 +303,9 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
     const cdCallback = `__loadCogData__${id}_${group}_${name}`;
 
     window[ldCallback] = (dObjJson) => {
+      dObjJson.panelInterface.base = // eslint-disable-line no-param-reassign
+        fixBase(dObjJson.panelInterface.base, cfg.config_base);
+
       const iface = dObjJson.cogInterface;
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, dObjJson));

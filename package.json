@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.min.config.js --progress",
+    "buildf": "webpack --config webpack.config.js --progress",
     "prepublish": "npm run build",
     "analyze": "webpack --config webpack.min.config.js --progress --json | webpack-bundle-size-analyzer",
     "lint": "eslint src || true"

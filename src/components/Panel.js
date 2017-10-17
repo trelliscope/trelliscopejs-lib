@@ -10,6 +10,8 @@ import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line impo
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
 
+window.json = d3json;
+
 const getJSON = obj =>
   d3json(obj.url, json => obj.callback(json));
 
@@ -47,7 +49,7 @@ class Panel extends React.Component {
   componentDidMount() {
     // async stuff
     if (!this.state.loaded) {
-      let filebase = `${this.props.cfg.cog_server.info.base}/${this.props.iface.group}`;
+      let filebase = `${this.props.panelInterface.base}/${this.props.iface.group}`;
       filebase = `${filebase}/${this.props.iface.name}`;
 
       if (!window.__panel__) {
@@ -63,16 +65,22 @@ class Panel extends React.Component {
         // do post-rendering (if any)
         this.props.panelRenderer.fn(this.state.panelData, this.props.dims.ww,
           this.props.dims.hh, true, this.props.panelKey);
+        // console.log("done")
       };
 
-      if (this.props.cfg.cog_server.type === 'jsonp') {
+      if (this.props.panelInterface.mode === 'jsonp') {
         this.xhr = getJSONP({
           url: `${filebase}/jsonp/${this.props.panelKey}.jsonp`,
           callbackName: `__panel_${this.props.panelKey}__`
         });
-      } else {
+      } else if (this.props.panelInterface.mode === 'json') {
         this.xhr = getJSON({
           url: `${filebase}/json/${this.props.panelKey}.json`,
+          callback: window.__panel__[`_${this.props.panelKey}`]
+        });
+      } else if (this.props.panelInterface.mode === 'promise') {
+        this.xhr = getJSON({
+          url: `http://localhost:${this.props.panelInterface.port}/PANEL?idx=${this.props.panelKey}`,
           callback: window.__panel__[`_${this.props.panelKey}`]
         });
       }
