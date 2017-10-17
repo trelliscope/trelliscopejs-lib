@@ -237,7 +237,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
         dispatch(receiveConfig(json));
         if (json.data_type === 'jsonp') {
           getJSONP({
-            url: `${json.display_base}/displayList.jsonp`,
+            url: `${json.display_base}displayList.jsonp`,
             callbackName: dlCallback,
             error: err => dispatch(setErrorMessage(
               `Couldn't load display list: ${err.url}`
@@ -245,7 +245,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
           });
         } else {
           getJSON({
-            url: `${json.display_base}/displayList.json`,
+            url: `${json.display_base}displayList.json`,
             callback: window[dlCallback]
           }).on('error', err => dispatch(setErrorMessage(
             `Couldn't load display list: ${err.target.responseURL}`
