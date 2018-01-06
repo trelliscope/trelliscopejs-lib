@@ -47,7 +47,7 @@ class Panel extends React.Component {
   componentDidMount() {
     // async stuff
     if (!this.state.loaded) {
-      let filebase = `${this.props.cfg.cog_server.info.base}/${this.props.iface.group}`;
+      let filebase = `${this.props.cfg.cog_server.info.base}${this.props.iface.group}`;
       filebase = `${filebase}/${this.props.iface.name}`;
 
       if (!window.__panel__) {

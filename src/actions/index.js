@@ -238,7 +238,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
         dispatch(receiveConfig(json));
         if (json.data_type === 'jsonp') {
           getJSONP({
-            url: `${json.display_base}/displayList.jsonp`,
+            url: `${json.display_base}displayList.jsonp`,
             callbackName: dlCallback,
             error: err => dispatch(setErrorMessage(
               `Couldn't load display list: ${err.url}`
@@ -246,7 +246,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
           });
         } else {
           getJSON({
-            url: `${json.display_base}/displayList.json`,
+            url: `${json.display_base}displayList.json`,
             callback: window[dlCallback]
           }).on('error', err => dispatch(setErrorMessage(
             `Couldn't load display list: ${err.target.responseURL}`
@@ -324,7 +324,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
       // load the cog data
       if (cfg.data_type === 'jsonp') {
         getJSONP({
-          url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.jsonp`,
+          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
           callbackName: 'cdCallback',
           error: err => dispatch(setErrorMessage(
             `Couldn't load cognostics data: ${err.url}`
@@ -332,7 +332,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
         });
       } else {
         getJSON({
-          url: `${cfg.display_base}/${iface.group}/${iface.name}/cogData.json`,
+          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
           callback: window[cdCallback]
         }).on('error', err => dispatch(setErrorMessage(
           `Couldn't load display list: ${err.target.responseURL}`
@@ -343,7 +343,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
     // get displayObj.json so we can find the cog data, etc.
     if (cfg.data_type === 'jsonp') {
       getJSONP({
-        url: `${cfg.display_base}/${group}/${name}/displayObj.jsonp`,
+        url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
         callbackName: 'ldCallback',
         error: err => dispatch(setErrorMessage(
           `Couldn't load display object: ${err.url}`
@@ -351,7 +351,7 @@ export const fetchDisplay = (name, group, cfg, id = '') =>
       });
     } else {
       getJSON({
-        url: `${cfg.display_base}/${group}/${name}/displayObj.json`,
+        url: `${cfg.display_base}${group}/${name}/displayObj.json`,
         callback: window[ldCallback]
       }).on('error', err => dispatch(setErrorMessage(
         `Couldn't load display list: ${err.target.responseURL}`
