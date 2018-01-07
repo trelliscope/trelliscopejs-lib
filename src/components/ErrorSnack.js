@@ -12,7 +12,7 @@ const ErrorSnack = ({ errorMsg, handleClose }) => (
     message={errorMsg}
     onRequestClose={handleClose}
     action="close"
-    onActionTouchTap={handleClose}
+    onActionClick={handleClose}
     style={{
       position: 'absolute'
     }}

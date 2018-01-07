@@ -58,7 +58,7 @@ module.exports = {
         test: /\.js$/,
         include: path.join(__dirname, 'src'),
         use: [
-          'react-hot-loader',
+          'react-hot-loader/webpack',
           'babel-loader'
         ]
       },
