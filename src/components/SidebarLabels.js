@@ -9,7 +9,7 @@ import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChange }) => {
+const SidebarLabels = ({ classes, height, labels, cogInfo, handleChange }) => {
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
@@ -57,7 +57,7 @@ const SidebarLabels = ({ sheet: { classes }, height, labels, cogInfo, handleChan
 
 SidebarLabels.propTypes = {
   height: PropTypes.number.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   labels: PropTypes.array.isRequired,
   cogInfo: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired

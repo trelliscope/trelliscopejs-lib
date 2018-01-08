@@ -70,7 +70,7 @@ class FilterCat extends React.Component {
     this.props.handleChange(newState);
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     const regexInput = {
       width: uiConsts.sidebar.width - 40,
@@ -132,7 +132,7 @@ class FilterCat extends React.Component {
 }
 
 FilterCat.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   filterState: PropTypes.object.isRequired,
   dist: PropTypes.object.isRequired,
   condDist: PropTypes.object.isRequired,

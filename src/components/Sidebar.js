@@ -14,7 +14,7 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
+const Sidebar = ({ classes, styles, active, displayLoaded }) => {
   if (active === '') {
     return (
       <div
@@ -58,7 +58,7 @@ const Sidebar = ({ sheet: { classes }, styles, active, displayLoaded }) => {
 
 Sidebar.propTypes = {
   styles: PropTypes.object.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   active: PropTypes.string.isRequired,
   displayLoaded: PropTypes.bool.isRequired
 };

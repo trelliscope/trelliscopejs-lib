@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { SB_CONFIG } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick }) => (
+const SideButton = ({ classes, isActive, icon, title, label, onClick }) => (
   <button
     className={classNames({
       [classes.base]: true,
@@ -23,7 +23,7 @@ const SideButton = ({ sheet: { classes }, isActive, icon, title, label, onClick 
 );
 
 SideButton.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   isActive: PropTypes.bool.isRequired,
   icon: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

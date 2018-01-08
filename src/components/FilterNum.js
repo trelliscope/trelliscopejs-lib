@@ -97,7 +97,7 @@ class FilterNum extends React.Component {
     return true;
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     const underlineStyle = {
       bottom: 10
@@ -190,7 +190,7 @@ class FilterNum extends React.Component {
 FilterNum.propTypes = {
   name: PropTypes.string.isRequired,
   filterState: PropTypes.object.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   dist: PropTypes.object.isRequired,
   condDist: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired

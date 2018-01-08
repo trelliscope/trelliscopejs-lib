@@ -6,7 +6,7 @@ import { fade } from 'material-ui/utils/colorManipulator';
 import { setFilterView, setFilter, setLayout, setSort } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
-const FooterChip = ({ sheet: { classes }, label, icon, text, index,
+const FooterChip = ({ classes, label, icon, text, index,
   type, handleStateClose }) => {
   let iconTag = '';
   if (icon !== '') {
@@ -47,7 +47,7 @@ FooterChip.propTypes = {
   icon: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   handleStateClose: PropTypes.func.isRequired
 };

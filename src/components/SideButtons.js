@@ -69,7 +69,7 @@ class SideButtons extends React.Component {
     }
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     return (
       <div className={classes.sideButtonsContainer} style={this.props.styles.sideButtonsContainer}>
@@ -91,7 +91,7 @@ class SideButtons extends React.Component {
 
 SideButtons.propTypes = {
   styles: PropTypes.object.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   active: PropTypes.string.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,

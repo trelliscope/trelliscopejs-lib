@@ -10,7 +10,7 @@ import { displayInfoSelector, filterSelector, sortSelector,
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => {
+const Footer = ({ classes, style, sort, filter, nFilt, nPanels }) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -78,7 +78,7 @@ const Footer = ({ sheet: { classes }, style, sort, filter, nFilt, nPanels }) => 
 };
 
 Footer.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
   sort: PropTypes.array.isRequired,
   filter: PropTypes.array.isRequired,

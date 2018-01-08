@@ -10,7 +10,7 @@ import { setLayout } from '../actions';
 import { layoutSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
+const SidebarLayout = ({ classes, layout, handleChange }) => {
   let content = <div />;
   if (layout.nrow) {
     content = (
@@ -84,7 +84,7 @@ const SidebarLayout = ({ sheet: { classes }, layout, handleChange }) => {
 };
 
 SidebarLayout.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired
 };

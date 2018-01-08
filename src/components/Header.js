@@ -26,7 +26,7 @@ class Header extends React.Component {
   componentWillReceiveProps(nprops) {
     // handle loading a single display if necessary
     const singleDisplay = nprops.displayList.isLoaded &&
-        nprops.displayList.list.length <= 1;
+      nprops.displayList.list.length <= 1;
     this.setState({ singleDisplay });
 
     if (!this.state.singleLoaded && singleDisplay &&
@@ -44,7 +44,7 @@ class Header extends React.Component {
     }
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     let displayName = '';
     let displayDesc = '';
@@ -111,7 +111,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   styles: PropTypes.object.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // classes: PropTypes.objects.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   cfg: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types

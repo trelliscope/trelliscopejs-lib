@@ -16,7 +16,7 @@ class CatBar extends React.Component {
     this.setState({ hover: false });
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     const fontSize = Math.min(10, this.props.height - 6);
     const labelFontSize = Math.min(9, this.props.height - 7);
@@ -76,7 +76,7 @@ class CatBar extends React.Component {
 }
 
 CatBar.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   active: PropTypes.bool.isRequired,
   allActive: PropTypes.bool.isRequired,
   width: PropTypes.number.isRequired,

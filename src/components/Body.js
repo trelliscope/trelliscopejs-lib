@@ -8,7 +8,7 @@ import SideButtons from './SideButtons';
 import Sidebar from './Sidebar';
 import Content from './Content';
 
-const Body = ({ sheet: { classes }, width, height }) => (
+const Body = ({ classes, width, height }) => (
   <div className={classes.body} style={{ width, height }}>
     <SideButtons />
     <Sidebar />
@@ -17,7 +17,6 @@ const Body = ({ sheet: { classes }, width, height }) => (
 );
 
 Body.propTypes = {
-  sheet: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };

@@ -5,7 +5,7 @@ import { GridList, GridTile } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import { redA200 } from 'material-ui/styles/colors';
 
-const DisplayList = ({ sheet: { classes }, di, displayGroups, handleClick, cfg }) => {
+const DisplayList = ({ classes, di, displayGroups, handleClick, cfg }) => {
   const groupKeys = Object.keys(displayGroups);
 
   const makeSubheader = (groupName, n) => {
@@ -98,7 +98,7 @@ const staticStyles = {
 };
 
 DisplayList.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   di: PropTypes.array.isRequired,
   displayGroups: PropTypes.object.isRequired,
   handleClick: PropTypes.func.isRequired,

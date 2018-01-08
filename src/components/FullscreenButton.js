@@ -48,7 +48,7 @@ class FullscreenButton extends React.Component {
       return null;
     }
 
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
     const cls = this.props.fullscreen ? 'icon-minimize' : 'icon-maximize';
 
     return (
@@ -72,7 +72,7 @@ class FullscreenButton extends React.Component {
 }
 
 FullscreenButton.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   dialog: PropTypes.bool.isRequired,
   sidebar: PropTypes.string.isRequired,

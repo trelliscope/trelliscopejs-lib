@@ -123,7 +123,7 @@ class Panel extends React.Component {
     this.setState({ hover: val });
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
     const dims = this.props.dims;
     const rowIndex = this.props.rowIndex;
     const iColIndex = this.props.iColIndex;
@@ -282,7 +282,7 @@ Panel.propTypes = {
   dims: PropTypes.object.isRequired,
   rowIndex: PropTypes.number.isRequired,
   iColIndex: PropTypes.number.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   panelRenderer: PropTypes.object.isRequired,
   panelInterface: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   panelData: PropTypes.object,

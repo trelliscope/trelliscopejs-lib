@@ -69,7 +69,7 @@ class NumericInput extends React.Component {
     }
   }
   render() {
-    const { classes } = this.props.sheet;
+    const classes = this.props.classes;
 
     let arrowElements = '';
     if (this.props.arrows) {
@@ -112,7 +112,7 @@ class NumericInput extends React.Component {
 }
 
 NumericInput.propTypes = {
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   arrows: PropTypes.bool.isRequired,
   value: PropTypes.number.isRequired,
   min: PropTypes.number.isRequired,

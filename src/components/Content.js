@@ -17,7 +17,7 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
   localPanelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Content = ({ sheet: { classes }, contentStyle, ccd, ci, cinfo, cfg, layout,
+const Content = ({ classes, contentStyle, ccd, ci, cinfo, cfg, layout,
   labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, panelData,
   removeLabel, setPageNum }) => {
   let ret = <div />;

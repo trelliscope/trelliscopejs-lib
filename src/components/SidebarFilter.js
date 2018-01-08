@@ -17,7 +17,7 @@ import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
+const SidebarFilter = ({ classes, styles, catHeight, filter,
   filterView, cogInfo, displayInfo, filtDist, colSplit, handleViewChange,
   handleFilterChange, handleFilterSortChange, labels }) => {
   let content = <div />;
@@ -191,7 +191,7 @@ const SidebarFilter = ({ sheet: { classes }, styles, catHeight, filter,
 
 SidebarFilter.propTypes = {
   styles: PropTypes.object.isRequired,
-  sheet: PropTypes.object.isRequired,
+  // sheet: PropTypes.object.isRequired,
   catHeight: PropTypes.number.isRequired,
   filter: PropTypes.object.isRequired,
   filterView: PropTypes.object.isRequired,
