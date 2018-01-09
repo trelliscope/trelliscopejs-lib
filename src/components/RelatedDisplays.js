@@ -40,7 +40,7 @@ class RelatedDisplays extends React.Component {
     this.setState({ open: false });
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     const actions = [
       <FlatButton
@@ -77,7 +77,7 @@ class RelatedDisplays extends React.Component {
 
 RelatedDisplays.propTypes = {
   styles: PropTypes.object.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   relatedDisplays: PropTypes.array.isRequired,
   active: PropTypes.bool.isRequired
 };

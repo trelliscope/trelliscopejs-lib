@@ -47,7 +47,7 @@ class HeaderLogo extends React.Component {
     this.setState({ open: false });
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     const actions = [
       <FlatButton
@@ -329,7 +329,7 @@ class HeaderLogo extends React.Component {
 }
 
 HeaderLogo.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   windowHeight: PropTypes.number.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   setDialogOpen: PropTypes.func.isRequired

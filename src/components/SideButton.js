@@ -5,14 +5,16 @@ import classNames from 'classnames';
 import { SB_CONFIG } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SideButton = ({ classes, isActive, icon, title, label, onClick }) => (
+const SideButton = ({
+  classes, isActive, icon, title, label, onClick
+}) => (
   <button
     className={classNames({
       [classes.base]: true,
       [classes.active]: isActive,
       [classes.bottom]: title === SB_CONFIG
     })}
-    type={'button'}
+    type="button"
     onTouchTap={onClick}
   >
     <div className={classes.icon}>
@@ -23,7 +25,7 @@ const SideButton = ({ classes, isActive, icon, title, label, onClick }) => (
 );
 
 SideButton.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   isActive: PropTypes.bool.isRequired,
   icon: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -58,11 +60,11 @@ const staticStyles = {
   },
   active: {
     transition: 'color 0.2s, background 0.2s',
-    background: 'white',
-    color: uiConsts.sideButtons.button.active.color,
+    background: 'white !important',
+    color: `${uiConsts.sideButtons.button.active.color} !important`,
     '&:hover': {
       transition: 'color 0.2s, background 0.2s',
-      background: uiConsts.sideButtons.button.active.background
+      background: `${uiConsts.sideButtons.button.active.background} !important`
     }
   },
   icon: {

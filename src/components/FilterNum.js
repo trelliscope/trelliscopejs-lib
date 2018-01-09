@@ -81,8 +81,7 @@ class FilterNum extends React.Component {
       this.props.handleChange(newState);
 
       if (this._fromInput && this._toInput) {
-        this._fromInput.input.value = values[0];
-        this._toInput.input.value = values[1];
+        [this._fromInput.input.value, this._toInput.input.value] = values;
       }
     }
   }
@@ -97,7 +96,7 @@ class FilterNum extends React.Component {
     return true;
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     const underlineStyle = {
       bottom: 10
@@ -122,7 +121,7 @@ class FilterNum extends React.Component {
     }
 
     // calculate step value for numeric input
-    const breaks = this.props.dist.dist.raw.breaks;
+    const { breaks } = this.props.dist.dist.raw;
     const hspan = (breaks[1] - breaks[0]) * breaks.length;
     const step = 10 ** Math.round(Math.log10(hspan / 100) - 0.4);
 
@@ -190,7 +189,7 @@ class FilterNum extends React.Component {
 FilterNum.propTypes = {
   name: PropTypes.string.isRequired,
   filterState: PropTypes.object.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   dist: PropTypes.object.isRequired,
   condDist: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired

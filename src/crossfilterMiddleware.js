@@ -5,10 +5,10 @@
 // SET_SORT or SET_FILTER operations are performed
 
 const MAX_VALUE = 9007199254740992; // we want NAs to always get pushed back in sort
-const getNumVal = (d, name) => (isNaN(d[name]) ? -MAX_VALUE : d[name]);
+const getNumVal = (d, name) => (Number.isNaN(d[name]) ? -MAX_VALUE : d[name]);
 const getNumValSign = (d, name, dir) => {
   const sign = dir === 'asc' ? 1 : 0;
-  return (isNaN(d[name]) ? sign * MAX_VALUE : d[name]);
+  return (Number.isNaN(d[name]) ? sign * MAX_VALUE : d[name]);
 };
 const getCatVal = (d, name) => (d[name] ? d[name] : 'NA');
 
@@ -58,7 +58,7 @@ const crossfilterMiddleware = store => next => (action) => {
             // create group that bins into histogram breaks
             const ci = store.getState()._displayInfo.info.cogInfo[names[i]];
             groups[names[i]] = dimensions[names[i]].group(d =>
-              (isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+              (Number.isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
           }
           if (action.filter[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
@@ -100,7 +100,7 @@ const crossfilterMiddleware = store => next => (action) => {
       const dimensions = store.getState()._cogDataMutable.dimensionRefs;
       const groups = store.getState()._cogDataMutable.groupRefs;
 
-      const type = store.getState()._displayInfo.info.cogInfo[action.name].type;
+      const { type } = store.getState()._displayInfo.info.cogInfo[action.name];
 
       if (dimensions[action.name] === undefined) {
         if (type === 'numeric') {
@@ -114,7 +114,7 @@ const crossfilterMiddleware = store => next => (action) => {
         if (type === 'numeric') {
           const ci = store.getState()._displayInfo.info.cogInfo[action.name];
           groups[action.name] = dimensions[action.name].group(d =>
-            (isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+            (Number.isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
         } else {
           groups[action.name] = dimensions[action.name].group();
         }

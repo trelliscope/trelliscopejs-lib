@@ -9,7 +9,7 @@ class NumericInput extends React.Component {
     super(props);
     let step = 1;
     if (props.step) {
-      step = props.step;
+      step = props.step; // eslint-disable-line prefer-destructuring
     }
     this.state = { value: props.value, step };
     this.mousetrap = null;
@@ -55,7 +55,7 @@ class NumericInput extends React.Component {
   handleChange = (event) => {
     this.setState({ value: event.target.value });
     const val = parseFloat(event.target.value);
-    if (!isNaN(val) && this.props.onChange) {
+    if (!Number.isNaN(val) && this.props.onChange) {
       let updateable = true;
       if (this.props.min && val < this.props.min) {
         updateable = false;
@@ -69,7 +69,7 @@ class NumericInput extends React.Component {
     }
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     let arrowElements = '';
     if (this.props.arrows) {
@@ -112,7 +112,7 @@ class NumericInput extends React.Component {
 }
 
 NumericInput.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   arrows: PropTypes.bool.isRequired,
   value: PropTypes.number.isRequired,
   min: PropTypes.number.isRequired,

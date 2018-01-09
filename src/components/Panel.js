@@ -59,7 +59,8 @@ class Panel extends React.Component {
           panelContent: this.props.panelRenderer.fn(json2, this.props.dims.ww,
             this.props.dims.hh, false, this.props.panelKey),
           panelData: json2,
-          loaded: true });
+          loaded: true
+        });
         // do post-rendering (if any)
         this.props.panelRenderer.fn(this.state.panelData, this.props.dims.ww,
           this.props.dims.hh, true, this.props.panelKey);
@@ -84,7 +85,7 @@ class Panel extends React.Component {
     // fade in on new component
     const elem = this._panel;
     elem.style.opacity = 0;
-    setTimeout(() => (elem.style.opacity = 1), 10);
+    setTimeout(() => (elem.style.opacity = 1), 10); // eslint-disable-line no-return-assign
   }
   componentWillReceiveProps(nprops) {
     // when there is an update, if the size changed, update
@@ -123,10 +124,10 @@ class Panel extends React.Component {
     this.setState({ hover: val });
   }
   render() {
-    const classes = this.props.classes;
-    const dims = this.props.dims;
-    const rowIndex = this.props.rowIndex;
-    const iColIndex = this.props.iColIndex;
+    const { classes } = this.props;
+    const { dims } = this.props;
+    const { rowIndex } = this.props;
+    const { iColIndex } = this.props;
 
     const styles = {
       bounding: {
@@ -243,7 +244,9 @@ class Panel extends React.Component {
                     })}
                     style={styles.labelRow}
                     onMouseOver={() => this.handleHover(d.name)}
+                    onFocus={() => this.handleHover(d.name)}
                     onMouseOut={() => this.handleHover('')}
+                    onBlur={() => this.handleHover('')}
                   >
                     <td
                       className={`${classes.labelCell} ${classes.labelNameCell}`}
@@ -282,7 +285,7 @@ Panel.propTypes = {
   dims: PropTypes.object.isRequired,
   rowIndex: PropTypes.number.isRequired,
   iColIndex: PropTypes.number.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   panelRenderer: PropTypes.object.isRequired,
   panelInterface: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   panelData: PropTypes.object,

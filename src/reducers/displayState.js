@@ -2,7 +2,9 @@ import { omit } from 'lodash';
 import { combineReducers } from 'redux';
 import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants';
 
-export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 }, action) => {
+export const layout = (state = {
+  nrow: 1, ncol: 1, arrange: 'row', pageNum: 1
+}, action) => {
   switch (action.type) {
     case SET_LAYOUT: {
       // if the layout change was to nrow / ncol
@@ -11,7 +13,7 @@ export const layout = (state = { nrow: 1, ncol: 1, arrange: 'row', pageNum: 1 },
       if (obj.nrow || obj.ncol) {
         const prevPanelIndex = (state.nrow * state.ncol * (state.pageNum - 1)) + 1;
         obj.pageNum = Math.ceil(prevPanelIndex / (obj.nrow * obj.ncol));
-        if (isNaN(obj.pageNum)) {
+        if (Number.isNaN(obj.pageNum)) {
           obj.pageNum = 1;
         }
       }

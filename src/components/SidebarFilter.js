@@ -17,9 +17,11 @@ import { displayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarFilter = ({ classes, styles, catHeight, filter,
-  filterView, cogInfo, displayInfo, filtDist, colSplit, handleViewChange,
-  handleFilterChange, handleFilterSortChange, labels }) => {
+const SidebarFilter = ({
+  classes, styles, catHeight, filter, filterView, cogInfo,
+  displayInfo, filtDist, colSplit, handleViewChange,
+  handleFilterChange, handleFilterSortChange, labels
+}) => {
   let content = <div />;
   const displId = displayInfo.info.name;
   if (filter && filterView.active && colSplit) {
@@ -95,22 +97,22 @@ const SidebarFilter = ({ classes, styles, catHeight, filter,
                     [classes.headerNameActive]: filterActive
                   })}
                 >
-                  <a data-tip data-for={`hdtooltip_${d}`}>
+                  <span data-tip data-for={`hdtooltip_${d}`}>
                     <span className={classes.headerNameText}>{d}</span>
-                  </a>
+                  </span>
                 </div>
                 <ReactTooltip place="right" id={`hdtooltip_${d}`}>
                   <span>{cogInfo[d].desc}</span>
                 </ReactTooltip>
                 <div className={classes.headerExtra}>{headerExtra}</div>
-                <div
+                <button
                   key={`${d}_${displId}-close-icon`}
                   className={`${classes.headerIcon} ${classes.headerClose}`}
                   onMouseDown={() => handleViewChange(d, 'remove')}
                 >
                   <i className="icon-times-circle" />
-                </div>
-                <div
+                </button>
+                <button
                   key={`${d}_${displId}-reset-icon`}
                   className={classNames({
                     [classes.headerIcon]: true,
@@ -120,7 +122,7 @@ const SidebarFilter = ({ classes, styles, catHeight, filter,
                   onMouseDown={() => handleFilterChange(filterState.name)}
                 >
                   <i className="icon-undo" />
-                </div>
+                </button>
               </div>
               {itemContent}
             </div>
@@ -154,7 +156,7 @@ const SidebarFilter = ({ classes, styles, catHeight, filter,
         >
           {inames.map(d => (
             <span key={`${d}_${displId}`}>
-              <a data-tip data-for={`tooltip_${d}`}>
+              <span data-tip data-for={`tooltip_${d}`}>
                 <button
                   className={classNames({
                     [classes.variable]: true,
@@ -165,7 +167,7 @@ const SidebarFilter = ({ classes, styles, catHeight, filter,
                 >
                   {d}
                 </button>
-              </a>
+              </span>
               <ReactTooltip place="right" id={`tooltip_${d}`}>
                 <span>{cogInfo[d].desc}</span>
               </ReactTooltip>
@@ -257,10 +259,10 @@ const staticStyles = {
     }
   },
   variableActive: {
-    background: '#81C784',
-    color: 'white',
+    background: '#81C784 !important',
+    color: 'white !important',
     '&:hover': {
-      background: emphasize('#81C784', 0.2)
+      background: `${emphasize('#81C784', 0.2)} !important`
     }
   },
   allContainer: {

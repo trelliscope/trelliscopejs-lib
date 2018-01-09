@@ -17,9 +17,11 @@ import { configSelector, cogInterfaceSelector, layoutSelector,
   localPanelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Content = ({ classes, contentStyle, ccd, ci, cinfo, cfg, layout,
-  labels, dims, panelRenderer, panelInterface, sidebar, curPage, totPages, panelData,
-  removeLabel, setPageNum }) => {
+const Content = ({
+  classes, contentStyle, ccd, ci, cinfo, cfg, layout, labels,
+  dims, panelRenderer, panelInterface, sidebar, curPage,
+  totPages, panelData, removeLabel, setPageNum
+}) => {
   let ret = <div />;
 
   if (ci && ccd && cinfo && panelRenderer.fn !== null) {

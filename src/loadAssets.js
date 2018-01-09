@@ -1,5 +1,5 @@
 export const findWidget = (name) => {
-  const widgets = window.HTMLWidgets.widgets;
+  const { widgets } = window.HTMLWidgets;
   // console.log(widgets);
   for (let i = 0; i < widgets.length; i += 1) {
     if (widgets[i].name === name) {

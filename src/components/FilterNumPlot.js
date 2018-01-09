@@ -15,7 +15,7 @@ class FilterNumPlot extends React.Component {
     // the one thing that can change is the domain of ys
     const axisPad = 16;
     const sidePad = 5;
-    const delta = this.props.condDist.delta;
+    const { delta } = this.props.condDist;
     const xrange = [this.props.condDist.breaks[0],
       this.props.condDist.breaks[this.props.condDist.breaks.length - 1] + delta];
     const xs = scaleLinear()
@@ -226,10 +226,10 @@ HistPlotD3.update = (props, pars, selection) => {
 
     // explicitly set from = min or to = max if not specified
     if (fFrom === undefined) {
-      fFrom = pars.xrange[0];
+      fFrom = pars.xrange[0]; // eslint-disable-line prefer-destructuring
     }
     if (fTo === undefined) {
-      fTo = pars.xrange[1];
+      fTo = pars.xrange[1]; // eslint-disable-line prefer-destructuring
     }
     //
     if (fTo > fFrom) {

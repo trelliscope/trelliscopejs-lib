@@ -281,9 +281,9 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
       // all data for rendering app is self-contained in document
       dispatch(receiveConfig(config.config));
       dispatch(receiveDisplayList(config.displayList));
-      const name = config.displayList[0].name;
-      const group = config.displayList[0].group;
-      const desc = config.displayList[0].desc;
+      const { name } = config.displayList[0];
+      const { group } = config.displayList[0];
+      const { desc } = config.displayList[0];
 
       dispatch(setSelectedDisplay(name, group, desc));
       dispatch(requestDisplay(name, group));

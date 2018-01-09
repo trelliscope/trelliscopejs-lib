@@ -10,7 +10,9 @@ import { displayInfoSelector, filterSelector, sortSelector,
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Footer = ({ classes, style, sort, filter, nFilt, nPanels }) => {
+const Footer = ({
+  classes, style, sort, filter, nFilt, nPanels
+}) => {
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -27,7 +29,7 @@ const Footer = ({ classes, style, sort, filter, nFilt, nPanels }) => {
               key={`${el.name}_sortchip`}
               label={el.name}
               icon={el.icon}
-              text={''}
+              text=""
               index={i}
               type="sort"
             />
@@ -48,7 +50,7 @@ const Footer = ({ classes, style, sort, filter, nFilt, nPanels }) => {
             <FooterChip
               key={`${el.name}_filterchip`}
               label={el.name}
-              icon={''}
+              icon=""
               text={el.text}
               index={i}
               type="filter"
@@ -78,7 +80,7 @@ const Footer = ({ classes, style, sort, filter, nFilt, nPanels }) => {
 };
 
 Footer.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
   sort: PropTypes.array.isRequired,
   filter: PropTypes.array.isRequired,
@@ -144,8 +146,8 @@ const sortInfoSelector = createSelector(
   (sort, di) => {
     const res = [];
     for (let i = 0; i < sort.length; i += 1) {
-      const name = sort[i].name;
-      const type = di.info.cogInfo[name].type;
+      const { name } = sort[i];
+      const { type } = di.info.cogInfo[name];
       let icon = 'icon-sort-amount';
       if (type === 'factor') {
         icon = 'icon-sort-alpha';

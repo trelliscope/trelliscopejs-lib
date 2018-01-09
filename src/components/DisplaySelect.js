@@ -77,7 +77,7 @@ class DisplaySelect extends React.Component {
     this.setState({ open: false });
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     const actions = [
       <FlatButton
@@ -130,7 +130,7 @@ class DisplaySelect extends React.Component {
 }
 
 DisplaySelect.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   handleClick: PropTypes.func.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
   cfg: PropTypes.object.isRequired,

@@ -9,7 +9,9 @@ import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLabels = ({ classes, height, labels, cogInfo, handleChange }) => {
+const SidebarLabels = ({
+  classes, height, labels, cogInfo, handleChange
+}) => {
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {

@@ -21,7 +21,10 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
             <NumericInput
               arrows
               value={layout.nrow}
-              size={3} min={1} max={15} step={1}
+              size={3}
+              min={1}
+              max={15}
+              step={1}
               onChange={nr =>
                 handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
               }
@@ -35,7 +38,10 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
             <NumericInput
               arrows
               value={layout.ncol}
-              size={3} min={1} max={15} step={1}
+              size={3}
+              min={1}
+              max={15}
+              step={1}
               onChange={nc =>
                 handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
               }

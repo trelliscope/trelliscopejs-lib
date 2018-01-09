@@ -47,7 +47,8 @@ class DisplayInfo extends React.Component {
     this.setState({ open: false });
   }
   render() {
-    const classes = this.props.classes;
+    // const { classes } = this.props;
+    const { classes } = this.props;
 
     const actions = [
       <FlatButton
@@ -154,7 +155,7 @@ class DisplayInfo extends React.Component {
 
 DisplayInfo.propTypes = {
   styles: PropTypes.object.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   singleDisplay: PropTypes.bool.isRequired,
   // selectedDisplay: PropTypes.object.isRequired,
   displayInfo: PropTypes.object.isRequired,

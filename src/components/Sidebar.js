@@ -14,7 +14,9 @@ import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
   SB_PANEL_LABELS, SB_CONFIG } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
-const Sidebar = ({ classes, styles, active, displayLoaded }) => {
+const Sidebar = ({
+  classes, styles, active, displayLoaded
+}) => {
   if (active === '') {
     return (
       <div
@@ -34,13 +36,13 @@ const Sidebar = ({ classes, styles, active, displayLoaded }) => {
       case SB_PANEL_LAYOUT:
         content = <div><SidebarLayout /></div>;
         break;
-      case SB_PANEL_FILTER :
+      case SB_PANEL_FILTER:
         content = <div><SidebarFilter /></div>;
         break;
-      case SB_PANEL_SORT :
+      case SB_PANEL_SORT:
         content = <div><SidebarSort /></div>;
         break;
-      case SB_PANEL_LABELS :
+      case SB_PANEL_LABELS:
         content = <div><SidebarLabels /></div>;
         break;
       default:
@@ -58,7 +60,7 @@ const Sidebar = ({ classes, styles, active, displayLoaded }) => {
 
 Sidebar.propTypes = {
   styles: PropTypes.object.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   active: PropTypes.string.isRequired,
   displayLoaded: PropTypes.bool.isRequired
 };

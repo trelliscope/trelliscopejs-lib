@@ -6,7 +6,7 @@ export const relatedDisplaysSelector = createSelector(
   (di, dl) => {
     const res = [];
     if (di.isLoaded) {
-      const keySig = di.info.keySig;
+      const { keySig } = di.info;
       const dispID = [di.info.group, di.info.name].join('/');
       for (let i = 0; i < dl.list.length; i += 1) {
         const sameKey = dl.list[i].keySig === keySig;

@@ -11,8 +11,9 @@ import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarSort = ({ classes, styles, sort, cogDesc, labels,
-  handleChange, addLabel }) => {
+const SidebarSort = ({
+  classes, styles, sort, cogDesc, labels, handleChange, addLabel
+}) => {
   let content = <div />;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
@@ -71,7 +72,7 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels,
         <div className={classes.notUsed} style={styles.notUsed}>
           {notUsed.map(d => (
             <span key={`${d}_notused`}>
-              <a data-tip data-for={`tooltip_${d}`}>
+              <span data-tip data-for={`tooltip_${d}`}>
                 <button
                   className={classes.variable}
                   key={`${d}_button`}
@@ -84,7 +85,7 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels,
                 >
                   {d}
                 </button>
-              </a>
+              </span>
               <ReactTooltip place="right" id={`tooltip_${d}`}>
                 <span>{cogDesc[d]}</span>
               </ReactTooltip>

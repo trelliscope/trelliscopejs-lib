@@ -17,6 +17,7 @@ const Body = ({ classes, width, height }) => (
 );
 
 Body.propTypes = {
+  classes: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };

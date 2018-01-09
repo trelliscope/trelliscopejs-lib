@@ -12,10 +12,10 @@ import { filterCardinalitySelector } from '../selectors/cogData';
 import uiConsts from '../assets/styles/uiConsts';
 
 class Pagination extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { skip: 1 };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   // this.state = { skip: 1 };
+  // }
   componentDidMount() {
     if (this.props.fullscreen) {
       Mousetrap.bind(['right'], () => {
@@ -73,7 +73,7 @@ class Pagination extends React.Component {
   pageFirst = () => this.props.handleChange(1)
   pageLast = () => this.props.handleChange(this.props.totPages)
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     const styles = {
       icon: {
@@ -181,7 +181,7 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   n: PropTypes.number.isRequired,
   npp: PropTypes.number.isRequired,
   totPages: PropTypes.number.isRequired,

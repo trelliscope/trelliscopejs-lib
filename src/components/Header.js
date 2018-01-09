@@ -44,7 +44,7 @@ class Header extends React.Component {
     }
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     let displayName = '';
     let displayDesc = '';
@@ -111,7 +111,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   styles: PropTypes.object.isRequired,
-  // classes: PropTypes.objects.isRequired,
+  classes: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   cfg: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types

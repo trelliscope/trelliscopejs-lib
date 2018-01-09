@@ -65,7 +65,7 @@ class FilterCatPlot extends React.Component {
       ridx = this.props.condDist.reverseRows ?
         x.rowIndex : this.props.condDist.dist.length - ((x.rowIndex - totSel) + 1);
     }
-    ridx = this.props.condDist.idx[ridx];
+    ridx = this.props.condDist.idx[ridx]; // eslint-disable-line prefer-destructuring
 
     active = x.rowIndex < totSel;
     barSize = this.props.condDist.dist[ridx].value;
@@ -91,9 +91,9 @@ class FilterCatPlot extends React.Component {
     );
   }
   render() {
-    const orderValue = this.props.condDist.orderValue;
-    const totSelected = this.props.condDist.totSelected;
-    const sumSelected = this.props.condDist.sumSelected;
+    const { orderValue } = this.props.condDist;
+    const { totSelected } = this.props.condDist;
+    const { sumSelected } = this.props.condDist;
     const fc = this.props.filterCardinality;
 
     return (

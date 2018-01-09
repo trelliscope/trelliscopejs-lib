@@ -11,7 +11,7 @@ const uiConsts = {
     button: {
       color: '#9ba3af',
       active: {
-        background: '#448AFF'  // <- blueA200 // '#4285f4' // #15a4fa
+        background: '#448AFF' // <- blueA200 // '#4285f4' // #15a4fa
       }
     },
     logo: {

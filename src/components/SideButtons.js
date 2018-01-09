@@ -14,17 +14,29 @@ import { dialogOpenSelector, fullscreenSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const buttons = [
-  { icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g' },
-  { icon: 'icon-list-ul', label: 'Labels', title: SB_PANEL_LABELS, key: 'l' },
-  { icon: 'icon-filter', label: 'Filter', title: SB_PANEL_FILTER, key: 'f' },
-  { icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's' }
+  {
+    icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g'
+  },
+  {
+    icon: 'icon-list-ul', label: 'Labels', title: SB_PANEL_LABELS, key: 'l'
+  },
+  {
+    icon: 'icon-filter', label: 'Filter', title: SB_PANEL_FILTER, key: 'f'
+  },
+  {
+    icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's'
+  }
   // { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
 ];
 
 class SideButtons extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false, displayList: [], open: false };
+    this.state = {
+      // loaded: false,
+      // displayList: [],
+      // open: false
+    };
   }
   componentDidMount() {
     if (this.props.fullscreen) {
@@ -69,7 +81,7 @@ class SideButtons extends React.Component {
     }
   }
   render() {
-    const classes = this.props.classes;
+    const { classes } = this.props;
 
     return (
       <div className={classes.sideButtonsContainer} style={this.props.styles.sideButtonsContainer}>
@@ -91,7 +103,7 @@ class SideButtons extends React.Component {
 
 SideButtons.propTypes = {
   styles: PropTypes.object.isRequired,
-  // sheet: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   active: PropTypes.string.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
