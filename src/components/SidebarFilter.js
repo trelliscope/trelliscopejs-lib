@@ -259,10 +259,10 @@ const staticStyles = {
     }
   },
   variableActive: {
-    background: '#81C784 !important',
-    color: 'white !important',
+    background: '#81C784',
+    color: 'white',
     '&:hover': {
-      background: `${emphasize('#81C784', 0.2)} !important`
+      background: emphasize('#81C784', 0.2)
     }
   },
   allContainer: {
@@ -316,6 +316,10 @@ const staticStyles = {
     color: '#666',
     cursor: 'pointer',
     position: 'absolute',
+    border: 'none',
+    background: 'none',
+    marginTop: -1,
+    padding: 0,
     zIndex: 1000,
     '&:hover': {
       transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',

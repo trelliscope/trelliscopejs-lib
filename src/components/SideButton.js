@@ -60,11 +60,11 @@ const staticStyles = {
   },
   active: {
     transition: 'color 0.2s, background 0.2s',
-    background: 'white !important',
-    color: `${uiConsts.sideButtons.button.active.color} !important`,
+    background: 'white',
+    color: uiConsts.sideButtons.button.active.color,
     '&:hover': {
       transition: 'color 0.2s, background 0.2s',
-      background: `${uiConsts.sideButtons.button.active.background} !important`
+      background: uiConsts.sideButtons.button.active.background
     }
   },
   icon: {
