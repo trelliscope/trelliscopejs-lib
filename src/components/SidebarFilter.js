@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import { intersection } from 'lodash';
+import intersection from 'lodash.intersection';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
