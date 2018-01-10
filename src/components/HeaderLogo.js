@@ -289,7 +289,7 @@ class HeaderLogo extends React.Component {
                     rel="noopener noreferrer"
                   >
                     Ryan Hafen
-                  </a>, 2016.
+                  </a>, 2018.
                 </p>
                 <p>
                   Built with&nbsp;
