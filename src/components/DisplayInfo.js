@@ -8,6 +8,7 @@ import marked from 'marked';
 // import katex from 'katex';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui-next/Button';
 import { selectedDisplaySelector, displayInfoSelector,
   fullscreenSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
@@ -51,7 +52,7 @@ class DisplayInfo extends React.Component {
     const { classes } = this.props;
 
     const actions = [
-      <FlatButton
+      <Button
         label="Close"
         secondary
         onTouchTap={this.handleClose}
