@@ -4,7 +4,7 @@ import injectSheet from 'react-jss';
 import classNames from 'classnames';
 // import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
-import { fade } from 'material-ui/utils/colorManipulator';
+import { fade } from 'material-ui-next/styles/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { findWidget } from '../loadAssets';

@@ -4,8 +4,14 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+// import Dialog from 'material-ui/Dialog';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui-next/Dialog';
+import Button from 'material-ui-next/Button';
 import { relatedDisplaysSelector } from '../selectors/display';
 import { selectedDisplaySelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
@@ -42,13 +48,6 @@ class RelatedDisplays extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const actions = [
-      <FlatButton
-        label="Close"
-        secondary
-        onTouchTap={this.handleClose}
-      />
-    ];
     return (
       <button
         onTouchTap={this.handleOpen}
@@ -57,18 +56,23 @@ class RelatedDisplays extends React.Component {
       >
         <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
         <Dialog
-          title="Add Related Displays"
-          actions={actions}
-          modal={false}
+          open={this.state.open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
+          aria-labelledby="dialog-reldisp-title"
         >
-          Under construction...
-          {this.props.relatedDisplays.map(d => (
-            <div key={`${d.group}_${d.name}`}>{d.group} / {d.name}</div>
-          ))}
+          <DialogTitle id="dialog-reldisp-title">{"Add Related Displays"}</DialogTitle>
+          <DialogContent>
+            Under construction...
+            {this.props.relatedDisplays.map(d => (
+              <div key={`${d.group}_${d.name}`}>{d.group} / {d.name}</div>
+            ))}
+          </DialogContent>
+          <DialogActions>
+            <Button color="accent" onClick={this.handleClose}>
+              Close
+            </Button>
+          </DialogActions>
         </Dialog>
       </button>
     );

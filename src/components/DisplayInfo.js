@@ -6,8 +6,12 @@ import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import marked from 'marked';
 // import katex from 'katex';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui-next/Dialog';
 import Button from 'material-ui-next/Button';
 import { selectedDisplaySelector, displayInfoSelector,
   fullscreenSelector } from '../selectors';
@@ -51,14 +55,6 @@ class DisplayInfo extends React.Component {
     // const { classes } = this.props;
     const { classes } = this.props;
 
-    const actions = [
-      <Button
-        label="Close"
-        secondary
-        onTouchTap={this.handleClose}
-      />
-    ];
-
     let dialogContent = '';
     if (this.props.displayInfo.isLoaded) {
       const mdDesc = marked(this.props.displayInfo.info.mdDesc, { sanitize: true });
@@ -84,48 +80,58 @@ class DisplayInfo extends React.Component {
         );
       }
 
+      // modal={false}
+      // className="trelliscope-app"
+      // style={{ zIndex: 8000, fontWeight: 300 }}
+      // onRequestClose={this.handleClose}
+
       dialogContent = (
         <Dialog
-          title="Information About This Display"
-          actions={actions}
-          modal={false}
+          open={this.state.open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
+          aria-labelledby="dialog-info-title"
         >
-          <div className={classes.modalContainer}>
-            <p>
-              <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
-            </p>
-            {descText}
-            <p>
-              <strong>Last updated</strong>: {this.props.displayInfo.info.updated}
-            </p>
-            <p>
-              <strong>Number of panels</strong>: {this.props.displayInfo.info.n}
-            </p>
-            {panelUnitText}
-            <div
-              // we can dangerously set because the HTML is generated from marked()
-              // with pure markdown (sanitize = TRUE so user HTML is not supported)
-              dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
-            />
-            <h3>Cognostics</h3>
-            <p>
-              To help navigate the panels, the following cognostics have been computed.
-              For information on how to use these metrics to interact with the panels,
-              please click the &quot;?&quot; icon in the top right corner of the
-              application or hit the key &quot;a&quot;.
-            </p>
-            <ul>
-              {ciKeys.map(d => (
-                <li key={ci[d].name}>
-                  <strong>{ci[d].name}</strong>: {ci[d].desc}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <DialogTitle id="dialog-info-title">{"Information About This Display"}</DialogTitle>
+          <DialogContent>
+            <div className={classes.modalContainer}>
+              <p>
+                <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
+              </p>
+              {descText}
+              <p>
+                <strong>Last updated</strong>: {this.props.displayInfo.info.updated}
+              </p>
+              <p>
+                <strong>Number of panels</strong>: {this.props.displayInfo.info.n}
+              </p>
+              {panelUnitText}
+              <div
+                // we can dangerously set because the HTML is generated from marked()
+                // with pure markdown (sanitize = TRUE so user HTML is not supported)
+                dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
+              />
+              <h3>Cognostics</h3>
+              <p>
+                To help navigate the panels, the following cognostics have been computed.
+                For information on how to use these metrics to interact with the panels,
+                please click the &quot;?&quot; icon in the top right corner of the
+                application or hit the key &quot;a&quot;.
+              </p>
+              <ul>
+                {ciKeys.map(d => (
+                  <li key={ci[d].name}>
+                    <strong>{ci[d].name}</strong>: {ci[d].desc}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button color="accent" onClick={this.handleClose}>
+              Close
+            </Button>
+          </DialogActions>
         </Dialog>
       );
     }

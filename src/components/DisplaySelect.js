@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
+import Button from 'material-ui-next/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui-next/Dialog';
+import { emphasize } from 'material-ui-next/styles/colorManipulator';
 import DisplayList from './DisplayList';
 import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
@@ -79,13 +84,6 @@ class DisplaySelect extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const actions = [
-      <FlatButton
-        label="Close"
-        secondary
-        onTouchTap={this.handleClose}
-      />
-    ];
     const isLoaded = this.props.displayList && this.props.displayList.isLoaded;
     let attnDiv = (
       <div className={classes.attnOuter}>
@@ -109,20 +107,25 @@ class DisplaySelect extends React.Component {
         {attnDiv}
         <i className={`icon-folder-open ${classes.folderIcon}`} />
         <Dialog
-          title="Select a Display to Open"
-          actions={actions}
-          modal={false}
+          open={this.state.open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
+          aria-labelledby="dialog-dispselect-title"
         >
-          <DisplayList
-            di={this.props.displayList.list}
-            displayGroups={this.props.displayGroups}
-            handleClick={this.handleSelect}
-            cfg={this.props.cfg}
-          />
+          <DialogTitle id="dialog-dispselect-title">{"Select a Display to Open"}</DialogTitle>
+          <DialogContent>
+            <DisplayList
+              di={this.props.displayList.list}
+              displayGroups={this.props.displayGroups}
+              handleClick={this.handleSelect}
+              cfg={this.props.cfg}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button color="accent" onClick={this.handleClose}>
+              Close
+            </Button>
+          </DialogActions>
         </Dialog>
       </button>
     );

@@ -8,7 +8,14 @@ import { createLogger } from 'redux-logger';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { blueA200, lightBlue700, redA200 } from 'material-ui/styles/colors';
+
+import blue from 'material-ui-next/colors/blue';
+import lightBlue from 'material-ui-next/colors/lightBlue';
+import red from 'material-ui-next/colors/red';
+const blueA200 = blue['A200'];
+const lightBlue700 = lightBlue['lightBlue'];
+const redA200 = red['A200']
+
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 import { addClass } from './classManipulation';

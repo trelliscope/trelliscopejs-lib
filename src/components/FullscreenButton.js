@@ -4,7 +4,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import { emphasize } from 'material-ui/utils/colorManipulator';
+import { emphasize } from 'material-ui-next/styles/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
 import { dialogOpenSelector, fullscreenSelector,
   appIdSelector, singlePageAppSelector } from '../selectors';

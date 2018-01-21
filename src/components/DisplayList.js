@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { GridList, GridTile } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
-import { redA200 } from 'material-ui/styles/colors';
+import red from 'material-ui-next/colors/red';
+const redA200 = red['A200'];
 
 const DisplayList = ({
   classes, di, displayGroups, handleClick, cfg
