@@ -4,7 +4,6 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-// import Dialog from 'material-ui/Dialog';
 import Dialog, {
   DialogActions,
   DialogContent,

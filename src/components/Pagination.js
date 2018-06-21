@@ -4,7 +4,11 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import IconButton from 'material-ui/IconButton';
+import IconButton from 'material-ui-next/IconButton';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import FirstPageIcon from 'material-ui-icons/FirstPage';
+import LastPageIcon from 'material-ui-icons/LastPage';
 import { setLayout } from '../actions';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector,
   fullscreenSelector, cogDataSelector } from '../selectors';
@@ -77,7 +81,7 @@ class Pagination extends React.Component {
 
     const styles = {
       icon: {
-        fontSize: 20,
+        fontSize: 10,
         padding: 6
       },
       button: {
@@ -124,10 +128,26 @@ class Pagination extends React.Component {
             <IconButton
               disabled={this.props.n <= 1}
               style={styles.button}
-              iconStyle={styles.icon}
-              iconClassName="icon-angle-left"
+              // iconStyle={styles.icon}
+              onTouchTap={() => this.pageFirst()}
+            >
+              <FirstPageIcon />
+            </IconButton>
+          </div>
+          <div className={classes.buttonText}>
+            First
+          </div>
+        </div>
+        <div className={classes.buttonWrap}>
+          <div className={classes.buttonDiv}>
+            <IconButton
+              disabled={this.props.n <= 1}
+              style={styles.button}
+              // iconStyle={styles.icon}
               onTouchTap={() => this.pageLeft()}
-            />
+            >
+              <ChevronLeftIcon />
+            </IconButton>
           </div>
           <div className={classes.buttonText}>
             Prev
@@ -138,10 +158,11 @@ class Pagination extends React.Component {
             <IconButton
               disabled={this.props.n >= this.props.totPages}
               style={styles.button}
-              iconStyle={styles.icon}
-              iconClassName="icon-angle-right"
+              // iconStyle={styles.icon}
               onTouchTap={() => this.pageRight()}
-            />
+            >
+              <ChevronRightIcon />
+            </IconButton>
           </div>
           <div className={classes.buttonText}>
             Next
@@ -150,26 +171,13 @@ class Pagination extends React.Component {
         <div className={classes.buttonWrap}>
           <div className={classes.buttonDiv}>
             <IconButton
-              disabled={this.props.n <= 1}
-              style={styles.button}
-              iconStyle={styles.icon}
-              iconClassName="icon-angle-double-left"
-              onTouchTap={() => this.pageFirst()}
-            />
-          </div>
-          <div className={classes.buttonText}>
-            First
-          </div>
-        </div>
-        <div className={classes.buttonWrap}>
-          <div className={classes.buttonDiv}>
-            <IconButton
               disabled={this.props.n >= this.props.totPages}
               style={styles.button}
-              iconStyle={styles.icon}
-              iconClassName="icon-angle-double-right"
+              // iconStyle={styles.icon}
               onTouchTap={() => this.pageLast()}
-            />
+            >
+              <LastPageIcon style={styles.icon} />
+            </IconButton>
           </div>
           <div className={classes.buttonText}>
             Last

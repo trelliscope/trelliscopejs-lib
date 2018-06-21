@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
-import { Table, TableRow, TableRowColumn, TableBody } from 'material-ui/Table';
+import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui-next/List';
+import Checkbox from 'material-ui-next/Checkbox';
 import { setLabels } from '../actions';
 import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
@@ -17,40 +18,33 @@ const SidebarLabels = ({
   if (ciKeys.length > 0) {
     const tableData = ciKeys.map(d => ({
       name: cogInfo[d].name,
-      desc: cogInfo[d].desc,
-      selected: labels.indexOf(cogInfo[d].name) > -1
+      desc: cogInfo[d].desc
     }));
 
     content = (
       <div style={{ height, overflowY: 'auto' }}>
-        <Table
-          height={`${ciKeys.length * 51}px`}
-          fixedHeader
-          multiSelectable
-          onRowSelection={(rows) => {
-            const newLabels = [];
-            for (let ii = 0; ii < rows.length; ii += 1) {
-              newLabels.push(ciKeys[rows[ii]]);
-            }
-            handleChange(newLabels);
-          }}
-        >
-          <TableBody
-            displayRowCheckbox
-            deselectOnClickaway={false}
-            style={{ cursor: 'pointer' }}
-          >
-            {tableData.map(row => (
-              <TableRow key={row.name} selected={row.selected}>
-                <TableRowColumn>{row.name}<br />
-                  <span className={classes.rowDesc}>
-                    {row.desc}
-                  </span>
-                </TableRowColumn>
-              </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <List style={{ padding: 0 }}>
+          {tableData.map((value, i) => (
+            <ListItem
+              key={value.name}
+              dense
+              button
+              onClick={() => handleChange(value.name, labels)}
+            >
+              <Checkbox
+                checked={labels.indexOf(value.name) !== -1}
+                style={{ width: 20, height: 20 }}
+                tabIndex={-1}
+                disableRipple
+              />
+              <ListItemText
+                primary={value.name}
+                secondary={value.desc}
+                style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+              />
+            </ListItem>
+          ))}
+        </List>
       </div>
     );
   }
@@ -91,7 +85,13 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => ({
-  handleChange: (labels) => {
+  handleChange: (value, labels) => {
+    const idx = labels.indexOf(value);
+    if (idx === -1) {
+      labels.push(value);
+    } else {
+      labels.splice(idx, 1);
+    }
     dispatch(setLabels(labels));
   }
 });

@@ -9,6 +9,11 @@ import { createLogger } from 'redux-logger';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+import {
+  MuiThemeProvider as NewMuiThemeProvider,
+  createMuiTheme
+} from 'material-ui-next/styles';
+
 import blue from 'material-ui-next/colors/blue';
 import lightBlue from 'material-ui-next/colors/lightBlue';
 import red from 'material-ui-next/colors/red';
@@ -48,7 +53,7 @@ class Root extends Component {
       }
     });
 
-    this.muiTheme = getMuiTheme({
+    const themeV0 = getMuiTheme({
       fontFamily: '"Open Sans", sans-serif',
       palette: {
         primary1Color: blueA200, // '#4285f4', // lightBlue500,
@@ -66,6 +71,22 @@ class Root extends Component {
         miniSize: 30
       }
     });
+    this.themeV0 = themeV0;
+
+    const themeV1 = createMuiTheme({
+      palette: {
+        primary: { light: blue['A100'], main: blue['A200'] }, // '#4285f4', // lightBlue500,
+        secondary: { light: lightBlue[200], main: lightBlue[700] }
+        // accent1Color: redA200
+      },
+      typography: {
+        fontFamily: '"Open Sans", sans-serif',
+        fontWeightLight: 200,
+        fontWeightRegular: 300,
+        fontWeightMedium: 400
+      }
+    });
+    this.themeV1 = themeV1;
 
     // load the list of displays
     // const cfgdat = appData;
@@ -74,11 +95,13 @@ class Root extends Component {
 
   render() {
     return (
-      <MuiThemeProvider muiTheme={this.muiTheme}>
+      <NewMuiThemeProvider theme={this.themeV1}>
+      <MuiThemeProvider muiTheme={this.themeV0}>
         <Provider store={this.props.store}>
           <App />
         </Provider>
       </MuiThemeProvider>
+      </NewMuiThemeProvider>
     );
   }
 }
@@ -232,7 +255,6 @@ const trelliscopeApp = (id, config, options) => {
 window.trelliscopeApp = trelliscopeApp;
 
 
-// https://github.com/callemall/material-ui/tree/master/docs/src/app/components/pages/components
 // https://toddmotto.com/react-create-class-versus-component/
 // http://stackoverflow.com/questions/35073669/window-resize-react-redux
 // hover scroll: http://jsfiddle.net/r36cuuvr/

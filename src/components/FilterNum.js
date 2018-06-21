@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import TextField from 'material-ui/TextField';
+import TextField from 'material-ui-next/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterNumPlot from './FilterNumPlot';
 import uiConsts from '../assets/styles/uiConsts';
@@ -148,8 +148,8 @@ class FilterNum extends React.Component {
             // hintText="from"
             name="fromText"
             style={rangeInput}
-            inputStyle={validStyle}
-            underlineStyle={underlineStyle}
+            // inputStyle={validStyle}
+            // underlineStyle={underlineStyle}
             type="number"
             step={step}
             defaultValue={this.stateValue.from}

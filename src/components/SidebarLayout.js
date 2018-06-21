@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import Divider from 'material-ui/Divider';
+import Radio, { RadioGroup } from 'material-ui-next/Radio';
+import { FormControlLabel } from 'material-ui-next/Form';
+import Divider from 'material-ui-next/Divider';
 import { createSelector } from 'reselect';
 import NumericInput from './NumericInput';
 import { setLayout } from '../actions';
@@ -53,25 +54,27 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
           Arrangement:
         </div>
         <div className={classes.row}>
-          <RadioButtonGroup
+          <RadioGroup
             name="arrangement"
-            defaultSelected={layout.arrange}
+            value={layout.arrange}
             onChange={(e, ar) => handleChange({
               nrow: layout.nrow, ncol: layout.ncol, arrange: ar
             })}
           >
-            <RadioButton
+            <FormControlLabel
               value="row"
+              control={<Radio />}
               label={
                 <span className={classes.inputLabelSpan}>
                   By row
                   <i className={`icon-byrow ${classes.inputIcon}`} />
-                </span>}
+                </span>
+              }
               className={classes.inputRadio}
-              labelStyle={{ marginTop: -8 }}
             />
-            <RadioButton
+            <FormControlLabel
               value="column"
+              control={<Radio />}
               label={
                 <span className={classes.inputLabelSpan}>
                   By column
@@ -79,9 +82,8 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
                 </span>
               }
               className={classes.inputRadio}
-              labelStyle={{ marginTop: -8 }}
             />
-          </RadioButtonGroup>
+          </RadioGroup>
         </div>
       </div>
     );
@@ -122,7 +124,8 @@ const staticStyles = {
   },
   inputLabelSpan: {
     lineHeight: '40px',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    fontSize: 16
   },
   inputIcon: {
     fontSize: 23,

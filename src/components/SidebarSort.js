@@ -4,8 +4,9 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui-next/Button';
+import IconButton from 'material-ui-next/IconButton';
+import Icon from 'material-ui-next/Icon';
 import { setSort, setLabels, setLayout } from '../actions';
 import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
@@ -33,8 +34,11 @@ const SidebarSort = ({
                 return (
                   <tr className={classes.tr} key={`${d.name}_tr`}>
                     <td className={classes.sortButton}>
-                      <FloatingActionButton
+                      <Button
+                        fab
                         mini
+                        style={{ width:36, height: 30 }}
+                        color="primary"
                         key={`${d.name}_button`}
                         zDepth={1}
                         onTouchTap={() => {
@@ -44,7 +48,7 @@ const SidebarSort = ({
                         }}
                       >
                         <i className={`icon-chevron-${ic}`} />
-                      </FloatingActionButton>
+                      </Button>
                     </td>
                     <td className={classes.labels}>
                       {d.name}<br />
@@ -53,11 +57,9 @@ const SidebarSort = ({
                       </span>
                     </td>
                     <td className={classes.closeButton}>
-                      <IconButton
-                        iconStyle={{ fontSize: 16, color: '#aaa' }}
-                        iconClassName="icon-times"
-                        onTouchTap={() => handleChange(i)}
-                      />
+                      <IconButton onTouchTap={() => handleChange(i)}>
+                        <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
+                      </IconButton>
                     </td>
                   </tr>
                 );

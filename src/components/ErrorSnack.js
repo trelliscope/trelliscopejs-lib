@@ -2,25 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from 'material-ui-next/Snackbar';
+import Button from 'material-ui-next/Button';
 
 import { setErrorMessage } from '../actions';
 
 const ErrorSnack = ({ errorMsg, handleClose }) => (
   <Snackbar
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
     open={errorMsg !== ''}
-    message={errorMsg}
-    onRequestClose={handleClose}
-    action="close"
-    onActionClick={handleClose}
-    style={{
-      position: 'absolute'
+    // autoHideDuration={6000}
+    onClose={handleClose}
+    SnackbarContentProps={{
+      'aria-describedby': 'message-id',
     }}
-    bodyStyle={{
-      paddingTop: 14,
-      height: 'auto',
-      lineHeight: 'normal'
-    }}
+    message={<span id="message-id">{errorMsg}</span>}
+    action={[
+      <Button key="undo" color="accent" dense onClick={handleClose}>
+        Close
+      </Button>,
+    ]}
   />
 );
 
