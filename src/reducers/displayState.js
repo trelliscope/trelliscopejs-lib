@@ -1,6 +1,8 @@
 import omit from 'lodash.omit';
 import { combineReducers } from 'redux';
-import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants';
+import {
+  SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW
+} from '../constants';
 
 export const layout = (state = {
   nrow: 1, ncol: 1, arrange: 'row', pageNum: 1
@@ -40,7 +42,8 @@ export const sort = (state = [], action) => {
         const newState = Object.assign([], [], state);
         newState.splice(action.sort, 1);
         return newState;
-      } else if (action.sort === undefined) {
+      }
+      if (action.sort === undefined) {
         return [];
       }
       return Object.assign([], [], action.sort);
@@ -57,9 +60,11 @@ const filterState = (state = {}, action) => {
       // but if it's a string, the filter with that name will be removed
       if (typeof action.filter === 'string' || action.filter instanceof String) {
         return omit(state, action.filter);
-      } else if (action.filter === undefined) {
+      }
+      if (action.filter === undefined) {
         return {};
-      } else if (Object.keys(action.filter).length === 0 && action.filter.constructor === Object) {
+      }
+      if (Object.keys(action.filter).length === 0 && action.filter.constructor === Object) {
         return {};
       }
       return Object.assign({}, state, action.filter);
@@ -109,4 +114,3 @@ export const filter = combineReducers({
   state: filterState,
   view: filterView
 });
-

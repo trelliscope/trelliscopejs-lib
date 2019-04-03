@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import TextField from 'material-ui-next/TextField';
+import TextField from '@material-ui/core/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterNumPlot from './FilterNumPlot';
 import uiConsts from '../assets/styles/uiConsts';
@@ -13,37 +13,42 @@ class FilterNum extends React.Component {
     this.stateValue = {};
     this.handleBrushInput = this.handleBrushInput.bind(this);
   }
+
   componentDidUpdate() {
+    const { filterState } = this.props;
     // if component is updated with empty state, make sure text fields are empty
-    if (this.props.filterState.value === undefined && this._fromInput && this._toInput) {
+    if (filterState.value === undefined && this._fromInput && this._toInput) {
       this._fromInput.input.value = null;
       this._toInput.input.value = null;
     }
   }
+
   setValidState(lower, upper, which) {
+    const { filterState, handleChange } = this.props;
     const valid = this.checkValidNumber(lower, upper, which);
-    if (this.props.filterState.valid === undefined ||
-      this.props.filterState.valid !== valid) {
-      this.props.handleChange(Object.assign(this.props.filterState, { valid }));
+    if (filterState.valid === undefined || filterState.valid !== valid) {
+      handleChange(Object.assign(filterState, { valid }));
     }
   }
+
   handleInput(val, which) {
+    const { filterState, handleChange } = this.props;
     let newState = {};
     const newVal = val === '' ? undefined : parseFloat(val);
     const lower = which === 'from' ? newVal : this.stateValue.from;
     const upper = which === 'to' ? newVal : this.stateValue.to;
     if (lower === undefined && upper === undefined) {
       newState = {
-        name: this.props.filterState.name,
+        name: filterState.name,
         type: 'range',
-        varType: this.props.filterState.varType,
+        varType: filterState.varType,
         valid: true
       };
     } else {
       newState = {
-        name: this.props.filterState.name,
+        name: filterState.name,
         type: 'range',
-        varType: this.props.filterState.varType,
+        varType: filterState.varType,
         value: {
           from: lower,
           to: upper
@@ -51,17 +56,19 @@ class FilterNum extends React.Component {
         valid: this.checkValidNumber(lower, upper, which)
       };
     }
-    this.props.handleChange(newState);
+    handleChange(newState);
   }
+
   handleBrushInput(values) {
+    const { filterState, handleChange } = this.props;
     if (values === undefined) {
       const newState = {
-        name: this.props.filterState.name,
+        name: filterState.name,
         type: 'range',
-        varType: this.props.filterState.varType,
+        varType: filterState.varType,
         valid: true
       };
-      this.props.handleChange(newState);
+      handleChange(newState);
 
       if (this._fromInput && this._toInput) {
         this._fromInput.input.value = null;
@@ -69,22 +76,23 @@ class FilterNum extends React.Component {
       }
     } else {
       const newState = {
-        name: this.props.filterState.name,
+        name: filterState.name,
         type: 'range',
-        varType: this.props.filterState.varType,
+        varType: filterState.varType,
         value: {
           from: values[0],
           to: values[1]
         },
         valid: true
       };
-      this.props.handleChange(newState);
+      handleChange(newState);
 
       if (this._fromInput && this._toInput) {
         [this._fromInput.input.value, this._toInput.input.value] = values;
       }
     }
   }
+
   checkValidNumber(lower, upper, which) {
     if (which === 'to') {
       if (lower && parseFloat(lower) > parseFloat(upper)) {
@@ -95,15 +103,18 @@ class FilterNum extends React.Component {
     }
     return true;
   }
+
   render() {
-    const { classes } = this.props;
+    const {
+      classes, filterState, dist, condDist, name
+    } = this.props;
 
     const underlineStyle = {
       bottom: 10
     };
 
     const validStyle = { textAlign: 'center' };
-    if (this.props.filterState.valid !== undefined && !this.props.filterState.valid) {
+    if (filterState.valid !== undefined && !filterState.valid) {
       validStyle.color = 'red';
     }
 
@@ -115,13 +126,13 @@ class FilterNum extends React.Component {
       transformOrigin: '0 0'
     };
 
-    this.stateValue = this.props.filterState.value;
+    this.stateValue = filterState.value;
     if (this.stateValue === undefined) {
       this.stateValue = {};
     }
 
     // calculate step value for numeric input
-    const { breaks } = this.props.dist.dist.raw;
+    const { breaks } = dist.dist.raw;
     const hspan = (breaks[1] - breaks[0]) * breaks.length;
     const step = 10 ** Math.round(Math.log10(hspan / 100) - 0.4);
 
@@ -131,13 +142,13 @@ class FilterNum extends React.Component {
           className={classes.plotContainer}
         >
           <FilterNumPlot
-            name={this.props.name}
+            name={name}
             className={classes.plotContainer}
             width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
             height={uiConsts.sidebar.filter.num.height}
-            dist={this.props.dist}
-            condDist={this.props.condDist}
-            filterState={this.props.filterState}
+            dist={dist}
+            condDist={condDist}
+            filterState={filterState}
             handleChange={this.handleBrushInput}
           />
         </div>

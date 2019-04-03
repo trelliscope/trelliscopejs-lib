@@ -9,65 +9,72 @@ class CatBar extends React.Component {
     super(props);
     this.state = { hover: false };
   }
+
   mouseOver = () => {
     this.setState({ hover: true });
   }
+
   mouseOut = () => {
     this.setState({ hover: false });
   }
-  render() {
-    const { classes } = this.props;
 
-    const fontSize = Math.min(10, this.props.height - 6);
-    const labelFontSize = Math.min(9, this.props.height - 7);
-    const label = this.props.d.ct === this.props.d.mct ?
-      this.props.d.mct : `${this.props.d.ct} / ${this.props.d.mct}`;
+  render() {
+    const {
+      classes, width, height, d, divStyle, handleClick, active, allActive
+    } = this.props;
+    const { hover } = this.state;
+
+    const fontSize = Math.min(10, height - 6);
+    const labelFontSize = Math.min(9, height - 7);
+    const label = d.ct === d.mct ? d.mct : `${d.ct} / ${d.mct}`;
     return (
-      <div // eslint-disable-line jsx-a11y/no-static-element-interactions
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+      <div
         className={classNames({
           [classes.wrapper]: true,
-          [classes.wrapperHover]: this.state.hover
+          [classes.wrapperHover]: hover
         })}
-        style={this.props.divStyle}
+        style={divStyle}
         onMouseOver={this.mouseOver}
         onFocus={this.mouseOver}
         onMouseOut={this.mouseOut}
         onBlur={this.mouseOut}
-        onTouchTap={this.props.handleClick}
+        onClick={handleClick}
       >
         <div
           className={classNames({
             [classes.bar]: true,
-            [classes.barHover]: this.state.hover,
-            [classes.barActive]: this.props.active && !this.state.hover,
-            [classes.barAllActive]: this.props.allActive && !this.state.hover
+            [classes.barHover]: hover,
+            [classes.barActive]: active && !hover,
+            [classes.barAllActive]: allActive && !hover
           })}
           style={{
-            width: this.props.width,
-            height: this.props.height - 1
+            width,
+            height: height - 1
           }}
         >
           <div
             className={classes.barText}
             style={{
               fontSize,
-              lineHeight: `${this.props.height - 1}px`,
-              width: this.props.width
+              lineHeight: `${height - 1}px`,
+              width
             }}
           >
             <div className={classes.barTextInner}>
-              {this.props.d.id}
+              {d.id}
             </div>
           </div>
         </div>
         <div
           className={classNames({
             [classes.barLabel]: true,
-            [classes.hidden]: !this.state.hover
+            [classes.hidden]: !hover
           })}
           style={{
             labelFontSize,
-            lineHeight: `${this.props.height - 1}px`
+            lineHeight: `${height - 1}px`
           }}
         >
           {label}

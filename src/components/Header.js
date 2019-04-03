@@ -11,8 +11,10 @@ import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
-import { appIdSelector, configSelector, displayListSelector,
-  selectedDisplaySelector, dialogOpenSelector } from '../selectors';
+import {
+  appIdSelector, configSelector, displayListSelector,
+  selectedDisplaySelector, dialogOpenSelector
+} from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 class Header extends React.Component {
@@ -23,16 +25,16 @@ class Header extends React.Component {
       singleDisplay: props.displayList.isLoaded && props.displayList.list.length <= 1
     };
   }
+
   componentWillReceiveProps(nprops) {
+    const { singleLoaded } = this.state;
     // handle loading a single display if necessary
-    const singleDisplay = nprops.displayList.isLoaded &&
-      nprops.displayList.list.length <= 1;
+    const singleDisplay = nprops.displayList.isLoaded && nprops.displayList.list.length <= 1;
     this.setState({ singleDisplay });
 
-    if (!this.state.singleLoaded && singleDisplay &&
-      nprops.selectedDisplay.name !== '') {
+    if (!singleLoaded && singleDisplay && nprops.selectedDisplay.name !== '') {
       this.setState({ singleLoaded: true });
-    } else if (!this.state.singleLoaded && singleDisplay) {
+    } else if (!singleLoaded && singleDisplay) {
       nprops.selectDisplay(
         nprops.displayList.list[0].name,
         nprops.displayList.list[0].group,
@@ -43,53 +45,63 @@ class Header extends React.Component {
       this.setState({ singleLoaded: true });
     }
   }
+
   render() {
-    const { classes } = this.props;
+    const {
+      classes, styles, displayList, selectedDisplay, displayGroups,
+      doSetDialogOpen, dialogOpen
+    } = this.props;
+    const { singleDisplay } = this.state;
 
     let displayName = '';
     let displayDesc = '';
     let iconStyle = { visibility: 'hidden' };
     let pagination = '';
     let displaySelect = '';
-    const relatedDisplays = ''; // <RelatedDisplays setDialogOpen={this.props.setDialogOpen} />
-    const displayLoaded = this.props.selectedDisplay.name !== '';
-    const nGroups = Object.keys(this.props.displayGroups).length;
-    const listLoaded = this.props.displayList.isLoaded;
+    const relatedDisplays = ''; // <RelatedDisplays setDialogOpen={doSetDialogOpen} />
+    const displayLoaded = selectedDisplay.name !== '';
+    const nGroups = Object.keys(displayGroups).length;
+    const listLoaded = displayList.isLoaded;
 
-    if (listLoaded && !this.state.singleDisplay) {
-      displaySelect = <DisplaySelect setDialogOpen={this.props.setDialogOpen} />;
+    if (listLoaded && !singleDisplay) {
+      displaySelect = <DisplaySelect setDialogOpen={doSetDialogOpen} />;
     }
 
     if (displayLoaded) {
       if (nGroups > 1) {
-        displayName = `${this.props.selectedDisplay.group} /
-          ${this.props.selectedDisplay.name}`;
+        displayName = `${selectedDisplay.group} /
+          ${selectedDisplay.name}`;
       } else {
-        displayName = this.props.selectedDisplay.name;
+        displayName = selectedDisplay.name;
       }
-      if (!this.state.singleDisplay) {
+      if (!singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
       }
-      displayDesc = this.props.selectedDisplay.desc;
+      displayDesc = selectedDisplay.desc;
       pagination = <Pagination />;
-    } else if (this.state.singleDisplay) {
+    } else if (singleDisplay) {
       displayName = 'loading...';
-    } else if (!this.props.dialogOpen) {
-      displayName = <span><i className="icon-arrow-left" /> select a display to view...</span>;
+    } else if (!dialogOpen) {
+      displayName = (
+        <span>
+          <i className="icon-arrow-left" />
+          &nbsp;select a display to view...
+        </span>
+      );
     }
 
     return (
-      <div className={classes.headerContainer} style={this.props.styles.headerContainer}>
+      <div className={classes.headerContainer} style={styles.headerContainer}>
         {displaySelect}
         {relatedDisplays}
         <DisplayInfo
-          singleDisplay={this.state.singleDisplay}
-          setDialogOpen={this.props.setDialogOpen}
+          singleDisplay={singleDisplay}
+          setDialogOpen={doSetDialogOpen}
         />
         <i style={iconStyle} className="fa fa-info-circle" />
-        <div className={classes.headerSubContainer} style={this.props.styles.headerSubContainer}>
+        <div className={classes.headerSubContainer} style={styles.headerSubContainer}>
           <div className={classes.nameDescContainer}>
-            <div className={classes.displayName} style={this.props.styles.displayName}>
+            <div className={classes.displayName} style={styles.displayName}>
               {displayName}
             </div>
             <div className={classes.displayDesc}>
@@ -101,8 +113,8 @@ class Header extends React.Component {
           </div>
         </div>
         <HeaderLogo
-          setDialogOpen={this.props.setDialogOpen}
-          singleDisplay={this.state.singleDisplay}
+          setDialogOpen={doSetDialogOpen}
+          singleDisplay={singleDisplay}
         />
       </div>
     );
@@ -122,7 +134,7 @@ Header.propTypes = {
   dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   selectDisplay: PropTypes.func.isRequired,
-  setDialogOpen: PropTypes.func.isRequired
+  doSetDialogOpen: PropTypes.func.isRequired
 };
 
 // ------ static styles ------
@@ -194,11 +206,11 @@ const styleSelector = createSelector(
         width: ww
       },
       headerSubContainer: {
-        left: uiConsts.header.height *
-          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)), //  + (rd.length === 0 ? 0 : 1)
-        width: ww - ((uiConsts.header.height *
-          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1))) +
-          uiConsts.header.logoWidth + 30)
+        left: uiConsts.header.height
+          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)), //  + (rd.length === 0 ? 0 : 1)
+        width: ww - ((uiConsts.header.height
+          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)))
+            + uiConsts.header.logoWidth + 30)
       },
       displayName: {
         lineHeight: `${sd.desc === '' ? 48 : 26}px`,
@@ -223,7 +235,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg, appId));
   },
-  setDialogOpen: (isOpen) => {
+  doSetDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));
   }
 });

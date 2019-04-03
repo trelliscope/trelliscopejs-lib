@@ -4,9 +4,9 @@ node_modules
 src
 .publish
 _demo
-_test
+public/_test
 _ignore
-*.sublime-*
+*.code-workspace
 webpack*
 index.html
 server.js

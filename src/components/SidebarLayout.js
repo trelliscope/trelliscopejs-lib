@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Radio, { RadioGroup } from 'material-ui-next/Radio';
-import { FormControlLabel } from 'material-ui-next/Form';
-import Divider from 'material-ui-next/Divider';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Divider from '@material-ui/core/Divider';
 import { createSelector } from 'reselect';
 import NumericInput from './NumericInput';
 import { setLayout } from '../actions';
@@ -26,9 +27,9 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
               min={1}
               max={15}
               step={1}
-              onChange={nr =>
-                handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange })
-              }
+              onChange={nr => handleChange({
+                nrow: nr, ncol: layout.ncol, arrange: layout.arrange
+              })}
             />
           </div>
         </div>
@@ -43,8 +44,9 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
               min={1}
               max={15}
               step={1}
-              onChange={nc =>
-                handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange })
+              onChange={nc => handleChange({
+                nrow: layout.nrow, ncol: nc, arrange: layout.arrange
+              })
               }
             />
           </div>
@@ -64,23 +66,23 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
             <FormControlLabel
               value="row"
               control={<Radio />}
-              label={
+              label={(
                 <span className={classes.inputLabelSpan}>
                   By row
                   <i className={`icon-byrow ${classes.inputIcon}`} />
                 </span>
-              }
+              )}
               className={classes.inputRadio}
             />
             <FormControlLabel
               value="column"
               control={<Radio />}
-              label={
+              label={(
                 <span className={classes.inputLabelSpan}>
                   By column
                   <i className={`icon-bycol ${classes.inputIcon}`} />
                 </span>
-              }
+              )}
               className={classes.inputRadio}
             />
           </RadioGroup>

@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
-import { displayInfoSelector, filterSelector, sortSelector,
-  singlePageAppSelector } from '../selectors';
+import {
+  displayInfoSelector, filterSelector, sortSelector, singlePageAppSelector
+} from '../selectors';
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -58,7 +59,7 @@ const Footer = ({
           ))}
         </div>
         <div className={classes.filterText}>
-          ({nFilt} of {nPanels} panels)
+          {`(${nFilt} of ${nPanels} panels)`}
         </div>
       </div>
     );

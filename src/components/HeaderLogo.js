@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui-next/Dialog';
-import Tabs, { Tab } from 'material-ui-next/Tabs';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Mousetrap from 'mousetrap';
-import Button from 'material-ui-next/Button';
-import { emphasize } from 'material-ui-next/styles/colorManipulator';
+import Button from '@material-ui/core/Button';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { createSelector } from 'reselect';
 import { fullscreenSelector } from '../selectors';
 import { windowHeightSelector } from '../selectors/ui';
@@ -22,11 +21,14 @@ class HeaderLogo extends React.Component {
     super(props);
     this.state = { open: false, value: 0 };
   }
+
   componentDidMount() {
-    if (this.props.fullscreen) {
+    const { fullscreen } = this.props;
+    if (fullscreen) {
       Mousetrap.bind(['a'], this.handleKey);
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
       Mousetrap.bind(['a'], this.handleKey);
@@ -34,31 +36,41 @@ class HeaderLogo extends React.Component {
       Mousetrap.unbind(['a']);
     }
   }
+
   componentWillUnmount() {
-    if (this.props.fullscreen) {
+    const { fullscreen } = this.props;
+    if (fullscreen) {
       Mousetrap.unbind(['a']);
     }
   }
+
   handleOpen = () => {
-    this.props.setDialogOpen(true);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
   }
+
   handleChange = (event, value) => {
     this.setState({ value });
   }
+
   handleKey = () => {
-    this.props.setDialogOpen(true);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
   }
+
   handleClose = () => {
-    this.props.setDialogOpen(false);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(false);
     this.setState({ open: false });
   }
+
   render() {
-    const { classes } = this.props;
+    const { classes, fullscreen, windowHeight } = this.props;
 
     let keyNote = '';
-    if (!this.props.fullscreen) {
+    if (!fullscreen) {
       keyNote = (
         <p className={classes.keynote}>
           Note: keyboard shortcuts are only available when the app is fullscreen.
@@ -69,14 +81,15 @@ class HeaderLogo extends React.Component {
     const container1 = (
       <div
         className={classes.dialogDiv}
-        style={{ maxHeight: Math.max(50, this.props.windowHeight - 310) }}
+        style={{ maxHeight: Math.max(50, windowHeight - 310) }}
       >
         <div className={classes.dialogP}>
           <strong>What: </strong>
           Trelliscope is a tool for interactively viewing a large
           collection of visualizations.  Each visualization in a
-          collection is called a <em>panel</em> and each panel typically
-          represents one slice of a large dataset.
+          collection is called a&nbsp;
+          <em>panel</em>
+          &nbsp;and each panel typically represents one slice of a large dataset.
         </div>
         <div className={classes.dialogP}>
           <strong>Why: </strong>
@@ -92,17 +105,26 @@ class HeaderLogo extends React.Component {
           panel-to-panel comparisons by
           sorting and filtering the panels based on various criteria.
           Trelliscope provides this interactivity through panel metrics
-          called <em>cognostics</em>.
+          called&nbsp;
+          <em>cognostics</em>
+          .
         </div>
         <p>
           There are multiple modes of interaction with panels, indicated
           by the four buttons on the left sidebar of the application:
           &nbsp;
-          <strong>Grid</strong>, <strong>Labels</strong>,&nbsp;
-          <strong>Filter</strong>, and <strong>Sort</strong>.
+          <strong>Grid</strong>
+          ,&nbsp;
+          <strong>Labels</strong>
+          ,&nbsp;
+          <strong>Filter</strong>
+          ,&nbsp;and&nbsp;
+          <strong>Sort</strong>
+          .
         </p>
         <div className={classes.dialogP}>
-          <i className={`icon-th ${classes.dialogHi}`} />&nbsp;
+          <i className={`icon-th ${classes.dialogHi}`} />
+          &nbsp;
           <strong>Grid: </strong>
           In the &quot;Grid&quot; sidebar, you can specify the layout of
           the grid of panels you wish to display, specifying the number
@@ -110,7 +132,8 @@ class HeaderLogo extends React.Component {
           panels in order by row or by column.
         </div>
         <div className={classes.dialogP}>
-          <i className={`icon-list-ul ${classes.dialogHi}`} />&nbsp;
+          <i className={`icon-list-ul ${classes.dialogHi}`} />
+          &nbsp;
           <strong>Labels: </strong>
           In the &quot;Labels&quot; sidebar, you can specify the panel
           metrics that you wish to see displayed under each panel
@@ -123,7 +146,8 @@ class HeaderLogo extends React.Component {
           a new variable to sort or filter on.
         </div>
         <div className={classes.dialogP}>
-          <i className={`icon-filter ${classes.dialogHi}`} />&nbsp;
+          <i className={`icon-filter ${classes.dialogHi}`} />
+          &nbsp;
           <strong>Filter: </strong>
           The &quot;Filter&quot; sidebar provides various ways
           to filter the panels being displayed based on the panel
@@ -147,7 +171,9 @@ class HeaderLogo extends React.Component {
             into the text field below the bar chart.  Any matches to the
             typed text will be highlighted in the bar chart and panels
             will be filtered accordingly.  This field can be plain text or
-            a <a href="http://regexr.com/" target="_blank" rel="noopener noreferrer">regular expression</a>.
+            a&nbsp;
+            <a href="http://regexr.com/" target="_blank" rel="noopener noreferrer">regular expression</a>
+            .
           </p>
           <p className={classes.dialogP2}>
             <strong>Numeric filter: </strong>
@@ -162,21 +188,25 @@ class HeaderLogo extends React.Component {
           <p className={classes.dialogP22}>
             To reset a filter variable, you can either clear out the
             fields, deselect the selections made in the distribution
-            plots, or click the <i className="icon-undo" /> button
+            plots, or click the&nbsp;
+            <i className="icon-undo" />
+            &nbsp;button
             located at the top right of the filter box for that
             variable.  This icon is only available if there is an active
             filter for the variable.
           </p>
           <p className={classes.dialogP22}>
-            To close a filter box, click
-            the <i className="icon-times-circle" /> button located at
+            To close a filter box, click the&nbsp;
+            <i className="icon-times-circle" />
+            &nbsp;button located at
             the top right of the filter box.  Note that if there is an
             active filter on the variable, its button in the &quot;More
             variables&quot; section will be green to indicate this.
           </p>
         </div>
         <div className={classes.dialogP}>
-          <i className={`icon-sort-amount-asc ${classes.dialogHi}`} />&nbsp;
+          <i className={`icon-sort-amount-asc ${classes.dialogHi}`} />
+          &nbsp;
           <strong>Sort: </strong>
           In the &quot;Sort&quot; sidebar, a list of variables which are
           currently being sorted by (if any) will be listed at the top,
@@ -191,10 +221,10 @@ class HeaderLogo extends React.Component {
         </div>
         <div className={classes.dialogP}>
           The active filter and sort state are displayed at the bottom
-          of the page in the footer.  Clicking
-          the <i className="icon-times-circle" /> button
-          for anything listed in the footer will remove the sorting or
-          filtering on that variable.
+          of the page in the footer.  Clicking the&nbsp;
+          <i className="icon-times-circle" />
+          &nbsp;button for anything listed in the footer will remove the
+          sorting or filtering on that variable.
         </div>
       </div>
     );
@@ -274,7 +304,8 @@ class HeaderLogo extends React.Component {
             rel="noopener noreferrer"
           >
             Ryan Hafen
-          </a>, 2018.
+          </a>
+          , 2019.
         </p>
         <p>
           Built with&nbsp;
@@ -292,10 +323,13 @@ class HeaderLogo extends React.Component {
             rel="noopener noreferrer"
           >
             here
-          </a>.
+          </a>
+          .
         </p>
         <p>
-          Source code available on <a href="https://github.com/hafen/trelliscopejs-lib/" target="_blank" rel="noopener noreferrer">github</a> &ndash; submit issues and feature requests there.
+          Source code available on&nbsp;
+          <a href="https://github.com/hafen/trelliscopejs-lib/" target="_blank" rel="noopener noreferrer">github</a>
+          &nbsp;&ndash; submit issues and feature requests there.
         </p>
         <p>
           Thanks to Bill Cleveland for ideas upon which this is built,
@@ -307,41 +341,46 @@ class HeaderLogo extends React.Component {
       </div>
     );
 
+    const { open, value } = this.state;
+
     return (
-      <button
-        onTouchTap={this.handleOpen}
-        className={classes.logo}
-      >
-        Trelliscope
-        <div className={classes.icon}>
-          <i className={`icon-help ${classes.icon}`} />
-        </div>
+      <div>
+        <button
+          type="button"
+          onClick={this.handleOpen}
+          className={classes.logo}
+        >
+          Trelliscope
+          <div className={classes.icon}>
+            <i className={`icon-help ${classes.icon}`} />
+          </div>
+        </button>
         <Dialog
-          open={this.state.open}
+          open={open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-viewer-title"
         >
           <DialogTitle id="dialog-viewer-title">
-            {`Trelliscope Viewer v${VERSION}`}
+            {`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}
           </DialogTitle>
           <DialogContent>
-            <Tabs value={this.state.value} onChange={this.handleChange}>
+            <Tabs value={value} onChange={this.handleChange}>
               <Tab label="How to Use" />
               <Tab label="Shortcuts" />
               <Tab label="Credits" />
             </Tabs>
-            {this.state.value === 0 && container1}
-            {this.state.value === 1 && container2}
-            {this.state.value === 2 && container3}
+            {value === 0 && container1}
+            {value === 1 && container2}
+            {value === 2 && container3}
           </DialogContent>
           <DialogActions>
-            <Button color="accent" onClick={this.handleClose}>
+            <Button color="secondary" onClick={this.handleClose}>
               Close
             </Button>
           </DialogActions>
         </Dialog>
-      </button>
+      </div>
     );
   }
 }

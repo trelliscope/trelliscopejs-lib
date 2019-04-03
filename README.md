@@ -1,34 +1,68 @@
-# trelliscopejs-lib
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-[![npm version](https://badge.fury.io/js/trelliscopejs-lib.svg)](https://badge.fury.io/js/trelliscopejs-lib)
+## Available Scripts
 
-trelliscopejs-lib is a viewer for Trelliscope displays which can currently be created using the [trelliscopejs](https://github.com/hafen/trelliscopejs) R package (and hopefully in the future, conceptually created with anything else).  This viewer is being written as a pure JavaScript application and the ultimate goal is for it to be able to plug in to many languages and be served by many back-ends depending on the scale of the display.
+In the project directory, you can run:
 
-Trelliscope is a system for detailed interactive visualization of potentially very large data sets.  The concept is to break a dataset into pieces, make a plot for each piece (each plot called a *panel*), and then arrange these plots into a grid or pages of grids for viewing.  This idea is based on [Trellis Display](http://polisci.msu.edu/jacoby/uic/manuscripts/95.8.color.pdf).  When the number of panels becomes very large, Trelliscope provides a system for allowing the user to interactively explore the space of the panels based on metrics computed for each panel, called *cognostics*.  To read more about Trelliscope, see [here](http://tessera.io/docs-trelliscope).
+### `npm start`
 
-## Demo
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Try out a demo [here](http://hafen.github.io/trelliscopejs-demo/housing).
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-## Development
+### `npm test`
 
-```bash
-# install dependencies
-npm install
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-# clone the examples that are needed to test the application
-git clone https://github.com/hafen/trelliscopejs-examples.git _test
+### `npm run build`
 
-# run webpack server for interactive development
-npm start
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-# build a deployment bundle
-npm run build
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
-# run eslint
-npm run lint
-```
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Copyright and license
+### `npm run eject`
 
-Copyright 2016 Ryan Hafen. Code released under the BSD license.
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

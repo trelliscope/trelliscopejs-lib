@@ -14,6 +14,7 @@ class NumericInput extends React.Component {
     this.state = { value: props.value, step };
     this.mousetrap = null;
   }
+
   componentDidMount() {
     this.mousetrap = new Mousetrap(this._NumericInput);
     this.mousetrap.bind(['up'], () => this.increment());
@@ -25,68 +26,82 @@ class NumericInput extends React.Component {
     this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
       event => event.stopPropagation());
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ value: nextProps.value });
   }
+
   componentWillUnmount() {
     this.mousetrap.unbind(['up']);
     this.mousetrap.unbind(['down']);
     this.mousetrap.unbind(['esc']);
     this.mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r']);
   }
+
   increment = () => {
-    const newVal = this.state.value + this.state.step;
-    if (!(this.props.max && newVal > this.props.max)) {
+    const { value, step } = this.state;
+    const { max, onChange } = this.props;
+    const newVal = value + step;
+    if (!(max && newVal > max)) {
       this.setState({ value: newVal });
-      if (this.props.onChange) {
-        this.props.onChange(newVal);
+      if (onChange) {
+        onChange(newVal);
       }
     }
   }
+
   decrement = () => {
-    const newVal = this.state.value - this.state.step;
-    if (!(this.props.min && newVal < this.props.min)) {
+    const { value, step } = this.state;
+    const { min, onChange } = this.props;
+    const newVal = value - step;
+    if (!(min && newVal < min)) {
       this.setState({ value: newVal });
-      if (this.props.onChange) {
-        this.props.onChange(newVal);
+      if (onChange) {
+        onChange(newVal);
       }
     }
   }
+
   handleChange = (event) => {
+    const { min, max, onChange } = this.props;
     this.setState({ value: event.target.value });
     const val = parseFloat(event.target.value);
-    if (!Number.isNaN(val) && this.props.onChange) {
+    if (!Number.isNaN(val) && onChange) {
       let updateable = true;
-      if (this.props.min && val < this.props.min) {
+      if (min && val < min) {
         updateable = false;
       }
-      if (this.props.max && val > this.props.max) {
+      if (max && val > max) {
         updateable = false;
       }
       if (updateable) {
-        this.props.onChange(val);
+        onChange(val);
       }
     }
   }
+
   render() {
-    const { classes } = this.props;
+    const { classes, arrows, size } = this.props;
+    const { value } = this.state;
 
     let arrowElements = '';
-    if (this.props.arrows) {
+    if (arrows) {
       arrowElements = (
         <span>
           <button
+            type="button"
             key="up-button"
             className={`${classes.b} ${classes.b1}`}
-            onTouchTap={this.increment}
+            onClick={this.increment}
             tabIndex="-1"
           >
             <i className={`${classes.i} ${classes.i1}`} />
           </button>
           <button
+            type="button"
             key="down-button"
             className={`${classes.b} ${classes.b2}`}
-            onTouchTap={this.decrement}
+            onClick={this.decrement}
             tabIndex="-1"
           >
             <i className={`${classes.i} ${classes.i2}`} />
@@ -100,9 +115,9 @@ class NumericInput extends React.Component {
         <input
           ref={(d) => { this._NumericInput = d; }}
           type="text"
-          size={this.props.size ? this.props.size : 4}
+          size={size ? size : 4} // eslint-disable-line no-unneeded-ternary
           className={`mousetrap ${classes.input}`}
-          value={this.state.value}
+          value={value}
           onChange={this.handleChange}
         />
         {arrowElements}

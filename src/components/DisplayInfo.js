@@ -6,15 +6,14 @@ import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import marked from 'marked';
 // import katex from 'katex';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui-next/Dialog';
-import Button from 'material-ui-next/Button';
-import { selectedDisplaySelector, displayInfoSelector,
-  fullscreenSelector } from '../selectors';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import {
+  selectedDisplaySelector, displayInfoSelector, fullscreenSelector
+} from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 class DisplayInfo extends React.Component {
@@ -22,11 +21,14 @@ class DisplayInfo extends React.Component {
     super(props);
     this.state = { open: false };
   }
+
   componentDidMount() {
-    if (this.props.active && this.props.fullscreen) {
+    const { active, fullscreen } = this.props;
+    if (active && fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind(['i'], this.handleKey);
@@ -34,48 +36,60 @@ class DisplayInfo extends React.Component {
       Mousetrap.unbind(['i']);
     }
   }
+
   componentWillUnmount() {
-    if (this.props.active && this.props.fullscreen) {
+    const { active, fullscreen } = this.props;
+    if (active && fullscreen) {
       Mousetrap.unbind(['i']);
     }
   }
+
   handleOpen = () => {
-    this.props.setDialogOpen(true);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
   }
+
   handleKey = () => {
-    this.props.setDialogOpen(true);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
   }
+
   handleClose = () => {
-    this.props.setDialogOpen(false);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(false);
     this.setState({ open: false });
   }
+
   render() {
-    // const { classes } = this.props;
-    const { classes } = this.props;
+    const {
+      classes, displayInfo, singleDisplay, styles
+    } = this.props;
 
     let dialogContent = '';
-    if (this.props.displayInfo.isLoaded) {
-      const mdDesc = marked(this.props.displayInfo.info.mdDesc, { sanitize: true });
+    if (displayInfo.isLoaded) {
+      const mdDesc = marked(displayInfo.info.mdDesc, { sanitize: true });
       // mdDesc = katex.renderToString(mdDesc);
-      const ci = this.props.displayInfo.info.cogInfo;
+      const ci = displayInfo.info.cogInfo;
       const ciKeys = Object.keys(ci);
 
       let descText = '';
-      if (this.props.displayInfo.info.desc) {
+      if (displayInfo.info.desc) {
         descText = (
           <p>
-            <strong>Description:</strong> {this.props.displayInfo.info.desc}
+            <strong>Description:</strong>
+            {displayInfo.info.desc}
           </p>
         );
       }
 
       let panelUnitText = '';
-      if (this.props.displayInfo.info.panelUnitDesc) {
+      if (displayInfo.info.panelUnitDesc) {
         panelUnitText = (
           <p>
-            Each panel of this display represents a {this.props.displayInfo.info.panelUnitDesc}
+            Each panel of this display represents a
+            {displayInfo.info.panelUnitDesc}
           </p>
         );
       }
@@ -85,25 +99,31 @@ class DisplayInfo extends React.Component {
       // style={{ zIndex: 8000, fontWeight: 300 }}
       // onRequestClose={this.handleClose}
 
+      const { open } = this.state;
       dialogContent = (
         <Dialog
-          open={this.state.open}
+          open={open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-info-title"
         >
-          <DialogTitle id="dialog-info-title">{"Information About This Display"}</DialogTitle>
+          <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
           <DialogContent>
             <div className={classes.modalContainer}>
               <p>
-                <strong>Dispay name:</strong> {this.props.displayInfo.info.name}
+                <strong>Dispay name:</strong>
+                {displayInfo.info.name}
               </p>
               {descText}
               <p>
-                <strong>Last updated</strong>: {this.props.displayInfo.info.updated}
+                <strong>Last updated</strong>
+                :
+                {displayInfo.info.updated}
               </p>
               <p>
-                <strong>Number of panels</strong>: {this.props.displayInfo.info.n}
+                <strong>Number of panels</strong>
+                :
+                {displayInfo.info.n}
               </p>
               {panelUnitText}
               <div
@@ -121,14 +141,16 @@ class DisplayInfo extends React.Component {
               <ul>
                 {ciKeys.map(d => (
                   <li key={ci[d].name}>
-                    <strong>{ci[d].name}</strong>: {ci[d].desc}
+                    <strong>{ci[d].name}</strong>
+                    :
+                    {ci[d].desc}
                   </li>
                 ))}
               </ul>
             </div>
           </DialogContent>
           <DialogActions>
-            <Button color="accent" onClick={this.handleClose}>
+            <Button color="secondary" onClick={this.handleClose}>
               Close
             </Button>
           </DialogActions>
@@ -139,23 +161,26 @@ class DisplayInfo extends React.Component {
     // <h3>Data</h3>
     // <p>The data for one subset has the following structure:</p>
     // <pre><code>
-    //   {this.props.displayInfo.info.example}
+    //   {displayInfo.info.example}
     // </code></pre>
     // <h3>Panel Function</h3>
     // The R code that generates each panel:
     // <pre><code>
-    //   {this.props.displayInfo.info.panelFn}
+    //   {displayInfo.info.panelFn}
     // </code></pre>
 
     return (
-      <button
-        onTouchTap={this.handleOpen}
-        className={classes.button}
-        style={this.props.singleDisplay ? this.props.styles.single : this.props.styles.button}
-      >
-        <i className={`${classes.icon} icon-info_outline`} />
+      <div>
+        <button
+          type="button"
+          onClick={this.handleOpen}
+          className={classes.button}
+          style={singleDisplay ? styles.single : styles.button}
+        >
+          <i className={`${classes.icon} icon-info_outline`} />
+        </button>
         {dialogContent}
-      </button>
+      </div>
     );
   }
 }

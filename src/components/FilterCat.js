@@ -7,10 +7,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import TextField from 'material-ui/TextField';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import { debounce } from 'throttle-debounce';
 import FilterCatPlot from './FilterCatPlot';
 import uiConsts from '../assets/styles/uiConsts';
@@ -26,51 +26,59 @@ const sortOptions = [
 class FilterCat extends React.Component {
   constructor(props) {
     super(props);
+    const { filterState } = this.props;
     this.handleRegex = debounce(400, this.handleRegex);
-    this.sortOrder = this.props.filterState.orderValue ?
-      this.props.filterState.orderValue : 'ct,desc';
+    this.sortOrder = filterState.orderValue
+      ? filterState.orderValue : 'ct,desc';
   }
+
   componentWillUpdate(nextProps) {
-    this.sortOrder = this.props.filterState.orderValue ?
-      this.props.filterState.orderValue : 'ct,desc';
+    const { filterState } = this.props;
+    this.sortOrder = filterState.orderValue
+      ? filterState.orderValue : 'ct,desc';
 
     if (nextProps.filterState.type !== 'regex') {
       // hacky way to clear regex field after it switches to selection
       // until material-ui is fixed and we can change to controlled input
-      // https://github.com/callemall/material-ui/pull/3673
+      // https://github.com/callemall/@material-ui/core/pull/3673
       this._TextField.input.value = '';
       this._TextField.state.hasValue = false;
     }
   }
+
   handleRegex(val) {
+    const { filterState, levels, handleChange } = this.props;
     let newState = {};
     if (val === '') {
       newState = {
-        name: this.props.filterState.name,
-        varType: this.props.filterState.varType,
+        name: filterState.name,
+        varType: filterState.varType,
         orderValue: this.sortOrder
       };
     } else {
       const vals = [];
       const rval = new RegExp(val, 'i');
-      for (let j = 0; j < this.props.levels.length; j += 1) {
-        if (this.props.levels[j].match(rval) !== null) {
-          vals.push(this.props.levels[j]);
+      for (let j = 0; j < levels.length; j += 1) {
+        if (levels[j].match(rval) !== null) {
+          vals.push(levels[j]);
         }
       }
       newState = {
-        name: this.props.filterState.name,
+        name: filterState.name,
         type: 'regex',
-        varType: this.props.filterState.varType,
+        varType: filterState.varType,
         regex: val,
         value: vals,
         orderValue: this.sortOrder
       };
     }
-    this.props.handleChange(newState);
+    handleChange(newState);
   }
+
   render() {
-    const { classes } = this.props;
+    const {
+      classes, handleSortChange, filterState, height, dist, condDist, handleChange
+    } = this.props;
 
     const regexInput = {
       width: uiConsts.sidebar.width - 40,
@@ -82,10 +90,10 @@ class FilterCat extends React.Component {
 
     const iconButtonElement = <IconButton iconClassName="icon-more_vert" />;
     const extraOptionsInput = (
-      <IconMenu
+      <Menu
         value={this.sortOrder}
         onChange={(e, value) => {
-          this.props.handleSortChange(Object.assign(this.props.filterState,
+          handleSortChange(Object.assign(filterState,
             { orderValue: value }));
         }}
         className={classes.extraOptionsInput}
@@ -95,7 +103,7 @@ class FilterCat extends React.Component {
         {sortOptions.map(d => (
           <MenuItem primaryText={d.text} value={d.payload} key={d.payload} />
         ))}
-      </IconMenu>
+      </Menu>
     );
 
     return (
@@ -105,23 +113,22 @@ class FilterCat extends React.Component {
         >
           <FilterCatPlot
             className={classes.plotContainer}
-            height={this.props.height}
+            height={height}
             width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
             cellHeight={15}
-            dist={this.props.dist}
-            condDist={this.props.condDist}
-            filterState={this.props.filterState}
-            handleChange={this.props.handleChange}
+            dist={dist}
+            condDist={condDist}
+            filterState={filterState}
+            handleChange={handleChange}
             sortOrder={this.sortOrder}
           />
         </div>
         <div className={classes.inputContainer}>
           <TextField
             ref={(d) => { this._TextField = d; }}
-            hintText="regex"
+            placeholder="regex"
             style={regexInput}
-            defaultValue={this.props.filterState.type === 'regex' ?
-              this.props.filterState.regex : ''}
+            defaultValue={filterState.type === 'regex' ? filterState.regex : ''}
             onChange={e => this.handleRegex(e.target.value)}
           />
           {extraOptionsInput}

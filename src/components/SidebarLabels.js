@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
-import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui-next/List';
-import Checkbox from 'material-ui-next/Checkbox';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Checkbox from '@material-ui/core/Checkbox';
 import { setLabels } from '../actions';
 import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, displayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarLabels = ({
-  classes, height, labels, cogInfo, handleChange
+  height, labels, cogInfo, handleChange
 }) => {
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
@@ -24,7 +27,7 @@ const SidebarLabels = ({
     content = (
       <div style={{ height, overflowY: 'auto' }}>
         <List style={{ padding: 0 }}>
-          {tableData.map((value, i) => (
+          {tableData.map(value => (
             <ListItem
               key={value.name}
               dense
@@ -40,7 +43,7 @@ const SidebarLabels = ({
               <ListItemText
                 primary={value.name}
                 secondary={value.desc}
-                style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+                style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </ListItem>
           ))}

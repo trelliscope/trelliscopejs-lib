@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Swipeable from 'react-swipeable';
+import { Swipeable } from 'react-swipeable';
 import { max } from 'd3-array';
 import Panel from './Panel';
 import { setLabels, setLayout } from '../actions';
-import { contentWidthSelector, sidebarActiveSelector,
-  contentHeightSelector } from '../selectors/ui';
+import {
+  contentWidthSelector, sidebarActiveSelector, contentHeightSelector
+} from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
-import { configSelector, cogInterfaceSelector, layoutSelector,
-  aspectSelector, labelsSelector, panelRendererSelector,
-  displayInfoSelector, nPerPageSelector, pageNumSelector,
-  localPanelsSelector } from '../selectors';
+import {
+  configSelector, cogInterfaceSelector, layoutSelector, aspectSelector, labelsSelector,
+  panelRendererSelector, displayInfoSelector, nPerPageSelector, pageNumSelector,
+  localPanelsSelector
+} from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({
@@ -189,8 +191,8 @@ const stateSelector = createSelector(
     // these remain fixed while width and height can change
     // for ppad + 2, "+ 2" is border
     const wExtra = (pPad + 2) * (layout.ncol + 1);
-    const hExtra = ((pPad + 2) * (layout.nrow + 1)) +
-      (nLabels * labelHeight * layout.nrow);
+    const hExtra = ((pPad + 2) * (layout.nrow + 1))
+      + (nLabels * labelHeight * layout.nrow);
 
     // first try stretching panels across full width:
     let newW = Math.round((cw - wExtra) / layout.ncol, 0);

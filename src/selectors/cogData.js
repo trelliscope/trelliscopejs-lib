@@ -1,20 +1,22 @@
 import { createSelector } from 'reselect';
-import { cogDataSelector, filterStateSelector, filterViewSelector,
-  sortSelector, displayInfoSelector, pageNumSelector, nPerPageSelector } from '.';
+import {
+  cogDataSelector, filterStateSelector, filterViewSelector,
+  sortSelector, displayInfoSelector, pageNumSelector, nPerPageSelector
+} from '.';
 
 export const cogFiltDistSelector = createSelector(
   cogDataSelector, filterStateSelector,
   filterViewSelector, displayInfoSelector,
   (cogData, filter, filterView, di) => {
     const result = {};
-    if (cogData.iface && filterView.active && cogData.crossfilter &&
-      cogData.iface.type === 'JSON') {
+    if (cogData.iface && filterView.active && cogData.crossfilter
+      && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
       for (let i = 0; i < keys.length; i += 1) {
         if (di.info.cogInfo[keys[i]].type === 'factor') {
-          const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ?
-            filter[keys[i]].orderValue : 'ct,desc';
+          const orderValue = filter[keys[i]] && filter[keys[i]].orderValue
+            ? filter[keys[i]].orderValue : 'ct,desc';
 
           let dist = [];
           // if sort order is count, use .top to get sorted
@@ -45,8 +47,8 @@ export const cogFiltDistSelector = createSelector(
           // would it be more efficient as a crossfilter group reducer?
           const selectedIdx = [];
           const notSelectedIdx = [];
-          const filterVals = filter[keys[i]] && filter[keys[i]].value ?
-            filter[keys[i]].value : [];
+          const filterVals = filter[keys[i]] && filter[keys[i]].value
+            ? filter[keys[i]].value : [];
           let sumSelected = 0;
           for (let j = 0; j < dist.length; j += 1) {
             const val = filterVals.indexOf(dist[j].key);

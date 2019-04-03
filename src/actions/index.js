@@ -1,16 +1,18 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
+import * as crossfilter from 'crossfilter2';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
-import { SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
+import {
+  SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
   SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
-  SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS } from '../constants';
+  SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS
+} from '../constants';
 
-const getJSON = obj =>
-  d3json(obj.url, json => obj.callback(json));
+const getJSON = obj => d3json(obj.url, json => obj.callback(json));
 
 export const setAppID = id => ({
   type: SET_APP_ID, id
@@ -125,8 +127,8 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch) => {
   const ciKeys = Object.keys(dObjJson.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
-      if (dObjJson.state.filter &&
-        dObjJson.state.filter[ciKeys[i]] !== undefined) {
+      if (dObjJson.state.filter
+        && dObjJson.state.filter[ciKeys[i]] !== undefined) {
         dispatch(setFilterView(ciKeys[i], 'add'));
       } else {
         dispatch(setFilterView(ciKeys[i], 'remove'));
@@ -201,160 +203,158 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
 
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
-export const fetchDisplayList = (config = 'config.jsonp', id = '') =>
-  (dispatch) => {
-    const selfContained = !(typeof config === 'string' || config instanceof String);
+export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch) => {
+  const selfContained = !(typeof config === 'string' || config instanceof String);
 
-    if (!selfContained) {
-      dispatch(requestConfig());
+  if (!selfContained) {
+    dispatch(requestConfig());
 
-      const dlCallback = `__loadDisplayList__${id}`;
-      const cfgCallback = `__loadTrscopeConfig__${id}`;
+    const dlCallback = `__loadDisplayList__${id}`;
+    const cfgCallback = `__loadTrscopeConfig__${id}`;
 
-      const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
+    const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
-      const getConfigBase = (txt) => {
-        let res = txt;
-        if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
-          res = configBase;
-          if (txt !== '') {
-            res += `${txt}/`;
-          }
+    const getConfigBase = (txt) => {
+      let res = txt;
+      if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
+        res = configBase;
+        if (txt !== '') {
+          res += `${txt}/`;
         }
-        return res;
-      };
-
-      window[dlCallback] = (json) => {
-        dispatch(receiveDisplayList(json));
-      };
-
-      window[cfgCallback] = (json) => {
-        // if display_base is empty, we want to use same path as config
-        json.display_base = // eslint-disable-line no-param-reassign
-          getConfigBase(json.display_base);
-        json.config_base = configBase; // eslint-disable-line no-param-reassign
-        json.cog_server.info.base = // eslint-disable-line no-param-reassign
-          getConfigBase(json.cog_server.info.base);
-        dispatch(receiveConfig(json));
-        if (json.data_type === 'jsonp') {
-          getJSONP({
-            url: `${json.display_base}displayList.jsonp`,
-            callbackName: dlCallback,
-            error: err => dispatch(setErrorMessage(
-              `Couldn't load display list: ${err.url}`
-            ))
-          });
-        } else {
-          getJSON({
-            url: `${json.display_base}displayList.json`,
-            callback: window[dlCallback]
-          }).on('error', err => dispatch(setErrorMessage(
-            `Couldn't load display list: ${err.target.responseURL}`
-          )));
-        }
-      };
-      // load the config to start
-      // try json first and if the file isn't there, try jsonp
-
-      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
-      const configExt = config.match(extRegex)[0];
-
-      if (configExt === '.jsonp') {
-        getJSONP({
-          url: config,
-          callbackName: cfgCallback,
-          error: err => dispatch(setErrorMessage(
-            `Couldn't load config: ${err.url}`
-          ))
-        });
-      } else if (configExt === '.json') {
-        getJSON({
-          url: config,
-          callback: window[cfgCallback]
-        });
-      } else {
-        dispatch(setErrorMessage(
-          `Config specified as ${config} must have extension '.json' or '.jsonp'`
-        ));
       }
-    } else {
-      // all data for rendering app is self-contained in document
-      dispatch(receiveConfig(config.config));
-      dispatch(receiveDisplayList(config.displayList));
-      const { name } = config.displayList[0];
-      const { group } = config.displayList[0];
-      const { desc } = config.displayList[0];
+      return res;
+    };
 
-      dispatch(setSelectedDisplay(name, group, desc));
-      dispatch(requestDisplay(name, group));
-      const iface = config.displayObj.cogInterface;
-      dispatch(receiveDisplay(name, group, config.displayObj));
-      dispatch(receiveCogData(iface));
-      dispatch(setLocalPanels(config.panels));
-      setCogDatAndState(iface, config.cogData, config.displayObj, dispatch);
-      setPanelInfo(config.displayObj, config.config, dispatch);
-    }
-  };
+    window[dlCallback] = (json) => {
+      dispatch(receiveDisplayList(json));
+    };
 
-export const fetchDisplay = (name, group, cfg, id = '') =>
-  (dispatch) => {
-    dispatch(requestDisplay(name, group));
-
-    const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
-    const cdCallback = `__loadCogData__${id}_${group}_${name}`;
-
-    window[ldCallback] = (dObjJson) => {
-      const iface = dObjJson.cogInterface;
-      // now that displayObj is available, we can set the state with this data
-      dispatch(receiveDisplay(name, group, dObjJson));
-      // set cog data state as pending while it loads
-      dispatch(receiveCogData(iface));
-      // TODO: perhaps do a quick load of initial panels while cog data is loading...
-      // (to do this, have displayObj store initial panel keys and cogs)
-
-      window[cdCallback] = (cogDatJson) => {
-        // once cog data is loaded, set the state with this data
-        // but first add an index column to the data so we can
-        // preserve original order or do multi-column sorts
-        setCogDatAndState(iface, cogDatJson, dObjJson, dispatch);
-      };
-
-      setPanelInfo(dObjJson, cfg, dispatch);
-
-      // load the cog data
-      if (cfg.data_type === 'jsonp') {
+    window[cfgCallback] = (json) => {
+      // if display_base is empty, we want to use same path as config
+      // eslint-disable-next-line no-param-reassign
+      json.display_base = getConfigBase(json.display_base);
+      json.config_base = configBase; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      json.cog_server.info.base = getConfigBase(json.cog_server.info.base);
+      dispatch(receiveConfig(json));
+      if (json.data_type === 'jsonp') {
         getJSONP({
-          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
-          callbackName: 'cdCallback',
+          url: `${json.display_base}displayList.jsonp`,
+          callbackName: dlCallback,
           error: err => dispatch(setErrorMessage(
-            `Couldn't load cognostics data: ${err.url}`
+            `Couldn't load display list: ${err.url}`
           ))
         });
       } else {
         getJSON({
-          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
-          callback: window[cdCallback]
+          url: `${json.display_base}displayList.json`,
+          callback: window[dlCallback]
         }).on('error', err => dispatch(setErrorMessage(
           `Couldn't load display list: ${err.target.responseURL}`
         )));
       }
     };
+    // load the config to start
+    // try json first and if the file isn't there, try jsonp
 
-    // get displayObj.json so we can find the cog data, etc.
+    const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
+    const configExt = config.match(extRegex)[0];
+
+    if (configExt === '.jsonp') {
+      getJSONP({
+        url: config,
+        callbackName: cfgCallback,
+        error: err => dispatch(setErrorMessage(
+          `Couldn't load config: ${err.url}`
+        ))
+      });
+    } else if (configExt === '.json') {
+      getJSON({
+        url: config,
+        callback: window[cfgCallback]
+      });
+    } else {
+      dispatch(setErrorMessage(
+        `Config specified as ${config} must have extension '.json' or '.jsonp'`
+      ));
+    }
+  } else {
+    // all data for rendering app is self-contained in document
+    dispatch(receiveConfig(config.config));
+    dispatch(receiveDisplayList(config.displayList));
+    const { name } = config.displayList[0];
+    const { group } = config.displayList[0];
+    const { desc } = config.displayList[0];
+
+    dispatch(setSelectedDisplay(name, group, desc));
+    dispatch(requestDisplay(name, group));
+    const iface = config.displayObj.cogInterface;
+    dispatch(receiveDisplay(name, group, config.displayObj));
+    dispatch(receiveCogData(iface));
+    dispatch(setLocalPanels(config.panels));
+    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch);
+    setPanelInfo(config.displayObj, config.config, dispatch);
+  }
+};
+
+export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
+  dispatch(requestDisplay(name, group));
+
+  const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
+  const cdCallback = `__loadCogData__${id}_${group}_${name}`;
+
+  window[ldCallback] = (dObjJson) => {
+    const iface = dObjJson.cogInterface;
+    // now that displayObj is available, we can set the state with this data
+    dispatch(receiveDisplay(name, group, dObjJson));
+    // set cog data state as pending while it loads
+    dispatch(receiveCogData(iface));
+    // TODO: perhaps do a quick load of initial panels while cog data is loading...
+    // (to do this, have displayObj store initial panel keys and cogs)
+
+    window[cdCallback] = (cogDatJson) => {
+      // once cog data is loaded, set the state with this data
+      // but first add an index column to the data so we can
+      // preserve original order or do multi-column sorts
+      setCogDatAndState(iface, cogDatJson, dObjJson, dispatch);
+    };
+
+    setPanelInfo(dObjJson, cfg, dispatch);
+
+    // load the cog data
     if (cfg.data_type === 'jsonp') {
       getJSONP({
-        url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
-        callbackName: 'ldCallback',
+        url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
+        callbackName: 'cdCallback',
         error: err => dispatch(setErrorMessage(
-          `Couldn't load display object: ${err.url}`
+          `Couldn't load cognostics data: ${err.url}`
         ))
       });
     } else {
       getJSON({
-        url: `${cfg.display_base}${group}/${name}/displayObj.json`,
-        callback: window[ldCallback]
+        url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
+        callback: window[cdCallback]
       }).on('error', err => dispatch(setErrorMessage(
         `Couldn't load display list: ${err.target.responseURL}`
       )));
     }
   };
+
+  // get displayObj.json so we can find the cog data, etc.
+  if (cfg.data_type === 'jsonp') {
+    getJSONP({
+      url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
+      callbackName: 'ldCallback',
+      error: err => dispatch(setErrorMessage(
+        `Couldn't load display object: ${err.url}`
+      ))
+    });
+  } else {
+    getJSON({
+      url: `${cfg.display_base}${group}/${name}/displayObj.json`,
+      callback: window[ldCallback]
+    }).on('error', err => dispatch(setErrorMessage(
+      `Couldn't load display list: ${err.target.responseURL}`
+    )));
+  }
+};

@@ -4,14 +4,16 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import IconButton from 'material-ui-next/IconButton';
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
-import ChevronRightIcon from 'material-ui-icons/ChevronRight';
-import FirstPageIcon from 'material-ui-icons/FirstPage';
-import LastPageIcon from 'material-ui-icons/LastPage';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import LastPageIcon from '@material-ui/icons/LastPage';
 import { setLayout } from '../actions';
-import { nPerPageSelector, pageNumSelector, dialogOpenSelector,
-  fullscreenSelector, cogDataSelector } from '../selectors';
+import {
+  nPerPageSelector, pageNumSelector, dialogOpenSelector,
+  fullscreenSelector, cogDataSelector
+} from '../selectors';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -21,28 +23,31 @@ class Pagination extends React.Component {
   //   // this.state = { skip: 1 };
   // }
   componentDidMount() {
-    if (this.props.fullscreen) {
+    const { fullscreen, dialogOpen } = this.props;
+    if (fullscreen) {
       Mousetrap.bind(['right'], () => {
-        if (!this.props.dialogOpen) {
+        if (!dialogOpen) {
           this.pageRight();
         }
       });
       Mousetrap.bind(['left'], () => {
-        if (!this.props.dialogOpen) {
+        if (!dialogOpen) {
           this.pageLeft();
         }
       });
     }
   }
+
   componentWillReceiveProps(nextProps) {
+    const { dialogOpen } = this.props;
     if (nextProps.fullscreen) {
       Mousetrap.bind(['right'], () => {
-        if (!this.props.dialogOpen) {
+        if (!dialogOpen) {
           this.pageRight();
         }
       });
       Mousetrap.bind(['left'], () => {
-        if (!this.props.dialogOpen) {
+        if (!dialogOpen) {
           this.pageLeft();
         }
       });
@@ -51,33 +56,51 @@ class Pagination extends React.Component {
       Mousetrap.unbind(['left']);
     }
   }
+
   // shouldComponentUpdate(nextProps) {
   //   return nextProps.cogData.isLoaded && nextProps.cogData.crossfilter !== undefined;
   // }
+
   componentWillUnmount() {
-    if (this.props.fullscreen) {
+    const { fullscreen } = this.props;
+    if (fullscreen) {
       Mousetrap.unbind(['right']);
       Mousetrap.unbind(['left']);
     }
   }
+
   pageLeft = () => {
-    let n = this.props.n - 1;
-    if (n < 1) {
-      n += 1;
+    const { n, handleChange } = this.props;
+    let nn = n - 1;
+    if (nn < 1) {
+      nn += 1;
     }
-    return this.props.handleChange(n);
+    return handleChange(nn);
   }
+
   pageRight = () => {
-    let n = this.props.n + 1;
-    if (n > this.props.totPages) {
-      n -= 1;
+    const { n, totPages, handleChange } = this.props;
+    let nn = n + 1;
+    if (nn > totPages) {
+      nn -= 1;
     }
-    return this.props.handleChange(n);
+    return handleChange(nn);
   }
-  pageFirst = () => this.props.handleChange(1)
-  pageLast = () => this.props.handleChange(this.props.totPages)
+
+  pageFirst = () => {
+    const { handleChange } = this.props;
+    handleChange(1);
+  }
+
+  pageLast = () => {
+    const { handleChange, totPages } = this.props;
+    handleChange(totPages);
+  }
+
   render() {
-    const { classes } = this.props;
+    const {
+      classes, cogData, totPages, totPanels, npp, n
+    } = this.props;
 
     const styles = {
       icon: {
@@ -98,26 +121,37 @@ class Pagination extends React.Component {
       }
     };
 
-    if (this.props.cogData.isFetching ||
-      (this.props.cogData.isLoaded && this.props.cogData.crossfilter === undefined)) {
+    if (cogData.isFetching || (cogData.isLoaded && cogData.crossfilter === undefined)) {
       return (
         <div style={styles.progress}>loading panels...</div>
       );
-    } else if (this.props.totPanels === 0) {
+    }
+    if (totPanels === 0) {
       return <div />;
     }
 
-    const pFrom = (this.props.npp * (this.props.n - 1)) + 1;
-    const pTo = Math.min(this.props.npp * this.props.n, this.props.totPanels);
+    const pFrom = (npp * (n - 1)) + 1;
+    const pTo = Math.min(npp * n, totPanels);
     let pRange = <span>{pFrom}</span>;
     if (pFrom !== pTo) {
       pRange = (
         <span>
-          {pFrom} <span className={classes.pageDash}>-</span> {pTo}
+          {pFrom}
+          &nbsp;
+          <span className={classes.pageDash}>-</span>
+          &nbsp;
+          {pTo}
         </span>
       );
     }
-    const txt = <span>{pRange}<span>{` of ${this.props.totPanels}`}</span></span>;
+    const txt = (
+      <span>
+        {pRange}
+        <span>
+          {` of ${totPanels}`}
+        </span>
+      </span>
+    );
     return (
       <div className={classes.outer}>
         <div className={classes.label}>
@@ -126,10 +160,10 @@ class Pagination extends React.Component {
         <div className={classes.buttonWrap}>
           <div className={classes.buttonDiv}>
             <IconButton
-              disabled={this.props.n <= 1}
+              disabled={n <= 1}
               style={styles.button}
               // iconStyle={styles.icon}
-              onTouchTap={() => this.pageFirst()}
+              onClick={() => this.pageFirst()}
             >
               <FirstPageIcon />
             </IconButton>
@@ -141,10 +175,10 @@ class Pagination extends React.Component {
         <div className={classes.buttonWrap}>
           <div className={classes.buttonDiv}>
             <IconButton
-              disabled={this.props.n <= 1}
+              disabled={n <= 1}
               style={styles.button}
               // iconStyle={styles.icon}
-              onTouchTap={() => this.pageLeft()}
+              onClick={() => this.pageLeft()}
             >
               <ChevronLeftIcon />
             </IconButton>
@@ -156,10 +190,10 @@ class Pagination extends React.Component {
         <div className={classes.buttonWrap}>
           <div className={classes.buttonDiv}>
             <IconButton
-              disabled={this.props.n >= this.props.totPages}
+              disabled={n >= totPages}
               style={styles.button}
               // iconStyle={styles.icon}
-              onTouchTap={() => this.pageRight()}
+              onClick={() => this.pageRight()}
             >
               <ChevronRightIcon />
             </IconButton>
@@ -171,12 +205,12 @@ class Pagination extends React.Component {
         <div className={classes.buttonWrap}>
           <div className={classes.buttonDiv}>
             <IconButton
-              disabled={this.props.n >= this.props.totPages}
+              disabled={n >= totPages}
               style={styles.button}
               // iconStyle={styles.icon}
-              onTouchTap={() => this.pageLast()}
+              onClick={() => this.pageLast()}
             >
-              <LastPageIcon style={styles.icon} />
+              <LastPageIcon />
             </IconButton>
           </div>
           <div className={classes.buttonText}>

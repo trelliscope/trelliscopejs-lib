@@ -1,27 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { render } from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import {
-  MuiThemeProvider as NewMuiThemeProvider,
-  createMuiTheme
-} from 'material-ui-next/styles';
-
-import blue from 'material-ui-next/colors/blue';
-import lightBlue from 'material-ui-next/colors/lightBlue';
-import red from 'material-ui-next/colors/red';
-const blueA200 = blue['A200'];
-const lightBlue700 = lightBlue['lightBlue'];
-const redA200 = red['A200']
+// import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
+
+import blue from '@material-ui/core/colors/blue';
+import lightBlue from '@material-ui/core/colors/lightBlue';
+// import red from '@material-ui/core/colors/red';
+// const blueA200 = blue['A200'];
+// const lightBlue700 = lightBlue['lightBlue'];
+// const redA200 = red['A200']
 
 import { addClass } from './classManipulation';
 
@@ -29,88 +23,19 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { fetchDisplayList, windowResize, setAppDims, setLayout } from './actions';
+import {
+  fetchDisplayList, windowResize, setAppDims, setLayout
+} from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
 import createCallbackMiddleware from './callbackMiddleware';
 import crossfilterMiddleware from './crossfilterMiddleware';
-import app from './reducers';
+import reducers from './reducers';
 import App from './App';
 
+import * as serviceWorker from './serviceWorker';
+
 // import appData from './appData';
-
-class Root extends Component {
-  constructor(props) {
-    super(props);
-
-    // resize handler only when in fullscreen mode (which is always for SPA)
-    window.addEventListener('resize', () => {
-      if (this.props.store.getState().fullscreen) {
-        this.props.store.dispatch(windowResize({
-          height: window.innerHeight,
-          width: window.innerWidth
-        }));
-      }
-    });
-
-    const themeV0 = getMuiTheme({
-      fontFamily: '"Open Sans", sans-serif',
-      palette: {
-        primary1Color: blueA200, // '#4285f4', // lightBlue500,
-        primary2Color: lightBlue700,
-        accent1Color: redA200
-      },
-      tableRowColumn: {
-        spacing: 10
-      },
-      tableHeaderColumn: {
-        spacing: 10,
-        height: 30
-      },
-      floatingActionButton: {
-        miniSize: 30
-      }
-    });
-    this.themeV0 = themeV0;
-
-    const themeV1 = createMuiTheme({
-      palette: {
-        primary: { light: blue['A100'], main: blue['A200'] }, // '#4285f4', // lightBlue500,
-        secondary: { light: lightBlue[200], main: lightBlue[700] }
-        // accent1Color: redA200
-      },
-      typography: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeightLight: 200,
-        fontWeightRegular: 300,
-        fontWeightMedium: 400
-      }
-    });
-    this.themeV1 = themeV1;
-
-    // load the list of displays
-    // const cfgdat = appData;
-    this.props.store.dispatch(fetchDisplayList(this.props.config, this.props.id));
-  }
-
-  render() {
-    return (
-      <NewMuiThemeProvider theme={this.themeV1}>
-      <MuiThemeProvider muiTheme={this.themeV0}>
-        <Provider store={this.props.store}>
-          <App />
-        </Provider>
-      </MuiThemeProvider>
-      </NewMuiThemeProvider>
-    );
-  }
-}
-
-Root.propTypes = {
-  id: PropTypes.string.isRequired,
-  config: PropTypes.string.isRequired,
-  store: PropTypes.object.isRequired
-};
 
 const trelliscopeApp = (id, config, options) => {
   let useLogger = true;
@@ -143,10 +68,10 @@ const trelliscopeApp = (id, config, options) => {
 
   // if there is only one div in the whole document and it doesn't have dimensions
   // then we treat this as a single-page application
-  const noHeight = el.style.height === undefined || el.style.height === '' ||
-    el.style.height === '100%';
-  const noWidth = el.style.width === undefined || el.style.width === '' ||
-    el.style.width === '100%';
+  const noHeight = el.style.height === undefined || el.style.height === ''
+    || el.style.height === '100%';
+  const noWidth = el.style.width === undefined || el.style.width === ''
+    || el.style.width === '100%';
 
   let singlePageApp = false;
   let fullscreen = false;
@@ -222,18 +147,86 @@ const trelliscopeApp = (id, config, options) => {
   }
 
   const store = createStore(
-    app,
+    reducers,
     { appId: id, singlePageApp, fullscreen }, // initial state
     applyMiddleware(...middlewares)
   );
+  if (module.hot) {
+    module.hot.accept('./reducers', () => {
+      store.replaceReducer(reducers);
+    });
+  }
 
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
+  // load the list of displays
+  store.dispatch(fetchDisplayList(config, id));
 
-  render(
-    <Root id={id} config={config} store={store} />,
+  // resize handler only when in fullscreen mode (which is always for SPA)
+  window.addEventListener('resize', () => {
+    if (store.getState().fullscreen) {
+      store.dispatch(windowResize({
+        height: window.innerHeight,
+        width: window.innerWidth
+      }));
+    }
+  });
+
+  // const themeV0 = getMuiTheme({
+  //   fontFamily: '"Open Sans", sans-serif',
+  //   palette: {
+  //     primary1Color: blueA200, // '#4285f4', // lightBlue500,
+  //     primary2Color: lightBlue700,
+  //     accent1Color: redA200
+  //   },
+  //   tableRowColumn: {
+  //     spacing: 10
+  //   },
+  //   tableHeaderColumn: {
+  //     spacing: 10,
+  //     height: 30
+  //   },
+  //   floatingActionButton: {
+  //     miniSize: 30
+  //   }
+  // });
+  // this.themeV0 = themeV0;
+
+  const themeV1 = createMuiTheme({
+    palette: {
+      primary: { light: blue.A100, main: blue.A200 }, // '#4285f4', // lightBlue500,
+      secondary: { light: lightBlue[200], main: lightBlue[700] }
+      // accent1Color: redA200
+    },
+    typography: {
+      fontFamily: '"Open Sans", sans-serif',
+      fontWeightLight: 200,
+      fontWeightRegular: 300,
+      fontWeightMedium: 400
+    }
+  });
+
+  ReactDOM.render(
+    <MuiThemeProvider theme={themeV1}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById(id)
   );
+
+  if (module.hot) {
+    module.hot.accept('./App', () => {
+      ReactDOM.render(
+        <MuiThemeProvider theme={themeV1}>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </MuiThemeProvider>,
+        document.getElementById(id)
+      );
+    });
+  }
 
   return ({
     resize: (width, height) => {
@@ -254,8 +247,11 @@ const trelliscopeApp = (id, config, options) => {
 
 window.trelliscopeApp = trelliscopeApp;
 
+trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
 
 // https://toddmotto.com/react-create-class-versus-component/
 // http://stackoverflow.com/questions/35073669/window-resize-react-redux
 // hover scroll: http://jsfiddle.net/r36cuuvr/
 // https://github.com/StevenIseki/react-search
+
+serviceWorker.register();

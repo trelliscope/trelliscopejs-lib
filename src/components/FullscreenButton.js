@@ -4,12 +4,15 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import { emphasize } from 'material-ui-next/styles/colorManipulator';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
-import { dialogOpenSelector, fullscreenSelector,
-  appIdSelector, singlePageAppSelector } from '../selectors';
-import { sidebarActiveSelector, origWidthSelector,
-  origHeightSelector } from '../selectors/ui';
+import {
+  dialogOpenSelector, fullscreenSelector,
+  appIdSelector, singlePageAppSelector
+} from '../selectors';
+import {
+  sidebarActiveSelector, origWidthSelector, origHeightSelector
+} from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -19,49 +22,63 @@ class FullscreenButton extends React.Component {
     // store all these things so we can restore them
     this.yOffset = window.pageYOffset;
   }
+
   componentDidMount() {
-    if (!this.props.singlePageApp && this.props.fullscreen &&
-      this.props.sidebar === '' && !this.props.dialog) {
-      Mousetrap.bindGlobal(['esc'], () => this.props.toggleFullscreen(false,
-        this.props.appId, { width: this.props.ww, height: this.props.hh }, this.yOffset));
+    const {
+      singlePageApp, fullscreen, sidebar, dialog, appId, toggleFullscreen, ww, hh
+    } = this.props;
+    if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
+      Mousetrap.bindGlobal(['esc'], () => toggleFullscreen(false,
+        appId, { width: ww, height: hh }, this.yOffset));
     }
   }
+
   componentWillReceiveProps(nextProps) {
-    if (!this.props.singlePageApp) {
+    const { singlePageApp, ww, hh } = this.props;
+    if (!singlePageApp) {
       if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
         Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
-          nextProps.appId, { width: this.props.ww, height: this.props.hh }, this.yOffset));
+          nextProps.appId, { width: ww, height: hh }, this.yOffset));
       }
       if (nextProps.dialog) {
         Mousetrap.unbind(['esc']);
       }
     }
   }
+
   componentWillUnmount() {
-    if (!this.props.singlePageApp && this.props.fullscreen &&
-      this.props.sidebar === '' && !this.props.dialog) {
+    const {
+      singlePageApp, fullscreen, sidebar, dialog
+    } = this.props;
+    if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
       Mousetrap.unbind(['esc']);
     }
   }
+
   render() {
-    if (this.props.singlePageApp) {
+    const {
+      singlePageApp, fullscreen, appId, ww, hh, toggleFullscreen
+    } = this.props;
+
+    if (singlePageApp) {
       return null;
     }
 
     const { classes } = this.props;
-    const cls = this.props.fullscreen ? 'icon-minimize' : 'icon-maximize';
+    const cls = fullscreen ? 'icon-minimize' : 'icon-maximize';
 
     return (
       <button
+        type="button"
         className={classes.button}
         onClick={() => {
-          if (!this.props.fullscreen) { // toggling to fullscreen
+          if (!fullscreen) { // toggling to fullscreen
             this.yOffset = window.pageYOffset;
           }
-          this.props.toggleFullscreen(
-            !this.props.fullscreen,
-            this.props.appId,
-            { width: this.props.ww, height: this.props.hh },
+          toggleFullscreen(
+            !fullscreen,
+            appId,
+            { width: ww, height: hh },
             this.yOffset);
         }}
       >

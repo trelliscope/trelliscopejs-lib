@@ -28,7 +28,8 @@ export const filterColSplitSelector = createSelector(
         // if the number of levels is small then only make the box that tall
         const nlvl = di.info.cogInfo[d].levels ? di.info.cogInfo[d].levels.length : 1000;
         return Math.min(uiConsts.sidebar.filter.cat.height, nlvl * 15) + 54;
-      } else if (di.info.cogInfo[d].type === 'numeric') {
+      }
+      if (di.info.cogInfo[d].type === 'numeric') {
         return uiConsts.sidebar.filter.num.height + 54;
       }
       return 0;
@@ -66,10 +67,10 @@ export const filterColSplitSelector = createSelector(
 export const contentWidthSelector = createSelector(
   windowWidthSelector, sidebarActiveSelector, filterColSplitSelector,
   (ww, active, colSplit) => {
-    const sw = uiConsts.sidebar.width *
-      (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null));
-    return ww - uiConsts.sideButtons.width -
-      (active === '' ? 0 : (sw + 1));
+    const sw = uiConsts.sidebar.width
+      * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null));
+    return ww - uiConsts.sideButtons.width
+      - (active === '' ? 0 : (sw + 1));
   }
 );
 

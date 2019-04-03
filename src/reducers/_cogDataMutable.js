@@ -20,8 +20,8 @@ const _cogDataMutable = (state = {
         crossfilter: action.crossfilter,
         dimensionRefs: {},
         groupRefs: {},
-        allRef: action.crossfilter !== undefined ?
-          action.crossfilter.groupAll() : undefined,
+        allRef: action.crossfilter !== undefined
+          ? action.crossfilter.groupAll() : undefined,
         iface: action.iface,
         lastUpdated: action.receivedAt
       });

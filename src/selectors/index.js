@@ -29,5 +29,5 @@ export const fullscreenSelector = state => state.fullscreen;
 
 export const dialogOpenSelector = state => state.dialog;
 
-export const aspectSelector = state =>
-  state._displayInfo.info.height / state._displayInfo.info.width;
+export const aspectSelector = state => state._displayInfo.info.height
+  / state._displayInfo.info.width;

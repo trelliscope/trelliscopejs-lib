@@ -1,75 +1,24 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const glob = require('glob');
 
 module.exports = {
-  devtool: 'eval',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'trelliscope.js'
+  entry: {
+    'bundle.js': glob.sync('build/static/?(js|css|media)/*.?(js|css|eot|woff|ttf|svg|woff2)').map(f => path.resolve(__dirname, f))
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.ProvidePlugin({
-      crossfilter: 'crossfilter2'
-    }),
-    new webpack.DefinePlugin({
-      VERSION: JSON.stringify(require('./package.json').version)
-    })
-  ],
+  // entry: {
+  //   'bundle.js': glob.sync('build/static/?(js|css)/main.*.?(js|css)')
+  //     .map(f => path.resolve(__dirname, f)),
+  // },
+  output: {
+    filename: 'build/static/js/bundle.min.js'
+  },
   module: {
     rules: [
       {
-        test: /\.scss$/,
-        include: /src/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'autoprefixer',
-            options: {
-              browsers: 'last 3 versions'
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              outputStyle: 'expanded'
-            }
-          }
-        ]
-      },
-      {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ['style-loader', 'css-loader']
       },
-      {
-        test: /\.js$/,
-        include: path.join(__dirname, 'src'),
-        use: [
-          'react-hot-loader/webpack',
-          'babel-loader'
-        ]
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          'babel-loader'
-        ]
-      },
-      // Font Definitions
       {
         test: /\.svg(\?[\s\S]+)?$/,
         use: [
@@ -78,7 +27,7 @@ module.exports = {
             options: {
               limit: 65000,
               mimetype: 'image/svg+xml',
-              name: 'public/fonts/[name].[ext]'
+              name: 'build/static/media/[name].[ext]'
             }
           }
         ]
@@ -91,7 +40,7 @@ module.exports = {
             options: {
               limit: 65000,
               mimetype: 'application/font-woff',
-              name: 'public/fonts/[name].[ext]'
+              name: 'build/static/media/[name].[ext]'
             }
           }
         ]
@@ -104,7 +53,7 @@ module.exports = {
             options: {
               limit: 65000,
               mimetype: 'application/font-woff2',
-              name: 'public/fonts/[name].[ext]'
+              name: 'build/static/media/[name].[ext]'
             }
           }
         ]
@@ -117,7 +66,7 @@ module.exports = {
             options: {
               limit: 65000,
               mimetype: 'application/octet-stream',
-              name: 'public/fonts/[name].[ext]'
+              name: 'build/static/media/[name].[ext]'
             }
           }
         ]
@@ -130,11 +79,12 @@ module.exports = {
             options: {
               limit: 65000,
               mimetype: 'application/vnd.ms-fontobject',
-              name: 'public/fonts/[name].[ext]'
+              name: 'build/static/media/[name].[ext]'
             }
           }
         ]
       }
     ]
-  }
+  },
+  plugins: [new UglifyJsPlugin()]
 };

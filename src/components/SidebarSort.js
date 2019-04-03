@@ -4,9 +4,10 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import Button from 'material-ui-next/Button';
-import IconButton from 'material-ui-next/IconButton';
-import Icon from 'material-ui-next/Icon';
+import Fab from '@material-ui/core/Button';
+// import ExpandMore from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 import { setSort, setLabels, setLayout } from '../actions';
 import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
@@ -34,30 +35,29 @@ const SidebarSort = ({
                 return (
                   <tr className={classes.tr} key={`${d.name}_tr`}>
                     <td className={classes.sortButton}>
-                      <Button
-                        fab
+                      <Fab
                         mini
-                        style={{ width:36, height: 30 }}
+                        style={{ width: 36, height: 30 }}
                         color="primary"
                         key={`${d.name}_button`}
-                        zDepth={1}
-                        onTouchTap={() => {
+                        onClick={() => {
                           const sort2 = Object.assign([], sort);
                           sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
                           handleChange(sort2);
                         }}
                       >
                         <i className={`icon-chevron-${ic}`} />
-                      </Button>
+                      </Fab>
                     </td>
                     <td className={classes.labels}>
-                      {d.name}<br />
+                      {d.name}
+                      <br />
                       <span style={{ color: '#888', fontStyle: 'italic' }}>
                         {cogDesc[d.name]}
                       </span>
                     </td>
                     <td className={classes.closeButton}>
-                      <IconButton onTouchTap={() => handleChange(i)}>
+                      <IconButton onClick={() => handleChange(i)}>
                         <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
                       </IconButton>
                     </td>
@@ -68,17 +68,18 @@ const SidebarSort = ({
           </table>
         </div>
         <div className={classes.notUsedHeader}>
-          {sort.length === 0 ? 'Select a variable to sort on:' :
-            notUsed.length === 0 ? '' : 'More variables:'}
+          {sort.length === 0 ? 'Select a variable to sort on:'
+            : notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div className={classes.notUsed} style={styles.notUsed}>
           {notUsed.map(d => (
             <span key={`${d}_notused`}>
               <span data-tip data-for={`tooltip_${d}`}>
                 <button
+                  type="button"
                   className={classes.variable}
                   key={`${d}_button`}
-                  onTouchTap={() => {
+                  onClick={() => {
                     const sort2 = Object.assign([], sort);
                     sort2.push({ name: d, dir: 'asc' });
                     addLabel(d, labels);

@@ -7,11 +7,13 @@ import SidebarLabels from './SidebarLabels';
 import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
-import { contentHeightSelector, sidebarActiveSelector,
-  filterColSplitSelector } from '../selectors/ui';
+import {
+  contentHeightSelector, sidebarActiveSelector, filterColSplitSelector
+} from '../selectors/ui';
 import { displayLoadedSelector } from '../selectors';
-import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
-  SB_PANEL_LABELS, SB_CONFIG } from '../constants';
+import {
+  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG
+} from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Sidebar = ({
@@ -113,8 +115,8 @@ const stateSelector = createSelector(
   (ch, active, displayLoaded, colSplit) => ({
     styles: {
       sidebarContainer: {
-        width: uiConsts.sidebar.width * (1 +
-          (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null)),
+        width: uiConsts.sidebar.width
+          * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null)),
         height: ch
       }
     },

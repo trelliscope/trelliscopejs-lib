@@ -5,20 +5,22 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import Button from 'material-ui-next/Button';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui-next/Dialog';
-import { emphasize } from 'material-ui-next/styles/colorManipulator';
+import Button from '@material-ui/core/Button';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import DisplayList from './DisplayList';
-import { setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
-  setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
+import {
+  setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
+  setLabels, setLayout, setSort, setFilter, setFilterView
+} from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
-import { appIdSelector, configSelector, displayListSelector, fullscreenSelector,
-  selectedDisplaySelector, singlePageAppSelector } from '../selectors';
+import {
+  appIdSelector, configSelector, displayListSelector, fullscreenSelector,
+  selectedDisplaySelector, singlePageAppSelector
+} from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 class DisplaySelect extends React.Component {
@@ -29,27 +31,34 @@ class DisplaySelect extends React.Component {
       btnScale: 1
     };
   }
+
   componentWillMount() {
-    if (this.props.selectedDisplay.name === '' && this.props.singlePageApp) {
-      this.props.setDialogOpen(true);
+    const { selectedDisplay, singlePageApp, setDialogOpen } = this.props;
+    if (selectedDisplay.name === '' && singlePageApp) {
+      setDialogOpen(true);
     }
   }
+
   componentDidMount() {
-    if (this.props.fullscreen) {
+    const { fullscreen, selectedDisplay } = this.props;
+    const { btnScale } = this.state;
+
+    if (fullscreen) {
       Mousetrap.bind(['o'], this.handleKey);
     }
 
     const attnInterval = setInterval(() => {
       const elem = this._atnnCircle;
-      if (this.props.selectedDisplay.name !== '') {
+      if (selectedDisplay.name !== '') {
         clearInterval(attnInterval);
       }
       if (elem) {
-        elem.style.transform = `scale(${this.state.btnScale})`;
-        this.setState({ btnScale: this.state.btnScale === 1 ? 0.85 : 1 });
+        elem.style.transform = `scale(${btnScale})`;
+        this.setState({ btnScale: btnScale === 1 ? 0.85 : 1 });
       }
     }, 750);
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
       Mousetrap.bind(['o'], this.handleKey);
@@ -57,34 +66,50 @@ class DisplaySelect extends React.Component {
       Mousetrap.unbind(['o']);
     }
   }
+
   componentWillUnmount() {
-    if (this.props.fullscreen) {
+    const { fullscreen } = this.props;
+    if (fullscreen) {
       Mousetrap.unbind(['o']);
     }
   }
+
   handleOpen = () => {
-    if (this.props.displayList && this.props.displayList.isLoaded) {
-      this.props.setDialogOpen(true);
+    const { displayList, setDialogOpen } = this.props;
+    if (displayList && displayList.isLoaded) {
+      setDialogOpen(true);
       this.setState({ open: true });
     }
   }
+
   handleKey = () => {
-    this.props.setDialogOpen(true);
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
   }
-  handleClose = () => {
-    this.props.setDialogOpen(false);
-    this.setState({ open: false });
-  }
-  handleSelect = (name, group, desc) => {
-    this.props.handleClick(name, group, desc, this.props.cfg, this.props.appId);
-    this.props.setDialogOpen(false);
-    this.setState({ open: false });
-  }
-  render() {
-    const { classes } = this.props;
 
-    const isLoaded = this.props.displayList && this.props.displayList.isLoaded;
+  handleClose = () => {
+    const { setDialogOpen } = this.props;
+    setDialogOpen(false);
+    this.setState({ open: false });
+  }
+
+  handleSelect = (name, group, desc) => {
+    const {
+      handleClick, setDialogOpen, cfg, appId
+    } = this.props;
+    handleClick(name, group, desc, cfg, appId);
+    setDialogOpen(false);
+    this.setState({ open: false });
+  }
+
+  render() {
+    const {
+      classes, displayList, displayGroups, selectedDisplay, cfg
+    } = this.props;
+    const { open } = this.state;
+
+    const isLoaded = displayList && displayList.isLoaded;
     let attnDiv = (
       <div className={classes.attnOuter}>
         <div className={classes.attnInner}>
@@ -95,34 +120,35 @@ class DisplaySelect extends React.Component {
         </div>
       </div>
     );
-    if (this.props.selectedDisplay.name !== '' || this.state.open) {
+    if (selectedDisplay.name !== '' || open) {
       attnDiv = '';
     }
 
     return (
       <button
-        onTouchTap={this.handleOpen}
+        type="button"
+        onClick={this.handleOpen}
         className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
       >
         {attnDiv}
         <i className={`icon-folder-open ${classes.folderIcon}`} />
         <Dialog
-          open={this.state.open}
+          open={open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-dispselect-title"
         >
-          <DialogTitle id="dialog-dispselect-title">{"Select a Display to Open"}</DialogTitle>
+          <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
           <DialogContent>
             <DisplayList
-              di={this.props.displayList.list}
-              displayGroups={this.props.displayGroups}
+              di={displayList.list}
+              displayGroups={displayGroups}
               handleClick={this.handleSelect}
-              cfg={this.props.cfg}
+              cfg={cfg}
             />
           </DialogContent>
           <DialogActions>
-            <Button color="accent" onClick={this.handleClose}>
+            <Button color="secondary" onClick={this.handleClose}>
               Close
             </Button>
           </DialogActions>

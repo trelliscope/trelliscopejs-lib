@@ -10,25 +10,26 @@ const HistPlotD3 = {};
 
 class FilterNumPlot extends React.Component {
   componentDidMount() {
+    const { condDist, width, height } = this.props;
     // we don't expect most props to change so we'll set things here
     // so we don't recompute every time the plots updates
     // the one thing that can change is the domain of ys
     const axisPad = 16;
     const sidePad = 5;
-    const { delta } = this.props.condDist;
-    const xrange = [this.props.condDist.breaks[0],
-      this.props.condDist.breaks[this.props.condDist.breaks.length - 1] + delta];
+    const { delta } = condDist;
+    const xrange = [condDist.breaks[0],
+      condDist.breaks[condDist.breaks.length - 1] + delta];
     const xs = scaleLinear()
       .domain(xrange)
-      .range([sidePad, this.props.width - sidePad]);
+      .range([sidePad, width - sidePad]);
     const ys = scaleLinear()
-      .domain([0, this.props.condDist.max])
-      .range([this.props.height - axisPad, 0]);
+      .domain([0, condDist.max])
+      .range([height - axisPad, 0]);
     const axis = axisBottom(ys)
       .scale(xs)
       .ticks(5)
       .tickSize(4);
-    const height = this.props.height - axisPad;
+    const newHeight = height - axisPad;
     const barWidth = xs(delta) - xs(0);
 
     const barPath = (dat, pars) => {
@@ -56,7 +57,7 @@ class FilterNumPlot extends React.Component {
       xs,
       ys,
       axis,
-      height,
+      height: newHeight,
       barWidth,
       barPath
     };
@@ -64,20 +65,25 @@ class FilterNumPlot extends React.Component {
     this._d3node
       .call(HistPlotD3.enter.bind(this, this.props, this.d3pars));
   }
+
   // shouldComponentUpdate(nextProps, nextState) {
   //   return true;
   // }
+
   componentDidUpdate() {
-    this.d3pars.ys.domain([0, this.props.condDist.max]);
+    const { condDist } = this.props;
+    this.d3pars.ys.domain([0, condDist.max]);
     this._d3node
       .call(HistPlotD3.update.bind(this, this.props, this.d3pars));
   }
+
   render() {
+    const { width, height } = this.props;
     return (
       <svg
         ref={(d) => { this._d3node = select(d); }}
-        width={this.props.width}
-        height={this.props.height}
+        width={width}
+        height={height}
       />
     );
   }

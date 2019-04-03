@@ -7,8 +7,9 @@ import Mousetrap from 'mousetrap';
 import { setActiveSidebar } from '../actions';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind';
 import SideButton from './SideButton';
-import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT,
-  SB_PANEL_LABELS } from '../constants';
+import {
+  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS
+} from '../constants';
 import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
@@ -38,14 +39,17 @@ class SideButtons extends React.Component {
       // open: false
     };
   }
+
   componentDidMount() {
-    if (this.props.fullscreen) {
+    const { fullscreen, active } = this.props;
+    if (fullscreen) {
       Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
-      if (this.props.active !== '') {
+      if (active !== '') {
         Mousetrap.bindGlobal(['esc'], this.handleKey);
       }
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
       Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
@@ -56,18 +60,23 @@ class SideButtons extends React.Component {
       Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
     }
   }
+
   componentWillUnmount() {
-    if (this.props.fullscreen) {
+    const { fullscreen } = this.props;
+    if (fullscreen) {
       Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
     }
   }
+
   handleKey = (e, k) => {
-    if (e.target.nodeName === 'INPUT' || this.props.dialogOpen) {
+    const { dialogOpen, setActive } = this.props;
+
+    if (e.target.nodeName === 'INPUT' || dialogOpen) {
       e.stopPropagation();
     } else if (k === 'esc' || k === 'enter') {
       // allow keyboard shortcuts for sidebars
       // if 'esc', close it, otherwise, open according to key code
-      this.props.setActive('');
+      setActive('');
     } else {
       const which = [];
       for (let ii = 0; ii < buttons.length; ii += 1) {
@@ -76,24 +85,27 @@ class SideButtons extends React.Component {
         }
       }
       if (which.length > 0) {
-        this.props.setActive(which[0]);
+        setActive(which[0]);
       }
     }
   }
+
   render() {
-    const { classes } = this.props;
+    const {
+      classes, styles, active, setActive
+    } = this.props;
 
     return (
-      <div className={classes.sideButtonsContainer} style={this.props.styles.sideButtonsContainer}>
+      <div className={classes.sideButtonsContainer} style={styles.sideButtonsContainer}>
         <div className={classes.spacer} />
         {buttons.map(d => (
           <SideButton
             key={`sidebutton_${d.title}`}
-            isActive={d.title === this.props.active}
+            isActive={d.title === active}
             icon={d.icon}
             title={d.title}
             label={d.label}
-            onClick={() => this.props.setActive(d.title)}
+            onClick={() => setActive(d.title)}
           />
         ))}
       </div>

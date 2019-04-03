@@ -15,7 +15,7 @@ const SideButton = ({
       [classes.bottom]: title === SB_CONFIG
     })}
     type="button"
-    onTouchTap={onClick}
+    onClick={onClick}
   >
     <div className={classes.icon}>
       <i className={icon} />

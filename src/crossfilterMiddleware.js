@@ -57,8 +57,8 @@ const crossfilterMiddleware = store => next => (action) => {
             // group.dispose(); // to get rid of previous group
             // create group that bins into histogram breaks
             const ci = store.getState()._displayInfo.info.cogInfo[names[i]];
-            groups[names[i]] = dimensions[names[i]].group(d =>
-              (Number.isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+            groups[names[i]] = dimensions[names[i]].group(d => (Number.isNaN(d)
+              ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
           }
           if (action.filter[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
@@ -113,8 +113,8 @@ const crossfilterMiddleware = store => next => (action) => {
       if (groups[action.name] === undefined) {
         if (type === 'numeric') {
           const ci = store.getState()._displayInfo.info.cogInfo[action.name];
-          groups[action.name] = dimensions[action.name].group(d =>
-            (Number.isNaN(d) ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+          groups[action.name] = dimensions[action.name].group(d => (Number.isNaN(d)
+            ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
         } else {
           groups[action.name] = dimensions[action.name].group();
         }

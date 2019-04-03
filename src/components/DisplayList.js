@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import { GridList, GridTile } from 'material-ui/GridList';
-import Subheader from 'material-ui/Subheader';
-import red from 'material-ui-next/colors/red';
-const redA200 = red['A200'];
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import red from '@material-ui/core/colors/red';
+
+const redA200 = red.A200;
 
 const DisplayList = ({
   classes, di, displayGroups, handleClick, cfg
@@ -13,9 +15,9 @@ const DisplayList = ({
 
   const makeSubheader = (groupName, n) => {
     if (n > 1) {
-      return <Subheader style={{ fontSize: 20, color: 'black' }}>{groupName}</Subheader>;
+      return <ListSubheader style={{ fontSize: 20, color: 'black' }}>{groupName}</ListSubheader>;
     }
-    return <Subheader />;
+    return <ListSubheader />;
   };
 
   const displayList = groupKeys.map(k => (
@@ -27,25 +29,27 @@ const DisplayList = ({
       >
         {makeSubheader(k, groupKeys.length)}
         {displayGroups[k].map(i => (
-          <GridTile
+          <GridListTile
             key={i}
             className={classes.gridTile}
-            title={
+            title={(
               <div className={classes.gridTitle}>
                 {di[i].name}
               </div>
-            }
-            subtitle={
+            )}
+            subtitle={(
               <span style={{ fontSize: 13 }}>
-                {di[i].desc}<br />
+                {di[i].desc}
+                <br />
                 <span className={classes.gridSubtitle}>
-                  {di[i].n} panels,
+                  {di[i].n}
+                  &nbsp;panels,
                   {di[i].updated.substring(0, di[i].updated.length - 3)}
                 </span>
               </span>
-            }
+            )}
             titleBackground="rgba(0, 0, 0, 0.80)"
-            onTouchTap={() => handleClick(di[i].name, di[i].group, di[i].desc)}
+            onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
           >
             <img
               src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}
@@ -53,7 +57,7 @@ const DisplayList = ({
               className={classes.img}
               key={`img${i}`}
             />
-          </GridTile>
+          </GridListTile>
         ))}
       </GridList>
     </div>

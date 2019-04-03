@@ -1,5 +1,7 @@
-import { SET_APP_ID, SET_DIALOG_OPEN, SET_SINGLE_PAGE_APP,
-  SET_FULLSCREEN, SET_ERROR_MESSAGE } from '../constants';
+import {
+  SET_APP_ID, SET_DIALOG_OPEN, SET_SINGLE_PAGE_APP,
+  SET_FULLSCREEN, SET_ERROR_MESSAGE
+} from '../constants';
 
 export const appId = (state = 'app', action) => {
   switch (action.type) {

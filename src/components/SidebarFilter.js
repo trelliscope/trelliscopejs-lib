@@ -6,15 +6,19 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
-import { emphasize } from 'material-ui-next/styles/colorManipulator';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
-import { setFilterView, setFilter, setLayout, setLabels } from '../actions';
+import {
+  setFilterView, setFilter, setLayout, setLabels
+} from '../actions';
 import { cogFiltDistSelector } from '../selectors/cogData';
 import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
-import { displayInfoSelector, filterStateSelector,
-  filterViewSelector, labelsSelector } from '../selectors';
+import {
+  displayInfoSelector, filterStateSelector,
+  filterViewSelector, labelsSelector
+} from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarFilter = ({
@@ -106,6 +110,7 @@ const SidebarFilter = ({
                 </ReactTooltip>
                 <div className={classes.headerExtra}>{headerExtra}</div>
                 <button
+                  type="button"
                   key={`${d}_${displId}-close-icon`}
                   className={`${classes.headerIcon} ${classes.headerClose}`}
                   onMouseDown={() => handleViewChange(d, 'remove')}
@@ -113,6 +118,7 @@ const SidebarFilter = ({
                   <i className="icon-times-circle" />
                 </button>
                 <button
+                  type="button"
                   key={`${d}_${displId}-reset-icon`}
                   className={classNames({
                     [classes.headerIcon]: true,
@@ -144,8 +150,8 @@ const SidebarFilter = ({
     } else {
       colContent[extraIdx].push(
         <div key="notUsedHeader" className={classes.notUsedHeader}>
-          {filterView.active.length === 0 ? 'Select a variable to filter on:' :
-            filterView.inactive.length === 0 ? '' : 'More variables:'}
+          {filterView.active.length === 0 ? 'Select a variable to filter on:'
+            : filterView.inactive.length === 0 ? '' : 'More variables:'}
         </div>
       );
       colContent[extraIdx].push(
@@ -158,6 +164,7 @@ const SidebarFilter = ({
             <span key={`${d}_${displId}`}>
               <span data-tip data-for={`tooltip_${d}`}>
                 <button
+                  type="button"
                   className={classNames({
                     [classes.variable]: true,
                     [classes.variableActive]: filter[d] && filter[d].value !== undefined
