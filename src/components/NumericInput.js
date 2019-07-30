@@ -17,9 +17,9 @@ class NumericInput extends React.Component {
 
   componentDidMount() {
     this.mousetrap = new Mousetrap(this._NumericInput);
-    this.mousetrap.bind(['up'], () => this.increment());
-    this.mousetrap.bind(['down'], () => this.decrement());
-    this.mousetrap.bind(['esc'], () => {
+    this.mousetrap.bind('up', () => this.increment());
+    this.mousetrap.bind('down', () => this.decrement());
+    this.mousetrap.bind('esc', () => {
       this._NumericInput.blur();
       return false;
     });
@@ -32,9 +32,9 @@ class NumericInput extends React.Component {
   }
 
   componentWillUnmount() {
-    this.mousetrap.unbind(['up']);
-    this.mousetrap.unbind(['down']);
-    this.mousetrap.unbind(['esc']);
+    this.mousetrap.unbind('up');
+    this.mousetrap.unbind('down');
+    this.mousetrap.unbind('esc');
     this.mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r']);
   }
 

@@ -44,7 +44,7 @@ class DisplaySelect extends React.Component {
     const { btnScale } = this.state;
 
     if (fullscreen) {
-      Mousetrap.bind(['o'], this.handleKey);
+      Mousetrap.bind('o', this.handleKey);
     }
 
     const attnInterval = setInterval(() => {
@@ -61,16 +61,16 @@ class DisplaySelect extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
-      Mousetrap.bind(['o'], this.handleKey);
+      Mousetrap.bind('o', this.handleKey);
     } else {
-      Mousetrap.unbind(['o']);
+      Mousetrap.unbind('o');
     }
   }
 
   componentWillUnmount() {
     const { fullscreen } = this.props;
     if (fullscreen) {
-      Mousetrap.unbind(['o']);
+      Mousetrap.unbind('o');
     }
   }
 

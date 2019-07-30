@@ -109,9 +109,9 @@ class FilterNum extends React.Component {
       classes, filterState, dist, condDist, name
     } = this.props;
 
-    const underlineStyle = {
-      bottom: 10
-    };
+    // const underlineStyle = {
+    //   bottom: 10
+    // };
 
     const validStyle = { textAlign: 'center' };
     if (filterState.valid !== undefined && !filterState.valid) {
@@ -155,7 +155,6 @@ class FilterNum extends React.Component {
         <div className={classes.inputContainer}>
           <div className={classes.rangeInputText}>Range:</div>
           <TextField
-            ref={(d) => { this._fromInput = d; }}
             // hintText="from"
             name="fromText"
             style={rangeInput}
@@ -163,33 +162,32 @@ class FilterNum extends React.Component {
             // underlineStyle={underlineStyle}
             type="number"
             step={step}
-            defaultValue={this.stateValue.from}
+            value={this.stateValue.from}
             onChange={e => this.handleInput(e.target.value, 'from')}
-            onKeyDown={e => this.setValidState(
-              e.target.value,
-              this.stateValue.to,
-              'from'
-            )}
+            // onKeyDown={e => this.setValidState(
+            //   e.target.value,
+            //   this.stateValue.to,
+            //   'from'
+            // )}
           />
           <div className={`${classes.rangeInputText} ${classes.rangeInputTextDash}`}>
             -
           </div>
           <TextField
-            ref={(d) => { this._toInput = d; }}
             // hintText="to"
             name="toText"
             style={rangeInput}
-            inputStyle={validStyle}
-            underlineStyle={underlineStyle}
+            // inputStyle={validStyle}
+            // underlineStyle={underlineStyle}
             type="number"
             step={step}
-            defaultValue={this.stateValue.to}
+            value={this.stateValue.to}
             onChange={e => this.handleInput(e.target.value, 'to')}
-            onKeyDown={e => this.setValidState(
-              this.stateValue.from,
-              e.target.value,
-              'to'
-            )}
+            // onKeyDown={e => this.setValidState(
+            //   this.stateValue.from,
+            //   e.target.value,
+            //   'to'
+            // )}
           />
         </div>
       </div>
@@ -226,6 +224,7 @@ const staticStyles = {
   inputContainer: {
     width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
     marginBottom: -14,
+    paddingBottom: 12,
     zIndex: 100,
     position: 'relative',
     verticalAlign: 'center'

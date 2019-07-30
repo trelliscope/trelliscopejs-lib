@@ -28,7 +28,7 @@ class FullscreenButton extends React.Component {
       singlePageApp, fullscreen, sidebar, dialog, appId, toggleFullscreen, ww, hh
     } = this.props;
     if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
-      Mousetrap.bindGlobal(['esc'], () => toggleFullscreen(false,
+      Mousetrap.bindGlobal('esc', () => toggleFullscreen(false,
         appId, { width: ww, height: hh }, this.yOffset));
     }
   }
@@ -37,11 +37,11 @@ class FullscreenButton extends React.Component {
     const { singlePageApp, ww, hh } = this.props;
     if (!singlePageApp) {
       if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
-        Mousetrap.bindGlobal(['esc'], () => nextProps.toggleFullscreen(false,
+        Mousetrap.bindGlobal('esc', () => nextProps.toggleFullscreen(false,
           nextProps.appId, { width: ww, height: hh }, this.yOffset));
       }
       if (nextProps.dialog) {
-        Mousetrap.unbind(['esc']);
+        Mousetrap.unbind('esc');
       }
     }
   }
@@ -51,7 +51,7 @@ class FullscreenButton extends React.Component {
       singlePageApp, fullscreen, sidebar, dialog
     } = this.props;
     if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
-      Mousetrap.unbind(['esc']);
+      Mousetrap.unbind('esc');
     }
   }
 

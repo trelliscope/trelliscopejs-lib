@@ -25,12 +25,12 @@ class Pagination extends React.Component {
   componentDidMount() {
     const { fullscreen, dialogOpen } = this.props;
     if (fullscreen) {
-      Mousetrap.bind(['right'], () => {
+      Mousetrap.bind('right', () => {
         if (!dialogOpen) {
           this.pageRight();
         }
       });
-      Mousetrap.bind(['left'], () => {
+      Mousetrap.bind('left', () => {
         if (!dialogOpen) {
           this.pageLeft();
         }
@@ -39,21 +39,20 @@ class Pagination extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dialogOpen } = this.props;
+    const { dialogOpen } = nextProps;
     if (nextProps.fullscreen) {
-      Mousetrap.bind(['right'], () => {
+      Mousetrap.bind('right', () => {
         if (!dialogOpen) {
           this.pageRight();
         }
       });
-      Mousetrap.bind(['left'], () => {
+      Mousetrap.bind('left', () => {
         if (!dialogOpen) {
           this.pageLeft();
         }
       });
     } else {
-      Mousetrap.unbind(['right']);
-      Mousetrap.unbind(['left']);
+      Mousetrap.unbind(['right', 'left']);
     }
   }
 
@@ -64,8 +63,7 @@ class Pagination extends React.Component {
   componentWillUnmount() {
     const { fullscreen } = this.props;
     if (fullscreen) {
-      Mousetrap.unbind(['right']);
-      Mousetrap.unbind(['left']);
+      Mousetrap.unbind(['right', 'left']);
     }
   }
 

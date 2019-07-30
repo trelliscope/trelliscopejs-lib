@@ -45,7 +45,7 @@ class SideButtons extends React.Component {
     if (fullscreen) {
       Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
       if (active !== '') {
-        Mousetrap.bindGlobal(['esc'], this.handleKey);
+        Mousetrap.bindGlobal('esc', this.handleKey);
       }
     }
   }
@@ -54,7 +54,7 @@ class SideButtons extends React.Component {
     if (nextProps.fullscreen) {
       Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
       if (nextProps.active !== '') {
-        Mousetrap.bindGlobal(['esc'], this.handleKey);
+        Mousetrap.bindGlobal('esc', this.handleKey);
       }
     } else {
       Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);

@@ -25,22 +25,22 @@ class HeaderLogo extends React.Component {
   componentDidMount() {
     const { fullscreen } = this.props;
     if (fullscreen) {
-      Mousetrap.bind(['a'], this.handleKey);
+      Mousetrap.bind('a', this.handleKey);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.fullscreen) {
-      Mousetrap.bind(['a'], this.handleKey);
+      Mousetrap.bind('a', this.handleKey);
     } else {
-      Mousetrap.unbind(['a']);
+      Mousetrap.unbind('a');
     }
   }
 
   componentWillUnmount() {
     const { fullscreen } = this.props;
     if (fullscreen) {
-      Mousetrap.unbind(['a']);
+      Mousetrap.unbind('a');
     }
   }
 
@@ -48,6 +48,7 @@ class HeaderLogo extends React.Component {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleChange = (event, value) => {
@@ -58,12 +59,14 @@ class HeaderLogo extends React.Component {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(false);
     this.setState({ open: false });
+    Mousetrap.unbind('esc');
   }
 
   render() {
@@ -360,6 +363,7 @@ class HeaderLogo extends React.Component {
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-viewer-title"
+          onBackdropClick={this.handleClose}
         >
           <DialogTitle id="dialog-viewer-title">
             {`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}

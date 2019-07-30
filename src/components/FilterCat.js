@@ -32,18 +32,10 @@ class FilterCat extends React.Component {
       ? filterState.orderValue : 'ct,desc';
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate() {
     const { filterState } = this.props;
     this.sortOrder = filterState.orderValue
       ? filterState.orderValue : 'ct,desc';
-
-    if (nextProps.filterState.type !== 'regex') {
-      // hacky way to clear regex field after it switches to selection
-      // until material-ui is fixed and we can change to controlled input
-      // https://github.com/callemall/@material-ui/core/pull/3673
-      this._TextField.input.value = '';
-      this._TextField.state.hasValue = false;
-    }
   }
 
   handleRegex(val) {
@@ -125,10 +117,9 @@ class FilterCat extends React.Component {
         </div>
         <div className={classes.inputContainer}>
           <TextField
-            ref={(d) => { this._TextField = d; }}
             placeholder="regex"
             style={regexInput}
-            defaultValue={filterState.type === 'regex' ? filterState.regex : ''}
+            value={filterState.type === 'regex' ? filterState.regex : ''}
             onChange={e => this.handleRegex(e.target.value)}
           />
           {extraOptionsInput}
@@ -172,7 +163,8 @@ const staticStyles = {
   inputContainer: {
     height: 39,
     width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
-    marginBottom: -14,
+    marginBottom: -21,
+    paddingTop: 7,
     zIndex: 100,
     position: 'relative'
   },

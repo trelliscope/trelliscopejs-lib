@@ -22,20 +22,20 @@ class RelatedDisplays extends React.Component {
   componentDidMount() {
     const { active } = this.props;
     if (active) {
-      Mousetrap.bind(['r'], this.handleKey);
+      Mousetrap.bind('r', this.handleKey);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.active) {
-      Mousetrap.bind(['r'], this.handleKey);
+      Mousetrap.bind('r', this.handleKey);
     }
   }
 
   componentWillUnmount() {
     const { active } = this.props;
     if (active) {
-      Mousetrap.unbind(['r']);
+      Mousetrap.unbind('r');
     }
   }
 

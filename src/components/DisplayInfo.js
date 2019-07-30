@@ -25,22 +25,22 @@ class DisplayInfo extends React.Component {
   componentDidMount() {
     const { active, fullscreen } = this.props;
     if (active && fullscreen) {
-      Mousetrap.bind(['i'], this.handleKey);
+      Mousetrap.bind('i', this.handleKey);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.active && nextProps.fullscreen) {
-      Mousetrap.bind(['i'], this.handleKey);
+      Mousetrap.bind('i', this.handleKey);
     } else {
-      Mousetrap.unbind(['i']);
+      Mousetrap.unbind('i');
     }
   }
 
   componentWillUnmount() {
     const { active, fullscreen } = this.props;
     if (active && fullscreen) {
-      Mousetrap.unbind(['i']);
+      Mousetrap.unbind('i');
     }
   }
 
@@ -48,18 +48,21 @@ class DisplayInfo extends React.Component {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleKey = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(false);
     this.setState({ open: false });
+    Mousetrap.unbind('esc');
   }
 
   render() {
@@ -94,11 +97,6 @@ class DisplayInfo extends React.Component {
         );
       }
 
-      // modal={false}
-      // className="trelliscope-app"
-      // style={{ zIndex: 8000, fontWeight: 300 }}
-      // onRequestClose={this.handleClose}
-
       const { open } = this.state;
       dialogContent = (
         <Dialog
@@ -106,6 +104,8 @@ class DisplayInfo extends React.Component {
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-info-title"
+          onBackdropClick={this.handleClose}
+          disableEscapeKeyDown
         >
           <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
           <DialogContent>

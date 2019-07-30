@@ -123,6 +123,7 @@ HistPlotD3.enter = (props, pars, selection) => {
     if (currentEvent.sourceEvent) {
       if (currentEvent.selection) {
         const newRange = currentEvent.selection.map(d => fixNumber(pars.xs.invert(d)));
+        console.log(newRange)
         props.handleChange(newRange);
       } else {
         selection.select('#cliprect')

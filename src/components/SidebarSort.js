@@ -4,7 +4,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import Fab from '@material-ui/core/Button';
+// import Fab from '@material-ui/core/Button';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
@@ -35,9 +35,8 @@ const SidebarSort = ({
                 return (
                   <tr className={classes.tr} key={`${d.name}_tr`}>
                     <td className={classes.sortButton}>
-                      <Fab
-                        mini
-                        style={{ width: 36, height: 30 }}
+                      <IconButton
+                        // style={{ width: 36, height: 30 }}
                         color="primary"
                         key={`${d.name}_button`}
                         onClick={() => {
@@ -46,8 +45,8 @@ const SidebarSort = ({
                           handleChange(sort2);
                         }}
                       >
-                        <i className={`icon-chevron-${ic}`} />
-                      </Fab>
+                        <i className={`icon-chevron-${ic}`} style={{ fontSize: 16 }} />
+                      </IconButton>
                     </td>
                     <td className={classes.labels}>
                       {d.name}
