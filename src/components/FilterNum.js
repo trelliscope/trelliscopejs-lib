@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import TextField from '@material-ui/core/TextField';
-import { debounce } from 'throttle-debounce';
+// import { debounce } from 'throttle-debounce';
 import FilterNumPlot from './FilterNumPlot';
 import uiConsts from '../assets/styles/uiConsts';
 
 class FilterNum extends React.Component {
   constructor(props) {
     super(props);
-    this.handleInput = debounce(400, this.handleInput);
+    // this.handleInput = debounce(400, this.handleInput);
     this.stateValue = {};
     this.handleBrushInput = this.handleBrushInput.bind(this);
   }
@@ -120,15 +120,22 @@ class FilterNum extends React.Component {
 
     const rangeInput = {
       width: 75,
-      marginTop: -10,
+      marginTop: -5,
       fontSize: 16,
       transform: 'scale(0.85)',
       transformOrigin: '0 0'
     };
 
+    const inputStyle = { textAlign: 'center', paddingBottom: 2 };
+
     this.stateValue = filterState.value;
     if (this.stateValue === undefined) {
       this.stateValue = {};
+    }
+
+    const { to, from } = this.stateValue;
+    if (to && from && to < from) {
+      inputStyle.color = 'red';
     }
 
     // calculate step value for numeric input
@@ -158,11 +165,14 @@ class FilterNum extends React.Component {
             // hintText="from"
             name="fromText"
             style={rangeInput}
+            inputProps={{
+              style: inputStyle
+            }}
             // inputStyle={validStyle}
             // underlineStyle={underlineStyle}
             type="number"
             step={step}
-            value={this.stateValue.from}
+            value={this.stateValue.from ? this.stateValue.from : ''}
             onChange={e => this.handleInput(e.target.value, 'from')}
             // onKeyDown={e => this.setValidState(
             //   e.target.value,
@@ -177,11 +187,14 @@ class FilterNum extends React.Component {
             // hintText="to"
             name="toText"
             style={rangeInput}
+            inputProps={{
+              style: inputStyle
+            }}
             // inputStyle={validStyle}
             // underlineStyle={underlineStyle}
             type="number"
             step={step}
-            value={this.stateValue.to}
+            value={this.stateValue.to ? this.stateValue.to : ''}
             onChange={e => this.handleInput(e.target.value, 'to')}
             // onKeyDown={e => this.setValidState(
             //   this.stateValue.from,
@@ -223,8 +236,9 @@ const staticStyles = {
   },
   inputContainer: {
     width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
-    marginBottom: -14,
-    paddingBottom: 12,
+    marginBottom: -12,
+    paddingBottom: 8,
+    paddingTop: 4,
     zIndex: 100,
     position: 'relative',
     verticalAlign: 'center'

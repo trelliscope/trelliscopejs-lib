@@ -54,6 +54,7 @@ class FilterCatPlot extends React.Component {
       <CatBar
         key={`${x.rowIndex}_${barCt}_${sortOrder}`}
         // key={x.key}
+        style={null}
         divStyle={x.style}
         active={active}
         allActive={filterState.value === undefined}

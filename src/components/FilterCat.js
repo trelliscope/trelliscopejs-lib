@@ -11,7 +11,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import { debounce } from 'throttle-debounce';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+// import { debounce } from 'throttle-debounce';
+// import Mousetrap from 'mousetrap';
 import FilterCatPlot from './FilterCatPlot';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -27,15 +29,31 @@ class FilterCat extends React.Component {
   constructor(props) {
     super(props);
     const { filterState } = this.props;
-    this.handleRegex = debounce(400, this.handleRegex);
+    // this.handleRegex = debounce(400, this.handleRegex);
     this.sortOrder = filterState.orderValue
       ? filterState.orderValue : 'ct,desc';
+    this.state = { menuOpen: false, anchorEl: null };
   }
 
   componentWillUpdate() {
     const { filterState } = this.props;
     this.sortOrder = filterState.orderValue
       ? filterState.orderValue : 'ct,desc';
+  }
+
+  handleMenuClose = () => {
+    this.setState({ menuOpen: false });
+  }
+
+  handleMenuIconClick = (event) => {
+    const { menuOpen } = this.state;
+    this.setState({ menuOpen: !menuOpen });
+    this.setState({ anchorEl: menuOpen ? null : event.currentTarget });
+    // if (menuOpen) {
+    //   Mousetrap.unbind('esc');
+    // } else {
+    //   Mousetrap.bind('esc', this.handleMenuClose);
+    // }
   }
 
   handleRegex(val) {
@@ -80,22 +98,49 @@ class FilterCat extends React.Component {
       transformOrigin: '0 0'
     };
 
-    const iconButtonElement = <IconButton iconClassName="icon-more_vert" />;
+    const { menuOpen, anchorEl } = this.state;
+
+    // const iconButtonElement = <IconButton iconClassName="icon-more_vert" />;
     const extraOptionsInput = (
-      <Menu
-        value={this.sortOrder}
-        onChange={(e, value) => {
-          handleSortChange(Object.assign(filterState,
-            { orderValue: value }));
-        }}
-        className={classes.extraOptionsInput}
-        iconButtonElement={iconButtonElement}
-        desktop
-      >
-        {sortOptions.map(d => (
-          <MenuItem primaryText={d.text} value={d.payload} key={d.payload} />
-        ))}
-      </Menu>
+      <div className={classes.extraOptionsInput}>
+        <IconButton
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={this.handleMenuIconClick}
+          // onClose={this.handleMenuClose}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="long-menu"
+          open={menuOpen}
+          anchorEl={anchorEl}
+          onClose={this.handleMenuClose}
+          // keepMounted
+          // PaperProps={{
+          //   style: {
+          //     maxHeight: 48 * 4.5,
+          //     width: 200
+          //   }
+          // }}
+          // className={classes.extraOptionsInput}
+        >
+          {sortOptions.map(d => (
+            <MenuItem
+              key={d.payload}
+              selected={d.payload === filterState.orderValue}
+              onClick={() => {
+                handleSortChange(Object.assign(filterState,
+                  { orderValue: d.payload }));
+                this.handleMenuClose();
+              }}
+            >
+              {d.text}
+            </MenuItem>
+          ))}
+        </Menu>
+      </div>
     );
 
     return (
@@ -169,12 +214,18 @@ const staticStyles = {
     position: 'relative'
   },
   extraOptionsInput: {
+    // position: 'absolute',
+    // top: -8,
+    // right: -10,
     float: 'right',
-    width: 28,
     marginTop: -6,
-    transform: 'scale(0.85)',
+    width: 28,
+    transform: 'scale(0.6)',
     transformOrigin: '0 0'
   }
+  // position: absolute;
+  // top: -8px;
+  // right: -10px;
 };
 
 export default injectSheet(staticStyles)(FilterCat);
