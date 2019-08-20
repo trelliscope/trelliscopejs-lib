@@ -11,7 +11,7 @@ export const layout = (state = {
     case SET_LAYOUT: {
       // if the layout change was to nrow / ncol
       // then we need to recompute pageNum
-      const obj = Object.assign({}, action.layout, {});
+      const obj = { ...action.layout };
       if (obj.nrow || obj.ncol) {
         const prevPanelIndex = (state.nrow * state.ncol * (state.pageNum - 1)) + 1;
         obj.pageNum = Math.ceil(prevPanelIndex / (obj.nrow * obj.ncol));
@@ -19,7 +19,7 @@ export const layout = (state = {
           obj.pageNum = 1;
         }
       }
-      return Object.assign({}, state, obj);
+      return { ...state, ...obj };
     }
     default:
   }
@@ -67,7 +67,7 @@ const filterState = (state = {}, action) => {
       if (Object.keys(action.filter).length === 0 && action.filter.constructor === Object) {
         return {};
       }
-      return Object.assign({}, state, action.filter);
+      return { ...state, ...action.filter };
     }
     default:
   }
@@ -77,7 +77,7 @@ const filterState = (state = {}, action) => {
 const filterView = (state = {}, action) => {
   switch (action.type) {
     case SET_FILTER_VIEW: {
-      const view = Object.assign({}, state);
+      const view = { ...state };
       if (view.active === undefined) {
         view.active = [];
       }

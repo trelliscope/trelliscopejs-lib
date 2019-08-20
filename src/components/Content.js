@@ -84,7 +84,7 @@ const Content = ({
         onSwipedLeft={() => setPageNum('left', curPage, totPages)}
       >
         <div className={classes.content} style={contentStyle}>
-          {panelMatrix.map(el => (
+          {panelMatrix.map((el) => (
             <Panel
               key={`${el.key}${keyExtra}`}
               cfg={cfg}
@@ -257,11 +257,11 @@ const stateSelector = createSelector(
   }
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   removeLabel: (name, labels) => {
     const idx = labels.indexOf(name);
     if (idx > -1) {

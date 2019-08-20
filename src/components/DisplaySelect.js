@@ -258,11 +258,11 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group, desc, cfg, appId) => {
     // need to clear out state for new display...
     // first close sidebars for safety

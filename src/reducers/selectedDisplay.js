@@ -7,11 +7,12 @@ const selectedDisplayReducer = (state = {
 }, action) => {
   switch (action.type) {
     case SELECT_DISPLAY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         name: action.name,
         group: action.group,
         desc: action.desc
-      });
+      };
     default:
   }
   return state;

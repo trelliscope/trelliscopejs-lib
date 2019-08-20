@@ -41,20 +41,20 @@ ErrorSnack.propTypes = {
 
 // ------ redux container ------
 
-const errorSelector = state => state.errorMsg;
+const errorSelector = (state) => state.errorMsg;
 
 const stateSelector = createSelector(
   errorSelector,
-  errorMsg => ({
+  (errorMsg) => ({
     errorMsg
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleClose: () => {
     dispatch(setErrorMessage(''));
   }

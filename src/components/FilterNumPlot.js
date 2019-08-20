@@ -122,7 +122,7 @@ HistPlotD3.enter = (props, pars, selection) => {
   const brushed = () => {
     if (currentEvent.sourceEvent) {
       if (currentEvent.selection) {
-        const newRange = currentEvent.selection.map(d => fixNumber(pars.xs.invert(d)));
+        const newRange = currentEvent.selection.map((d) => fixNumber(pars.xs.invert(d)));
         // console.log(newRange)
         props.handleChange(newRange);
       } else {
@@ -217,14 +217,14 @@ HistPlotD3.enter = (props, pars, selection) => {
   gBrush.selectAll('rect')
     .attr('height', pars.height);
 
-  selection.selectAll('.bar').attr('d', d => pars.barPath(d, pars));
+  selection.selectAll('.bar').attr('d', (d) => pars.barPath(d, pars));
 };
 
 HistPlotD3.update = (props, pars, selection) => {
   selection.selectAll('.bar')
     .attr('d', null)
     .datum(props.condDist.dist)
-    .attr('d', d => pars.barPath(d, pars));
+    .attr('d', (d) => pars.barPath(d, pars));
 
   // brush needs to reflect updated range
   if (props.filterState.value !== undefined) {

@@ -139,7 +139,7 @@ class DisplayInfo extends React.Component {
                 application or hit the key &quot;a&quot;.
               </p>
               <ul>
-                {ciKeys.map(d => (
+                {ciKeys.map((d) => (
                   <li key={ci[d].name}>
                     <strong>{ci[d].name}</strong>
                     :
@@ -252,7 +252,7 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   styleSelector(state)
 );
 

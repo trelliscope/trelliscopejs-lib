@@ -24,7 +24,7 @@ class NumericInput extends React.Component {
       return false;
     });
     this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
-      event => event.stopPropagation());
+      (event) => event.stopPropagation());
   }
 
   componentWillReceiveProps(nextProps) {

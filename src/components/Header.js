@@ -226,11 +226,11 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   selectDisplay: (name, group, desc, cfg, appId) => {
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg, appId));

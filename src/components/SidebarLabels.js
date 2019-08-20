@@ -19,7 +19,7 @@ const SidebarLabels = ({
   let content = <div />;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
-    const tableData = ciKeys.map(d => ({
+    const tableData = ciKeys.map((d) => ({
       name: cogInfo[d].name,
       desc: cogInfo[d].desc
     }));
@@ -27,7 +27,7 @@ const SidebarLabels = ({
     content = (
       <div style={{ height, overflowY: 'auto' }}>
         <List style={{ padding: 0 }}>
-          {tableData.map(value => (
+          {tableData.map((value) => (
             <ListItem
               key={value.name}
               dense
@@ -83,11 +83,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleChange: (value, labels) => {
     const idx = labels.indexOf(value);
     if (idx === -1) {

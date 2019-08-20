@@ -8,19 +8,21 @@ const _displayInfoReducer = (state = {
 }, action) => {
   switch (action.type) {
     case REQUEST_DISPLAY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         isLoaded: false,
         didInvalidate: false
-      });
+      };
     case RECEIVE_DISPLAY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
         isLoaded: true,
         info: action.info,
         lastUpdated: action.receivedAt
-      });
+      };
     default:
       return state;
   }

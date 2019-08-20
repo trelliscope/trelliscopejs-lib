@@ -10,7 +10,7 @@ import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line impo
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
 
-const getJSON = obj => d3json(obj.url, json => obj.callback(json));
+const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 
 class Panel extends React.Component {
   constructor(props) {
@@ -218,8 +218,10 @@ class Panel extends React.Component {
                   <button
                     type="button"
                     className={classes.labelClose}
-                    style={Object.assign({}, styles.labelClose,
-                      hover !== d.name && { display: 'none' })}
+                    style={({
+                      ...styles.labelClose,
+                      ...hover !== d.name && { display: 'none' }
+                    })}
                     onClick={() => removeLabel(d.name, labelArr)}
                   >
                     <i className="icon-times-circle" />

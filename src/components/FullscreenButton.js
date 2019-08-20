@@ -141,11 +141,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   toggleFullscreen: (fullscreen, appId, appDims, yOffset) => {
     const el = document.getElementById(appId);
     const newDims = {};

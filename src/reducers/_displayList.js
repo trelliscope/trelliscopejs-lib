@@ -8,19 +8,21 @@ const _displayListReducer = (state = {
 }, action) => {
   switch (action.type) {
     case REQUEST_DISPLAY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         isLoaded: false,
         didInvalidate: false
-      });
+      };
     case RECEIVE_DISPLAY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
         isLoaded: true,
         list: action.list,
         lastUpdated: action.receivedAt
-      });
+      };
     default:
       return state;
   }

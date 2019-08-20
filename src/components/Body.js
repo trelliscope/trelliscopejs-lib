@@ -44,7 +44,7 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 

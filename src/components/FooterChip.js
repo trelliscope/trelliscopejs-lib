@@ -122,7 +122,7 @@ const staticStyles = {
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleStateClose: (x) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));

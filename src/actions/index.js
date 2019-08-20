@@ -12,21 +12,21 @@ import {
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS
 } from '../constants';
 
-const getJSON = obj => d3json(obj.url, json => obj.callback(json));
+const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 
-export const setAppID = id => ({
+export const setAppID = (id) => ({
   type: SET_APP_ID, id
 });
 
-export const setFullscreen = fullscreen => ({
+export const setFullscreen = (fullscreen) => ({
   type: SET_FULLSCREEN, fullscreen
 });
 
-export const windowResize = dims => (
+export const windowResize = (dims) => (
   { type: WINDOW_RESIZE, dims }
 );
 
-export const setAppDims = dims => (
+export const setAppDims = (dims) => (
   { type: UPDATE_DIMS, dims }
 );
 
@@ -34,33 +34,33 @@ export const requestConfig = () => ({
   type: REQUEST_CONFIG
 });
 
-export const receiveConfig = json => ({
+export const receiveConfig = (json) => ({
   type: RECEIVE_CONFIG,
   config: json,
   receivedAt: Date.now()
 });
 
-export const setActiveSidebar = active => ({
+export const setActiveSidebar = (active) => ({
   type: ACTIVE_SIDEBAR, active
 });
 
-export const setDialogOpen = isOpen => ({
+export const setDialogOpen = (isOpen) => ({
   type: SET_DIALOG_OPEN, isOpen
 });
 
-export const setLayout = layout => ({
+export const setLayout = (layout) => ({
   type: SET_LAYOUT, layout
 });
 
-export const setLabels = labels => ({
+export const setLabels = (labels) => ({
   type: SET_LABELS, labels
 });
 
-export const setSort = sort => ({
+export const setSort = (sort) => ({
   type: SET_SORT, sort
 });
 
-export const setFilter = filter => ({
+export const setFilter = (filter) => ({
   type: SET_FILTER, filter
 });
 
@@ -72,7 +72,7 @@ export const requestDisplayList = () => ({
   type: REQUEST_DISPLAY_LIST
 });
 
-export const receiveDisplayList = json => ({
+export const receiveDisplayList = (json) => ({
   type: RECEIVE_DISPLAY_LIST,
   list: json,
   receivedAt: Date.now()
@@ -101,15 +101,15 @@ const receiveCogData = (iface, json) => ({
   receivedAt: Date.now()
 });
 
-export const setPanelRenderer = fn => ({
+export const setPanelRenderer = (fn) => ({
   type: SET_PANEL_RENDERER, fn
 });
 
-export const setLocalPanels = dat => ({
+export const setLocalPanels = (dat) => ({
   type: SET_LOCAL_PANELS, dat
 });
 
-export const setErrorMessage = msg => ({
+export const setErrorMessage = (msg) => ({
   type: SET_ERROR_MESSAGE, msg
 });
 
@@ -147,7 +147,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
       />
     )));
   } else if (dObjJson.panelInterface.type === 'image_src') {
-    dispatch(setPanelRenderer(x => (
+    dispatch(setPanelRenderer((x) => (
       <img
         src={x}
         alt="panel"
@@ -241,7 +241,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch)
         getJSONP({
           url: `${json.display_base}displayList.jsonp`,
           callbackName: dlCallback,
-          error: err => dispatch(setErrorMessage(
+          error: (err) => dispatch(setErrorMessage(
             `Couldn't load display list: ${err.url}`
           ))
         });
@@ -249,7 +249,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch)
         getJSON({
           url: `${json.display_base}displayList.json`,
           callback: window[dlCallback]
-        }).on('error', err => dispatch(setErrorMessage(
+        }).on('error', (err) => dispatch(setErrorMessage(
           `Couldn't load display list: ${err.target.responseURL}`
         )));
       }
@@ -264,7 +264,7 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch)
       getJSONP({
         url: config,
         callbackName: cfgCallback,
-        error: err => dispatch(setErrorMessage(
+        error: (err) => dispatch(setErrorMessage(
           `Couldn't load config: ${err.url}`
         ))
       });
@@ -326,7 +326,7 @@ export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
       getJSONP({
         url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
         callbackName: 'cdCallback',
-        error: err => dispatch(setErrorMessage(
+        error: (err) => dispatch(setErrorMessage(
           `Couldn't load cognostics data: ${err.url}`
         ))
       });
@@ -334,7 +334,7 @@ export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
       getJSON({
         url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
         callback: window[cdCallback]
-      }).on('error', err => dispatch(setErrorMessage(
+      }).on('error', (err) => dispatch(setErrorMessage(
         `Couldn't load display list: ${err.target.responseURL}`
       )));
     }
@@ -345,7 +345,7 @@ export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
     getJSONP({
       url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
       callbackName: 'ldCallback',
-      error: err => dispatch(setErrorMessage(
+      error: (err) => dispatch(setErrorMessage(
         `Couldn't load display object: ${err.url}`
       ))
     });
@@ -353,7 +353,7 @@ export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
     getJSON({
       url: `${cfg.display_base}${group}/${name}/displayObj.json`,
       callback: window[ldCallback]
-    }).on('error', err => dispatch(setErrorMessage(
+    }).on('error', (err) => dispatch(setErrorMessage(
       `Couldn't load display list: ${err.target.responseURL}`
     )));
   }

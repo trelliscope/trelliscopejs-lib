@@ -7,13 +7,15 @@ const _cogDataMutable = (state = {
 }, action) => {
   switch (action.type) {
     case REQUEST_COGDATA:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         isLoaded: false,
         didInvalidate: false
-      });
+      };
     case RECEIVE_COGDATA:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
         isLoaded: true,
@@ -24,7 +26,7 @@ const _cogDataMutable = (state = {
           ? action.crossfilter.groupAll() : undefined,
         iface: action.iface,
         lastUpdated: action.receivedAt
-      });
+      };
     default:
       return state;
   }

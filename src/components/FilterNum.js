@@ -173,7 +173,7 @@ class FilterNum extends React.Component {
             type="number"
             step={step}
             value={this.stateValue.from ? this.stateValue.from : ''}
-            onChange={e => this.handleInput(e.target.value, 'from')}
+            onChange={(e) => this.handleInput(e.target.value, 'from')}
             // onKeyDown={e => this.setValidState(
             //   e.target.value,
             //   this.stateValue.to,
@@ -195,7 +195,7 @@ class FilterNum extends React.Component {
             type="number"
             step={step}
             value={this.stateValue.to ? this.stateValue.to : ''}
-            onChange={e => this.handleInput(e.target.value, 'to')}
+            onChange={(e) => this.handleInput(e.target.value, 'to')}
             // onKeyDown={e => this.setValidState(
             //   this.stateValue.from,
             //   e.target.value,

@@ -22,7 +22,7 @@ export const relatedDisplaysSelector = createSelector(
 
 export const cogInfoSelector = createSelector(
   displayInfoSelector,
-  di => (
+  (di) => (
     di.info.cogInfo ? di.info.cogInfo : {}
   )
 );

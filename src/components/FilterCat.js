@@ -126,7 +126,7 @@ class FilterCat extends React.Component {
           // }}
           // className={classes.extraOptionsInput}
         >
-          {sortOptions.map(d => (
+          {sortOptions.map((d) => (
             <MenuItem
               key={d.payload}
               selected={d.payload === filterState.orderValue}
@@ -165,7 +165,7 @@ class FilterCat extends React.Component {
             placeholder="regex"
             style={regexInput}
             value={filterState.type === 'regex' ? filterState.regex : ''}
-            onChange={e => this.handleRegex(e.target.value)}
+            onChange={(e) => this.handleRegex(e.target.value)}
           />
           {extraOptionsInput}
         </div>

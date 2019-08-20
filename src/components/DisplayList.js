@@ -20,7 +20,7 @@ const DisplayList = ({
     return <ListSubheader />;
   };
 
-  const displayList = groupKeys.map(k => (
+  const displayList = groupKeys.map((k) => (
     <div className={classes.groupContainer} key={k}>
       <GridList
         cellHeight={200}
@@ -28,7 +28,7 @@ const DisplayList = ({
         className={classes.gridList}
       >
         {makeSubheader(k, groupKeys.length)}
-        {displayGroups[k].map(i => (
+        {displayGroups[k].map((i) => (
           <GridListTile
             key={i}
             className={classes.gridTile}

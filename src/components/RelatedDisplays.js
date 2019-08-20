@@ -72,7 +72,7 @@ class RelatedDisplays extends React.Component {
           <DialogTitle id="dialog-reldisp-title">Add Related Displays</DialogTitle>
           <DialogContent>
             Under construction...
-            {relatedDisplays.map(d => (
+            {relatedDisplays.map((d) => (
               <div key={`${d.group}_${d.name}`}>
                 {`${d.group} / ${d.name}`}
               </div>
@@ -139,7 +139,7 @@ const styleSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   styleSelector(state)
 );
 

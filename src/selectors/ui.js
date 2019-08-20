@@ -3,15 +3,15 @@ import { SB_PANEL_FILTER } from '../constants';
 import { filterViewSelector, displayInfoSelector } from '.';
 import uiConsts from '../assets/styles/uiConsts';
 
-export const windowWidthSelector = state => state.ui.windowWidth;
-export const windowHeightSelector = state => state.ui.windowHeight;
-export const origWidthSelector = state => state.ui.origWidth;
-export const origHeightSelector = state => state.ui.origHeight;
-export const sidebarActiveSelector = state => state.sidebar.active;
+export const windowWidthSelector = (state) => state.ui.windowWidth;
+export const windowHeightSelector = (state) => state.ui.windowHeight;
+export const origWidthSelector = (state) => state.ui.origWidth;
+export const origHeightSelector = (state) => state.ui.origHeight;
+export const sidebarActiveSelector = (state) => state.sidebar.active;
 
 export const sidebarHeightSelector = createSelector(
   windowHeightSelector,
-  wh => wh - uiConsts.header.height - uiConsts.footer.height - uiConsts.sidebar.header.height
+  (wh) => wh - uiConsts.header.height - uiConsts.footer.height - uiConsts.sidebar.header.height
 );
 
 // keep track of how high each filter entry is so we can spill over into a new column
@@ -76,5 +76,5 @@ export const contentWidthSelector = createSelector(
 
 export const contentHeightSelector = createSelector(
   windowHeightSelector,
-  wh => wh - uiConsts.header.height - uiConsts.footer.height
+  (wh) => wh - uiConsts.header.height - uiConsts.footer.height
 );

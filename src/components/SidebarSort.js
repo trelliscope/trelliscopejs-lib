@@ -71,7 +71,7 @@ const SidebarSort = ({
             : notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div className={classes.notUsed} style={styles.notUsed}>
-          {notUsed.map(d => (
+          {notUsed.map((d) => (
             <span key={`${d}_notused`}>
               <span data-tip data-for={`tooltip_${d}`}>
                 <button
@@ -224,11 +224,11 @@ const stateSelector = createSelector(
   }
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleChange: (sortSpec) => {
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ pageNum: 1 }));

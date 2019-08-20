@@ -141,12 +141,12 @@ FilterCatPlot.propTypes = {
 
 const stateSelector = createSelector(
   filterCardinalitySelector,
-  filterCardinality => ({
+  (filterCardinality) => ({
     filterCardinality
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 

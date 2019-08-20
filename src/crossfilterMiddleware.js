@@ -38,7 +38,7 @@ const multiSort = (args) => {
   };
 };
 
-const crossfilterMiddleware = store => next => (action) => {
+const crossfilterMiddleware = (store) => (next) => (action) => {
   if (action.type === 'SET_FILTER' && action.filter) {
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
@@ -51,13 +51,13 @@ const crossfilterMiddleware = store => next => (action) => {
         // numeric is always 'range' type
         if (action.filter[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension(d => getNumVal(d, names[i]));
+            dimensions[names[i]] = cf.dimension((d) => getNumVal(d, names[i]));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
             // create group that bins into histogram breaks
             const ci = store.getState()._displayInfo.info.cogInfo[names[i]];
-            groups[names[i]] = dimensions[names[i]].group(d => (Number.isNaN(d)
+            groups[names[i]] = dimensions[names[i]].group((d) => (Number.isNaN(d)
               ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
           }
           if (action.filter[names[i]].value === undefined) {
@@ -68,11 +68,11 @@ const crossfilterMiddleware = store => next => (action) => {
             fromVal = fromVal === undefined ? -Infinity : fromVal;
             toVal = toVal === undefined ? Infinity : toVal;
             // want to be inclusive on both ends
-            dimensions[names[i]].filterFunction(d => d >= fromVal && d <= toVal);
+            dimensions[names[i]].filterFunction((d) => d >= fromVal && d <= toVal);
           }
         } else if (action.filter[names[i]].varType === 'factor') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension(d => getCatVal(d, names[i]));
+            dimensions[names[i]] = cf.dimension((d) => getCatVal(d, names[i]));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
@@ -83,7 +83,7 @@ const crossfilterMiddleware = store => next => (action) => {
           } else {
             // handle select and regex (regex same as select as value is already populated)
             const selectVals = action.filter[names[i]].value;
-            dimensions[names[i]].filter(d => selectVals.indexOf(d) > -1);
+            dimensions[names[i]].filter((d) => selectVals.indexOf(d) > -1);
           }
         }
       }
@@ -104,16 +104,16 @@ const crossfilterMiddleware = store => next => (action) => {
 
       if (dimensions[action.name] === undefined) {
         if (type === 'numeric') {
-          dimensions[action.name] = cf.dimension(d => getNumVal(d, action.name));
+          dimensions[action.name] = cf.dimension((d) => getNumVal(d, action.name));
         } else {
-          dimensions[action.name] = cf.dimension(d => getCatVal(d, action.name));
+          dimensions[action.name] = cf.dimension((d) => getCatVal(d, action.name));
         }
       }
 
       if (groups[action.name] === undefined) {
         if (type === 'numeric') {
           const ci = store.getState()._displayInfo.info.cogInfo[action.name];
-          groups[action.name] = dimensions[action.name].group(d => (Number.isNaN(d)
+          groups[action.name] = dimensions[action.name].group((d) => (Number.isNaN(d)
             ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
         } else {
           groups[action.name] = dimensions[action.name].group();
@@ -140,14 +140,14 @@ const crossfilterMiddleware = store => next => (action) => {
         newState.splice(action.sort, 1);
       }
       if (newState.length === 0) {
-        dimensions.__sort = cf.dimension(d => d.__index);
+        dimensions.__sort = cf.dimension((d) => d.__index);
       } else if (newState.length === 1) {
         // if (action.filter[names[i]].varType === 'numeric') {
         const ci = store.getState()._displayInfo.info.cogInfo[newState[0].name];
         if (ci.type === 'factor') {
-          dimensions.__sort = cf.dimension(d => getCatVal(d, newState[0].name));
+          dimensions.__sort = cf.dimension((d) => getCatVal(d, newState[0].name));
         } else if (ci.type === 'numeric') {
-          dimensions.__sort = cf.dimension(d => getNumValSign(d,
+          dimensions.__sort = cf.dimension((d) => getNumValSign(d,
             newState[0].name, newState[0].dir));
         }
       } else {
@@ -177,7 +177,7 @@ const crossfilterMiddleware = store => next => (action) => {
         for (let i = 0; i < sortDat.length; i += 1) {
           idx[sortDat[i].__index] = i;
         }
-        dimensions.__sort = cf.dimension(d => idx[d.__index]);
+        dimensions.__sort = cf.dimension((d) => idx[d.__index]);
       }
     }
   }

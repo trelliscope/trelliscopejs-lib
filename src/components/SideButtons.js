@@ -98,7 +98,7 @@ class SideButtons extends React.Component {
     return (
       <div className={classes.sideButtonsContainer} style={styles.sideButtonsContainer}>
         <div className={classes.spacer} />
-        {buttons.map(d => (
+        {buttons.map((d) => (
           <SideButton
             key={`sidebutton_${d.title}`}
             isActive={d.title === active}
@@ -161,11 +161,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   setActive: (n) => {
     dispatch(setActiveSidebar(n));
   }

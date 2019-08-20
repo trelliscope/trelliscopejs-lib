@@ -5,9 +5,7 @@ const panelRendererReducer = (state = {
 }, action) => {
   switch (action.type) {
     case SET_PANEL_RENDERER:
-      return Object.assign({}, state, {
-        fn: action.fn
-      });
+      return { ...state, fn: action.fn };
     default:
   }
   return state;

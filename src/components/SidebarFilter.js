@@ -39,7 +39,7 @@ const SidebarFilter = ({
     }
     const colFilters = [col1filters, col2filters];
 
-    const colContent = colFilters.map(curFilters => (
+    const colContent = colFilters.map((curFilters) => (
       curFilters.map((d, i) => {
         if (filtDist[d]) {
           let filterState = filter[d];
@@ -160,7 +160,7 @@ const SidebarFilter = ({
           className={classes.notUsedContainer}
           style={styles.notUsedContainer}
         >
-          {inames.map(d => (
+          {inames.map((d) => (
             <span key={`${d}_${displId}`}>
               <span data-tip data-for={`tooltip_${d}`}>
                 <button
@@ -377,11 +377,11 @@ const stateSelector = createSelector(
   })
 );
 
-const mapStateToProps = state => (
+const mapStateToProps = (state) => (
   stateSelector(state)
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleViewChange: (x, which, labels) => {
     // if a filter is being added to the view, add a panel label for the variable
     if (which === 'add') {
@@ -399,7 +399,7 @@ const mapDispatchToProps = dispatch => ({
       obj = x;
     } else {
       obj = {};
-      obj[x.name] = Object.assign({}, x);
+      obj[x.name] = { ...x };
     }
     dispatch(setFilter(obj));
     dispatch(setLayout({ pageNum: 1 }));
