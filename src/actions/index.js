@@ -127,6 +127,27 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
 
+  // layout
+  // (need to set layout before others because the default layout is 1,1
+  //   and will be temporarily honored if this is set later)
+  const { layout } = dObjJson.state;
+  if (hashItems.nrow) {
+    layout.nrow = parseInt(hashItems.nrow, 10);
+  }
+  if (hashItems.ncol) {
+    layout.ncol = parseInt(hashItems.ncol, 10);
+  }
+  if (hashItems.arr) {
+    layout.arrange = hashItems.arr;
+  }
+  dispatch(setLayout(layout));
+  // need to do page number separately because it is recomputed when nrow/ncol are changed
+  if (hashItems.pg) {
+    dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
+  } else {
+    dispatch(setLayout({ pageNum: 1 }));
+  }
+
   // labels
   let { labels } = dObjJson.state;
   if (hashItems.labels) {
@@ -150,23 +171,6 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
 
   // filter
   dispatch(setFilter(dObjJson.state.filter));
-
-  // layout
-  const { layout } = dObjJson.state;
-  if (hashItems.nrow) {
-    layout.nrow = parseInt(hashItems.nrow, 10);
-  }
-  if (hashItems.ncol) {
-    layout.ncol = parseInt(hashItems.ncol, 10);
-  }
-  if (hashItems.arr) {
-    layout.arrange = hashItems.arr;
-  }
-  dispatch(setLayout(layout));
-  // need to do page number separately because it is recomputed when nrow/ncol are changed
-  if (hashItems.pg) {
-    dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
-  }
 
   const ciKeys = Object.keys(dObjJson.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {
