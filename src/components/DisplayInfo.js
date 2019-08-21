@@ -29,7 +29,7 @@ class DisplayInfo extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind('i', this.handleKey);
     } else {

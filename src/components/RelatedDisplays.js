@@ -26,7 +26,7 @@ class RelatedDisplays extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.active) {
       Mousetrap.bind('r', this.handleKey);
     }

@@ -33,7 +33,7 @@ class FullscreenButton extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     const { singlePageApp, ww, hh } = this.props;
     if (!singlePageApp) {
       if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {

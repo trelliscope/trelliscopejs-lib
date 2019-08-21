@@ -394,7 +394,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setFilterView(x, which));
   },
   handleFilterChange: (x) => {
-    console.log(x)
     let obj;
     if (typeof x === 'string' || x instanceof String) {
       obj = x;

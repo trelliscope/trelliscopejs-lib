@@ -249,7 +249,6 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
 // but it needs the config so we'll load config first
 export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch) => {
   const selfContained = !(typeof config === 'string' || config instanceof String);
-  const hash = window.location.hash; // get the hash right when app is loaded because middleware changes it
 
   if (!selfContained) {
     dispatch(requestConfig());

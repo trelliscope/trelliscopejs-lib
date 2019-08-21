@@ -26,7 +26,7 @@ class Header extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nprops) {
+  UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
     const { singleLoaded } = this.state;
     // handle loading a single display if necessary
     // TODO: Why do this here? Why not in actions/index.js?

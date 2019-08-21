@@ -29,7 +29,7 @@ class HeaderLogo extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
       Mousetrap.bind('a', this.handleKey);
     } else {

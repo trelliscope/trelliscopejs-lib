@@ -27,7 +27,7 @@ class NumericInput extends React.Component {
       (event) => event.stopPropagation());
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     this.setState({ value: nextProps.value });
   }
 

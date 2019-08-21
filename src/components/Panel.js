@@ -94,7 +94,7 @@ class Panel extends React.Component {
     setTimeout(() => (elem.style.opacity = 1), 10); // eslint-disable-line no-return-assign
   }
 
-  componentWillReceiveProps(nprops) {
+  UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
     const { loaded, panelData } = this.state;
     const { dims } = this.props;
     // when there is an update, if the size changed, update
@@ -220,7 +220,7 @@ class Panel extends React.Component {
                     className={classes.labelClose}
                     style={({
                       ...styles.labelClose,
-                      ...hover !== d.name && { display: 'none' }
+                      ...(hover !== d.name && { display: 'none' })
                     })}
                     onClick={() => removeLabel(d.name, labelArr)}
                   >

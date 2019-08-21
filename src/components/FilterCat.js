@@ -35,7 +35,7 @@ class FilterCat extends React.Component {
     this.state = { menuOpen: false, anchorEl: null };
   }
 
-  componentWillUpdate() {
+  UNSAFE_componentWillUpdate() { // eslint-disable-line camelcase
     const { filterState } = this.props;
     this.sortOrder = filterState.orderValue
       ? filterState.orderValue : 'ct,desc';

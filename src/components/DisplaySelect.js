@@ -58,7 +58,7 @@ class DisplaySelect extends React.Component {
     }, 750);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
       Mousetrap.bind('o', this.handleKey);
     } else {

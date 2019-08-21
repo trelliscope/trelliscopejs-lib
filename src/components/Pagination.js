@@ -38,7 +38,7 @@ class Pagination extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     const { dialogOpen } = nextProps;
     if (nextProps.fullscreen) {
       Mousetrap.bind('right', () => {
