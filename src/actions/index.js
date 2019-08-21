@@ -144,8 +144,6 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   // need to do page number separately because it is recomputed when nrow/ncol are changed
   if (hashItems.pg) {
     dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
-  } else {
-    dispatch(setLayout({ pageNum: 1 }));
   }
 
   // labels
