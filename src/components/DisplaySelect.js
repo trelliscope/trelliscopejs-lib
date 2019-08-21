@@ -32,16 +32,15 @@ class DisplaySelect extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const { selectedDisplay, singlePageApp, setDialogOpen } = this.props;
+  componentDidMount() {
+    const {
+      fullscreen, selectedDisplay, singlePageApp, setDialogOpen
+    } = this.props;
+    const { btnScale } = this.state;
+
     if (selectedDisplay.name === '' && singlePageApp) {
       setDialogOpen(true);
     }
-  }
-
-  componentDidMount() {
-    const { fullscreen, selectedDisplay } = this.props;
-    const { btnScale } = this.state;
 
     if (fullscreen) {
       Mousetrap.bind('o', this.handleKey);
@@ -277,7 +276,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSort([]));
 
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg, appId));
+    dispatch(fetchDisplay(name, group, cfg, appId, ''));
   }
 });
 

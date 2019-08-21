@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -16,6 +15,8 @@ import lightBlue from '@material-ui/core/colors/lightBlue';
 // const blueA200 = blue['A200'];
 // const lightBlue700 = lightBlue['lightBlue'];
 // const redA200 = red['A200']
+
+import { hashMiddleware } from './hash';
 
 import { addClass } from './classManipulation';
 
@@ -145,6 +146,8 @@ const trelliscopeApp = (id, config, options) => {
     const callbackMiddleware = createCallbackMiddleware(options.callbacks);
     middlewares.push(callbackMiddleware);
   }
+
+  middlewares.push(hashMiddleware);
 
   const store = createStore(
     reducers,

@@ -29,6 +29,7 @@ class Header extends React.Component {
   componentWillReceiveProps(nprops) {
     const { singleLoaded } = this.state;
     // handle loading a single display if necessary
+    // TODO: Why do this here? Why not in actions/index.js?
     const singleDisplay = nprops.displayList.isLoaded && nprops.displayList.list.length <= 1;
     this.setState({ singleDisplay });
 
@@ -40,7 +41,8 @@ class Header extends React.Component {
         nprops.displayList.list[0].group,
         nprops.displayList.list[0].desc,
         nprops.cfg,
-        nprops.appId
+        nprops.appId,
+        window.location.hash
       );
       this.setState({ singleLoaded: true });
     }
@@ -231,9 +233,9 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  selectDisplay: (name, group, desc, cfg, appId) => {
+  selectDisplay: (name, group, desc, cfg, appId, hash) => {
     dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(fetchDisplay(name, group, cfg, appId));
+    dispatch(fetchDisplay(name, group, cfg, appId, hash));
   },
   doSetDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));

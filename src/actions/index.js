@@ -113,17 +113,61 @@ export const setErrorMessage = (msg) => ({
   type: SET_ERROR_MESSAGE, msg
 });
 
-const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch) => {
+const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
+  const hashItems = {};
+  hash.replace('#', '').split('&').forEach((d) => {
+    const tuple = d.split('=');
+    hashItems[tuple[0]] = tuple[[1]];
+  });
+
   for (let i = 0; i < cogDatJson.length; i += 1) {
     cogDatJson[i].__index = i; // eslint-disable-line no-param-reassign
   }
   dispatch(receiveCogData(iface, crossfilter(cogDatJson)));
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
-  dispatch(setLabels(dObjJson.state.labels));
-  dispatch(setLayout(dObjJson.state.layout));
-  dispatch(setSort(dObjJson.state.sort));
+
+  // labels
+  let { labels } = dObjJson.state;
+  if (hashItems.labels) {
+    labels = hashItems.labels.split(',');
+  }
+  dispatch(setLabels(labels));
+
+  // sort
+  let { sort } = dObjJson.state;
+  if (hashItems.sort) {
+    sort = hashItems.sort.split(',').map((d, i) => {
+      const vals = d.split(';');
+      return ({
+        order: i + 1,
+        name: vals[0],
+        dir: vals[1]
+      });
+    });
+  }
+  dispatch(setSort(sort));
+
+  // filter
   dispatch(setFilter(dObjJson.state.filter));
+
+  // layout
+  const { layout } = dObjJson.state;
+  if (hashItems.nrow) {
+    layout.nrow = parseInt(hashItems.nrow, 10);
+  }
+  if (hashItems.ncol) {
+    layout.ncol = parseInt(hashItems.ncol, 10);
+  }
+  if (hashItems.arr) {
+    layout.arrange = hashItems.arr;
+  }
+  dispatch(setLayout(layout));
+  // need to do page number separately because it is recomputed when nrow/ncol are changed
+  if (hashItems.pg) {
+    dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
+  }
+
   const ciKeys = Object.keys(dObjJson.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
@@ -205,6 +249,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
 // but it needs the config so we'll load config first
 export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch) => {
   const selfContained = !(typeof config === 'string' || config instanceof String);
+  const hash = window.location.hash; // get the hash right when app is loaded because middleware changes it
 
   if (!selfContained) {
     dispatch(requestConfig());
@@ -292,12 +337,12 @@ export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch)
     dispatch(receiveDisplay(name, group, config.displayObj));
     dispatch(receiveCogData(iface));
     dispatch(setLocalPanels(config.panels));
-    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch);
+    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
     setPanelInfo(config.displayObj, config.config, dispatch);
   }
 };
 
-export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
+export const fetchDisplay = (name, group, cfg, id = '', hash = '') => (dispatch) => {
   dispatch(requestDisplay(name, group));
 
   const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
@@ -316,7 +361,7 @@ export const fetchDisplay = (name, group, cfg, id = '') => (dispatch) => {
       // once cog data is loaded, set the state with this data
       // but first add an index column to the data so we can
       // preserve original order or do multi-column sorts
-      setCogDatAndState(iface, cogDatJson, dObjJson, dispatch);
+      setCogDatAndState(iface, cogDatJson, dObjJson, dispatch, hash);
     };
 
     setPanelInfo(dObjJson, cfg, dispatch);
