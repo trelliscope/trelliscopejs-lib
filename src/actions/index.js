@@ -168,7 +168,40 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   dispatch(setSort(sort));
 
   // filter
-  dispatch(setFilter(dObjJson.state.filter));
+  const filter = dObjJson.state.filter ? dObjJson.state.filter : {};
+  if (hashItems.filter) {
+    const fltrs = hashItems.filter.split(',');
+    fltrs.forEach((flt) => {
+      const fltItems = {};
+      flt.split(';').forEach((d) => {
+        const tuple = d.split(':');
+        fltItems[tuple[0]] = tuple[[1]];
+      });
+      // fltItems.var
+      const fltState = {
+        name: fltItems.var,
+        type: fltItems.type,
+        varType: dObjJson.cogInfo[fltItems.var].type
+      };
+      if (fltItems.type === 'select') {
+        fltState.orderValue = 'ct,desc';
+        fltState.value = fltItems.val.split('#');
+      } else if (fltItems.type === 'regex') {
+        const { levels } = dObjJson.cogInfo[fltItems.var];
+        const vals = [];
+        const rval = new RegExp(fltItems.val, 'i');
+        levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
+        fltState.regex = fltItems.val;
+        fltState.value = vals;
+        fltState.orderValue = 'ct,desc';
+      } else if (fltItems.type === 'range') {
+        // valid: true
+        // value: {from: 45.952, to: 63.095}
+      }
+      filter[fltItems.var] = fltState;
+    });
+  }
+  dispatch(setFilter(filter));
 
   const ciKeys = Object.keys(dObjJson.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {

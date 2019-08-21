@@ -68,11 +68,7 @@ class FilterCat extends React.Component {
     } else {
       const vals = [];
       const rval = new RegExp(val, 'i');
-      for (let j = 0; j < levels.length; j += 1) {
-        if (levels[j].match(rval) !== null) {
-          vals.push(levels[j]);
-        }
-      }
+      levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
       newState = {
         name: filterState.name,
         type: 'regex',
