@@ -1,5 +1,6 @@
 import {
-  SELECT_DISPLAY, SET_LAYOUT, SET_LABELS
+  SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR,
+  SET_FILTER_VIEW, SB_REV_LOOKUP
 } from './constants';
 
 // this updates the window hash whenever the state changes
@@ -21,9 +22,9 @@ export const hashFromState = (state) => {
     const flt = filter.state[k];
     let res = '';
     if (flt.type === 'select') {
-      res = `var:${flt.name};type:select;val:${flt.value.join('#')}`;
+      res = `var:${flt.name};type:select;val:${flt.value.map(encodeURIComponent).join('#')}`;
     } else if (flt.type === 'regex') {
-      res = `var:${flt.name};type:regex;val:${flt.regex}`;
+      res = `var:${flt.name};type:regex;val:${encodeURIComponent(flt.regex)}`;
     } else if (flt.type === 'range') {
       const from = flt.value.from ? flt.value.from : '';
       const to = flt.value.to ? flt.value.to : '';
@@ -31,20 +32,33 @@ export const hashFromState = (state) => {
     }
     return res;
   });
-  // http://localhost:3000/#display=gapminder_lifeexp&nrow=1&ncol=4&arr=row&pg=5&labels=country,continent,lifeExp_mean&sort=lifeExp_mean;asc&filter=var:continent;type:select;val:Africavar:country;type:regex;val:avar:lifeExp_mean;type:range;from:45.476;to:58.333
+  // http://localhost:3000/#display=gapminder_lifeexp&nrow=1&ncol=4&arr=row&pg=4&labels=country,continent,lifeExp_mean&sort=lifeExp_mean;asc&filter=var:continent;type:select;val:Africa,var:country;type:regex;val:a,var:lifeExp_mean;type:range;from:45.476;to:58.333
 
-  // http://localhost:3000/#display=gapminder_lifeexp&nrow=2&ncol=6&arr=row&pg=1&labels=country,continent,lifeExp_mean&sort=country;asc,continent;asc&
-  // filter=
-  // var:continent;type:select;val:Africa
-  // var:country;type:regex;val:a
-  // var:lifeExp_mean;type:range;from:45.476;to:58.333
+  // sidebar
+  const { sidebar } = state;
+  const sb = SB_REV_LOOKUP[sidebar.active];
 
-  const hash = `display=${display.name}&${layoutPars}&labels=${labels.join(',')}&sort=${sortStr}&filter=${filterStrs.join(',')}`;
+  // filterView
+  let fv = '';
+  if (filter.view.active) {
+    fv = filter.view.active.join(',');
+  }
+
+  const hash = `display=${display.name}&${layoutPars}&labels=${labels.join(',')}\
+&sort=${sortStr}&filter=${filterStrs.join(',')}&sidebar=${sb}&fv=${fv}`;
   return hash;
 };
 
+// Panel Grid Layout
+// Hide Labels
+// Filter Panels
+// Sort Panels
+
 export const hashMiddleware = (store) => (next) => (action) => {
-  const types = [SELECT_DISPLAY, SET_LAYOUT, SET_LABELS];
+  const types = [
+    SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT,
+    SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW
+  ];
   const result = next(action);
   if (types.indexOf(action.type) > -1) {
     const hash = hashFromState(store.getState());

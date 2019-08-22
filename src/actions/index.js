@@ -9,7 +9,8 @@ import {
   SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
-  SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS
+  SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
+  SB_LOOKUP
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -127,6 +128,12 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
 
+  // sidebar
+  if (hashItems.sidebar) {
+    const sb = SB_LOOKUP[parseInt(hashItems.sidebar, 10)];
+    dispatch(setActiveSidebar(sb));
+  }
+
   // layout
   // (need to set layout before others because the default layout is 1,1
   //   and will be temporarily honored if this is set later)
@@ -185,28 +192,40 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
       };
       if (fltItems.type === 'select') {
         fltState.orderValue = 'ct,desc';
-        fltState.value = fltItems.val.split('#');
+        fltState.value = fltItems.val.split('#').map(decodeURIComponent);
       } else if (fltItems.type === 'regex') {
         const { levels } = dObjJson.cogInfo[fltItems.var];
         const vals = [];
-        const rval = new RegExp(fltItems.val, 'i');
+        const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
         levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
         fltState.regex = fltItems.val;
         fltState.value = vals;
         fltState.orderValue = 'ct,desc';
       } else if (fltItems.type === 'range') {
-        // valid: true
-        // value: {from: 45.952, to: 63.095}
+        const from = fltItems.from ? parseFloat(fltItems.from, 10) : undefined;
+        const to = fltItems.to ? parseFloat(fltItems.to, 10) : undefined;
+        fltState.value = { from, to };
+        fltState.valid = true;
+        if (from && to && from > to) {
+          fltState.valid = false;
+        }
       }
       filter[fltItems.var] = fltState;
     });
   }
   dispatch(setFilter(filter));
 
+  let fv = [];
+  if (hashItems.fv) {
+    fv = hashItems.fv.split(',');
+  }
+
   const ciKeys = Object.keys(dObjJson.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
-      if (dObjJson.state.filter
+      if (fv.indexOf(ciKeys[i]) > -1) {
+        dispatch(setFilterView(ciKeys[i], 'add'));
+      } else if (dObjJson.state.filter
         && dObjJson.state.filter[ciKeys[i]] !== undefined) {
         dispatch(setFilterView(ciKeys[i], 'add'));
       } else {

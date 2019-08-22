@@ -20,7 +20,7 @@ export const filterColSplitSelector = createSelector(
   (filt, di, sh) => {
     const keys = filt.active;
     if (keys === undefined) {
-      return null;
+      return { cutoff: null, heights: [0, 0] };
     }
     const heights = keys.map((d) => {
       // 53 is the extra height of header/footer
