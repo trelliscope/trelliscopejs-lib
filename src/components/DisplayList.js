@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import red from '@material-ui/core/colors/red';
 
@@ -15,7 +16,13 @@ const DisplayList = ({
 
   const makeSubheader = (groupName, n) => {
     if (n > 1) {
-      return <ListSubheader style={{ fontSize: 20, color: 'black' }}>{groupName}</ListSubheader>;
+      return (
+        <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
+          <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
+            {groupName}
+          </ListSubheader>
+        </GridListTile>
+      );
     }
     return <ListSubheader />;
   };
@@ -32,23 +39,6 @@ const DisplayList = ({
           <GridListTile
             key={i}
             className={classes.gridTile}
-            title={(
-              <div className={classes.gridTitle}>
-                {di[i].name}
-              </div>
-            )}
-            subtitle={(
-              <span style={{ fontSize: 13 }}>
-                {di[i].desc}
-                <br />
-                <span className={classes.gridSubtitle}>
-                  {di[i].n}
-                  &nbsp;panels,
-                  {di[i].updated.substring(0, di[i].updated.length - 3)}
-                </span>
-              </span>
-            )}
-            titleBackground="rgba(0, 0, 0, 0.80)"
             onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
           >
             <img
@@ -56,6 +46,28 @@ const DisplayList = ({
               alt={di[i].name}
               className={classes.img}
               key={`img${i}`}
+            />
+            <GridListTileBar
+              // titlePosition="top"
+              classes={{
+                root: classes.titleBar
+              }}
+              title={(
+                <div className={classes.gridTitle}>
+                  {di[i].name}
+                </div>
+              )}
+              subtitle={(
+                <span style={{ fontSize: 13 }}>
+                  {di[i].desc}
+                  <br />
+                  <span className={classes.gridSubtitle}>
+                    {di[i].n}
+                    &nbsp;panels,
+                    {di[i].updated.substring(0, di[i].updated.length - 3)}
+                  </span>
+                </span>
+              )}
             />
           </GridListTile>
         ))}
@@ -91,7 +103,8 @@ const staticStyles = {
   },
   gridTitle: {
     fontWeight: 400,
-    color: redA200
+    color: redA200,
+    fontSize: 15
   },
   gridSubtitle: {
     fontStyle: 'italic',
@@ -102,6 +115,9 @@ const staticStyles = {
     '&:hover': {
       opacity: 0.7
     }
+  },
+  titleBar: {
+    background: 'rgba(0, 0, 0, 0.8) !important'
   }
 };
 

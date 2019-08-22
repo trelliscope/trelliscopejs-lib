@@ -78,6 +78,7 @@ class DisplaySelect extends React.Component {
     if (displayList && displayList.isLoaded) {
       setDialogOpen(true);
       this.setState({ open: true });
+      Mousetrap.bind('esc', this.handleClose);
     }
   }
 
@@ -85,12 +86,14 @@ class DisplaySelect extends React.Component {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(false);
     this.setState({ open: false });
+    Mousetrap.unbind('esc');
   }
 
   handleSelect = (name, group, desc) => {
@@ -124,18 +127,22 @@ class DisplaySelect extends React.Component {
     }
 
     return (
-      <button
-        type="button"
-        onClick={this.handleOpen}
-        className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
-      >
-        {attnDiv}
-        <i className={`icon-folder-open ${classes.folderIcon}`} />
+      <div>
+        <button
+          type="button"
+          onClick={this.handleOpen}
+          className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
+        >
+          {attnDiv}
+          <i className={`icon-folder-open ${classes.folderIcon}`} />
+        </button>
         <Dialog
           open={open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-dispselect-title"
+          onBackdropClick={this.handleClose}
+          disableEscapeKeyDown
         >
           <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
           <DialogContent>
@@ -152,7 +159,7 @@ class DisplaySelect extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </button>
+      </div>
     );
   }
 }
@@ -208,7 +215,7 @@ const staticStyles = {
     paddingLeft: 3
   },
   button: {
-    zIndex: 500,
+    zIndex: 8000,
     position: 'absolute',
     boxSizing: 'border-box',
     top: -1, // cover up top app border

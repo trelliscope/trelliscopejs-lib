@@ -250,7 +250,14 @@ const trelliscopeApp = (id, config, options) => {
 
 window.trelliscopeApp = trelliscopeApp;
 
-trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
+// trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
+
+trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
+// trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
+// trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
+// trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
+// trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp', { logger: true });
+
 
 // https://toddmotto.com/react-create-class-versus-component/
 // http://stackoverflow.com/questions/35073669/window-resize-react-redux
