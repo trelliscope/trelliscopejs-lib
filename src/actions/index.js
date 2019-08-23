@@ -10,7 +10,7 @@ import {
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
-  SB_LOOKUP
+  SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -47,6 +47,10 @@ export const setActiveSidebar = (active) => ({
 
 export const setDialogOpen = (isOpen) => ({
   type: SET_DIALOG_OPEN, isOpen
+});
+
+export const setDispSelectDialogOpen = (isOpen) => ({
+  type: SET_DISPSELECT_DIALOG_OPEN, isOpen
 });
 
 export const setLayout = (layout) => ({
@@ -299,102 +303,6 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
   }
 };
 
-// the display list is only loaded once at the beginning
-// but it needs the config so we'll load config first
-export const fetchDisplayList = (config = 'config.jsonp', id = '') => (dispatch) => {
-  const selfContained = !(typeof config === 'string' || config instanceof String);
-
-  if (!selfContained) {
-    dispatch(requestConfig());
-
-    const dlCallback = `__loadDisplayList__${id}`;
-    const cfgCallback = `__loadTrscopeConfig__${id}`;
-
-    const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
-
-    const getConfigBase = (txt) => {
-      let res = txt;
-      if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
-        res = configBase;
-        if (txt !== '') {
-          res += `${txt}/`;
-        }
-      }
-      return res;
-    };
-
-    window[dlCallback] = (json) => {
-      dispatch(receiveDisplayList(json));
-    };
-
-    window[cfgCallback] = (json) => {
-      // if display_base is empty, we want to use same path as config
-      // eslint-disable-next-line no-param-reassign
-      json.display_base = getConfigBase(json.display_base);
-      json.config_base = configBase; // eslint-disable-line no-param-reassign
-      // eslint-disable-next-line no-param-reassign
-      json.cog_server.info.base = getConfigBase(json.cog_server.info.base);
-      dispatch(receiveConfig(json));
-      if (json.data_type === 'jsonp') {
-        getJSONP({
-          url: `${json.display_base}displayList.jsonp`,
-          callbackName: dlCallback,
-          error: (err) => dispatch(setErrorMessage(
-            `Couldn't load display list: ${err.url}`
-          ))
-        });
-      } else {
-        getJSON({
-          url: `${json.display_base}displayList.json`,
-          callback: window[dlCallback]
-        }).on('error', (err) => dispatch(setErrorMessage(
-          `Couldn't load display list: ${err.target.responseURL}`
-        )));
-      }
-    };
-    // load the config to start
-    // try json first and if the file isn't there, try jsonp
-
-    const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
-    const configExt = config.match(extRegex)[0];
-
-    if (configExt === '.jsonp') {
-      getJSONP({
-        url: config,
-        callbackName: cfgCallback,
-        error: (err) => dispatch(setErrorMessage(
-          `Couldn't load config: ${err.url}`
-        ))
-      });
-    } else if (configExt === '.json') {
-      getJSON({
-        url: config,
-        callback: window[cfgCallback]
-      });
-    } else {
-      dispatch(setErrorMessage(
-        `Config specified as ${config} must have extension '.json' or '.jsonp'`
-      ));
-    }
-  } else {
-    // all data for rendering app is self-contained in document
-    dispatch(receiveConfig(config.config));
-    dispatch(receiveDisplayList(config.displayList));
-    const { name } = config.displayList[0];
-    const { group } = config.displayList[0];
-    const { desc } = config.displayList[0];
-
-    dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(requestDisplay(name, group));
-    const iface = config.displayObj.cogInterface;
-    dispatch(receiveDisplay(name, group, config.displayObj));
-    dispatch(receiveCogData(iface));
-    dispatch(setLocalPanels(config.panels));
-    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
-    setPanelInfo(config.displayObj, config.config, dispatch);
-  }
-};
-
 export const fetchDisplay = (name, group, cfg, id = '', hash = '') => (dispatch) => {
   dispatch(requestDisplay(name, group));
 
@@ -454,5 +362,124 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '') => (dispatch)
     }).on('error', (err) => dispatch(setErrorMessage(
       `Couldn't load display list: ${err.target.responseURL}`
     )));
+  }
+};
+
+// the display list is only loaded once at the beginning
+// but it needs the config so we'll load config first
+export const fetchDisplayList = (
+  config = 'config.jsonp', id = '', singlePageApp = false
+) => (dispatch) => {
+  const selfContained = !(typeof config === 'string' || config instanceof String);
+
+  if (!selfContained) {
+    dispatch(requestConfig());
+
+    const dlCallback = `__loadDisplayList__${id}`;
+    const cfgCallback = `__loadTrscopeConfig__${id}`;
+
+    const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
+
+    const getConfigBase = (txt) => {
+      let res = txt;
+      if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
+        res = configBase;
+        if (txt !== '') {
+          res += `${txt}/`;
+        }
+      }
+      return res;
+    };
+
+    window[cfgCallback] = (cfg) => {
+      // if display_base is empty, we want to use same path as config
+      // eslint-disable-next-line no-param-reassign
+      cfg.display_base = getConfigBase(cfg.display_base);
+      cfg.config_base = configBase; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
+      dispatch(receiveConfig(cfg));
+
+      window[dlCallback] = (json) => {
+        dispatch(receiveDisplayList(json));
+        // check to see if a display is specified already in the URL
+        // and load it if it is
+        const { hash } = window.location;
+        const hashItems = {};
+        hash.replace('#', '').split('&').forEach((d) => {
+          const tuple = d.split('=');
+          hashItems[tuple[0]] = tuple[[1]];
+        });
+        if (hashItems.display) {
+          const names = json.map((d) => d.name);
+          const idx = names.indexOf(hashItems.display);
+          if (idx > -1) {
+            const dObj = json[idx];
+            dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
+            dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
+          }
+        } else if (singlePageApp) {
+          dispatch(setDialogOpen(true));
+          dispatch(setDispSelectDialogOpen(true));
+        }
+      };
+
+      if (cfg.data_type === 'jsonp') {
+        getJSONP({
+          url: `${cfg.display_base}displayList.jsonp`,
+          callbackName: dlCallback,
+          error: (err) => dispatch(setErrorMessage(
+            `Couldn't load display list: ${err.url}`
+          ))
+        });
+      } else {
+        getJSON({
+          url: `${cfg.display_base}displayList.json`,
+          callback: window[dlCallback]
+        }).on('error', (err) => dispatch(setErrorMessage(
+          `Couldn't load display list: ${err.target.responseURL}`
+        )));
+      }
+    };
+    // load the config to start
+    // try json first and if the file isn't there, try jsonp
+
+    const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
+    const configExt = config.match(extRegex)[0];
+
+    if (configExt === '.jsonp') {
+      getJSONP({
+        url: config,
+        callbackName: cfgCallback,
+        error: (err) => dispatch(setErrorMessage(
+          `Couldn't load config: ${err.url}`
+        ))
+      });
+    } else if (configExt === '.json') {
+      getJSON({
+        url: config,
+        callback: window[cfgCallback]
+      });
+    } else {
+      dispatch(setErrorMessage(
+        `Config specified as ${config} must have extension '.json' or '.jsonp'`
+      ));
+    }
+  } else {
+    // all data for rendering app is self-contained in document
+    dispatch(receiveConfig(config.config));
+    dispatch(receiveDisplayList(config.displayList));
+    const { name } = config.displayList[0];
+    const { group } = config.displayList[0];
+    const { desc } = config.displayList[0];
+
+    dispatch(setSelectedDisplay(name, group, desc));
+    dispatch(requestDisplay(name, group));
+    const iface = config.displayObj.cogInterface;
+    dispatch(receiveDisplay(name, group, config.displayObj));
+    dispatch(receiveCogData(iface));
+    dispatch(setLocalPanels(config.panels));
+    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
+    setPanelInfo(config.displayObj, config.config, dispatch);
   }
 };

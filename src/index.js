@@ -163,8 +163,7 @@ const trelliscopeApp = (id, config, options) => {
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
   // load the list of displays
-  store.dispatch(fetchDisplayList(config, id));
-
+  store.dispatch(fetchDisplayList(config, id, singlePageApp));
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
     if (store.getState().fullscreen) {

@@ -14,12 +14,13 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import DisplayList from './DisplayList';
 import {
   setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
-  setLabels, setLayout, setSort, setFilter, setFilterView
+  setLabels, setLayout, setSort, setFilter, setFilterView,
+  setDispSelectDialogOpen
 } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
 import {
   appIdSelector, configSelector, displayListSelector, fullscreenSelector,
-  selectedDisplaySelector, singlePageAppSelector
+  selectedDisplaySelector, singlePageAppSelector, dispSelectDialogSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -27,20 +28,15 @@ class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: props.selectedDisplay.name === '' && props.singlePageApp,
       btnScale: 1
     };
   }
 
   componentDidMount() {
     const {
-      fullscreen, selectedDisplay, singlePageApp, setDialogOpen
+      fullscreen, selectedDisplay
     } = this.props;
     const { btnScale } = this.state;
-
-    if (selectedDisplay.name === '' && singlePageApp) {
-      setDialogOpen(true);
-    }
 
     if (fullscreen) {
       Mousetrap.bind('o', this.handleKey);
@@ -74,42 +70,41 @@ class DisplaySelect extends React.Component {
   }
 
   handleOpen = () => {
-    const { displayList, setDialogOpen } = this.props;
+    const { displayList, setDialogOpen, setDispDialogOpen } = this.props;
     if (displayList && displayList.isLoaded) {
       setDialogOpen(true);
-      this.setState({ open: true });
+      setDispDialogOpen(true);
       Mousetrap.bind('esc', this.handleClose);
     }
   }
 
   handleKey = () => {
-    const { setDialogOpen } = this.props;
+    const { setDialogOpen, setDispDialogOpen } = this.props;
     setDialogOpen(true);
-    this.setState({ open: true });
+    setDispDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
-    const { setDialogOpen } = this.props;
+    const { setDialogOpen, setDispDialogOpen } = this.props;
     setDialogOpen(false);
-    this.setState({ open: false });
+    setDispDialogOpen(false);
     Mousetrap.unbind('esc');
   }
 
   handleSelect = (name, group, desc) => {
     const {
-      handleClick, setDialogOpen, cfg, appId
+      handleClick, setDialogOpen, setDispDialogOpen, cfg, appId
     } = this.props;
     handleClick(name, group, desc, cfg, appId);
     setDialogOpen(false);
-    this.setState({ open: false });
+    setDispDialogOpen(false);
   }
 
   render() {
     const {
-      classes, displayList, displayGroups, selectedDisplay, cfg
+      classes, displayList, displayGroups, selectedDisplay, cfg, isOpen
     } = this.props;
-    const { open } = this.state;
 
     const isLoaded = displayList && displayList.isLoaded;
     let attnDiv = (
@@ -122,7 +117,7 @@ class DisplaySelect extends React.Component {
         </div>
       </div>
     );
-    if (selectedDisplay.name !== '' || open) {
+    if (selectedDisplay.name !== '' || isOpen) {
       attnDiv = '';
     }
 
@@ -137,7 +132,7 @@ class DisplaySelect extends React.Component {
           <i className={`icon-folder-open ${classes.folderIcon}`} />
         </button>
         <Dialog
-          open={open}
+          open={isOpen}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-dispselect-title"
@@ -168,9 +163,11 @@ DisplaySelect.propTypes = {
   classes: PropTypes.object.isRequired,
   handleClick: PropTypes.func.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
+  setDispDialogOpen: PropTypes.func.isRequired,
   cfg: PropTypes.object.isRequired,
-  singlePageApp: PropTypes.bool.isRequired,
+  // singlePageApp: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   appId: PropTypes.string.isRequired,
   selectedDisplay: PropTypes.object.isRequired,
   displayList: PropTypes.object.isRequired,
@@ -252,15 +249,16 @@ const staticStyles = {
 const styleSelector = createSelector(
   selectedDisplaySelector, displayListSelector,
   displayGroupsSelector, configSelector, appIdSelector,
-  singlePageAppSelector, fullscreenSelector,
-  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen) => ({
+  singlePageAppSelector, fullscreenSelector, dispSelectDialogSelector,
+  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen, isOpen) => ({
     appId,
     cfg,
     selectedDisplay,
     displayList,
     displayGroups,
     singlePageApp,
-    fullscreen
+    fullscreen,
+    isOpen
   })
 );
 
@@ -284,6 +282,9 @@ const mapDispatchToProps = (dispatch) => ({
 
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg, appId, ''));
+  },
+  setDispDialogOpen: (isOpen) => {
+    dispatch(setDispSelectDialogOpen(isOpen));
   }
 });
 

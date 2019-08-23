@@ -28,6 +28,7 @@ export const singlePageAppSelector = (state) => state.singlePageApp;
 export const fullscreenSelector = (state) => state.fullscreen;
 
 export const dialogOpenSelector = (state) => state.dialog;
+export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
 
 export const aspectSelector = (state) => state._displayInfo.info.height
   / state._displayInfo.info.width;
