@@ -29,6 +29,8 @@ class RelatedDisplays extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.active) {
       Mousetrap.bind('r', this.handleKey);
+    } else {
+      Mousetrap.unbind('r');
     }
   }
 
@@ -40,15 +42,24 @@ class RelatedDisplays extends React.Component {
   }
 
   handleOpen = () => {
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleKey = () => {
+    const { setDialogOpen } = this.props;
+    setDialogOpen(true);
     this.setState({ open: true });
+    Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
+    const { setDialogOpen } = this.props;
+    setDialogOpen(false);
     this.setState({ open: false });
+    Mousetrap.unbind('esc');
   }
 
   render() {
@@ -56,17 +67,20 @@ class RelatedDisplays extends React.Component {
     const { open } = this.state;
 
     return (
-      <button
-        type="button"
-        onClick={this.handleOpen}
-        className={classes.button}
-        style={styles.button}
-      >
-        <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
+      <div>
+        <button
+          type="button"
+          onClick={this.handleOpen}
+          className={classes.button}
+          style={styles.button}
+        >
+          <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
+        </button>
         <Dialog
           open={open}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
+          onBackdropClick={this.handleClose}
           aria-labelledby="dialog-reldisp-title"
         >
           <DialogTitle id="dialog-reldisp-title">Add Related Displays</DialogTitle>
@@ -84,7 +98,7 @@ class RelatedDisplays extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </button>
+      </div>
     );
   }
 }
@@ -93,6 +107,7 @@ RelatedDisplays.propTypes = {
   styles: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   relatedDisplays: PropTypes.array.isRequired,
+  setDialogOpen: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired
 };
 
@@ -102,15 +117,15 @@ const staticStyles = {
   button: {
     position: 'absolute',
     boxSizing: 'border-box',
-    top: 0,
+    top: -1,
     transition: 'left 0.5s ease, background 250ms',
     display: 'inline-block',
     height: uiConsts.header.height,
     width: uiConsts.header.height,
     fontSize: 18,
-    lineHeight: `${uiConsts.header.height}px`,
+    // lineHeight: `${uiConsts.header.height}px`,
     color: uiConsts.header.button.color,
-    background: 'white',
+    background: 'none',
     textAlign: 'center',
     borderRight: `1px solid ${uiConsts.header.borderColor}`,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,

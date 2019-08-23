@@ -4,7 +4,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import DisplayInfo from './DisplayInfo';
-// import RelatedDisplays from './RelatedDisplays';
+import RelatedDisplays from './RelatedDisplays';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
@@ -50,8 +50,8 @@ class Header extends React.Component {
 
   render() {
     const {
-      classes, styles, displayList, selectedDisplay, displayGroups,
-      doSetDialogOpen, dialogOpen
+      classes, styles, displayList, selectedDisplay, relatedDisplays,
+      displayGroups, doSetDialogOpen, dialogOpen
     } = this.props;
     const { singleDisplay } = this.state;
 
@@ -60,7 +60,10 @@ class Header extends React.Component {
     let iconStyle = { visibility: 'hidden' };
     let pagination = '';
     let displaySelect = '';
-    const relatedDisplays = ''; // <RelatedDisplays setDialogOpen={doSetDialogOpen} />
+    let relatedDisplayButton = '';
+    if (relatedDisplays && relatedDisplays.length > 0) {
+      relatedDisplayButton = (<RelatedDisplays setDialogOpen={doSetDialogOpen} />);
+    }
     const displayLoaded = selectedDisplay.name !== '';
     const nGroups = Object.keys(displayGroups).length;
     const listLoaded = displayList.isLoaded;
@@ -95,7 +98,7 @@ class Header extends React.Component {
     return (
       <div className={classes.headerContainer} style={styles.headerContainer}>
         {displaySelect}
-        {relatedDisplays}
+        {relatedDisplayButton}
         <DisplayInfo
           singleDisplay={singleDisplay}
           setDialogOpen={doSetDialogOpen}
@@ -133,6 +136,7 @@ Header.propTypes = {
   displayList: PropTypes.object.isRequired,
   displayGroups: PropTypes.object.isRequired,
   selectedDisplay: PropTypes.object.isRequired,
+  relatedDisplays: PropTypes.array.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   selectDisplay: PropTypes.func.isRequired,
@@ -209,7 +213,7 @@ const styleSelector = createSelector(
       },
       headerSubContainer: {
         left: uiConsts.header.height
-          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)), //  + (rd.length === 0 ? 0 : 1)
+          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1)),
         width: ww - ((uiConsts.header.height
           * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)))
             + uiConsts.header.logoWidth + 30)
@@ -224,6 +228,7 @@ const styleSelector = createSelector(
     displayList: dl,
     displayGroups: dg,
     selectedDisplay: sd,
+    relatedDisplays: rd,
     dialogOpen
   })
 );
