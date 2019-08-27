@@ -20,6 +20,28 @@ export const relatedDisplaysSelector = createSelector(
   }
 );
 
+export const relatedDisplayGroupsSelector = createSelector(
+  displayInfoSelector, displayListSelector,
+  (di, dl) => {
+    const res = {};
+    if (di.isLoaded) {
+      const { keySig } = di.info;
+      const dispID = [di.info.group, di.info.name].join('/');
+      dl.list.forEach((d, i) => {
+        const sameKey = d.keySig === keySig;
+        const curID = [d.group, d.name].join('/');
+        if (sameKey && curID !== dispID) {
+          if (!res[d.group]) {
+            res[d.group] = [];
+          }
+          res[d.group].push(i);
+        }
+      });
+    }
+    return res;
+  }
+);
+
 export const cogInfoSelector = createSelector(
   displayInfoSelector,
   (di) => (
@@ -42,3 +64,5 @@ export const displayGroupsSelector = createSelector(
     return dispGroups;
   }
 );
+
+export const selectedRelDispsSelector = (state) => state.selectedRelDisps;

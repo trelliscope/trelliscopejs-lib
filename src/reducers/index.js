@@ -5,7 +5,7 @@ import {
   appId, dialog, singlePageApp, fullscreen, errorMsg,
   dispSelectDialog
 } from './app';
-import selectedDisplay from './selectedDisplay';
+import { selectedDisplay, selectedRelDisps } from './selectedDisplay';
 import panelRenderer from './panelRenderer';
 import {
   layout, labels, sort, filter
@@ -26,6 +26,7 @@ const reducers = combineReducers({
   sidebar,
   errorMsg,
   selectedDisplay,
+  selectedRelDisps,
   panelRenderer,
   layout,
   labels,

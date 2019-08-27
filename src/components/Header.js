@@ -10,7 +10,7 @@ import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
-import { relatedDisplaysSelector, displayGroupsSelector } from '../selectors/display';
+import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../selectors/display';
 import {
   appIdSelector, configSelector, displayListSelector,
   selectedDisplaySelector, dialogOpenSelector
@@ -50,7 +50,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      classes, styles, displayList, selectedDisplay, relatedDisplays,
+      classes, styles, displayList, selectedDisplay, relatedDisplayGroups,
       displayGroups, doSetDialogOpen, dialogOpen
     } = this.props;
     const { singleDisplay } = this.state;
@@ -61,7 +61,7 @@ class Header extends React.Component {
     let pagination = '';
     let displaySelect = '';
     let relatedDisplayButton = '';
-    if (relatedDisplays && relatedDisplays.length > 0) {
+    if (relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0) {
       relatedDisplayButton = (<RelatedDisplays setDialogOpen={doSetDialogOpen} />);
     }
     const displayLoaded = selectedDisplay.name !== '';
@@ -136,7 +136,7 @@ Header.propTypes = {
   displayList: PropTypes.object.isRequired,
   displayGroups: PropTypes.object.isRequired,
   selectedDisplay: PropTypes.object.isRequired,
-  relatedDisplays: PropTypes.array.isRequired,
+  relatedDisplayGroups: PropTypes.object.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   selectDisplay: PropTypes.func.isRequired,
@@ -205,18 +205,18 @@ const staticStyles = {
 
 const styleSelector = createSelector(
   appIdSelector, windowWidthSelector, displayListSelector, displayGroupsSelector,
-  selectedDisplaySelector, relatedDisplaysSelector, configSelector, dialogOpenSelector,
-  (appId, ww, dl, dg, sd, rd, cfg, dialogOpen) => ({
+  selectedDisplaySelector, relatedDisplayGroupsSelector, configSelector, dialogOpenSelector,
+  (appId, ww, dl, dg, sd, rdg, cfg, dialogOpen) => ({
     styles: {
       headerContainer: {
         width: ww
       },
       headerSubContainer: {
         left: uiConsts.header.height
-          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (rd.length === 0 ? 0 : 1)),
+          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)),
         width: ww - ((uiConsts.header.height
-          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1)))
-            + uiConsts.header.logoWidth + 30)
+          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1))
+            + uiConsts.header.logoWidth + 30))
       },
       displayName: {
         lineHeight: `${sd.desc === '' ? 48 : 26}px`,
@@ -228,7 +228,7 @@ const styleSelector = createSelector(
     displayList: dl,
     displayGroups: dg,
     selectedDisplay: sd,
-    relatedDisplays: rd,
+    relatedDisplayGroups: rdg,
     dialogOpen
   })
 );

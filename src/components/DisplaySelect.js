@@ -15,7 +15,7 @@ import DisplayList from './DisplayList';
 import {
   setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView,
-  setDispSelectDialogOpen
+  setDispSelectDialogOpen, resetRelDisps
 } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
 import {
@@ -103,7 +103,7 @@ class DisplaySelect extends React.Component {
 
   render() {
     const {
-      classes, displayList, displayGroups, selectedDisplay, cfg, isOpen
+      classes, displayList, displayGroups, selectedDisplay, isOpen
     } = this.props;
 
     const isLoaded = displayList && displayList.isLoaded;
@@ -138,6 +138,8 @@ class DisplaySelect extends React.Component {
           aria-labelledby="dialog-dispselect-title"
           onBackdropClick={this.handleClose}
           disableEscapeKeyDown
+          maxWidth="md"
+          fullWidth
         >
           <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
           <DialogContent>
@@ -145,7 +147,7 @@ class DisplaySelect extends React.Component {
               di={displayList.list}
               displayGroups={displayGroups}
               handleClick={this.handleSelect}
-              cfg={cfg}
+              selectable={false}
             />
           </DialogContent>
           <DialogActions>
@@ -273,6 +275,7 @@ const mapDispatchToProps = (dispatch) => ({
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
     dispatch(setPanelRenderer(null));
+    dispatch(resetRelDisps());
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
     dispatch(setLayout({ pageNum: 1 }));

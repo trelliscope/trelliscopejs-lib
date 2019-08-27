@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import injectSheet from 'react-jss';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Checkbox from '@material-ui/core/Checkbox';
 import red from '@material-ui/core/colors/red';
+import { selectedRelDispsSelector } from '../selectors/display';
+import { configSelector } from '../selectors';
+import { addRelDisp, removeRelDisp } from '../actions';
 
 const redA200 = red.A200;
 
 const DisplayList = ({
-  classes, di, displayGroups, handleClick, cfg
+  classes, selectable, di, displayGroups, handleClick,
+  cfg, selectedRelDisps, handleCheckbox
 }) => {
   const groupKeys = Object.keys(displayGroups);
 
@@ -24,7 +31,7 @@ const DisplayList = ({
         </GridListTile>
       );
     }
-    return <ListSubheader />;
+    return null;
   };
 
   const displayList = groupKeys.map((k) => (
@@ -39,7 +46,13 @@ const DisplayList = ({
           <GridListTile
             key={i}
             className={classes.gridTile}
-            onClick={() => handleClick(di[i].name, di[i].group, di[i].desc)}
+            onClick={() => {
+              if (selectable) {
+                handleCheckbox(i, selectedRelDisps.indexOf(i) > -1);
+              } else {
+                handleClick(di[i].name, di[i].group, di[i].desc);
+              }
+            }}
           >
             <img
               src={`${cfg.cog_server.info.base}/${di[i].group}/${di[i].name}/thumb.png`}
@@ -47,6 +60,17 @@ const DisplayList = ({
               className={classes.img}
               key={`img${i}`}
             />
+            { selectable && (
+              <Checkbox
+                classes={{ root: classes.checkbox }}
+                checked={selectedRelDisps.indexOf(i) > -1}
+                onChange={() => { handleCheckbox(i, selectedRelDisps.indexOf(i) > -1); }}
+                value={`checked${i}`}
+                inputProps={{
+                  // 'aria-label': 'primary checkbox'
+                }}
+              />
+            )}
             <GridListTileBar
               // titlePosition="top"
               classes={{
@@ -118,15 +142,53 @@ const staticStyles = {
   },
   titleBar: {
     background: 'rgba(0, 0, 0, 0.8) !important'
+  },
+  checkbox: {
+    position: 'absolute !important',
+    left: 0,
+    top: 0,
+    background: 'rgba(69, 138, 249, 0.9) !important',
+    color: 'white !important',
+    '&checked': {
+      color: 'white !important'
+    }
   }
 };
 
 DisplayList.propTypes = {
+  selectable: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   di: PropTypes.array.isRequired,
   displayGroups: PropTypes.object.isRequired,
   handleClick: PropTypes.func.isRequired,
-  cfg: PropTypes.object.isRequired
+  cfg: PropTypes.object.isRequired,
+  selectedRelDisps: PropTypes.array.isRequired,
+  handleCheckbox: PropTypes.func.isRequired
 };
 
-export default injectSheet(staticStyles)(DisplayList);
+const styleSelector = createSelector(
+  selectedRelDispsSelector, configSelector,
+  (selectedRelDisps, cfg) => ({
+    selectedRelDisps,
+    cfg
+  })
+);
+
+const mapStateToProps = (state) => (
+  styleSelector(state)
+);
+
+const mapDispatchToProps = (dispatch) => ({
+  handleCheckbox: (i, checked) => {
+    if (checked) {
+      dispatch(removeRelDisp(i));
+    } else {
+      dispatch(addRelDisp(i));
+    }
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectSheet(staticStyles)(DisplayList));
