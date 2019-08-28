@@ -10,14 +10,16 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import red from '@material-ui/core/colors/red';
 import { selectedRelDispsSelector } from '../selectors/display';
-import { configSelector } from '../selectors';
-import { addRelDisp, removeRelDisp } from '../actions';
+import { configSelector, selectedDisplaySelector } from '../selectors';
+import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
+import { setSelectedRelDisps, setRelDispPositions } from '../actions';
 
 const redA200 = red.A200;
 
 const DisplayList = ({
   classes, selectable, di, displayGroups, handleClick,
-  cfg, selectedRelDisps, handleCheckbox
+  cfg, selectedDisplay, selectedRelDisps, handleCheckbox,
+  contentHeight, contentWidth
 }) => {
   const groupKeys = Object.keys(displayGroups);
 
@@ -48,7 +50,8 @@ const DisplayList = ({
             className={classes.gridTile}
             onClick={() => {
               if (selectable) {
-                handleCheckbox(i, selectedRelDisps.indexOf(i) > -1);
+                handleCheckbox(i, selectedRelDisps, selectedDisplay,
+                  di, contentHeight, contentWidth);
               } else {
                 handleClick(di[i].name, di[i].group, di[i].desc);
               }
@@ -64,7 +67,10 @@ const DisplayList = ({
               <Checkbox
                 classes={{ root: classes.checkbox }}
                 checked={selectedRelDisps.indexOf(i) > -1}
-                onChange={() => { handleCheckbox(i, selectedRelDisps.indexOf(i) > -1); }}
+                onChange={() => {
+                  handleCheckbox(i, selectedRelDisps, selectedDisplay,
+                    di, contentHeight, contentWidth);
+                }}
                 value={`checked${i}`}
                 inputProps={{
                   // 'aria-label': 'primary checkbox'
@@ -163,14 +169,21 @@ DisplayList.propTypes = {
   handleClick: PropTypes.func.isRequired,
   cfg: PropTypes.object.isRequired,
   selectedRelDisps: PropTypes.array.isRequired,
+  selectedDisplay: PropTypes.object.isRequired,
+  contentHeight: PropTypes.number.isRequired,
+  contentWidth: PropTypes.number.isRequired,
   handleCheckbox: PropTypes.func.isRequired
 };
 
 const styleSelector = createSelector(
-  selectedRelDispsSelector, configSelector,
-  (selectedRelDisps, cfg) => ({
+  selectedDisplaySelector, selectedRelDispsSelector, configSelector,
+  contentHeightSelector, contentWidthSelector,
+  (selectedDisplay, selectedRelDisps, cfg, contentHeight, contentWidth) => ({
+    selectedDisplay,
     selectedRelDisps,
-    cfg
+    cfg,
+    contentHeight,
+    contentWidth
   })
 );
 
@@ -179,12 +192,96 @@ const mapStateToProps = (state) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  handleCheckbox: (i, checked) => {
+  handleCheckbox: (i, selectedRelDisps, selectedDisplay, di, contentHeight, contentWidth) => {
+    const checked = selectedRelDisps.indexOf(i) > -1;
+    const newRelDisps = Object.assign([], selectedRelDisps);
     if (checked) {
-      dispatch(removeRelDisp(i));
-    } else {
-      dispatch(addRelDisp(i));
+      const idx = newRelDisps.indexOf(i);
+      if (idx > -1) {
+        newRelDisps.splice(idx, 1);
+      }
+    } else if (newRelDisps.indexOf(i) < 0) {
+      newRelDisps.push(i);
     }
+    newRelDisps.sort();
+
+    const dnames = di.map((d) => d.name);
+    const idx = dnames.indexOf(selectedDisplay.name);
+    const disps = [idx, ...newRelDisps];
+
+    const n = disps.length;
+    const contentAspect = contentHeight / contentWidth;
+
+    // find all possible ways to grid
+    const grids = [];
+    for (let ii = 1; ii <= n; ii += 1) {
+      if (n / ii === Math.floor(n / ii)) {
+        grids.push([ii, n / ii]);
+      }
+    }
+
+    // find difference between total area and that of laying out
+    // panels according to the different grid choices
+    const areaDiff = [];
+    const totArea = contentWidth * contentHeight;
+    grids.forEach((grd, ii) => {
+      const nRow = grd[0];
+      const nCol = grd[1];
+      const gridAspect = (grd[1] / grd[0]) * contentAspect;
+      const gridWidth = contentWidth / nCol;
+      const gridHeight = contentHeight / nRow;
+      let runningTotal = 0;
+      for (let j = 0; j < nRow * nCol; j += 1) {
+        const curDispAspect = di[disps[j]].height / di[disps[j]].width;
+        let curWidth = gridWidth;
+        let curHeight = curWidth * curDispAspect;
+        if (gridAspect < curDispAspect) {
+          curHeight = gridHeight;
+          curWidth = curHeight / curDispAspect;
+        }
+        runningTotal += curWidth * curHeight;
+      }
+      areaDiff[ii] = totArea - runningTotal;
+    });
+
+    const curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
+
+    // // now move the boxes to appropriate position
+    // // make them appropriate size
+    // // and give them appropriate labels (group / name)
+    const nRow = curGrid[0];
+    const nCol = curGrid[1];
+    const gridAspect = (curGrid[1] / curGrid[0]) * contentAspect;
+    const gridWidth = (contentWidth / contentHeight) / nCol;
+    const gridHeight = 1 / nRow;
+
+    const relDispPositions = disps.map((didx, ii) => {
+      const row = Math.floor(ii / nCol);
+      const col = ii % nCol;
+      const aspect = di[didx].height / di[didx].width;
+      let width = gridWidth;
+      let height = width * aspect;
+      if (gridAspect < aspect) {
+        height = gridHeight;
+        width = height / aspect;
+      }
+
+      return ({
+        idx: didx,
+        name: di[didx].name,
+        group: di[didx].group,
+        aspect,
+        left: col * gridWidth,
+        top: row * gridHeight,
+        width,
+        height,
+        row,
+        col
+      });
+    });
+
+    dispatch(setSelectedRelDisps(newRelDisps));
+    dispatch(setRelDispPositions(relDispPositions));
   }
 });
 

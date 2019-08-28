@@ -16,7 +16,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Rnd } from 'react-rnd';
 import DisplayList from './DisplayList';
-import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../selectors/display';
+import { relatedDisplayGroupsSelector, selectedRelDispsSelector, displayAspectsSelector } from '../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
@@ -93,7 +93,7 @@ class RelatedDisplays extends React.Component {
   render() {
     const {
       classes, styles, relatedDisplayGroups, displayList,
-      contentHeight, contentWidth, selectedRelDisps
+      contentHeight, contentWidth, selectedRelDisps, relDispPositions
     } = this.props;
     const { open, activeStep } = this.state;
 
@@ -116,23 +116,28 @@ class RelatedDisplays extends React.Component {
       ),
       (
         <div style={parentBoundary}>
-          <Rnd
-            style={boxStyle}
-            default={{
-              width: 200,
-              height: 160,
-              x: 0,
-              y: 0
-            }}
-            bounds="parent"
-            lockAspectRatio
-          >
-            <div className={classes.trHandle} />
-            <div className={classes.tlHandle} />
-            <div className={classes.brHandle} />
-            <div className={classes.blHandle} />
-            original
-          </Rnd>
+          {
+            relDispPositions.map((d) => (
+              <Rnd
+                key={d.name}
+                style={boxStyle}
+                default={{
+                  width: 400 * d.width,
+                  height: 400 * d.height,
+                  x: 400 * d.left,
+                  y: 400 * d.top
+                }}
+                bounds="parent"
+                lockAspectRatio
+              >
+                <div className={classes.trHandle} />
+                <div className={classes.tlHandle} />
+                <div className={classes.brHandle} />
+                <div className={classes.blHandle} />
+                {d.name}
+              </Rnd>
+            ))
+          }
         </div>
       )
     ];
@@ -170,6 +175,7 @@ class RelatedDisplays extends React.Component {
                 <Step>
                   <StepButton
                     onClick={() => this.setStep(1)}
+                    disabled={activeStep === 0 && selectedRelDisps.length === 0}
                   >
                     Arrange Panel Layout
                   </StepButton>
@@ -187,6 +193,7 @@ class RelatedDisplays extends React.Component {
                 style={{ width: 200 }}
                 onClick={() => this.setStep(activeStep === 1 ? 0 : 1)}
                 className={classes.button}
+                disabled={activeStep === 0 && selectedRelDisps.length === 0}
               >
                 { activeStep === 0 ? '' : <ChevronLeftIcon /> }
                 { activeStep === 0 ? 'Set Layout' : 'Select Displays' }
@@ -212,7 +219,9 @@ RelatedDisplays.propTypes = {
   active: PropTypes.bool.isRequired,
   selectedRelDisps: PropTypes.array.isRequired,
   contentHeight: PropTypes.number.isRequired,
-  contentWidth: PropTypes.number.isRequired
+  contentWidth: PropTypes.number.isRequired,
+  relDispPositions: PropTypes.array.isRequired
+  // displayAspects: PropTypes.array.isRequired
 };
 
 // ------ static styles ------
@@ -277,10 +286,13 @@ const staticStyles = {
 
 // ------ redux container ------
 
+const relDispPositionsSelector = (state) => state.relDispPositions;
+
 const styleSelector = createSelector(
   displayListSelector, selectedDisplaySelector, relatedDisplayGroupsSelector,
   contentHeightSelector, contentWidthSelector, selectedRelDispsSelector,
-  (dl, sd, rdg, ch, cw, srd) => ({
+  displayAspectsSelector, relDispPositionsSelector,
+  (dl, sd, rdg, ch, cw, srd, dasp, rdp) => ({
     styles: {
       button: {
         left: uiConsts.header.height * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2)
@@ -291,7 +303,9 @@ const styleSelector = createSelector(
     active: Object.keys(rdg).length > 0,
     contentHeight: ch,
     contentWidth: cw,
-    selectedRelDisps: srd
+    selectedRelDisps: srd,
+    displayAspects: dasp,
+    relDispPositions: rdp
   })
 );
 

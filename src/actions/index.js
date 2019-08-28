@@ -10,7 +10,8 @@ import {
   RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
-  SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS
+  SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS,
+  SET_REL_DISP_POSITIONS
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -87,6 +88,12 @@ export const setSelectedDisplay = (name, group, desc) => ({
   type: SELECT_DISPLAY, name, group, desc
 });
 
+export const setSelectedRelDisps = (arr) => ({
+  type: SET_SELECTED_RELDISPS,
+  which: 'set',
+  val: arr
+});
+
 export const addRelDisp = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'add',
@@ -103,6 +110,10 @@ export const resetRelDisps = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
   val: i
+});
+
+export const setRelDispPositions = (obj) => ({
+  type: SET_REL_DISP_POSITIONS, obj
 });
 
 export const requestDisplay = (name, group) => ({

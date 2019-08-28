@@ -1,4 +1,4 @@
-import { SELECT_DISPLAY, SET_SELECTED_RELDISPS } from '../constants';
+import { SELECT_DISPLAY, SET_SELECTED_RELDISPS, SET_REL_DISP_POSITIONS } from '../constants';
 
 export const selectedDisplay = (state = {
   name: '',
@@ -13,6 +13,15 @@ export const selectedDisplay = (state = {
         group: action.group,
         desc: action.desc
       };
+    default:
+  }
+  return state;
+};
+
+export const relDispPositions = (state = [], action) => {
+  switch (action.type) {
+    case SET_REL_DISP_POSITIONS:
+      return Object.assign([], [], action.obj);
     default:
   }
   return state;
@@ -33,6 +42,8 @@ export const selectedRelDisps = (state = [], action) => {
         }
       } else if (action.which === 'reset') {
         return [];
+      } else if (action.which === 'set') {
+        return action.val;
       }
       newState.sort();
       return newState;

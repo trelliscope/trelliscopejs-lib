@@ -26,6 +26,7 @@ export const REQUEST_CONFIG = 'REQUEST_CONFIG';
 export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
 export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS';
 export const SET_SELECTED_RELDISPS = 'SET_SELECTED_RELDISPS';
+export const SET_REL_DISP_POSITIONS = 'SET_REL_DISP_POSITIONS';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';

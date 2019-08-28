@@ -1,25 +1,6 @@
 import { createSelector } from 'reselect';
 import { displayListSelector, displayInfoSelector } from '.';
 
-export const relatedDisplaysSelector = createSelector(
-  displayInfoSelector, displayListSelector,
-  (di, dl) => {
-    const res = [];
-    if (di.isLoaded) {
-      const { keySig } = di.info;
-      const dispID = [di.info.group, di.info.name].join('/');
-      for (let i = 0; i < dl.list.length; i += 1) {
-        const sameKey = dl.list[i].keySig === keySig;
-        const curID = [dl.list[i].group, dl.list[i].name].join('/');
-        if (sameKey && curID !== dispID) {
-          res.push({ name: dl.list[i].name, group: dl.list[i].group });
-        }
-      }
-    }
-    return res;
-  }
-);
-
 export const relatedDisplayGroupsSelector = createSelector(
   displayInfoSelector, displayListSelector,
   (di, dl) => {
@@ -38,6 +19,30 @@ export const relatedDisplayGroupsSelector = createSelector(
         }
       });
     }
+    return res;
+  }
+);
+
+export const selectedRelDispsSelector = (state) => state.selectedRelDisps;
+
+export const displayAspectsSelector = createSelector(
+  displayInfoSelector, displayListSelector, selectedRelDispsSelector,
+  (di, dl, srd) => {
+    const res = [];
+    if (dl.isLoaded && di.isLoaded) {
+      res.push({
+        aspect: di.info.height / di.info.width,
+        group: di.info.group,
+        name: di.info.name
+      });
+    }
+    srd.forEach((i) => {
+      res.push({
+        aspect: dl.list[i].height / dl.list[i].width,
+        group: dl.list[i].group,
+        name: dl.list[i].name
+      });
+    });
     return res;
   }
 );
@@ -64,5 +69,3 @@ export const displayGroupsSelector = createSelector(
     return dispGroups;
   }
 );
-
-export const selectedRelDispsSelector = (state) => state.selectedRelDisps;
