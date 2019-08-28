@@ -21,15 +21,17 @@ class Panel extends React.Component {
       && props.cfg.display_base === '__self__';
 
     if (this.isImageSrc) {
+      const { name } = props.displayInfo.info;
       this.state = {
-        panelContent: props.panelRenderer.fn(props.panelData.url,
+        panelContent: props.panelRenderers[name].fn(props.panelData.url,
           props.dims.ww, props.dims.hh, false, props.panelKey),
         panelData: props.panelData,
         loaded: true
       };
     } else if (this.isSelfContained) {
+      const { name } = props.displayInfo.info;
       this.state = {
-        panelContent: props.panelRenderer.fn(props.panelData,
+        panelContent: props.panelRenderers[name].fn(props.panelData,
           props.dims.ww, props.dims.hh, false, props.panelKey),
         panelData: props.panelData,
         loaded: true
@@ -49,8 +51,10 @@ class Panel extends React.Component {
 
     const { loaded, panelData } = this.state;
     const {
-      cfg, iface, panelKey, panelRenderer, dims
+      cfg, iface, panelKey, panelRenderers, dims, displayInfo
     } = this.props;
+
+    const panelRenderer = panelRenderers[displayInfo.info.name];
 
     if (!loaded) {
       let filebase = `${cfg.cog_server.info.base}${iface.group}`;
@@ -302,9 +306,10 @@ Panel.propTypes = {
   rowIndex: PropTypes.number.isRequired,
   iColIndex: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired,
-  panelRenderer: PropTypes.object.isRequired,
+  panelRenderers: PropTypes.object.isRequired,
   panelInterface: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   panelData: PropTypes.object,
+  displayInfo: PropTypes.object.isRequired,
   removeLabel: PropTypes.func.isRequired
 };
 

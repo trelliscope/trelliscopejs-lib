@@ -135,8 +135,8 @@ const receiveCogData = (iface, json) => ({
   receivedAt: Date.now()
 });
 
-export const setPanelRenderer = (fn) => ({
-  type: SET_PANEL_RENDERER, fn
+export const setPanelRenderers = (name, fn) => ({
+  type: SET_PANEL_RENDERER, name, fn
 });
 
 export const setLocalPanels = (dat) => ({
@@ -270,56 +270,65 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
 
 const setPanelInfo = (dObjJson, cfg, dispatch) => {
   if (dObjJson.panelInterface.type === 'image') {
-    dispatch(setPanelRenderer((x, width, height) => (
-      <img
-        src={x}
-        alt="panel"
-        style={{ width, height }}
-      />
-    )));
+    dispatch(setPanelRenderers(
+      dObjJson.name,
+      (x, width, height) => (
+        <img
+          src={x}
+          alt="panel"
+          style={{ width, height }}
+        />
+      ))
+    );
   } else if (dObjJson.panelInterface.type === 'image_src') {
-    dispatch(setPanelRenderer((x) => (
-      <img
-        src={x}
-        alt="panel"
-        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-        // style={{ width, height }}
-      />
-    )));
+    dispatch(setPanelRenderers(
+      dObjJson.name,
+      (x) => (
+        <img
+          src={x}
+          alt="panel"
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          // style={{ width, height }}
+        />
+      ))
+    );
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     const prCallback = () => {
       const binding = findWidget(dObjJson.panelInterface.deps.name);
 
-      dispatch(setPanelRenderer((x, width, height, post, key) => {
-        const el = document.getElementById(`widget_outer_${key}`);
+      dispatch(setPanelRenderers(
+        dObjJson.name,
+        (x, width, height, post, key) => {
+          const el = document.getElementById(`widget_outer_${key}`);
 
-        if (post && el) {
-          // need to create a child div that is not bound to react
-          const dv = document.createElement('div');
-          dv.style.width = `${width}px`;
-          dv.style.height = `${height}px`;
-          dv.setAttribute('id', `widget_${key}`);
-          el.appendChild(dv);
+          if (post && el) {
+            // need to create a child div that is not bound to react
+            const dv = document.createElement('div');
+            dv.style.width = `${width}px`;
+            dv.style.height = `${height}px`;
+            dv.setAttribute('id', `widget_${key}`);
+            el.appendChild(dv);
 
-          let initResult;
-          if (binding.initialize) {
-            initResult = binding.initialize(dv, width, height);
+            let initResult;
+            if (binding.initialize) {
+              initResult = binding.initialize(dv, width, height);
+            }
+
+            if (!(x.evals instanceof Array)) {
+              x.evals = [x.evals]; // eslint-disable-line no-param-reassign
+            }
+            for (let i = 0; x.evals && i < x.evals.length; i += 1) {
+              window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
+            }
+
+            binding.renderValue(dv, x.x, initResult);
+            // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
+          } else {
+            return <div id={`widget_outer_${key}`} />;
           }
-
-          if (!(x.evals instanceof Array)) {
-            x.evals = [x.evals]; // eslint-disable-line no-param-reassign
-          }
-          for (let i = 0; x.evals && i < x.evals.length; i += 1) {
-            window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
-          }
-
-          binding.renderValue(dv, x.x, initResult);
-          // evalAndRun(x.jsHooks.render, initResult, [el, x.x]);
-        } else {
-          return <div id={`widget_outer_${key}`} />;
-        }
-        return null;
-      }));
+          return null;
+        })
+      );
     };
 
     if (cfg.config_base) {

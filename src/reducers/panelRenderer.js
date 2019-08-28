@@ -1,14 +1,17 @@
 import { SET_PANEL_RENDERER } from '../constants';
 
-const panelRendererReducer = (state = {
-  fn: null
-}, action) => {
+const panelRenderersReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_PANEL_RENDERER:
-      return { ...state, fn: action.fn };
+      return {
+        ...state,
+        [action.name]: {
+          fn: action.fn
+        }
+      };
     default:
   }
   return state;
 };
 
-export default panelRendererReducer;
+export default panelRenderersReducer;

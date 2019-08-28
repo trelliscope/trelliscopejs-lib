@@ -13,7 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import DisplayList from './DisplayList';
 import {
-  setSelectedDisplay, fetchDisplay, setPanelRenderer, setActiveSidebar,
+  setSelectedDisplay, fetchDisplay, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView,
   setDispSelectDialogOpen, resetRelDisps
 } from '../actions';
@@ -274,7 +274,7 @@ const mapDispatchToProps = (dispatch) => ({
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
-    dispatch(setPanelRenderer(null));
+    // dispatch(setPanelRenderers(null));
     dispatch(resetRelDisps());
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));

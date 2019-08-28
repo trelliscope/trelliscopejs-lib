@@ -6,7 +6,7 @@ import {
   dispSelectDialog
 } from './app';
 import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';
-import panelRenderer from './panelRenderer';
+import panelRenderers from './panelRenderer';
 import {
   layout, labels, sort, filter
 } from './displayState';
@@ -28,7 +28,7 @@ const reducers = combineReducers({
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,
-  panelRenderer,
+  panelRenderers,
   layout,
   labels,
   sort,

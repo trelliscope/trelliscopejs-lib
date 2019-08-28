@@ -14,19 +14,19 @@ import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
 import {
   configSelector, cogInterfaceSelector, layoutSelector, aspectSelector, labelsSelector,
-  panelRendererSelector, displayInfoSelector, nPerPageSelector, pageNumSelector,
+  panelRenderersSelector, displayInfoSelector, nPerPageSelector, pageNumSelector,
   localPanelsSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({
   classes, contentStyle, ccd, ci, cinfo, cfg, layout, labels,
-  dims, panelRenderer, panelInterface, sidebar, curPage,
-  totPages, panelData, removeLabel, setPageNum
+  dims, panelRenderers, panelInterface, sidebar, curPage,
+  totPages, panelData, removeLabel, setPageNum, displayInfo
 }) => {
   let ret = <div />;
 
-  if (ci && ccd && cinfo && panelRenderer.fn !== null) {
+  if (ci && ccd && cinfo && panelRenderers.fn !== null) {
     const panelKeys = [];
     const panelLabels = [];
 
@@ -92,13 +92,14 @@ const Content = ({
               labels={el.labels}
               labelArr={labels}
               iface={ci}
-              panelRenderer={panelRenderer}
+              panelRenderers={panelRenderers}
               panelData={panelData[el.key]}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
               rowIndex={el.rowIndex}
               iColIndex={el.iColIndex}
+              displayInfo={displayInfo}
             />
           ))}
         </div>
@@ -118,12 +119,13 @@ Content.propTypes = {
   layout: PropTypes.object.isRequired,
   labels: PropTypes.array.isRequired,
   dims: PropTypes.object.isRequired,
-  panelRenderer: PropTypes.object.isRequired,
+  panelRenderers: PropTypes.object.isRequired,
   panelInterface: PropTypes.object,
   sidebar: PropTypes.string.isRequired,
   curPage: PropTypes.number.isRequired,
   totPages: PropTypes.number.isRequired,
-  panelData: PropTypes.object.isRequired
+  panelData: PropTypes.object.isRequired,
+  displayInfo: PropTypes.object.isRequired
 };
 
 Content.defaultProps = () => ({
@@ -167,10 +169,10 @@ const stateSelector = createSelector(
   contentWidthSelector, contentHeightSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
-  configSelector, panelRendererSelector, displayInfoSelector,
+  configSelector, panelRenderersSelector, displayInfoSelector,
   sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector, localPanelsSelector,
-  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderer, di, sidebar,
+  nPerPageSelector, localPanelsSelector, displayInfoSelector,
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderers, di, sidebar,
     curPage, card, npp, localPanels) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
@@ -247,12 +249,13 @@ const stateSelector = createSelector(
         hOffset,
         pPad
       },
-      panelRenderer,
+      panelRenderers,
       panelInterface: di.info.panelInterface,
       sidebar,
       curPage,
       totPages: Math.ceil(card / npp),
-      panelData
+      panelData,
+      displayInfo: di
     });
   }
 );
