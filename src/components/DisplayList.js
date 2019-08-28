@@ -191,6 +191,87 @@ const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
+const getRelDispPositions = (
+  selectedDisplay, relDisps, displayInfo, contentHeight, contentWidth
+) => {
+  const dnames = displayInfo.map((d) => d.name);
+  const idx = dnames.indexOf(selectedDisplay.name);
+  const disps = [idx, ...relDisps];
+
+  const n = disps.length;
+  const contentAspect = contentHeight / contentWidth;
+
+  // find all possible ways to grid
+  const grids = [];
+  for (let ii = 1; ii <= n; ii += 1) {
+    if (n / ii === Math.floor(n / ii)) {
+      grids.push([ii, n / ii]);
+    }
+  }
+
+  // find difference between total area and that of laying out
+  // panels according to the different grid choices
+  const areaDiff = [];
+  const totArea = contentWidth * contentHeight;
+  grids.forEach((grd, ii) => {
+    const nRow = grd[0];
+    const nCol = grd[1];
+    const gridAspect = (grd[1] / grd[0]) * contentAspect;
+    const gridWidth = contentWidth / nCol;
+    const gridHeight = contentHeight / nRow;
+    let runningTotal = 0;
+    for (let j = 0; j < nRow * nCol; j += 1) {
+      const curDispAspect = displayInfo[disps[j]].height / displayInfo[disps[j]].width;
+      let curWidth = gridWidth;
+      let curHeight = curWidth * curDispAspect;
+      if (gridAspect < curDispAspect) {
+        curHeight = gridHeight;
+        curWidth = curHeight / curDispAspect;
+      }
+      runningTotal += curWidth * curHeight;
+    }
+    areaDiff[ii] = totArea - runningTotal;
+  });
+
+  const curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
+
+  // // now move the boxes to appropriate position
+  // // make them appropriate size
+  // // and give them appropriate labels (group / name)
+  const nRow = curGrid[0];
+  const nCol = curGrid[1];
+  const gridAspect = (curGrid[1] / curGrid[0]) * contentAspect;
+  const gridWidth = (contentWidth / contentHeight) / nCol;
+  const gridHeight = 1 / nRow;
+
+  const relDispPositions = disps.map((didx, ii) => {
+    const row = Math.floor(ii / nCol);
+    const col = ii % nCol;
+    const aspect = displayInfo[didx].height / displayInfo[didx].width;
+    let width = gridWidth;
+    let height = width * aspect;
+    if (gridAspect < aspect) {
+      height = gridHeight;
+      width = height / aspect;
+    }
+
+    return ({
+      idx: didx,
+      name: displayInfo[didx].name,
+      group: displayInfo[didx].group,
+      aspect,
+      left: col * gridWidth,
+      top: row * gridHeight,
+      width,
+      height,
+      row,
+      col
+    });
+  });
+
+  return relDispPositions;
+};
+
 const mapDispatchToProps = (dispatch) => ({
   handleCheckbox: (i, selectedRelDisps, selectedDisplay, di, contentHeight, contentWidth) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
@@ -205,80 +286,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
     newRelDisps.sort();
 
-    const dnames = di.map((d) => d.name);
-    const idx = dnames.indexOf(selectedDisplay.name);
-    const disps = [idx, ...newRelDisps];
-
-    const n = disps.length;
-    const contentAspect = contentHeight / contentWidth;
-
-    // find all possible ways to grid
-    const grids = [];
-    for (let ii = 1; ii <= n; ii += 1) {
-      if (n / ii === Math.floor(n / ii)) {
-        grids.push([ii, n / ii]);
-      }
-    }
-
-    // find difference between total area and that of laying out
-    // panels according to the different grid choices
-    const areaDiff = [];
-    const totArea = contentWidth * contentHeight;
-    grids.forEach((grd, ii) => {
-      const nRow = grd[0];
-      const nCol = grd[1];
-      const gridAspect = (grd[1] / grd[0]) * contentAspect;
-      const gridWidth = contentWidth / nCol;
-      const gridHeight = contentHeight / nRow;
-      let runningTotal = 0;
-      for (let j = 0; j < nRow * nCol; j += 1) {
-        const curDispAspect = di[disps[j]].height / di[disps[j]].width;
-        let curWidth = gridWidth;
-        let curHeight = curWidth * curDispAspect;
-        if (gridAspect < curDispAspect) {
-          curHeight = gridHeight;
-          curWidth = curHeight / curDispAspect;
-        }
-        runningTotal += curWidth * curHeight;
-      }
-      areaDiff[ii] = totArea - runningTotal;
-    });
-
-    const curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
-
-    // // now move the boxes to appropriate position
-    // // make them appropriate size
-    // // and give them appropriate labels (group / name)
-    const nRow = curGrid[0];
-    const nCol = curGrid[1];
-    const gridAspect = (curGrid[1] / curGrid[0]) * contentAspect;
-    const gridWidth = (contentWidth / contentHeight) / nCol;
-    const gridHeight = 1 / nRow;
-
-    const relDispPositions = disps.map((didx, ii) => {
-      const row = Math.floor(ii / nCol);
-      const col = ii % nCol;
-      const aspect = di[didx].height / di[didx].width;
-      let width = gridWidth;
-      let height = width * aspect;
-      if (gridAspect < aspect) {
-        height = gridHeight;
-        width = height / aspect;
-      }
-
-      return ({
-        idx: didx,
-        name: di[didx].name,
-        group: di[didx].group,
-        aspect,
-        left: col * gridWidth,
-        top: row * gridHeight,
-        width,
-        height,
-        row,
-        col
-      });
-    });
+    const relDispPositions = getRelDispPositions(
+      selectedDisplay, newRelDisps, di, contentHeight, contentWidth
+    );
 
     dispatch(setSelectedRelDisps(newRelDisps));
     dispatch(setRelDispPositions(relDispPositions));

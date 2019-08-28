@@ -19,6 +19,7 @@ import DisplayList from './DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector, displayAspectsSelector } from '../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../selectors';
+import { setRelDispPositions } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
 const boxStyle = {
@@ -28,6 +29,10 @@ const boxStyle = {
   border: 'solid 1px #ddd',
   background: 'rgba(69, 138, 249, 0.4)'
 };
+
+const previewHeight = 400;
+
+const fixCSS = (value) => parseInt(value.replace('px', ''), 10);
 
 class RelatedDisplays extends React.Component {
   constructor(props) {
@@ -93,14 +98,16 @@ class RelatedDisplays extends React.Component {
   render() {
     const {
       classes, styles, relatedDisplayGroups, displayList,
-      contentHeight, contentWidth, selectedRelDisps, relDispPositions
+      contentHeight, contentWidth, selectedRelDisps, relDispPositions,
+      handleResize
     } = this.props;
     const { open, activeStep } = this.state;
 
     const parentBoundary = {
+      position: 'relative',
       background: '#efefef',
-      width: 400 * (contentWidth / contentHeight),
-      height: 400,
+      width: previewHeight * (contentWidth / contentHeight),
+      height: previewHeight,
       marginLeft: 'auto',
       marginRight: 'auto'
     };
@@ -122,13 +129,21 @@ class RelatedDisplays extends React.Component {
                 key={d.name}
                 style={boxStyle}
                 default={{
-                  width: 400 * d.width,
-                  height: 400 * d.height,
-                  x: 400 * d.left,
-                  y: 400 * d.top
+                  width: previewHeight * d.width,
+                  height: previewHeight * d.height,
+                  x: previewHeight * d.left,
+                  y: previewHeight * d.top
                 }}
                 bounds="parent"
                 lockAspectRatio
+                onDragStop={(e, a) => {
+                  handleResize(d, relDispPositions, a.x, a.y, undefined, undefined,
+                    previewHeight);
+                }}
+                onResizeStop={(e, direction, ref, delta, position) => {
+                  handleResize(d, relDispPositions, position.x, position.y,
+                    fixCSS(ref.style.width), fixCSS(ref.style.height), previewHeight);
+                }}
               >
                 <div className={classes.trHandle} />
                 <div className={classes.tlHandle} />
@@ -220,7 +235,8 @@ RelatedDisplays.propTypes = {
   selectedRelDisps: PropTypes.array.isRequired,
   contentHeight: PropTypes.number.isRequired,
   contentWidth: PropTypes.number.isRequired,
-  relDispPositions: PropTypes.array.isRequired
+  relDispPositions: PropTypes.array.isRequired,
+  handleResize: PropTypes.func.isRequired
   // displayAspects: PropTypes.array.isRequired
 };
 
@@ -309,10 +325,31 @@ const styleSelector = createSelector(
   })
 );
 
+const mapDispatchToProps = (dispatch) => ({
+  handleResize: (pos, relDispPositions, x, y, width, height, prvwHeight) => {
+    const names = relDispPositions.map((d) => d.name);
+    const idx = names.indexOf(pos.name);
+    const newPos = { ...pos };
+    newPos.left = x / prvwHeight;
+    newPos.top = y / prvwHeight;
+
+    if (width) {
+      newPos.width = width / prvwHeight;
+    }
+    if (height) {
+      newPos.height = height / prvwHeight;
+    }
+    const newPositions = { ...relDispPositions };
+    newPositions[idx] = newPos;
+    dispatch(setRelDispPositions(newPositions));
+  }
+});
+
 const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(injectSheet(staticStyles)(RelatedDisplays));
