@@ -1,11 +1,30 @@
 // cross-component selectors go here
 // otherwise they go in the component files
+import { createSelector } from 'reselect';
 
 export const displayListSelector = (state) => state._displayList;
-export const displayInfoSelector = (state) => state._displayInfo;
-export const currentDisplaySelector = (state) => state.currentDisplay;
+export const displayInfoSelector = (state) => {
+  if (state.selectedDisplay
+    && state.selectedDisplay.name !== ''
+    && state._displayInfo[state.selectedDisplay.name]) {
+    return state._displayInfo[state.selectedDisplay.name];
+  }
+  return {
+    isFetching: true,
+    isLoaded: false,
+    didInvalidate: false,
+    info: {}
+  };
+};
 export const selectedDisplaySelector = (state) => state.selectedDisplay;
-export const displayLoadedSelector = (state) => state._displayInfo.isLoaded;
+export const displayLoadedSelector = (state) => {
+  if (state.selectedDisplay
+    && state.selectedDisplay.name !== ''
+    && state._displayInfo[state.selectedDisplay.name]) {
+    return state._displayInfo[state.selectedDisplay.name].isLoaded;
+  }
+  return false;
+};
 
 export const cogInterfaceSelector = (state) => state._cogDataMutable.iface;
 export const cogDataSelector = (state) => state._cogDataMutable;
@@ -30,5 +49,12 @@ export const fullscreenSelector = (state) => state.fullscreen;
 export const dialogOpenSelector = (state) => state.dialog;
 export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
 
-export const aspectSelector = (state) => state._displayInfo.info.height
-  / state._displayInfo.info.width;
+export const aspectSelector = createSelector(
+  displayInfoSelector,
+  (di) => {
+    if (di.isLoaded) {
+      return di.info.height / di.info.width;
+    }
+    return 0;
+  }
+);

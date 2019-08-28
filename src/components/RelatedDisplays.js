@@ -169,12 +169,7 @@ class RelatedDisplays extends React.Component {
           <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }}>
             <Badge
               className={classes.badge}
-              classes={{
-                badge: {
-                  background: 'rgba(69, 138, 249, 0.4)',
-                  color: 'white'
-                }
-              }}
+              classes={{ badge: classes.badgeCircle }}
               badgeContent={selectedRelDisps.length}
             />
           </i>
@@ -311,6 +306,10 @@ const staticStyles = {
   },
   badge: {
     paddingBottom: 27
+  },
+  badgeCircle: {
+    background: 'rgba(69, 138, 249, 0.4)',
+    color: 'white'
   }
 };
 

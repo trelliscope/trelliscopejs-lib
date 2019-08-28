@@ -1,27 +1,27 @@
 import { REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants';
 
-const _displayInfoReducer = (state = {
-  isFetching: false,
-  isLoaded: false,
-  didInvalidate: false,
-  info: []
-}, action) => {
+const _displayInfoReducer = (state = {}, action) => {
   switch (action.type) {
     case REQUEST_DISPLAY:
       return {
         ...state,
-        isFetching: true,
-        isLoaded: false,
-        didInvalidate: false
+        [action.name]: {
+          isFetching: true,
+          isLoaded: false,
+          info: {},
+          didInvalidate: false
+        }
       };
     case RECEIVE_DISPLAY:
       return {
         ...state,
-        isFetching: false,
-        didInvalidate: false,
-        isLoaded: true,
-        info: action.info,
-        lastUpdated: action.receivedAt
+        [action.name]: {
+          isFetching: false,
+          didInvalidate: false,
+          isLoaded: true,
+          info: action.info,
+          lastUpdated: action.receivedAt
+        }
       };
     default:
       return state;
