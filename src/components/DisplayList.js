@@ -12,7 +12,7 @@ import red from '@material-ui/core/colors/red';
 import { selectedRelDispsSelector } from '../selectors/display';
 import { configSelector, selectedDisplaySelector } from '../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
-import { setSelectedRelDisps, setRelDispPositions } from '../actions';
+import { setSelectedRelDisps, setRelDispPositions, setLayout } from '../actions';
 
 const redA200 = red.A200;
 
@@ -290,6 +290,7 @@ const mapDispatchToProps = (dispatch) => ({
       selectedDisplay, newRelDisps, di, contentHeight, contentWidth
     );
 
+    dispatch(setLayout({ nrow: 1, ncol: 1 })); // related displays only works in 1/1 mode
     dispatch(setSelectedRelDisps(newRelDisps));
     dispatch(setRelDispPositions(relDispPositions));
   }

@@ -2,19 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Divider from '@material-ui/core/Divider';
 import { createSelector } from 'reselect';
 import NumericInput from './NumericInput';
-import { setLayout } from '../actions';
+import { setLayout, setSelectedRelDisps, setRelDispPositions } from '../actions';
 import { layoutSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLayout = ({ classes, layout, handleChange }) => {
+const SidebarLayout = ({
+  classes, layout, hasRelDisps, handleChange, resetRelDisps
+}) => {
   let content = <div />;
-  if (layout.nrow) {
+  if (hasRelDisps) {
+    content = (
+      <div className={classes.relDisp}>
+        <div className={classes.relDispText}>
+          Grid layout cannot be changed when viewing related displays.
+        </div>
+        <div className={classes.relDispButton}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={resetRelDisps}
+            size="small"
+          >
+            Remove Related Displays
+          </Button>
+        </div>
+      </div>
+    );
+  } else if (layout.nrow) {
     content = (
       <div>
         <div className={classes.row}>
@@ -95,7 +116,9 @@ const SidebarLayout = ({ classes, layout, handleChange }) => {
 SidebarLayout.propTypes = {
   // sheet: PropTypes.object.isRequired,
   layout: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  hasRelDisps: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  resetRelDisps: PropTypes.func.isRequired
 };
 
 // ------ static styles ------
@@ -132,15 +155,28 @@ const staticStyles = {
     fontSize: 23,
     paddingLeft: 6,
     verticalAlign: 'text-bottom'
+  },
+  relDisp: {
+    fontSize: 14,
+    padding: 15
+  },
+  relDispText: {
+    paddingBottom: 10
+  },
+  relDispButton: {
+    textAlign: 'center'
   }
 };
 
 // ------ redux container ------
 
+const selectedRelDispsSelector = (state) => state.selectedRelDisps;
+
 const stateSelector = createSelector(
-  layoutSelector,
-  (layout) => ({
-    layout
+  layoutSelector, selectedRelDispsSelector,
+  (layout, srd) => ({
+    layout,
+    hasRelDisps: srd.length > 0
   })
 );
 
@@ -151,6 +187,10 @@ const mapStateToProps = (state) => (
 const mapDispatchToProps = (dispatch) => ({
   handleChange: (layout) => {
     dispatch(setLayout(layout));
+  },
+  resetRelDisps: () => {
+    dispatch(setSelectedRelDisps([]));
+    dispatch(setRelDispPositions([]));
   }
 });
 

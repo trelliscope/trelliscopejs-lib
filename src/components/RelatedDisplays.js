@@ -12,11 +12,12 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Rnd } from 'react-rnd';
 import DisplayList from './DisplayList';
-import { relatedDisplayGroupsSelector, selectedRelDispsSelector, displayAspectsSelector } from '../selectors/display';
+import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../selectors';
 import { setRelDispPositions } from '../actions';
@@ -165,7 +166,18 @@ class RelatedDisplays extends React.Component {
           className={classes.button}
           style={styles.button}
         >
-          <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }} />
+          <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }}>
+            <Badge
+              className={classes.badge}
+              classes={{
+                badge: {
+                  background: 'rgba(69, 138, 249, 0.4)',
+                  color: 'white'
+                }
+              }}
+              badgeContent={selectedRelDisps.length}
+            />
+          </i>
         </button>
         <Dialog
           open={open}
@@ -237,7 +249,6 @@ RelatedDisplays.propTypes = {
   contentWidth: PropTypes.number.isRequired,
   relDispPositions: PropTypes.array.isRequired,
   handleResize: PropTypes.func.isRequired
-  // displayAspects: PropTypes.array.isRequired
 };
 
 // ------ static styles ------
@@ -253,8 +264,8 @@ const staticStyles = {
     width: uiConsts.header.height,
     fontSize: 18,
     // lineHeight: `${uiConsts.header.height}px`,
-    color: uiConsts.header.button.color,
-    background: 'none',
+    // color: uiConsts.header.button.color,
+    // background: 'none',
     textAlign: 'center',
     borderRight: `1px solid ${uiConsts.header.borderColor}`,
     borderBottom: `1px solid ${uiConsts.header.borderColor}`,
@@ -297,6 +308,9 @@ const staticStyles = {
     width: 8,
     height: 8,
     background: 'rgba(69, 138, 249, 0.4)'
+  },
+  badge: {
+    paddingBottom: 27
   }
 };
 
@@ -307,11 +321,13 @@ const relDispPositionsSelector = (state) => state.relDispPositions;
 const styleSelector = createSelector(
   displayListSelector, selectedDisplaySelector, relatedDisplayGroupsSelector,
   contentHeightSelector, contentWidthSelector, selectedRelDispsSelector,
-  displayAspectsSelector, relDispPositionsSelector,
-  (dl, sd, rdg, ch, cw, srd, dasp, rdp) => ({
+  relDispPositionsSelector,
+  (dl, sd, rdg, ch, cw, srd, rdp) => ({
     styles: {
       button: {
-        left: uiConsts.header.height * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2)
+        left: uiConsts.header.height * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
+        background: srd.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
+        color: srd.length === 0 ? uiConsts.header.button.color : 'white'
       }
     },
     displayList: dl,
@@ -320,7 +336,6 @@ const styleSelector = createSelector(
     contentHeight: ch,
     contentWidth: cw,
     selectedRelDisps: srd,
-    displayAspects: dasp,
     relDispPositions: rdp
   })
 );
