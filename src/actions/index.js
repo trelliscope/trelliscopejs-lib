@@ -341,7 +341,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
   }
 };
 
-export const fetchDisplay = (name, group, cfg, id = '', hash = '') => (dispatch) => {
+export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = true) => (dispatch) => {
   dispatch(requestDisplay(name, group));
 
   const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
@@ -351,36 +351,39 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '') => (dispatch)
     const iface = dObjJson.cogInterface;
     // now that displayObj is available, we can set the state with this data
     dispatch(receiveDisplay(name, group, dObjJson));
-    // set cog data state as pending while it loads
-    dispatch(receiveCogData(iface));
-    // TODO: perhaps do a quick load of initial panels while cog data is loading...
-    // (to do this, have displayObj store initial panel keys and cogs)
-
-    window[cdCallback] = (cogDatJson) => {
-      // once cog data is loaded, set the state with this data
-      // but first add an index column to the data so we can
-      // preserve original order or do multi-column sorts
-      setCogDatAndState(iface, cogDatJson, dObjJson, dispatch, hash);
-    };
 
     setPanelInfo(dObjJson, cfg, dispatch);
 
-    // load the cog data
-    if (cfg.data_type === 'jsonp') {
-      getJSONP({
-        url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
-        callbackName: 'cdCallback',
-        error: (err) => dispatch(setErrorMessage(
-          `Couldn't load cognostics data: ${err.url}`
-        ))
-      });
-    } else {
-      getJSON({
-        url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
-        callback: window[cdCallback]
-      }).on('error', (err) => dispatch(setErrorMessage(
-        `Couldn't load display list: ${err.target.responseURL}`
-      )));
+    // set cog data state as pending while it loads
+    if (getCogData) {
+      dispatch(receiveCogData(iface));
+      // TODO: perhaps do a quick load of initial panels while cog data is loading...
+      // (to do this, have displayObj store initial panel keys and cogs)
+
+      window[cdCallback] = (cogDatJson) => {
+        // once cog data is loaded, set the state with this data
+        // but first add an index column to the data so we can
+        // preserve original order or do multi-column sorts
+        setCogDatAndState(iface, cogDatJson, dObjJson, dispatch, hash);
+      };
+
+      // load the cog data
+      if (cfg.data_type === 'jsonp') {
+        getJSONP({
+          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
+          callbackName: 'cdCallback',
+          error: (err) => dispatch(setErrorMessage(
+            `Couldn't load cognostics data: ${err.url}`
+          ))
+        });
+      } else {
+        getJSON({
+          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
+          callback: window[cdCallback]
+        }).on('error', (err) => dispatch(setErrorMessage(
+          `Couldn't load display list: ${err.target.responseURL}`
+        )));
+      }
     }
   };
 

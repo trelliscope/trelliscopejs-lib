@@ -105,8 +105,9 @@ class Panel extends React.Component {
     const dh = nprops.dims.ww !== dims.ww;
     if (loaded && dh) {
       if (nprops.panelInterface.type === 'image') {
+        const panelRenderer = nprops.panelRenderers[nprops.displayInfo.info.name];
         this.setState({
-          panelContent: nprops.panelRenderer.fn(panelData,
+          panelContent: panelRenderer.fn(panelData,
             nprops.dims.ww, nprops.dims.hh, false, nprops.panelKey)
         });
       } else if (nprops.panelInterface.type === 'htmlwidget') {

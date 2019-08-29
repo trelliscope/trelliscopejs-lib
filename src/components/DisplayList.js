@@ -10,15 +10,17 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import red from '@material-ui/core/colors/red';
 import { selectedRelDispsSelector } from '../selectors/display';
-import { configSelector, selectedDisplaySelector } from '../selectors';
+import { appIdSelector, configSelector, selectedDisplaySelector } from '../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
-import { setSelectedRelDisps, setRelDispPositions, setLayout } from '../actions';
+import {
+  setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay
+} from '../actions';
 
 const redA200 = red.A200;
 
 const DisplayList = ({
   classes, selectable, di, displayGroups, handleClick,
-  cfg, selectedDisplay, selectedRelDisps, handleCheckbox,
+  cfg, appId, selectedDisplay, selectedRelDisps, handleCheckbox,
   contentHeight, contentWidth
 }) => {
   const groupKeys = Object.keys(displayGroups);
@@ -51,7 +53,7 @@ const DisplayList = ({
             onClick={() => {
               if (selectable) {
                 handleCheckbox(i, selectedRelDisps, selectedDisplay,
-                  di, contentHeight, contentWidth);
+                  di, contentHeight, contentWidth, cfg, appId);
               } else {
                 handleClick(di[i].name, di[i].group, di[i].desc);
               }
@@ -69,7 +71,7 @@ const DisplayList = ({
                 checked={selectedRelDisps.indexOf(i) > -1}
                 onChange={() => {
                   handleCheckbox(i, selectedRelDisps, selectedDisplay,
-                    di, contentHeight, contentWidth);
+                    di, contentHeight, contentWidth, cfg, appId);
                 }}
                 value={`checked${i}`}
                 inputProps={{
@@ -168,6 +170,7 @@ DisplayList.propTypes = {
   displayGroups: PropTypes.object.isRequired,
   handleClick: PropTypes.func.isRequired,
   cfg: PropTypes.object.isRequired,
+  appId: PropTypes.string.isRequired,
   selectedRelDisps: PropTypes.array.isRequired,
   selectedDisplay: PropTypes.object.isRequired,
   contentHeight: PropTypes.number.isRequired,
@@ -176,11 +179,12 @@ DisplayList.propTypes = {
 };
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, selectedRelDispsSelector, configSelector,
+  selectedDisplaySelector, selectedRelDispsSelector, configSelector, appIdSelector,
   contentHeightSelector, contentWidthSelector,
-  (selectedDisplay, selectedRelDisps, cfg, contentHeight, contentWidth) => ({
+  (selectedDisplay, selectedRelDisps, cfg, appId, contentHeight, contentWidth) => ({
     selectedDisplay,
     selectedRelDisps,
+    appId,
     cfg,
     contentHeight,
     contentWidth
@@ -273,7 +277,8 @@ const getRelDispPositions = (
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  handleCheckbox: (i, selectedRelDisps, selectedDisplay, di, contentHeight, contentWidth) => {
+  handleCheckbox: (i, selectedRelDisps, selectedDisplay, di,
+    contentHeight, contentWidth, cfg, appId) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
     const newRelDisps = Object.assign([], selectedRelDisps);
     if (checked) {
@@ -282,6 +287,8 @@ const mapDispatchToProps = (dispatch) => ({
         newRelDisps.splice(idx, 1);
       }
     } else if (newRelDisps.indexOf(i) < 0) {
+      // if it is being checked we also need to load the display
+      dispatch(fetchDisplay(di[i].name, di[i].group, cfg, appId, '', false));
       newRelDisps.push(i);
     }
     newRelDisps.sort();

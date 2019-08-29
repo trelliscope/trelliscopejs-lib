@@ -26,7 +26,7 @@ const Content = ({
 }) => {
   let ret = <div />;
 
-  if (ci && ccd && cinfo && panelRenderers.fn !== null) {
+  if (ci && ccd && cinfo && panelRenderers.fn !== null && panelInterface) {
     const panelKeys = [];
     const panelLabels = [];
 
