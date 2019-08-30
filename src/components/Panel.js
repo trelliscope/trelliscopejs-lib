@@ -130,11 +130,10 @@ class Panel extends React.Component {
     setTimeout(() => (elem.style.opacity = 1), 10); // eslint-disable-line no-return-assign
   }
 
-  // resizing
+  // resizing (only when viewing single displays - not related displays)
   UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
     const { panels } = this.state;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
-    // TODO make this work with every display...
     const { dims } = this.props;
     // when there is an update, if the size changed, update
     const dh = nprops.dims.ww !== dims.ww;

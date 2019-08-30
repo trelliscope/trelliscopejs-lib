@@ -86,7 +86,13 @@ const Content = ({
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
       keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
     }
-    const relDispNames = relDispPositions.map((d) => d.name).join('_');
+    if (relDispPositions.length > 0) {
+      const relDispNames = relDispPositions.map((d) => d.name).join('_');
+      let relDispSum = '';
+      relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height)
+        .reduce((a, b) => a + b);
+      keyExtra = `${keyExtra}_${relDispNames}_${relDispSum}_${labels.length}`;
+    }
 
     ret = (
       <Swipeable
@@ -96,7 +102,7 @@ const Content = ({
         <div className={classes.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
-              key={`${el.key}${keyExtra}${relDispNames}`}
+              key={`${el.key}${keyExtra}`}
               cfg={cfg}
               panelKey={el.key}
               labels={el.labels}
