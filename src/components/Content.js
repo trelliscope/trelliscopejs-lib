@@ -31,7 +31,8 @@ const Content = ({
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
   }
-  const hasRenderers = names.every((name) => panelRenderers[name] && panelRenderers[name].fn !== null);
+  const hasRenderers = names.every((name) => panelRenderers[name]
+    && panelRenderers[name].fn !== null);
   const hasDisplayInfo = names.every((name) => displayInfo[name] && displayInfo[name].isLoaded);
 
   if (ci && ccd && cinfo && hasRenderers && hasDisplayInfo && panelInterface) {
@@ -100,7 +101,7 @@ const Content = ({
               panelKey={el.key}
               labels={el.labels}
               labelArr={labels}
-              iface={ci}
+              // iface={ci}
               panelRenderers={panelRenderers}
               panelData={panelData[el.key]}
               panelInterface={panelInterface}
@@ -262,7 +263,8 @@ const stateSelector = createSelector(
         pHeight: newH + (nLabels * labelHeight),
         wOffset,
         hOffset,
-        pPad
+        pPad,
+        contentWidth: cw
       },
       panelRenderers,
       panelInterface: cdi.info.panelInterface,

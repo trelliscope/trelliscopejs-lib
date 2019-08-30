@@ -63,7 +63,7 @@ class Panel extends React.Component {
     const { panels } = this.state;
     // const loaded = Object.keys(panels).every((k) => panels[k].loaded);
     const {
-      cfg, iface, panelKey, panelRenderers, dims, curDisplayInfo,
+      cfg, panelKey, panelRenderers, dims, curDisplayInfo,
       displayInfo, relDispPositions
     } = this.props;
 
@@ -200,7 +200,7 @@ class Panel extends React.Component {
             <div
               key={d.name}
               style={{
-                position: 'absolute', top: d.top * dims.hh, left: (d.left * dims.hh) / d.aspect
+                position: 'absolute', top: d.top * dims.hh, left: d.left * (dims.hh)
               }}
             >
               {panels[d.name].panelContent}
@@ -209,30 +209,33 @@ class Panel extends React.Component {
         </div>
       );
     }
+    const bWidth = relDispPositions.length > 0 ? dims.contentWidth - 6 : dims.ww;
+    const bRight = relDispPositions.length > 0 ? 1 : (dims.pWidth * iColIndex)
+      + ((iColIndex + 1) * dims.pPad)
+      + dims.wOffset
+      + (iColIndex * 2) + 1;
     const styles = {
       bounding: {
-        width: dims.ww + 2,
+        width: bWidth + 2,
         height: dims.hh + (dims.nLabels * dims.labelHeight) + 2,
         top: (dims.pHeight * rowIndex) + ((rowIndex + 1) * dims.pPad) // + dims.hOffset
           + (rowIndex * 2),
-        right: (dims.pWidth * iColIndex) + ((iColIndex + 1) * dims.pPad)
-          + dims.wOffset
-          + (iColIndex * 2) + 1
+        right: bRight
       },
       panel: {
-        width: dims.ww,
+        width: bWidth,
         height: dims.hh
         // lineHeight: `${dims.hh}px`
       },
       panelContent: {
-        width: dims.ww,
+        width: bWidth,
         height: dims.hh
       },
       labelTable: {
-        width: dims.ww
+        width: bWidth
       },
       labelRow: {
-        width: dims.ww,
+        width: bWidth,
         height: dims.labelHeight,
         lineHeight: `${dims.labelHeight}px`
       },
@@ -361,7 +364,7 @@ class Panel extends React.Component {
 Panel.propTypes = {
   labels: PropTypes.array.isRequired,
   labelArr: PropTypes.array.isRequired,
-  iface: PropTypes.object.isRequired,
+  // iface: PropTypes.object.isRequired,
   cfg: PropTypes.object.isRequired,
   panelKey: PropTypes.string.isRequired,
   dims: PropTypes.object.isRequired,
