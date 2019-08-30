@@ -16,7 +16,6 @@ class Panel extends React.Component {
   constructor(props) {
     super(props);
 
-    this.isImageSrc = props.panelInterface.type === 'image_src';
     this.isSelfContained = props.panelData !== undefined
       && props.cfg.display_base === '__self__';
 
@@ -30,11 +29,13 @@ class Panel extends React.Component {
       hover: ''
     };
 
-    // TODO: isImageSrc and isSelfContained should be 'name'-specific
     names.forEach((name) => {
-      if (this.isImageSrc) {
+      const { panelInterface } = props.displayInfo[name].info;
+      const isImageSrc = panelInterface.type === 'image_src';
+      if (isImageSrc) {
         initialState.panels[name] = {
-          panelContent: props.panelRenderers[name].fn(props.panelData.url,
+          panelContent: props.panelRenderers[name].fn(
+            props.displayInfo[name].info.imgSrcLookup[props.panelKey],
             props.dims.ww, props.dims.hh, false, props.panelKey),
           panelData: props.panelData,
           loaded: true
@@ -98,15 +99,12 @@ class Panel extends React.Component {
               ...pnls,
               [name]: {
                 panelContent: panelRenderer.fn(json2, width,
-                  height, false, panelKey),
+                  height, false, `${panelKey}_${name}`),
                 panelData: json2,
                 loaded: true
               }
             }
           });
-          // do post-rendering (if any)
-          panelRenderer.fn(json2, width,
-            height, true, panelKey);
         };
 
         if (cfg.cog_server.type === 'jsonp') {
@@ -122,7 +120,7 @@ class Panel extends React.Component {
         }
       } else {
         panelRenderer.fn(panels[name].panelData, width,
-          height, true, panelKey);
+          height, true, `${panelKey}_${name}`);
       }
     });
 
@@ -136,7 +134,7 @@ class Panel extends React.Component {
   UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
     const { panels } = this.state;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
-
+    // TODO make this work with every display...
     const { dims } = this.props;
     // when there is an update, if the size changed, update
     const dh = nprops.dims.ww !== dims.ww;
@@ -146,7 +144,7 @@ class Panel extends React.Component {
         const panelRenderer = nprops.panelRenderers[name];
         const newPanels = { ...panels };
         newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
-          nprops.dims.ww, nprops.dims.hh, false, nprops.panelKey);
+          nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);
         this.setState({
           panels: newPanels
         });
@@ -165,6 +163,7 @@ class Panel extends React.Component {
     }
   }
 
+  // do post-rendering (if any)
   componentDidUpdate() {
     const { panels } = this.state;
     const {
@@ -186,7 +185,7 @@ class Panel extends React.Component {
         }
         const panelRenderer = panelRenderers[name];
         panelRenderer.fn(panels[name].panelData, width,
-          height, true, panelKey);
+          height, true, `${panelKey}_${name}`);
       }
     });
   }
@@ -200,7 +199,7 @@ class Panel extends React.Component {
       this.xhr.abort();
     }
     // remove callback
-    if (!(this.isSelfContained || this.isImageSrc) && window.__panel__[`_${panelKey}_${name}`]) {
+    if (!this.isSelfContained && window.__panel__ && window.__panel__[`_${panelKey}_${name}`]) {
       window.__panel__[`_${panelKey}_${name}`] = null;
     }
   }
@@ -226,7 +225,11 @@ class Panel extends React.Component {
             <div
               key={d.name}
               style={{
-                position: 'absolute', top: d.top * dims.hh, left: d.left * (dims.hh)
+                position: 'absolute',
+                top: d.top * dims.hh,
+                left: d.left * (dims.hh),
+                height: d.height * dims.hh,
+                width: d.width * dims.hh
               }}
             >
               {panels[d.name].panelContent}

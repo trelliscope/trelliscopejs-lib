@@ -226,15 +226,7 @@ const stateSelector = createSelector(
       wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
     }
 
-    let panelData = localPanels;
-    // if panel type is image_src, set panelData accordingly
-    if (cdi.info.panelInterface && cdi.info.panelInterface.type === 'image_src') {
-      panelData = {};
-      ccd.map((d) => {
-        panelData[d.panelKey] = { url: d[cdi.info.panelInterface.panelCol] };
-        return d;
-      });
-    }
+    const panelData = localPanels;
 
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
 
