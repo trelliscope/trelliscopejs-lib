@@ -112,7 +112,7 @@ class Panel extends React.Component {
         if (cfg.cog_server.type === 'jsonp') {
           this.xhr = getJSONP({
             url: `${filebase}/jsonp/${panelKey}.jsonp`,
-            callbackName: `__panel_${panelKey}`
+            callbackName: `__panel_${panelKey}_${name}`
           });
         } else {
           this.xhr = getJSON({
@@ -163,6 +163,32 @@ class Panel extends React.Component {
         }
       }
     }
+  }
+
+  componentDidUpdate() {
+    const { panels } = this.state;
+    const {
+      panelKey, panelRenderers, dims, curDisplayInfo,
+      relDispPositions
+    } = this.props;
+
+    let names = [curDisplayInfo.info.name];
+    if (relDispPositions.length > 0) {
+      names = relDispPositions.map((d) => d.name);
+    }
+    names.forEach((name, i) => {
+      if (panels[name].loaded) {
+        let width = dims.ww;
+        let height = dims.hh;
+        if (relDispPositions.length > 0) {
+          height = dims.hh * relDispPositions[i].height;
+          width = height / relDispPositions[i].aspect;
+        }
+        const panelRenderer = panelRenderers[name];
+        panelRenderer.fn(panels[name].panelData, width,
+          height, true, panelKey);
+      }
+    });
   }
 
   componentWillUnmount() {

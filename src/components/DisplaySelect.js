@@ -15,7 +15,7 @@ import DisplayList from './DisplayList';
 import {
   setSelectedDisplay, fetchDisplay, setActiveSidebar,
   setLabels, setLayout, setSort, setFilter, setFilterView,
-  setDispSelectDialogOpen, resetRelDisps
+  setDispSelectDialogOpen, resetRelDisps, setRelDispPositions
 } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
 import {
@@ -282,6 +282,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setFilterView({}));
     dispatch(setFilter({}));
     dispatch(setSort([]));
+    dispatch(setRelDispPositions([]));
 
     dispatch(setSelectedDisplay(name, group, desc));
     dispatch(fetchDisplay(name, group, cfg, appId, ''));
