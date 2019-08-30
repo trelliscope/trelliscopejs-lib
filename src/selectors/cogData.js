@@ -1,20 +1,20 @@
 import { createSelector } from 'reselect';
 import {
   cogDataSelector, filterStateSelector, filterViewSelector,
-  sortSelector, displayInfoSelector, pageNumSelector, nPerPageSelector
+  sortSelector, curDisplayInfoSelector, pageNumSelector, nPerPageSelector
 } from '.';
 
 export const cogFiltDistSelector = createSelector(
   cogDataSelector, filterStateSelector,
-  filterViewSelector, displayInfoSelector,
-  (cogData, filter, filterView, di) => {
+  filterViewSelector, curDisplayInfoSelector,
+  (cogData, filter, filterView, cdi) => {
     const result = {};
     if (cogData.iface && filterView.active && cogData.crossfilter
       && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
       for (let i = 0; i < keys.length; i += 1) {
-        if (di.info.cogInfo[keys[i]].type === 'factor') {
+        if (cdi.info.cogInfo[keys[i]].type === 'factor') {
           const orderValue = filter[keys[i]] && filter[keys[i]].orderValue
             ? filter[keys[i]].orderValue : 'ct,desc';
 
@@ -69,7 +69,7 @@ export const cogFiltDistSelector = createSelector(
             sumSelected,
             idx: selectedIdx.concat(notSelectedIdx)
           };
-        } else if (di.info.cogInfo[keys[i]].type === 'numeric') {
+        } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
           const dist = cogData.groupRefs[keys[i]].all();
 
           let maxVal = 0;
@@ -82,10 +82,10 @@ export const cogFiltDistSelector = createSelector(
           result[keys[i]] = {
             dist,
             max: maxVal,
-            breaks: di.info.cogInfo[keys[i]].breaks,
-            delta: di.info.cogInfo[keys[i]].delta,
-            range: di.info.cogInfo[keys[i]].range,
-            log: di.info.cogInfo[keys[i]].log
+            breaks: cdi.info.cogInfo[keys[i]].breaks,
+            delta: cdi.info.cogInfo[keys[i]].delta,
+            range: cdi.info.cogInfo[keys[i]].range,
+            log: cdi.info.cogInfo[keys[i]].log
           };
         }
       }

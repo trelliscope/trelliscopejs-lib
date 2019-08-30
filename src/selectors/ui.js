@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { SB_PANEL_FILTER } from '../constants';
-import { filterViewSelector, displayInfoSelector } from '.';
+import { filterViewSelector, curDisplayInfoSelector } from '.';
 import uiConsts from '../assets/styles/uiConsts';
 
 export const windowWidthSelector = (state) => state.ui.windowWidth;
@@ -16,20 +16,20 @@ export const sidebarHeightSelector = createSelector(
 
 // keep track of how high each filter entry is so we can spill over into a new column
 export const filterColSplitSelector = createSelector(
-  filterViewSelector, displayInfoSelector, sidebarHeightSelector,
-  (filt, di, sh) => {
+  filterViewSelector, curDisplayInfoSelector, sidebarHeightSelector,
+  (filt, cdi, sh) => {
     const keys = filt.active;
     if (keys === undefined) {
       return { cutoff: null, heights: [0, 0] };
     }
     const heights = keys.map((d) => {
       // 53 is the extra height of header/footer
-      if (di.info.cogInfo[d].type === 'factor') {
+      if (cdi.info.cogInfo[d].type === 'factor') {
         // if the number of levels is small then only make the box that tall
-        const nlvl = di.info.cogInfo[d].levels ? di.info.cogInfo[d].levels.length : 1000;
+        const nlvl = cdi.info.cogInfo[d].levels ? cdi.info.cogInfo[d].levels.length : 1000;
         return Math.min(uiConsts.sidebar.filter.cat.height, nlvl * 15) + 54;
       }
-      if (di.info.cogInfo[d].type === 'numeric') {
+      if (cdi.info.cogInfo[d].type === 'numeric') {
         return uiConsts.sidebar.filter.num.height + 54;
       }
       return 0;

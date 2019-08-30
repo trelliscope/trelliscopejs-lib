@@ -20,77 +20,111 @@ class Panel extends React.Component {
     this.isSelfContained = props.panelData !== undefined
       && props.cfg.display_base === '__self__';
 
-    if (this.isImageSrc) {
-      const { name } = props.displayInfo.info;
-      this.state = {
-        panelContent: props.panelRenderers[name].fn(props.panelData.url,
-          props.dims.ww, props.dims.hh, false, props.panelKey),
-        panelData: props.panelData,
-        loaded: true
-      };
-    } else if (this.isSelfContained) {
-      const { name } = props.displayInfo.info;
-      this.state = {
-        panelContent: props.panelRenderers[name].fn(props.panelData,
-          props.dims.ww, props.dims.hh, false, props.panelKey),
-        panelData: props.panelData,
-        loaded: true
-      };
-    } else {
-      this.state = {
-        loaded: false,
-        panelContent: null,
-        panelData: null,
-        hover: ''
-      };
+    let names = [props.curDisplayInfo.info.name];
+    if (props.relDispPositions.length > 0) {
+      names = props.relDispPositions.map((d) => d.name);
     }
+
+    const initialState = {
+      panels: {},
+      hover: ''
+    };
+
+    // TODO: isImageSrc and isSelfContained should be 'name'-specific
+    names.forEach((name) => {
+      if (this.isImageSrc) {
+        initialState.panels[name] = {
+          panelContent: props.panelRenderers[name].fn(props.panelData.url,
+            props.dims.ww, props.dims.hh, false, props.panelKey),
+          panelData: props.panelData,
+          loaded: true
+        };
+      } else if (this.isSelfContained) {
+        initialState.panels[name] = {
+          panelContent: props.panelRenderers[name].fn(props.panelData,
+            props.dims.ww, props.dims.hh, false, props.panelKey),
+          panelData: props.panelData,
+          loaded: true
+        };
+      } else {
+        initialState.panels[name] = {
+          loaded: false,
+          panelContent: null,
+          panelData: null
+        };
+      }
+    });
+    this.state = initialState;
   }
 
   componentDidMount() {
     // async stuff
 
-    const { loaded, panelData } = this.state;
+    const { panels } = this.state;
+    // const loaded = Object.keys(panels).every((k) => panels[k].loaded);
     const {
-      cfg, iface, panelKey, panelRenderers, dims, displayInfo
+      cfg, iface, panelKey, panelRenderers, dims, curDisplayInfo,
+      displayInfo, relDispPositions
     } = this.props;
 
-    const panelRenderer = panelRenderers[displayInfo.info.name];
-
-    if (!loaded) {
-      let filebase = `${cfg.cog_server.info.base}${iface.group}`;
-      filebase = `${filebase}/${iface.name}`;
-
-      if (!window.__panel__) {
-        window.__panel__ = {};
-      }
-
-      window.__panel__[`_${panelKey}`] = (json2) => {
-        this.setState({
-          panelContent: panelRenderer.fn(json2, dims.ww,
-            dims.hh, false, panelKey),
-          panelData: json2,
-          loaded: true
-        });
-        // do post-rendering (if any)
-        panelRenderer.fn(panelData, dims.ww,
-          dims.hh, true, panelKey);
-      };
-
-      if (cfg.cog_server.type === 'jsonp') {
-        this.xhr = getJSONP({
-          url: `${filebase}/jsonp/${panelKey}.jsonp`,
-          callbackName: `__panel_${panelKey}__`
-        });
-      } else {
-        this.xhr = getJSON({
-          url: `${filebase}/json/${panelKey}.json`,
-          callback: window.__panel__[`_${panelKey}`]
-        });
-      }
-    } else {
-      panelRenderer.fn(panelData, dims.ww,
-        dims.hh, true, panelKey);
+    let names = [curDisplayInfo.info.name];
+    if (relDispPositions.length > 0) {
+      names = relDispPositions.map((d) => d.name);
     }
+    names.forEach((name, i) => {
+      const panelRenderer = panelRenderers[name];
+      const curIface = displayInfo[name].info.cogInterface;
+
+      let width = dims.ww;
+      let height = dims.hh;
+      if (relDispPositions.length > 0) {
+        height = dims.hh * relDispPositions[i].height;
+        width = height / relDispPositions[i].aspect;
+      }
+
+      if (!panels[name].loaded) {
+        let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
+        filebase = `${filebase}/${curIface.name}`;
+
+        if (!window.__panel__) {
+          window.__panel__ = {};
+        }
+
+        window.__panel__[`_${panelKey}_${name}`] = (json2) => {
+          // eslint-disable-next-line react/destructuring-assignment
+          const pnls = this.state.panels;
+          this.setState({
+            panels: {
+              ...pnls,
+              [name]: {
+                panelContent: panelRenderer.fn(json2, width,
+                  height, false, panelKey),
+                panelData: json2,
+                loaded: true
+              }
+            }
+          });
+          // do post-rendering (if any)
+          panelRenderer.fn(json2, width,
+            height, true, panelKey);
+        };
+
+        if (cfg.cog_server.type === 'jsonp') {
+          this.xhr = getJSONP({
+            url: `${filebase}/jsonp/${panelKey}.jsonp`,
+            callbackName: `__panel_${panelKey}`
+          });
+        } else {
+          this.xhr = getJSON({
+            url: `${filebase}/json/${panelKey}.json`,
+            callback: window.__panel__[`_${panelKey}_${name}`]
+          });
+        }
+      } else {
+        panelRenderer.fn(panels[name].panelData, width,
+          height, true, panelKey);
+      }
+    });
 
     // fade in on new component
     const elem = this._panel;
@@ -98,17 +132,23 @@ class Panel extends React.Component {
     setTimeout(() => (elem.style.opacity = 1), 10); // eslint-disable-line no-return-assign
   }
 
+  // resizing
   UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
-    const { loaded, panelData } = this.state;
+    const { panels } = this.state;
+    const loaded = Object.keys(panels).every((k) => panels[k].loaded);
+
     const { dims } = this.props;
     // when there is an update, if the size changed, update
     const dh = nprops.dims.ww !== dims.ww;
+    const { name } = nprops.curDisplayInfo.info;
     if (loaded && dh) {
       if (nprops.panelInterface.type === 'image') {
-        const panelRenderer = nprops.panelRenderers[nprops.displayInfo.info.name];
+        const panelRenderer = nprops.panelRenderers[name];
+        const newPanels = { ...panels };
+        newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
+          nprops.dims.ww, nprops.dims.hh, false, nprops.panelKey);
         this.setState({
-          panelContent: panelRenderer.fn(panelData,
-            nprops.dims.ww, nprops.dims.hh, false, nprops.panelKey)
+          panels: newPanels
         });
       } else if (nprops.panelInterface.type === 'htmlwidget') {
         const widget = findWidget(nprops.panelInterface.deps.name);
@@ -126,15 +166,16 @@ class Panel extends React.Component {
   }
 
   componentWillUnmount() {
-    const { panelKey } = this.props;
+    const { panelKey, curDisplayInfo } = this.props;
+    const { name } = curDisplayInfo.info;
 
     // stop requesting panel assets
     if (this.xhr) {
       this.xhr.abort();
     }
     // remove callback
-    if (!(this.isSelfContained || this.isImageSrc)) {
-      window.__panel__[`_${panelKey}`] = null;
+    if (!(this.isSelfContained || this.isImageSrc) && window.__panel__[`_${panelKey}_${name}`]) {
+      window.__panel__[`_${panelKey}_${name}`] = null;
     }
   }
 
@@ -144,10 +185,30 @@ class Panel extends React.Component {
 
   render() {
     const {
-      classes, dims, rowIndex, iColIndex, labels, labelArr, removeLabel
+      classes, dims, rowIndex, iColIndex, labels, labelArr,
+      removeLabel, curDisplayInfo, relDispPositions
     } = this.props;
-    const { loaded, panelContent, hover } = this.state;
+    const { panels, hover } = this.state;
 
+    const { name } = curDisplayInfo.info;
+    const loaded = Object.keys(panels).every((k) => panels[k].loaded);
+    let { panelContent } = panels[name];
+    if (loaded && relDispPositions.length > 0) {
+      panelContent = (
+        <div>
+          {relDispPositions.map((d) => (
+            <div
+              key={d.name}
+              style={{
+                position: 'absolute', top: d.top * dims.hh, left: (d.left * dims.hh) / d.aspect
+              }}
+            >
+              {panels[d.name].panelContent}
+            </div>
+          ))}
+        </div>
+      );
+    }
     const styles = {
       bounding: {
         width: dims.ww + 2,
@@ -311,6 +372,8 @@ Panel.propTypes = {
   panelInterface: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
   panelData: PropTypes.object,
   displayInfo: PropTypes.object.isRequired,
+  curDisplayInfo: PropTypes.object.isRequired,
+  relDispPositions: PropTypes.array.isRequired,
   removeLabel: PropTypes.func.isRequired
 };
 

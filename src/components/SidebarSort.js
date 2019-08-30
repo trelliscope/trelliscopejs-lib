@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import { setSort, setLabels, setLayout } from '../actions';
 import { sidebarHeightSelector } from '../selectors/ui';
-import { sortSelector, displayInfoSelector, labelsSelector } from '../selectors';
+import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarSort = ({
@@ -188,12 +188,12 @@ const staticStyles = {
 // ------ redux container ------
 
 const cogDescSelector = createSelector(
-  displayInfoSelector,
-  (di) => {
+  curDisplayInfoSelector,
+  (cdi) => {
     const res = {};
-    const ciKeys = Object.keys(di.info.cogInfo);
+    const ciKeys = Object.keys(cdi.info.cogInfo);
     for (let i = 0; i < ciKeys.length; i += 1) {
-      res[ciKeys[i]] = di.info.cogInfo[ciKeys[i]].desc;
+      res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
     }
     return (res);
   }

@@ -3,7 +3,8 @@
 import { createSelector } from 'reselect';
 
 export const displayListSelector = (state) => state._displayList;
-export const displayInfoSelector = (state) => {
+export const displayInfoSelector = (state) => state._displayInfo;
+export const curDisplayInfoSelector = (state) => {
   if (state.selectedDisplay
     && state.selectedDisplay.name !== ''
     && state._displayInfo[state.selectedDisplay.name]) {
@@ -50,10 +51,10 @@ export const dialogOpenSelector = (state) => state.dialog;
 export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
 
 export const aspectSelector = createSelector(
-  displayInfoSelector,
-  (di) => {
-    if (di.isLoaded) {
-      return di.info.height / di.info.width;
+  curDisplayInfoSelector,
+  (cdi) => {
+    if (cdi.isLoaded) {
+      return cdi.info.height / cdi.info.width;
     }
     return 0;
   }

@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import {
-  displayInfoSelector, filterSelector, sortSelector, singlePageAppSelector
+  curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector
 } from '../selectors';
 import FooterChip from './FooterChip';
 import uiConsts from '../assets/styles/uiConsts';
@@ -143,12 +143,12 @@ const staticStyles = {
 // ------ redux container ------
 
 const sortInfoSelector = createSelector(
-  sortSelector, displayInfoSelector,
-  (sort, di) => {
+  sortSelector, curDisplayInfoSelector,
+  (sort, cdi) => {
     const res = [];
     for (let i = 0; i < sort.length; i += 1) {
       const { name } = sort[i];
-      const { type } = di.info.cogInfo[name];
+      const { type } = cdi.info.cogInfo[name];
       let icon = 'icon-sort-amount';
       if (type === 'factor') {
         icon = 'icon-sort-alpha';
@@ -163,8 +163,8 @@ const sortInfoSelector = createSelector(
 );
 
 const filterInfoSelector = createSelector(
-  filterSelector, displayInfoSelector,
-  (filter, di) => {
+  filterSelector, curDisplayInfoSelector,
+  (filter, cdi) => {
     const keys = Object.keys(filter.state);
     const res = [];
     for (let i = 0; i < keys.length; i += 1) {
@@ -193,7 +193,7 @@ const filterInfoSelector = createSelector(
             text = curState.value.sort().join(', ');
           } else {
             // just show "k of n"
-            const tot = di.info.cogInfo[curState.name].levels.length;
+            const tot = cdi.info.cogInfo[curState.name].levels.length;
             text = `${curState.value.length} of ${tot}`;
           }
         }
@@ -206,9 +206,9 @@ const filterInfoSelector = createSelector(
 
 const stateSelector = createSelector(
   windowWidthSelector, sortInfoSelector, filterInfoSelector,
-  filterCardinalitySelector, displayInfoSelector, singlePageAppSelector,
+  filterCardinalitySelector, curDisplayInfoSelector, singlePageAppSelector,
   contentHeightSelector,
-  (ww, sort, filter, nFilt, di, singlePage, ch) => ({
+  (ww, sort, filter, nFilt, cdi, singlePage, ch) => ({
     style: {
       width: ww - (singlePage ? 0 : uiConsts.footer.height),
       top: ch + uiConsts.header.height
@@ -216,7 +216,7 @@ const stateSelector = createSelector(
     sort,
     filter,
     nFilt,
-    nPanels: di.info.n
+    nPanels: cdi.info.n
   })
 );
 

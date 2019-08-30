@@ -16,18 +16,18 @@ import { cogFiltDistSelector } from '../selectors/cogData';
 import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import {
-  displayInfoSelector, filterStateSelector,
+  curDisplayInfoSelector, filterStateSelector,
   filterViewSelector, labelsSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarFilter = ({
   classes, styles, catHeight, filter, filterView, cogInfo,
-  displayInfo, filtDist, colSplit, handleViewChange,
+  curDisplayInfo, filtDist, colSplit, handleViewChange,
   handleFilterChange, handleFilterSortChange, labels
 }) => {
   let content = <div />;
-  const displId = displayInfo.info.name;
+  const displId = curDisplayInfo.info.name;
   if (filter && filterView.active && colSplit) {
     let col1filters = [];
     let col2filters = [];
@@ -64,9 +64,9 @@ const SidebarFilter = ({
               <FilterCat
                 filterState={filterState}
                 height={Math.min(catHeight, nlvl * 15)}
-                dist={displayInfo.info.cogDistns[d]}
+                dist={curDisplayInfo.info.cogDistns[d]}
                 condDist={filtDist[d]}
-                levels={displayInfo.info.cogInfo[d].levels}
+                levels={curDisplayInfo.info.cogInfo[d].levels}
                 handleChange={handleFilterChange}
                 handleSortChange={handleFilterSortChange}
               />
@@ -86,7 +86,7 @@ const SidebarFilter = ({
               <FilterNum
                 name={d}
                 filterState={filterState}
-                dist={displayInfo.info.cogDistns[d]}
+                dist={curDisplayInfo.info.cogDistns[d]}
                 condDist={filtDist[d]}
                 handleChange={handleFilterChange}
               />
@@ -205,7 +205,7 @@ SidebarFilter.propTypes = {
   filter: PropTypes.object.isRequired,
   filterView: PropTypes.object.isRequired,
   cogInfo: PropTypes.object.isRequired,
-  displayInfo: PropTypes.object.isRequired,
+  curDisplayInfo: PropTypes.object.isRequired,
   filtDist: PropTypes.object.isRequired,
   colSplit: PropTypes.object.isRequired,
   handleViewChange: PropTypes.func.isRequired,
@@ -348,9 +348,9 @@ const staticStyles = {
 
 const stateSelector = createSelector(
   filterStateSelector, filterViewSelector,
-  cogInfoSelector, sidebarHeightSelector, displayInfoSelector,
+  cogInfoSelector, sidebarHeightSelector, curDisplayInfoSelector,
   cogFiltDistSelector, filterColSplitSelector, labelsSelector,
-  (filter, filterView, cogInfo, sh, displayInfo, filtDist, colSplit, labels) => ({
+  (filter, filterView, cogInfo, sh, curDisplayInfo, filtDist, colSplit, labels) => ({
     styles: {
       col1: {
         height: sh
@@ -370,7 +370,7 @@ const stateSelector = createSelector(
     filter,
     filterView,
     cogInfo,
-    displayInfo,
+    curDisplayInfo,
     filtDist,
     colSplit,
     labels

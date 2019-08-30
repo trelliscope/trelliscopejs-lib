@@ -273,6 +273,10 @@ const getRelDispPositions = (
     });
   });
 
+  if (relDispPositions.length === 1 && relDispPositions[0].name === selectedDisplay.name) {
+    return [];
+  }
+
   return relDispPositions;
 };
 

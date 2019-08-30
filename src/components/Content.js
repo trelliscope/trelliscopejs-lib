@@ -14,19 +14,27 @@ import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
 import {
   configSelector, cogInterfaceSelector, layoutSelector, aspectSelector, labelsSelector,
-  panelRenderersSelector, displayInfoSelector, nPerPageSelector, pageNumSelector,
-  localPanelsSelector
+  panelRenderersSelector, curDisplayInfoSelector, nPerPageSelector, pageNumSelector,
+  localPanelsSelector, displayInfoSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({
   classes, contentStyle, ccd, ci, cinfo, cfg, layout, labels,
   dims, panelRenderers, panelInterface, sidebar, curPage,
-  totPages, panelData, removeLabel, setPageNum, displayInfo
+  totPages, panelData, removeLabel, setPageNum, curDisplayInfo,
+  displayInfo, relDispPositions
 }) => {
   let ret = <div />;
 
-  if (ci && ccd && cinfo && panelRenderers.fn !== null && panelInterface) {
+  let names = [curDisplayInfo.info.name];
+  if (relDispPositions.length > 0) {
+    names = relDispPositions.map((d) => d.name);
+  }
+  const hasRenderers = names.every((name) => panelRenderers[name] && panelRenderers[name].fn !== null);
+  const hasDisplayInfo = names.every((name) => displayInfo[name] && displayInfo[name].isLoaded);
+
+  if (ci && ccd && cinfo && hasRenderers && hasDisplayInfo && panelInterface) {
     const panelKeys = [];
     const panelLabels = [];
 
@@ -77,6 +85,7 @@ const Content = ({
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
       keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
     }
+    const relDispNames = relDispPositions.map((d) => d.name).join('_');
 
     ret = (
       <Swipeable
@@ -86,7 +95,7 @@ const Content = ({
         <div className={classes.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
-              key={`${el.key}${keyExtra}`}
+              key={`${el.key}${keyExtra}${relDispNames}`}
               cfg={cfg}
               panelKey={el.key}
               labels={el.labels}
@@ -99,7 +108,9 @@ const Content = ({
               dims={dims}
               rowIndex={el.rowIndex}
               iColIndex={el.iColIndex}
+              curDisplayInfo={curDisplayInfo}
               displayInfo={displayInfo}
+              relDispPositions={relDispPositions}
             />
           ))}
         </div>
@@ -125,7 +136,8 @@ Content.propTypes = {
   curPage: PropTypes.number.isRequired,
   totPages: PropTypes.number.isRequired,
   panelData: PropTypes.object.isRequired,
-  displayInfo: PropTypes.object.isRequired
+  displayInfo: PropTypes.object.isRequired,
+  relDispPositions: PropTypes.array.isRequired
 };
 
 Content.defaultProps = () => ({
@@ -165,15 +177,18 @@ const getTextWidth = (labels, size) => {
   return max(w);
 };
 
+const relDispPositionsSelector = (state) => state.relDispPositions;
+
 const stateSelector = createSelector(
   contentWidthSelector, contentHeightSelector,
   currentCogDataSelector, cogInterfaceSelector,
   layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
-  configSelector, panelRenderersSelector, displayInfoSelector,
+  configSelector, panelRenderersSelector, curDisplayInfoSelector,
   sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector, localPanelsSelector, displayInfoSelector,
-  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderers, di, sidebar,
-    curPage, card, npp, localPanels) => {
+  nPerPageSelector, localPanelsSelector,
+  relDispPositionsSelector, displayInfoSelector,
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderers, cdi, sidebar,
+    curPage, card, npp, localPanels, rdp, di) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
@@ -212,10 +227,10 @@ const stateSelector = createSelector(
 
     let panelData = localPanels;
     // if panel type is image_src, set panelData accordingly
-    if (di.info.panelInterface && di.info.panelInterface.type === 'image_src') {
+    if (cdi.info.panelInterface && cdi.info.panelInterface.type === 'image_src') {
       panelData = {};
       ccd.map((d) => {
-        panelData[d.panelKey] = { url: d[di.info.panelInterface.panelCol] };
+        panelData[d.panelKey] = { url: d[cdi.info.panelInterface.panelCol] };
         return d;
       });
     }
@@ -250,12 +265,14 @@ const stateSelector = createSelector(
         pPad
       },
       panelRenderers,
-      panelInterface: di.info.panelInterface,
+      panelInterface: cdi.info.panelInterface,
       sidebar,
       curPage,
       totPages: Math.ceil(card / npp),
       panelData,
-      displayInfo: di
+      curDisplayInfo: cdi,
+      displayInfo: di,
+      relDispPositions: rdp
     });
   }
 );

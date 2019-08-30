@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { setLabels } from '../actions';
 import { contentHeightSelector } from '../selectors/ui';
-import { labelsSelector, displayInfoSelector } from '../selectors';
+import { labelsSelector, curDisplayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarLabels = ({
@@ -74,12 +74,12 @@ const staticStyles = {
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, labelsSelector, displayInfoSelector,
-  (ch, labels, di) => ({
+  contentHeightSelector, labelsSelector, curDisplayInfoSelector,
+  (ch, labels, cdi) => ({
     width: uiConsts.sidebar.width,
     height: ch - uiConsts.sidebar.header.height,
     labels,
-    cogInfo: di.info.cogInfo
+    cogInfo: cdi.info.cogInfo
   })
 );
 

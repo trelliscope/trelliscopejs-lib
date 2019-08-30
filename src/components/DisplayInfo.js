@@ -12,7 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import {
-  selectedDisplaySelector, displayInfoSelector, fullscreenSelector
+  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -67,32 +67,32 @@ class DisplayInfo extends React.Component {
 
   render() {
     const {
-      classes, displayInfo, singleDisplay, styles
+      classes, curDisplayInfo, singleDisplay, styles
     } = this.props;
 
     let dialogContent = '';
-    if (displayInfo.isLoaded) {
-      const mdDesc = marked(displayInfo.info.mdDesc, { sanitize: true });
+    if (curDisplayInfo.isLoaded) {
+      const mdDesc = marked(curDisplayInfo.info.mdDesc, { sanitize: true });
       // mdDesc = katex.renderToString(mdDesc);
-      const ci = displayInfo.info.cogInfo;
+      const ci = curDisplayInfo.info.cogInfo;
       const ciKeys = Object.keys(ci);
 
       let descText = '';
-      if (displayInfo.info.desc) {
+      if (curDisplayInfo.info.desc) {
         descText = (
           <p>
             <strong>Description:</strong>
-            {displayInfo.info.desc}
+            {curDisplayInfo.info.desc}
           </p>
         );
       }
 
       let panelUnitText = '';
-      if (displayInfo.info.panelUnitDesc) {
+      if (curDisplayInfo.info.panelUnitDesc) {
         panelUnitText = (
           <p>
             Each panel of this display represents a
-            {displayInfo.info.panelUnitDesc}
+            {curDisplayInfo.info.panelUnitDesc}
           </p>
         );
       }
@@ -112,18 +112,18 @@ class DisplayInfo extends React.Component {
             <div className={classes.modalContainer}>
               <p>
                 <strong>Dispay name:</strong>
-                {displayInfo.info.name}
+                {curDisplayInfo.info.name}
               </p>
               {descText}
               <p>
                 <strong>Last updated</strong>
                 :
-                {displayInfo.info.updated}
+                {curDisplayInfo.info.updated}
               </p>
               <p>
                 <strong>Number of panels</strong>
                 :
-                {displayInfo.info.n}
+                {curDisplayInfo.info.n}
               </p>
               {panelUnitText}
               <div
@@ -190,7 +190,7 @@ DisplayInfo.propTypes = {
   classes: PropTypes.object.isRequired,
   singleDisplay: PropTypes.bool.isRequired,
   // selectedDisplay: PropTypes.object.isRequired,
-  displayInfo: PropTypes.object.isRequired,
+  curDisplayInfo: PropTypes.object.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   active: PropTypes.bool.isRequired
@@ -235,8 +235,8 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, displayInfoSelector, fullscreenSelector,
-  (selectedDisplay, displayInfo, fullscreen) => ({
+  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector,
+  (selectedDisplay, curDisplayInfo, fullscreen) => ({
     styles: {
       button: {
         left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
@@ -246,7 +246,7 @@ const styleSelector = createSelector(
       }
     },
     // selectedDisplay,
-    displayInfo,
+    curDisplayInfo,
     fullscreen,
     active: selectedDisplay.name !== ''
   })
