@@ -300,8 +300,8 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
         dObjJson.name,
         (x, width, height, post, key) => {
           const el = document.getElementById(`widget_outer_${key}`);
-
-          if (post && el) {
+          const child = document.getElementById(`widget_${key}`)
+          if (post && el && child === null) {
             // need to create a child div that is not bound to react
             const dv = document.createElement('div');
             dv.style.width = `${width}px`;
