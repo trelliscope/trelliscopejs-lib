@@ -92,6 +92,7 @@ const Content = ({
       relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height)
         .reduce((a, b) => a + b);
       keyExtra = `${keyExtra}_${relDispNames}_${relDispSum}_${labels.length}`;
+      keyExtra += `_${contentStyle.height}`;
     }
 
     ret = (
