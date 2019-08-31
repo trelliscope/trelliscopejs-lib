@@ -1,23 +1,43 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const glob = require('glob');
+const replaceInFiles = require('replace-in-files');
+
+// we need to do this in order to get url-loader to properly recognize fonts
+replaceInFiles({
+  files: 'build/static/css/*.css',
+  from: /\/static/g,
+  to: '\.\.'
+})
+  .then(({ changedFiles, countOfMatchesByPaths }) => {
+    console.log('Modified files:', changedFiles);
+    console.log('Count of matches by paths:', countOfMatchesByPaths);
+  })
+  .catch(error => {
+    console.error('Error occurred:', error);
+  });
 
 module.exports = {
   entry: {
-    'bundle.js': glob.sync('build/static/?(js|css|media)/*.?(js|css|eot|woff|ttf|svg|woff2)').map(f => path.resolve(__dirname, f))
+    app: glob.sync('build/static/?(js|css|media)/*.?(js|css|eot|woff|ttf|svg|woff2)')
+      .map((f) => path.resolve(__dirname, f))
   },
-  // entry: {
-  //   'bundle.js': glob.sync('build/static/?(js|css)/main.*.?(js|css)')
-  //     .map(f => path.resolve(__dirname, f)),
-  // },
   output: {
-    filename: 'build/static/js/bundle.min.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'trelliscope.min.js'
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ]
       },
       {
         test: /\.svg(\?[\s\S]+)?$/,
@@ -25,9 +45,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-              mimetype: 'image/svg+xml',
-              name: 'build/static/media/[name].[ext]'
+              limit: 10000000,
+              mimetype: 'image/svg+xml'
             }
           }
         ]
@@ -38,9 +57,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-              mimetype: 'application/font-woff',
-              name: 'build/static/media/[name].[ext]'
+              limit: 10000000,
+              mimetype: 'application/font-woff'
             }
           }
         ]
@@ -51,9 +69,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-              mimetype: 'application/font-woff2',
-              name: 'build/static/media/[name].[ext]'
+              limit: 10000000,
+              mimetype: 'application/font-woff2'
             }
           }
         ]
@@ -64,9 +81,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-              mimetype: 'application/octet-stream',
-              name: 'build/static/media/[name].[ext]'
+              limit: 10000000,
+              mimetype: 'application/octet-stream'
             }
           }
         ]
@@ -77,9 +93,8 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-              mimetype: 'application/vnd.ms-fontobject',
-              name: 'build/static/media/[name].[ext]'
+              limit: 10000000,
+              mimetype: 'application/vnd.ms-fontobject'
             }
           }
         ]
