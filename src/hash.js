@@ -63,7 +63,8 @@ export const hashMiddleware = (store) => (next) => (action) => {
   if (types.indexOf(action.type) > -1) {
     const hash = hashFromState(store.getState());
     if (window.location.hash !== hash) {
-      window.history.pushState(hash, undefined, `#${hash}`);
+      window.location.hash = hash;
+      // window.history.pushState(hash, undefined, `#${hash}`);
       // window.history.pushState(hash, undefined, '');
     }
   }
