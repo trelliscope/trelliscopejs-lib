@@ -74,10 +74,10 @@ const filterState = (state = {}, action) => {
   return state;
 };
 
-const filterView = (state = {}, action) => {
+const filterView = (state = { active: [], inactive: [] }, action) => {
   switch (action.type) {
     case SET_FILTER_VIEW: {
-      const view = { ...state };
+      let view = { ...state };
       if (view.active === undefined) {
         view.active = [];
       }
@@ -102,6 +102,8 @@ const filterView = (state = {}, action) => {
         if (idxI < 0) {
           view.active.push(action.name);
         }
+      } else if (action.which === 'set') {
+        view = action.name;
       }
       return view;
     }

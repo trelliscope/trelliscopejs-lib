@@ -279,7 +279,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
     dispatch(setLayout({ pageNum: 1 }));
-    dispatch(setFilterView({}));
+    dispatch(setFilterView({ active: [], inactive: [] }));
     dispatch(setFilter({}));
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));

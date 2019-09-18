@@ -246,7 +246,6 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
       filter[fltItems.var] = fltState;
     });
   }
-  dispatch(setFilter(filter));
 
   let fv = [];
   if (hashItems.fv) {
@@ -254,18 +253,24 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   }
 
   const ciKeys = Object.keys(dObjJson.cogInfo);
+  const fvObj = {
+    active: [],
+    inactive: []
+  };
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
       if (fv.indexOf(ciKeys[i]) > -1) {
-        dispatch(setFilterView(ciKeys[i], 'add'));
+        fvObj.active.push(ciKeys[i]);
       } else if (dObjJson.state.filter
         && dObjJson.state.filter[ciKeys[i]] !== undefined) {
-        dispatch(setFilterView(ciKeys[i], 'add'));
+        fvObj.active.push(ciKeys[i]);
       } else {
-        dispatch(setFilterView(ciKeys[i], 'remove'));
+        fvObj.inactive.push(ciKeys[i]);
       }
     }
   }
+  dispatch(setFilterView(fvObj, 'set'));
+  dispatch(setFilter(filter));
 };
 
 const setPanelInfo = (dObjJson, cfg, dispatch) => {
@@ -300,7 +305,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
         dObjJson.name,
         (x, width, height, post, key) => {
           const el = document.getElementById(`widget_outer_${key}`);
-          const child = document.getElementById(`widget_${key}`)
+          const child = document.getElementById(`widget_${key}`);
           if (post && el && child === null) {
             // need to create a child div that is not bound to react
             const dv = document.createElement('div');

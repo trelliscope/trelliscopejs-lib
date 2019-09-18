@@ -96,31 +96,40 @@ const crossfilterMiddleware = (store) => (next) => (action) => {
     // so we can create bar charts / histograms
     // also if the filter is hidden and inactive, we should remove the dimension
     // .remove() ?
-    if (action.which === 'add') {
+    if (action.which === 'add' || action.which === 'set') {
       const cf = store.getState()._cogDataMutable.crossfilter;
       const dimensions = store.getState()._cogDataMutable.dimensionRefs;
       const groups = store.getState()._cogDataMutable.groupRefs;
-
       const dispName = store.getState().selectedDisplay.name;
-      const { type } = store.getState()._displayInfo[dispName].info.cogInfo[action.name];
 
-      if (dimensions[action.name] === undefined) {
-        if (type === 'numeric') {
-          dimensions[action.name] = cf.dimension((d) => getNumVal(d, action.name));
-        } else {
-          dimensions[action.name] = cf.dimension((d) => getCatVal(d, action.name));
-        }
+      let names = [];
+      if (action.which === 'add') {
+        names.push(action.name);
+      } else {
+        names = action.name.active;
       }
 
-      if (groups[action.name] === undefined) {
-        if (type === 'numeric') {
-          const ci = store.getState()._displayInfo[dispName].info.cogInfo[action.name];
-          groups[action.name] = dimensions[action.name].group((d) => (Number.isNaN(d)
-            ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
-        } else {
-          groups[action.name] = dimensions[action.name].group();
+      names.forEach((name) => {
+        const { type } = store.getState()._displayInfo[dispName].info.cogInfo[name];
+
+        if (dimensions[name] === undefined) {
+          if (type === 'numeric') {
+            dimensions[name] = cf.dimension((d) => getNumVal(d, name));
+          } else {
+            dimensions[name] = cf.dimension((d) => getCatVal(d, name));
+          }
         }
-      }
+
+        if (groups[name] === undefined) {
+          if (type === 'numeric') {
+            const ci = store.getState()._displayInfo[dispName].info.cogInfo[name];
+            groups[name] = dimensions[name].group((d) => (Number.isNaN(d)
+              ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
+          } else {
+            groups[name] = dimensions[name].group();
+          }
+        }
+      });
     }
   } else if (action.type === 'SET_SORT' && action.sort !== undefined) {
     // if only sorting on one variable, make a sort dimension according to that variable
