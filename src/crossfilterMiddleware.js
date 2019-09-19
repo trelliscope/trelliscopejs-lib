@@ -5,10 +5,11 @@
 // SET_SORT or SET_FILTER operations are performed
 
 const MAX_VALUE = 9007199254740992; // we want NAs to always get pushed back in sort
-const getNumVal = (d, name) => (Number.isNaN(d[name]) ? -MAX_VALUE : d[name]);
+const getNumVal = (d, name) => (Number.isNaN(d[name] || d[name] === undefined)
+  ? -MAX_VALUE : d[name]);
 const getNumValSign = (d, name, dir) => {
   const sign = dir === 'asc' ? 1 : 0;
-  return (Number.isNaN(d[name]) ? sign * MAX_VALUE : d[name]);
+  return (Number.isNaN(d[name]) || d[name] === undefined ? sign * MAX_VALUE : d[name]);
 };
 const getCatVal = (d, name) => (d[name] ? d[name] : 'NA');
 
@@ -58,7 +59,7 @@ const crossfilterMiddleware = (store) => (next) => (action) => {
             // create group that bins into histogram breaks
             const dispName = store.getState().selectedDisplay.name;
             const ci = store.getState()._displayInfo[dispName].info.cogInfo[names[i]];
-            groups[names[i]] = dimensions[names[i]].group((d) => (Number.isNaN(d)
+            groups[names[i]] = dimensions[names[i]].group((d) => (Number.isNaN(d) || d === undefined
               ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
           }
           if (action.filter[names[i]].value === undefined) {
@@ -123,7 +124,7 @@ const crossfilterMiddleware = (store) => (next) => (action) => {
         if (groups[name] === undefined) {
           if (type === 'numeric') {
             const ci = store.getState()._displayInfo[dispName].info.cogInfo[name];
-            groups[name] = dimensions[name].group((d) => (Number.isNaN(d)
+            groups[name] = dimensions[name].group((d) => (Number.isNaN(d) || d === undefined
               ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)]));
           } else {
             groups[name] = dimensions[name].group();

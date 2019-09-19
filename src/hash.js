@@ -3,13 +3,23 @@ import {
   SET_FILTER_VIEW, SB_REV_LOOKUP
 } from './constants';
 
+const layoutLookup = {
+  pg: 'pageNum',
+  arr: 'arrange',
+  nrow: 'nrow',
+  ncol: 'ncol'
+};
+
 // this updates the window hash whenever the state changes
 export const hashFromState = (state) => {
   // display
   const display = state.selectedDisplay;
   // layout
   const { layout } = state;
-  const layoutPars = `nrow=${layout.nrow}&ncol=${layout.ncol}&arr=${layout.arrange}&pg=${layout.pageNum}`;
+  const layoutPars = Object.keys(layoutLookup).map((el) => (
+    layout[layoutLookup[el]] ? `${el}=${layout[layoutLookup[el]]}` : ''
+  )).join('&');
+  // `nrow=${layout.nrow}&ncol=${layout.ncol}&arr=${layout.arrange}&pg=${layout.pageNum}`;
   // labels
   const { labels } = state;
   // sort

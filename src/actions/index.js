@@ -416,6 +416,8 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
 export const fetchDisplayList = (
   config = 'config.jsonp', id = '', singlePageApp = false
 ) => (dispatch) => {
+  const { hash } = window.location;
+
   const selfContained = !(typeof config === 'string' || config instanceof String);
 
   if (!selfContained) {
@@ -450,7 +452,6 @@ export const fetchDisplayList = (
         dispatch(receiveDisplayList(json));
         // check to see if a display is specified already in the URL
         // and load it if it is
-        const { hash } = window.location;
         const hashItems = {};
         hash.replace('#', '').split('&').forEach((d) => {
           const tuple = d.split('=');

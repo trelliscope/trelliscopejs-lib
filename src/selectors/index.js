@@ -32,7 +32,7 @@ export const cogDataSelector = (state) => state._cogDataMutable;
 export const panelRenderersSelector = (state) => state.panelRenderers;
 export const localPanelsSelector = (state) => state._localPanels;
 
-export const pageNumSelector = (state) => state.layout.pageNum;
+export const pageNumSelector = (state) => (state.layout.pageNum ? state.layout.pageNum : -1);
 export const nPerPageSelector = (state) => state.layout.nrow * state.layout.ncol;
 
 export const filterSelector = (state) => state.filter;

@@ -250,8 +250,10 @@ const trelliscopeApp = (id, config, options) => {
 window.trelliscopeApp = trelliscopeApp;
 
 // trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
+// trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
+trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
 
-trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
+// trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
 // trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
 // trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
 // trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
