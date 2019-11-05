@@ -233,6 +233,13 @@ const stateSelector = createSelector(
       wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
     }
 
+    // if related displays are being used, panel area is full height/width
+    if (rdp.length > 0) {
+      newH = ch - hExtra;
+      newW = cw - wExtra;
+      wOffset = 0;
+    }
+
     const panelData = localPanels;
 
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
