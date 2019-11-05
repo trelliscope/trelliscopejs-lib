@@ -465,7 +465,7 @@ export const fetchDisplayList = (
             dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
             dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
           }
-        } else if (singlePageApp) {
+        } else if (singlePageApp && json.length > 1) {
           dispatch(setDialogOpen(true));
           dispatch(setDispSelectDialogOpen(true));
         }
