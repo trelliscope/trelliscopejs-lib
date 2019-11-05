@@ -119,6 +119,7 @@ class Panel extends React.Component {
           });
         }
       } else {
+        alert('122')
         panelRenderer.fn(panels[name].panelData, width,
           height, true, `${panelKey}_${name}`);
       }
@@ -142,8 +143,10 @@ class Panel extends React.Component {
       if (nprops.panelInterface.type === 'image') {
         const panelRenderer = nprops.panelRenderers[name];
         const newPanels = { ...panels };
-        newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
-          nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);
+        if (nprops.relDispPositions.length === 0) {
+          newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
+            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);  
+        }
         this.setState({
           panels: newPanels
         });

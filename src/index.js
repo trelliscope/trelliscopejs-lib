@@ -253,8 +253,6 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
 trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
-// http://localhost:3001/_test/error2/config.jsonp?__loadTrscopeConfig__07ed5efb=jsonp_2dtp66n37f05x6d
-// http://localhost:3001/_test/terra/config.jsonp?__loadTrscopeConfig__d4116f83=jsonp_pzr90a665coymyk
 
 // trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
 // trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
