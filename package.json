@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.3.1",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.2",
@@ -26,7 +26,7 @@
     "react-jss": "^10.0.0",
     "react-redux": "^7.1.1",
     "react-rnd": "^10.1.1",
-    "react-scripts": "3.2.0",
+    "react-scripts": "3.1.1",
     "react-swipeable": "^5.4.0",
     "react-tooltip": "^3.11.1",
     "react-virtualized": "^9.21.1",
