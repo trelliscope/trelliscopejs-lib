@@ -119,7 +119,6 @@ class Panel extends React.Component {
           });
         }
       } else {
-        alert('122')
         panelRenderer.fn(panels[name].panelData, width,
           height, true, `${panelKey}_${name}`);
       }
