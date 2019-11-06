@@ -416,7 +416,8 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
 export const fetchDisplayList = (
   config = 'config.jsonp', id = '', singlePageApp = false
 ) => (dispatch) => {
-  const { hash } = window.location;
+  // don't read from the hash if not in single-page-app mode
+  const hash = singlePageApp ? window.location.hash : '';
 
   const selfContained = !(typeof config === 'string' || config instanceof String);
 

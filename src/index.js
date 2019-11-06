@@ -147,7 +147,9 @@ const trelliscopeApp = (id, config, options) => {
     middlewares.push(callbackMiddleware);
   }
 
-  middlewares.push(hashMiddleware);
+  if (singlePageApp) {
+    middlewares.push(hashMiddleware);
+  }
 
   const store = createStore(
     reducers,
