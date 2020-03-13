@@ -144,7 +144,7 @@ class Panel extends React.Component {
         const newPanels = { ...panels };
         if (nprops.relDispPositions.length === 0) {
           newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
-            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);  
+            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);
         }
         this.setState({
           panels: newPanels
