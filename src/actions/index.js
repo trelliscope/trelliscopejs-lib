@@ -1,6 +1,6 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
-import * as crossfilter from 'crossfilter2';
+import crossfilter from 'crossfilter2';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
 import {
