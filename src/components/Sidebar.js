@@ -80,7 +80,7 @@ const staticStyles = {
     height: '100%',
     boxSizing: 'border-box',
     borderRight: '1px solid',
-    borderColor: uiConsts.sidebar.borderColor,
+    borderColor: `${uiConsts.sidebar.borderColor} !important`,
     background: '#fff',
     zIndex: 999,
     overflow: 'hidden'
