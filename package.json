@@ -2,6 +2,7 @@
   "name": "trelliscopejs-lib",
   "version": "0.3.2",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
@@ -26,7 +27,7 @@
     "react-jss": "^10.0.4",
     "react-redux": "^7.2.0",
     "react-rnd": "^10.1.6",
-    "react-scripts": "3.4.0",
+    "react-scripts": "3.1.1",
     "react-swipeable": "^5.5.1",
     "react-tooltip": "^4.1.2",
     "react-virtualized": "^9.21.2",
@@ -63,8 +64,8 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "glob": "^7.1.6",
     "replace-in-files": "^2.0.3",
-    "source-map-explorer": "^2.3.1",
-    "uglifyjs-webpack-plugin": "^2.2.0",
+    "source-map-explorer": "^2.4.0",
+    "terser-webpack-plugin": "^2.3.5",
     "webpack-cli": "^3.3.11"
   }
 }
