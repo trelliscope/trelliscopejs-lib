@@ -2,7 +2,6 @@
   "name": "trelliscopejs-lib",
   "version": "0.3.2",
   "private": true,
-  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
@@ -16,6 +15,7 @@
     "d3-scale": "^3.2.1",
     "d3-selection": "^1.4.1",
     "dompurify": "^2.0.8",
+    "fingerprintjs2": "^2.1.0",
     "lodash.intersection": "^4.4.0",
     "lodash.omit": "^4.5.0",
     "marked": "^0.8.0",

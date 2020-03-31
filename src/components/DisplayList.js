@@ -86,7 +86,7 @@ const DisplayList = ({
               }}
               title={(
                 <div className={classes.gridTitle}>
-                  {di[i].name}
+                  {di[i].name.replace(/_/g, ' ')}
                 </div>
               )}
               subtitle={(

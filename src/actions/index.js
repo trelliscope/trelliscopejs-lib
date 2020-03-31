@@ -94,6 +94,11 @@ export const setSelectedRelDisps = (arr) => ({
   val: arr
 });
 
+// export const setSelectedView = (val) => ({
+//   type: SET_SELECTED_VIEW,
+//   val
+// });
+
 export const addRelDisp = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'add',
@@ -162,9 +167,12 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   // on either display or cog data or can't be set until this data is loaded
 
   // sidebar
+  let sb = dObjJson.state.sidebar;
   if (hashItems.sidebar) {
-    const sb = SB_LOOKUP[parseInt(hashItems.sidebar, 10)];
-    dispatch(setActiveSidebar(sb));
+    sb = parseInt(hashItems.sidebar, 10);
+  }
+  if (sb && sb >= 0) {
+    dispatch(setActiveSidebar(SB_LOOKUP[sb]));
   }
 
   // layout
@@ -449,7 +457,27 @@ export const fetchDisplayList = (
       cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
       dispatch(receiveConfig(cfg));
 
+      if (cfg.require_token === true) {
+        const id1 = `${(window.devicePixelRatio || '')}${navigator.userAgent.replace(/\D+/g, '')}`;
+        const id2 = `${navigator.language.length || ''}${(window.screen.colorDepth || '')}`;
+        const id3 = `${(new Date()).getTimezoneOffset()}${(navigator.platform.length || '')}`;
+        const id4 = `${(window.screen.height || '')}${(window.screen.width || '')}${(window.screen.pixelDepth || '')}`;
+        const id5 = `${(new Date()).toLocaleDateString().replace(/\D+/g, '')}`;
+        const token = `${id1}${id2}${id3}${id4}${id5}`;
+        // console.log(token);
+        // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
+        if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
+          dispatch(setErrorMessage('Visualization could not be loaded because it is not embedded in a properly authenticated website.'));
+          return;
+        }
+      }
+
       window[dlCallback] = (json) => {
+        json.sort((a, b) => {
+          const v1 = a.order === undefined ? 1 : a.order;
+          const v2 = b.order === undefined ? 1 : b.order;
+          return (v1 > v2 ? 1 : -1);
+        });
         dispatch(receiveDisplayList(json));
         // check to see if a display is specified already in the URL
         // and load it if it is

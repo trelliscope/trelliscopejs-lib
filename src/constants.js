@@ -27,14 +27,18 @@ export const RECEIVE_CONFIG = 'RECEIVE_CONFIG';
 export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS';
 export const SET_SELECTED_RELDISPS = 'SET_SELECTED_RELDISPS';
 export const SET_REL_DISP_POSITIONS = 'SET_REL_DISP_POSITIONS';
+// export const SET_SELECTED_VIEW = 'SET_SELECTED_VIEW';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';
 export const SB_PANEL_SORT = 'Sort Panels';
 export const SB_PANEL_LABELS = 'Show/Hide Labels';
+export const SB_VIEWS = 'Views';
 export const SB_CONFIG = 'Configuration';
 
-export const SB_LOOKUP = [SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS];
+export const SB_LOOKUP = [
+  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS
+];
 export const SB_REV_LOOKUP = {};
 SB_LOOKUP.forEach((d, i) => { SB_REV_LOOKUP[d] = i; });
-SB_REV_LOOKUP[''] = '';
+SB_REV_LOOKUP[''] = -1;

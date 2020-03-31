@@ -7,8 +7,8 @@ const replaceInFiles = require('replace-in-files');
 replaceInFiles({
   files: 'build/static/css/*.css',
   from: /\/static/g,
-  to: ''
-  // to: '\.\.'
+  // to: ''
+  to: '\.\.'
 })
   .then(({ changedFiles, countOfMatchesByPaths }) => {
     console.log('Modified files:', changedFiles);
