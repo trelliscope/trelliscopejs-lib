@@ -25,7 +25,7 @@ const SidebarLabels = ({
     }));
 
     content = (
-      <div style={{ height, overflowY: 'auto' }}>
+      <div style={{ height, overflowY: 'auto', overflowX: 'hidden' }}>
         <List style={{ padding: 0 }}>
           {tableData.map((value) => (
             <ListItem
