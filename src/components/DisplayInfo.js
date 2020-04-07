@@ -16,6 +16,12 @@ import {
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
+const moptions = {
+  passoverHTML: false,
+  passoverAttribute: 'passover',
+  stripPassoverAttribute: true
+};
+
 class DisplayInfo extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +78,7 @@ class DisplayInfo extends React.Component {
 
     let dialogContent = '';
     if (curDisplayInfo.isLoaded) {
-      const mdDesc = marked(curDisplayInfo.info.mdDesc, { sanitize: true });
+      const mdDesc = marked(curDisplayInfo.info.mdDesc, moptions);
       // mdDesc = katex.renderToString(mdDesc);
       const ci = curDisplayInfo.info.cogInfo;
       const ciKeys = Object.keys(ci);
@@ -81,7 +87,7 @@ class DisplayInfo extends React.Component {
       if (curDisplayInfo.info.desc) {
         descText = (
           <p>
-            <strong>Description:</strong>
+            <strong>Description: </strong>
             {curDisplayInfo.info.desc}
           </p>
         );
@@ -106,25 +112,24 @@ class DisplayInfo extends React.Component {
           aria-labelledby="dialog-info-title"
           onBackdropClick={this.handleClose}
           disableEscapeKeyDown
+          maxWidth="md"
         >
           <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
           <DialogContent>
             <div className={classes.modalContainer}>
               <p>
-                <strong>Dispay name:</strong>
+                <strong>Dispay name: </strong>
                 {curDisplayInfo.info.name}
               </p>
               {descText}
               <p>
-                <strong>Last updated</strong>
-                :
+                <strong>Last updated: </strong>
                 {curDisplayInfo.info.updated}
               </p>
-              <p>
-                <strong>Number of panels</strong>
-                :
+              {/* <p>
+                <strong>Number of panels: </strong>
                 {curDisplayInfo.info.n}
-              </p>
+              </p> */}
               {panelUnitText}
               <div
                 // we can dangerously set because the HTML is generated from marked()
@@ -141,8 +146,7 @@ class DisplayInfo extends React.Component {
               <ul>
                 {ciKeys.map((d) => (
                   <li key={ci[d].name}>
-                    <strong>{ci[d].name}</strong>
-                    :
+                    <strong>{`${ci[d].name}: `}</strong>
                     {ci[d].desc}
                   </li>
                 ))}
