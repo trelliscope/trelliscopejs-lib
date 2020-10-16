@@ -339,6 +339,20 @@ class Panel extends React.Component {
                       </a>
                     </div>
                   );
+                } else if (d.type === 'href_hash') {
+                  labelDiv = (
+                    <div className={classes.labelInner} style={styles.labelInner}>
+                      <a
+                        style={{ ...styles.labelSpan, textDecoration: 'none' }}
+                        href="#open_in_same_window"
+                        onClick={() => {
+                          window.location.href = d.value; window.location.reload();
+                        }}
+                      >
+                        <i className="icon-open" style={styles.linkIcon} />
+                      </a>
+                    </div>
+                  );
                 } else {
                   labelDiv = (
                     <div
