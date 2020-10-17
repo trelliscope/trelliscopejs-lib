@@ -4,6 +4,9 @@ import injectSheet from 'react-jss';
 import classNames from 'classnames';
 // import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
@@ -26,7 +29,8 @@ class Panel extends React.Component {
 
     const initialState = {
       panels: {},
-      hover: ''
+      hover: '',
+      inputChangeCounter: 0 // to trigger state change if user inputs are updated
     };
 
     names.forEach((name) => {
@@ -212,9 +216,9 @@ class Panel extends React.Component {
   render() {
     const {
       classes, dims, rowIndex, iColIndex, labels, labelArr,
-      removeLabel, curDisplayInfo, relDispPositions
+      removeLabel, curDisplayInfo, relDispPositions, panelKey
     } = this.props;
-    const { panels, hover } = this.state;
+    const { panels, hover, inputChangeCounter } = this.state;
 
     const { name } = curDisplayInfo.info;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
@@ -292,6 +296,11 @@ class Panel extends React.Component {
       linkIcon: {
         textDecoration: 'none',
         fontSize: dims.fontSize - 2
+      },
+      radioDiv: {
+        transform: `scale(${dims.labelHeight / 29})`,
+        transformOrigin: 'left top',
+        marginTop: -4
       }
     };
 
@@ -351,6 +360,40 @@ class Panel extends React.Component {
                       >
                         <i className="icon-open" style={styles.linkIcon} />
                       </a>
+                    </div>
+                  );
+                } else if (d.type === 'input_radio') {
+                  const lsKey = `${curDisplayInfo.info.group}__${curDisplayInfo.info.name}__${panelKey}__${d.name}`;
+                  const opts = curDisplayInfo.info.cogInfo[labels[2].name].options;
+                  labelDiv = (
+                    <div
+                      className={classes.labelInner}
+                      style={styles.labelInner}
+                      title={d.value}
+                    >
+                      <div style={styles.radioDiv}>
+                        <RadioGroup
+                          aria-label={d.name}
+                          name={d.name}
+                          value={localStorage.getItem(lsKey) || ''}
+                          // onChange={(event) => {
+                          onClick={(event) => {
+                            if (event.target.value) {
+                              if (localStorage.getItem(lsKey) === event.target.value) {
+                                localStorage.removeItem(lsKey);
+                              } else {
+                                localStorage.setItem(lsKey, event.target.value);
+                              }
+                              this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                            }
+                          }}
+                          row
+                        >
+                          {opts.map((a) => (
+                            <FormControlLabel value={a} control={<Radio disableRipple size="small" />} label={a} />
+                          ))}
+                        </RadioGroup>
+                      </div>
                     </div>
                   );
                 } else {
