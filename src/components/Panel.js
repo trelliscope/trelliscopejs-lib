@@ -384,6 +384,7 @@ class Panel extends React.Component {
                               } else {
                                 localStorage.setItem(lsKey, event.target.value);
                               }
+                              document.activeElement.blur();
                               this.setState({ inputChangeCounter: inputChangeCounter + 1 });
                             }
                           }}
