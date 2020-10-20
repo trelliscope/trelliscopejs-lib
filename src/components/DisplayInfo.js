@@ -261,5 +261,5 @@ const mapStateToProps = (state) => (
 );
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps
 )(injectSheet(staticStyles)(DisplayInfo));

@@ -363,8 +363,8 @@ class Panel extends React.Component {
                     </div>
                   );
                 } else if (d.type === 'input_radio') {
-                  const lsKey = `${curDisplayInfo.info.group}__${curDisplayInfo.info.name}__${panelKey}__${d.name}`;
-                  const opts = curDisplayInfo.info.cogInfo[labels[2].name].options;
+                  const lsKey = `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${d.name}`;
+                  const opts = curDisplayInfo.info.cogInfo[d.name].options;
                   labelDiv = (
                     <div
                       className={classes.labelInner}

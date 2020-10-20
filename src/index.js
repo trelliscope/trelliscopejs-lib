@@ -264,7 +264,6 @@ trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: tru
 // trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
 // trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp', { logger: true });
 
-
 // https://toddmotto.com/react-create-class-versus-component/
 // http://stackoverflow.com/questions/35073669/window-resize-react-redux
 // hover scroll: http://jsfiddle.net/r36cuuvr/
