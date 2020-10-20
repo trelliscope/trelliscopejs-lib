@@ -375,6 +375,7 @@ class Panel extends React.Component {
                         <RadioGroup
                           aria-label={d.name}
                           name={d.name}
+                          classes={{ root: classes.formRow }}
                           value={localStorage.getItem(lsKey) || ''}
                           // onChange={(event) => {
                           onClick={(event) => {
@@ -391,7 +392,7 @@ class Panel extends React.Component {
                           row
                         >
                           {opts.map((a) => (
-                            <FormControlLabel value={a} control={<Radio disableRipple size="small" />} label={a} />
+                            <FormControlLabel key={a} value={a} control={<Radio disableRipple size="small" />} label={a} />
                           ))}
                         </RadioGroup>
                       </div>
@@ -562,6 +563,9 @@ const staticStyles = {
     padding: 0,
     margin: 0,
     opacity: 0.5
+  },
+  formRow: {
+    flexWrap: 'unset'
   }
 };
 
