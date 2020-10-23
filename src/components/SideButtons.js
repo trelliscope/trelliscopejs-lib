@@ -46,7 +46,7 @@ class SideButtons extends React.Component {
   componentDidMount() {
     const { fullscreen, active } = this.props;
     if (fullscreen) {
-      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
+      Mousetrap.bind(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
       if (active !== '') {
         Mousetrap.bindGlobal('esc', this.handleKey);
       }
@@ -55,7 +55,7 @@ class SideButtons extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
-      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
+      Mousetrap.bind(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
       if (nextProps.active !== '') {
         Mousetrap.bindGlobal('esc', this.handleKey);
       }

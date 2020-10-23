@@ -1,4 +1,3 @@
-
 // even though it isn't a good thing to do in redux, we want
 // crossfilter to remain mutable so we will use a custom
 // middleware to mutate the crossfilter dimensions whenever

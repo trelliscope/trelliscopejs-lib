@@ -7,6 +7,9 @@ import Delay from 'react-delay';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Popover from '@material-ui/core/Popover';
+import EditIcon from '@material-ui/icons/Edit';
+import TextField from '@material-ui/core/TextField';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
@@ -19,6 +22,8 @@ class Panel extends React.Component {
   constructor(props) {
     super(props);
 
+    this.myRef = React.createRef();
+
     this.isSelfContained = props.panelData !== undefined
       && props.cfg.display_base === '__self__';
 
@@ -30,6 +35,7 @@ class Panel extends React.Component {
     const initialState = {
       panels: {},
       hover: '',
+      textInputOpen: '',
       inputChangeCounter: 0 // to trigger state change if user inputs are updated
     };
 
@@ -64,7 +70,6 @@ class Panel extends React.Component {
 
   componentDidMount() {
     // async stuff
-
     const { panels } = this.state;
     // const loaded = Object.keys(panels).every((k) => panels[k].loaded);
     const {
@@ -209,6 +214,10 @@ class Panel extends React.Component {
     }
   }
 
+  setTextInputOpen(val) {
+    this.setState({ textInputOpen: val });
+  }
+
   handleHover(val) {
     this.setState({ hover: val });
   }
@@ -218,7 +227,9 @@ class Panel extends React.Component {
       classes, dims, rowIndex, iColIndex, labels, labelArr,
       removeLabel, curDisplayInfo, relDispPositions, panelKey
     } = this.props;
-    const { panels, hover, inputChangeCounter } = this.state;
+    const {
+      panels, hover, inputChangeCounter, textInputOpen
+    } = this.state;
 
     const { name } = curDisplayInfo.info;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
@@ -317,7 +328,7 @@ class Panel extends React.Component {
             </Delay>
           )}
         </div>
-        <div>
+        <div ref={this.myRef}>
           <table className={classes.labelTable} style={styles.labelTable}>
             <tbody>
               {labels.map((d, i) => {
@@ -396,6 +407,83 @@ class Panel extends React.Component {
                           ))}
                         </RadioGroup>
                       </div>
+                    </div>
+                  );
+                } else if (d.type === 'input_text') {
+                  const lsKey = `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${d.name}`;
+                  const divRef = React.createRef();
+                  const editInputButton = (
+                    <button
+                      type="button"
+                      className={classes.editButton}
+                      style={({
+                        ...styles.labelClose
+                        // ...({ right: dims.fontSize + 4 })
+                        // ...(localStorage.getItem(lsKey) === undefined && { display: 'none' })
+                      })}
+                      onClick={() => this.setTextInputOpen(d.name)}
+                    >
+                      <EditIcon style={{ fontSize: dims.fontSize }} />
+                    </button>
+                  );
+                  labelDiv = (
+                    <div
+                      className={classes.labelInner}
+                      style={({
+                        ...styles.labelInner,
+                        ...({ display: 'flex', paddingRight: dims.fontSize + 4 })
+                      })}
+                      title={d.value}
+                      ref={divRef}
+                    >
+                      <div
+                        className={classes.labelP}
+                        style={{ fontSize: dims.fontSize }}
+                        onClick={() => this.setTextInputOpen(d.name)}
+                        role="button"
+                        onKeyDown={() => {}}
+                        tabIndex="-1"
+                      >
+                        {localStorage.getItem(lsKey) || ''}
+                      </div>
+                      <div>{editInputButton}</div>
+                      <Popover
+                        open={textInputOpen === d.name}
+                        anchorEl={this.myRef.current}
+                        // anchorReference="anchorPosition"
+                        // anchorPosition={{ top: 200, left: 400 }}
+                        onClose={() => this.setTextInputOpen('')}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center'
+                        }}
+                      >
+                        <div style={{ padding: 7 }}>
+                          <TextField
+                            id="outlined-multiline-static"
+                            label={`${d.name} ('esc' when complete)`}
+                            onChange={(e) => {
+                              if (e.target.value === '' && localStorage.getItem(lsKey)) {
+                                localStorage.removeItem(lsKey);
+                              } else {
+                                localStorage.setItem(lsKey, e.target.value);
+                              }
+                              this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                            }}
+                            value={localStorage.getItem(lsKey)}
+                            style={{ minWidth: 300 }}
+                            size="small"
+                            autoFocus
+                            multiline
+                            rows={curDisplayInfo.info.cogInfo[d.name].height}
+                            variant="outlined"
+                          />
+                        </div>
+                      </Popover>
                     </div>
                   );
                 } else {
@@ -557,6 +645,15 @@ const staticStyles = {
     position: 'absolute',
     top: 0,
     right: 2,
+    cursor: 'pointer',
+    border: 'none',
+    background: 'none',
+    padding: 0,
+    margin: 0,
+    opacity: 0.5
+  },
+  editButton: {
+    // float: 'right',
     cursor: 'pointer',
     border: 'none',
     background: 'none',

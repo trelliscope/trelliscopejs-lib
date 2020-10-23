@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -81,3 +82,9 @@ export default function ExportInputDialog({ open, handleClose, displayInfo }) {
     </div>
   );
 }
+
+ExportInputDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  displayInfo: PropTypes.object.isRequired
+};
