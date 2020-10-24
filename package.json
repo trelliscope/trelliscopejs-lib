@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -39,9 +39,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build:react": "react-scripts build",
-    "build:bundle": "webpack --config webpack.config.js",
-    "build": "yarn build:react && yarn build:bundle",
+    "build": "react-scripts build",
+    "deploy": "./deploy.sh",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
