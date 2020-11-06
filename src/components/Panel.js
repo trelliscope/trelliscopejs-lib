@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
-// import ReactTooltip from 'react-tooltip';
+import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -514,9 +514,19 @@ class Panel extends React.Component {
                       className={`${classes.labelCell} ${classes.labelNameCell}`}
                       style={styles.labelNameCell}
                     >
-                      <div className={classes.labelInner} style={styles.labelInner}>
+                      <div
+                        className={classes.labelInner}
+                        style={styles.labelInner}
+                        data-tip
+                        data-for={`tooltip_${panelKey}_${d.name}`}
+                      >
                         <span style={styles.labelSpan}>{d.name}</span>
                       </div>
+                      {d.name !== d.desc && (
+                        <ReactTooltip place="right" id={`tooltip_${panelKey}_${d.name}`}>
+                          <span>{d.desc}</span>
+                        </ReactTooltip>
+                      )}
                     </td>
                     <td
                       className={classes.labelCell}
@@ -627,7 +637,8 @@ const staticStyles = {
     overflow: 'hidden',
     whiteSpace: 'normal',
     verticalAlign: 'middle',
-    position: 'relative'
+    position: 'relative',
+    cursor: 'default'
     // overflow: 'hidden',
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis'
