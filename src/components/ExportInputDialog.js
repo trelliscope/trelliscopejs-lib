@@ -123,9 +123,20 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
 
   const header = ['panelKey'];
   header.push(cols);
-  const rows = Object.keys(data).map((kk) => {
+  header.push(...['fullname', 'email', 'jobtitle', 'otherinfo']);
+  const rows = Object.keys(data).map((kk, ii) => {
     const row = [kk];
     row.push(cols.map((cc) => (data[kk][cc] ? data[kk][cc] : '')));
+    if (ii === 0) {
+      row.push(...[
+        localStorage.getItem('__trelliscope_username'),
+        localStorage.getItem('__trelliscope_email'),
+        localStorage.getItem('__trelliscope_jobtitle'),
+        localStorage.getItem('__trelliscope_otherinfo')
+      ]);
+    } else {
+      row.push(...['', '', '', '']);
+    }
     return row;
   });
 
