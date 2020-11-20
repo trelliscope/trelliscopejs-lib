@@ -129,10 +129,10 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     row.push(cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : '')));
     if (ii === 0) {
       row.push(...[
-        `"${localStorage.getItem('__trelliscope_username').replace(/"/g, '""')}"`,
-        `"${localStorage.getItem('__trelliscope_email').replace(/"/g, '""')}"`,
-        `"${localStorage.getItem('__trelliscope_jobtitle').replace(/"/g, '""')}"`,
-        `"${localStorage.getItem('__trelliscope_otherinfo').replace(/"/g, '""')}"`,
+        `"${(localStorage.getItem('__trelliscope_username') || '').replace(/"/g, '""')}"`,
+        `"${(localStorage.getItem('__trelliscope_email') || '').replace(/"/g, '""')}"`,
+        `"${(localStorage.getItem('__trelliscope_jobtitle') || '').replace(/"/g, '""')}"`,
+        `"${(localStorage.getItem('__trelliscope_otherinfo') || '').replace(/"/g, '""')}"`,
         (new Date()).toISOString()
       ]);
     } else {
