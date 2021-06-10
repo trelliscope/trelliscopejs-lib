@@ -1,8 +1,10 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
 import crossfilter from 'crossfilter2';
+import ReactGA from 'react-ga';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
+import { getInputsAPI } from '../inputUtils';
 import {
   SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
   SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
@@ -11,7 +13,7 @@ import {
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
   SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS,
-  SET_REL_DISP_POSITIONS
+  SET_DISPINFO_DIALOG_OPEN, SET_REL_DISP_POSITIONS
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -52,6 +54,10 @@ export const setDialogOpen = (isOpen) => ({
 
 export const setDispSelectDialogOpen = (isOpen) => ({
   type: SET_DISPSELECT_DIALOG_OPEN, isOpen
+});
+
+export const setDispInfoDialogOpen = (isOpen) => ({
+  type: SET_DISPINFO_DIALOG_OPEN, isOpen
 });
 
 export const setLayout = (layout) => ({
@@ -367,6 +373,10 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
 
     setPanelInfo(dObjJson, cfg, dispatch);
 
+    if (dObjJson.showMdDesc) {
+      dispatch(setDispInfoDialogOpen(true));
+    }
+
     // set cog data state as pending while it loads
     if (getCogData) {
       dispatch(receiveCogData(iface));
@@ -396,6 +406,11 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
         }).on('error', (err) => dispatch(setErrorMessage(
           `Couldn't load display list: ${err.target.responseURL}`
         )));
+      }
+
+      // if storing inputs through an API, set localStorage accordingly
+      if (dObjJson.has_inputs && dObjJson.input_type === 'API') {
+        getInputsAPI(dObjJson);
       }
     }
   };
@@ -456,6 +471,11 @@ export const fetchDisplayList = (
       // eslint-disable-next-line no-param-reassign
       cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
       dispatch(receiveConfig(cfg));
+
+      // register with google analytics if specified
+      if (cfg.ga_id) {
+        ReactGA.initialize(cfg.ga_id);
+      }
 
       if (cfg.require_token === true) {
         const id1 = `${(window.devicePixelRatio || '')}${navigator.userAgent.replace(/\D+/g, '')}`;

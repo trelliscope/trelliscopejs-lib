@@ -24,6 +24,7 @@
     "react": "^16.14.0",
     "react-delay": "^0.1.0",
     "react-dom": "^16.14.0",
+    "react-ga": "^3.3.0",
     "react-jss": "^10.4.0",
     "react-redux": "^7.2.1",
     "react-rnd": "^10.2.3",
@@ -55,7 +56,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "proxy": "http://localhost:8080",
   "devDependencies": {
+    "cors-anywhere": "^0.4.4",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",

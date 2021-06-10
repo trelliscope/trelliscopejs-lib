@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,11 +9,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 // import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import SaveIcon from '@material-ui/icons/Save';
+import { cogDataSelector } from '../selectors';
+
+// cogDataSelector
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +65,16 @@ export default function ExportInputDialog({ open, handleClose, displayInfo }) {
   const [email, setEmail] = React.useState(localStorage.getItem('__trelliscope_email') || '');
   const [jobTitle, setJobTitle] = React.useState(localStorage.getItem('__trelliscope_jobtitle') || '');
   const [otherInfo, setOtherInfo] = React.useState(localStorage.getItem('__trelliscope_otherinfo') || '');
-  const [tabValue, setTabValue] = React.useState(fullName === '' ? 0 : 1);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [csvDownloaded, setCsvDownloaded] = React.useState(false);
+
+  const cogData = useSelector(cogDataSelector);
+  if (!cogData.isLoaded || cogData.crossfilter === undefined) {
+    return '';
+  }
+  if (!(displayInfo.has_inputs && displayInfo.input_type === 'localStorage')) {
+    return '';
+  }
 
   const sendMail = () => {
     const subject = 'Trelliscope input';
@@ -74,6 +88,8 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     mail.href = `mailto:${displayInfo.input_email}?subject=${subject}&body=${body}`;
     mail.click();
   };
+
+  const steps = ['User info', 'Download csv', 'Compose email'];
 
   // localStorage.getItem('common_:_gapminder_life_expectancy_fullname')
 
@@ -99,12 +115,17 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     localStorage.setItem('__trelliscope_otherinfo', event.target.value);
   };
 
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const keyMatch = new RegExp(`^${id}`);
 
+  const ccols = displayInfo.input_csv_vars || [];
   const data = {};
   const cols = [];
   Object.keys(localStorage).forEach((key) => {
@@ -122,13 +143,21 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
   });
 
   const header = ['panelKey'];
-  header.push(cols);
+  // array of panel keys so we can search to get columns we need if ccols defined
+  const cd = cogData.crossfilter.all();
+  const pk = cd.map((dd) => dd.panelKey);
+  header.push(...ccols, ...cols);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
-    const row = [kk];
-    row.push(cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : '')));
+    const rcdat = [];
+    if (ccols.length > 0) {
+      const idx = pk.indexOf(kk);
+      rcdat.push(ccols.map((cc) => cd[idx][cc]));
+    }
+    const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : ''));
+    const extra = [];
     if (ii === 0) {
-      row.push(...[
+      extra.push(...[
         `"${(localStorage.getItem('__trelliscope_username') || '').replace(/"/g, '""')}"`,
         `"${(localStorage.getItem('__trelliscope_email') || '').replace(/"/g, '""')}"`,
         `"${(localStorage.getItem('__trelliscope_jobtitle') || '').replace(/"/g, '""')}"`,
@@ -136,9 +165,9 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
         (new Date()).toISOString()
       ]);
     } else {
-      row.push(...['', '', '', '', '']);
+      extra.push(...['', '', '', '', '']);
     }
-    return row;
+    return [kk, ...rcdat, rdat, extra];
   });
 
   const downloadCsv = () => {
@@ -148,6 +177,7 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     downloadLink.download = `${displayInfo.name}_${(new Date()).toISOString().split('T')[0]}.csv`;
     downloadLink.href = window.URL.createObjectURL(csvFile);
     downloadLink.click();
+    setCsvDownloaded(true);
   };
 
   const clearInputs = () => {
@@ -162,116 +192,155 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => { setActiveStep(0); handleClose(); }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">Export user inputs</DialogTitle>
-        <Tabs
-          value={tabValue}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={handleTabChange}
-          aria-label="disabled tabs example"
-        >
-          <Tab label="User Information" />
-          <Tab label="Export" disabled={fullName === ''} />
-        </Tabs>
-        <TabPanel value={tabValue} index={0}>
-          <DialogContent>
-            <DialogContentText>
-              Before exporting the inputs you have provided, we would like to gather some
-              information about you. Please provide at least your full name, after which you
-              will be able to click the &apos;Export&apos; tab in this window to proceed with
-              the export.
-            </DialogContentText>
+        <DialogContent dividers>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === 0 && (
             <div>
-              <TextField
-                style={{ marginBottom: 15 }}
-                required
-                label="Full Name"
-                fullWidth
-                value={fullName}
-                onChange={handleNameChange}
-              />
-              <TextField
-                style={{ marginBottom: 15 }}
-                label="Email Address"
-                fullWidth
-                value={email}
-                onChange={handleEmailChange}
-              />
-              <TextField
-                style={{ marginBottom: 15 }}
-                label="Job Title"
-                fullWidth
-                value={jobTitle}
-                onChange={handleJobTitleChange}
-              />
-              <TextField
-                style={{ marginBottom: 15 }}
-                multiline
-                rows={3}
-                label="Additional Contact Information"
-                fullWidth
-                value={otherInfo}
-                onChange={handleOtherInfoChange}
-              />
+              <DialogContentText>
+                Before exporting the inputs you have provided, we would like to gather some
+                information about you. Please provide at least your full name, after which you
+                will be able to click the &apos;Export&apos; tab in this window to proceed with
+                the export.
+              </DialogContentText>
+              <div>
+                <TextField
+                  style={{ marginBottom: 15 }}
+                  required
+                  label="Full Name"
+                  fullWidth
+                  value={fullName}
+                  onChange={handleNameChange}
+                />
+                <TextField
+                  style={{ marginBottom: 15 }}
+                  label="Email Address"
+                  fullWidth
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                <TextField
+                  style={{ marginBottom: 15 }}
+                  label="Job Title"
+                  fullWidth
+                  value={jobTitle}
+                  onChange={handleJobTitleChange}
+                />
+                <TextField
+                  style={{ marginBottom: 15 }}
+                  multiline
+                  rows={3}
+                  label="Additional Contact Information"
+                  fullWidth
+                  value={otherInfo}
+                  onChange={handleOtherInfoChange}
+                />
+              </div>
             </div>
-          </DialogContent>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <p style={{ marginTop: 0 }}>
-                {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
-              </p>
-              <p>
-                {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
-              </p>
-
-            </DialogContentText>
-            <div style={{ textAlign: 'center' }}>
+          )}
+          {activeStep === 1 && (
+            <div>
+              <DialogContentText id="alert-dialog-description">
+                <p style={{ marginTop: 0 }}>
+                  {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
+                </p>
+                <p>
+                  {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
+                </p>
+              </DialogContentText>
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  endIcon={<SaveIcon />}
+                  onClick={downloadCsv}
+                >
+                  Download CSV
+                </Button>
+              </div>
+              {/* <FormControl fullWidth>
+                <TextField
+                  inputProps={{ style: {
+                    fontFamily: 'courier, monospace', fontSize: 14, color: '#777'
+                  } }}
+                  id="outlined-multiline-static"
+                  label="csv"
+                  multiline
+                  disabled
+                  rows={Math.min(rows.length + 1, 10)}
+                  defaultValue={[header.join(','), ...rows.map((d) => d.join(','))].join('\n')}
+                  variant="outlined"
+                />
+              </FormControl> */}
+            </div>
+          )}
+          {activeStep === 2 && (
+            <div>
+              <DialogContentText id="alert-dialog-description">
+                <p style={{ marginTop: 0 }}>
+                  {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
+                </p>
+                <p>
+                  <strong>
+                    Note: You must manually attach the csv file downloaded in
+                    the previous step to this email prior to sending.
+                  </strong>
+                </p>
+              </DialogContentText>
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  endIcon={<SendIcon />}
+                  onClick={sendMail}
+                >
+                  Compose Email
+                </Button>
+              </div>
+            </div>
+          )}
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className={classes.button}
+            >
+              Back
+            </Button>
+            {activeStep <= 1 && (
               <Button
+                disabled={(activeStep === 0 && fullName === '') || (activeStep === 1 && !csvDownloaded)}
                 variant="contained"
                 color="primary"
+                onClick={handleNext}
                 className={classes.button}
-                endIcon={<SendIcon />}
-                onClick={sendMail}
               >
-                Compose Email
+                Next
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                endIcon={<SaveIcon />}
-                onClick={downloadCsv}
-              >
-                Download CSV
-              </Button>
-            </div>
-            {/* <FormControl fullWidth>
-              <TextField
-                inputProps={{ style: {
-                  fontFamily: 'courier, monospace', fontSize: 14, color: '#777'
-                } }}
-                id="outlined-multiline-static"
-                label="csv"
-                multiline
-                disabled
-                rows={Math.min(rows.length + 1, 10)}
-                defaultValue={[header.join(','), ...rows.map((d) => d.join(','))].join('\n')}
-                variant="outlined"
-              />
-            </FormControl> */}
-          </DialogContent>
-        </TabPanel>
+            )}
+          </div>
+        </DialogContent>
         <DialogActions>
           <Button onClick={clearInputs}>
             Clear all inputs
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button
+            onClick={() => { setActiveStep(0); handleClose(); }}
+            color="primary"
+            autoFocus
+          >
             Close
           </Button>
         </DialogActions>

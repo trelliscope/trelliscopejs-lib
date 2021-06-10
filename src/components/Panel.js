@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
+import { getLocalStorageKey, setPanelCogInput } from '../inputUtils';
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -36,6 +37,7 @@ class Panel extends React.Component {
       panels: {},
       hover: '',
       textInputOpen: '',
+      textInputValue: '',
       inputChangeCounter: 0 // to trigger state change if user inputs are updated
     };
 
@@ -374,7 +376,7 @@ class Panel extends React.Component {
                     </div>
                   );
                 } else if (d.type === 'input_radio') {
-                  const lsKey = `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${d.name}`;
+                  const lsKey = getLocalStorageKey(curDisplayInfo.info, panelKey, d.name);
                   const opts = curDisplayInfo.info.cogInfo[d.name].options;
                   labelDiv = (
                     <div
@@ -391,11 +393,7 @@ class Panel extends React.Component {
                           // onChange={(event) => {
                           onClick={(event) => {
                             if (event.target.value) {
-                              if (localStorage.getItem(lsKey) === event.target.value) {
-                                localStorage.removeItem(lsKey);
-                              } else {
-                                localStorage.setItem(lsKey, event.target.value);
-                              }
+                              setPanelCogInput(curDisplayInfo.info, event.target.value, panelKey, d.name);
                               document.activeElement.blur();
                               this.setState({ inputChangeCounter: inputChangeCounter + 1 });
                             }
@@ -452,7 +450,14 @@ class Panel extends React.Component {
                         anchorEl={this.myRef.current}
                         // anchorReference="anchorPosition"
                         // anchorPosition={{ top: 200, left: 400 }}
-                        onClose={() => this.setTextInputOpen('')}
+                        onClose={() => {
+                          this.setTextInputOpen('');
+                          setPanelCogInput(curDisplayInfo.info, this.state.textInputValue, panelKey, d.name);
+                          this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                        }}
+                        onEnter={() => {
+                          this.setState({ textInputValue: localStorage.getItem(lsKey) || ''});
+                        }}
                         anchorOrigin={{
                           vertical: 'top',
                           horizontal: 'center'
@@ -467,14 +472,9 @@ class Panel extends React.Component {
                             id="outlined-multiline-static"
                             label={`${d.name} ('esc' when complete)`}
                             onChange={(e) => {
-                              if (e.target.value === '' && localStorage.getItem(lsKey)) {
-                                localStorage.removeItem(lsKey);
-                              } else {
-                                localStorage.setItem(lsKey, e.target.value);
-                              }
-                              this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                              this.setState({ textInputValue: e.target.value });
                             }}
-                            value={localStorage.getItem(lsKey)}
+                            value={this.state.textInputValue}
                             style={{ minWidth: 300 }}
                             size="small"
                             autoFocus

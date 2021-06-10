@@ -88,7 +88,7 @@ const Footer = ({
         {spacerContent}
         {filterContent}
       </div>
-      {displayInfo.has_inputs && (
+      {displayInfo.has_inputs && displayInfo.input_type === 'localStorage' && (
         <div className={classes.buttonDiv}>
           <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
             Export Inputs
