@@ -251,7 +251,9 @@ const trelliscopeApp = (id, config, options) => {
 
 window.trelliscopeApp = trelliscopeApp;
 
-trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
+// trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
+trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
+
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
 // trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
