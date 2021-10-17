@@ -20,7 +20,7 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
       panel_id: panelKey,
       cog_id: cogId,
       // if it's the current value, it means the user has deselected all radio values
-      val: localStorage.getItem(lsKey) === value ? '' : value
+      val: encodeURIComponent(localStorage.getItem(lsKey) === value ? '' : value)
     };
     const qry = Object.entries(queryObj).map((e) => e.join('=')).join('&');
     fetch(`${di.input_api.set}?${qry}`, di.input_api.setRequestOptions)
