@@ -261,7 +261,7 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
     });
   }
 
-  let fv = [];
+  let fv = dObjJson.state.fv ? dObjJson.state.fv : [];
   if (hashItems.fv) {
     fv = hashItems.fv.split(',');
   }
