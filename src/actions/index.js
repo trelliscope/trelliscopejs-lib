@@ -271,9 +271,10 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
     active: [],
     inactive: []
   };
+
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
-      if (fv.indexOf(ciKeys[i]) > -1) {
+      if (fv.includes(ciKeys[i])) {
         fvObj.active.push(ciKeys[i]);
       } else if (dObjJson.state.filter
         && dObjJson.state.filter[ciKeys[i]] !== undefined) {

@@ -252,7 +252,11 @@ const trelliscopeApp = (id, config, options) => {
 window.trelliscopeApp = trelliscopeApp;
 
 // trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
-trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
+// trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
+// trelliscopeApp('02a6e2cc', '_test/univar/config.jsonp', { logger: true });
+// trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
+// trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
+trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
 
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });

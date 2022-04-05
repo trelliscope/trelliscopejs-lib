@@ -42,6 +42,7 @@ const Content = ({
     for (let i = 0; i < ccd.length; i += 1) {
       panelKeys.push(ccd[i].panelKey);
       const curLabels = [];
+
       for (let j = 0; j < labels.length; j += 1) {
         curLabels.push({
           name: labels[j],
