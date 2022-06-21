@@ -111,18 +111,19 @@ class DisplayInfo extends React.Component {
           <DialogContent>
             <div className={classes.modalContainer}>
               <p>
-                <strong>Dispay name:</strong>
+                <strong>Display name</strong>
+                : 
                 {curDisplayInfo.info.name}
               </p>
               {descText}
               <p>
                 <strong>Last updated</strong>
-                :
+                : 
                 {curDisplayInfo.info.updated}
               </p>
               <p>
                 <strong>Number of panels</strong>
-                :
+                : 
                 {curDisplayInfo.info.n}
               </p>
               {panelUnitText}
@@ -142,7 +143,7 @@ class DisplayInfo extends React.Component {
                 {ciKeys.map((d) => (
                   <li key={ci[d].name}>
                     <strong>{ci[d].name}</strong>
-                    :
+                    : 
                     {ci[d].desc}
                   </li>
                 ))}
