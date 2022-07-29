@@ -180,14 +180,16 @@ const staticStyles = {
     bottom: '50%',
     borderRadius: '2px 2px 0px 0px',
     borderWidth: '1px 1px 0px',
-    background: 'rgba(0, 0, 0, 0.0980392)'
+    background: 'rgba(0, 0, 0, 0.0980392)',
+    height: 12
   },
   b2: {
     top: '50%',
     bottom: 2,
     borderRadius: '0px 0px 2px 2px',
     borderWidth: '0px 1px 1px',
-    background: 'rgba(0, 0, 0, 0.0980392)'
+    background: 'rgba(0, 0, 0, 0.0980392)',
+    height: 12
   },
   i: {
     position: 'absolute',

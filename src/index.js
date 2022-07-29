@@ -251,18 +251,24 @@ const trelliscopeApp = (id, config, options) => {
 
 window.trelliscopeApp = trelliscopeApp;
 
-// trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
+// trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
+// trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
+// trelliscopeApp('02a6e2cc', '_test/univar/config.jsonp', { logger: true });
+// trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
+// trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
+trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
-trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
+// trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
 // trelliscopeApp('8653174a', '_test/adversarial/config.jsonp', { logger: true });
+// trelliscopeApp('mydisplay', '_test/who2/config.jsonp', { logger: true });
 
 // trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
 // trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
 // trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
 // trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
 // trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp', { logger: true });
-
 
 // https://toddmotto.com/react-create-class-versus-component/
 // http://stackoverflow.com/questions/35073669/window-resize-react-redux

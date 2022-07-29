@@ -28,6 +28,7 @@ const SidebarFilter = ({
 }) => {
   let content = <div />;
   const displId = curDisplayInfo.info.name;
+  const { cogGroups } = curDisplayInfo.info;
   if (filter && filterView.active && colSplit) {
     let col1filters = [];
     let col2filters = [];
@@ -160,26 +161,45 @@ const SidebarFilter = ({
           className={classes.notUsedContainer}
           style={styles.notUsedContainer}
         >
-          {inames.map((d) => (
-            <span key={`${d}_${displId}`}>
-              <span data-tip data-for={`tooltip_${d}`}>
-                <button
-                  type="button"
-                  className={classNames({
-                    [classes.variable]: true,
-                    [classes.variableActive]: filter[d] && filter[d].value !== undefined
-                  })}
-                  key={`${d}_${displId}_button_${inames.length}`}
-                  onClick={() => handleViewChange(d, 'add', labels)}
-                >
-                  {d}
-                </button>
-              </span>
-              <ReactTooltip place="right" id={`tooltip_${d}`}>
-                <span>{cogInfo[d].desc}</span>
-              </ReactTooltip>
-            </span>
-          ))}
+          {Object.keys(cogGroups).map((grp) => {
+            const curItems = intersection(inames, cogGroups[grp]);
+            if (curItems.length === 0) {
+              return null;
+            }
+            return (
+              <React.Fragment key={grp}>
+                {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                  <div className={classes.cogGroupHeader}>
+                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  </div>
+                )}
+                {cogGroups[grp].sort().map((d) => (
+                  <React.Fragment key={`${d}_${displId}`}>
+                    {inames.includes(d) && (
+                      <span>
+                        <span data-tip data-for={`tooltip_${d}`}>
+                          <button
+                            type="button"
+                            className={classNames({
+                              [classes.variable]: true,
+                              [classes.variableActive]: filter[d] && filter[d].value !== undefined
+                            })}
+                            key={`${d}_${displId}_button_${inames.length}`}
+                            onClick={() => handleViewChange(d, 'add', labels)}
+                          >
+                            {d}
+                          </button>
+                        </span>
+                        <ReactTooltip place="right" id={`tooltip_${d}`}>
+                          <span>{cogInfo[d].desc}</span>
+                        </ReactTooltip>
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </React.Fragment>
+            );
+          })}
         </div>
       );
     }
@@ -216,7 +236,8 @@ SidebarFilter.propTypes = {
 
 // ------ static styles ------
 
-// the 'notUsed' and 'variable' styles are reused with SidebarSort - should share
+// the 'notUsed', 'variable', 'cogGroupHeader', 'cogGroupText'
+// styles are reused with SidebarSort - should share
 const staticStyles = {
   col1: {
     position: 'absolute',
@@ -250,13 +271,13 @@ const staticStyles = {
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
     borderRadius: 10,
     paddingTop: '2px !important',
-    paddingBottom: '2px !important',
-    paddingLeft: '10px !important',
-    paddingRight: '10px !important',
+    paddingBottom: '3px !important',
+    paddingLeft: '7px !important',
+    paddingRight: '7px !important',
     border: 0,
     background: 'white',
     margin: '3px !important',
-    fontSize: 13,
+    fontSize: 12,
     cursor: 'pointer',
     color: 'black',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
@@ -341,6 +362,21 @@ const staticStyles = {
   },
   headerReset: {
     right: 18
+  },
+  cogGroupHeader: {
+    background: '#90CAF9',
+    marginLeft: -10,
+    marginRight: -10,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    color: 'white',
+    fontWeight: 400,
+    fontSize: 14
+  },
+  cogGroupText: {
+    paddingLeft: 20
   }
 };
 

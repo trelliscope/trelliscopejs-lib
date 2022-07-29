@@ -77,7 +77,7 @@ class Header extends React.Component {
         displayName = `${selectedDisplay.group} /
           ${selectedDisplay.name}`;
       } else {
-        displayName = selectedDisplay.name;
+        displayName = selectedDisplay.name.replace(/_/g, ' ');
       }
       if (!singleDisplay) {
         iconStyle = { color: '#aaa', fontSize: 12 };
@@ -86,7 +86,7 @@ class Header extends React.Component {
       pagination = <Pagination />;
     } else if (singleDisplay) {
       displayName = 'loading...';
-    } else if (!dialogOpen) {
+    } else if (!dialogOpen && displayList.list.length > 0) {
       displayName = (
         <span>
           <i className="icon-arrow-left" />

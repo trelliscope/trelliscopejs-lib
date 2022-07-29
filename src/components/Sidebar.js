@@ -7,12 +7,13 @@ import SidebarLabels from './SidebarLabels';
 import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
+import SidebarViews from './SidebarViews';
 import {
   contentHeightSelector, sidebarActiveSelector, filterColSplitSelector
 } from '../selectors/ui';
 import { displayLoadedSelector } from '../selectors';
 import {
-  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG
+  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS
 } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -47,6 +48,9 @@ const Sidebar = ({
       case SB_PANEL_LABELS:
         content = <div><SidebarLabels /></div>;
         break;
+      case SB_VIEWS:
+        content = <div><SidebarViews /></div>;
+        break;
       default:
         content = '';
     }
@@ -80,7 +84,7 @@ const staticStyles = {
     height: '100%',
     boxSizing: 'border-box',
     borderRight: '1px solid',
-    borderColor: uiConsts.sidebar.borderColor,
+    borderColor: `${uiConsts.sidebar.borderColor} !important`,
     background: '#fff',
     zIndex: 999,
     overflow: 'hidden'

@@ -24,6 +24,9 @@ export const filterColSplitSelector = createSelector(
     }
     const heights = keys.map((d) => {
       // 53 is the extra height of header/footer
+      if (!cdi.isLoaded) {
+        return 0;
+      }
       if (cdi.info.cogInfo[d].type === 'factor') {
         // if the number of levels is small then only make the box that tall
         const nlvl = cdi.info.cogInfo[d].levels ? cdi.info.cogInfo[d].levels.length : 1000;

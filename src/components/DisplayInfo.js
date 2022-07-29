@@ -12,16 +12,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import {
-  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector
+  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector,
+  dispInfoDialogSelector
 } from '../selectors';
+import { setDispInfoDialogOpen } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
-class DisplayInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
+const moptions = {
+  passoverHTML: false,
+  passoverAttribute: 'passover',
+  stripPassoverAttribute: true
+};
 
+class DisplayInfo extends React.Component {
   componentDidMount() {
     const { active, fullscreen } = this.props;
     if (active && fullscreen) {
@@ -45,23 +48,23 @@ class DisplayInfo extends React.Component {
   }
 
   handleOpen = () => {
-    const { setDialogOpen } = this.props;
+    const { setDialogOpen, setThisDialogOpen } = this.props;
     setDialogOpen(true);
-    this.setState({ open: true });
+    setThisDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
   }
 
   handleKey = () => {
-    const { setDialogOpen } = this.props;
+    const { setDialogOpen, setThisDialogOpen } = this.props;
     setDialogOpen(true);
-    this.setState({ open: true });
+    setThisDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
   }
 
   handleClose = () => {
-    const { setDialogOpen } = this.props;
+    const { setDialogOpen, setThisDialogOpen } = this.props;
     setDialogOpen(false);
-    this.setState({ open: false });
+    setThisDialogOpen(false);
     Mousetrap.unbind('esc');
   }
 
@@ -72,66 +75,90 @@ class DisplayInfo extends React.Component {
 
     let dialogContent = '';
     if (curDisplayInfo.isLoaded) {
-      const mdDesc = marked(curDisplayInfo.info.mdDesc, { sanitize: true });
+      const mdDesc = marked(curDisplayInfo.info.mdDesc, moptions);
       // mdDesc = katex.renderToString(mdDesc);
-      const ci = curDisplayInfo.info.cogInfo;
-      const ciKeys = Object.keys(ci);
+      // const ci = curDisplayInfo.info.cogInfo;
+      // const ciKeys = Object.keys(ci);
 
       let descText = '';
       if (curDisplayInfo.info.desc) {
         descText = (
-          <p>
-            <strong>Description:</strong>
-            {curDisplayInfo.info.desc}
-          </p>
+          <em>{curDisplayInfo.info.desc}</em>
         );
       }
 
-      let panelUnitText = '';
-      if (curDisplayInfo.info.panelUnitDesc) {
-        panelUnitText = (
+      // let panelUnitText = '';
+      // if (curDisplayInfo.info.panelUnitDesc) {
+      //   panelUnitText = (
+      //     <p>
+      //       Each panel of this display represents a
+      //       {curDisplayInfo.info.panelUnitDesc}
+      //     </p>
+      //   );
+      // }
+      const defaultContent = (
+        <div>
+          <div style={{ background: '#ededed', padding: 5 }}>
+            <strong>{curDisplayInfo.info.name}</strong>
+            <br />
+            {descText}
+          </div>
           <p>
-            Each panel of this display represents a
-            {curDisplayInfo.info.panelUnitDesc}
+            {`This visualization contains ${curDisplayInfo.info.n} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "cognostics", that you can use to sort and filter the panels that you want to view.`}
           </p>
-        );
-      }
+          <p>
+            To learn more about how to interact with this visualization, click the &ldquo;?&rdquo;
+            icon in the top right corner of the display.
+          </p>
+          {curDisplayInfo.info.has_inputs && (
+            <p>
+              There are user input variables available in this visualization with which you can
+              provide feedback for any panel. These will show up as either a radio button or free
+              text entry in the labels that show up under each panel. As you enter inputs, these
+              are saved in your local web browser&apos;s storage and will be remembered in
+              subsequent views of the display.
+            </p>
+          )}
+          {curDisplayInfo.info.has_inputs && (
+            <p>
+              If you&apos;d like to pull the data that you have input, you can click the
+              &ldquo;Export Inputs&rdquo; button at the bottom left corner of the display and
+              follow the prompts in the dialog box that pops up.
+            </p>
+          )}
+          {/* <p>
+            <strong>Last updated: </strong>
+            {curDisplayInfo.info.updated}
+          </p> */}
+          {/* <p>
+            <strong>Number of panels: </strong>
+            {curDisplayInfo.info.n}
+          </p>
+          {panelUnitText} */}
+        </div>
+      );
 
-      const { open } = this.state;
+      const { isOpen } = this.props;
       dialogContent = (
         <Dialog
-          open={open}
+          open={isOpen}
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-info-title"
           onBackdropClick={this.handleClose}
           disableEscapeKeyDown
+          maxWidth="md"
         >
-          <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
+          <DialogTitle id="dialog-info-title">{`${curDisplayInfo.info.mdTitle}`}</DialogTitle>
           <DialogContent>
             <div className={classes.modalContainer}>
-              <p>
-                <strong>Dispay name:</strong>
-                {curDisplayInfo.info.name}
-              </p>
-              {descText}
-              <p>
-                <strong>Last updated</strong>
-                :
-                {curDisplayInfo.info.updated}
-              </p>
-              <p>
-                <strong>Number of panels</strong>
-                :
-                {curDisplayInfo.info.n}
-              </p>
-              {panelUnitText}
+              {defaultContent}
               <div
                 // we can dangerously set because the HTML is generated from marked()
                 // with pure markdown (sanitize = TRUE so user HTML is not supported)
                 dangerouslySetInnerHTML={{ __html: mdDesc }} // eslint-disable-line react/no-danger
               />
-              <h3>Cognostics</h3>
+              {/* <h3>Cognostics</h3>
               <p>
                 To help navigate the panels, the following cognostics have been computed.
                 For information on how to use these metrics to interact with the panels,
@@ -141,12 +168,11 @@ class DisplayInfo extends React.Component {
               <ul>
                 {ciKeys.map((d) => (
                   <li key={ci[d].name}>
-                    <strong>{ci[d].name}</strong>
-                    :
+                    <strong>{`${ci[d].name}: `}</strong>
                     {ci[d].desc}
                   </li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           </DialogContent>
           <DialogActions>
@@ -191,7 +217,9 @@ DisplayInfo.propTypes = {
   singleDisplay: PropTypes.bool.isRequired,
   // selectedDisplay: PropTypes.object.isRequired,
   curDisplayInfo: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
+  setThisDialogOpen: PropTypes.func.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   active: PropTypes.bool.isRequired
 };
@@ -235,8 +263,8 @@ const staticStyles = {
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector,
-  (selectedDisplay, curDisplayInfo, fullscreen) => ({
+  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector, dispInfoDialogSelector,
+  (selectedDisplay, curDisplayInfo, fullscreen, isOpen) => ({
     styles: {
       button: {
         left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
@@ -248,7 +276,8 @@ const styleSelector = createSelector(
     // selectedDisplay,
     curDisplayInfo,
     fullscreen,
-    active: selectedDisplay.name !== ''
+    active: selectedDisplay.name !== '',
+    isOpen
   })
 );
 
@@ -256,6 +285,13 @@ const mapStateToProps = (state) => (
   styleSelector(state)
 );
 
+const mapDispatchToProps = (dispatch) => ({
+  setThisDialogOpen: (isOpen) => {
+    dispatch(setDispInfoDialogOpen(isOpen));
+  }
+});
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(injectSheet(staticStyles)(DisplayInfo));

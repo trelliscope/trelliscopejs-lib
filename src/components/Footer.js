@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import { createSelector } from 'reselect';
 import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
@@ -9,11 +10,22 @@ import {
   curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector
 } from '../selectors';
 import FooterChip from './FooterChip';
+import ExportInputDialog from './ExportInputDialog';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Footer = ({
-  classes, style, sort, filter, nFilt, nPanels
+  classes, style, sort, filter, nFilt, nPanels, displayInfo
 }) => {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   let sortContent = '';
   let filterContent = '';
   let spacerContent = '';
@@ -76,6 +88,14 @@ const Footer = ({
         {spacerContent}
         {filterContent}
       </div>
+      {displayInfo.has_inputs && displayInfo.input_type === 'localStorage' && (
+        <div className={classes.buttonDiv}>
+          <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
+            Export Inputs
+          </Button>
+        </div>
+      )}
+      <ExportInputDialog open={dialogOpen} handleClose={handleClose} displayInfo={displayInfo} />
     </div>
   );
 };
@@ -86,13 +106,13 @@ Footer.propTypes = {
   sort: PropTypes.array.isRequired,
   filter: PropTypes.array.isRequired,
   nFilt: PropTypes.number.isRequired,
+  displayInfo: PropTypes.object.isRequired,
   nPanels: PropTypes.number
 };
 
 Footer.defaultProps = () => ({
   nPanels: 0
 });
-
 
 // ------ static styles ------
 
@@ -137,6 +157,11 @@ const staticStyles = {
   },
   filterText: {
     marginLeft: 5
+  },
+  buttonDiv: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0
   }
 };
 
@@ -216,6 +241,7 @@ const stateSelector = createSelector(
     sort,
     filter,
     nFilt,
+    displayInfo: cdi.info,
     nPanels: cdi.info.n
   })
 );

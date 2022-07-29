@@ -4,6 +4,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
+import intersection from 'lodash.intersection';
 // import Fab from '@material-ui/core/Button';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +15,10 @@ import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../selecto
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarSort = ({
-  classes, styles, sort, cogDesc, labels, handleChange, addLabel
+  classes, styles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo
 }) => {
   let content = <div />;
+  const { cogGroups } = curDisplayInfo.info;
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
     for (let i = 0; i < sort.length; i += 1) {
@@ -71,28 +73,43 @@ const SidebarSort = ({
             : notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div className={classes.notUsed} style={styles.notUsed}>
-          {notUsed.map((d) => (
-            <span key={`${d}_notused`}>
-              <span data-tip data-for={`tooltip_${d}`}>
-                <button
-                  type="button"
-                  className={classes.variable}
-                  key={`${d}_button`}
-                  onClick={() => {
-                    const sort2 = Object.assign([], sort);
-                    sort2.push({ name: d, dir: 'asc' });
-                    addLabel(d, labels);
-                    handleChange(sort2);
-                  }}
-                >
-                  {d}
-                </button>
-              </span>
-              <ReactTooltip place="right" id={`tooltip_${d}`}>
-                <span>{cogDesc[d]}</span>
-              </ReactTooltip>
-            </span>
-          ))}
+          {Object.keys(cogGroups).map((grp) => {
+            const curItems = intersection(notUsed, cogGroups[grp]);
+            if (curItems.length === 0) {
+              return null;
+            }
+            return (
+              <React.Fragment key={grp}>
+                {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                  <div className={classes.cogGroupHeader}>
+                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  </div>
+                )}
+                {curItems.sort().map((d) => (
+                  <span key={`${d}_notused`}>
+                    <span data-tip data-for={`tooltip_${d}`}>
+                      <button
+                        type="button"
+                        className={classes.variable}
+                        key={`${d}_button`}
+                        onClick={() => {
+                          const sort2 = Object.assign([], sort);
+                          sort2.push({ name: d, dir: 'asc' });
+                          addLabel(d, labels);
+                          handleChange(sort2);
+                        }}
+                      >
+                        {d}
+                      </button>
+                    </span>
+                    <ReactTooltip place="right" id={`tooltip_${d}`}>
+                      <span>{cogDesc[d]}</span>
+                    </ReactTooltip>
+                  </span>
+                ))}
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
     );
@@ -170,11 +187,11 @@ const staticStyles = {
     border: 0,
     background: 'none',
     paddingTop: '2px !important',
-    paddingBottom: '2px !important',
-    paddingLeft: '10px !important',
-    paddingRight: '10px !important',
+    paddingBottom: '3px !important',
+    paddingLeft: '7px !important',
+    paddingRight: '7px !important',
     margin: '3px !important',
-    fontSize: 13,
+    fontSize: 12,
     color: 'black',
     cursor: 'pointer',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
@@ -182,6 +199,21 @@ const staticStyles = {
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
       background: '#ebebeb'
     }
+  },
+  cogGroupHeader: {
+    background: '#90CAF9',
+    marginLeft: -10,
+    marginRight: -10,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    color: 'white',
+    fontWeight: 400,
+    fontSize: 14
+  },
+  cogGroupText: {
+    paddingLeft: 20
   }
 };
 
@@ -200,8 +232,8 @@ const cogDescSelector = createSelector(
 );
 
 const stateSelector = createSelector(
-  sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector,
-  (sort, cogDesc, sh, labels) => {
+  sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector, curDisplayInfoSelector,
+  (sort, cogDesc, sh, labels, cdi) => {
     const activeIsTaller = sort.length * 51 > sh - (2 * 51);
     let activeHeight = 51 * sort.length;
     if (activeIsTaller) {
@@ -219,7 +251,8 @@ const stateSelector = createSelector(
       },
       sort,
       cogDesc,
-      labels
+      labels,
+      curDisplayInfo: cdi
     });
   }
 );

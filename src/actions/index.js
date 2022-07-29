@@ -1,8 +1,10 @@
 import React from 'react';
 import { json as d3json } from 'd3-request';
-import * as crossfilter from 'crossfilter2';
+import crossfilter from 'crossfilter2';
+import ReactGA from 'react-ga';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
+import { getInputsAPI } from '../inputUtils';
 import {
   SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
   SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
@@ -11,7 +13,7 @@ import {
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
   SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS,
-  SET_REL_DISP_POSITIONS
+  SET_DISPINFO_DIALOG_OPEN, SET_REL_DISP_POSITIONS
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -54,6 +56,10 @@ export const setDispSelectDialogOpen = (isOpen) => ({
   type: SET_DISPSELECT_DIALOG_OPEN, isOpen
 });
 
+export const setDispInfoDialogOpen = (isOpen) => ({
+  type: SET_DISPINFO_DIALOG_OPEN, isOpen
+});
+
 export const setLayout = (layout) => ({
   type: SET_LAYOUT, layout
 });
@@ -93,6 +99,11 @@ export const setSelectedRelDisps = (arr) => ({
   which: 'set',
   val: arr
 });
+
+// export const setSelectedView = (val) => ({
+//   type: SET_SELECTED_VIEW,
+//   val
+// });
 
 export const addRelDisp = (i) => ({
   type: SET_SELECTED_RELDISPS,
@@ -162,9 +173,12 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   // on either display or cog data or can't be set until this data is loaded
 
   // sidebar
+  let sb = dObjJson.state.sidebar;
   if (hashItems.sidebar) {
-    const sb = SB_LOOKUP[parseInt(hashItems.sidebar, 10)];
-    dispatch(setActiveSidebar(sb));
+    sb = parseInt(hashItems.sidebar, 10);
+  }
+  if (sb && sb >= 0) {
+    dispatch(setActiveSidebar(SB_LOOKUP[sb]));
   }
 
   // layout
@@ -247,7 +261,7 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
     });
   }
 
-  let fv = [];
+  let fv = dObjJson.state.fv ? dObjJson.state.fv : [];
   if (hashItems.fv) {
     fv = hashItems.fv.split(',');
   }
@@ -257,9 +271,10 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
     active: [],
     inactive: []
   };
+
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
-      if (fv.indexOf(ciKeys[i]) > -1) {
+      if (fv.includes(ciKeys[i])) {
         fvObj.active.push(ciKeys[i]);
       } else if (dObjJson.state.filter
         && dObjJson.state.filter[ciKeys[i]] !== undefined) {
@@ -359,6 +374,10 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
 
     setPanelInfo(dObjJson, cfg, dispatch);
 
+    if (dObjJson.showMdDesc) {
+      dispatch(setDispInfoDialogOpen(true));
+    }
+
     // set cog data state as pending while it loads
     if (getCogData) {
       dispatch(receiveCogData(iface));
@@ -388,6 +407,11 @@ export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = 
         }).on('error', (err) => dispatch(setErrorMessage(
           `Couldn't load display list: ${err.target.responseURL}`
         )));
+      }
+
+      // if storing inputs through an API, set localStorage accordingly
+      if (dObjJson.has_inputs && dObjJson.input_type === 'API') {
+        getInputsAPI(dObjJson);
       }
     }
   };
@@ -449,7 +473,32 @@ export const fetchDisplayList = (
       cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
       dispatch(receiveConfig(cfg));
 
+      // register with google analytics if specified
+      if (cfg.ga_id) {
+        ReactGA.initialize(cfg.ga_id);
+      }
+
+      if (cfg.require_token === true) {
+        const id1 = `${(window.devicePixelRatio || '')}${navigator.userAgent.replace(/\D+/g, '')}`;
+        const id2 = `${navigator.language.length || ''}${(window.screen.colorDepth || '')}`;
+        const id3 = `${(new Date()).getTimezoneOffset()}${(navigator.platform.length || '')}`;
+        const id4 = `${(window.screen.height || '')}${(window.screen.width || '')}${(window.screen.pixelDepth || '')}`;
+        const id5 = `${(new Date()).toLocaleDateString().replace(/\D+/g, '')}`;
+        const token = `${id1}${id2}${id3}${id4}${id5}`;
+        // console.log(token);
+        // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
+        if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
+          dispatch(setErrorMessage('Visualization could not be loaded because it is not embedded in a properly authenticated website.'));
+          return;
+        }
+      }
+
       window[dlCallback] = (json) => {
+        json.sort((a, b) => {
+          const v1 = a.order === undefined ? 1 : a.order;
+          const v2 = b.order === undefined ? 1 : b.order;
+          return (v1 > v2 ? 1 : -1);
+        });
         dispatch(receiveDisplayList(json));
         // check to see if a display is specified already in the URL
         // and load it if it is

@@ -1,12 +1,13 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const glob = require('glob');
+const TerserPlugin = require('terser-webpack-plugin');
 const replaceInFiles = require('replace-in-files');
 
 // we need to do this in order to get url-loader to properly recognize fonts
 replaceInFiles({
   files: 'build/static/css/*.css',
   from: /\/static/g,
+  // to: ''
   to: '\.\.'
 })
   .then(({ changedFiles, countOfMatchesByPaths }) => {
@@ -18,6 +19,7 @@ replaceInFiles({
   });
 
 module.exports = {
+  mode: 'production',
   entry: {
     app: glob.sync('build/static/?(js|css|media)/*.?(js|css|eot|woff|ttf|svg|woff2)')
       .map((f) => path.resolve(__dirname, f))
@@ -25,6 +27,10 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'trelliscope.min.js'
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()]
   },
   module: {
     rules: [
@@ -100,6 +106,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [new UglifyJsPlugin()]
+  }
 };

@@ -49,6 +49,7 @@ export const fullscreenSelector = (state) => state.fullscreen;
 
 export const dialogOpenSelector = (state) => state.dialog;
 export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
+export const dispInfoDialogSelector = (state) => state.dispInfoDialog;
 
 export const aspectSelector = createSelector(
   curDisplayInfoSelector,

@@ -8,10 +8,10 @@ import { setActiveSidebar } from '../actions';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind';
 import SideButton from './SideButton';
 import {
-  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS
+  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS
 } from '../constants';
 import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
-import { dialogOpenSelector, fullscreenSelector } from '../selectors';
+import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const buttons = [
@@ -26,6 +26,9 @@ const buttons = [
   },
   {
     icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's'
+  },
+  {
+    icon: 'icon-views', label: 'Views', title: SB_VIEWS, key: 'v'
   }
   // { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
 ];
@@ -43,7 +46,7 @@ class SideButtons extends React.Component {
   componentDidMount() {
     const { fullscreen, active } = this.props;
     if (fullscreen) {
-      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
+      Mousetrap.bind(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
       if (active !== '') {
         Mousetrap.bindGlobal('esc', this.handleKey);
       }
@@ -52,24 +55,28 @@ class SideButtons extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
-      Mousetrap.bindGlobal(['g', 'l', 'f', 's', 'c', 'enter'], this.handleKey);
+      Mousetrap.bind(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
       if (nextProps.active !== '') {
         Mousetrap.bindGlobal('esc', this.handleKey);
       }
     } else {
-      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
+      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'v', 'esc', 'enter']);
     }
   }
 
   componentWillUnmount() {
     const { fullscreen } = this.props;
     if (fullscreen) {
-      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'esc', 'enter']);
+      Mousetrap.unbind(['g', 'l', 'f', 's', 'c', 'v', 'esc', 'enter']);
     }
   }
 
   handleKey = (e, k) => {
-    const { dialogOpen, setActive } = this.props;
+    const { dialogOpen, setActive, hasViews } = this.props;
+
+    if (k === 'v' && !hasViews) {
+      return;
+    }
 
     if (e.target.nodeName === 'INPUT' || dialogOpen) {
       e.stopPropagation();
@@ -92,22 +99,27 @@ class SideButtons extends React.Component {
 
   render() {
     const {
-      classes, styles, active, setActive
+      classes, styles, active, hasViews, setActive
     } = this.props;
 
     return (
       <div className={classes.sideButtonsContainer} style={styles.sideButtonsContainer}>
         <div className={classes.spacer} />
-        {buttons.map((d) => (
-          <SideButton
-            key={`sidebutton_${d.title}`}
-            isActive={d.title === active}
-            icon={d.icon}
-            title={d.title}
-            label={d.label}
-            onClick={() => setActive(d.title)}
-          />
-        ))}
+        {buttons.map((d) => {
+          if (d.label === 'Views' && !hasViews) {
+            return '';
+          }
+          return (
+            <SideButton
+              key={`sidebutton_${d.title}`}
+              isActive={d.title === active}
+              icon={d.icon}
+              title={d.title}
+              label={d.label}
+              onClick={() => setActive(d.title)}
+            />
+          );
+        })}
       </div>
     );
   }
@@ -117,6 +129,7 @@ SideButtons.propTypes = {
   styles: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   active: PropTypes.string.isRequired,
+  hasViews: PropTypes.bool.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   setActive: PropTypes.func.isRequired
@@ -147,8 +160,8 @@ const staticStyles = {
 
 const stateSelector = createSelector(
   contentHeightSelector, sidebarActiveSelector, dialogOpenSelector,
-  fullscreenSelector,
-  (ch, active, dialogOpen, fullscreen) => ({
+  fullscreenSelector, curDisplayInfoSelector,
+  (ch, active, dialogOpen, fullscreen, cdi) => ({
     styles: {
       sideButtonsContainer: {
         height: ch + uiConsts.header.height
@@ -157,7 +170,8 @@ const stateSelector = createSelector(
     width: uiConsts.sideButtons.width,
     active,
     dialogOpen,
-    fullscreen
+    fullscreen,
+    hasViews: (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false
   })
 );
 

@@ -5,6 +5,7 @@ import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -14,39 +15,50 @@ import { labelsSelector, curDisplayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarLabels = ({
-  height, labels, cogInfo, handleChange
+  classes, height, labels, cogInfo, curDisplayInfo, handleChange
 }) => {
   let content = <div />;
+  const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
-    const tableData = ciKeys.map((d) => ({
-      name: cogInfo[d].name,
-      desc: cogInfo[d].desc
-    }));
-
     content = (
-      <div style={{ height, overflowY: 'auto' }}>
+      <div style={{ height, overflowY: 'auto', overflowX: 'hidden' }}>
         <List style={{ padding: 0 }}>
-          {tableData.map((value) => (
-            <ListItem
-              key={value.name}
-              dense
-              button
-              onClick={() => handleChange(value.name, labels)}
-            >
-              <Checkbox
-                checked={labels.indexOf(value.name) !== -1}
-                style={{ width: 20, height: 20 }}
-                tabIndex={-1}
-                disableRipple
-              />
-              <ListItemText
-                primary={value.name}
-                secondary={value.desc}
-                style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
-              />
-            </ListItem>
-          ))}
+          {Object.keys(cogGroups).map((grp) => {
+            const curItems = cogGroups[grp];
+            if (curItems.length === 0) {
+              return null;
+            }
+            return (
+              <React.Fragment key={grp}>
+                {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                  <ListSubheader className={classes.cogGroupHeader}>
+                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  </ListSubheader>
+                )}
+                {cogGroups[grp].sort().map((d) => (
+                  <ListItem
+                    key={cogInfo[d].name}
+                    dense
+                    button
+                    onClick={() => handleChange(cogInfo[d].name, labels)}
+                  >
+                    <Checkbox
+                      checked={labels.indexOf(cogInfo[d].name) !== -1}
+                      style={{ width: 20, height: 20 }}
+                      tabIndex={-1}
+                      disableRipple
+                    />
+                    <ListItemText
+                      primary={cogInfo[d].name}
+                      secondary={cogInfo[d].desc}
+                      style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                    />
+                  </ListItem>
+                ))}
+              </React.Fragment>
+            );
+          })}
         </List>
       </div>
     );
@@ -68,6 +80,16 @@ const staticStyles = {
   rowDesc: {
     color: '#888',
     fontStyle: 'italic'
+  },
+  cogGroupHeader: {
+    background: '#90CAF9',
+    color: 'white',
+    fontWeight: 400,
+    fontSize: 14,
+    lineHeight: '29px'
+  },
+  cogGroupText: {
+    paddingLeft: 20
   }
 };
 
@@ -79,7 +101,8 @@ const stateSelector = createSelector(
     width: uiConsts.sidebar.width,
     height: ch - uiConsts.sidebar.header.height,
     labels,
-    cogInfo: cdi.info.cogInfo
+    cogInfo: cdi.info.cogInfo,
+    curDisplayInfo: cdi
   })
 );
 

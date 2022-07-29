@@ -2,11 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classNames from 'classnames';
-// import ReactTooltip from 'react-tooltip';
+import ReactTooltip from 'react-tooltip';
 import Delay from 'react-delay';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Popover from '@material-ui/core/Popover';
+import EditIcon from '@material-ui/icons/Edit';
+import TextField from '@material-ui/core/TextField';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { json as d3json } from 'd3-request';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
+import { getLocalStorageKey, setPanelCogInput } from '../inputUtils';
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -15,6 +22,8 @@ const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 class Panel extends React.Component {
   constructor(props) {
     super(props);
+
+    this.myRef = React.createRef();
 
     this.isSelfContained = props.panelData !== undefined
       && props.cfg.display_base === '__self__';
@@ -26,7 +35,10 @@ class Panel extends React.Component {
 
     const initialState = {
       panels: {},
-      hover: ''
+      hover: '',
+      textInputOpen: '',
+      textInputValue: '',
+      inputChangeCounter: 0 // to trigger state change if user inputs are updated
     };
 
     names.forEach((name) => {
@@ -60,7 +72,6 @@ class Panel extends React.Component {
 
   componentDidMount() {
     // async stuff
-
     const { panels } = this.state;
     // const loaded = Object.keys(panels).every((k) => panels[k].loaded);
     const {
@@ -144,7 +155,7 @@ class Panel extends React.Component {
         const newPanels = { ...panels };
         if (nprops.relDispPositions.length === 0) {
           newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
-            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);  
+            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);
         }
         this.setState({
           panels: newPanels
@@ -205,6 +216,10 @@ class Panel extends React.Component {
     }
   }
 
+  setTextInputOpen(val) {
+    this.setState({ textInputOpen: val });
+  }
+
   handleHover(val) {
     this.setState({ hover: val });
   }
@@ -212,9 +227,11 @@ class Panel extends React.Component {
   render() {
     const {
       classes, dims, rowIndex, iColIndex, labels, labelArr,
-      removeLabel, curDisplayInfo, relDispPositions
+      removeLabel, curDisplayInfo, relDispPositions, panelKey
     } = this.props;
-    const { panels, hover } = this.state;
+    const {
+      panels, hover, inputChangeCounter, textInputOpen
+    } = this.state;
 
     const { name } = curDisplayInfo.info;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
@@ -292,6 +309,11 @@ class Panel extends React.Component {
       linkIcon: {
         textDecoration: 'none',
         fontSize: dims.fontSize - 2
+      },
+      radioDiv: {
+        transform: `scale(${dims.labelHeight / 29})`,
+        transformOrigin: 'left top',
+        marginTop: -4
       }
     };
 
@@ -308,7 +330,7 @@ class Panel extends React.Component {
             </Delay>
           )}
         </div>
-        <div>
+        <div ref={this.myRef}>
           <table className={classes.labelTable} style={styles.labelTable}>
             <tbody>
               {labels.map((d, i) => {
@@ -339,6 +361,131 @@ class Panel extends React.Component {
                       </a>
                     </div>
                   );
+                } else if (d.type === 'href_hash') {
+                  labelDiv = (
+                    <div className={classes.labelInner} style={styles.labelInner}>
+                      <a
+                        style={{ ...styles.labelSpan, textDecoration: 'none' }}
+                        href="#open_in_same_window"
+                        onClick={() => {
+                          window.location.href = d.value; window.location.reload();
+                        }}
+                      >
+                        <i className="icon-open" style={styles.linkIcon} />
+                      </a>
+                    </div>
+                  );
+                } else if (d.type === 'input_radio') {
+                  const lsKey = getLocalStorageKey(curDisplayInfo.info, panelKey, d.name);
+                  const opts = curDisplayInfo.info.cogInfo[d.name].options;
+                  labelDiv = (
+                    <div
+                      className={classes.labelInner}
+                      style={styles.labelInner}
+                      title={d.value}
+                    >
+                      <div style={styles.radioDiv}>
+                        <RadioGroup
+                          aria-label={d.name}
+                          name={d.name}
+                          classes={{ root: classes.formRow }}
+                          value={localStorage.getItem(lsKey) || ''}
+                          // onChange={(event) => {
+                          onClick={(event) => {
+                            if (event.target.value) {
+                              setPanelCogInput(curDisplayInfo.info, event.target.value, panelKey, d.name);
+                              document.activeElement.blur();
+                              this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                            }
+                          }}
+                          row
+                        >
+                          {opts.map((a) => (
+                            <FormControlLabel key={a} value={a} control={<Radio disableRipple size="small" />} label={a} />
+                          ))}
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  );
+                } else if (d.type === 'input_text') {
+                  const lsKey = `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${d.name}`;
+                  const divRef = React.createRef();
+                  const editInputButton = (
+                    <button
+                      type="button"
+                      className={classes.editButton}
+                      style={({
+                        ...styles.labelClose
+                        // ...({ right: dims.fontSize + 4 })
+                        // ...(localStorage.getItem(lsKey) === undefined && { display: 'none' })
+                      })}
+                      onClick={() => this.setTextInputOpen(d.name)}
+                    >
+                      <EditIcon style={{ fontSize: dims.fontSize }} />
+                    </button>
+                  );
+                  labelDiv = (
+                    <div
+                      className={classes.labelInner}
+                      style={({
+                        ...styles.labelInner,
+                        ...({ display: 'flex', paddingRight: dims.fontSize + 4 })
+                      })}
+                      title={d.value}
+                      ref={divRef}
+                    >
+                      <div
+                        className={classes.labelP}
+                        style={{ fontSize: dims.fontSize }}
+                        onClick={() => this.setTextInputOpen(d.name)}
+                        role="button"
+                        onKeyDown={() => {}}
+                        tabIndex="-1"
+                      >
+                        {localStorage.getItem(lsKey) || ''}
+                      </div>
+                      <div>{editInputButton}</div>
+                      <Popover
+                        open={textInputOpen === d.name}
+                        anchorEl={this.myRef.current}
+                        // anchorReference="anchorPosition"
+                        // anchorPosition={{ top: 200, left: 400 }}
+                        onClose={() => {
+                          this.setTextInputOpen('');
+                          setPanelCogInput(curDisplayInfo.info, this.state.textInputValue, panelKey, d.name);
+                          this.setState({ inputChangeCounter: inputChangeCounter + 1 });
+                        }}
+                        onEnter={() => {
+                          this.setState({ textInputValue: localStorage.getItem(lsKey) || ''});
+                        }}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center'
+                        }}
+                      >
+                        <div style={{ padding: 7 }}>
+                          <TextField
+                            id="outlined-multiline-static"
+                            label={`${d.name} ('esc' when complete)`}
+                            onChange={(e) => {
+                              this.setState({ textInputValue: e.target.value });
+                            }}
+                            value={this.state.textInputValue}
+                            style={{ minWidth: 300 }}
+                            size="small"
+                            autoFocus
+                            multiline
+                            rows={curDisplayInfo.info.cogInfo[d.name].height}
+                            variant="outlined"
+                          />
+                        </div>
+                      </Popover>
+                    </div>
+                  );
                 } else {
                   labelDiv = (
                     <div
@@ -367,9 +514,19 @@ class Panel extends React.Component {
                       className={`${classes.labelCell} ${classes.labelNameCell}`}
                       style={styles.labelNameCell}
                     >
-                      <div className={classes.labelInner} style={styles.labelInner}>
+                      <div
+                        className={classes.labelInner}
+                        style={styles.labelInner}
+                        data-tip
+                        data-for={`tooltip_${panelKey}_${d.name}`}
+                      >
                         <span style={styles.labelSpan}>{d.name}</span>
                       </div>
+                      {d.name !== d.desc && (
+                        <ReactTooltip place="right" id={`tooltip_${panelKey}_${d.name}`}>
+                          <span>{d.desc}</span>
+                        </ReactTooltip>
+                      )}
                     </td>
                     <td
                       className={classes.labelCell}
@@ -480,7 +637,8 @@ const staticStyles = {
     overflow: 'hidden',
     whiteSpace: 'normal',
     verticalAlign: 'middle',
-    position: 'relative'
+    position: 'relative',
+    cursor: 'default'
     // overflow: 'hidden',
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis'
@@ -504,6 +662,18 @@ const staticStyles = {
     padding: 0,
     margin: 0,
     opacity: 0.5
+  },
+  editButton: {
+    // float: 'right',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'none',
+    padding: 0,
+    margin: 0,
+    opacity: 0.5
+  },
+  formRow: {
+    flexWrap: 'unset'
   }
 };
 

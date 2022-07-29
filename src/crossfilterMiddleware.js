@@ -1,4 +1,3 @@
-
 // even though it isn't a good thing to do in redux, we want
 // crossfilter to remain mutable so we will use a custom
 // middleware to mutate the crossfilter dimensions whenever
@@ -48,6 +47,10 @@ const crossfilterMiddleware = (store) => (next) => (action) => {
       dimensions[action.filter].filter(null); // .remove(), .filterAll() ?
     } else {
       const names = Object.keys(action.filter);
+      if (names.length === 0 && dimensions) {
+        // all filters were reset - remove them all...
+        Object.keys(store.getState().filter.state).forEach((nn) => dimensions[nn].filter(null));
+      }
       for (let i = 0; i < names.length; i += 1) {
         // numeric is always 'range' type
         if (action.filter[names[i]].varType === 'numeric') {

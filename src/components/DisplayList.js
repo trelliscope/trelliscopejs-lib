@@ -41,7 +41,7 @@ const DisplayList = ({
   const displayList = groupKeys.map((k) => (
     <div className={classes.groupContainer} key={k}>
       <GridList
-        cellHeight={200}
+        cellHeight={180}
         cols={3}
         className={classes.gridList}
       >
@@ -86,7 +86,7 @@ const DisplayList = ({
               }}
               title={(
                 <div className={classes.gridTitle}>
-                  {di[i].name}
+                  {di[i].name.replace(/_/g, ' ')}
                 </div>
               )}
               subtitle={(
@@ -103,6 +103,14 @@ const DisplayList = ({
             />
           </GridListTile>
         ))}
+        {cfg.disclaimer ? (
+          <GridListTile cols={cfg.disclaimer.cols}>
+            <div
+              className={classes.disclaimer}
+              dangerouslySetInnerHTML={{__html: cfg.disclaimer.text}}
+            />
+          </GridListTile>
+        ) : ''}
       </GridList>
     </div>
   ));
@@ -160,6 +168,11 @@ const staticStyles = {
     '&checked': {
       color: 'white !important'
     }
+  },
+  disclaimer: {
+    paddingLeft: 10,
+    fontSize: 13,
+    marginTop: -3
   }
 };
 

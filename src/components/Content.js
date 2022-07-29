@@ -42,6 +42,7 @@ const Content = ({
     for (let i = 0; i < ccd.length; i += 1) {
       panelKeys.push(ccd[i].panelKey);
       const curLabels = [];
+
       for (let j = 0; j < labels.length; j += 1) {
         curLabels.push({
           name: labels[j],
@@ -82,6 +83,7 @@ const Content = ({
     // HACK: htmlwidget panels won't resize properly when layout or sidebar is toggled
     // so we need to add this to key to force it to re-draw
     let keyExtra = '';
+    // TODO: see if we can get htmlwidget resize method to work instead
     if (panelInterface.type === 'htmlwidget') {
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
       keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
