@@ -1,17 +1,20 @@
 import { SELECT_DISPLAY, SET_SELECTED_RELDISPS, SET_REL_DISP_POSITIONS } from '../constants';
 
-export const selectedDisplay = (state = {
-  name: '',
-  group: '',
-  desc: ''
-}, action) => {
+export const selectedDisplay = (
+  state = {
+    name: '',
+    group: '',
+    desc: '',
+  },
+  action,
+) => {
   switch (action.type) {
     case SELECT_DISPLAY:
       return {
         ...state,
         name: action.name,
         group: action.group,
-        desc: action.desc
+        desc: action.desc,
       };
     default:
   }

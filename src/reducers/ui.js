@@ -8,20 +8,22 @@ const uiReducer = (
     windowHeight,
     windowWidth,
     origHeight: undefined,
-    origWidth: undefined
-  }, action) => {
+    origWidth: undefined,
+  },
+  action,
+) => {
   switch (action.type) {
     case WINDOW_RESIZE:
       return {
         ...state,
         windowHeight: action.dims.height,
-        windowWidth: action.dims.width
+        windowWidth: action.dims.width,
       };
     case UPDATE_DIMS:
       return {
         ...state,
         origHeight: action.dims.height,
-        origWidth: action.dims.width
+        origWidth: action.dims.width,
       };
     default:
   }

@@ -6,98 +6,128 @@ import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line impo
 import { loadAssetsSequential, findWidget } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
 import {
-  SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
-  SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
-  SET_FILTER, SET_FILTER_VIEW, SELECT_DISPLAY, REQUEST_DISPLAY,
-  RECEIVE_DISPLAY, REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST,
-  RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
-  SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
-  SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS,
-  SET_DISPINFO_DIALOG_OPEN, SET_REL_DISP_POSITIONS
+  SET_APP_ID,
+  SET_FULLSCREEN,
+  WINDOW_RESIZE,
+  UPDATE_DIMS,
+  SET_ERROR_MESSAGE,
+  ACTIVE_SIDEBAR,
+  SET_LAYOUT,
+  SET_LABELS,
+  SET_SORT,
+  SET_FILTER,
+  SET_FILTER_VIEW,
+  SELECT_DISPLAY,
+  REQUEST_DISPLAY,
+  RECEIVE_DISPLAY,
+  REQUEST_DISPLAY_LIST,
+  RECEIVE_DISPLAY_LIST,
+  RECEIVE_COGDATA,
+  REQUEST_CONFIG,
+  RECEIVE_CONFIG,
+  SET_DIALOG_OPEN,
+  SET_PANEL_RENDERER,
+  SET_LOCAL_PANELS,
+  SB_LOOKUP,
+  SET_DISPSELECT_DIALOG_OPEN,
+  SET_SELECTED_RELDISPS,
+  SET_DISPINFO_DIALOG_OPEN,
+  SET_REL_DISP_POSITIONS,
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 
 export const setAppID = (id) => ({
-  type: SET_APP_ID, id
+  type: SET_APP_ID,
+  id,
 });
 
 export const setFullscreen = (fullscreen) => ({
-  type: SET_FULLSCREEN, fullscreen
+  type: SET_FULLSCREEN,
+  fullscreen,
 });
 
-export const windowResize = (dims) => (
-  { type: WINDOW_RESIZE, dims }
-);
+export const windowResize = (dims) => ({ type: WINDOW_RESIZE, dims });
 
-export const setAppDims = (dims) => (
-  { type: UPDATE_DIMS, dims }
-);
+export const setAppDims = (dims) => ({ type: UPDATE_DIMS, dims });
 
 export const requestConfig = () => ({
-  type: REQUEST_CONFIG
+  type: REQUEST_CONFIG,
 });
 
 export const receiveConfig = (json) => ({
   type: RECEIVE_CONFIG,
   config: json,
-  receivedAt: Date.now()
+  receivedAt: Date.now(),
 });
 
 export const setActiveSidebar = (active) => ({
-  type: ACTIVE_SIDEBAR, active
+  type: ACTIVE_SIDEBAR,
+  active,
 });
 
 export const setDialogOpen = (isOpen) => ({
-  type: SET_DIALOG_OPEN, isOpen
+  type: SET_DIALOG_OPEN,
+  isOpen,
 });
 
 export const setDispSelectDialogOpen = (isOpen) => ({
-  type: SET_DISPSELECT_DIALOG_OPEN, isOpen
+  type: SET_DISPSELECT_DIALOG_OPEN,
+  isOpen,
 });
 
 export const setDispInfoDialogOpen = (isOpen) => ({
-  type: SET_DISPINFO_DIALOG_OPEN, isOpen
+  type: SET_DISPINFO_DIALOG_OPEN,
+  isOpen,
 });
 
 export const setLayout = (layout) => ({
-  type: SET_LAYOUT, layout
+  type: SET_LAYOUT,
+  layout,
 });
 
 export const setLabels = (labels) => ({
-  type: SET_LABELS, labels
+  type: SET_LABELS,
+  labels,
 });
 
 export const setSort = (sort) => ({
-  type: SET_SORT, sort
+  type: SET_SORT,
+  sort,
 });
 
 export const setFilter = (filter) => ({
-  type: SET_FILTER, filter
+  type: SET_FILTER,
+  filter,
 });
 
 export const setFilterView = (name, which) => ({
-  type: SET_FILTER_VIEW, name, which
+  type: SET_FILTER_VIEW,
+  name,
+  which,
 });
 
 export const requestDisplayList = () => ({
-  type: REQUEST_DISPLAY_LIST
+  type: REQUEST_DISPLAY_LIST,
 });
 
 export const receiveDisplayList = (json) => ({
   type: RECEIVE_DISPLAY_LIST,
   list: json,
-  receivedAt: Date.now()
+  receivedAt: Date.now(),
 });
 
 export const setSelectedDisplay = (name, group, desc) => ({
-  type: SELECT_DISPLAY, name, group, desc
+  type: SELECT_DISPLAY,
+  name,
+  group,
+  desc,
 });
 
 export const setSelectedRelDisps = (arr) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'set',
-  val: arr
+  val: arr,
 });
 
 // export const setSelectedView = (val) => ({
@@ -108,27 +138,30 @@ export const setSelectedRelDisps = (arr) => ({
 export const addRelDisp = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'add',
-  val: i
+  val: i,
 });
 
 export const removeRelDisp = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'remove',
-  val: i
+  val: i,
 });
 
 export const resetRelDisps = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
-  val: i
+  val: i,
 });
 
 export const setRelDispPositions = (obj) => ({
-  type: SET_REL_DISP_POSITIONS, obj
+  type: SET_REL_DISP_POSITIONS,
+  obj,
 });
 
 export const requestDisplay = (name, group) => ({
-  type: REQUEST_DISPLAY, name, group
+  type: REQUEST_DISPLAY,
+  name,
+  group,
 });
 
 export const receiveDisplay = (name, group, json) => ({
@@ -136,34 +169,41 @@ export const receiveDisplay = (name, group, json) => ({
   name,
   group,
   info: json,
-  receivedAt: Date.now()
+  receivedAt: Date.now(),
 });
 
 const receiveCogData = (iface, json) => ({
   type: RECEIVE_COGDATA,
   iface,
   crossfilter: json,
-  receivedAt: Date.now()
+  receivedAt: Date.now(),
 });
 
 export const setPanelRenderers = (name, fn) => ({
-  type: SET_PANEL_RENDERER, name, fn
+  type: SET_PANEL_RENDERER,
+  name,
+  fn,
 });
 
 export const setLocalPanels = (dat) => ({
-  type: SET_LOCAL_PANELS, dat
+  type: SET_LOCAL_PANELS,
+  dat,
 });
 
 export const setErrorMessage = (msg) => ({
-  type: SET_ERROR_MESSAGE, msg
+  type: SET_ERROR_MESSAGE,
+  msg,
 });
 
 const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   const hashItems = {};
-  hash.replace('#', '').split('&').forEach((d) => {
-    const tuple = d.split('=');
-    hashItems[tuple[0]] = tuple[[1]];
-  });
+  hash
+    .replace('#', '')
+    .split('&')
+    .forEach((d) => {
+      const tuple = d.split('=');
+      hashItems[tuple[0]] = tuple[[1]];
+    });
 
   for (let i = 0; i < cogDatJson.length; i += 1) {
     cogDatJson[i].__index = i; // eslint-disable-line no-param-reassign
@@ -212,11 +252,11 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   if (hashItems.sort) {
     sort = hashItems.sort.split(',').map((d, i) => {
       const vals = d.split(';');
-      return ({
+      return {
         order: i + 1,
         name: vals[0],
-        dir: vals[1]
-      });
+        dir: vals[1],
+      };
     });
   }
   dispatch(setSort(sort));
@@ -235,7 +275,7 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
       const fltState = {
         name: fltItems.var,
         type: fltItems.type,
-        varType: dObjJson.cogInfo[fltItems.var].type
+        varType: dObjJson.cogInfo[fltItems.var].type,
       };
       if (fltItems.type === 'select') {
         fltState.orderValue = 'ct,desc';
@@ -244,7 +284,11 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
         const { levels } = dObjJson.cogInfo[fltItems.var];
         const vals = [];
         const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
-        levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
+        levels.forEach((d) => {
+          if (d.match(rval) !== null) {
+            vals.push(d);
+          }
+        });
         fltState.regex = fltItems.val;
         fltState.value = vals;
         fltState.orderValue = 'ct,desc';
@@ -269,15 +313,14 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   const ciKeys = Object.keys(dObjJson.cogInfo);
   const fvObj = {
     active: [],
-    inactive: []
+    inactive: [],
   };
 
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
       if (fv.includes(ciKeys[i])) {
         fvObj.active.push(ciKeys[i]);
-      } else if (dObjJson.state.filter
-        && dObjJson.state.filter[ciKeys[i]] !== undefined) {
+      } else if (dObjJson.state.filter && dObjJson.state.filter[ciKeys[i]] !== undefined) {
         fvObj.active.push(ciKeys[i]);
       } else {
         fvObj.inactive.push(ciKeys[i]);
@@ -290,35 +333,24 @@ const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
 
 const setPanelInfo = (dObjJson, cfg, dispatch) => {
   if (dObjJson.panelInterface.type === 'image') {
-    dispatch(setPanelRenderers(
-      dObjJson.name,
-      (x, width, height) => (
-        <img
-          src={x}
-          alt="panel"
-          style={{ width, height }}
-        />
-      ))
-    );
+    dispatch(setPanelRenderers(dObjJson.name, (x, width, height) => <img src={x} alt="panel" style={{ width, height }} />));
   } else if (dObjJson.panelInterface.type === 'image_src') {
-    dispatch(setPanelRenderers(
-      dObjJson.name,
-      (x) => (
+    dispatch(
+      setPanelRenderers(dObjJson.name, (x) => (
         <img
           src={x}
           alt="panel"
           style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           // style={{ width, height }}
         />
-      ))
+      )),
     );
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     const prCallback = () => {
       const binding = findWidget(dObjJson.panelInterface.deps.name);
 
-      dispatch(setPanelRenderers(
-        dObjJson.name,
-        (x, width, height, post, key) => {
+      dispatch(
+        setPanelRenderers(dObjJson.name, (x, width, height, post, key) => {
           const el = document.getElementById(`widget_outer_${key}`);
           const child = document.getElementById(`widget_${key}`);
           if (post && el && child === null) {
@@ -347,7 +379,7 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
             return <div id={`widget_outer_${key}`} />;
           }
           return null;
-        })
+        }),
       );
     };
 
@@ -361,222 +393,215 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
   }
 };
 
-export const fetchDisplay = (name, group, cfg, id = '', hash = '', getCogData = true) => (dispatch) => {
-  dispatch(requestDisplay(name, group));
+export const fetchDisplay =
+  (name, group, cfg, id = '', hash = '', getCogData = true) =>
+  (dispatch) => {
+    dispatch(requestDisplay(name, group));
 
-  const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
-  const cdCallback = `__loadCogData__${id}_${group}_${name}`;
+    const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
+    const cdCallback = `__loadCogData__${id}_${group}_${name}`;
 
-  window[ldCallback] = (dObjJson) => {
-    const iface = dObjJson.cogInterface;
-    // now that displayObj is available, we can set the state with this data
-    dispatch(receiveDisplay(name, group, dObjJson));
+    window[ldCallback] = (dObjJson) => {
+      const iface = dObjJson.cogInterface;
+      // now that displayObj is available, we can set the state with this data
+      dispatch(receiveDisplay(name, group, dObjJson));
 
-    setPanelInfo(dObjJson, cfg, dispatch);
+      setPanelInfo(dObjJson, cfg, dispatch);
 
-    if (dObjJson.showMdDesc) {
-      dispatch(setDispInfoDialogOpen(true));
-    }
-
-    // set cog data state as pending while it loads
-    if (getCogData) {
-      dispatch(receiveCogData(iface));
-      // TODO: perhaps do a quick load of initial panels while cog data is loading...
-      // (to do this, have displayObj store initial panel keys and cogs)
-
-      window[cdCallback] = (cogDatJson) => {
-        // once cog data is loaded, set the state with this data
-        // but first add an index column to the data so we can
-        // preserve original order or do multi-column sorts
-        setCogDatAndState(iface, cogDatJson, dObjJson, dispatch, hash);
-      };
-
-      // load the cog data
-      if (cfg.data_type === 'jsonp') {
-        getJSONP({
-          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
-          callbackName: 'cdCallback',
-          error: (err) => dispatch(setErrorMessage(
-            `Couldn't load cognostics data: ${err.url}`
-          ))
-        });
-      } else {
-        getJSON({
-          url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
-          callback: window[cdCallback]
-        }).on('error', (err) => dispatch(setErrorMessage(
-          `Couldn't load display list: ${err.target.responseURL}`
-        )));
+      if (dObjJson.showMdDesc) {
+        dispatch(setDispInfoDialogOpen(true));
       }
 
-      // if storing inputs through an API, set localStorage accordingly
-      if (dObjJson.has_inputs && dObjJson.input_type === 'API') {
-        getInputsAPI(dObjJson);
+      // set cog data state as pending while it loads
+      if (getCogData) {
+        dispatch(receiveCogData(iface));
+        // TODO: perhaps do a quick load of initial panels while cog data is loading...
+        // (to do this, have displayObj store initial panel keys and cogs)
+
+        window[cdCallback] = (cogDatJson) => {
+          // once cog data is loaded, set the state with this data
+          // but first add an index column to the data so we can
+          // preserve original order or do multi-column sorts
+          setCogDatAndState(iface, cogDatJson, dObjJson, dispatch, hash);
+        };
+
+        // load the cog data
+        if (cfg.data_type === 'jsonp') {
+          getJSONP({
+            url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
+            callbackName: 'cdCallback',
+            error: (err) => dispatch(setErrorMessage(`Couldn't load cognostics data: ${err.url}`)),
+          });
+        } else {
+          getJSON({
+            url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
+            callback: window[cdCallback],
+          }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
+        }
+
+        // if storing inputs through an API, set localStorage accordingly
+        if (dObjJson.has_inputs && dObjJson.input_type === 'API') {
+          getInputsAPI(dObjJson);
+        }
       }
+    };
+
+    // get displayObj.json so we can find the cog data, etc.
+    if (cfg.data_type === 'jsonp') {
+      getJSONP({
+        url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
+        callbackName: 'ldCallback',
+        error: (err) => dispatch(setErrorMessage(`Couldn't load display object: ${err.url}`)),
+      });
+    } else {
+      getJSON({
+        url: `${cfg.display_base}${group}/${name}/displayObj.json`,
+        callback: window[ldCallback],
+      }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
     }
   };
 
-  // get displayObj.json so we can find the cog data, etc.
-  if (cfg.data_type === 'jsonp') {
-    getJSONP({
-      url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
-      callbackName: 'ldCallback',
-      error: (err) => dispatch(setErrorMessage(
-        `Couldn't load display object: ${err.url}`
-      ))
-    });
-  } else {
-    getJSON({
-      url: `${cfg.display_base}${group}/${name}/displayObj.json`,
-      callback: window[ldCallback]
-    }).on('error', (err) => dispatch(setErrorMessage(
-      `Couldn't load display list: ${err.target.responseURL}`
-    )));
-  }
-};
-
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
-export const fetchDisplayList = (
-  config = 'config.jsonp', id = '', singlePageApp = false
-) => (dispatch) => {
-  // don't read from the hash if not in single-page-app mode
-  const hash = singlePageApp ? window.location.hash : '';
+export const fetchDisplayList =
+  (config = 'config.jsonp', id = '', singlePageApp = false) =>
+  (dispatch) => {
+    // don't read from the hash if not in single-page-app mode
+    const hash = singlePageApp ? window.location.hash : '';
 
-  const selfContained = !(typeof config === 'string' || config instanceof String);
+    const selfContained = !(typeof config === 'string' || config instanceof String);
 
-  if (!selfContained) {
-    dispatch(requestConfig());
+    if (!selfContained) {
+      dispatch(requestConfig());
 
-    const dlCallback = `__loadDisplayList__${id}`;
-    const cfgCallback = `__loadTrscopeConfig__${id}`;
+      const dlCallback = `__loadDisplayList__${id}`;
+      const cfgCallback = `__loadTrscopeConfig__${id}`;
 
-    const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
+      const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
-    const getConfigBase = (txt) => {
-      let res = txt;
-      if (!(/^https?:\/\/|^file:\/\/|^\//.test(txt))) {
-        res = configBase;
-        if (txt !== '') {
-          res += `${txt}/`;
-        }
-      }
-      return res;
-    };
-
-    window[cfgCallback] = (cfg) => {
-      // if display_base is empty, we want to use same path as config
-      // eslint-disable-next-line no-param-reassign
-      cfg.display_base = getConfigBase(cfg.display_base);
-      cfg.config_base = configBase; // eslint-disable-line no-param-reassign
-      // eslint-disable-next-line no-param-reassign
-      cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
-      dispatch(receiveConfig(cfg));
-
-      // register with google analytics if specified
-      if (cfg.ga_id) {
-        ReactGA.initialize(cfg.ga_id);
-      }
-
-      if (cfg.require_token === true) {
-        const id1 = `${(window.devicePixelRatio || '')}${navigator.userAgent.replace(/\D+/g, '')}`;
-        const id2 = `${navigator.language.length || ''}${(window.screen.colorDepth || '')}`;
-        const id3 = `${(new Date()).getTimezoneOffset()}${(navigator.platform.length || '')}`;
-        const id4 = `${(window.screen.height || '')}${(window.screen.width || '')}${(window.screen.pixelDepth || '')}`;
-        const id5 = `${(new Date()).toLocaleDateString().replace(/\D+/g, '')}`;
-        const token = `${id1}${id2}${id3}${id4}${id5}`;
-        // console.log(token);
-        // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
-        if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
-          dispatch(setErrorMessage('Visualization could not be loaded because it is not embedded in a properly authenticated website.'));
-          return;
-        }
-      }
-
-      window[dlCallback] = (json) => {
-        json.sort((a, b) => {
-          const v1 = a.order === undefined ? 1 : a.order;
-          const v2 = b.order === undefined ? 1 : b.order;
-          return (v1 > v2 ? 1 : -1);
-        });
-        dispatch(receiveDisplayList(json));
-        // check to see if a display is specified already in the URL
-        // and load it if it is
-        const hashItems = {};
-        hash.replace('#', '').split('&').forEach((d) => {
-          const tuple = d.split('=');
-          hashItems[tuple[0]] = tuple[[1]];
-        });
-        if (hashItems.display) {
-          const names = json.map((d) => d.name);
-          const idx = names.indexOf(hashItems.display);
-          if (idx > -1) {
-            const dObj = json[idx];
-            dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
-            dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
+      const getConfigBase = (txt) => {
+        let res = txt;
+        if (!/^https?:\/\/|^file:\/\/|^\//.test(txt)) {
+          res = configBase;
+          if (txt !== '') {
+            res += `${txt}/`;
           }
-        } else if (singlePageApp && json.length > 1) {
-          dispatch(setDialogOpen(true));
-          dispatch(setDispSelectDialogOpen(true));
         }
+        return res;
       };
 
-      if (cfg.data_type === 'jsonp') {
+      window[cfgCallback] = (cfg) => {
+        // if display_base is empty, we want to use same path as config
+        // eslint-disable-next-line no-param-reassign
+        cfg.display_base = getConfigBase(cfg.display_base);
+        cfg.config_base = configBase; // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
+        dispatch(receiveConfig(cfg));
+
+        // register with google analytics if specified
+        if (cfg.ga_id) {
+          ReactGA.initialize(cfg.ga_id);
+        }
+
+        if (cfg.require_token === true) {
+          const id1 = `${window.devicePixelRatio || ''}${navigator.userAgent.replace(/\D+/g, '')}`;
+          const id2 = `${navigator.language.length || ''}${window.screen.colorDepth || ''}`;
+          const id3 = `${new Date().getTimezoneOffset()}${navigator.platform.length || ''}`;
+          const id4 = `${window.screen.height || ''}${window.screen.width || ''}${window.screen.pixelDepth || ''}`;
+          const id5 = `${new Date().toLocaleDateString().replace(/\D+/g, '')}`;
+          const token = `${id1}${id2}${id3}${id4}${id5}`;
+          // console.log(token);
+          // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
+          if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
+            dispatch(
+              setErrorMessage(
+                'Visualization could not be loaded because it is not embedded in a properly authenticated website.',
+              ),
+            );
+            return;
+          }
+        }
+
+        window[dlCallback] = (json) => {
+          json.sort((a, b) => {
+            const v1 = a.order === undefined ? 1 : a.order;
+            const v2 = b.order === undefined ? 1 : b.order;
+            return v1 > v2 ? 1 : -1;
+          });
+          dispatch(receiveDisplayList(json));
+          // check to see if a display is specified already in the URL
+          // and load it if it is
+          const hashItems = {};
+          hash
+            .replace('#', '')
+            .split('&')
+            .forEach((d) => {
+              const tuple = d.split('=');
+              hashItems[tuple[0]] = tuple[[1]];
+            });
+          if (hashItems.display) {
+            const names = json.map((d) => d.name);
+            const idx = names.indexOf(hashItems.display);
+            if (idx > -1) {
+              const dObj = json[idx];
+              dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
+              dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
+            }
+          } else if (singlePageApp && json.length > 1) {
+            dispatch(setDialogOpen(true));
+            dispatch(setDispSelectDialogOpen(true));
+          }
+        };
+
+        if (cfg.data_type === 'jsonp') {
+          getJSONP({
+            url: `${cfg.display_base}displayList.jsonp`,
+            callbackName: dlCallback,
+            error: (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.url}`)),
+          });
+        } else {
+          getJSON({
+            url: `${cfg.display_base}displayList.json`,
+            callback: window[dlCallback],
+          }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
+        }
+      };
+      // load the config to start
+      // try json first and if the file isn't there, try jsonp
+
+      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
+      const configExt = config.match(extRegex)[0];
+
+      if (configExt === '.jsonp') {
         getJSONP({
-          url: `${cfg.display_base}displayList.jsonp`,
-          callbackName: dlCallback,
-          error: (err) => dispatch(setErrorMessage(
-            `Couldn't load display list: ${err.url}`
-          ))
+          url: config,
+          callbackName: cfgCallback,
+          error: (err) => dispatch(setErrorMessage(`Couldn't load config: ${err.url}`)),
+        });
+      } else if (configExt === '.json') {
+        getJSON({
+          url: config,
+          callback: window[cfgCallback],
         });
       } else {
-        getJSON({
-          url: `${cfg.display_base}displayList.json`,
-          callback: window[dlCallback]
-        }).on('error', (err) => dispatch(setErrorMessage(
-          `Couldn't load display list: ${err.target.responseURL}`
-        )));
+        dispatch(setErrorMessage(`Config specified as ${config} must have extension '.json' or '.jsonp'`));
       }
-    };
-    // load the config to start
-    // try json first and if the file isn't there, try jsonp
-
-    const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
-    const configExt = config.match(extRegex)[0];
-
-    if (configExt === '.jsonp') {
-      getJSONP({
-        url: config,
-        callbackName: cfgCallback,
-        error: (err) => dispatch(setErrorMessage(
-          `Couldn't load config: ${err.url}`
-        ))
-      });
-    } else if (configExt === '.json') {
-      getJSON({
-        url: config,
-        callback: window[cfgCallback]
-      });
     } else {
-      dispatch(setErrorMessage(
-        `Config specified as ${config} must have extension '.json' or '.jsonp'`
-      ));
-    }
-  } else {
-    // all data for rendering app is self-contained in document
-    dispatch(receiveConfig(config.config));
-    dispatch(receiveDisplayList(config.displayList));
-    const { name } = config.displayList[0];
-    const { group } = config.displayList[0];
-    const { desc } = config.displayList[0];
+      // all data for rendering app is self-contained in document
+      dispatch(receiveConfig(config.config));
+      dispatch(receiveDisplayList(config.displayList));
+      const { name } = config.displayList[0];
+      const { group } = config.displayList[0];
+      const { desc } = config.displayList[0];
 
-    dispatch(setSelectedDisplay(name, group, desc));
-    dispatch(requestDisplay(name, group));
-    const iface = config.displayObj.cogInterface;
-    dispatch(receiveDisplay(name, group, config.displayObj));
-    dispatch(receiveCogData(iface));
-    dispatch(setLocalPanels(config.panels));
-    setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
-    setPanelInfo(config.displayObj, config.config, dispatch);
-  }
-};
+      dispatch(setSelectedDisplay(name, group, desc));
+      dispatch(requestDisplay(name, group));
+      const iface = config.displayObj.cogInterface;
+      dispatch(receiveDisplay(name, group, config.displayObj));
+      dispatch(receiveCogData(iface));
+      dispatch(setLocalPanels(config.panels));
+      setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
+      setPanelInfo(config.displayObj, config.config, dispatch);
+    }
+  };

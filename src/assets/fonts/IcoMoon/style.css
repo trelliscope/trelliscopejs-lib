@@ -1,16 +1,15 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('icomoon.eot?y0cidr');
-  src:  url('icomoon.eot?y0cidr#iefix') format('embedded-opentype'),
-    url('icomoon.ttf?y0cidr') format('truetype'),
-    url('icomoon.woff?y0cidr') format('woff'),
-    url('icomoon.svg?y0cidr#icomoon') format('svg');
+  src: url('icomoon.eot?y0cidr');
+  src: url('icomoon.eot?y0cidr#iefix') format('embedded-opentype'), url('icomoon.ttf?y0cidr') format('truetype'),
+    url('icomoon.woff?y0cidr') format('woff'), url('icomoon.svg?y0cidr#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^='icon-'],
+[class*=' icon-'] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
   speak: none;
@@ -26,185 +25,185 @@
 }
 
 .icon-eye:before {
-  content: "\e90d";
+  content: '\e90d';
 }
 .icon-views:before {
-  content: "\e90d";
+  content: '\e90d';
 }
 .icon-vision:before {
-  content: "\e90d";
+  content: '\e90d';
 }
 .icon-visit:before {
-  content: "\e90d";
+  content: '\e90d';
 }
 .icon-dice:before {
-  content: "\e904";
+  content: '\e904';
 }
 .icon-cog:before {
-  content: "\e901";
+  content: '\e901';
 }
 .icon-info:before {
-  content: "\e905";
+  content: '\e905';
 }
 .icon-th:before {
-  content: "\f00a";
+  content: '\f00a';
 }
 .icon-close:before {
-  content: "\f00d";
+  content: '\f00d';
 }
 .icon-remove:before {
-  content: "\f00d";
+  content: '\f00d';
 }
 .icon-times:before {
-  content: "\f00d";
+  content: '\f00d';
 }
 .icon-chevron-left:before {
-  content: "\f053";
+  content: '\f053';
 }
 .icon-chevron-right:before {
-  content: "\f054";
+  content: '\f054';
 }
 .icon-times-circle:before {
-  content: "\f057";
+  content: '\f057';
 }
 .icon-chevron-up:before {
-  content: "\f077";
+  content: '\f077';
 }
 .icon-chevron-down:before {
-  content: "\f078";
+  content: '\f078';
 }
 .icon-folder-open:before {
-  content: "\f07c";
+  content: '\f07c';
 }
 .icon-filter:before {
-  content: "\f0b0";
+  content: '\f0b0';
 }
 .icon-list-ul:before {
-  content: "\f0ca";
+  content: '\f0ca';
 }
 .icon-sort:before {
-  content: "\f0dc";
+  content: '\f0dc';
 }
 .icon-unsorted:before {
-  content: "\f0dc";
+  content: '\f0dc';
 }
 .icon-sort-desc:before {
-  content: "\f0dd";
+  content: '\f0dd';
 }
 .icon-sort-down:before {
-  content: "\f0dd";
+  content: '\f0dd';
 }
 .icon-sort-asc:before {
-  content: "\f0de";
+  content: '\f0de';
 }
 .icon-sort-up:before {
-  content: "\f0de";
+  content: '\f0de';
 }
 .icon-rotate-left:before {
-  content: "\f0e2";
+  content: '\f0e2';
 }
 .icon-undo:before {
-  content: "\f0e2";
+  content: '\f0e2';
 }
 .icon-chevron-circle-left:before {
-  content: "\f137";
+  content: '\f137';
 }
 .icon-chevron-circle-right:before {
-  content: "\f138";
+  content: '\f138';
 }
 .icon-chevron-circle-up:before {
-  content: "\f139";
+  content: '\f139';
 }
 .icon-chevron-circle-down:before {
-  content: "\f13a";
+  content: '\f13a';
 }
 .icon-sort-alpha-asc:before {
-  content: "\f15d";
+  content: '\f15d';
 }
 .icon-sort-alpha-desc:before {
-  content: "\f15e";
+  content: '\f15e';
 }
 .icon-sort-amount-asc:before {
-  content: "\f160";
+  content: '\f160';
 }
 .icon-sort-amount-desc:before {
-  content: "\f161";
+  content: '\f161';
 }
 .icon-sort-numeric-asc:before {
-  content: "\f162";
+  content: '\f162';
 }
 .icon-sort-numeric-desc:before {
-  content: "\f163";
+  content: '\f163';
 }
 .icon-angle-right:before {
-  content: "\e909";
+  content: '\e909';
 }
 .icon-angle-left:before {
-  content: "\e90a";
+  content: '\e90a';
 }
 .icon-angle-double-right:before {
-  content: "\e90b";
+  content: '\e90b';
 }
 .icon-angle-double-left:before {
-  content: "\e90c";
+  content: '\e90c';
 }
 .icon-open-add:before {
-  content: "\e998";
+  content: '\e998';
 }
 .icon-bycol:before {
-  content: "\e906";
+  content: '\e906';
 }
 .icon-byrow:before {
-  content: "\e999";
+  content: '\e999';
 }
 .icon-help:before {
-  content: "\e887";
+  content: '\e887';
 }
 .icon-help_outline:before {
-  content: "\e8fd";
+  content: '\e8fd';
 }
 .icon-info2:before {
-  content: "\e88e";
+  content: '\e88e';
 }
 .icon-info_outline:before {
-  content: "\e88f";
+  content: '\e88f';
 }
 .icon-more_vert:before {
-  content: "\e5d4";
+  content: '\e5d4';
 }
 .icon-wb_incandescent:before {
-  content: "\e42e";
+  content: '\e42e';
 }
 .icon-label_outline:before {
-  content: "\e902";
+  content: '\e902';
 }
 .icon-label:before {
-  content: "\e903";
+  content: '\e903';
 }
 .icon-arrow-left:before {
-  content: "\e094";
+  content: '\e094';
 }
 .icon-arrow-right:before {
-  content: "\e095";
+  content: '\e095';
 }
 .icon-arrow-up:before {
-  content: "\e096";
+  content: '\e096';
 }
 .icon-arrow-down:before {
-  content: "\e097";
+  content: '\e097';
 }
 .icon-grid-2:before {
-  content: "\e103";
+  content: '\e103';
 }
 .icon-maximize:before {
-  content: "\e112";
+  content: '\e112';
 }
 .icon-minimize:before {
-  content: "\e113";
+  content: '\e113';
 }
 .icon-open:before {
-  content: "\e128";
+  content: '\e128';
 }
 .icon-th-list:before {
-  content: "\e900";
+  content: '\e900';
 }

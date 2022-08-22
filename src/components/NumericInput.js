@@ -23,11 +23,11 @@ class NumericInput extends React.Component {
       this._NumericInput.blur();
       return false;
     });
-    this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'],
-      (event) => event.stopPropagation());
+    this.mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'], (event) => event.stopPropagation());
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     this.setState({ value: nextProps.value });
   }
 
@@ -48,7 +48,7 @@ class NumericInput extends React.Component {
         onChange(newVal);
       }
     }
-  }
+  };
 
   decrement = () => {
     const { value, step } = this.state;
@@ -60,7 +60,7 @@ class NumericInput extends React.Component {
         onChange(newVal);
       }
     }
-  }
+  };
 
   handleChange = (event) => {
     const { min, max, onChange } = this.props;
@@ -78,7 +78,7 @@ class NumericInput extends React.Component {
         onChange(val);
       }
     }
-  }
+  };
 
   render() {
     const { classes, arrows, size } = this.props;
@@ -113,7 +113,9 @@ class NumericInput extends React.Component {
     return (
       <span className={classes.span}>
         <input
-          ref={(d) => { this._NumericInput = d; }}
+          ref={(d) => {
+            this._NumericInput = d;
+          }}
           type="text"
           size={size ? size : 4} // eslint-disable-line no-unneeded-ternary
           className={`mousetrap ${classes.input}`}
@@ -134,7 +136,7 @@ NumericInput.propTypes = {
   max: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -144,7 +146,7 @@ const staticStyles = {
     position: 'relative',
     display: 'inline-block',
     borderRadius: 0,
-    fontSize: 13
+    fontSize: 13,
   },
   input: {
     padding: '3px 10px 3px 6px',
@@ -158,7 +160,7 @@ const staticStyles = {
     border: '1px solid rgb(204, 204, 204)',
     display: 'block',
     // -webkit-appearance: 'none',
-    lineHeight: 'normal'
+    lineHeight: 'normal',
   },
   b: {
     position: 'absolute',
@@ -172,8 +174,8 @@ const staticStyles = {
     boxShadow: 'none',
     '&:hover': {
       background: 'rgba(0, 0, 0, 0.2)',
-      boxShadow: '0 0 0 0.5px rgba(0, 0, 0, 0.3)'
-    }
+      boxShadow: '0 0 0 0.5px rgba(0, 0, 0, 0.3)',
+    },
   },
   b1: {
     top: 2,
@@ -181,7 +183,7 @@ const staticStyles = {
     borderRadius: '2px 2px 0px 0px',
     borderWidth: '1px 1px 0px',
     background: 'rgba(0, 0, 0, 0.0980392)',
-    height: 12
+    height: 12,
   },
   b2: {
     top: '50%',
@@ -189,27 +191,27 @@ const staticStyles = {
     borderRadius: '0px 0px 2px 2px',
     borderWidth: '0px 1px 1px',
     background: 'rgba(0, 0, 0, 0.0980392)',
-    height: 12
+    height: 12,
   },
   i: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     width: 0,
-    height: 0
+    height: 0,
   },
   i1: {
     borderWidth: '0px 0.6ex 0.6ex',
     borderColor: 'transparent transparent rgba(0, 0, 0, 0.701961)',
     borderStyle: 'solid',
-    margin: '-0.3ex 0px 0px -0.56ex'
+    margin: '-0.3ex 0px 0px -0.56ex',
   },
   i2: {
     borderWidth: '0.6ex 0.6ex 0px',
     borderColor: 'rgba(0, 0, 0, 0.701961) transparent transparent',
     borderStyle: 'solid',
-    margin: '-0.3ex 0px 0px -0.56ex'
-  }
+    margin: '-0.3ex 0px 0px -0.56ex',
+  },
 };
 
 export default injectSheet(staticStyles)(NumericInput);

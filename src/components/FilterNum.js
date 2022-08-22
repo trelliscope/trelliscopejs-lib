@@ -42,7 +42,7 @@ class FilterNum extends React.Component {
         name: filterState.name,
         type: 'range',
         varType: filterState.varType,
-        valid: true
+        valid: true,
       };
     } else {
       newState = {
@@ -51,9 +51,9 @@ class FilterNum extends React.Component {
         varType: filterState.varType,
         value: {
           from: lower,
-          to: upper
+          to: upper,
         },
-        valid: this.checkValidNumber(lower, upper, which)
+        valid: this.checkValidNumber(lower, upper, which),
       };
     }
     handleChange(newState);
@@ -66,7 +66,7 @@ class FilterNum extends React.Component {
         name: filterState.name,
         type: 'range',
         varType: filterState.varType,
-        valid: true
+        valid: true,
       };
       handleChange(newState);
 
@@ -81,9 +81,9 @@ class FilterNum extends React.Component {
         varType: filterState.varType,
         value: {
           from: values[0],
-          to: values[1]
+          to: values[1],
         },
-        valid: true
+        valid: true,
       };
       handleChange(newState);
 
@@ -105,9 +105,7 @@ class FilterNum extends React.Component {
   }
 
   render() {
-    const {
-      classes, filterState, dist, condDist, name
-    } = this.props;
+    const { classes, filterState, dist, condDist, name } = this.props;
 
     // const underlineStyle = {
     //   bottom: 10
@@ -123,7 +121,7 @@ class FilterNum extends React.Component {
       marginTop: -5,
       fontSize: 16,
       transform: 'scale(0.85)',
-      transformOrigin: '0 0'
+      transformOrigin: '0 0',
     };
 
     const inputStyle = { textAlign: 'center', paddingBottom: 2 };
@@ -145,13 +143,11 @@ class FilterNum extends React.Component {
 
     return (
       <div className={classes.container}>
-        <div
-          className={classes.plotContainer}
-        >
+        <div className={classes.plotContainer}>
           <FilterNumPlot
             name={name}
             className={classes.plotContainer}
-            width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
+            width={uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2}
             height={uiConsts.sidebar.filter.num.height}
             dist={dist}
             condDist={condDist}
@@ -166,7 +162,7 @@ class FilterNum extends React.Component {
             name="fromText"
             style={rangeInput}
             inputProps={{
-              style: inputStyle
+              style: inputStyle,
             }}
             // inputStyle={validStyle}
             // underlineStyle={underlineStyle}
@@ -180,15 +176,13 @@ class FilterNum extends React.Component {
             //   'from'
             // )}
           />
-          <div className={`${classes.rangeInputText} ${classes.rangeInputTextDash}`}>
-            -
-          </div>
+          <div className={`${classes.rangeInputText} ${classes.rangeInputTextDash}`}>-</div>
           <TextField
             // hintText="to"
             name="toText"
             style={rangeInput}
             inputProps={{
-              style: inputStyle
+              style: inputStyle,
             }}
             // inputStyle={validStyle}
             // underlineStyle={underlineStyle}
@@ -214,7 +208,7 @@ FilterNum.propTypes = {
   classes: PropTypes.object.isRequired,
   dist: PropTypes.object.isRequired,
   condDist: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -223,35 +217,35 @@ const staticStyles = {
   container: {
     marginLeft: 5,
     marginRight: 5,
-    marginTop: 5
+    marginTop: 5,
   },
   plotContainer: {
-    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    width: uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2,
     height: uiConsts.sidebar.filter.num.height,
     position: 'relative',
     overflow: 'hidden',
     cursor: 'default',
     userSelect: 'none',
-    zIndex: 1000
+    zIndex: 1000,
   },
   inputContainer: {
-    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    width: uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2,
     marginBottom: -12,
     paddingBottom: 8,
     paddingTop: 4,
     zIndex: 100,
     position: 'relative',
-    verticalAlign: 'center'
+    verticalAlign: 'center',
   },
   rangeInputText: {
     fontSize: 13,
     paddingRight: 10,
-    display: 'inline-block'
+    display: 'inline-block',
   },
   rangeInputTextDash: {
     paddingLeft: 4,
-    transform: 'scale(2,1)' // to deal with some browsers not being able to handle endash
-  }
+    transform: 'scale(2,1)', // to deal with some browsers not being able to handle endash
+  },
 };
 
 export default injectSheet(staticStyles)(FilterNum);

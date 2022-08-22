@@ -1,6 +1,12 @@
 import {
-  SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR,
-  SET_FILTER_VIEW, SB_REV_LOOKUP
+  SELECT_DISPLAY,
+  SET_LAYOUT,
+  SET_LABELS,
+  SET_SORT,
+  SET_FILTER,
+  ACTIVE_SIDEBAR,
+  SET_FILTER_VIEW,
+  SB_REV_LOOKUP,
 } from './constants';
 
 // const layoutLookup = {
@@ -24,7 +30,7 @@ export const hashFromState = (state) => {
   const { labels } = state;
   // sort
   const { sort } = state; // TODO: should this be a deep copy?
-  sort.sort((a, b) => ((a.order > b.order) ? 1 : -1));
+  sort.sort((a, b) => (a.order > b.order ? 1 : -1));
   const sortStr = sort.map((d) => `${d.name};${d.dir}`).join(',');
   // filter
   const { filter } = state;
@@ -65,10 +71,7 @@ export const hashFromState = (state) => {
 // Sort Panels
 
 export const hashMiddleware = (store) => (next) => (action) => {
-  const types = [
-    SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT,
-    SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW
-  ];
+  const types = [SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW];
   const result = next(action);
   if (types.indexOf(action.type) > -1) {
     const hash = hashFromState(store.getState());

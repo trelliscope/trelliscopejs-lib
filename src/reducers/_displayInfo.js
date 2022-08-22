@@ -9,8 +9,8 @@ const _displayInfoReducer = (state = {}, action) => {
           isFetching: true,
           isLoaded: false,
           info: {},
-          didInvalidate: false
-        }
+          didInvalidate: false,
+        },
       };
     case RECEIVE_DISPLAY:
       return {
@@ -20,8 +20,8 @@ const _displayInfoReducer = (state = {}, action) => {
           didInvalidate: false,
           isLoaded: true,
           info: action.info,
-          lastUpdated: action.receivedAt
-        }
+          lastUpdated: action.receivedAt,
+        },
       };
     default:
       return state;

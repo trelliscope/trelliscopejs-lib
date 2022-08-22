@@ -1,22 +1,27 @@
 import { createSelector } from 'reselect';
 import {
-  cogDataSelector, filterStateSelector, filterViewSelector,
-  sortSelector, curDisplayInfoSelector, pageNumSelector, nPerPageSelector
+  cogDataSelector,
+  filterStateSelector,
+  filterViewSelector,
+  sortSelector,
+  curDisplayInfoSelector,
+  pageNumSelector,
+  nPerPageSelector,
 } from '.';
 
 export const cogFiltDistSelector = createSelector(
-  cogDataSelector, filterStateSelector,
-  filterViewSelector, curDisplayInfoSelector,
+  cogDataSelector,
+  filterStateSelector,
+  filterViewSelector,
+  curDisplayInfoSelector,
   (cogData, filter, filterView, cdi) => {
     const result = {};
-    if (cogData.iface && filterView.active && cogData.crossfilter
-      && cogData.iface.type === 'JSON') {
+    if (cogData.iface && filterView.active && cogData.crossfilter && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
       for (let i = 0; i < keys.length; i += 1) {
         if (cdi.info.cogInfo[keys[i]].type === 'factor') {
-          const orderValue = filter[keys[i]] && filter[keys[i]].orderValue
-            ? filter[keys[i]].orderValue : 'ct,desc';
+          const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ? filter[keys[i]].orderValue : 'ct,desc';
 
           let dist = [];
           // if sort order is count, use .top to get sorted
@@ -47,8 +52,7 @@ export const cogFiltDistSelector = createSelector(
           // would it be more efficient as a crossfilter group reducer?
           const selectedIdx = [];
           const notSelectedIdx = [];
-          const filterVals = filter[keys[i]] && filter[keys[i]].value
-            ? filter[keys[i]].value : [];
+          const filterVals = filter[keys[i]] && filter[keys[i]].value ? filter[keys[i]].value : [];
           let sumSelected = 0;
           for (let j = 0; j < dist.length; j += 1) {
             const val = filterVals.indexOf(dist[j].key);
@@ -67,7 +71,7 @@ export const cogFiltDistSelector = createSelector(
             reverseRows,
             totSelected: selectedIdx.length,
             sumSelected,
-            idx: selectedIdx.concat(notSelectedIdx)
+            idx: selectedIdx.concat(notSelectedIdx),
           };
         } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
           const dist = cogData.groupRefs[keys[i]].all();
@@ -85,18 +89,21 @@ export const cogFiltDistSelector = createSelector(
             breaks: cdi.info.cogInfo[keys[i]].breaks,
             delta: cdi.info.cogInfo[keys[i]].delta,
             range: cdi.info.cogInfo[keys[i]].range,
-            log: cdi.info.cogInfo[keys[i]].log
+            log: cdi.info.cogInfo[keys[i]].log,
           };
         }
       }
     }
     return result;
-  }
+  },
 );
 
 export const currentCogDataSelector = createSelector(
-  cogDataSelector, pageNumSelector, nPerPageSelector,
-  filterStateSelector, sortSelector,
+  cogDataSelector,
+  pageNumSelector,
+  nPerPageSelector,
+  filterStateSelector,
+  sortSelector,
   (cd, pnum, npp, filt, sort) => {
     let result = [];
     if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
@@ -111,10 +118,29 @@ export const currentCogDataSelector = createSelector(
       }
     }
     return result;
-  }
+  },
 );
 
-export const filterCardinalitySelector = createSelector(
-  cogDataSelector, filterStateSelector,
-  (cd, filt) => (cd.allRef === undefined && filt ? 0 : cd.allRef.value())
+// export const currentCogDataSelector = createSelector(
+//   cogDataSelector,
+//   pageNumSelector,
+//   nPerPageSelector,
+//   filterStateSelector,
+//   sortSelector,
+//   (cd, pnum, npp, filt, sort) => {
+//     if (!cd.dimensionRefs || !cd.dimensionRefs.__sort || !filt || !sort) {
+//       return [];
+//     }
+//     if (sort.length !== 1) {
+//       return cd.dimensionRefs.__sort.bottom(npp, (pnum - 1) * npp);
+//     }
+//     if (sort[0].dir !== 'asc') {
+//       return cd.dimensionRefs.__sort.top(npp, (pnum - 1) * npp);
+//     }
+//     return cd.dimensionRefs.__sort.bottom(npp, (pnum - 1) * npp);
+//   },
+// );
+
+export const filterCardinalitySelector = createSelector(cogDataSelector, filterStateSelector, (cd, filt) =>
+  cd.allRef === undefined && filt ? 0 : cd.allRef.value(),
 );

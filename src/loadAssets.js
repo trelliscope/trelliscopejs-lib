@@ -3,7 +3,7 @@ export const findWidget = (name) => {
   // console.log(widgets);
   for (let i = 0; i < widgets.length; i += 1) {
     if (widgets[i].name === name) {
-      return (widgets[i]);
+      return widgets[i];
     }
   }
   return undefined;
@@ -54,7 +54,8 @@ export const loadAssetsSequential = (widgetAssets, configBase, callback) => {
     .then(() => {
       // console.log('all scripts loaded');
       callback();
-    }).catch((script) => {
+    })
+    .catch((script) => {
       // console.log(script + ' failed to load');
     });
 };

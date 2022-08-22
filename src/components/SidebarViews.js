@@ -7,28 +7,19 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import {
-  setLabels, setLayout, setSort, setFilter, setFilterView
-} from '../actions';
+import { setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
 
 import { contentHeightSelector } from '../selectors/ui';
 import { curDisplayInfoSelector } from '../selectors';
 import { cogInfoSelector } from '../selectors/display';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarViews = ({
-  height, views, cinfo, handleChange
-}) => {
+const SidebarViews = ({ height, views, cinfo, handleChange }) => {
   const content = (
     <div style={{ height, overflowY: 'auto' }}>
       <List style={{ padding: 0 }}>
         {views.map((value) => (
-          <ListItem
-            key={value.name}
-            dense
-            button
-            onClick={() => handleChange(value.state, cinfo)}
-          >
+          <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
             <ListItemText
               primary={value.name}
               // secondary={value.desc}
@@ -39,7 +30,7 @@ const SidebarViews = ({
       </List>
     </div>
   );
-  return (content);
+  return content;
 };
 
 SidebarViews.propTypes = {
@@ -47,7 +38,7 @@ SidebarViews.propTypes = {
   // sheet: PropTypes.object.isRequired,
   views: PropTypes.array.isRequired,
   cinfo: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -55,39 +46,37 @@ SidebarViews.propTypes = {
 const staticStyles = {
   rowDesc: {
     color: '#888',
-    fontStyle: 'italic'
-  }
+    fontStyle: 'italic',
+  },
 };
 
 // ------ redux container ------
 
-const stateSelector = createSelector(
-  contentHeightSelector, curDisplayInfoSelector, cogInfoSelector,
-  (ch, cdi, cinfo) => ({
-    width: uiConsts.sidebar.width,
-    height: ch - uiConsts.sidebar.header.height,
-    views: cdi.info.views,
-    cinfo
-  })
-);
+const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelector, cogInfoSelector, (ch, cdi, cinfo) => ({
+  width: uiConsts.sidebar.width,
+  height: ch - uiConsts.sidebar.header.height,
+  views: cdi.info.views,
+  cinfo,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleChange: (value, cinfo) => {
     const hashItems = {};
-    value.replace('#', '').split('&').forEach((d) => {
-      const tuple = d.split('=');
-      hashItems[tuple[0]] = tuple[[1]];
-    });
+    value
+      .replace('#', '')
+      .split('&')
+      .forEach((d) => {
+        const tuple = d.split('=');
+        hashItems[tuple[0]] = tuple[[1]];
+      });
 
     if (hashItems.nrow && hashItems.ncol && hashItems.arr) {
       const layout = {
         nrow: parseInt(hashItems.nrow, 10),
         ncol: parseInt(hashItems.ncol, 10),
-        arrange: hashItems.arr
+        arrange: hashItems.arr,
       };
       dispatch(setLayout(layout));
     }
@@ -108,11 +97,11 @@ const mapDispatchToProps = (dispatch) => ({
     if (hashItems.sort) {
       sort = hashItems.sort.split(',').map((d, i) => {
         const vals = d.split(';');
-        return ({
+        return {
           order: i + 1,
           name: vals[0],
-          dir: vals[1]
-        });
+          dir: vals[1],
+        };
       });
     }
     dispatch(setSort(sort));
@@ -131,7 +120,7 @@ const mapDispatchToProps = (dispatch) => ({
         const fltState = {
           name: fltItems.var,
           type: fltItems.type,
-          varType: cinfo[fltItems.var].type
+          varType: cinfo[fltItems.var].type,
         };
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
@@ -140,7 +129,11 @@ const mapDispatchToProps = (dispatch) => ({
           const { levels } = cinfo[fltItems.var];
           const vals = [];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
-          levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
+          levels.forEach((d) => {
+            if (d.match(rval) !== null) {
+              vals.push(d);
+            }
+          });
           fltState.regex = fltItems.val;
           fltState.value = vals;
           fltState.orderValue = 'ct,desc';
@@ -164,10 +157,7 @@ const mapDispatchToProps = (dispatch) => ({
     if (hashItems.fv) {
       hashItems.fv.split(',').map((el) => dispatch(setFilterView(el, 'add')));
     }
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SidebarViews));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarViews));

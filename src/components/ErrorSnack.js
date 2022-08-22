@@ -11,26 +11,26 @@ const ErrorSnack = ({ errorMsg, handleClose }) => (
   <Snackbar
     anchorOrigin={{
       vertical: 'bottom',
-      horizontal: 'center'
+      horizontal: 'center',
     }}
     open={errorMsg !== ''}
     // autoHideDuration={6000}
     onClose={handleClose}
     SnackbarContentProps={{
-      'aria-describedby': 'message-id'
+      'aria-describedby': 'message-id',
     }}
     message={<span id="message-id">{errorMsg}</span>}
     action={[
       <Button key="undo" color="secondary" dense onClick={handleClose}>
         Close
-      </Button>
+      </Button>,
     ]}
   />
 );
 
 ErrorSnack.propTypes = {
   errorMsg: PropTypes.string.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -43,24 +43,16 @@ ErrorSnack.propTypes = {
 
 const errorSelector = (state) => state.errorMsg;
 
-const stateSelector = createSelector(
-  errorSelector,
-  (errorMsg) => ({
-    errorMsg
-  })
-);
+const stateSelector = createSelector(errorSelector, (errorMsg) => ({
+  errorMsg,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleClose: () => {
     dispatch(setErrorMessage(''));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)((ErrorSnack));
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorSnack);

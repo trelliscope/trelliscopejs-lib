@@ -24,9 +24,7 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import {
-  fetchDisplayList, windowResize, setAppDims, setLayout
-} from './actions';
+import { fetchDisplayList, windowResize, setAppDims, setLayout } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
 import createCallbackMiddleware from './callbackMiddleware';
@@ -69,10 +67,8 @@ const trelliscopeApp = (id, config, options) => {
 
   // if there is only one div in the whole document and it doesn't have dimensions
   // then we treat this as a single-page application
-  const noHeight = el.style.height === undefined || el.style.height === ''
-    || el.style.height === '100%';
-  const noWidth = el.style.width === undefined || el.style.width === ''
-    || el.style.width === '100%';
+  const noHeight = el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
+  const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
   let fullscreen = false;
@@ -94,9 +90,11 @@ const trelliscopeApp = (id, config, options) => {
     document.getElementsByTagName('body')[0].appendChild(bodyEl);
 
     if (noHeight) {
-      const nSiblings = [].slice.call(el.parentNode.childNodes)
-        .map((d) => d.nodeType !== 3 && d.nodeType !== 8)
-        .reduce((a, b) => a + b) - 1;
+      const nSiblings =
+        [].slice
+          .call(el.parentNode.childNodes)
+          .map((d) => d.nodeType !== 3 && d.nodeType !== 8)
+          .reduce((a, b) => a + b) - 1;
       if (nSiblings === 0) {
         el.style.height = `${el.parentNode.clientHeight}px`;
         el.style.width = `${el.parentNode.clientWidth}px`;
@@ -154,7 +152,7 @@ const trelliscopeApp = (id, config, options) => {
   const store = createStore(
     reducers,
     { appId: id, singlePageApp, fullscreen }, // initial state
-    applyMiddleware(...middlewares)
+    applyMiddleware(...middlewares),
   );
   if (module.hot) {
     module.hot.accept('./reducers', () => {
@@ -169,10 +167,12 @@ const trelliscopeApp = (id, config, options) => {
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
     if (store.getState().fullscreen) {
-      store.dispatch(windowResize({
-        height: window.innerHeight,
-        width: window.innerWidth
-      }));
+      store.dispatch(
+        windowResize({
+          height: window.innerHeight,
+          width: window.innerWidth,
+        }),
+      );
     }
   });
 
@@ -199,15 +199,15 @@ const trelliscopeApp = (id, config, options) => {
   const themeV1 = createMuiTheme({
     palette: {
       primary: { light: blue.A100, main: blue.A200 }, // '#4285f4', // lightBlue500,
-      secondary: { light: lightBlue[200], main: lightBlue[700] }
+      secondary: { light: lightBlue[200], main: lightBlue[700] },
       // accent1Color: redA200
     },
     typography: {
       fontFamily: '"Open Sans", sans-serif',
       fontWeightLight: 200,
       fontWeightRegular: 300,
-      fontWeightMedium: 400
-    }
+      fontWeightMedium: 400,
+    },
   });
 
   ReactDOM.render(
@@ -216,7 +216,7 @@ const trelliscopeApp = (id, config, options) => {
         <App />
       </Provider>
     </MuiThemeProvider>,
-    document.getElementById(id)
+    document.getElementById(id),
   );
 
   if (module.hot) {
@@ -227,12 +227,12 @@ const trelliscopeApp = (id, config, options) => {
             <App />
           </Provider>
         </MuiThemeProvider>,
-        document.getElementById(id)
+        document.getElementById(id),
       );
     });
   }
 
-  return ({
+  return {
     resize: (width, height) => {
       el.style.height = `${height}px`;
       el.style.width = `${width}px`;
@@ -245,8 +245,8 @@ const trelliscopeApp = (id, config, options) => {
     // setFilter: (x) => {
     //   store.dispatch(setFilter(x));
     // },
-    currentCogs: () => currentCogDataSelector(store.getState())
-  });
+    currentCogs: () => currentCogDataSelector(store.getState()),
+  };
 };
 
 window.trelliscopeApp = trelliscopeApp;

@@ -9,22 +9,27 @@ import intersection from 'lodash.intersection';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
-import {
-  setFilterView, setFilter, setLayout, setLabels
-} from '../actions';
+import { setFilterView, setFilter, setLayout, setLabels } from '../actions';
 import { cogFiltDistSelector } from '../selectors/cogData';
 import { sidebarHeightSelector, filterColSplitSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
-import {
-  curDisplayInfoSelector, filterStateSelector,
-  filterViewSelector, labelsSelector
-} from '../selectors';
+import { curDisplayInfoSelector, filterStateSelector, filterViewSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const SidebarFilter = ({
-  classes, styles, catHeight, filter, filterView, cogInfo,
-  curDisplayInfo, filtDist, colSplit, handleViewChange,
-  handleFilterChange, handleFilterSortChange, labels
+  classes,
+  styles,
+  catHeight,
+  filter,
+  filterView,
+  cogInfo,
+  curDisplayInfo,
+  filtDist,
+  colSplit,
+  handleViewChange,
+  handleFilterChange,
+  handleFilterSortChange,
+  labels,
 }) => {
   let content = <div />;
   const displId = curDisplayInfo.info.name;
@@ -40,7 +45,7 @@ const SidebarFilter = ({
     }
     const colFilters = [col1filters, col2filters];
 
-    const colContent = colFilters.map((curFilters) => (
+    const colContent = colFilters.map((curFilters) =>
       curFilters.map((d, i) => {
         if (filtDist[d]) {
           let filterState = filter[d];
@@ -48,14 +53,13 @@ const SidebarFilter = ({
           const filterActive = filterState && filterState.value !== undefined;
 
           let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
-          if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time'
-            || cogInfo[d].type === 'date') {
+          if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time' || cogInfo[d].type === 'date') {
             if (!filterState) {
               filterState = {
                 name: d,
                 orderValue: 'ct,desc',
                 type: 'select',
-                varType: 'factor'
+                varType: 'factor',
               };
             }
 
@@ -79,7 +83,7 @@ const SidebarFilter = ({
                 name: d,
                 orderValue: 'ct,desc',
                 type: 'range',
-                varType: 'numeric'
+                varType: 'numeric',
               };
             }
 
@@ -99,7 +103,7 @@ const SidebarFilter = ({
                 <div
                   className={classNames({
                     [classes.headerName]: true,
-                    [classes.headerNameActive]: filterActive
+                    [classes.headerNameActive]: filterActive,
                   })}
                 >
                   <span data-tip data-for={`hdtooltip_${d}`}>
@@ -124,7 +128,7 @@ const SidebarFilter = ({
                   className={classNames({
                     [classes.headerIcon]: true,
                     [classes.headerReset]: true,
-                    [classes.headerIconHide]: !filterActive
+                    [classes.headerIconHide]: !filterActive,
                   })}
                   onMouseDown={() => handleFilterChange(filterState.name)}
                 >
@@ -136,8 +140,8 @@ const SidebarFilter = ({
           );
         }
         return '';
-      })
-    ));
+      }),
+    );
 
     const extraIdx = colSplit.cutoff === null ? 0 : 1;
     const cogNames = Object.keys(cogInfo);
@@ -146,21 +150,20 @@ const SidebarFilter = ({
       colContent[extraIdx].push(
         <div key="notUsedHeader" className={classes.notUsedHeader}>
           Remove filters to select more.
-        </div>
+        </div>,
       );
     } else {
       colContent[extraIdx].push(
         <div key="notUsedHeader" className={classes.notUsedHeader}>
-          {filterView.active.length === 0 ? 'Select a variable to filter on:'
-            : filterView.inactive.length === 0 ? '' : 'More variables:'}
-        </div>
+          {filterView.active.length === 0
+            ? 'Select a variable to filter on:'
+            : filterView.inactive.length === 0
+            ? ''
+            : 'More variables:'}
+        </div>,
       );
       colContent[extraIdx].push(
-        <div
-          key="notUsed"
-          className={classes.notUsedContainer}
-          style={styles.notUsedContainer}
-        >
+        <div key="notUsed" className={classes.notUsedContainer} style={styles.notUsedContainer}>
           {Object.keys(cogGroups).map((grp) => {
             const curItems = intersection(inames, cogGroups[grp]);
             if (curItems.length === 0) {
@@ -182,7 +185,7 @@ const SidebarFilter = ({
                             type="button"
                             className={classNames({
                               [classes.variable]: true,
-                              [classes.variableActive]: filter[d] && filter[d].value !== undefined
+                              [classes.variableActive]: filter[d] && filter[d].value !== undefined,
                             })}
                             key={`${d}_${displId}_button_${inames.length}`}
                             onClick={() => handleViewChange(d, 'add', labels)}
@@ -200,7 +203,7 @@ const SidebarFilter = ({
               </React.Fragment>
             );
           })}
-        </div>
+        </div>,
       );
     }
 
@@ -215,7 +218,7 @@ const SidebarFilter = ({
       </div>
     );
   }
-  return (content);
+  return content;
 };
 
 SidebarFilter.propTypes = {
@@ -231,7 +234,7 @@ SidebarFilter.propTypes = {
   handleViewChange: PropTypes.func.isRequired,
   handleFilterChange: PropTypes.func.isRequired,
   handleFilterSortChange: PropTypes.func.isRequired,
-  labels: PropTypes.array.isRequired
+  labels: PropTypes.array.isRequired,
 };
 
 // ------ static styles ------
@@ -242,13 +245,13 @@ const staticStyles = {
   col1: {
     position: 'absolute',
     top: uiConsts.sidebar.header.height,
-    left: 0
+    left: 0,
   },
   col2: {
     position: 'absolute',
     top: uiConsts.sidebar.header.height,
     left: uiConsts.sidebar.width,
-    borderLeft: `1px solid ${uiConsts.sidebar.borderColor}`
+    borderLeft: `1px solid ${uiConsts.sidebar.borderColor}`,
   },
   notUsedHeader: {
     height: 30,
@@ -256,7 +259,7 @@ const staticStyles = {
     paddingLeft: 10,
     boxSizing: 'border-box',
     width: uiConsts.sidebar.width,
-    fontSize: 14
+    fontSize: 14,
   },
   notUsedContainer: {
     width: uiConsts.sidebar.width,
@@ -264,7 +267,7 @@ const staticStyles = {
     boxSizing: 'border-box',
     paddingLeft: 10,
     paddingRight: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   variable: {
     display: 'inline-block',
@@ -283,19 +286,19 @@ const staticStyles = {
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     '&:hover': {
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-      background: '#ebebeb'
-    }
+      background: '#ebebeb',
+    },
   },
   variableActive: {
     background: '#81C784',
     color: 'white',
     '&:hover': {
-      background: emphasize('#81C784', 0.2)
-    }
+      background: emphasize('#81C784', 0.2),
+    },
   },
   allContainer: {
     width: uiConsts.sidebar.width,
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
   },
   container: {
     width: uiConsts.sidebar.width,
@@ -305,7 +308,7 @@ const staticStyles = {
     zIndex: 100, // + this.props.index,
     position: 'relative',
     paddingBottom: 6,
-    borderBottom: `1px solid ${uiConsts.sidebar.borderColor}`
+    borderBottom: `1px solid ${uiConsts.sidebar.borderColor}`,
   },
   header: {
     height: 16,
@@ -313,7 +316,7 @@ const staticStyles = {
     width: uiConsts.sidebar.width,
     marginTop: 1,
     fontSize: 12,
-    position: 'relative'
+    position: 'relative',
   },
   headerExtra: {
     position: 'absolute',
@@ -321,7 +324,7 @@ const staticStyles = {
     height: 16,
     lineHeight: '15px',
     fontSize: 11,
-    color: '#777'
+    color: '#777',
   },
   headerName: {
     height: 16,
@@ -331,13 +334,13 @@ const staticStyles = {
     left: 1,
     userSelect: 'none',
     cursor: 'default',
-    background: '#999'
+    background: '#999',
   },
   headerNameActive: {
-    background: '#81C784'
+    background: '#81C784',
   },
   headerNameText: {
-    color: 'white'
+    color: 'white',
   },
   headerIcon: {
     height: 16,
@@ -351,17 +354,17 @@ const staticStyles = {
     zIndex: 1000,
     '&:hover': {
       transition: 'all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-      color: '#aaa'
-    }
+      color: '#aaa',
+    },
   },
   headerIconHide: {
-    visibility: 'hidden'
+    visibility: 'hidden',
   },
   headerClose: {
-    right: 5
+    right: 5,
   },
   headerReset: {
-    right: 18
+    right: 18,
   },
   cogGroupHeader: {
     background: '#90CAF9',
@@ -373,34 +376,39 @@ const staticStyles = {
     paddingBottom: 5,
     color: 'white',
     fontWeight: 400,
-    fontSize: 14
+    fontSize: 14,
   },
   cogGroupText: {
-    paddingLeft: 20
-  }
+    paddingLeft: 20,
+  },
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  filterStateSelector, filterViewSelector,
-  cogInfoSelector, sidebarHeightSelector, curDisplayInfoSelector,
-  cogFiltDistSelector, filterColSplitSelector, labelsSelector,
+  filterStateSelector,
+  filterViewSelector,
+  cogInfoSelector,
+  sidebarHeightSelector,
+  curDisplayInfoSelector,
+  cogFiltDistSelector,
+  filterColSplitSelector,
+  labelsSelector,
   (filter, filterView, cogInfo, sh, curDisplayInfo, filtDist, colSplit, labels) => ({
     styles: {
       col1: {
-        height: sh
+        height: sh,
       },
       col2: {
         height: sh,
-        display: colSplit.cutoff === null ? 'none' : 'inline'
+        display: colSplit.cutoff === null ? 'none' : 'inline',
       },
       notUsedContainer: {
-        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1]
+        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1],
       },
       allContainer: {
-        height: sh
-      }
+        height: sh,
+      },
     },
     catHeight: uiConsts.sidebar.filter.cat.height,
     filter,
@@ -409,13 +417,11 @@ const stateSelector = createSelector(
     curDisplayInfo,
     filtDist,
     colSplit,
-    labels
-  })
+    labels,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleViewChange: (x, which, labels) => {
@@ -444,10 +450,7 @@ const mapDispatchToProps = (dispatch) => ({
     const obj = {};
     obj[x.name] = x;
     dispatch(setFilter(obj));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SidebarFilter));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarFilter));

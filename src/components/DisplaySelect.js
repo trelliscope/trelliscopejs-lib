@@ -13,14 +13,27 @@ import DialogActions from '@material-ui/core/DialogActions';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import DisplayList from './DisplayList';
 import {
-  setSelectedDisplay, fetchDisplay, setActiveSidebar,
-  setLabels, setLayout, setSort, setFilter, setFilterView,
-  setDispSelectDialogOpen, resetRelDisps, setRelDispPositions
+  setSelectedDisplay,
+  fetchDisplay,
+  setActiveSidebar,
+  setLabels,
+  setLayout,
+  setSort,
+  setFilter,
+  setFilterView,
+  setDispSelectDialogOpen,
+  resetRelDisps,
+  setRelDispPositions,
 } from '../actions';
 import { displayGroupsSelector } from '../selectors/display';
 import {
-  appIdSelector, configSelector, displayListSelector, fullscreenSelector,
-  selectedDisplaySelector, singlePageAppSelector, dispSelectDialogSelector
+  appIdSelector,
+  configSelector,
+  displayListSelector,
+  fullscreenSelector,
+  selectedDisplaySelector,
+  singlePageAppSelector,
+  dispSelectDialogSelector,
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -28,14 +41,12 @@ class DisplaySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      btnScale: 1
+      btnScale: 1,
     };
   }
 
   componentDidMount() {
-    const {
-      fullscreen, selectedDisplay
-    } = this.props;
+    const { fullscreen, selectedDisplay } = this.props;
     const { btnScale } = this.state;
 
     if (fullscreen) {
@@ -54,7 +65,8 @@ class DisplaySelect extends React.Component {
     }, 750);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
       Mousetrap.bind('o', this.handleKey);
     } else {
@@ -76,42 +88,40 @@ class DisplaySelect extends React.Component {
       setDispDialogOpen(true);
       Mousetrap.bind('esc', this.handleClose);
     }
-  }
+  };
 
   handleKey = () => {
     const { setDialogOpen, setDispDialogOpen } = this.props;
     setDialogOpen(true);
     setDispDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
-  }
+  };
 
   handleClose = () => {
     const { setDialogOpen, setDispDialogOpen } = this.props;
     setDialogOpen(false);
     setDispDialogOpen(false);
     Mousetrap.unbind('esc');
-  }
+  };
 
   handleSelect = (name, group, desc) => {
-    const {
-      handleClick, setDialogOpen, setDispDialogOpen, cfg, appId
-    } = this.props;
+    const { handleClick, setDialogOpen, setDispDialogOpen, cfg, appId } = this.props;
     handleClick(name, group, desc, cfg, appId);
     setDialogOpen(false);
     setDispDialogOpen(false);
-  }
+  };
 
   render() {
-    const {
-      classes, displayList, displayGroups, selectedDisplay, isOpen
-    } = this.props;
+    const { classes, displayList, displayGroups, selectedDisplay, isOpen } = this.props;
 
     const isLoaded = displayList && displayList.isLoaded;
     let attnDiv = (
       <div className={classes.attnOuter}>
         <div className={classes.attnInner}>
           <div
-            ref={(d) => { this._atnnCircle = d; }}
+            ref={(d) => {
+              this._atnnCircle = d;
+            }}
             className={classes.attnEmpty}
           />
         </div>
@@ -173,7 +183,7 @@ DisplaySelect.propTypes = {
   appId: PropTypes.string.isRequired,
   selectedDisplay: PropTypes.object.isRequired,
   displayList: PropTypes.object.isRequired,
-  displayGroups: PropTypes.object.isRequired
+  displayGroups: PropTypes.object.isRequired,
 };
 
 // ------ static styles ------
@@ -186,7 +196,7 @@ const staticStyles = {
     width: uiConsts.header.height,
     top: 0,
     left: (uiConsts.sideButtons.width - uiConsts.header.height) / 2,
-    pointerEvents: 'none'
+    pointerEvents: 'none',
   },
   attnInner: {
     position: 'absolute',
@@ -194,10 +204,12 @@ const staticStyles = {
     width: uiConsts.header.height,
     top: 0,
     left: 0,
-    transition: ['transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
-      '0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'].join(' '),
+    transition: [
+      'transform 450ms cubic-bezier(0.23, 1, 0.32, 1)',
+      '0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    ].join(' '),
     opacity: 1,
-    transform: 'scale(0.85)'
+    transform: 'scale(0.85)',
   },
   attnEmpty: {
     position: 'absolute',
@@ -208,10 +220,10 @@ const staticStyles = {
     transition: 'transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms',
     top: 0,
     transform: 'scale(0.85)',
-    backgroundColor: 'rgba(0, 0, 0, 0.870588)'
+    backgroundColor: 'rgba(0, 0, 0, 0.870588)',
   },
   folderIcon: {
-    paddingLeft: 3
+    paddingLeft: 3,
   },
   button: {
     zIndex: 8000,
@@ -233,25 +245,30 @@ const staticStyles = {
       transition: 'background 250ms',
       background: emphasize(uiConsts.header.button.active.background, 0.2),
       color: 'white',
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   buttonInactive: {
     background: '#ddd',
     borderColor: '#ddd',
     '&:hover': {
       background: '#ccc',
-      borderColor: '#ccc'
-    }
-  }
+      borderColor: '#ccc',
+    },
+  },
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, displayListSelector,
-  displayGroupsSelector, configSelector, appIdSelector,
-  singlePageAppSelector, fullscreenSelector, dispSelectDialogSelector,
+  selectedDisplaySelector,
+  displayListSelector,
+  displayGroupsSelector,
+  configSelector,
+  appIdSelector,
+  singlePageAppSelector,
+  fullscreenSelector,
+  dispSelectDialogSelector,
   (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen, isOpen) => ({
     appId,
     cfg,
@@ -260,13 +277,11 @@ const styleSelector = createSelector(
     displayGroups,
     singlePageApp,
     fullscreen,
-    isOpen
-  })
+    isOpen,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  styleSelector(state)
-);
+const mapStateToProps = (state) => styleSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleClick: (name, group, desc, cfg, appId) => {
@@ -289,10 +304,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setDispDialogOpen: (isOpen) => {
     dispatch(setDispSelectDialogOpen(isOpen));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(DisplaySelect));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(DisplaySelect));

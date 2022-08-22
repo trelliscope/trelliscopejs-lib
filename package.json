@@ -15,6 +15,7 @@
     "d3-scale": "^3.2.1",
     "d3-selection": "^1.4.1",
     "dompurify": "^2.1.1",
+    "eslint-config-prettier": "^8.5.0",
     "fingerprintjs2": "^2.1.2",
     "lodash.intersection": "^4.4.0",
     "lodash.omit": "^4.5.0",
@@ -36,7 +37,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "throttle-debounce": "^2.3.0"
+    "throttle-debounce": "^2.3.0",
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -60,14 +62,18 @@
   "devDependencies": {
     "cors-anywhere": "^0.4.4",
     "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^2.5.0",
     "glob": "^7.1.6",
+    "prettier": "2.7.1",
     "replace-in-files": "^2.0.3",
+    "sass": "^1.54.5",
     "source-map-explorer": "^2.5.0",
     "terser-webpack-plugin": "^2.3.5",
+    "typescript": "^4.7.4",
     "webpack-cli": "^4.0.0"
   }
 }

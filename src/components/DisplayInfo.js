@@ -11,17 +11,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import {
-  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector,
-  dispInfoDialogSelector
-} from '../selectors';
+import { selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector, dispInfoDialogSelector } from '../selectors';
 import { setDispInfoDialogOpen } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
 const moptions = {
   passoverHTML: false,
   passoverAttribute: 'passover',
-  stripPassoverAttribute: true
+  stripPassoverAttribute: true,
 };
 
 class DisplayInfo extends React.Component {
@@ -32,7 +29,8 @@ class DisplayInfo extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     if (nextProps.active && nextProps.fullscreen) {
       Mousetrap.bind('i', this.handleKey);
     } else {
@@ -52,26 +50,24 @@ class DisplayInfo extends React.Component {
     setDialogOpen(true);
     setThisDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
-  }
+  };
 
   handleKey = () => {
     const { setDialogOpen, setThisDialogOpen } = this.props;
     setDialogOpen(true);
     setThisDialogOpen(true);
     Mousetrap.bind('esc', this.handleClose);
-  }
+  };
 
   handleClose = () => {
     const { setDialogOpen, setThisDialogOpen } = this.props;
     setDialogOpen(false);
     setThisDialogOpen(false);
     Mousetrap.unbind('esc');
-  }
+  };
 
   render() {
-    const {
-      classes, curDisplayInfo, singleDisplay, styles
-    } = this.props;
+    const { classes, curDisplayInfo, singleDisplay, styles } = this.props;
 
     let dialogContent = '';
     if (curDisplayInfo.isLoaded) {
@@ -82,9 +78,7 @@ class DisplayInfo extends React.Component {
 
       let descText = '';
       if (curDisplayInfo.info.desc) {
-        descText = (
-          <em>{curDisplayInfo.info.desc}</em>
-        );
+        descText = <em>{curDisplayInfo.info.desc}</em>;
       }
 
       // let panelUnitText = '';
@@ -107,23 +101,21 @@ class DisplayInfo extends React.Component {
             {`This visualization contains ${curDisplayInfo.info.n} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "cognostics", that you can use to sort and filter the panels that you want to view.`}
           </p>
           <p>
-            To learn more about how to interact with this visualization, click the &ldquo;?&rdquo;
-            icon in the top right corner of the display.
+            To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top right
+            corner of the display.
           </p>
           {curDisplayInfo.info.has_inputs && (
             <p>
-              There are user input variables available in this visualization with which you can
-              provide feedback for any panel. These will show up as either a radio button or free
-              text entry in the labels that show up under each panel. As you enter inputs, these
-              are saved in your local web browser&apos;s storage and will be remembered in
+              There are user input variables available in this visualization with which you can provide feedback for any
+              panel. These will show up as either a radio button or free text entry in the labels that show up under each
+              panel. As you enter inputs, these are saved in your local web browser&apos;s storage and will be remembered in
               subsequent views of the display.
             </p>
           )}
           {curDisplayInfo.info.has_inputs && (
             <p>
-              If you&apos;d like to pull the data that you have input, you can click the
-              &ldquo;Export Inputs&rdquo; button at the bottom left corner of the display and
-              follow the prompts in the dialog box that pops up.
+              If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo; button
+              at the bottom left corner of the display and follow the prompts in the dialog box that pops up.
             </p>
           )}
           {/* <p>
@@ -221,7 +213,7 @@ DisplayInfo.propTypes = {
   setDialogOpen: PropTypes.func.isRequired,
   setThisDialogOpen: PropTypes.func.isRequired,
   fullscreen: PropTypes.bool.isRequired,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
 };
 
 // ------ static styles ------
@@ -247,51 +239,49 @@ const staticStyles = {
     '&:hover': {
       transition: 'background 250ms',
       background: '#eee',
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   icon: {
     paddingLeft: 2,
-    lineHeight: `${uiConsts.header.height}px`
+    lineHeight: `${uiConsts.header.height}px`,
   },
   modalContainer: {
     overflowY: 'auto',
-    maxHeight: 520
-  }
+    maxHeight: 520,
+  },
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  selectedDisplaySelector, curDisplayInfoSelector, fullscreenSelector, dispInfoDialogSelector,
+  selectedDisplaySelector,
+  curDisplayInfoSelector,
+  fullscreenSelector,
+  dispInfoDialogSelector,
   (selectedDisplay, curDisplayInfo, fullscreen, isOpen) => ({
     styles: {
       button: {
-        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width
+        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : uiConsts.sideButtons.width,
       },
       single: {
-        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : 0
-      }
+        left: selectedDisplay.name === '' ? -uiConsts.sideButtons.width : 0,
+      },
     },
     // selectedDisplay,
     curDisplayInfo,
     fullscreen,
     active: selectedDisplay.name !== '',
-    isOpen
-  })
+    isOpen,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  styleSelector(state)
-);
+const mapStateToProps = (state) => styleSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   setThisDialogOpen: (isOpen) => {
     dispatch(setDispInfoDialogOpen(isOpen));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(DisplayInfo));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(DisplayInfo));

@@ -25,15 +25,13 @@
 }
 
 .trelliscope-app {
-  font-family: "Open Sans",
-  sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   line-height: normal;
 }
 
 .trelliscope-app button {
-  font-family: "Open Sans",
-  sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   /*border: none;*/
   /*background: none;*/
@@ -55,7 +53,7 @@
 }
 
 .trelliscope-app button:focus {
-  outline:0;
+  outline: 0;
 }
 
 .trelliscope-app h1,
@@ -86,5 +84,5 @@
 }
 
 .trelliscope-app a {
-  color: #FF5252
+  color: #ff5252;
 }

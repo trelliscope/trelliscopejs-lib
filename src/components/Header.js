@@ -12,8 +12,11 @@ import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../selectors/display';
 import {
-  appIdSelector, configSelector, displayListSelector,
-  selectedDisplaySelector, dialogOpenSelector
+  appIdSelector,
+  configSelector,
+  displayListSelector,
+  selectedDisplaySelector,
+  dialogOpenSelector,
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -22,11 +25,12 @@ class Header extends React.Component {
     super(props);
     this.state = {
       singleLoaded: props.selectedDisplay.name !== '',
-      singleDisplay: props.displayList.isLoaded && props.displayList.list.length <= 1
+      singleDisplay: props.displayList.isLoaded && props.displayList.list.length <= 1,
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nprops) {
+    // eslint-disable-line camelcase
     const { singleLoaded } = this.state;
     // handle loading a single display if necessary
     // TODO: Why do this here? Why not in actions/index.js?
@@ -42,7 +46,7 @@ class Header extends React.Component {
         nprops.displayList.list[0].desc,
         nprops.cfg,
         nprops.appId,
-        window.location.hash
+        window.location.hash,
       );
       this.setState({ singleLoaded: true });
     }
@@ -50,8 +54,14 @@ class Header extends React.Component {
 
   render() {
     const {
-      classes, styles, displayList, selectedDisplay, relatedDisplayGroups,
-      displayGroups, doSetDialogOpen, dialogOpen
+      classes,
+      styles,
+      displayList,
+      selectedDisplay,
+      relatedDisplayGroups,
+      displayGroups,
+      doSetDialogOpen,
+      dialogOpen,
     } = this.props;
     const { singleDisplay } = this.state;
 
@@ -62,7 +72,7 @@ class Header extends React.Component {
     let displaySelect = '';
     let relatedDisplayButton = '';
     if (relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0) {
-      relatedDisplayButton = (<RelatedDisplays setDialogOpen={doSetDialogOpen} />);
+      relatedDisplayButton = <RelatedDisplays setDialogOpen={doSetDialogOpen} />;
     }
     const displayLoaded = selectedDisplay.name !== '';
     const nGroups = Object.keys(displayGroups).length;
@@ -99,28 +109,18 @@ class Header extends React.Component {
       <div className={classes.headerContainer} style={styles.headerContainer}>
         {displaySelect}
         {relatedDisplayButton}
-        <DisplayInfo
-          singleDisplay={singleDisplay}
-          setDialogOpen={doSetDialogOpen}
-        />
+        <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={doSetDialogOpen} />
         <i style={iconStyle} className="fa fa-info-circle" />
         <div className={classes.headerSubContainer} style={styles.headerSubContainer}>
           <div className={classes.nameDescContainer}>
             <div className={classes.displayName} style={styles.displayName}>
               {displayName}
             </div>
-            <div className={classes.displayDesc}>
-              {displayDesc}
-            </div>
+            <div className={classes.displayDesc}>{displayDesc}</div>
           </div>
-          <div className={classes.paginationContainer}>
-            {pagination}
-          </div>
+          <div className={classes.paginationContainer}>{pagination}</div>
         </div>
-        <HeaderLogo
-          setDialogOpen={doSetDialogOpen}
-          singleDisplay={singleDisplay}
-        />
+        <HeaderLogo setDialogOpen={doSetDialogOpen} singleDisplay={singleDisplay} />
       </div>
     );
   }
@@ -140,7 +140,7 @@ Header.propTypes = {
   dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   selectDisplay: PropTypes.func.isRequired,
-  doSetDialogOpen: PropTypes.func.isRequired
+  doSetDialogOpen: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -160,20 +160,20 @@ const staticStyles = {
     margin: 0,
     fontSize: uiConsts.header.fontSize,
     fontWeight: 300,
-    zIndex: 1010
+    zIndex: 1010,
   },
   headerSubContainer: {
     display: 'flex',
     position: 'absolute',
     top: 0,
-    height: uiConsts.header.height
+    height: uiConsts.header.height,
   },
   nameDescContainer: {
     flex: '1 0',
     minWidth: 0,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   paginationContainer: {
     // flex: '0 0'
@@ -184,7 +184,7 @@ const staticStyles = {
     fontSize: 17,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
     // fontWeight: 400,
     // transition: 'left 0.5s ease',
   },
@@ -197,31 +197,41 @@ const staticStyles = {
     fontStyle: 'italic',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
-  }
+    textOverflow: 'ellipsis',
+  },
 };
 
 // ------ redux container ------
 
 const styleSelector = createSelector(
-  appIdSelector, windowWidthSelector, displayListSelector, displayGroupsSelector,
-  selectedDisplaySelector, relatedDisplayGroupsSelector, configSelector, dialogOpenSelector,
+  appIdSelector,
+  windowWidthSelector,
+  displayListSelector,
+  displayGroupsSelector,
+  selectedDisplaySelector,
+  relatedDisplayGroupsSelector,
+  configSelector,
+  dialogOpenSelector,
   (appId, ww, dl, dg, sd, rdg, cfg, dialogOpen) => ({
     styles: {
       headerContainer: {
-        width: ww
+        width: ww,
       },
       headerSubContainer: {
-        left: uiConsts.header.height
-          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)),
-        width: ww - ((uiConsts.header.height
-          * ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1))
-            + uiConsts.header.logoWidth + 30))
+        left:
+          uiConsts.header.height *
+          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)),
+        width:
+          ww -
+          (uiConsts.header.height *
+            ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)) +
+            uiConsts.header.logoWidth +
+            30),
       },
       displayName: {
         lineHeight: `${sd.desc === '' ? 48 : 26}px`,
-        paddingTop: sd.desc === '' ? 0 : 5
-      }
+        paddingTop: sd.desc === '' ? 0 : 5,
+      },
     },
     appId,
     cfg,
@@ -229,13 +239,11 @@ const styleSelector = createSelector(
     displayGroups: dg,
     selectedDisplay: sd,
     relatedDisplayGroups: rdg,
-    dialogOpen
-  })
+    dialogOpen,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  styleSelector(state)
-);
+const mapStateToProps = (state) => styleSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   selectDisplay: (name, group, desc, cfg, appId, hash) => {
@@ -244,10 +252,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   doSetDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(Header));

@@ -6,8 +6,8 @@ const panelRenderersReducer = (state = {}, action) => {
       return {
         ...state,
         [action.name]: {
-          fn: action.fn
-        }
+          fn: action.fn,
+        },
       };
     default:
   }

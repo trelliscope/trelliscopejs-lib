@@ -12,16 +12,14 @@ class CatBar extends React.Component {
 
   mouseOver = () => {
     this.setState({ hover: true });
-  }
+  };
 
   mouseOut = () => {
     this.setState({ hover: false });
-  }
+  };
 
   render() {
-    const {
-      classes, width, height, d, divStyle, handleClick, active, allActive
-    } = this.props;
+    const { classes, width, height, d, divStyle, handleClick, active, allActive } = this.props;
     const { hover } = this.state;
 
     const fontSize = Math.min(10, height - 6);
@@ -33,7 +31,7 @@ class CatBar extends React.Component {
       <div
         className={classNames({
           [classes.wrapper]: true,
-          [classes.wrapperHover]: hover
+          [classes.wrapperHover]: hover,
         })}
         style={divStyle}
         onMouseOver={this.mouseOver}
@@ -47,11 +45,11 @@ class CatBar extends React.Component {
             [classes.bar]: true,
             [classes.barHover]: hover,
             [classes.barActive]: active && !hover,
-            [classes.barAllActive]: allActive && !hover
+            [classes.barAllActive]: allActive && !hover,
           })}
           style={{
             width,
-            height: height - 1
+            height: height - 1,
           }}
         >
           <div
@@ -59,22 +57,20 @@ class CatBar extends React.Component {
             style={{
               fontSize,
               lineHeight: `${height - 1}px`,
-              width
+              width,
             }}
           >
-            <div className={classes.barTextInner}>
-              {d.id}
-            </div>
+            <div className={classes.barTextInner}>{d.id}</div>
           </div>
         </div>
         <div
           className={classNames({
             [classes.barLabel]: true,
-            [classes.hidden]: !hover
+            [classes.hidden]: !hover,
           })}
           style={{
             labelFontSize,
-            lineHeight: `${height - 1}px`
+            lineHeight: `${height - 1}px`,
           }}
         >
           {label}
@@ -92,35 +88,35 @@ CatBar.propTypes = {
   height: PropTypes.number.isRequired,
   divStyle: PropTypes.object.isRequired,
   d: PropTypes.object.isRequired,
-  handleClick: PropTypes.func.isRequired
+  handleClick: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
 
 const staticStyles = {
   wrapper: {
-    background: 'white'
+    background: 'white',
   },
   wrapperHover: {
-    background: '#f6f6f6'
+    background: '#f6f6f6',
   },
   bar: {
     background: uiConsts.sidebar.filter.cat.bar.color.default,
     color: uiConsts.sidebar.filter.cat.text.color.default,
     position: 'absolute',
-    left: 0
+    left: 0,
   },
   barHover: {
     background: uiConsts.sidebar.filter.cat.bar.color.hover,
-    color: uiConsts.sidebar.filter.cat.text.color.hover
+    color: uiConsts.sidebar.filter.cat.text.color.hover,
   },
   barActive: {
     background: uiConsts.sidebar.filter.cat.bar.color.select,
-    color: uiConsts.sidebar.filter.cat.text.color.select
+    color: uiConsts.sidebar.filter.cat.text.color.select,
   },
   barAllActive: {
     background: uiConsts.sidebar.filter.cat.bar.color.noneSelect,
-    color: uiConsts.sidebar.filter.cat.text.color.select
+    color: uiConsts.sidebar.filter.cat.text.color.select,
   },
   barLabel: {
     fontSize: 10,
@@ -129,23 +125,23 @@ const staticStyles = {
     cursor: 'default',
     position: 'absolute',
     lineHeight: '19px',
-    right: 4
+    right: 4,
   },
   hidden: {
-    visibility: 'hidden'
+    visibility: 'hidden',
   },
   barText: {
     display: 'inline-block',
     overflow: 'hidden',
-    cursor: 'default'
+    cursor: 'default',
   },
   barTextInner: {
     display: 'inline-block',
     whiteSpace: 'nowrap',
     position: 'absolute',
     left: 5,
-    bottom: 0
-  }
+    bottom: 0,
+  },
 };
 
 export default injectSheet(staticStyles)(CatBar);
