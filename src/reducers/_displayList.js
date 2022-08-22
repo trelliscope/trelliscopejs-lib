@@ -1,18 +1,21 @@
 import { REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST } from '../constants';
 
-const _displayListReducer = (state = {
-  isFetching: false,
-  isLoaded: false,
-  didInvalidate: false,
-  list: []
-}, action) => {
+const _displayListReducer = (
+  state = {
+    isFetching: false,
+    isLoaded: false,
+    didInvalidate: false,
+    list: [],
+  },
+  action,
+) => {
   switch (action.type) {
     case REQUEST_DISPLAY_LIST:
       return {
         ...state,
         isFetching: true,
         isLoaded: false,
-        didInvalidate: false
+        didInvalidate: false,
       };
     case RECEIVE_DISPLAY_LIST:
       return {
@@ -21,7 +24,7 @@ const _displayListReducer = (state = {
         didInvalidate: false,
         isLoaded: true,
         list: action.list,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
       };
     default:
       return state;

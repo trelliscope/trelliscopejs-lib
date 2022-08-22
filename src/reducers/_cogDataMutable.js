@@ -1,17 +1,20 @@
 import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants';
 
-const _cogDataMutable = (state = {
-  isFetching: false,
-  isLoaded: false,
-  didInvalidate: false
-}, action) => {
+const _cogDataMutable = (
+  state = {
+    isFetching: false,
+    isLoaded: false,
+    didInvalidate: false,
+  },
+  action,
+) => {
   switch (action.type) {
     case REQUEST_COGDATA:
       return {
         ...state,
         isFetching: true,
         isLoaded: false,
-        didInvalidate: false
+        didInvalidate: false,
       };
     case RECEIVE_COGDATA:
       return {
@@ -22,10 +25,9 @@ const _cogDataMutable = (state = {
         crossfilter: action.crossfilter,
         dimensionRefs: {},
         groupRefs: {},
-        allRef: action.crossfilter !== undefined
-          ? action.crossfilter.groupAll() : undefined,
+        allRef: action.crossfilter !== undefined ? action.crossfilter.groupAll() : undefined,
         iface: action.iface,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
       };
     default:
       return state;

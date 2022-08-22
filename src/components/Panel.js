@@ -25,8 +25,7 @@ class Panel extends React.Component {
 
     this.myRef = React.createRef();
 
-    this.isSelfContained = props.panelData !== undefined
-      && props.cfg.display_base === '__self__';
+    this.isSelfContained = props.panelData !== undefined && props.cfg.display_base === '__self__';
 
     let names = [props.curDisplayInfo.info.name];
     if (props.relDispPositions.length > 0) {
@@ -38,7 +37,7 @@ class Panel extends React.Component {
       hover: '',
       textInputOpen: '',
       textInputValue: '',
-      inputChangeCounter: 0 // to trigger state change if user inputs are updated
+      inputChangeCounter: 0, // to trigger state change if user inputs are updated
     };
 
     names.forEach((name) => {
@@ -48,22 +47,25 @@ class Panel extends React.Component {
         initialState.panels[name] = {
           panelContent: props.panelRenderers[name].fn(
             props.displayInfo[name].info.imgSrcLookup[props.panelKey],
-            props.dims.ww, props.dims.hh, false, props.panelKey),
+            props.dims.ww,
+            props.dims.hh,
+            false,
+            props.panelKey,
+          ),
           panelData: props.panelData,
-          loaded: true
+          loaded: true,
         };
       } else if (this.isSelfContained) {
         initialState.panels[name] = {
-          panelContent: props.panelRenderers[name].fn(props.panelData,
-            props.dims.ww, props.dims.hh, false, props.panelKey),
+          panelContent: props.panelRenderers[name].fn(props.panelData, props.dims.ww, props.dims.hh, false, props.panelKey),
           panelData: props.panelData,
-          loaded: true
+          loaded: true,
         };
       } else {
         initialState.panels[name] = {
           loaded: false,
           panelContent: null,
-          panelData: null
+          panelData: null,
         };
       }
     });
@@ -74,10 +76,7 @@ class Panel extends React.Component {
     // async stuff
     const { panels } = this.state;
     // const loaded = Object.keys(panels).every((k) => panels[k].loaded);
-    const {
-      cfg, panelKey, panelRenderers, dims, curDisplayInfo,
-      displayInfo, relDispPositions
-    } = this.props;
+    const { cfg, panelKey, panelRenderers, dims, curDisplayInfo, displayInfo, relDispPositions } = this.props;
 
     let names = [curDisplayInfo.info.name];
     if (relDispPositions.length > 0) {
@@ -109,29 +108,27 @@ class Panel extends React.Component {
             panels: {
               ...pnls,
               [name]: {
-                panelContent: panelRenderer.fn(json2, width,
-                  height, false, `${panelKey}_${name}`),
+                panelContent: panelRenderer.fn(json2, width, height, false, `${panelKey}_${name}`),
                 panelData: json2,
-                loaded: true
-              }
-            }
+                loaded: true,
+              },
+            },
           });
         };
 
         if (cfg.cog_server.type === 'jsonp') {
           this.xhr = getJSONP({
             url: `${filebase}/jsonp/${panelKey}.jsonp`,
-            callbackName: `__panel_${panelKey}_${name}`
+            callbackName: `__panel_${panelKey}_${name}`,
           });
         } else {
           this.xhr = getJSON({
             url: `${filebase}/json/${panelKey}.json`,
-            callback: window.__panel__[`_${panelKey}_${name}`]
+            callback: window.__panel__[`_${panelKey}_${name}`],
           });
         }
       } else {
-        panelRenderer.fn(panels[name].panelData, width,
-          height, true, `${panelKey}_${name}`);
+        panelRenderer.fn(panels[name].panelData, width, height, true, `${panelKey}_${name}`);
       }
     });
 
@@ -142,7 +139,8 @@ class Panel extends React.Component {
   }
 
   // resizing (only when viewing single displays - not related displays)
-  UNSAFE_componentWillReceiveProps(nprops) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nprops) {
+    // eslint-disable-line camelcase
     const { panels } = this.state;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
     const { dims } = this.props;
@@ -154,11 +152,16 @@ class Panel extends React.Component {
         const panelRenderer = nprops.panelRenderers[name];
         const newPanels = { ...panels };
         if (nprops.relDispPositions.length === 0) {
-          newPanels[name].panelContent = panelRenderer.fn(panels[name].panelData,
-            nprops.dims.ww, nprops.dims.hh, false, `${nprops.panelKey}_${name}`);
+          newPanels[name].panelContent = panelRenderer.fn(
+            panels[name].panelData,
+            nprops.dims.ww,
+            nprops.dims.hh,
+            false,
+            `${nprops.panelKey}_${name}`,
+          );
         }
         this.setState({
-          panels: newPanels
+          panels: newPanels,
         });
       } else if (nprops.panelInterface.type === 'htmlwidget') {
         const widget = findWidget(nprops.panelInterface.deps.name);
@@ -178,10 +181,7 @@ class Panel extends React.Component {
   // do post-rendering (if any)
   componentDidUpdate() {
     const { panels } = this.state;
-    const {
-      panelKey, panelRenderers, dims, curDisplayInfo,
-      relDispPositions
-    } = this.props;
+    const { panelKey, panelRenderers, dims, curDisplayInfo, relDispPositions } = this.props;
 
     let names = [curDisplayInfo.info.name];
     if (relDispPositions.length > 0) {
@@ -196,8 +196,7 @@ class Panel extends React.Component {
           width = height / relDispPositions[i].aspect;
         }
         const panelRenderer = panelRenderers[name];
-        panelRenderer.fn(panels[name].panelData, width,
-          height, true, `${panelKey}_${name}`);
+        panelRenderer.fn(panels[name].panelData, width, height, true, `${panelKey}_${name}`);
       }
     });
   }
@@ -225,13 +224,9 @@ class Panel extends React.Component {
   }
 
   render() {
-    const {
-      classes, dims, rowIndex, iColIndex, labels, labelArr,
-      removeLabel, curDisplayInfo, relDispPositions, panelKey
-    } = this.props;
-    const {
-      panels, hover, inputChangeCounter, textInputOpen
-    } = this.state;
+    const { classes, dims, rowIndex, iColIndex, labels, labelArr, removeLabel, curDisplayInfo, relDispPositions, panelKey } =
+      this.props;
+    const { panels, hover, inputChangeCounter, textInputOpen } = this.state;
 
     const { name } = curDisplayInfo.info;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
@@ -245,9 +240,9 @@ class Panel extends React.Component {
               style={{
                 position: 'absolute',
                 top: d.top * dims.hh,
-                left: d.left * (dims.hh),
+                left: d.left * dims.hh,
                 height: d.height * dims.hh,
-                width: d.width * dims.hh
+                width: d.width * dims.hh,
               }}
             >
               {panels[d.name].panelContent}
@@ -257,74 +252,80 @@ class Panel extends React.Component {
       );
     }
     const bWidth = relDispPositions.length > 0 ? dims.contentWidth - 6 : dims.ww;
-    const bRight = relDispPositions.length > 0 ? 1 : (dims.pWidth * iColIndex)
-      + ((iColIndex + 1) * dims.pPad)
-      + dims.wOffset
-      + (iColIndex * 2) + 1;
+    const bRight =
+      relDispPositions.length > 0
+        ? 1
+        : dims.pWidth * iColIndex + (iColIndex + 1) * dims.pPad + dims.wOffset + iColIndex * 2 + 1;
     const styles = {
       bounding: {
         width: bWidth + 2,
-        height: dims.hh + (dims.nLabels * dims.labelHeight) + 2,
-        top: (dims.pHeight * rowIndex) + ((rowIndex + 1) * dims.pPad) // + dims.hOffset
-          + (rowIndex * 2),
-        right: bRight
+        height: dims.hh + dims.nLabels * dims.labelHeight + 2,
+        top:
+          dims.pHeight * rowIndex +
+          (rowIndex + 1) * dims.pPad + // + dims.hOffset
+          rowIndex * 2,
+        right: bRight,
       },
       panel: {
         width: bWidth,
-        height: dims.hh
+        height: dims.hh,
         // lineHeight: `${dims.hh}px`
       },
       panelContent: {
         width: bWidth,
-        height: dims.hh
+        height: dims.hh,
       },
       labelTable: {
-        width: bWidth
+        width: bWidth,
       },
       labelRow: {
         width: bWidth,
         height: dims.labelHeight,
-        lineHeight: `${dims.labelHeight}px`
+        lineHeight: `${dims.labelHeight}px`,
       },
       labelSpan: {
         fontSize: dims.fontSize,
-        position: 'absolute'
+        position: 'absolute',
       },
       labelClose: {
         fontSize: dims.fontSize,
-        lineHeight: `${dims.labelHeight}px`
+        lineHeight: `${dims.labelHeight}px`,
       },
       labelInner: {
-        height: dims.labelHeight
+        height: dims.labelHeight,
       },
       labelNameCell: {
-        paddingLeft: (dims.labelPad / 2) + 2,
-        paddingRIght: (dims.labelPad / 2) + 2,
-        width: dims.labelWidth
+        paddingLeft: dims.labelPad / 2 + 2,
+        paddingRIght: dims.labelPad / 2 + 2,
+        width: dims.labelWidth,
       },
       labelValueCell: {
-        paddingLeft: (dims.labelPad / 2) + 2,
-        paddingRIght: (dims.labelPad / 2) + 2
+        paddingLeft: dims.labelPad / 2 + 2,
+        paddingRIght: dims.labelPad / 2 + 2,
       },
       linkIcon: {
         textDecoration: 'none',
-        fontSize: dims.fontSize - 2
+        fontSize: dims.fontSize - 2,
       },
       radioDiv: {
         transform: `scale(${dims.labelHeight / 29})`,
         transformOrigin: 'left top',
-        marginTop: -4
-      }
+        marginTop: -4,
+      },
     };
 
     return (
       <div
         className={classes.bounding}
         style={styles.bounding}
-        ref={(d) => { this._panel = d; }}
+        ref={(d) => {
+          this._panel = d;
+        }}
       >
         <div className={classes.panel} style={styles.panel}>
-          {loaded ? panelContent : (
+          {loaded ? (
+            panelContent
+          ) : (
             <Delay wait={500}>
               <div>&apos;loading...&apos;</div>
             </Delay>
@@ -339,10 +340,10 @@ class Panel extends React.Component {
                   <button
                     type="button"
                     className={classes.labelClose}
-                    style={({
+                    style={{
                       ...styles.labelClose,
-                      ...(hover !== d.name && { display: 'none' })
-                    })}
+                      ...(hover !== d.name && { display: 'none' }),
+                    }}
                     onClick={() => removeLabel(d.name, labelArr)}
                   >
                     <i className="icon-times-circle" />
@@ -368,7 +369,8 @@ class Panel extends React.Component {
                         style={{ ...styles.labelSpan, textDecoration: 'none' }}
                         href="#open_in_same_window"
                         onClick={() => {
-                          window.location.href = d.value; window.location.reload();
+                          window.location.href = d.value;
+                          window.location.reload();
                         }}
                       >
                         <i className="icon-open" style={styles.linkIcon} />
@@ -379,11 +381,7 @@ class Panel extends React.Component {
                   const lsKey = getLocalStorageKey(curDisplayInfo.info, panelKey, d.name);
                   const opts = curDisplayInfo.info.cogInfo[d.name].options;
                   labelDiv = (
-                    <div
-                      className={classes.labelInner}
-                      style={styles.labelInner}
-                      title={d.value}
-                    >
+                    <div className={classes.labelInner} style={styles.labelInner} title={d.value}>
                       <div style={styles.radioDiv}>
                         <RadioGroup
                           aria-label={d.name}
@@ -414,11 +412,11 @@ class Panel extends React.Component {
                     <button
                       type="button"
                       className={classes.editButton}
-                      style={({
-                        ...styles.labelClose
+                      style={{
+                        ...styles.labelClose,
                         // ...({ right: dims.fontSize + 4 })
                         // ...(localStorage.getItem(lsKey) === undefined && { display: 'none' })
-                      })}
+                      }}
                       onClick={() => this.setTextInputOpen(d.name)}
                     >
                       <EditIcon style={{ fontSize: dims.fontSize }} />
@@ -427,10 +425,10 @@ class Panel extends React.Component {
                   labelDiv = (
                     <div
                       className={classes.labelInner}
-                      style={({
+                      style={{
                         ...styles.labelInner,
-                        ...({ display: 'flex', paddingRight: dims.fontSize + 4 })
-                      })}
+                        ...{ display: 'flex', paddingRight: dims.fontSize + 4 },
+                      }}
                       title={d.value}
                       ref={divRef}
                     >
@@ -456,15 +454,15 @@ class Panel extends React.Component {
                           this.setState({ inputChangeCounter: inputChangeCounter + 1 });
                         }}
                         onEnter={() => {
-                          this.setState({ textInputValue: localStorage.getItem(lsKey) || ''});
+                          this.setState({ textInputValue: localStorage.getItem(lsKey) || '' });
                         }}
                         anchorOrigin={{
                           vertical: 'top',
-                          horizontal: 'center'
+                          horizontal: 'center',
                         }}
                         transformOrigin={{
                           vertical: 'top',
-                          horizontal: 'center'
+                          horizontal: 'center',
                         }}
                       >
                         <div style={{ padding: 7 }}>
@@ -488,12 +486,10 @@ class Panel extends React.Component {
                   );
                 } else {
                   labelDiv = (
-                    <div
-                      className={classes.labelInner}
-                      style={styles.labelInner}
-                      title={d.value}
-                    >
-                      <span className={classes.labelP} style={styles.labelSpan}>{d.value}</span>
+                    <div className={classes.labelInner} style={styles.labelInner} title={d.value}>
+                      <span className={classes.labelP} style={styles.labelSpan}>
+                        {d.value}
+                      </span>
                     </div>
                   );
                 }
@@ -502,7 +498,7 @@ class Panel extends React.Component {
                     key={`${d.name}`}
                     className={classNames({
                       [classes.labelRow]: true,
-                      [classes.labelRowHover]: hover === d.name
+                      [classes.labelRowHover]: hover === d.name,
                     })}
                     style={styles.labelRow}
                     onMouseOver={() => this.handleHover(d.name)}
@@ -510,10 +506,7 @@ class Panel extends React.Component {
                     onMouseOut={() => this.handleHover('')}
                     onBlur={() => this.handleHover('')}
                   >
-                    <td
-                      className={`${classes.labelCell} ${classes.labelNameCell}`}
-                      style={styles.labelNameCell}
-                    >
+                    <td className={`${classes.labelCell} ${classes.labelNameCell}`} style={styles.labelNameCell}>
                       <div
                         className={classes.labelInner}
                         style={styles.labelInner}
@@ -528,10 +521,7 @@ class Panel extends React.Component {
                         </ReactTooltip>
                       )}
                     </td>
-                    <td
-                      className={classes.labelCell}
-                      style={styles.labelValueCell}
-                    >
+                    <td className={classes.labelCell} style={styles.labelValueCell}>
                       <div className={classes.labelOuter}>
                         {labelDiv}
                         {removeLabelDiv}
@@ -564,12 +554,12 @@ Panel.propTypes = {
   displayInfo: PropTypes.object.isRequired,
   curDisplayInfo: PropTypes.object.isRequired,
   relDispPositions: PropTypes.array.isRequired,
-  removeLabel: PropTypes.func.isRequired
+  removeLabel: PropTypes.func.isRequired,
 };
 
 Panel.defaultProps = () => ({
   panelInterface: undefined,
-  panelData: undefined
+  panelData: undefined,
 });
 
 // ------ static styles ------
@@ -583,7 +573,7 @@ const staticStyles = {
     overflow: 'hidden',
     padding: 0,
     boxSizing: 'border-box',
-    border: '1px solid #ddd'
+    border: '1px solid #ddd',
   },
   panel: {
     transitionProperty: 'all',
@@ -593,13 +583,13 @@ const staticStyles = {
     // background: '#f6f6f6',
     textAlign: 'center',
     overflow: 'hidden',
-    color: '#bbb'
+    color: '#bbb',
   },
   panelContent: {
     transitionProperty: 'all',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    display: 'block'
+    display: 'block',
   },
   labelTable: {
     transitionProperty: 'all',
@@ -608,29 +598,29 @@ const staticStyles = {
     padding: 0,
     tableLayout: 'fixed',
     borderSpacing: 0,
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
   },
   labelRow: {
     transitionProperty: 'all',
     transitionDuration: uiConsts.trans.duration,
     transitionTimingFunction: uiConsts.trans.timing,
-    background: '#f6f6f6'
+    background: '#f6f6f6',
   },
   labelRowHover: {
-    background: fade('#f6f6f6', 0.4)
+    background: fade('#f6f6f6', 0.4),
   },
   labelCell: {
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
     // borderTop: '1px solid white'
   },
   labelNameCell: {
     borderRight: '1px solid #fff',
-    fontWeight: 400
+    fontWeight: 400,
   },
   labelOuter: {
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   labelInner: {
     paddingRight: 3,
@@ -638,7 +628,7 @@ const staticStyles = {
     whiteSpace: 'normal',
     verticalAlign: 'middle',
     position: 'relative',
-    cursor: 'default'
+    cursor: 'default',
     // overflow: 'hidden',
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis'
@@ -648,7 +638,7 @@ const staticStyles = {
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     width: '100%',
-    margin: 0
+    margin: 0,
   },
   labelClose: {
     // float: 'right',
@@ -661,7 +651,7 @@ const staticStyles = {
     background: 'none',
     padding: 0,
     margin: 0,
-    opacity: 0.5
+    opacity: 0.5,
   },
   editButton: {
     // float: 'right',
@@ -670,11 +660,11 @@ const staticStyles = {
     background: 'none',
     padding: 0,
     margin: 0,
-    opacity: 0.5
+    opacity: 0.5,
   },
   formRow: {
-    flexWrap: 'unset'
-  }
+    flexWrap: 'unset',
+  },
 };
 
 export default injectSheet(staticStyles)(Panel);

@@ -14,9 +14,7 @@ class FilterCatPlot extends React.Component {
   // rowIndex,    // Vertical (row) index of cell
   // style        // Style object to be applied to cell (to position it)
   barCellRenderer = (x) => {
-    const {
-      condDist, sortOrder, filterState, cellHeight, width, dist
-    } = this.props;
+    const { condDist, sortOrder, filterState, cellHeight, width, dist } = this.props;
 
     let barSize = 0;
     let barCt = 0;
@@ -33,11 +31,9 @@ class FilterCatPlot extends React.Component {
     // we also have to take into account whether the rows should be reversed or not
     let ridx;
     if (x.rowIndex < totSel) {
-      ridx = condDist.reverseRows
-        ? x.rowIndex : totSel - (x.rowIndex + 1);
+      ridx = condDist.reverseRows ? x.rowIndex : totSel - (x.rowIndex + 1);
     } else {
-      ridx = condDist.reverseRows
-        ? x.rowIndex : condDist.dist.length - ((x.rowIndex - totSel) + 1);
+      ridx = condDist.reverseRows ? x.rowIndex : condDist.dist.length - (x.rowIndex - totSel + 1);
     }
     ridx = condDist.idx[ridx]; // eslint-disable-line prefer-destructuring
 
@@ -59,12 +55,12 @@ class FilterCatPlot extends React.Component {
         active={active}
         allActive={filterState.value === undefined}
         height={cellHeight}
-        width={((barSize / barMax) * (width - 1)) + 1}
+        width={(barSize / barMax) * (width - 1) + 1}
         handleClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: dist.dist[barName], id: barName }}
       />
     );
-  }
+  };
 
   handleSelect(val, active) {
     const { filterState, sortOrder, handleChange } = this.props;
@@ -85,7 +81,7 @@ class FilterCatPlot extends React.Component {
       newState = {
         name: filterState.name,
         varType: filterState.varType,
-        orderValue: sortOrder
+        orderValue: sortOrder,
       };
     } else {
       newState = {
@@ -93,16 +89,14 @@ class FilterCatPlot extends React.Component {
         type: 'select',
         varType: filterState.varType,
         value: selectArr,
-        orderValue: sortOrder
+        orderValue: sortOrder,
       };
     }
     handleChange(newState);
   }
 
   render() {
-    const {
-      condDist, filterCardinality, width, height, cellHeight
-    } = this.props;
+    const { condDist, filterCardinality, width, height, cellHeight } = this.props;
 
     const { orderValue } = condDist;
     const { totSelected } = condDist;
@@ -134,22 +128,15 @@ FilterCatPlot.propTypes = {
   filterState: PropTypes.object.isRequired,
   sortOrder: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
-  filterCardinality: PropTypes.number.isRequired
+  filterCardinality: PropTypes.number.isRequired,
 };
 
 // ------ redux container ------
 
-const stateSelector = createSelector(
-  filterCardinalitySelector,
-  (filterCardinality) => ({
-    filterCardinality
-  })
-);
+const stateSelector = createSelector(filterCardinalitySelector, (filterCardinality) => ({
+  filterCardinality,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
-export default connect(
-  mapStateToProps
-)(FilterCatPlot);
+export default connect(mapStateToProps)(FilterCatPlot);

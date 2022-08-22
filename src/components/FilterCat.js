@@ -22,7 +22,7 @@ const sortOptions = [
   { payload: 'ct,asc', text: 'Order: count ascending' },
   { payload: 'ct,desc', text: 'Order: count descending' },
   { payload: 'id,asc', text: 'Order: label ascending' },
-  { payload: 'id,desc', text: 'Order: label descending' }
+  { payload: 'id,desc', text: 'Order: label descending' },
 ];
 
 class FilterCat extends React.Component {
@@ -30,20 +30,19 @@ class FilterCat extends React.Component {
     super(props);
     const { filterState } = this.props;
     // this.handleRegex = debounce(400, this.handleRegex);
-    this.sortOrder = filterState.orderValue
-      ? filterState.orderValue : 'ct,desc';
+    this.sortOrder = filterState.orderValue ? filterState.orderValue : 'ct,desc';
     this.state = { menuOpen: false, anchorEl: null };
   }
 
-  UNSAFE_componentWillUpdate() { // eslint-disable-line camelcase
+  UNSAFE_componentWillUpdate() {
+    // eslint-disable-line camelcase
     const { filterState } = this.props;
-    this.sortOrder = filterState.orderValue
-      ? filterState.orderValue : 'ct,desc';
+    this.sortOrder = filterState.orderValue ? filterState.orderValue : 'ct,desc';
   }
 
   handleMenuClose = () => {
     this.setState({ menuOpen: false });
-  }
+  };
 
   handleMenuIconClick = (event) => {
     const { menuOpen } = this.state;
@@ -54,7 +53,7 @@ class FilterCat extends React.Component {
     // } else {
     //   Mousetrap.bind('esc', this.handleMenuClose);
     // }
-  }
+  };
 
   handleRegex(val) {
     const { filterState, levels, handleChange } = this.props;
@@ -63,35 +62,37 @@ class FilterCat extends React.Component {
       newState = {
         name: filterState.name,
         varType: filterState.varType,
-        orderValue: this.sortOrder
+        orderValue: this.sortOrder,
       };
     } else {
       const vals = [];
       const rval = new RegExp(val, 'i');
-      levels.forEach((d) => { if (d.match(rval) !== null) { vals.push(d); } });
+      levels.forEach((d) => {
+        if (d.match(rval) !== null) {
+          vals.push(d);
+        }
+      });
       newState = {
         name: filterState.name,
         type: 'regex',
         varType: filterState.varType,
         regex: val,
         value: vals,
-        orderValue: this.sortOrder
+        orderValue: this.sortOrder,
       };
     }
     handleChange(newState);
   }
 
   render() {
-    const {
-      classes, handleSortChange, filterState, height, dist, condDist, handleChange
-    } = this.props;
+    const { classes, handleSortChange, filterState, height, dist, condDist, handleChange } = this.props;
 
     const regexInput = {
       width: uiConsts.sidebar.width - 40,
       marginTop: -8,
       fontSize: 16,
       transform: 'scale(0.85)',
-      transformOrigin: '0 0'
+      transformOrigin: '0 0',
     };
 
     const { menuOpen, anchorEl } = this.state;
@@ -127,8 +128,7 @@ class FilterCat extends React.Component {
               key={d.payload}
               selected={d.payload === filterState.orderValue}
               onClick={() => {
-                handleSortChange(Object.assign(filterState,
-                  { orderValue: d.payload }));
+                handleSortChange(Object.assign(filterState, { orderValue: d.payload }));
                 this.handleMenuClose();
               }}
             >
@@ -141,13 +141,11 @@ class FilterCat extends React.Component {
 
     return (
       <div className={classes.container}>
-        <div
-          className={classes.plotContainer}
-        >
+        <div className={classes.plotContainer}>
           <FilterCatPlot
             className={classes.plotContainer}
             height={height}
-            width={uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2)}
+            width={uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2}
             cellHeight={15}
             dist={dist}
             condDist={condDist}
@@ -178,36 +176,36 @@ FilterCat.propTypes = {
   levels: PropTypes.array.isRequired,
   height: PropTypes.number.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSortChange: PropTypes.func.isRequired
+  handleSortChange: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
 
 const staticStyles = {
   container: {
-    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    width: uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2,
     boxSizing: 'border-box',
     paddingLeft: uiConsts.sidebar.filter.margin,
     paddingRight: uiConsts.sidebar.filter.margin,
-    paddingTop: uiConsts.sidebar.filter.margin
+    paddingTop: uiConsts.sidebar.filter.margin,
   },
   plotContainer: {
-    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    width: uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2,
     // height: uiConsts.sidebar.filter.cat.height,
     boxSizing: 'border-box',
     position: 'relative',
     overflow: 'hidden',
     cursor: 'default',
     userSelect: 'none',
-    zIndex: 1000
+    zIndex: 1000,
   },
   inputContainer: {
     height: 39,
-    width: uiConsts.sidebar.width - (uiConsts.sidebar.filter.margin * 2),
+    width: uiConsts.sidebar.width - uiConsts.sidebar.filter.margin * 2,
     marginBottom: -21,
     paddingTop: 7,
     zIndex: 100,
-    position: 'relative'
+    position: 'relative',
   },
   extraOptionsInput: {
     // position: 'absolute',
@@ -217,8 +215,8 @@ const staticStyles = {
     marginTop: -6,
     width: 28,
     transform: 'scale(0.6)',
-    transformOrigin: '0 0'
-  }
+    transformOrigin: '0 0',
+  },
   // position: absolute;
   // top: -8px;
   // right: -10px;

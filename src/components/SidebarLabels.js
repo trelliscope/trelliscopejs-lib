@@ -14,9 +14,7 @@ import { contentHeightSelector } from '../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLabels = ({
-  classes, height, labels, cogInfo, curDisplayInfo, handleChange
-}) => {
+const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handleChange }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
@@ -37,12 +35,7 @@ const SidebarLabels = ({
                   </ListSubheader>
                 )}
                 {cogGroups[grp].sort().map((d) => (
-                  <ListItem
-                    key={cogInfo[d].name}
-                    dense
-                    button
-                    onClick={() => handleChange(cogInfo[d].name, labels)}
-                  >
+                  <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name, labels)}>
                     <Checkbox
                       checked={labels.indexOf(cogInfo[d].name) !== -1}
                       style={{ width: 20, height: 20 }}
@@ -63,7 +56,7 @@ const SidebarLabels = ({
       </div>
     );
   }
-  return (content);
+  return content;
 };
 
 SidebarLabels.propTypes = {
@@ -71,7 +64,7 @@ SidebarLabels.propTypes = {
   // sheet: PropTypes.object.isRequired,
   labels: PropTypes.array.isRequired,
   cogInfo: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -79,36 +72,31 @@ SidebarLabels.propTypes = {
 const staticStyles = {
   rowDesc: {
     color: '#888',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   cogGroupHeader: {
     background: '#90CAF9',
     color: 'white',
     fontWeight: 400,
     fontSize: 14,
-    lineHeight: '29px'
+    lineHeight: '29px',
   },
   cogGroupText: {
-    paddingLeft: 20
-  }
+    paddingLeft: 20,
+  },
 };
 
 // ------ redux container ------
 
-const stateSelector = createSelector(
-  contentHeightSelector, labelsSelector, curDisplayInfoSelector,
-  (ch, labels, cdi) => ({
-    width: uiConsts.sidebar.width,
-    height: ch - uiConsts.sidebar.header.height,
-    labels,
-    cogInfo: cdi.info.cogInfo,
-    curDisplayInfo: cdi
-  })
-);
+const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
+  width: uiConsts.sidebar.width,
+  height: ch - uiConsts.sidebar.header.height,
+  labels,
+  cogInfo: cdi.info.cogInfo,
+  curDisplayInfo: cdi,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleChange: (value, labels) => {
@@ -119,10 +107,7 @@ const mapDispatchToProps = (dispatch) => ({
       labels.splice(idx, 1);
     }
     dispatch(setLabels(labels));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SidebarLabels));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarLabels));

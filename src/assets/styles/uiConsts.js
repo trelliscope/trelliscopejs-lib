@@ -11,14 +11,14 @@ const uiConsts = {
     button: {
       color: '#9ba3af',
       active: {
-        background: '#448AFF' // <- blueA200 // '#4285f4' // #15a4fa
-      }
+        background: '#448AFF', // <- blueA200 // '#4285f4' // #15a4fa
+      },
     },
     logo: {
       background: '#FF4308',
-      color: 'white'
+      color: 'white',
     },
-    logoWidth: 130
+    logoWidth: 130,
   },
   footer: {
     height: 30,
@@ -26,8 +26,8 @@ const uiConsts = {
     color: 'white',
     button: {
       background: '#90CAF9',
-      color: 'white'
-    }
+      color: 'white',
+    },
   },
   sideButtons: {
     width: 48,
@@ -40,13 +40,13 @@ const uiConsts = {
       borderColor: '#c0c0c0',
       active: {
         color: '#448AFF', // '#4285f4',
-        background: 'white'
+        background: 'white',
       },
       hover: {
         // background: '#999'
-        background: '#448AFF' // '#4285f4'
-      }
-    }
+        background: '#448AFF', // '#4285f4'
+      },
+    },
   },
   sidebar: {
     width: 230,
@@ -55,7 +55,7 @@ const uiConsts = {
       fontSize: 15,
       height: 25,
       background: '#c1c1c1',
-      color: 'white'
+      color: 'white',
     },
     filter: {
       margin: 5,
@@ -67,39 +67,39 @@ const uiConsts = {
             default: '#eee',
             hover: 'rgb(255, 192, 76)',
             select: 'rgb(255, 170, 10)',
-            noneSelect: 'rgb(255, 210, 127)'
-          }
+            noneSelect: 'rgb(255, 210, 127)',
+          },
         },
         text: {
           color: {
             default: '#888',
             hover: '#000',
-            select: '#000'
-          }
-        }
+            select: '#000',
+          },
+        },
       },
       num: {
         height: 100,
-        barColor: 'rgb(255, 210, 127)'
+        barColor: 'rgb(255, 210, 127)',
       },
       variables: {
-        height: 50
-      }
-    }
+        height: 50,
+      },
+    },
   },
   content: {
     panel: {
-      pad: 2
+      pad: 2,
     },
     label: {
       height: 15,
-      fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
   trans: {
     duration: '300ms',
-    timing: 'ease'
-  }
+    timing: 'ease',
+  },
 };
 
 export default uiConsts;

@@ -28,7 +28,7 @@ const boxStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   border: 'solid 1px #ddd',
-  background: 'rgba(69, 138, 249, 0.4)'
+  background: 'rgba(69, 138, 249, 0.4)',
 };
 
 const previewHeight = 400;
@@ -48,7 +48,8 @@ class RelatedDisplays extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     if (nextProps.active) {
       Mousetrap.bind('r', this.handleKey);
     } else {
@@ -68,39 +69,45 @@ class RelatedDisplays extends React.Component {
     setDialogOpen(true);
     this.setState({ open: true });
     Mousetrap.bind('esc', this.handleClose);
-  }
+  };
 
   handleKey = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(true);
     this.setState({ open: true });
     Mousetrap.bind('esc', this.handleClose);
-  }
+  };
 
   handleClose = () => {
     const { setDialogOpen } = this.props;
     setDialogOpen(false);
     this.setState({ open: false });
     Mousetrap.unbind('esc');
-  }
+  };
 
   setStep = (step) => {
     this.setState({ activeStep: step });
-  }
+  };
 
   handleNext = () => {
     this.setState({ activeStep: 1 });
-  }
+  };
 
   handleBack = () => {
     this.setState({ activeStep: 0 });
-  }
+  };
 
   render() {
     const {
-      classes, styles, relatedDisplayGroups, displayList,
-      contentHeight, contentWidth, selectedRelDisps, relDispPositions,
-      handleResize
+      classes,
+      styles,
+      relatedDisplayGroups,
+      displayList,
+      contentHeight,
+      contentWidth,
+      selectedRelDisps,
+      relDispPositions,
+      handleResize,
     } = this.props;
     const { open, activeStep } = this.state;
 
@@ -110,62 +117,52 @@ class RelatedDisplays extends React.Component {
       width: previewHeight * (contentWidth / contentHeight),
       height: previewHeight,
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
     };
 
     const stepContent = [
-      (
-        <DisplayList
-          di={displayList.list}
-          displayGroups={relatedDisplayGroups}
-          handleClick={() => {}}
-          selectable
-        />
-      ),
-      (
-        <div style={parentBoundary}>
-          {
-            relDispPositions.map((d) => (
-              <Rnd
-                key={d.name}
-                style={boxStyle}
-                default={{
-                  width: previewHeight * d.width,
-                  height: previewHeight * d.height,
-                  x: previewHeight * d.left,
-                  y: previewHeight * d.top
-                }}
-                bounds="parent"
-                lockAspectRatio
-                onDragStop={(e, a) => {
-                  handleResize(d, relDispPositions, a.x, a.y, undefined, undefined,
-                    previewHeight);
-                }}
-                onResizeStop={(e, direction, ref, delta, position) => {
-                  handleResize(d, relDispPositions, position.x, position.y,
-                    fixCSS(ref.style.width), fixCSS(ref.style.height), previewHeight);
-                }}
-              >
-                <div className={classes.trHandle} />
-                <div className={classes.tlHandle} />
-                <div className={classes.brHandle} />
-                <div className={classes.blHandle} />
-                {d.name}
-              </Rnd>
-            ))
-          }
-        </div>
-      )
+      <DisplayList di={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
+      <div style={parentBoundary}>
+        {relDispPositions.map((d) => (
+          <Rnd
+            key={d.name}
+            style={boxStyle}
+            default={{
+              width: previewHeight * d.width,
+              height: previewHeight * d.height,
+              x: previewHeight * d.left,
+              y: previewHeight * d.top,
+            }}
+            bounds="parent"
+            lockAspectRatio
+            onDragStop={(e, a) => {
+              handleResize(d, relDispPositions, a.x, a.y, undefined, undefined, previewHeight);
+            }}
+            onResizeStop={(e, direction, ref, delta, position) => {
+              handleResize(
+                d,
+                relDispPositions,
+                position.x,
+                position.y,
+                fixCSS(ref.style.width),
+                fixCSS(ref.style.height),
+                previewHeight,
+              );
+            }}
+          >
+            <div className={classes.trHandle} />
+            <div className={classes.tlHandle} />
+            <div className={classes.brHandle} />
+            <div className={classes.blHandle} />
+            {d.name}
+          </Rnd>
+        ))}
+      </div>,
     ];
 
     return (
       <div>
-        <button
-          type="button"
-          onClick={this.handleOpen}
-          className={classes.button}
-          style={styles.button}
-        >
+        <button type="button" onClick={this.handleOpen} className={classes.button} style={styles.button}>
           <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }}>
             <Badge
               className={classes.badge}
@@ -188,24 +185,17 @@ class RelatedDisplays extends React.Component {
             <div>
               <Stepper alternativeLabel nonLinear activeStep={activeStep}>
                 <Step>
-                  <StepButton
-                    onClick={() => this.setStep(0)}
-                  >
+                  <StepButton onClick={() => this.setStep(0)}>
                     {`Select related displays (${selectedRelDisps.length} selected)`}
                   </StepButton>
                 </Step>
                 <Step>
-                  <StepButton
-                    onClick={() => this.setStep(1)}
-                    disabled={activeStep === 0 && selectedRelDisps.length === 0}
-                  >
+                  <StepButton onClick={() => this.setStep(1)} disabled={activeStep === 0 && selectedRelDisps.length === 0}>
                     Arrange Panel Layout
                   </StepButton>
                 </Step>
               </Stepper>
-              <div>
-                {stepContent[activeStep]}
-              </div>
+              <div>{stepContent[activeStep]}</div>
             </div>
           </DialogContent>
           <DialogActions>
@@ -217,9 +207,9 @@ class RelatedDisplays extends React.Component {
                 className={classes.button}
                 disabled={activeStep === 0 && selectedRelDisps.length === 0}
               >
-                { activeStep === 0 ? '' : <ChevronLeftIcon /> }
-                { activeStep === 0 ? 'Set Layout' : 'Select Displays' }
-                { activeStep === 0 ? <ChevronRightIcon /> : '' }
+                {activeStep === 0 ? '' : <ChevronLeftIcon />}
+                {activeStep === 0 ? 'Set Layout' : 'Select Displays'}
+                {activeStep === 0 ? <ChevronRightIcon /> : ''}
               </Button>
             </div>
             <Button color="secondary" onClick={this.handleClose}>
@@ -243,7 +233,7 @@ RelatedDisplays.propTypes = {
   contentHeight: PropTypes.number.isRequired,
   contentWidth: PropTypes.number.isRequired,
   relDispPositions: PropTypes.array.isRequired,
-  handleResize: PropTypes.func.isRequired
+  handleResize: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -269,8 +259,8 @@ const staticStyles = {
     '&:hover': {
       transition: 'background 250ms',
       background: '#eee',
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   trHandle: {
     position: 'absolute',
@@ -278,7 +268,7 @@ const staticStyles = {
     right: 0,
     width: 8,
     height: 8,
-    background: 'rgba(69, 138, 249, 0.4)'
+    background: 'rgba(69, 138, 249, 0.4)',
   },
   tlHandle: {
     position: 'absolute',
@@ -286,7 +276,7 @@ const staticStyles = {
     left: 0,
     width: 8,
     height: 8,
-    background: 'rgba(69, 138, 249, 0.4)'
+    background: 'rgba(69, 138, 249, 0.4)',
   },
   brHandle: {
     position: 'absolute',
@@ -294,7 +284,7 @@ const staticStyles = {
     right: 0,
     width: 8,
     height: 8,
-    background: 'rgba(69, 138, 249, 0.4)'
+    background: 'rgba(69, 138, 249, 0.4)',
   },
   blHandle: {
     position: 'absolute',
@@ -302,15 +292,15 @@ const staticStyles = {
     left: 0,
     width: 8,
     height: 8,
-    background: 'rgba(69, 138, 249, 0.4)'
+    background: 'rgba(69, 138, 249, 0.4)',
   },
   badge: {
-    paddingBottom: 27
+    paddingBottom: 27,
   },
   badgeCircle: {
     background: 'rgba(69, 138, 249, 0.4)',
-    color: 'white'
-  }
+    color: 'white',
+  },
 };
 
 // ------ redux container ------
@@ -318,16 +308,20 @@ const staticStyles = {
 const relDispPositionsSelector = (state) => state.relDispPositions;
 
 const styleSelector = createSelector(
-  displayListSelector, selectedDisplaySelector, relatedDisplayGroupsSelector,
-  contentHeightSelector, contentWidthSelector, selectedRelDispsSelector,
+  displayListSelector,
+  selectedDisplaySelector,
+  relatedDisplayGroupsSelector,
+  contentHeightSelector,
+  contentWidthSelector,
+  selectedRelDispsSelector,
   relDispPositionsSelector,
   (dl, sd, rdg, ch, cw, srd, rdp) => ({
     styles: {
       button: {
         left: uiConsts.header.height * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
         background: srd.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
-        color: srd.length === 0 ? uiConsts.header.button.color : 'white'
-      }
+        color: srd.length === 0 ? uiConsts.header.button.color : 'white',
+      },
     },
     displayList: dl,
     relatedDisplayGroups: rdg,
@@ -335,8 +329,8 @@ const styleSelector = createSelector(
     contentHeight: ch,
     contentWidth: cw,
     selectedRelDisps: srd,
-    relDispPositions: rdp
-  })
+    relDispPositions: rdp,
+  }),
 );
 
 const mapDispatchToProps = (dispatch) => ({
@@ -356,14 +350,9 @@ const mapDispatchToProps = (dispatch) => ({
     const newPositions = { ...relDispPositions };
     newPositions[idx] = newPos;
     dispatch(setRelDispPositions(newPositions));
-  }
+  },
 });
 
-const mapStateToProps = (state) => (
-  styleSelector(state)
-);
+const mapStateToProps = (state) => styleSelector(state);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(RelatedDisplays));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(RelatedDisplays));

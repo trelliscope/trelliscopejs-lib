@@ -7,29 +7,42 @@ import Mousetrap from 'mousetrap';
 import { setActiveSidebar } from '../actions';
 import '../../node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind';
 import SideButton from './SideButton';
-import {
-  SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS
-} from '../constants';
+import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../constants';
 import { sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const buttons = [
   {
-    icon: 'icon-th', label: 'Grid', title: SB_PANEL_LAYOUT, key: 'g'
+    icon: 'icon-th',
+    label: 'Grid',
+    title: SB_PANEL_LAYOUT,
+    key: 'g',
   },
   {
-    icon: 'icon-list-ul', label: 'Labels', title: SB_PANEL_LABELS, key: 'l'
+    icon: 'icon-list-ul',
+    label: 'Labels',
+    title: SB_PANEL_LABELS,
+    key: 'l',
   },
   {
-    icon: 'icon-filter', label: 'Filter', title: SB_PANEL_FILTER, key: 'f'
+    icon: 'icon-filter',
+    label: 'Filter',
+    title: SB_PANEL_FILTER,
+    key: 'f',
   },
   {
-    icon: 'icon-sort-amount-asc', label: 'Sort', title: SB_PANEL_SORT, key: 's'
+    icon: 'icon-sort-amount-asc',
+    label: 'Sort',
+    title: SB_PANEL_SORT,
+    key: 's',
   },
   {
-    icon: 'icon-views', label: 'Views', title: SB_VIEWS, key: 'v'
-  }
+    icon: 'icon-views',
+    label: 'Views',
+    title: SB_VIEWS,
+    key: 'v',
+  },
   // { icon: 'icon-cog', label: 'Config', title: SB_CONFIG, key: 'c' }
 ];
 
@@ -53,7 +66,8 @@ class SideButtons extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     if (nextProps.fullscreen) {
       Mousetrap.bind(['g', 'l', 'f', 's', 'c', 'v', 'enter'], this.handleKey);
       if (nextProps.active !== '') {
@@ -95,12 +109,10 @@ class SideButtons extends React.Component {
         setActive(which[0]);
       }
     }
-  }
+  };
 
   render() {
-    const {
-      classes, styles, active, hasViews, setActive
-    } = this.props;
+    const { classes, styles, active, hasViews, setActive } = this.props;
 
     return (
       <div className={classes.sideButtonsContainer} style={styles.sideButtonsContainer}>
@@ -132,7 +144,7 @@ SideButtons.propTypes = {
   hasViews: PropTypes.bool.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
-  setActive: PropTypes.func.isRequired
+  setActive: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -146,46 +158,44 @@ const staticStyles = {
     width: uiConsts.sideButtons.width,
     background: uiConsts.sideButtons.background,
     boxSizing: 'border-box',
-    zIndex: 1000
+    zIndex: 1000,
   },
   spacer: {
     transition: 'height 0.2s',
     height: uiConsts.sidebar.header.height,
     width: uiConsts.sideButtons.width,
-    background: uiConsts.sideButtons.spacerBackground
-  }
+    background: uiConsts.sideButtons.spacerBackground,
+  },
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  contentHeightSelector, sidebarActiveSelector, dialogOpenSelector,
-  fullscreenSelector, curDisplayInfoSelector,
+  contentHeightSelector,
+  sidebarActiveSelector,
+  dialogOpenSelector,
+  fullscreenSelector,
+  curDisplayInfoSelector,
   (ch, active, dialogOpen, fullscreen, cdi) => ({
     styles: {
       sideButtonsContainer: {
-        height: ch + uiConsts.header.height
-      }
+        height: ch + uiConsts.header.height,
+      },
     },
     width: uiConsts.sideButtons.width,
     active,
     dialogOpen,
     fullscreen,
-    hasViews: (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false
-  })
+    hasViews: (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   setActive: (n) => {
     dispatch(setActiveSidebar(n));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SideButtons));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SideButtons));

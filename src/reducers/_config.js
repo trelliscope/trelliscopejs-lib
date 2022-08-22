@@ -1,18 +1,21 @@
 import { REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants';
 
-const _configReducer = (state = {
-  isFetching: false,
-  isLoaded: false,
-  didInvalidate: false,
-  config: {}
-}, action) => {
+const _configReducer = (
+  state = {
+    isFetching: false,
+    isLoaded: false,
+    didInvalidate: false,
+    config: {},
+  },
+  action,
+) => {
   switch (action.type) {
     case REQUEST_CONFIG:
       return {
         ...state,
         isFetching: true,
         isLoaded: false,
-        didInvalidate: false
+        didInvalidate: false,
       };
     case RECEIVE_CONFIG:
       return {
@@ -21,7 +24,7 @@ const _configReducer = (state = {
         didInvalidate: false,
         isLoaded: true,
         config: action.config,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
       };
     default:
       return state;

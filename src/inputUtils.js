@@ -1,10 +1,6 @@
-export const getLocalStoragePrefix = (di) => (
-  `${di.group}_:_${di.name}_:`
-);
+export const getLocalStoragePrefix = (di) => `${di.group}_:_${di.name}_:`;
 
-export const getLocalStorageKey = (di, panelKey, cogId) => (
-  `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`
-);
+export const getLocalStorageKey = (di, panelKey, cogId) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
 
 // Stores a user-specified input value
 // Note that this always stores in localStorage
@@ -20,13 +16,15 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
       panel_id: panelKey,
       cog_id: cogId,
       // if it's the current value, it means the user has deselected all radio values
-      val: encodeURIComponent(localStorage.getItem(lsKey) === value ? '' : value)
+      val: encodeURIComponent(localStorage.getItem(lsKey) === value ? '' : value),
     };
-    const qry = Object.entries(queryObj).map((e) => e.join('=')).join('&');
+    const qry = Object.entries(queryObj)
+      .map((e) => e.join('='))
+      .join('&');
     fetch(`${di.input_api.set}?${qry}`, di.input_api.setRequestOptions)
       .then(async (response) => {
         const isJson = response.headers.get('content-type')?.includes('application/json');
-        const data = isJson && await response.json();
+        const data = isJson && (await response.json());
         // check for error response
         if (!response.ok) {
           // get error message from body or default to response status
@@ -57,10 +55,12 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
 export const getInputsAPI = (di) => {
   const queryObj = {
     display_id: `${di.group}___${di.name}`,
-    display_version: 'v1'
+    display_version: 'v1',
   };
 
-  const qry = Object.entries(queryObj).map((e) => e.join('=')).join('&');
+  const qry = Object.entries(queryObj)
+    .map((e) => e.join('='))
+    .join('&');
   fetch(`${di.input_api.get}?${qry}`, di.input_api.getRequestOptions)
     .then((response) => {
       const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -76,7 +76,7 @@ export const getInputsAPI = (di) => {
       if (data.success) {
         // clear out old localStorage for this display
         const rgxp = new RegExp(`^${getLocalStoragePrefix(di)}`, 'g');
-        Object.keys(localStorage).forEach(kk => {
+        Object.keys(localStorage).forEach((kk) => {
           if (kk.match(rgxp)) {
             localStorage.removeItem(kk);
           }

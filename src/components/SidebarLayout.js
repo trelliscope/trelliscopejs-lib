@@ -13,23 +13,14 @@ import { setLayout, setSelectedRelDisps, setRelDispPositions } from '../actions'
 import { layoutSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarLayout = ({
-  classes, layout, hasRelDisps, handleChange, resetRelDisps
-}) => {
+const SidebarLayout = ({ classes, layout, hasRelDisps, handleChange, resetRelDisps }) => {
   let content = <div />;
   if (hasRelDisps) {
     content = (
       <div className={classes.relDisp}>
-        <div className={classes.relDispText}>
-          Grid layout cannot be changed when viewing related displays.
-        </div>
+        <div className={classes.relDispText}>Grid layout cannot be changed when viewing related displays.</div>
         <div className={classes.relDispButton}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={resetRelDisps}
-            size="small"
-          >
+          <Button variant="outlined" color="primary" onClick={resetRelDisps} size="small">
             Remove Related Displays
           </Button>
         </div>
@@ -48,9 +39,13 @@ const SidebarLayout = ({
               min={1}
               max={15}
               step={1}
-              onChange={(nr) => handleChange({
-                nrow: nr, ncol: layout.ncol, arrange: layout.arrange
-              })}
+              onChange={(nr) =>
+                handleChange({
+                  nrow: nr,
+                  ncol: layout.ncol,
+                  arrange: layout.arrange,
+                })
+              }
             />
           </div>
         </div>
@@ -65,44 +60,50 @@ const SidebarLayout = ({
               min={1}
               max={15}
               step={1}
-              onChange={(nc) => handleChange({
-                nrow: layout.nrow, ncol: nc, arrange: layout.arrange
-              })}
+              onChange={(nc) =>
+                handleChange({
+                  nrow: layout.nrow,
+                  ncol: nc,
+                  arrange: layout.arrange,
+                })
+              }
             />
           </div>
         </div>
         <Divider />
-        <div className={classes.row}>
-          Arrangement:
-        </div>
+        <div className={classes.row}>Arrangement:</div>
         <div className={classes.row}>
           <RadioGroup
             name="arrangement"
             value={layout.arrange}
-            onChange={(e, ar) => handleChange({
-              nrow: layout.nrow, ncol: layout.ncol, arrange: ar
-            })}
+            onChange={(e, ar) =>
+              handleChange({
+                nrow: layout.nrow,
+                ncol: layout.ncol,
+                arrange: ar,
+              })
+            }
           >
             <FormControlLabel
               value="row"
               control={<Radio />}
-              label={(
+              label={
                 <span className={classes.inputLabelSpan}>
                   By row
                   <i className={`icon-byrow ${classes.inputIcon}`} />
                 </span>
-              )}
+              }
               className={classes.inputRadio}
             />
             <FormControlLabel
               value="column"
               control={<Radio />}
-              label={(
+              label={
                 <span className={classes.inputLabelSpan}>
                   By column
                   <i className={`icon-bycol ${classes.inputIcon}`} />
                 </span>
-              )}
+              }
               className={classes.inputRadio}
             />
           </RadioGroup>
@@ -110,7 +111,7 @@ const SidebarLayout = ({
       </div>
     );
   }
-  return (content);
+  return content;
 };
 
 SidebarLayout.propTypes = {
@@ -118,7 +119,7 @@ SidebarLayout.propTypes = {
   layout: PropTypes.object.isRequired,
   hasRelDisps: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
-  resetRelDisps: PropTypes.func.isRequired
+  resetRelDisps: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -133,56 +134,51 @@ const staticStyles = {
     boxSizing: 'border-box',
     fontSize: 16,
     width: uiConsts.sidebar.width,
-    display: 'inline-block'
+    display: 'inline-block',
   },
   label: {
     lineHeight: '28px',
-    float: 'left'
+    float: 'left',
   },
   nInput: {
-    float: 'right'
+    float: 'right',
   },
   inputRadio: {
     marginBottom: 5,
-    marginTop: 0
+    marginTop: 0,
   },
   inputLabelSpan: {
     lineHeight: '40px',
     verticalAlign: 'middle',
-    fontSize: 16
+    fontSize: 16,
   },
   inputIcon: {
     fontSize: 23,
     paddingLeft: 6,
-    verticalAlign: 'text-bottom'
+    verticalAlign: 'text-bottom',
   },
   relDisp: {
     fontSize: 14,
-    padding: 15
+    padding: 15,
   },
   relDispText: {
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   relDispButton: {
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 // ------ redux container ------
 
 const selectedRelDispsSelector = (state) => state.selectedRelDisps;
 
-const stateSelector = createSelector(
-  layoutSelector, selectedRelDispsSelector,
-  (layout, srd) => ({
-    layout,
-    hasRelDisps: srd.length > 0
-  })
-);
+const stateSelector = createSelector(layoutSelector, selectedRelDispsSelector, (layout, srd) => ({
+  layout,
+  hasRelDisps: srd.length > 0,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleChange: (layout) => {
@@ -191,10 +187,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetRelDisps: () => {
     dispatch(setSelectedRelDisps([]));
     dispatch(setRelDispPositions([]));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SidebarLayout));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarLayout));

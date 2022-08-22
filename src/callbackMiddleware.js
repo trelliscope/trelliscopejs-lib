@@ -1,4 +1,3 @@
-
 const createCallbackMiddleware = (callbacks) => {
   const cbKeys = Object.keys(callbacks);
 

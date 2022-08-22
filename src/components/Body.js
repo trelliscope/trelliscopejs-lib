@@ -19,7 +19,7 @@ const Body = ({ classes, width, height }) => (
 Body.propTypes = {
   classes: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
 };
 
 // ------ static styles ------
@@ -30,24 +30,17 @@ const staticStyles = {
     top: 0,
     left: 0,
     borderRight: '1px solid #ddd',
-    boxSizing: 'border-box'
-  }
+    boxSizing: 'border-box',
+  },
 };
 
 // ------ redux container ------
 
-const stateSelector = createSelector(
-  windowWidthSelector, windowHeightSelector,
-  (width, height) => ({
-    width,
-    height
-  })
-);
+const stateSelector = createSelector(windowWidthSelector, windowHeightSelector, (width, height) => ({
+  width,
+  height,
+}));
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
-export default connect(
-  mapStateToProps
-)(injectSheet(staticStyles)(Body));
+export default connect(mapStateToProps)(injectSheet(staticStyles)(Body));

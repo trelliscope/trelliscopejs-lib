@@ -5,23 +5,19 @@ import { createSelector } from 'reselect';
 export const displayListSelector = (state) => state._displayList;
 export const displayInfoSelector = (state) => state._displayInfo;
 export const curDisplayInfoSelector = (state) => {
-  if (state.selectedDisplay
-    && state.selectedDisplay.name !== ''
-    && state._displayInfo[state.selectedDisplay.name]) {
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
     return state._displayInfo[state.selectedDisplay.name];
   }
   return {
     isFetching: true,
     isLoaded: false,
     didInvalidate: false,
-    info: {}
+    info: {},
   };
 };
 export const selectedDisplaySelector = (state) => state.selectedDisplay;
 export const displayLoadedSelector = (state) => {
-  if (state.selectedDisplay
-    && state.selectedDisplay.name !== ''
-    && state._displayInfo[state.selectedDisplay.name]) {
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
     return state._displayInfo[state.selectedDisplay.name].isLoaded;
   }
   return false;
@@ -51,12 +47,9 @@ export const dialogOpenSelector = (state) => state.dialog;
 export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
 export const dispInfoDialogSelector = (state) => state.dispInfoDialog;
 
-export const aspectSelector = createSelector(
-  curDisplayInfoSelector,
-  (cdi) => {
-    if (cdi.isLoaded) {
-      return cdi.info.height / cdi.info.width;
-    }
-    return 0;
+export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
+  if (cdi.isLoaded) {
+    return cdi.info.height / cdi.info.width;
   }
-);
+  return 0;
+});

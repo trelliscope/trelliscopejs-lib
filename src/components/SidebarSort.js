@@ -14,9 +14,7 @@ import { sidebarHeightSelector } from '../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SidebarSort = ({
-  classes, styles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo
-}) => {
+const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   if (cogDesc) {
@@ -53,9 +51,7 @@ const SidebarSort = ({
                     <td className={classes.labels}>
                       {d.name}
                       <br />
-                      <span style={{ color: '#888', fontStyle: 'italic' }}>
-                        {cogDesc[d.name]}
-                      </span>
+                      <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.name]}</span>
                     </td>
                     <td className={classes.closeButton}>
                       <IconButton onClick={() => handleChange(i)}>
@@ -69,8 +65,7 @@ const SidebarSort = ({
           </table>
         </div>
         <div className={classes.notUsedHeader}>
-          {sort.length === 0 ? 'Select a variable to sort on:'
-            : notUsed.length === 0 ? '' : 'More variables:'}
+          {sort.length === 0 ? 'Select a variable to sort on:' : notUsed.length === 0 ? '' : 'More variables:'}
         </div>
         <div className={classes.notUsed} style={styles.notUsed}>
           {Object.keys(cogGroups).map((grp) => {
@@ -114,7 +109,7 @@ const SidebarSort = ({
       </div>
     );
   }
-  return (content);
+  return content;
 };
 
 SidebarSort.propTypes = {
@@ -123,7 +118,7 @@ SidebarSort.propTypes = {
   cogDesc: PropTypes.object.isRequired,
   labels: PropTypes.array.isRequired,
   handleChange: PropTypes.func.isRequired,
-  addLabel: PropTypes.func.isRequired
+  addLabel: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -131,23 +126,23 @@ SidebarSort.propTypes = {
 const staticStyles = {
   tableWrap: {
     overflowY: 'auto',
-    overflowX: 'hidden'
+    overflowX: 'hidden',
   },
   table: {
     width: uiConsts.sidebar.width - 5,
     borderCollapse: 'collapse',
     borderSpacing: 0,
-    tableLayout: 'fixed'
+    tableLayout: 'fixed',
   },
   tr: {
     width: uiConsts.sidebar.width - 5,
     height: 48,
-    borderBottom: '1px solid rgb(224, 224, 224)'
+    borderBottom: '1px solid rgb(224, 224, 224)',
   },
   sortButton: {
     verticalAlign: 'middle',
     width: 45,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   labels: {
     fontSize: 13,
@@ -156,13 +151,13 @@ const staticStyles = {
     verticalAlign: 'middle',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   closeButton: {
     height: 48,
     width: 45,
     textAlign: 'center',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
   },
   notUsedHeader: {
     height: 30,
@@ -170,7 +165,7 @@ const staticStyles = {
     paddingLeft: 10,
     boxSizing: 'border-box',
     width: uiConsts.sidebar.width,
-    fontSize: 14
+    fontSize: 14,
   },
   notUsed: {
     width: uiConsts.sidebar.width,
@@ -178,7 +173,7 @@ const staticStyles = {
     boxSizing: 'border-box',
     paddingLeft: 10,
     paddingRight: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   variable: {
     display: 'inline-block',
@@ -197,8 +192,8 @@ const staticStyles = {
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
     '&:hover': {
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-      background: '#ebebeb'
-    }
+      background: '#ebebeb',
+    },
   },
   cogGroupHeader: {
     background: '#90CAF9',
@@ -210,56 +205,55 @@ const staticStyles = {
     paddingBottom: 5,
     color: 'white',
     fontWeight: 400,
-    fontSize: 14
+    fontSize: 14,
   },
   cogGroupText: {
-    paddingLeft: 20
-  }
+    paddingLeft: 20,
+  },
 };
 
 // ------ redux container ------
 
-const cogDescSelector = createSelector(
-  curDisplayInfoSelector,
-  (cdi) => {
-    const res = {};
-    const ciKeys = Object.keys(cdi.info.cogInfo);
-    for (let i = 0; i < ciKeys.length; i += 1) {
-      res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
-    }
-    return (res);
+const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
+  const res = {};
+  const ciKeys = Object.keys(cdi.info.cogInfo);
+  for (let i = 0; i < ciKeys.length; i += 1) {
+    res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
   }
-);
+  return res;
+});
 
 const stateSelector = createSelector(
-  sortSelector, cogDescSelector, sidebarHeightSelector, labelsSelector, curDisplayInfoSelector,
+  sortSelector,
+  cogDescSelector,
+  sidebarHeightSelector,
+  labelsSelector,
+  curDisplayInfoSelector,
   (sort, cogDesc, sh, labels, cdi) => {
-    const activeIsTaller = sort.length * 51 > sh - (2 * 51);
+    const activeIsTaller = sort.length * 51 > sh - 2 * 51;
     let activeHeight = 51 * sort.length;
     if (activeIsTaller) {
       const n = Math.ceil((sh * 0.6) / 51);
-      activeHeight = (n * 51) - 25;
+      activeHeight = n * 51 - 25;
     }
-    return ({
+    return {
       styles: {
         tableWrap: {
-          maxHeight: activeHeight
+          maxHeight: activeHeight,
         },
         notUsed: {
-          height: sh - activeHeight - 30
-        }
+          height: sh - activeHeight - 30,
+        },
       },
       sort,
       cogDesc,
       labels,
-      curDisplayInfo: cdi
-    });
-  }
+      curDisplayInfo: cdi,
+    };
+  },
 );
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   handleChange: (sortSpec) => {
@@ -273,10 +267,7 @@ const mapDispatchToProps = (dispatch) => ({
       newLabels.push(name);
       dispatch(setLabels(newLabels));
     }
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(SidebarSort));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarSort));

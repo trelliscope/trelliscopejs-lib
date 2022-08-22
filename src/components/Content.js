@@ -7,23 +7,45 @@ import { Swipeable } from 'react-swipeable';
 import { max } from 'd3-array';
 import Panel from './Panel';
 import { setLabels, setLayout } from '../actions';
-import {
-  contentWidthSelector, sidebarActiveSelector, contentHeightSelector
-} from '../selectors/ui';
+import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
 import { cogInfoSelector } from '../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
 import {
-  configSelector, cogInterfaceSelector, layoutSelector, aspectSelector, labelsSelector,
-  panelRenderersSelector, curDisplayInfoSelector, nPerPageSelector, pageNumSelector,
-  localPanelsSelector, displayInfoSelector
+  configSelector,
+  cogInterfaceSelector,
+  layoutSelector,
+  aspectSelector,
+  labelsSelector,
+  panelRenderersSelector,
+  curDisplayInfoSelector,
+  nPerPageSelector,
+  pageNumSelector,
+  localPanelsSelector,
+  displayInfoSelector,
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Content = ({
-  classes, contentStyle, ccd, ci, cinfo, cfg, layout, labels,
-  dims, panelRenderers, panelInterface, sidebar, curPage,
-  totPages, panelData, removeLabel, setPageNum, curDisplayInfo,
-  displayInfo, relDispPositions
+  classes,
+  contentStyle,
+  ccd,
+  ci,
+  cinfo,
+  cfg,
+  layout,
+  labels,
+  dims,
+  panelRenderers,
+  panelInterface,
+  sidebar,
+  curPage,
+  totPages,
+  panelData,
+  removeLabel,
+  setPageNum,
+  curDisplayInfo,
+  displayInfo,
+  relDispPositions,
 }) => {
   let ret = <div />;
 
@@ -31,8 +53,7 @@ const Content = ({
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
   }
-  const hasRenderers = names.every((name) => panelRenderers[name]
-    && panelRenderers[name].fn !== null);
+  const hasRenderers = names.every((name) => panelRenderers[name] && panelRenderers[name].fn !== null);
   const hasDisplayInfo = names.every((name) => displayInfo[name] && displayInfo[name].isLoaded);
 
   if (ci && ccd && cinfo && hasRenderers && hasDisplayInfo && panelInterface) {
@@ -48,7 +69,7 @@ const Content = ({
           name: labels[j],
           value: ccd[i][labels[j]],
           type: cinfo[labels[j]].type,
-          desc: cinfo[labels[j]].desc
+          desc: cinfo[labels[j]].desc,
         });
       }
       panelLabels.push(curLabels);
@@ -68,17 +89,15 @@ const Content = ({
         rr = i % layout.nrow;
         cc = Math.floor(i / layout.nrow);
       }
-      panelMatrix.push(
-        {
-          rowIndex: rr,
-          colIndex: cc,
-          iColIndex: layout.ncol - cc - 1,
-          key: panelKeys[i],
-          labels: panelLabels[i]
-        }
-      );
+      panelMatrix.push({
+        rowIndex: rr,
+        colIndex: cc,
+        iColIndex: layout.ncol - cc - 1,
+        key: panelKeys[i],
+        labels: panelLabels[i],
+      });
     }
-    panelMatrix.sort((a, b) => ((a.key > b.key) ? 1 : ((b.key > a.key) ? -1 : 0)));
+    panelMatrix.sort((a, b) => (a.key > b.key ? 1 : b.key > a.key ? -1 : 0));
 
     // HACK: htmlwidget panels won't resize properly when layout or sidebar is toggled
     // so we need to add this to key to force it to re-draw
@@ -91,8 +110,7 @@ const Content = ({
     if (relDispPositions.length > 0) {
       const relDispNames = relDispPositions.map((d) => d.name).join('_');
       let relDispSum = '';
-      relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height)
-        .reduce((a, b) => a + b);
+      relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height).reduce((a, b) => a + b);
       keyExtra = `${keyExtra}_${relDispNames}_${relDispSum}_${labels.length}`;
       keyExtra += `_${contentStyle.height}`;
     }
@@ -128,7 +146,7 @@ const Content = ({
     );
   }
 
-  return (ret);
+  return ret;
 };
 
 Content.propTypes = {
@@ -147,12 +165,12 @@ Content.propTypes = {
   totPages: PropTypes.number.isRequired,
   panelData: PropTypes.object.isRequired,
   displayInfo: PropTypes.object.isRequired,
-  relDispPositions: PropTypes.array.isRequired
+  relDispPositions: PropTypes.array.isRequired,
 };
 
 Content.defaultProps = () => ({
   ci: undefined,
-  panelInterface: undefined
+  panelInterface: undefined,
 });
 
 // ------ static styles ------
@@ -165,8 +183,8 @@ const staticStyles = {
     top: uiConsts.header.height,
     right: 0,
     boxSizing: 'border-box',
-    padding: 0
-  }
+    padding: 0,
+  },
 };
 
 // ------ redux container ------
@@ -190,36 +208,64 @@ const getTextWidth = (labels, size) => {
 const relDispPositionsSelector = (state) => state.relDispPositions;
 
 const stateSelector = createSelector(
-  contentWidthSelector, contentHeightSelector,
-  currentCogDataSelector, cogInterfaceSelector,
-  layoutSelector, aspectSelector, labelsSelector, cogInfoSelector,
-  configSelector, panelRenderersSelector, curDisplayInfoSelector,
-  sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
-  nPerPageSelector, localPanelsSelector,
-  relDispPositionsSelector, displayInfoSelector,
-  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderers, cdi, sidebar,
-    curPage, card, npp, localPanels, rdp, di) => {
+  contentWidthSelector,
+  contentHeightSelector,
+  currentCogDataSelector,
+  cogInterfaceSelector,
+  layoutSelector,
+  aspectSelector,
+  labelsSelector,
+  cogInfoSelector,
+  configSelector,
+  panelRenderersSelector,
+  curDisplayInfoSelector,
+  sidebarActiveSelector,
+  pageNumSelector,
+  filterCardinalitySelector,
+  nPerPageSelector,
+  localPanelsSelector,
+  relDispPositionsSelector,
+  displayInfoSelector,
+  (
+    cw,
+    ch,
+    ccd,
+    ci,
+    layout,
+    aspect,
+    labels,
+    cinfo,
+    cfg,
+    panelRenderers,
+    cdi,
+    sidebar,
+    curPage,
+    card,
+    npp,
+    localPanels,
+    rdp,
+    di,
+  ) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
     let preW = Math.round(cw / layout.ncol, 0);
     // given this, compute panel height
     let preH = Math.round(preW * aspect, 0);
-    if ((preH * layout.nrow) > ch) {
+    if (preH * layout.nrow > ch) {
       preH = Math.round(ch / layout.nrow, 0);
       preW = Math.round(preH / aspect, 0);
     }
-    let labelHeight = (Math.min(preW, preH)) * 0.08;
+    let labelHeight = Math.min(preW, preH) * 0.08;
     labelHeight = Math.max(Math.min(labelHeight, 26), 13);
-    const labelPad = (labelHeight / 1.625) - 4;
+    const labelPad = labelHeight / 1.625 - 4;
     const fontSize = labelHeight - labelPad;
     const nLabels = labels.length; // number of cogs to show
     // extra padding beyond what is plotted
     // these remain fixed while width and height can change
     // for ppad + 2, "+ 2" is border
     const wExtra = (pPad + 2) * (layout.ncol + 1);
-    const hExtra = ((pPad + 2) * (layout.nrow + 1))
-      + (nLabels * labelHeight * layout.nrow);
+    const hExtra = (pPad + 2) * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
 
     // first try stretching panels across full width:
     let newW = Math.round((cw - wExtra) / layout.ncol, 0);
@@ -229,10 +275,10 @@ const stateSelector = createSelector(
 
     // check to see if this will make it too tall:
     // if so, do row-first full-height stretching
-    if (((newH * layout.nrow) + hExtra) > ch) {
+    if (newH * layout.nrow + hExtra > ch) {
       newH = Math.round((ch - hExtra) / layout.nrow, 0);
       newW = Math.round(newH / aspect, 0);
-      wOffset = (cw - ((newW * layout.ncol) + wExtra)) / 2;
+      wOffset = (cw - (newW * layout.ncol + wExtra)) / 2;
     }
 
     // if related displays are being used, panel area is full height/width
@@ -248,10 +294,10 @@ const stateSelector = createSelector(
 
     const hOffset = uiConsts.header.height;
 
-    return ({
+    return {
       contentStyle: {
         width: cw,
-        height: ch
+        height: ch,
       },
       ccd,
       ci,
@@ -268,11 +314,11 @@ const stateSelector = createSelector(
         fontSize,
         nLabels,
         pWidth: newW,
-        pHeight: newH + (nLabels * labelHeight),
+        pHeight: newH + nLabels * labelHeight,
         wOffset,
         hOffset,
         pPad,
-        contentWidth: cw
+        contentWidth: cw,
       },
       panelRenderers,
       panelInterface: cdi.info.panelInterface,
@@ -282,14 +328,12 @@ const stateSelector = createSelector(
       panelData,
       curDisplayInfo: cdi,
       displayInfo: di,
-      relDispPositions: rdp
-    });
-  }
+      relDispPositions: rdp,
+    };
+  },
 );
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   removeLabel: (name, labels) => {
@@ -314,10 +358,7 @@ const mapDispatchToProps = (dispatch) => ({
       }
     }
     dispatch(setLayout({ pageNum: n }));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(Content));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(Content));

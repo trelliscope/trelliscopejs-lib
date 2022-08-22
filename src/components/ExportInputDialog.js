@@ -23,18 +23,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '25ch'
-    }
+      width: '25ch',
+    },
   },
   button: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }));
 
 function TabPanel(props) {
-  const {
-    children, value, index
-  } = props;
+  const { children, value, index } = props;
 
   return (
     <div
@@ -43,11 +41,7 @@ function TabPanel(props) {
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
     >
-      {value === index && (
-        <div>
-          {children}
-        </div>
-      )}
+      {value === index && <div>{children}</div>}
     </div>
   );
 }
@@ -55,7 +49,7 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 export default function ExportInputDialog({ open, handleClose, displayInfo }) {
@@ -157,13 +151,15 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : ''));
     const extra = [];
     if (ii === 0) {
-      extra.push(...[
-        `"${(localStorage.getItem('__trelliscope_username') || '').replace(/"/g, '""')}"`,
-        `"${(localStorage.getItem('__trelliscope_email') || '').replace(/"/g, '""')}"`,
-        `"${(localStorage.getItem('__trelliscope_jobtitle') || '').replace(/"/g, '""')}"`,
-        `"${(localStorage.getItem('__trelliscope_otherinfo') || '').replace(/"/g, '""')}"`,
-        (new Date()).toISOString()
-      ]);
+      extra.push(
+        ...[
+          `"${(localStorage.getItem('__trelliscope_username') || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem('__trelliscope_email') || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem('__trelliscope_jobtitle') || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem('__trelliscope_otherinfo') || '').replace(/"/g, '""')}"`,
+          new Date().toISOString(),
+        ],
+      );
     } else {
       extra.push(...['', '', '', '', '']);
     }
@@ -174,7 +170,7 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     const csvString = [header.join(','), ...rows.map((d) => d.join(','))].join('\n');
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const downloadLink = document.createElement('a');
-    downloadLink.download = `${displayInfo.name}_${(new Date()).toISOString().split('T')[0]}.csv`;
+    downloadLink.download = `${displayInfo.name}_${new Date().toISOString().split('T')[0]}.csv`;
     downloadLink.href = window.URL.createObjectURL(csvFile);
     downloadLink.click();
     setCsvDownloaded(true);
@@ -192,7 +188,10 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
     <div>
       <Dialog
         open={open}
-        onClose={() => { setActiveStep(0); handleClose(); }}
+        onClose={() => {
+          setActiveStep(0);
+          handleClose();
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -208,10 +207,9 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
           {activeStep === 0 && (
             <div>
               <DialogContentText>
-                Before exporting the inputs you have provided, we would like to gather some
-                information about you. Please provide at least your full name, after which you
-                will be able to click the &apos;Export&apos; tab in this window to proceed with
-                the export.
+                Before exporting the inputs you have provided, we would like to gather some information about you. Please
+                provide at least your full name, after which you will be able to click the &apos;Export&apos; tab in this
+                window to proceed with the export.
               </DialogContentText>
               <div>
                 <TextField
@@ -293,8 +291,8 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
                 </p>
                 <p>
                   <strong>
-                    Note: You must manually attach the csv file downloaded in
-                    the previous step to this email prior to sending.
+                    Note: You must manually attach the csv file downloaded in the previous step to this email prior to
+                    sending.
                   </strong>
                 </p>
               </DialogContentText>
@@ -312,11 +310,7 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
             </div>
           )}
           <div style={{ textAlign: 'right' }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              className={classes.button}
-            >
+            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
               Back
             </Button>
             {activeStep <= 1 && (
@@ -333,11 +327,12 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={clearInputs}>
-            Clear all inputs
-          </Button>
+          <Button onClick={clearInputs}>Clear all inputs</Button>
           <Button
-            onClick={() => { setActiveStep(0); handleClose(); }}
+            onClick={() => {
+              setActiveStep(0);
+              handleClose();
+            }}
             color="primary"
             autoFocus
           >
@@ -352,5 +347,5 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
 ExportInputDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  displayInfo: PropTypes.object.isRequired
+  displayInfo: PropTypes.object.isRequired,
 };

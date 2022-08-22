@@ -1,15 +1,10 @@
 import { combineReducers } from 'redux';
 import sidebar from './sidebar';
 import ui from './ui';
-import {
-  appId, dialog, singlePageApp, fullscreen, errorMsg,
-  dispSelectDialog, dispInfoDialog
-} from './app';
+import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog } from './app';
 import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';
 import panelRenderers from './panelRenderer';
-import {
-  layout, labels, sort, filter
-} from './displayState';
+import { layout, labels, sort, filter } from './displayState';
 import _config from './_config';
 import _displayList from './_displayList';
 import _displayInfo from './_displayInfo';
@@ -38,7 +33,7 @@ const reducers = combineReducers({
   _displayList,
   _displayInfo,
   _cogDataMutable,
-  _localPanels
+  _localPanels,
 });
 
 export default reducers;

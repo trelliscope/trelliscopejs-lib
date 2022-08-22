@@ -5,14 +5,12 @@ import classNames from 'classnames';
 import { SB_CONFIG } from '../constants';
 import uiConsts from '../assets/styles/uiConsts';
 
-const SideButton = ({
-  classes, isActive, icon, title, label, onClick
-}) => (
+const SideButton = ({ classes, isActive, icon, title, label, onClick }) => (
   <button
     className={classNames({
       [classes.base]: true,
       [classes.active]: isActive,
-      [classes.bottom]: title === SB_CONFIG
+      [classes.bottom]: title === SB_CONFIG,
     })}
     type="button"
     onClick={onClick}
@@ -30,7 +28,7 @@ SideButton.propTypes = {
   icon: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 // ------ static styles ------
@@ -55,8 +53,8 @@ const staticStyles = {
     '&:hover': {
       transition: 'color 0.2s, background 0.2s',
       background: uiConsts.sideButtons.button.hover.background,
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   active: {
     transition: 'color 0.2s, background 0.2s',
@@ -64,8 +62,8 @@ const staticStyles = {
     color: uiConsts.sideButtons.button.active.color,
     '&:hover': {
       transition: 'color 0.2s, background 0.2s',
-      background: uiConsts.sideButtons.button.active.background
-    }
+      background: uiConsts.sideButtons.button.active.background,
+    },
   },
   icon: {
     lineHeight: `${uiConsts.sideButtons.fontSize}px`,
@@ -73,7 +71,7 @@ const staticStyles = {
     width: uiConsts.sideButtons.width,
     position: 'absolute',
     top: 8,
-    left: 0
+    left: 0,
   },
   label: {
     fontSize: uiConsts.sideButtons.labelFontSize,
@@ -82,15 +80,15 @@ const staticStyles = {
     // opacity: 0.6,
     position: 'absolute',
     bottom: 4,
-    left: 0
+    left: 0,
   },
   bottom: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     borderTop: '1px solid',
-    borderBottom: '0px'
-  }
+    borderBottom: '0px',
+  },
 };
 
 export default injectSheet(staticStyles)(SideButton);

@@ -6,13 +6,8 @@ import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { addClass, removeClass } from '../classManipulation';
-import {
-  dialogOpenSelector, fullscreenSelector,
-  appIdSelector, singlePageAppSelector
-} from '../selectors';
-import {
-  sidebarActiveSelector, origWidthSelector, origHeightSelector
-} from '../selectors/ui';
+import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../selectors';
+import { sidebarActiveSelector, origWidthSelector, origHeightSelector } from '../selectors/ui';
 import { setFullscreen, windowResize } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -24,21 +19,20 @@ class FullscreenButton extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      singlePageApp, fullscreen, sidebar, dialog, appId, toggleFullscreen, ww, hh
-    } = this.props;
+    const { singlePageApp, fullscreen, sidebar, dialog, appId, toggleFullscreen, ww, hh } = this.props;
     if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
-      Mousetrap.bindGlobal('esc', () => toggleFullscreen(false,
-        appId, { width: ww, height: hh }, this.yOffset));
+      Mousetrap.bindGlobal('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, this.yOffset));
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-line camelcase
     const { singlePageApp, ww, hh } = this.props;
     if (!singlePageApp) {
       if (nextProps.fullscreen && nextProps.sidebar === '' && !nextProps.dialog) {
-        Mousetrap.bindGlobal('esc', () => nextProps.toggleFullscreen(false,
-          nextProps.appId, { width: ww, height: hh }, this.yOffset));
+        Mousetrap.bindGlobal('esc', () =>
+          nextProps.toggleFullscreen(false, nextProps.appId, { width: ww, height: hh }, this.yOffset),
+        );
       }
       if (nextProps.dialog) {
         Mousetrap.unbind('esc');
@@ -47,18 +41,14 @@ class FullscreenButton extends React.Component {
   }
 
   componentWillUnmount() {
-    const {
-      singlePageApp, fullscreen, sidebar, dialog
-    } = this.props;
+    const { singlePageApp, fullscreen, sidebar, dialog } = this.props;
     if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
       Mousetrap.unbind('esc');
     }
   }
 
   render() {
-    const {
-      singlePageApp, fullscreen, appId, ww, hh, toggleFullscreen
-    } = this.props;
+    const { singlePageApp, fullscreen, appId, ww, hh, toggleFullscreen } = this.props;
 
     if (singlePageApp) {
       return null;
@@ -72,14 +62,11 @@ class FullscreenButton extends React.Component {
         type="button"
         className={classes.button}
         onClick={() => {
-          if (!fullscreen) { // toggling to fullscreen
+          if (!fullscreen) {
+            // toggling to fullscreen
             this.yOffset = window.pageYOffset;
           }
-          toggleFullscreen(
-            !fullscreen,
-            appId,
-            { width: ww, height: hh },
-            this.yOffset);
+          toggleFullscreen(!fullscreen, appId, { width: ww, height: hh }, this.yOffset);
         }}
       >
         <i className={`${cls} ${classes.icon}`} />
@@ -97,7 +84,7 @@ FullscreenButton.propTypes = {
   singlePageApp: PropTypes.bool.isRequired,
   toggleFullscreen: PropTypes.func.isRequired,
   ww: PropTypes.number.isRequired,
-  hh: PropTypes.number.isRequired
+  hh: PropTypes.number.isRequired,
 };
 
 // ------ static styles ------
@@ -115,21 +102,25 @@ const staticStyles = {
     border: 'none',
     transition: 'all 100ms ease-in',
     '&:hover': {
-      background: emphasize(uiConsts.footer.background, 0.3)
-    }
+      background: emphasize(uiConsts.footer.background, 0.3),
+    },
   },
   icon: {
     color: emphasize(uiConsts.footer.background, 0.8),
-    fontSize: `${uiConsts.footer.height - 16}px`
-  }
+    fontSize: `${uiConsts.footer.height - 16}px`,
+  },
 };
 
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  sidebarActiveSelector, dialogOpenSelector, fullscreenSelector,
-  appIdSelector, singlePageAppSelector,
-  origWidthSelector, origHeightSelector,
+  sidebarActiveSelector,
+  dialogOpenSelector,
+  fullscreenSelector,
+  appIdSelector,
+  singlePageAppSelector,
+  origWidthSelector,
+  origHeightSelector,
   (sidebar, dialog, fullscreen, appId, singlePageApp, ww, hh) => ({
     sidebar,
     dialog,
@@ -137,13 +128,11 @@ const stateSelector = createSelector(
     appId,
     singlePageApp,
     ww,
-    hh
-  })
+    hh,
+  }),
 );
 
-const mapStateToProps = (state) => (
-  stateSelector(state)
-);
+const mapStateToProps = (state) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch) => ({
   toggleFullscreen: (fullscreen, appId, appDims, yOffset) => {
@@ -173,10 +162,7 @@ const mapDispatchToProps = (dispatch) => ({
     }
     dispatch(setFullscreen(fullscreen));
     dispatch(windowResize(newDims));
-  }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectSheet(staticStyles)(FullscreenButton));
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(FullscreenButton));
