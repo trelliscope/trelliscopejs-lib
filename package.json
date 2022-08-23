@@ -29,7 +29,7 @@
     "react-jss": "^10.4.0",
     "react-redux": "^7.2.1",
     "react-rnd": "^10.2.3",
-    "react-scripts": "3.4.3",
+    "react-scripts": "5.0.1",
     "react-swipeable": "^5.5.1",
     "react-tooltip": "^4.2.10",
     "react-virtualized": "^9.22.2",
