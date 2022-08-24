@@ -12,9 +12,9 @@ import Mousetrap from 'mousetrap';
 import Button from '@material-ui/core/Button';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { createSelector } from 'reselect';
-import { fullscreenSelector } from '../selectors';
-import { windowHeightSelector } from '../selectors/ui';
-import uiConsts from '../assets/styles/uiConsts';
+import { fullscreenSelector } from '../../selectors';
+import { windowHeightSelector } from '../../selectors/ui';
+import uiConsts from '../../assets/styles/uiConsts';
 
 class HeaderLogo extends React.Component {
   constructor(props) {
@@ -305,7 +305,7 @@ class HeaderLogo extends React.Component {
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-viewer-title"
-          onBackdropClick={this.handleClose}
+          onClose={this.handleClose}
         >
           <DialogTitle id="dialog-viewer-title">{`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}</DialogTitle>
           <DialogContent>
