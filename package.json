@@ -60,6 +60,8 @@
   ],
   "proxy": "http://localhost:8080",
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.2",
     "cors-anywhere": "^0.4.4",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^8.5.0",
@@ -69,6 +71,7 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "glob": "^7.1.6",
     "prettier": "2.7.1",
+    "redux-mock-store": "^1.5.4",
     "replace-in-files": "^2.0.3",
     "sass": "^1.54.5",
     "source-map-explorer": "^2.5.0",
