@@ -1,27 +1,30 @@
 import React from 'react';
+import { Action, Dispatch } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
+import { setErrorMessage } from '../../actions';
 
-import { setErrorMessage } from '../actions';
+// import styles from './ErrorSnack.module.scss';
 
-const ErrorSnack = ({ errorMsg, handleClose }) => (
+interface ErrorSnackProps {
+  errorMsg: string;
+  handleClose: () => void;
+}
+
+const ErrorSnack: React.FC<ErrorSnackProps> = ({ errorMsg, handleClose }) => (
   <Snackbar
     anchorOrigin={{
       vertical: 'bottom',
       horizontal: 'center',
     }}
     open={errorMsg !== ''}
-    // autoHideDuration={6000}
     onClose={handleClose}
-    SnackbarContentProps={{
-      'aria-describedby': 'message-id',
-    }}
-    message={<span id="message-id">{errorMsg}</span>}
+    message={errorMsg}
     action={[
-      <Button key="undo" color="secondary" dense onClick={handleClose}>
+      <Button key="undo" color="secondary" size="small" onClick={handleClose}>
         Close
       </Button>,
     ]}
@@ -33,23 +36,17 @@ ErrorSnack.propTypes = {
   handleClose: PropTypes.func.isRequired,
 };
 
-// ------ static styles ------
-
-// const staticStyles = {
-//   overlay: {}
-// };
-
 // ------ redux container ------
 
-const errorSelector = (state) => state.errorMsg;
+const errorSelector = (state: { errorMsg: string }) => state.errorMsg;
 
 const stateSelector = createSelector(errorSelector, (errorMsg) => ({
   errorMsg,
 }));
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: { errorMsg: string }) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleClose: () => {
     dispatch(setErrorMessage(''));
   },
