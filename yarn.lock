@@ -2079,11 +2079,14 @@
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-5.1.0.tgz#c3018161691376002f8a22ebb87f341e0dba3219"
   integrity sha512-0RJHq5FqDWo17kdHe+SMDJLfxmLaqHbWnqZ6gNKzDvStUlrmx/eKIY17+ifLS1yybo7X86aUshQMlittDOVNnw==
+<<<<<<< HEAD
 
 "@types/mousetrap@^1.6.9":
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.6.9.tgz#f1ef9adbd1eac3466f21b6988b1c82c633a45340"
   integrity sha512-HUAiN65VsRXyFCTicolwb5+I7FM6f72zjMWr+ajGk+YTvzBgXqa2A5U7d+rtsouAkunJ5U4Sb5lNJjo9w+nmXg==
+=======
+>>>>>>> ce4ef69 (55 css module for styles)
 
 "@types/node@*":
   version "18.7.13"
@@ -2290,6 +2293,27 @@
     "@typescript-eslint/typescript-estree" "5.35.1"
     debug "^4.3.4"
 
+<<<<<<< HEAD
+=======
+"@typescript-eslint/parser@^5.5.0":
+  version "5.35.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.35.1.tgz#bf2ee2ebeaa0a0567213748243fb4eec2857f04f"
+  integrity sha512-XL2TBTSrh3yWAsMYpKseBYTVpvudNf69rPOWXWVBI08My2JVT5jR66eTt4IgQFHA/giiKJW5dUD4x/ZviCKyGg==
+  dependencies:
+    "@typescript-eslint/scope-manager" "5.35.1"
+    "@typescript-eslint/types" "5.35.1"
+    "@typescript-eslint/typescript-estree" "5.35.1"
+    debug "^4.3.4"
+
+"@typescript-eslint/scope-manager@5.35.1":
+  version "5.35.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.35.1.tgz#ccb69d54b7fd0f2d0226a11a75a8f311f525ff9e"
+  integrity sha512-kCYRSAzIW9ByEIzmzGHE50NGAvAP3wFTaZevgWva7GpquDyFPFcmvVkFJGWJJktg/hLwmys/FZwqM9EKr2u24Q==
+  dependencies:
+    "@typescript-eslint/types" "5.35.1"
+    "@typescript-eslint/visitor-keys" "5.35.1"
+
+>>>>>>> ce4ef69 (55 css module for styles)
 "@typescript-eslint/scope-manager@5.35.1":
   version "5.35.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.35.1.tgz#ccb69d54b7fd0f2d0226a11a75a8f311f525ff9e"
@@ -2322,11 +2346,20 @@
     debug "^4.3.4"
     tsutils "^3.21.0"
 
+<<<<<<< HEAD
+=======
 "@typescript-eslint/types@5.35.1":
   version "5.35.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.35.1.tgz#af355fe52a0cc88301e889bc4ada72f279b63d61"
   integrity sha512-FDaujtsH07VHzG0gQ6NDkVVhi1+rhq0qEvzHdJAQjysN+LHDCKDKCBRlZFFE0ec0jKxiv0hN63SNfExy0KrbQQ==
 
+>>>>>>> ce4ef69 (55 css module for styles)
+"@typescript-eslint/types@5.35.1":
+  version "5.35.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.35.1.tgz#af355fe52a0cc88301e889bc4ada72f279b63d61"
+  integrity sha512-FDaujtsH07VHzG0gQ6NDkVVhi1+rhq0qEvzHdJAQjysN+LHDCKDKCBRlZFFE0ec0jKxiv0hN63SNfExy0KrbQQ==
+
+<<<<<<< HEAD
 <<<<<<< HEAD
 "@typescript-eslint/types@5.35.1":
   version "5.35.1"
@@ -2338,11 +2371,22 @@
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.34.0.tgz#ba7b83f4bf8ccbabf074bbf1baca7a58de3ccb9a"
   integrity sha512-mXHAqapJJDVzxauEkfJI96j3D10sd567LlqroyCeJaHnu42sDbjxotGb3XFtGPYKPD9IyLjhsoULML1oI3M86A==
 =======
+=======
+>>>>>>> 9e1a107 (55 css module for styles)
 "@typescript-eslint/typescript-estree@5.35.1":
   version "5.35.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.35.1.tgz#db878a39a0dbdc9bb133f11cdad451770bfba211"
   integrity sha512-JUqE1+VRTGyoXlDWWjm6MdfpBYVq+hixytrv1oyjYIBEOZhBCwtpp5ZSvBt4wIA1MKWlnaC2UXl2XmYGC3BoQA==
+<<<<<<< HEAD
 >>>>>>> 9d5f2f9 (55 css module for styles)
+=======
+=======
+"@typescript-eslint/typescript-estree@5.34.0":
+  version "5.34.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.34.0.tgz#ba7b83f4bf8ccbabf074bbf1baca7a58de3ccb9a"
+  integrity sha512-mXHAqapJJDVzxauEkfJI96j3D10sd567LlqroyCeJaHnu42sDbjxotGb3XFtGPYKPD9IyLjhsoULML1oI3M86A==
+>>>>>>> ce4ef69 (55 css module for styles)
+>>>>>>> 9e1a107 (55 css module for styles)
   dependencies:
     "@typescript-eslint/types" "5.35.1"
     "@typescript-eslint/visitor-keys" "5.35.1"
@@ -2384,6 +2428,17 @@
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
+<<<<<<< HEAD
+=======
+"@typescript-eslint/visitor-keys@5.35.1":
+  version "5.35.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.35.1.tgz#285e9e34aed7c876f16ff646a3984010035898e6"
+  integrity sha512-cEB1DvBVo1bxbW/S5axbGPE6b7FIMAbo3w+AGq6zNDA7+NYJOIkKj/sInfTv4edxd4PxJSgdN4t6/pbvgA+n5g==
+  dependencies:
+    "@typescript-eslint/types" "5.35.1"
+    eslint-visitor-keys "^3.3.0"
+
+>>>>>>> ce4ef69 (55 css module for styles)
 "@typescript-eslint/visitor-keys@5.35.1":
   version "5.35.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.35.1.tgz#285e9e34aed7c876f16ff646a3984010035898e6"
@@ -4253,9 +4308,15 @@ ejs@^3.1.5, ejs@^3.1.6:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
+<<<<<<< HEAD
   version "1.4.232"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.232.tgz#67a0a874b0057662244230d18d3a9847c135a9d9"
   integrity sha512-nd+FW8xHjM+PxNWG44nKnwHaBDdVpJUZuI2sS2JJPt/QpdombnmoCRWEEQNnzaktdIQhsNWdD+dlqxwO8Bn99g==
+=======
+  version "1.4.230"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.230.tgz#666909fdf5765acb1348b69752ee9955dc1664b7"
+  integrity sha512-3pwjAK0qHSDN9+YAF4fJknsSruP7mpjdWzUSruIJD/JCH77pEh0SorEyb3xVaKkfwk2tzjOt2D8scJ0KAdfXLA==
+>>>>>>> ce4ef69 (55 css module for styles)
 
 emittery@^0.10.2:
   version "0.10.2"
@@ -4560,9 +4621,15 @@ eslint-plugin-react-hooks@^4.3.0:
   integrity sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==
 
 eslint-plugin-react@^7.21.4, eslint-plugin-react@^7.27.1:
+<<<<<<< HEAD
   version "7.31.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.31.1.tgz#d29793ed27743f3ed8a473c347b1bf5a0a8fb9af"
   integrity sha512-j4/2xWqt/R7AZzG8CakGHA6Xa/u7iR8Q3xCxY+AUghdT92bnIDOBEefV456OeH0QvBcroVc0eyvrrLSyQGYIfg==
+=======
+  version "7.31.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.31.0.tgz#fd3f81c9db5971095b3521ede22781afd37442b0"
+  integrity sha512-BWriBttYYCnfb4RO9SB91Og8uA9CPcBMl5UlCOCtuYW1UjhN3QypzEcEHky4ZIRZDKjbO2Blh9BjP8E7W/b1SA==
+>>>>>>> ce4ef69 (55 css module for styles)
   dependencies:
     array-includes "^3.1.5"
     array.prototype.flatmap "^1.3.0"
@@ -9518,9 +9585,15 @@ toidentifier@1.0.1:
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
 tough-cookie@^4.0.0:
+<<<<<<< HEAD
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-4.1.2.tgz#e53e84b85f24e0b65dd526f46628db6c85f6b874"
   integrity sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==
+=======
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-4.1.1.tgz#3600960f1e1c83545f130ac80043b9de8e5d488b"
+  integrity sha512-Ns3k8QxkEzIfLZbRwLOrMPDqRa1BEAl4BzNNAOYY4BhBmEkf+HvP467F4NrD9loK3NcYflWOpUH3LJg0ehq/rQ==
+>>>>>>> ce4ef69 (55 css module for styles)
   dependencies:
     psl "^1.1.33"
     punycode "^2.1.1"
