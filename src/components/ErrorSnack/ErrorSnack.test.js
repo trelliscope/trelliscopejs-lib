@@ -32,6 +32,7 @@ describe('ErrorSnack Component', () => {
     expect(screen.getByText('test error message')).toBeInTheDocument();
   });
 
+  // TODO this needs to be moved to an integration test once the framework is up, it wont work here due to the mock not updating the reducer state.
   //   test('should close and remove error message', async () => {
   //     render(
   //       <Provider store={store}>

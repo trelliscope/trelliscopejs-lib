@@ -1,6 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": ["airbnb", "prettier", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": ["airbnb", "prettier", "airbnb-typescript", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "env": {
     "browser": true,
     "jest": true

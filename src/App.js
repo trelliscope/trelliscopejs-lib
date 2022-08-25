@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
 import FullscreenButton from './components/FullscreenButton';
-import ErrorSnack from './components/ErrorSnack/ErrorSnack.tsx';
+import ErrorSnack from './components/ErrorSnack/ErrorSnack';
 
 const App = () => (
   <div>

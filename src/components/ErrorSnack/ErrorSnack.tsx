@@ -7,8 +7,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import { setErrorMessage } from '../../actions';
 
-// import styles from './ErrorSnack.module.scss';
-
 interface ErrorSnackProps {
   errorMsg: string;
   handleClose: () => void;
