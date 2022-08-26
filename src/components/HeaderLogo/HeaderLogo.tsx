@@ -15,7 +15,14 @@ import { fullscreenSelector, dialogOpenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
 import styles from './HeaderLogo.module.scss';
 
-const HeaderLogo = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
+interface HeaderLogoProps {
+  setDialogOpen: Function;
+  fullscreen: boolean;
+  windowHeight: number;
+  dialog: boolean;
+}
+
+const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
   const [tabNumber, setTabNumber] = useState(0);
 
   const handleClose = () => {
@@ -28,7 +35,7 @@ const HeaderLogo = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
     Mousetrap.bind('esc', handleClose);
   };
 
-  const handleChange = (event, value) => {
+  const handleChange = (event: any, value: number) => {
     setTabNumber(value);
   };
 
@@ -43,7 +50,7 @@ const HeaderLogo = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
     }
   }, []);
 
-  let keyNote = '';
+  let keyNote;
   if (!fullscreen) {
     keyNote = (
       <p className={styles.headerLogoKeynote}>Note: keyboard shortcuts are only available when the app is fullscreen.</p>
@@ -314,6 +321,6 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state) => styleSelector(state);
+const mapStateToProps = (state: {}) => styleSelector(state);
 
 export default connect(mapStateToProps)(HeaderLogo);
