@@ -24,7 +24,7 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { /* fetchDisplayList, */ windowResize, setAppDims, setLayout } from './actions';
+import { windowResize, setAppDims, setLayout } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
 import createCallbackMiddleware from './callbackMiddleware';
@@ -167,8 +167,7 @@ const trelliscopeApp = (id, config, options) => {
 
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
-  // load the list of displays
-  // store.dispatch(fetchDisplayList(config, id, singlePageApp));
+
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
     if (store.getState().fullscreen) {

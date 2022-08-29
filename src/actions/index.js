@@ -1,5 +1,4 @@
 import React from 'react';
-// import { json as d3json } from 'd3-request';
 import crossfilter from 'crossfilter2';
 import ReactGA from 'react-ga';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
