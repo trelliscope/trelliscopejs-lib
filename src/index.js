@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { setupWorker } from 'msw';
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -34,11 +33,7 @@ import reducers from './reducers';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
-import restHandlers from './test/__mockData__/restHandlers';
-
-const server = setupWorker(...restHandlers);
-
-server.start();
+import worker from './test/__mockData__/worker';
 
 // import appData from './appData';
 
@@ -55,6 +50,10 @@ const trelliscopeApp = (id, config, options) => {
     if (options.callbacks !== undefined) {
       useCallback = true;
     }
+  }
+
+  if (options && options.mockData) {
+    worker.start();
   }
 
   const el = document.getElementById(id);

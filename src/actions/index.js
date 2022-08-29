@@ -440,9 +440,11 @@ export const fetchDisplay =
           getJSON({
             url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
             callback: window[cdCallback],
-          }).catch((err) => {
-            dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`));
-          }); /* .on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`))); */
+          }).catch(() => {
+            dispatch(
+              setErrorMessage(`Couldn't load display list: ${cfg.display_base}${iface.group}/${iface.name}/cogData.json`),
+            );
+          });
         }
 
         // if storing inputs through an API, set localStorage accordingly
@@ -463,10 +465,9 @@ export const fetchDisplay =
       getJSON({
         url: `${cfg.display_base}${group}/${name}/displayObj.json`,
         callback: window[ldCallback],
-      }).catch((err) => {
-        dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`));
+      }).catch(() => {
+        dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}${group}/${name}/displayObj.json`));
       });
-      // .on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
     }
   };
 
@@ -576,7 +577,6 @@ export const fetchDisplayList =
           }).catch(() => {
             dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}displayList.json`));
           });
-          // .on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
         }
       };
       // load the config to start

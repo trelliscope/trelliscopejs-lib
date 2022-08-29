@@ -105,7 +105,7 @@ export const createDisplayList = (options) => {
     {
       group: 'common',
       name: 'gapminder_life_expectancy',
-      desc: 'test',
+      desc: 'This is the description of the data.',
       n: 142,
       order: 1,
       height: faker.datatype.number({ min: 320, max: 3000 }),
@@ -120,7 +120,7 @@ export const createDisplayList = (options) => {
 export const createDisplayObj = (options) => ({
   group: 'common',
   name: 'gapminder_life_expectancy',
-  desc: 'This is the description of the data',
+  desc: 'This is the description of the data.',
   mdDesc: faker.lorem.paragraph(),
   mdTitle: faker.lorem.sentence(),
   showMdDesc: faker.datatype.boolean(),
