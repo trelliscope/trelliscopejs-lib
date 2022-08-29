@@ -9,10 +9,10 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import red from '@material-ui/core/colors/red';
-import { selectedRelDispsSelector } from '../selectors/display';
-import { appIdSelector, configSelector, selectedDisplaySelector } from '../selectors';
-import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
-import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../actions';
+import { selectedRelDispsSelector } from '../../selectors/display';
+import { appIdSelector, configSelector, selectedDisplaySelector } from '../../selectors';
+import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
+import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
 
 const redA200 = red.A200;
 
@@ -31,6 +31,8 @@ const DisplayList = ({
   contentWidth,
 }) => {
   const groupKeys = Object.keys(displayGroups);
+  console.log('dispayGroups', displayGroups);
+  console.log(groupKeys);
 
   const makeSubheader = (groupName, n) => {
     if (n > 1) {
@@ -55,6 +57,7 @@ const DisplayList = ({
             className={classes.gridTile}
             onClick={() => {
               if (selectable) {
+                console.log('item::::', selectedRelDisps);
                 handleCheckbox(i, selectedRelDisps, selectedDisplay, di, contentHeight, contentWidth, cfg, appId);
               } else {
                 handleClick(di[i].name, di[i].group, di[i].desc);

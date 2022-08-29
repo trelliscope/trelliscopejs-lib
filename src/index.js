@@ -256,7 +256,8 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('02a6e2cc', '_test/univar/config.jsonp', { logger: true });
 // trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
 // trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
-trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
