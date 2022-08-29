@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
@@ -9,10 +8,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { setLayout } from '../actions';
-import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../selectors';
-import { filterCardinalitySelector } from '../selectors/cogData';
-import uiConsts from '../assets/styles/uiConsts';
+import { setLayout } from '../../actions';
+import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
+import { filterCardinalitySelector } from '../../selectors/cogData';
+import styles from './Pagination.module.scss';
 
 class Pagination extends React.Component {
   // constructor(props) {
@@ -94,29 +93,10 @@ class Pagination extends React.Component {
   };
 
   render() {
-    const { classes, cogData, totPages, totPanels, npp, n } = this.props;
-
-    const styles = {
-      icon: {
-        fontSize: 10,
-        padding: 6,
-      },
-      button: {
-        width: uiConsts.header.height - 10,
-        height: uiConsts.header.height - 10,
-        border: 0,
-        padding: 0,
-      },
-      progress: {
-        width: 120,
-        fontSize: 14,
-        color: '#444',
-        lineHeight: '48px',
-      },
-    };
+    const { cogData, totPages, totPanels, npp, n } = this.props;
 
     if (cogData.isFetching || (cogData.isLoaded && cogData.crossfilter === undefined)) {
-      return <div style={styles.progress}>loading panels...</div>;
+      return <div className={styles.paginationProgress}>loading panels...</div>;
     }
     if (totPanels === 0) {
       return <div />;
@@ -130,7 +110,7 @@ class Pagination extends React.Component {
         <span>
           {pFrom}
           &nbsp;
-          <span className={classes.pageDash}>-</span>
+          <span className={styles.paginationPageDash}>-</span>
           &nbsp;
           {pTo}
         </span>
@@ -143,59 +123,59 @@ class Pagination extends React.Component {
       </span>
     );
     return (
-      <div className={classes.outer}>
-        <div className={classes.label}>{txt}</div>
-        <div className={classes.buttonWrap}>
-          <div className={classes.buttonDiv}>
+      <div className={styles.paginationOuter}>
+        <div className={styles.paginationLabel}>{txt}</div>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
             <IconButton
               disabled={n <= 1}
-              style={styles.button}
+              className={styles.paginationButton}
               // iconStyle={styles.icon}
               onClick={() => this.pageFirst()}
             >
               <FirstPageIcon />
             </IconButton>
           </div>
-          <div className={classes.buttonText}>First</div>
+          <div className={styles.paginationButtonText}>First</div>
         </div>
-        <div className={classes.buttonWrap}>
-          <div className={classes.buttonDiv}>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
             <IconButton
               disabled={n <= 1}
-              style={styles.button}
+              className={styles.paginationButton}
               // iconStyle={styles.icon}
               onClick={() => this.pageLeft()}
             >
               <ChevronLeftIcon />
             </IconButton>
           </div>
-          <div className={classes.buttonText}>Prev</div>
+          <div className={styles.paginationButtonText}>Prev</div>
         </div>
-        <div className={classes.buttonWrap}>
-          <div className={classes.buttonDiv}>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
             <IconButton
               disabled={n >= totPages}
-              style={styles.button}
+              className={styles.paginationButton}
               // iconStyle={styles.icon}
               onClick={() => this.pageRight()}
             >
               <ChevronRightIcon />
             </IconButton>
           </div>
-          <div className={classes.buttonText}>Next</div>
+          <div className={styles.paginationButtonText}>Next</div>
         </div>
-        <div className={classes.buttonWrap}>
-          <div className={classes.buttonDiv}>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
             <IconButton
               disabled={n >= totPages}
-              style={styles.button}
+              className={styles.paginationButton}
               // iconStyle={styles.icon}
               onClick={() => this.pageLast()}
             >
               <LastPageIcon />
             </IconButton>
           </div>
-          <div className={classes.buttonText}>Last</div>
+          <div className={styles.paginationButtonText}>Last</div>
         </div>
       </div>
     );
@@ -203,7 +183,6 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  classes: PropTypes.object.isRequired,
   n: PropTypes.number.isRequired,
   npp: PropTypes.number.isRequired,
   totPages: PropTypes.number.isRequired,
@@ -212,41 +191,6 @@ Pagination.propTypes = {
   fullscreen: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
   cogData: PropTypes.object.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  outer: {
-    whiteSpace: 'nowrap',
-  },
-  buttonWrap: {
-    width: uiConsts.header.height - 10,
-    height: uiConsts.header.height,
-    display: 'inline-block',
-  },
-  buttonDiv: {
-    width: uiConsts.header.height - 10,
-    height: uiConsts.header.height - 10,
-    paddingLeft: 5,
-  },
-  buttonText: {
-    fontSize: 10,
-    width: 48,
-    height: 10,
-    lineHeight: '10px',
-    textAlign: 'center',
-    marginTop: -5,
-  },
-  pageDash: {
-    display: 'inline-block',
-    transform: 'scale(1.5,1)', // to deal with some browsers not being able to handle endash
-  },
-  label: {
-    verticalAlign: 'middle',
-    height: uiConsts.header.height,
-    display: 'inline-block',
-  },
 };
 
 // ------ redux container ------
@@ -277,4 +221,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(Pagination));
+export default connect(mapStateToProps, mapDispatchToProps)(Pagination);
