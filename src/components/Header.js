@@ -7,7 +7,7 @@ import DisplayInfo from './DisplayInfo';
 import RelatedDisplays from './RelatedDisplays';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
-import HeaderLogo from './HeaderLogo/HeaderLogo';
+import HeaderLogo from './HeaderLogo';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../selectors/display';
