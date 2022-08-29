@@ -16,7 +16,7 @@ import { windowHeightSelector } from '../../selectors/ui';
 import styles from './HeaderLogo.module.scss';
 
 interface HeaderLogoProps {
-  setDialogOpen: Function;
+  setDialogOpen: (arg0: boolean) => void;
   fullscreen: boolean;
   windowHeight: number;
   dialog: boolean;
@@ -35,7 +35,9 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
     Mousetrap.bind('esc', handleClose);
   };
 
+  // FIXME add typing for event once material ui is updated https://github.com/mui/material-ui/issues/17454
   const handleChange = (event: any, value: number) => {
+    event.preventDefault();
     setTabNumber(value);
   };
 
@@ -321,6 +323,11 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {}) => styleSelector(state);
+const mapStateToProps = (state: {
+  setDialogOpen: (arg0: boolean) => void;
+  fullscreen: boolean;
+  windowHeight: number;
+  dialog: boolean;
+}) => styleSelector(state);
 
 export default connect(mapStateToProps)(HeaderLogo);
