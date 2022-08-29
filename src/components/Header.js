@@ -87,6 +87,7 @@ class Header extends React.Component {
         displayName = `${selectedDisplay.group} /
           ${selectedDisplay.name}`;
       } else {
+        // Takes file name and replaces underscores with space to make title
         displayName = selectedDisplay.name.replace(/_/g, ' ');
       }
       if (!singleDisplay) {

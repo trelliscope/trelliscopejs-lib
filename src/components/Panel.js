@@ -10,20 +10,19 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Popover from '@material-ui/core/Popover';
 import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { json as d3json } from 'd3-request';
+import { alpha } from '@material-ui/core/styles';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { getLocalStorageKey, setPanelCogInput } from '../inputUtils';
 import { findWidget } from '../loadAssets';
 import uiConsts from '../assets/styles/uiConsts';
-
-const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 
 class Panel extends React.Component {
   constructor(props) {
     super(props);
 
     this.myRef = React.createRef();
+
+    this.controller = new AbortController();
 
     this.isSelfContained = props.panelData !== undefined && props.cfg.display_base === '__self__';
 
@@ -122,7 +121,7 @@ class Panel extends React.Component {
             callbackName: `__panel_${panelKey}_${name}`,
           });
         } else {
-          this.xhr = getJSON({
+          this.xhr = this.getJSON({
             url: `${filebase}/json/${panelKey}.json`,
             callback: window.__panel__[`_${panelKey}_${name}`],
           });
@@ -206,8 +205,8 @@ class Panel extends React.Component {
     const { name } = curDisplayInfo.info;
 
     // stop requesting panel assets
-    if (this.xhr) {
-      this.xhr.abort();
+    if (this.controller) {
+      this.controller.abort();
     }
     // remove callback
     if (!this.isSelfContained && window.__panel__ && window.__panel__[`_${panelKey}_${name}`]) {
@@ -215,18 +214,24 @@ class Panel extends React.Component {
     }
   }
 
+  handleHover(val) {
+    this.setState({ hover: val });
+  }
+
   setTextInputOpen(val) {
     this.setState({ textInputOpen: val });
   }
 
-  handleHover(val) {
-    this.setState({ hover: val });
+  getJSON(obj) {
+    return fetch(obj.url, { signal: this.controller.signal })
+      .then((response) => response.json())
+      .then((json) => obj.callback(json));
   }
 
   render() {
     const { classes, dims, rowIndex, iColIndex, labels, labelArr, removeLabel, curDisplayInfo, relDispPositions, panelKey } =
       this.props;
-    const { panels, hover, inputChangeCounter, textInputOpen } = this.state;
+    const { panels, hover, inputChangeCounter, textInputOpen, textInputValue } = this.state;
 
     const { name } = curDisplayInfo.info;
     const loaded = Object.keys(panels).every((k) => panels[k].loaded);
@@ -334,7 +339,7 @@ class Panel extends React.Component {
         <div ref={this.myRef}>
           <table className={classes.labelTable} style={styles.labelTable}>
             <tbody>
-              {labels.map((d, i) => {
+              {labels.map((d) => {
                 let labelDiv;
                 const removeLabelDiv = (
                   <button
@@ -450,7 +455,7 @@ class Panel extends React.Component {
                         // anchorPosition={{ top: 200, left: 400 }}
                         onClose={() => {
                           this.setTextInputOpen('');
-                          setPanelCogInput(curDisplayInfo.info, this.state.textInputValue, panelKey, d.name);
+                          setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, d.name);
                           this.setState({ inputChangeCounter: inputChangeCounter + 1 });
                         }}
                         onEnter={() => {
@@ -472,7 +477,7 @@ class Panel extends React.Component {
                             onChange={(e) => {
                               this.setState({ textInputValue: e.target.value });
                             }}
-                            value={this.state.textInputValue}
+                            value={textInputValue}
                             style={{ minWidth: 300 }}
                             size="small"
                             autoFocus
@@ -607,7 +612,7 @@ const staticStyles = {
     background: '#f6f6f6',
   },
   labelRowHover: {
-    background: fade('#f6f6f6', 0.4),
+    background: alpha('#f6f6f6', 0.4),
   },
   labelCell: {
     paddingTop: 0,
