@@ -1,0 +1,56 @@
+.pagination {
+  &Outer {
+    white-space: nowrap;
+  }
+
+  &Button {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    padding: 0;
+
+    &Wrap {
+      width: 38px;
+      height: 48px;
+      display: inline-block;
+    }
+
+    &Div {
+      width: 38px;
+      height: 38px;
+      padding-left: 5px;
+    }
+
+    &Text {
+      font-size: 10px;
+      width: 48px;
+      height: 10px;
+      line-height: 10px;
+      text-align: center;
+      margin-top: -5px;
+    }
+  }
+
+  &PageDash {
+    display: inline-block;
+    transform: scale(1.5, 1); // to deal with some browsers not being able to handle endash
+  }
+
+  &Label {
+    vertical-align: middle;
+    height: 48px;
+    display: inline-block;
+  }
+
+  &Icon {
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  &Progress {
+    width: 120px;
+    font-size: 14px;
+    color: #444;
+    line-height: 48px;
+  }
+}
