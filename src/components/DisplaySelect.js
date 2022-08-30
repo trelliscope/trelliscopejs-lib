@@ -11,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import DisplayList from './DisplayList/DisplayList';
+import DisplayList from './DisplayList';
 import {
   setSelectedDisplay,
   fetchDisplay,

@@ -16,7 +16,7 @@ import Badge from '@material-ui/core/Badge';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Rnd } from 'react-rnd';
-import DisplayList from './DisplayList/DisplayList';
+import DisplayList from './DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../selectors';
