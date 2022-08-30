@@ -1,5 +1,4 @@
 import React from 'react';
-import { json as d3json } from 'd3-request';
 import crossfilter from 'crossfilter2';
 import ReactGA from 'react-ga';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
@@ -35,7 +34,11 @@ import {
   SET_REL_DISP_POSITIONS,
 } from '../constants';
 
-const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
+// const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
+const getJSON = (obj) =>
+  fetch(obj.url)
+    .then((response) => response.json())
+    .then((json) => obj.callback(json));
 
 export const setAppID = (id) => ({
   type: SET_APP_ID,
@@ -436,7 +439,11 @@ export const fetchDisplay =
           getJSON({
             url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.json`,
             callback: window[cdCallback],
-          }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
+          }).catch(() => {
+            dispatch(
+              setErrorMessage(`Couldn't load display list: ${cfg.display_base}${iface.group}/${iface.name}/cogData.json`),
+            );
+          });
         }
 
         // if storing inputs through an API, set localStorage accordingly
@@ -457,7 +464,9 @@ export const fetchDisplay =
       getJSON({
         url: `${cfg.display_base}${group}/${name}/displayObj.json`,
         callback: window[ldCallback],
-      }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
+      }).catch(() => {
+        dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}${group}/${name}/displayObj.json`));
+      });
     }
   };
 
@@ -564,7 +573,9 @@ export const fetchDisplayList =
           getJSON({
             url: `${cfg.display_base}displayList.json`,
             callback: window[dlCallback],
-          }).on('error', (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.target.responseURL}`)));
+          }).catch(() => {
+            dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}displayList.json`));
+          });
         }
       };
       // load the config to start

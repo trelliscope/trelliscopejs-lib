@@ -137,7 +137,7 @@ class DisplayInfo extends React.Component {
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-info-title"
-          onBackdropClick={this.handleClose}
+          onClose={this.handleClose}
           disableEscapeKeyDown
           maxWidth="md"
         >

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles';
 import { setFilterView, setFilter, setLayout, setSort } from '../actions';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -101,8 +101,8 @@ const staticStyles = {
     margin: '1px 1px 0px -8px',
     WebkitUserSelect: 'none',
     '&:hover': {
-      color: fade('rgba(0, 0, 0, 0.22)', 0.4),
-      fill: fade('rgba(0, 0, 0, 0.22)', 0.4),
+      color: alpha('rgba(0, 0, 0, 0.22)', 0.4),
+      fill: alpha('rgba(0, 0, 0, 0.22)', 0.4),
     },
   },
   indIcon: {

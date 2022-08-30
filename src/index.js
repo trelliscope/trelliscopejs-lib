@@ -24,7 +24,7 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { fetchDisplayList, windowResize, setAppDims, setLayout } from './actions';
+import { windowResize, setAppDims, setLayout } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
 
 import createCallbackMiddleware from './callbackMiddleware';
@@ -33,6 +33,7 @@ import reducers from './reducers';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
+import worker from './test/__mockData__/worker';
 
 // import appData from './appData';
 
@@ -49,6 +50,10 @@ const trelliscopeApp = (id, config, options) => {
     if (options.callbacks !== undefined) {
       useCallback = true;
     }
+  }
+
+  if (options && options.mockData) {
+    worker.start();
   }
 
   const el = document.getElementById(id);
@@ -162,8 +167,7 @@ const trelliscopeApp = (id, config, options) => {
 
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
-  // load the list of displays
-  store.dispatch(fetchDisplayList(config, id, singlePageApp));
+
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
     if (store.getState().fullscreen) {
@@ -213,7 +217,7 @@ const trelliscopeApp = (id, config, options) => {
   ReactDOM.render(
     <MuiThemeProvider theme={themeV1}>
       <Provider store={store}>
-        <App />
+        <App config={config} id={id} singlePageApp={singlePageApp} />
       </Provider>
     </MuiThemeProvider>,
     document.getElementById(id),
@@ -257,7 +261,7 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
 // trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
-trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
+trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
 
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });

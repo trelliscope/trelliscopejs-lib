@@ -19,8 +19,12 @@ interface HeaderLogoProps {
   setDialogOpen: (arg0: boolean) => void;
   fullscreen: boolean;
   windowHeight: number;
-  dialog: boolean;
+  dialog?: boolean;
 }
+
+const defaultProps = {
+  dialog: false,
+};
 
 const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
   const [tabNumber, setTabNumber] = useState(0);
@@ -278,7 +282,7 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
         </div>
       </button>
       <Dialog
-        open={dialog}
+        open={dialog || false}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
@@ -305,11 +309,13 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
   );
 };
 
+HeaderLogo.defaultProps = defaultProps;
+
 HeaderLogo.propTypes = {
   windowHeight: PropTypes.number.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
-  dialog: PropTypes.bool.isRequired,
+  dialog: PropTypes.bool,
 };
 
 const styleSelector = createSelector(
