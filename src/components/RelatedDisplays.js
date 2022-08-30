@@ -121,7 +121,7 @@ class RelatedDisplays extends React.Component {
     };
 
     const stepContent = [
-      <DisplayList di={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
+      <DisplayList displayItems={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
       <div style={parentBoundary}>
         {relDispPositions.map((d) => (
           <Rnd

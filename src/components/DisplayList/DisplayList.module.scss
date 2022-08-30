@@ -1,0 +1,57 @@
+.displayList {
+  &Container {
+    height: 400px;
+    overflow-y: auto;
+  }
+
+  &GroupContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  &Grid {
+    &List {
+      width: 700px;
+      margin-bottom: 24px;
+    }
+
+    &Tile {
+      cursor: pointer;
+    }
+
+    &Title {
+      font-weight: 400;
+      color: #ff5252;
+      font-size: 15px;
+    }
+
+    &SubTitle {
+      font-style: italic;
+      font-size: 11px;
+    }
+  }
+  &Img {
+    opacity: 1;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &TitleBar {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+
+  &Checkbox {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    background: rgba(69, 138, 249, 0.9) !important;
+    color: white !important;
+
+    &Checked {
+      color: white !important;
+    }
+  }
+}

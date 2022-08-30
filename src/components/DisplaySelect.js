@@ -154,7 +154,7 @@ class DisplaySelect extends React.Component {
           <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
           <DialogContent>
             <DisplayList
-              di={displayList.list}
+              displayItems={displayList.list}
               displayGroups={displayGroups}
               handleClick={this.handleSelect}
               selectable={false}

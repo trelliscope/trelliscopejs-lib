@@ -1,9 +1,19 @@
 {
   "parser": "@typescript-eslint/parser",
+  "extends": ["airbnb", "prettier", "airbnb-typescript", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["airbnb", "prettier", "airbnb-typescript", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      // move the extends array out of the overrides once all js files are gone and the overrides are removed
+      "extends": ["airbnb", "prettier", "airbnb-typescript", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      }
+    }
+  ],
   "env": {
     "browser": true,
     "jest": true
