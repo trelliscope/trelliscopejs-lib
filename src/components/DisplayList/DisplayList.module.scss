@@ -1,6 +1,6 @@
 .displayList {
   &Container {
-    height: 400;
+    height: 400px;
     overflow-y: auto;
   }
 
@@ -12,8 +12,8 @@
 
   &Grid {
     &List {
-      width: 700;
-      margin-bottom: 24;
+      width: 700px;
+      margin-bottom: 24px;
     }
 
     &Tile {
@@ -23,12 +23,12 @@
     &Title {
       font-weight: 400;
       color: #ff5252;
-      font-size: 15;
+      font-size: 15px;
     }
 
     &SubTitle {
       font-style: italic;
-      font-size: 11;
+      font-size: 11px;
     }
   }
   &Img {

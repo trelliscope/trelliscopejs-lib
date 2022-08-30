@@ -11,7 +11,7 @@ export interface DisplayItem {
 }
 
 export interface DisplayGroups {
-  common: number[];
+  [key: string]: number[];
 }
 
 export interface Config {
@@ -25,7 +25,6 @@ export interface Config {
   data_type: string;
   display_base: string;
   has_legend: boolean;
-  require_token: boolean;
   split_layout: boolean;
 }
 

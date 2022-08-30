@@ -1,7 +1,6 @@
-/* eslint-disable */
 import React from 'react';
 import { Action, Dispatch } from 'redux';
-import PropTypes, { number } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import GridList from '@material-ui/core/GridList';
@@ -19,13 +18,22 @@ import { DisplayGroups, Config, SelectedDisplay, DisplayItem } from '../types';
 interface DisplayListProps {
   selectable: boolean;
   displayItems: DisplayItem[];
-  displayGroups: DisplayGroups[];
+  displayGroups: DisplayGroups;
   handleClick: (name: string, group: string, desc: string) => void;
   cfg: Config;
   appId: string;
   selectedDisplay: SelectedDisplay;
   selectedRelDisps: number[];
-  handleCheckbox: Function;
+  handleCheckbox: (
+    i: number,
+    selectedRelDisps: number[],
+    selectedDisplay: SelectedDisplay,
+    displayItems: DisplayItem[],
+    contentHeight: number,
+    contentWidth: number,
+    cfg: Config,
+    appId: string,
+  ) => void;
   contentHeight: number;
   contentWidth: number;
 }
@@ -45,107 +53,105 @@ const DisplayList: React.FC<DisplayListProps> = ({
 }) => {
   const groupKeys = Object.keys(displayGroups);
 
-  const makeSubheader = (groupName: string, n: number) => {
-    if (n > 1) {
-      return (
-        <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
-          <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
-            {groupName}
-          </ListSubheader>
-        </GridListTile>
-      );
-    }
-    return null;
-  };
-
-  const displayList = groupKeys.map((k: string) => (
-    <div className={styles.displayListGroupContainer} key={k}>
-      <GridList cellHeight={180} cols={3} className={styles.displayListGridList}>
-        {makeSubheader(k, groupKeys.length)}
-        {displayGroups[k].map((i: number) => (
-          <GridListTile
-            key={i}
-            className={styles.displayListGridTile}
-            onClick={() => {
-              if (selectable) {
-                handleCheckbox(i, selectedRelDisps, selectedDisplay, displayItems, contentHeight, contentWidth, cfg, appId);
-              } else {
-                handleClick(displayItems[i].name, displayItems[i].group, displayItems[i].desc);
-              }
-            }}
-          >
-            <img
-              src={`${cfg.cog_server.info.base}/${displayItems[i].group}/${displayItems[i].name}/thumb.png`}
-              alt={displayItems[i].name}
-              className={styles.displayListImg}
-              key={`img${i}`}
-            />
-            {selectable && (
-              <Checkbox
-                className={styles.displayListCheckbox}
-                checked={selectedRelDisps.indexOf(i) > -1}
-                onChange={() => {
-                  handleCheckbox(
-                    i,
-                    selectedRelDisps,
-                    selectedDisplay,
-                    displayItems,
-                    contentHeight,
-                    contentWidth,
-                    cfg,
-                    appId,
-                  );
-                }}
-                value={`checked${i}`}
-                inputProps={
-                  {
-                    // 'aria-label': 'primary checkbox'
+  return (
+    <div className={styles.displayListContainer}>
+      {groupKeys.map((groupName: string) => (
+        <div className={styles.displayListGroupContainer} key={groupName}>
+          <GridList cellHeight={180} cols={3} className={styles.displayListGridList}>
+            {groupKeys.length > 1 ? (
+              <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
+                <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
+                  {groupName}
+                </ListSubheader>
+              </GridListTile>
+            ) : null}
+            {displayGroups[groupName].map((i: number) => (
+              <GridListTile
+                key={i}
+                className={styles.displayListGridTile}
+                onClick={() => {
+                  if (selectable) {
+                    handleCheckbox(
+                      i,
+                      selectedRelDisps,
+                      selectedDisplay,
+                      displayItems,
+                      contentHeight,
+                      contentWidth,
+                      cfg,
+                      appId,
+                    );
+                  } else {
+                    handleClick(displayItems[i].name, displayItems[i].group, displayItems[i].desc);
                   }
-                }
-              />
-            )}
-            <GridListTileBar
-              // titlePosition="top"
-              className={styles.displayListGridTileBar}
-              title={<div className={styles.displayListGridTitle}>{displayItems[i].name.replace(/_/g, ' ')}</div>}
-              subtitle={
-                <span style={{ fontSize: 13 }}>
-                  {displayItems[i].desc}
-                  <br />
-                  <span className={styles.displayListGridSubtitle}>
-                    {displayItems[i].n}
-                    &nbsp;panels,
-                    {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)}
-                  </span>
-                </span>
-              }
-            />
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
-  ));
-  return <div className={styles.displayListGridContainer}>{displayList}</div>;
-};
+                }}
+              >
+                <img
+                  src={`${cfg.cog_server.info.base}/${displayItems[i]?.group}/${displayItems[i].name}/thumb.png`}
+                  alt={displayItems[i].name}
+                  className={styles.displayListImg}
+                  key={`img${i}`}
+                />
 
-//https://stackoverflow.com/questions/34362898/proptypes-check-of-object-with-dynamic-keys
+                {selectable && (
+                  <Checkbox
+                    className={styles.displayListCheckbox}
+                    checked={selectedRelDisps.indexOf(i) > -1}
+                    onChange={() => {
+                      handleCheckbox(
+                        i,
+                        selectedRelDisps,
+                        selectedDisplay,
+                        displayItems,
+                        contentHeight,
+                        contentWidth,
+                        cfg,
+                        appId,
+                      );
+                    }}
+                    value={`checked${i}`}
+                  />
+                )}
+                <GridListTileBar
+                  className={styles.displayListGridTileBar}
+                  title={<div className={styles.displayListGridTitle}>{displayItems[i].name.replace(/_/g, ' ')}</div>}
+                  subtitle={
+                    <span style={{ fontSize: 13 }}>
+                      {displayItems[i].desc}
+                      <br />
+                      <span className={styles.displayListGridSubtitle}>
+                        {displayItems[i].n}
+                        &nbsp;panels,
+                        {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)}
+                      </span>
+                    </span>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 DisplayList.propTypes = {
   selectable: PropTypes.bool.isRequired,
-  // displayItems: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     desc: PropTypes.string.isRequired,
-  //     group: PropTypes.string.isRequired,
-  //     height: PropTypes.number.isRequired,
-  //     keySig: PropTypes.string.isRequired,
-  //     n: PropTypes.number.isRequired,
-  //     name: PropTypes.string.isRequired,
-  //     order: PropTypes.array.isRequired,
-  //     updated: PropTypes.string.isRequired,
-  //     width: PropTypes.number.isRequired,
-  //   }),
-  // ).isRequired,
-  // displayGroups: PropTypes.object.isRequired,
+  displayItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      desc: PropTypes.string.isRequired,
+      group: PropTypes.string.isRequired,
+      height: PropTypes.number.isRequired,
+      keySig: PropTypes.string.isRequired,
+      n: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      order: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+      updated: PropTypes.string.isRequired,
+      width: PropTypes.number.isRequired,
+    }).isRequired,
+  ).isRequired,
+  displayGroups: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number.isRequired).isRequired).isRequired,
   handleClick: PropTypes.func.isRequired,
   cfg: PropTypes.shape({
     cog_server: PropTypes.shape({
@@ -158,16 +164,15 @@ DisplayList.propTypes = {
     data_type: PropTypes.string.isRequired,
     display_base: PropTypes.string.isRequired,
     has_legend: PropTypes.bool.isRequired,
-    require_token: PropTypes.bool.isRequired,
     split_layout: PropTypes.bool.isRequired,
-  }),
+  }).isRequired,
   appId: PropTypes.string.isRequired,
-  selectedRelDisps: PropTypes.array.isRequired,
+  selectedRelDisps: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   selectedDisplay: PropTypes.shape({
     name: PropTypes.string.isRequired,
     group: PropTypes.string.isRequired,
     desc: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
   contentHeight: PropTypes.number.isRequired,
   contentWidth: PropTypes.number.isRequired,
   handleCheckbox: PropTypes.func.isRequired,
@@ -192,7 +197,7 @@ const styleSelector = createSelector(
 
 const mapStateToProps = (state: {
   selectedDisplaySelector: DisplayItem;
-  selectedRelDispsSelector: DisplayItem[];
+  selectedRelDispsSelector: number[];
   configSelector: Config;
   appIdSelector: string;
   contentHeightSelector: number;
@@ -200,8 +205,8 @@ const mapStateToProps = (state: {
 }) => styleSelector(state);
 
 const getRelDispPositions = (
-  selectedDisplay: DisplayItem,
-  relDisps: DisplayItem[],
+  selectedDisplay: SelectedDisplay,
+  relDisps: number[],
   displayInfo: DisplayItem[],
   contentHeight: number,
   contentWidth: number,
@@ -289,7 +294,16 @@ const getRelDispPositions = (
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleCheckbox: (i: number, selectedRelDisps, selectedDisplay, displayItems, contentHeight, contentWidth, cfg, appId) => {
+  handleCheckbox: (
+    i: number,
+    selectedRelDisps: number[],
+    selectedDisplay: SelectedDisplay,
+    displayItems: DisplayItem[],
+    contentHeight: number,
+    contentWidth: number,
+    cfg: Config,
+    appId: string,
+  ) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
     const newRelDisps = Object.assign([], selectedRelDisps);
     if (checked) {
@@ -299,6 +313,10 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
       }
     } else if (newRelDisps.indexOf(i) < 0) {
       // if it is being checked we also need to load the display
+      // FIXME need to change the index.js actions file to be in typescript and return proper types for this method action
+      // once complete remove eslint disable and ts ignore, it seems that its the way the fetchDisplay is structured it needs to have a return value
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       dispatch(fetchDisplay(displayItems[i].name, displayItems[i].group, cfg, appId, '', false));
       newRelDisps.push(i);
     }
@@ -312,4 +330,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps);
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayList);

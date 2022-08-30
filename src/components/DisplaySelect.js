@@ -11,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import DisplayList from './DisplayList';
+import DisplayList from './DisplayList/DisplayList';
 import {
   setSelectedDisplay,
   fetchDisplay,
@@ -154,7 +154,7 @@ class DisplaySelect extends React.Component {
           <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
           <DialogContent>
             <DisplayList
-              di={displayList.list}
+              displayItems={displayList.list}
               displayGroups={displayGroups}
               handleClick={this.handleSelect}
               selectable={false}

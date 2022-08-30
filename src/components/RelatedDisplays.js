@@ -16,7 +16,7 @@ import Badge from '@material-ui/core/Badge';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Rnd } from 'react-rnd';
-import DisplayList from './DisplayList';
+import DisplayList from './DisplayList/DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../selectors';
@@ -121,7 +121,7 @@ class RelatedDisplays extends React.Component {
     };
 
     const stepContent = [
-      <DisplayList di={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
+      <DisplayList displayItems={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
       <div style={parentBoundary}>
         {relDispPositions.map((d) => (
           <Rnd
