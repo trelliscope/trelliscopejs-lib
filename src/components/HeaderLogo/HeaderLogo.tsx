@@ -282,7 +282,7 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
         </div>
       </button>
       <Dialog
-        open={dialog}
+        open={dialog || false}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
