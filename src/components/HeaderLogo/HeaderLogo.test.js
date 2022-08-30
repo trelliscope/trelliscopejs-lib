@@ -20,7 +20,7 @@ describe('HeaderLogo component', () => {
   test('renders logo', async () => {
     render(
       <Provider store={store}>
-        <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+        <HeaderLogo fullscreen={false} setDialogOpen={() => {}} dialog= />
       </Provider>,
     );
 
