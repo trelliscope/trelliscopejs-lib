@@ -78,10 +78,10 @@ interface DisplayObject {
   },
   imgSrcLookup: object;
   cogInfo: {
-    [string]: CogInfo;
+    [key: string]: CogInfo;
   };
   cogDistns: {
-    [string]: CogDistns;
+    [key: string]: CogDistns;
   }
 }
 
@@ -105,6 +105,6 @@ interface CogInfo {
 interface CogDistns {
   type: 'factor' | 'numeric';
   dis: {
-    [string]: number;
+    [key: string]: number;
   }
 }
