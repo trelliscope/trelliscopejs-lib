@@ -1,3 +1,4 @@
+// FIXME fix stateSelector after global state hand selectors have been typed
 import React, { useEffect } from 'react';
 import { Action, Dispatch } from 'redux';
 import PropTypes from 'prop-types';
