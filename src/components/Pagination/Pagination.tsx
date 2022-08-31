@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Action, Dispatch } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -13,7 +14,28 @@ import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelect
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import styles from './Pagination.module.scss';
 
-const Pagination = ({ n, npp, totPages, totPanels, dialogOpen, fullscreen, handleChange, cogData }) => {
+interface PaginationProps {
+  n: number;
+  npp: number;
+  totPages: number;
+  totPanels: number;
+  dialogOpen: boolean;
+  fullscreen: boolean;
+  handleChange: (arg0: number) => void;
+  // FIXME fix once cogData is typed
+  cogData: any;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
+  n,
+  npp,
+  totPages,
+  totPanels,
+  dialogOpen,
+  fullscreen,
+  handleChange,
+  cogData,
+}) => {
   const pageLeft = () => {
     let nn = n - 1;
     if (nn < 1) {
@@ -150,10 +172,22 @@ const stateSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: {
+  n: number;
+  npp: number;
+  totPages: number;
+  totPanels: number;
+  dialogOpen: boolean;
+  fullscreen: boolean;
+  handleChange: (arg0: number) => void;
+  // FIXME fix once cogData is typed
+  cogData: any;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: ts(2345)
+}) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
-  handleChange: (n) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  handleChange: (n: number) => {
     dispatch(setLayout({ pageNum: n }));
   },
 });
