@@ -163,8 +163,9 @@ const stateSelector = createSelector(
   cogDataSelector,
   (n, card, npp, dialogOpen, fullscreen, cogData) => ({
     n,
-    totPanels: card,
-    totPages: Math.ceil(card / npp),
+    card,
+    // totPanels: card,
+    // totPages: Math.ceil(card / npp),
     npp,
     dialogOpen,
     fullscreen,
@@ -173,17 +174,21 @@ const stateSelector = createSelector(
 );
 
 const mapStateToProps = (state: {
-  n: number;
-  npp: number;
-  totPages: number;
-  totPanels: number;
-  dialogOpen: boolean;
-  fullscreen: boolean;
-  handleChange: (arg0: number) => void;
+  pageNumSelector: number;
+  filterCardinalitySelector: number;
+  nPerPageSelector: number;
+  dialogOpenSelector: boolean;
+  fullscreenSelector: boolean;
+  cogDataSelector: any;
+  // n: number,
+  // npp: number,
+  // totPages: number,
+  // totPanels: number,
+  // dialogOpen: boolean,
+  // fullscreen: boolean,
+  // handleChange: (arg0: number) => void,
   // FIXME fix once cogData is typed
-  cogData: any;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: ts(2345)
+  // cogData: any,
 }) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
