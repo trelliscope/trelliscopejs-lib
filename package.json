@@ -67,6 +67,7 @@
     "@testing-library/react": "^12.1.2",
     "@typescript-eslint/parser": "^5.35.1",
     "cors-anywhere": "^0.4.4",
+    "eslint": "^8.23.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
