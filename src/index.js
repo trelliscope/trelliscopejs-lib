@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -16,7 +14,7 @@ import lightBlue from '@material-ui/core/colors/lightBlue';
 // const lightBlue700 = lightBlue['lightBlue'];
 // const redA200 = red['A200']
 
-import { hashMiddleware } from './hash';
+import store from './store';
 
 import { addClass } from './classManipulation';
 
@@ -24,11 +22,8 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { windowResize, setAppDims, setLayout } from './actions';
+import { windowResize, setAppDims, setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
 import { currentCogDataSelector } from './selectors/cogData';
-
-import createCallbackMiddleware from './callbackMiddleware';
-import crossfilterMiddleware from './crossfilterMiddleware';
 import reducers from './reducers';
 import App from './App';
 
@@ -38,20 +33,7 @@ import worker from './test/__mockData__/worker';
 // import appData from './appData';
 
 const trelliscopeApp = (id, config, options) => {
-  let useLogger = true;
-  let loggerOptions = {};
-  let useCallback = false;
-  if (options !== undefined) {
-    if (typeof options.logger === 'boolean') {
-      useLogger = options.logger;
-    } else if (options.logger !== undefined) {
-      loggerOptions = options.logger;
-    }
-    if (options.callbacks !== undefined) {
-      useCallback = true;
-    }
-  }
-
+  // Sets up msw worker for mocking api calls
   if (options && options.mockData) {
     worker.start();
   }
@@ -140,31 +122,16 @@ const trelliscopeApp = (id, config, options) => {
     fullscreen = true;
   }
 
-  const middlewares = [thunkMiddleware, crossfilterMiddleware];
-  if (useLogger) {
-    const loggerMiddleware = createLogger(loggerOptions);
-    middlewares.push(loggerMiddleware);
-  }
-  if (useCallback) {
-    const callbackMiddleware = createCallbackMiddleware(options.callbacks);
-    middlewares.push(callbackMiddleware);
-  }
-
-  if (singlePageApp) {
-    middlewares.push(hashMiddleware);
-  }
-
-  const store = createStore(
-    reducers,
-    { appId: id, singlePageApp, fullscreen }, // initial state
-    applyMiddleware(...middlewares),
-  );
   if (module.hot) {
     module.hot.accept('./reducers', () => {
       store.replaceReducer(reducers);
     });
   }
 
+  store.dispatch(setAppID(id));
+  store.dispatch(setOptions(options));
+  store.dispatch(setFullscreen(fullscreen));
+  store.dispatch(setSinglePageApp(singlePageApp));
   store.dispatch(windowResize(appDims));
   store.dispatch(setAppDims(appDims));
 
@@ -228,7 +195,7 @@ const trelliscopeApp = (id, config, options) => {
       ReactDOM.render(
         <MuiThemeProvider theme={themeV1}>
           <Provider store={store}>
-            <App />
+            <App config={config} id={id} singlePageApp={singlePageApp} />
           </Provider>
         </MuiThemeProvider>,
         document.getElementById(id),

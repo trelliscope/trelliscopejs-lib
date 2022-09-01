@@ -27,6 +27,11 @@
     "function-paren-newline": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react-hooks/rules-of-hooks": "error",
+    "import/no-extraneous-dependencies": [
+      "error", {
+        "devDependencies": ["**/*.test.js", "**/*.spec.js", "**/test-utils.js", "src/test/**/*"]
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",

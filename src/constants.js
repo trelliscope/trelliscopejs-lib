@@ -1,4 +1,5 @@
 export const SET_APP_ID = 'SET_APP_ID';
+export const SET_OPTIONS = 'SET_OPTIONS';
 export const SET_SINGLE_PAGE_APP = 'SET_SINGLE_PAGE_APP';
 export const SET_FULLSCREEN = 'SET_FULLSCREEN';
 export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN';

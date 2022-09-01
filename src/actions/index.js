@@ -32,6 +32,8 @@ import {
   SET_SELECTED_RELDISPS,
   SET_DISPINFO_DIALOG_OPEN,
   SET_REL_DISP_POSITIONS,
+  SET_SINGLE_PAGE_APP,
+  SET_OPTIONS,
 } from '../constants';
 
 // const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -45,9 +47,19 @@ export const setAppID = (id) => ({
   id,
 });
 
+export const setOptions = (options) => ({
+  type: SET_OPTIONS,
+  options,
+});
+
 export const setFullscreen = (fullscreen) => ({
   type: SET_FULLSCREEN,
   fullscreen,
+});
+
+export const setSinglePageApp = (singlePageApp) => ({
+  type: SET_SINGLE_PAGE_APP,
+  singlePageApp,
 });
 
 export const windowResize = (dims) => ({ type: WINDOW_RESIZE, dims });
@@ -538,6 +550,7 @@ export const fetchDisplayList =
             const v2 = b.order === undefined ? 1 : b.order;
             return v1 > v2 ? 1 : -1;
           });
+
           dispatch(receiveDisplayList(json));
           // check to see if a display is specified already in the URL
           // and load it if it is
