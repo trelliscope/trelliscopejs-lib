@@ -3,21 +3,18 @@ import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 import { createTheme, MuiThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
-import { applyMiddleware, createStore } from 'redux';
-import reducers from './reducers';
-import crossfilterMiddleware from './middleware/crossfilterMiddleware';
-import { setAppDims } from './actions';
+import store from './store';
+import { setAppDims, setAppID, setFullscreen, setOptions, setSinglePageApp } from './actions';
 
 const singlePageApp = true;
 const fullscreen = true;
 const id = 'theelementid';
-
-const middlewares = [thunkMiddleware, crossfilterMiddleware];
-
-const store = createStore(reducers, { appId: id, singlePageApp, fullscreen }, applyMiddleware(...middlewares));
 const theme = createTheme();
 
+store.dispatch(setAppID(id));
+store.dispatch(setOptions({}));
+store.dispatch(setFullscreen(fullscreen));
+store.dispatch(setSinglePageApp(singlePageApp));
 store.dispatch(setAppDims({ width: 500, height: 500 }));
 
 const Providers = ({ children }) => (
