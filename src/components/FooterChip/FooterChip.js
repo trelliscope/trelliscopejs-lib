@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { alpha } from '@material-ui/core/styles';
-import { setFilterView, setFilter, setLayout, setSort } from '../actions';
-import uiConsts from '../assets/styles/uiConsts';
+import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
+import uiConsts from '../../assets/styles/uiConsts';
 
 const FooterChip = ({ classes, label, icon, text, index, type, handleStateClose }) => {
   let iconTag = '';
