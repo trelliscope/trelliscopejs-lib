@@ -12,23 +12,29 @@ import { selectedRelDispsSelector } from '../../selectors/display';
 import { appIdSelector, configSelector, selectedDisplaySelector } from '../../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
+import { configPropTypes, displayPropTypes } from '../../commonPropTypes';
 import styles from './DisplayList.module.scss';
-import { DisplayGroups, Config, SelectedDisplay, DisplayItem } from '../types';
+
+// TODO this should probably live as a return type
+// of `displayGroupSelector` once that file is converted to TS
+type DisplayGroup = {
+  [key in string]: number[];
+};
 
 interface DisplayListProps {
   selectable: boolean;
-  displayItems: DisplayItem[];
-  displayGroups: DisplayGroups;
+  displayItems: Display[];
+  displayGroups: DisplayGroup;
   handleClick: (name: string, group: string, desc: string) => void;
   cfg: Config;
   appId: string;
-  selectedDisplay: SelectedDisplay;
+  selectedDisplay: Display;
   selectedRelDisps: number[];
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: SelectedDisplay,
-    displayItems: DisplayItem[],
+    selectedDisplay: Display,
+    displayItems: Display[],
     contentHeight: number,
     contentWidth: number,
     cfg: Config,
@@ -55,7 +61,7 @@ const DisplayList: React.FC<DisplayListProps> = ({
 
   return (
     <div className={styles.displayListContainer}>
-      {groupKeys.map((groupName: string) => (
+      {groupKeys.map((groupName) => (
         <div className={styles.displayListGroupContainer} key={groupName}>
           <GridList cellHeight={180} cols={3} className={styles.displayListGridList}>
             {groupKeys.length > 1 ? (
@@ -138,41 +144,13 @@ const DisplayList: React.FC<DisplayListProps> = ({
 
 DisplayList.propTypes = {
   selectable: PropTypes.bool.isRequired,
-  displayItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      desc: PropTypes.string.isRequired,
-      group: PropTypes.string.isRequired,
-      height: PropTypes.number.isRequired,
-      keySig: PropTypes.string.isRequired,
-      n: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      order: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-      updated: PropTypes.string.isRequired,
-      width: PropTypes.number.isRequired,
-    }).isRequired,
-  ).isRequired,
+  displayItems: PropTypes.arrayOf(displayPropTypes.isRequired).isRequired,
   displayGroups: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number.isRequired).isRequired).isRequired,
   handleClick: PropTypes.func.isRequired,
-  cfg: PropTypes.shape({
-    cog_server: PropTypes.shape({
-      info: PropTypes.shape({
-        base: PropTypes.string.isRequired,
-      }).isRequired,
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-    config_base: PropTypes.string.isRequired,
-    data_type: PropTypes.string.isRequired,
-    display_base: PropTypes.string.isRequired,
-    has_legend: PropTypes.bool.isRequired,
-    split_layout: PropTypes.bool.isRequired,
-  }).isRequired,
+  cfg: configPropTypes.isRequired,
   appId: PropTypes.string.isRequired,
   selectedRelDisps: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-  selectedDisplay: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    group: PropTypes.string.isRequired,
-    desc: PropTypes.string.isRequired,
-  }).isRequired,
+  selectedDisplay: displayPropTypes.isRequired,
   contentHeight: PropTypes.number.isRequired,
   contentWidth: PropTypes.number.isRequired,
   handleCheckbox: PropTypes.func.isRequired,
@@ -196,7 +174,7 @@ const styleSelector = createSelector(
 );
 
 const mapStateToProps = (state: {
-  selectedDisplaySelector: DisplayItem;
+  selectedDisplaySelector: Display;
   selectedRelDispsSelector: number[];
   configSelector: Config;
   appIdSelector: string;
@@ -205,13 +183,13 @@ const mapStateToProps = (state: {
 }) => styleSelector(state);
 
 const getRelDispPositions = (
-  selectedDisplay: SelectedDisplay,
+  selectedDisplay: Display,
   relDisps: number[],
-  displayInfo: DisplayItem[],
+  displayInfo: Display[],
   contentHeight: number,
   contentWidth: number,
 ) => {
-  const dnames = displayInfo.map((d: DisplayItem) => d.name);
+  const dnames = displayInfo.map((d: Display) => d.name);
   const idx = dnames.indexOf(selectedDisplay.name);
   const disps = [idx, ...relDisps];
 
@@ -297,8 +275,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: SelectedDisplay,
-    displayItems: DisplayItem[],
+    selectedDisplay: Display,
+    displayItems: Display[],
     contentHeight: number,
     contentWidth: number,
     cfg: Config,

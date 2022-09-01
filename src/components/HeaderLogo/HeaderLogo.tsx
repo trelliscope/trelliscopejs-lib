@@ -14,6 +14,7 @@ import { createSelector } from 'reselect';
 import { fullscreenSelector, dialogOpenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
 import styles from './HeaderLogo.module.scss';
+import { RootState } from '../../store';
 
 interface HeaderLogoProps {
   setDialogOpen: (arg0: boolean) => void;
@@ -329,11 +330,6 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {
-  setDialogOpen: (arg0: boolean) => void;
-  fullscreen: boolean;
-  windowHeight: number;
-  dialog: boolean;
-}) => styleSelector(state);
+const mapStateToProps = (state: RootState) => styleSelector(state);
 
 export default connect(mapStateToProps)(HeaderLogo);

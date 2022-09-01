@@ -47,6 +47,8 @@ export const dialogOpenSelector = (state) => state.dialog;
 export const dispSelectDialogSelector = (state) => state.dispSelectDialog;
 export const dispInfoDialogSelector = (state) => state.dispInfoDialog;
 
+export const selectCallbacks = (state) => state?.options?.callbacks;
+
 export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   if (cdi.isLoaded) {
     return cdi.info.height / cdi.info.width;

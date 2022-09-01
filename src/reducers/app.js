@@ -6,12 +6,22 @@ import {
   SET_ERROR_MESSAGE,
   SET_DISPSELECT_DIALOG_OPEN,
   SET_DISPINFO_DIALOG_OPEN,
+  SET_OPTIONS,
 } from '../constants';
 
 export const appId = (state = 'app', action) => {
   switch (action.type) {
     case SET_APP_ID:
       return action.id;
+    default:
+  }
+  return state;
+};
+
+export const options = (state = {}, action) => {
+  switch (action.type) {
+    case SET_OPTIONS:
+      return action.options;
     default:
   }
   return state;

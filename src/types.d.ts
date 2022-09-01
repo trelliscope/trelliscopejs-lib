@@ -1,6 +1,5 @@
-
 interface Config {
-  dipslay_base: 'displays' | '__self__';
+  display_base: '/displays/' | '/__self__/';
   data_type: 'json' | 'jsonp';
   cog_server: CogServer;
   split_layout: boolean;
@@ -32,7 +31,7 @@ interface Display {
 interface DisplayObject {
   name: string;
   // ?
-  group: Group,
+  group: Group;
   desc: string;
   mdDesc: string;
   mdTitle: string;
@@ -54,7 +53,7 @@ interface DisplayObject {
     set: function;
     get: function;
     getRequestOptions: function;
-  },
+  };
   gaID: string;
   split_layout: boolean;
   split_aspect: boolean;
@@ -62,10 +61,10 @@ interface DisplayObject {
   cogInterface: {
     name: string;
     // ?
-    group: Group,
+    group: Group;
     // ?
     type: string;
-  },
+  };
   panelInterface: {
     type: 'image' | 'image_src' | 'htmlwidget';
     deps: {
@@ -73,16 +72,16 @@ interface DisplayObject {
       assets: {
         url: string;
         type: 'script' | 'stylesheet';
-      }
-    }
-  },
+      };
+    };
+  };
   imgSrcLookup: object;
   cogInfo: {
     [key: string]: CogInfo;
   };
   cogDistns: {
     [key: string]: CogDistns;
-  }
+  };
 }
 
 interface CogInfo {
@@ -106,5 +105,5 @@ interface CogDistns {
   type: 'factor' | 'numeric';
   dis: {
     [key: string]: number;
-  }
+  };
 }

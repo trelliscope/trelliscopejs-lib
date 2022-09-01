@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore } from 'redux';
 import reducers from './reducers';
-import crossfilterMiddleware from './crossfilterMiddleware';
+import crossfilterMiddleware from './middleware/crossfilterMiddleware';
 import { setAppDims } from './actions';
 
 const singlePageApp = true;
@@ -20,13 +20,11 @@ const theme = createTheme();
 
 store.dispatch(setAppDims({ width: 500, height: 500 }));
 
-const Providers = ({ children }) => {
-  return (
-    <MuiThemeProvider theme={theme}>
-      <Provider store={store}>{children}</Provider>
-    </MuiThemeProvider>
-  );
-};
+const Providers = ({ children }) => (
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>{children}</Provider>
+  </MuiThemeProvider>
+);
 
 Providers.propTypes = {
   children: PropTypes.element.isRequired,

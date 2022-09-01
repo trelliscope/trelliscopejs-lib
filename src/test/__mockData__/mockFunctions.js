@@ -15,9 +15,7 @@ const generateMetricValues = () => {
   return obj;
 };
 
-const makeFakerArray = (length, generator) => {
-  return Array.from({ length }, generator);
-};
+const makeFakerArray = (length, generator) => Array.from({ length }, generator);
 
 const generateBreaks = (count, range) =>
   Array.from({ length: count }, (_, i) => (i * range[1] - range[0] / (count - 1) + range[0]).toFixed(2));
@@ -74,16 +72,13 @@ const generateDisplayObjCogDistns = () => {
   return obj;
 };
 
-export const createCogData = () => {
-  return countries.map((country) => {
-    return {
-      country,
-      continent: faker.helpers.arrayElement(continents),
-      ...generateMetricValues(),
-      panelKey: country,
-    };
-  });
-};
+export const createCogData = () =>
+  countries.map((country) => ({
+    country,
+    continent: faker.helpers.arrayElement(continents),
+    ...generateMetricValues(),
+    panelKey: country,
+  }));
 
 export const createConfig = () => ({
   display_base: 'displays',
@@ -100,22 +95,20 @@ export const createConfig = () => ({
   disclaimer: faker.datatype.boolean(),
 });
 
-export const createDisplayList = (options) => {
-  return [
-    {
-      group: 'common',
-      name: 'gapminder_life_expectancy',
-      desc: 'This is the description of the data.',
-      n: 142,
-      order: 1,
-      height: faker.datatype.number({ min: 320, max: 3000 }),
-      width: faker.datatype.number({ min: 320, max: 3000 }),
-      updated: faker.date.past(),
-      keySig: faker.random.alphaNumeric(32),
-      ...options,
-    },
-  ];
-};
+export const createDisplayList = (options) => [
+  {
+    group: 'common',
+    name: 'gapminder_life_expectancy',
+    desc: 'This is the description of the data.',
+    n: 142,
+    order: 1,
+    height: faker.datatype.number({ min: 320, max: 3000 }),
+    width: faker.datatype.number({ min: 320, max: 3000 }),
+    updated: faker.date.past(),
+    keySig: faker.random.alphaNumeric(32),
+    ...options,
+  },
+];
 
 export const createDisplayObj = (options) => ({
   group: 'common',
@@ -233,6 +226,4 @@ export const createDisplayObj = (options) => ({
   ...options,
 });
 
-export const createPanelData = () => {
-  return faker.image.cats(300, 300, true);
-};
+export const createPanelData = () => faker.image.cats(300, 300, true);
