@@ -11,7 +11,7 @@ import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import Mousetrap from 'mousetrap';
 import { createSelector } from 'reselect';
-import { fullscreenSelector, dialogOpenSelector } from '../../selectors';
+import { fullscreenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
 import styles from './HeaderLogo.module.scss';
 
@@ -19,23 +19,21 @@ interface HeaderLogoProps {
   setDialogOpen: (arg0: boolean) => void;
   fullscreen: boolean;
   windowHeight: number;
-  dialog?: boolean;
 }
 
-const defaultProps = {
-  dialog: false,
-};
-
-const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, windowHeight, dialog }) => {
+const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, windowHeight }) => {
   const [tabNumber, setTabNumber] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setDialogOpen(false);
+    setOpen(false);
     Mousetrap.unbind('esc');
   };
 
   const handleOpen = () => {
     setDialogOpen(true);
+    setOpen(true);
     Mousetrap.bind('esc', handleClose);
   };
 
@@ -282,7 +280,7 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
         </div>
       </button>
       <Dialog
-        open={dialog || false}
+        open={open}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
@@ -309,31 +307,24 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
   );
 };
 
-HeaderLogo.defaultProps = defaultProps;
-
 HeaderLogo.propTypes = {
+  setDialogOpen: PropTypes.func.isRequired,
   windowHeight: PropTypes.number.isRequired,
   fullscreen: PropTypes.bool.isRequired,
-  setDialogOpen: PropTypes.func.isRequired,
-  dialog: PropTypes.bool,
 };
 
 const styleSelector = createSelector(
   windowHeightSelector,
   fullscreenSelector,
-  dialogOpenSelector,
-  (wh, fullscreen, dialog) => ({
+  (wh, fullscreen) => ({
     windowHeight: wh,
     fullscreen,
-    dialog,
   }),
 );
 
 const mapStateToProps = (state: {
-  setDialogOpen: (arg0: boolean) => void;
   fullscreen: boolean;
   windowHeight: number;
-  dialog: boolean;
 }) => styleSelector(state);
 
 export default connect(mapStateToProps)(HeaderLogo);
