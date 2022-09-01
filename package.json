@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@reduxjs/toolkit": "^1.8.5",
     "@types/mousetrap": "^1.6.9",
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.6",

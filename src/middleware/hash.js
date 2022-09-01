@@ -7,7 +7,7 @@ import {
   ACTIVE_SIDEBAR,
   SET_FILTER_VIEW,
   SB_REV_LOOKUP,
-} from './constants';
+} from '../constants';
 
 // const layoutLookup = {
 //   pg: 'pageNum',
@@ -70,16 +70,21 @@ export const hashFromState = (state) => {
 // Filter Panels
 // Sort Panels
 
-export const hashMiddleware = (store) => (next) => (action) => {
-  const types = [SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW];
-  const result = next(action);
-  if (types.indexOf(action.type) > -1) {
-    const hash = hashFromState(store.getState());
-    if (window.location.hash !== hash) {
-      window.location.hash = hash;
-      // window.history.pushState(hash, undefined, `#${hash}`);
-      // window.history.pushState(hash, undefined, '');
+export const hashMiddleware =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    if (!getState().singlePageApp) return next(action);
+
+    const types = [SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW];
+    const result = next(action);
+    if (types.indexOf(action.type) > -1) {
+      const hash = hashFromState(getState());
+      if (window.location.hash !== hash) {
+        window.location.hash = hash;
+        // window.history.pushState(hash, undefined, `#${hash}`);
+        // window.history.pushState(hash, undefined, '');
+      }
     }
-  }
-  return result;
-};
+    return result;
+  };
