@@ -1,21 +1,31 @@
 import React from 'react';
+import { Action, Dispatch } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
 import styles from './FooterChip.module.scss';
 
-const FooterChip = ({ label, icon, text, index, type, handleStateClose }) => {
-  let iconTag = '';
+interface FooterChipProps {
+  label: string;
+  icon: string;
+  text: string;
+  index: number;
+  type: string;
+  handleStateClose: (arg0: { type: string; index: number; label: string; }) => void;
+}
+
+const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleStateClose }) => {
+  let iconTag;
   if (icon !== '') {
     iconTag = <i className={`${icon} ${styles.footerChipIndIcon}`} />;
   }
-  let textTag = '';
+  let textTag;
   if (text !== '') {
     textTag = <span className={styles.footerChipText}>{`(${text})`}</span>;
   }
 
   return (
-    <div type="button" className={styles.footerChipWrapper}>
+    <div className={styles.footerChipWrapper}>
       <span className={styles.footerChipLabel}>
         {iconTag}
         {label}
@@ -53,8 +63,8 @@ FooterChip.propTypes = {
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = (dispatch) => ({
-  handleStateClose: (x) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  handleStateClose: (x: { type: string; index: number; label: string; }) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));
       dispatch(setLayout({ pageNum: 1 }));
