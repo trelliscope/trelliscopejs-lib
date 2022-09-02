@@ -3,9 +3,7 @@ import { Action, Dispatch } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import { ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import { selectedRelDispsSelector } from '../../selectors/display';
@@ -28,12 +26,12 @@ interface DisplayListProps {
   handleClick: (name: string, group: string, desc: string) => void;
   cfg: Config;
   appId: string;
-  selectedDisplay: Display;
+  selectedDisplay: SelectedDisplay;
   selectedRelDisps: number[];
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: Display,
+    selectedDisplay: SelectedDisplay,
     displayItems: Display[],
     contentHeight: number,
     contentWidth: number,
@@ -42,6 +40,12 @@ interface DisplayListProps {
   ) => void;
   contentHeight: number;
   contentWidth: number;
+}
+
+interface SelectedDisplay {
+  group: string;
+  name: string;
+  desc: string;
 }
 
 const DisplayList: React.FC<DisplayListProps> = ({
@@ -118,7 +122,7 @@ const DisplayList: React.FC<DisplayListProps> = ({
                     value={`checked${i}`}
                   />
                 )}
-                <GridListTileBar
+                <ImageListItemBar
                   className={styles.displayListGridTileBar}
                   title={<div className={styles.displayListGridTitle}>{displayItems[i].name.replace(/_/g, ' ')}</div>}
                   subtitle={
@@ -133,9 +137,9 @@ const DisplayList: React.FC<DisplayListProps> = ({
                     </span>
                   }
                 />
-              </GridListTile>
+              </ImageListItem>
             ))}
-          </GridList>
+          </ImageList>
         </div>
       ))}
     </div>
@@ -150,7 +154,11 @@ DisplayList.propTypes = {
   cfg: configPropTypes.isRequired,
   appId: PropTypes.string.isRequired,
   selectedRelDisps: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-  selectedDisplay: displayPropTypes.isRequired,
+  selectedDisplay: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    group: PropTypes.string.isRequired,
+    desc: PropTypes.string.isRequired,
+  }).isRequired,
   contentHeight: PropTypes.number.isRequired,
   contentWidth: PropTypes.number.isRequired,
   handleCheckbox: PropTypes.func.isRequired,
@@ -183,7 +191,7 @@ const mapStateToProps = (state: {
 }) => styleSelector(state);
 
 const getRelDispPositions = (
-  selectedDisplay: Display,
+  selectedDisplay: SelectedDisplay,
   relDisps: number[],
   displayInfo: Display[],
   contentHeight: number,
@@ -275,7 +283,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: Display,
+    selectedDisplay: SelectedDisplay,
     displayItems: Display[],
     contentHeight: number,
     contentWidth: number,
