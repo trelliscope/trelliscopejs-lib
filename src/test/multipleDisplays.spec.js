@@ -38,7 +38,6 @@ describe('Trelliscope app loads multiple displays', () => {
     await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
     const closeButton = screen.queryByRole('button', { name: 'display select close' });
     await user.click(closeButton);
-    await waitFor(() => expect(closeButton).not.toBeInTheDocument());
     await waitFor(() => expect(screen.getByText('select a display to view...')).toBeInTheDocument());
     const openButton = screen.queryByRole('button', { name: 'display select open' });
     await user.click(openButton);
