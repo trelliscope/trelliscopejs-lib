@@ -1,0 +1,56 @@
+.footerChip {
+  &Wrapper {
+    border: 10px;
+    box-sizing: border-box;
+    display: flex;
+    text-decoration: none;
+    margin-left: 3px;
+    margin-top: 4px;
+    padding: 0;
+    outline: none;
+    border-radius: 10px;
+    white-space: nowrap;
+    width: -webkit-fit-content;
+    background: #90CAF9;
+    height: 22px;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  }
+
+  &Label {
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+    padding-left: 12px;
+    padding-right: 12px;
+    white-space: nowrap;
+    -webkit-user-select: none;
+  }
+
+  &Text {
+    padding-left: 5px;
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  &CloseIcon {
+    display: inline-block;
+    color: rgba(0, 0, 0, 0.22);
+    fill: rgba(0, 0, 0, 0.22);
+    height: 21px;
+    width: 21px;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    cursor: pointer;
+    margin: 1px 1px 0px -8px;
+    -webkit-user-select: none;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.4);
+      fill: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &IndIcon {
+    padding-right: 5px;
+  }
+}
