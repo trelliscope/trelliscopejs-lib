@@ -95,20 +95,50 @@ export const createConfig = () => ({
   disclaimer: faker.datatype.boolean(),
 });
 
-export const createDisplayList = (options) => [
-  {
-    group: 'common',
-    name: 'gapminder_life_expectancy',
-    desc: 'This is the description of the data.',
-    n: 142,
-    order: 1,
-    height: faker.datatype.number({ min: 320, max: 3000 }),
-    width: faker.datatype.number({ min: 320, max: 3000 }),
-    updated: faker.date.past(),
-    keySig: faker.random.alphaNumeric(32),
-    ...options,
-  },
-];
+export const createDisplayList = (options, isMultipleDisplays) => {
+  if (isMultipleDisplays) {
+    return [
+      {
+        group: 'common',
+        name: 'gapminder_life_expectancy',
+        desc: 'This is the description of the data.',
+        n: 142,
+        order: 1,
+        height: faker.datatype.number({ min: 320, max: 3000 }),
+        width: faker.datatype.number({ min: 320, max: 3000 }),
+        updated: faker.date.past(),
+        keySig: faker.random.alphaNumeric(32),
+        ...options,
+      },
+      {
+        group: 'common',
+        name: 'gapminder_life_expectancy2',
+        desc: 'This is the description of the data.',
+        n: 142,
+        order: 1,
+        height: faker.datatype.number({ min: 320, max: 3000 }),
+        width: faker.datatype.number({ min: 320, max: 3000 }),
+        updated: faker.date.past(),
+        keySig: faker.random.alphaNumeric(32),
+        ...options,
+      },
+    ];
+  }
+  return [
+    {
+      group: 'common',
+      name: 'gapminder_life_expectancy',
+      desc: 'This is the description of the data.',
+      n: 142,
+      order: 1,
+      height: faker.datatype.number({ min: 320, max: 3000 }),
+      width: faker.datatype.number({ min: 320, max: 3000 }),
+      updated: faker.date.past(),
+      keySig: faker.random.alphaNumeric(32),
+      ...options,
+    },
+  ];
+};
 
 export const createDisplayObj = (options) => ({
   group: 'common',
