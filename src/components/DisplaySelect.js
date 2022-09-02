@@ -135,6 +135,7 @@ class DisplaySelect extends React.Component {
       <div>
         <button
           type="button"
+          aria-label="display select open"
           onClick={this.handleOpen}
           className={classNames({ [classes.button]: true, [classes.buttonInactive]: !isLoaded })}
         >
@@ -146,7 +147,7 @@ class DisplaySelect extends React.Component {
           className="trelliscope-app"
           style={{ zIndex: 8000, fontWeight: 300 }}
           aria-labelledby="dialog-dispselect-title"
-          onBackdropClick={this.handleClose}
+          onClose={this.handleClose}
           disableEscapeKeyDown
           maxWidth="md"
           fullWidth
@@ -161,7 +162,7 @@ class DisplaySelect extends React.Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button color="secondary" onClick={this.handleClose}>
+            <Button aria-label="display select close" color="secondary" onClick={this.handleClose}>
               Close
             </Button>
           </DialogActions>

@@ -63,16 +63,16 @@ const DisplayList: React.FC<DisplayListProps> = ({
     <div className={styles.displayListContainer}>
       {groupKeys.map((groupName) => (
         <div className={styles.displayListGroupContainer} key={groupName}>
-          <GridList cellHeight={180} cols={3} className={styles.displayListGridList}>
+          <ImageList rowHeight={180} cols={3} className={styles.displayListGridList}>
             {groupKeys.length > 1 ? (
-              <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
+              <ImageListItem key="Subheader" cols={3} style={{ height: 'auto' }}>
                 <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
                   {groupName}
                 </ListSubheader>
-              </GridListTile>
+              </ImageListItem>
             ) : null}
             {displayGroups[groupName].map((i: number) => (
-              <GridListTile
+              <ImageListItem
                 key={i}
                 className={styles.displayListGridTile}
                 onClick={() => {
