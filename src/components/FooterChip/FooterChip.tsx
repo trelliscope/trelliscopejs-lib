@@ -25,7 +25,7 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
   }
 
   return (
-    <div className={styles.footerChipWrapper}>
+    <div className={styles.footerChipWrapper} role="listitem">
       <span className={styles.footerChipLabel}>
         {iconTag}
         {label}

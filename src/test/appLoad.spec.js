@@ -1,32 +1,18 @@
 import React from 'react';
 import { rest } from 'msw';
-import userEvent from '@testing-library/user-event'
-import { render, screen, waitFor } from '../test-utils';
+import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor, cleanup } from '../test-utils';
 import { createDisplayObj } from './__mockData__/mockFunctions';
 import server from './__mockData__/server';
 import App from '../App';
 
-const user = userEvent.setup();
-
-server.use(
-  rest.get('/displays/common/:displayGroup/displayObj.json', (req, res, ctx) =>
-    res(
-      ctx.json(
-        createDisplayObj({
-          name: req.params.createDisplayObj,
-          mdDesc: 'Introduction message for you',
-          showMdDesc: true,
-        }),
-      ),
-    ),
-  ),
-);
-
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+// const user = userEvent.setup();
 
 describe('Trelliscope app', () => {
+  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
   test('shows title and description', async () => {
     render(<App config="/config.json" id="thistheid" singlePageApp />);
 
@@ -41,22 +27,38 @@ describe('Trelliscope app', () => {
   });
 
   test('shows intro message', async () => {
+    server.use(
+      rest.get('/displays/common/:displayGroup/displayObj.json', (req, res, ctx) =>
+        res(
+          ctx.json(
+            createDisplayObj({
+              name: req.params.createDisplayObj,
+              mdDesc: 'Introduction message for you',
+              showMdDesc: true,
+            }),
+          ),
+        ),
+      ),
+    );
+
+    await new Promise((r) => setTimeout(r, 2000));
     render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
 
     await waitFor(() => expect(screen.getByText('Introduction message for you')).toBeInTheDocument());
   });
 
-  test('shows sort FooterChip', async () => {
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
+  // test('shows sort FooterChip', async () => {
+  //   render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
 
-    await waitFor(() => expect(screen.queryByText('country')).toBeInTheDocument());
-  });
+  //   await new Promise((r) => setTimeout(r, 2000));
+  //   await waitFor(() => expect(screen.getByRole('listitem')).toHaveTextContent('country'));
+  // });
 
-  test('dismisses FooterChip', async () => {
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
-    
-    await waitFor(() => expect(screen.queryByText('country')).toBeInTheDocument());
-    await user.click(screen.queryByTestId('footerchip-close'));
-    await waitFor(() => expect(screen.queryByText('country')).not.toBeInTheDocument());
-  });
+  // test('dismisses FooterChip', async () => {
+  //   render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
+
+  //   await waitFor(() => expect(screen.queryByText('country')).toBeInTheDocument());
+  //   await user.click(screen.queryByTestId('footerchip-close'));
+  //   await waitFor(() => expect(screen.queryByText('country')).not.toBeInTheDocument());
+  // });
 });
