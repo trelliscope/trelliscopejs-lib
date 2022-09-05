@@ -6,7 +6,7 @@ import server from './__mockData__/server';
 import App from '../App';
 
 describe('Trelliscope app', () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+  beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
@@ -18,7 +18,7 @@ describe('Trelliscope app', () => {
   });
 
   test('shows logo button', async () => {
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
+    render(<App config="/config.json" id="thistheid" singlePageApp />);
 
     await waitFor(() => expect(screen.getByText('Trelliscope')).toBeInTheDocument());
   });
@@ -29,7 +29,7 @@ describe('Trelliscope app', () => {
         res(
           ctx.json(
             createDisplayObj({
-              name: req.params.createDisplayObj,
+              name: 'gapminder_life_expectancy',
               mdDesc: 'Introduction message for you',
               showMdDesc: true,
             }),
@@ -39,8 +39,8 @@ describe('Trelliscope app', () => {
     );
 
     await new Promise((r) => setTimeout(r, 2000));
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
+    render(<App config="/config.json" id="thistheid" singlePageApp />);
 
-    await waitFor(() => expect(screen.getByText('Introduction message for you')).toBeInTheDocument());
+    expect(screen.getByText('Introduction message for you')).toBeInTheDocument();
   });
 });

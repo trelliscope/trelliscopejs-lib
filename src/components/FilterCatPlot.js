@@ -56,7 +56,7 @@ class FilterCatPlot extends React.Component {
         allActive={filterState.value === undefined}
         height={cellHeight}
         width={(barSize / barMax) * (width - 1) + 1}
-        handleClick={() => this.handleSelect(barName, active)}
+        onClick={() => this.handleSelect(barName, active)}
         d={{ ct: barCt, mct: dist.dist[barName], id: barName }}
       />
     );

@@ -1,0 +1,59 @@
+.wrapper {
+  background: white;
+
+  &:hover {
+    background: #f6f6f6;
+  }
+}
+
+.bar {
+  background: #eee;
+  color: #888;
+  position: absolute;
+  left: 0;
+
+  &:hover {
+    background: rgb(255, 192, 76);
+    color: #000;
+
+    .barLabel {
+      visibility: visible;
+    }
+  }
+
+  &Active {
+    background: rgb(255, 170, 10);
+    color: #000;
+  }
+
+  &AllActive {
+    background: rgb(255, 210, 127);
+    color: #000;
+  }
+
+  &Label {
+    font-size: 10px;
+    color: #444;
+    text-align: center;
+    cursor: default;
+    position: absolute;
+    line-height: 19px;
+    right: 4px;
+  }
+
+  &Text {
+    display: inline-block;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  &TextInner {
+    display: inline-block;
+    white-space: nowrap;
+    margin-left: 5px;
+  }
+
+  hidden {
+
+  }
+}
