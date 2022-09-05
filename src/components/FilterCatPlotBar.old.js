@@ -22,6 +22,8 @@ class CatBar extends React.Component {
     const { classes, width, height, d, divStyle, handleClick, active, allActive } = this.props;
     const { hover } = this.state;
 
+    console.log(d);
+
     const fontSize = Math.min(10, height - 6);
     const labelFontSize = Math.min(9, height - 7);
     const label = d.ct === d.mct ? d.mct : `${d.ct} / ${d.mct}`;
