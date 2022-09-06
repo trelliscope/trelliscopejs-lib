@@ -6,30 +6,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import SaveIcon from '@material-ui/icons/Save';
 import { cogDataSelector } from '../../selectors';
-
-// cogDataSelector
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
+import styles from './ExportInputDialog.module.scss';
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -52,9 +37,7 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-export default function ExportInputDialog({ open, handleClose, displayInfo }) {
-  const classes = useStyles();
-
+const ExportInputDialog = ({ open, handleClose, displayInfo }) => {
   const [fullName, setFullName] = React.useState(localStorage.getItem('__trelliscope_username') || '');
   const [email, setEmail] = React.useState(localStorage.getItem('__trelliscope_email') || '');
   const [jobTitle, setJobTitle] = React.useState(localStorage.getItem('__trelliscope_jobtitle') || '');
@@ -213,7 +196,7 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
               </DialogContentText>
               <div>
                 <TextField
-                  style={{ marginBottom: 15 }}
+                  className={styles.exportInputDialogTextField}
                   required
                   label="Full Name"
                   fullWidth
@@ -221,21 +204,21 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
                   onChange={handleNameChange}
                 />
                 <TextField
-                  style={{ marginBottom: 15 }}
+                  className={styles.exportInputDialogTextField}
                   label="Email Address"
                   fullWidth
                   value={email}
                   onChange={handleEmailChange}
                 />
                 <TextField
-                  style={{ marginBottom: 15 }}
+                  className={styles.exportInputDialogTextField}
                   label="Job Title"
                   fullWidth
                   value={jobTitle}
                   onChange={handleJobTitleChange}
                 />
                 <TextField
-                  style={{ marginBottom: 15 }}
+                  className={styles.exportInputDialogTextField}
                   multiline
                   rows={3}
                   label="Additional Contact Information"
@@ -249,44 +232,30 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
           {activeStep === 1 && (
             <div>
               <DialogContentText id="alert-dialog-description">
-                <p style={{ marginTop: 0 }}>
+                <p className={styles.exportInputDialogDescription}>
                   {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
                 </p>
                 <p>
                   {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
                 </p>
               </DialogContentText>
-              <div style={{ textAlign: 'center' }}>
+              <div className={styles.exportInputDialogWrapperCenter}>
                 <Button
                   variant="contained"
                   color="primary"
-                  className={classes.button}
+                  className={styles.exportInputDialogButton}
                   endIcon={<SaveIcon />}
                   onClick={downloadCsv}
                 >
                   Download CSV
                 </Button>
               </div>
-              {/* <FormControl fullWidth>
-                <TextField
-                  inputProps={{ style: {
-                    fontFamily: 'courier, monospace', fontSize: 14, color: '#777'
-                  } }}
-                  id="outlined-multiline-static"
-                  label="csv"
-                  multiline
-                  disabled
-                  rows={Math.min(rows.length + 1, 10)}
-                  defaultValue={[header.join(','), ...rows.map((d) => d.join(','))].join('\n')}
-                  variant="outlined"
-                />
-              </FormControl> */}
             </div>
           )}
           {activeStep === 2 && (
             <div>
               <DialogContentText id="alert-dialog-description">
-                <p style={{ marginTop: 0 }}>
+                <p className={styles.exportInputDialogDescription}>
                   {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
                 </p>
                 <p>
@@ -296,11 +265,11 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
                   </strong>
                 </p>
               </DialogContentText>
-              <div style={{ textAlign: 'center' }}>
+              <div className={styles.exportInputDialogWrapperCenter}>
                 <Button
                   variant="contained"
                   color="primary"
-                  className={classes.button}
+                  className={styles.exportInputDialogButton}
                   endIcon={<SendIcon />}
                   onClick={sendMail}
                 >
@@ -309,8 +278,8 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
               </div>
             </div>
           )}
-          <div style={{ textAlign: 'right' }}>
-            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+          <div className={styles.exportInputDialogWrapperRight}>
+            <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
               Back
             </Button>
             {activeStep <= 1 && (
@@ -319,7 +288,7 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
-                className={classes.button}
+                className={styles.exportInputDialogButton}
               >
                 Next
               </Button>
@@ -342,10 +311,12 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
       </Dialog>
     </div>
   );
-}
+};
 
 ExportInputDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   displayInfo: PropTypes.object.isRequired,
 };
+
+export default ExportInputDialog;
