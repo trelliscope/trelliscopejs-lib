@@ -15,7 +15,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import SaveIcon from '@material-ui/icons/Save';
-import { cogDataSelector } from '../selectors';
+import { cogDataSelector } from '../../selectors';
 
 // cogDataSelector
 
