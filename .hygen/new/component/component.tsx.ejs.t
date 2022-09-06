@@ -14,4 +14,8 @@ const <%= name %>: React.FC<<%= name %>Props> = () => {
   );
 };
 
+<%= name %>.propTypes = {
+
+};
+
 export default <%= name %>;
