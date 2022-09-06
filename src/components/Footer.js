@@ -8,7 +8,7 @@ import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
 import { filterCardinalitySelector } from '../selectors/cogData';
 import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../selectors';
 import FooterChip from './FooterChip';
-import ExportInputDialog from './ExportInputDialog';
+import ExportInputDialog from './ExportInputDialog/ExportInputDialog';
 import uiConsts from '../assets/styles/uiConsts';
 
 const Footer = ({ classes, style, sort, filter, nFilt, nPanels, displayInfo }) => {
