@@ -18,7 +18,6 @@ module.exports = {
       if (name.charAt(0) !== name.charAt(0).toUpperCase()) {
         throw new Error('Component name must start with a capital letter');
       }
-      console.log('this is a test', name);
       return { ...answers };
     });
   },
