@@ -23,7 +23,7 @@ describe('Trelliscope app has an error', () => {
   test('error modal closes', async () => {
     render(<App config="/config.invalid" id="thisalsotheid" singlePageApp />);
 
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: 3 });
     await waitFor(() =>
       expect(
         screen.queryByText("Config specified as /config.invalid must have extension '.json' or '.jsonp'"),
