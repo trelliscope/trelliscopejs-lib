@@ -484,7 +484,7 @@ export const fetchDisplay =
 
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
-export const fetchDisplayList =
+export const fetchDisplayList = 
   (config = 'config.jsonp', id = '', singlePageApp = false) =>
   (dispatch) => {
     // don't read from the hash if not in single-page-app mode
