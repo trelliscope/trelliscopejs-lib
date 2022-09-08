@@ -1,6 +1,5 @@
 import React from 'react';
 import { Action, Dispatch } from 'redux';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
 import styles from './FooterChip.module.scss';
@@ -25,7 +24,7 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
   }
 
   return (
-    <div className={styles.footerChipWrapper} role="listitem">
+    <div className={styles.footerChipWrapper} >
       <span className={styles.footerChipLabel}>
         {iconTag}
         {label}
@@ -43,20 +42,10 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
             '13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 ' +
             '10.59 15.59 7 17 8.41 13.41 12 17 15.59z'
           }
-          data-testid="footerchip-close"
         />
       </svg>
     </div>
   );
-};
-
-FooterChip.propTypes = {
-  label: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
-  handleStateClose: PropTypes.func.isRequired,
 };
 
 // ------ redux container ------

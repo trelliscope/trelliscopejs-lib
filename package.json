@@ -67,7 +67,6 @@
     "@faker-js/faker": "^7.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^14.4.3",
     "@typescript-eslint/parser": "^5.35.1",
     "cors-anywhere": "^0.4.4",
     "eslint": "^8.23.0",
