@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,51 +15,56 @@ import SaveIcon from '@material-ui/icons/Save';
 import { cogDataSelector } from '../../selectors';
 import styles from './ExportInputDialog.module.scss';
 
-function TabPanel(props) {
-  const { children, value, index } = props;
+// function TabPanel(props) {
+//   const { children, value, index } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-    >
-      {value === index && <div>{children}</div>}
-    </div>
-  );
+//   return (
+//     <div
+//       role="tabpanel"
+//       hidden={value !== index}
+//       id={`full-width-tabpanel-${index}`}
+//       aria-labelledby={`full-width-tab-${index}`}
+//     >
+//       {value === index && <div>{children}</div>}
+//     </div>
+//   );
+// }
+
+interface ExportInputDialogProps {
+  open: boolean;
+  handleClose: () => void;
+  displayInfo: DisplayObject;
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node.isRequired,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
+interface LooseObject {
+  // TODO figure out what the exact typing is
+  [key: string]: any;
+}
 
-const ExportInputDialog = ({ open, handleClose, displayInfo }) => {
-  const [fullName, setFullName] = React.useState(localStorage.getItem('__trelliscope_username') || '');
-  const [email, setEmail] = React.useState(localStorage.getItem('__trelliscope_email') || '');
-  const [jobTitle, setJobTitle] = React.useState(localStorage.getItem('__trelliscope_jobtitle') || '');
-  const [otherInfo, setOtherInfo] = React.useState(localStorage.getItem('__trelliscope_otherinfo') || '');
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [csvDownloaded, setCsvDownloaded] = React.useState(false);
+const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose, displayInfo }) => {
+  const [fullName, setFullName] = useState<string>(localStorage.getItem('__trelliscope_username') || '');
+  const [email, setEmail] = useState<string>(localStorage.getItem('__trelliscope_email') || '');
+  const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem('__trelliscope_jobtitle') || '');
+  const [otherInfo, setOtherInfo] = useState<string>(localStorage.getItem('__trelliscope_otherinfo') || '');
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
 
   const cogData = useSelector(cogDataSelector);
   if (!cogData.isLoaded || cogData.crossfilter === undefined) {
-    return '';
+    return null;
   }
   if (!(displayInfo.has_inputs && displayInfo.input_type === 'localStorage')) {
-    return '';
+    return null;
   }
 
   const sendMail = () => {
     const subject = 'Trelliscope input';
     const body = `From: ${fullName}%0D%0A%0D%0A\
-Email: ${email}%0D%0A%0D%0A\
-Job Title: ${encodeURIComponent(jobTitle)}%0D%0A%0D%0A\
-Other contact info: ${encodeURIComponent(otherInfo)}%0D%0A%0D%0A\
-Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
-(attach downloaded csv file here before sending)`;
+    Email: ${email}%0D%0A%0D%0A\
+    Job Title: ${encodeURIComponent(jobTitle)}%0D%0A%0D%0A\
+    Other contact info: ${encodeURIComponent(otherInfo)}%0D%0A%0D%0A\
+    Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
+    (attach downloaded csv file here before sending)`;
     const mail = document.createElement('a');
     mail.href = `mailto:${displayInfo.input_email}?subject=${subject}&body=${body}`;
     mail.click();
@@ -68,26 +72,24 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
 
   const steps = ['User info', 'Download csv', 'Compose email'];
 
-  // localStorage.getItem('common_:_gapminder_life_expectancy_fullname')
-
   const id = `${displayInfo.group}_:_${displayInfo.name}`;
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: { target: { value: string } }) => {
     setFullName(event.target.value);
     localStorage.setItem('__trelliscope_username', event.target.value);
   };
 
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (event: { target: { value: string } }) => {
     setEmail(event.target.value);
     localStorage.setItem('__trelliscope_email', event.target.value);
   };
 
-  const handleJobTitleChange = (event) => {
+  const handleJobTitleChange = (event: { target: { value: string } }) => {
     setJobTitle(event.target.value);
     localStorage.setItem('__trelliscope_jobtitle', event.target.value);
   };
 
-  const handleOtherInfoChange = (event) => {
+  const handleOtherInfoChange = (event: { target: { value: string } }) => {
     setOtherInfo(event.target.value);
     localStorage.setItem('__trelliscope_otherinfo', event.target.value);
   };
@@ -103,12 +105,12 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
   const keyMatch = new RegExp(`^${id}`);
 
   const ccols = displayInfo.input_csv_vars || [];
-  const data = {};
-  const cols = [];
+  const data: LooseObject = {};
+  const cols: string[] = [];
   Object.keys(localStorage).forEach((key) => {
     if (keyMatch.test(key)) {
       const parts = key.split('_:_');
-      const panelKey = parts[2];
+      const panelKey: string = parts[2];
       if (data[panelKey] === undefined) {
         data[panelKey] = {};
       }
@@ -122,14 +124,14 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
   const header = ['panelKey'];
   // array of panel keys so we can search to get columns we need if ccols defined
   const cd = cogData.crossfilter.all();
-  const pk = cd.map((dd) => dd.panelKey);
+  const pk = cd.map((dd: LooseObject) => dd.panelKey);
   header.push(...ccols, ...cols);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
     const rcdat = [];
     if (ccols.length > 0) {
       const idx = pk.indexOf(kk);
-      rcdat.push(ccols.map((cc) => cd[idx][cc]));
+      rcdat.push(ccols.map((cc: string | number) => cd[idx][cc]));
     }
     const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : ''));
     const extra = [];
@@ -311,12 +313,6 @@ Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
       </Dialog>
     </div>
   );
-};
-
-ExportInputDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  displayInfo: PropTypes.object.isRequired,
 };
 
 export default ExportInputDialog;

@@ -15,6 +15,21 @@ interface CogServer {
 
 type Group = 'common' | 'condVar' | 'panelKey';
 
+type PanelInterfaceType = 'image' | 'image_src' | 'htmlwidget';
+
+type PanelInterfaceAssetType = 'script' | 'stylesheet';
+
+interface PanelInterface {
+  type: PanelInterfaceType;
+  deps: {
+    name: string;
+    assets: {
+      url: string;
+      type: PanelInterfaceAssetType;
+    };
+  };
+}
+
 interface Display {
   // ?
   group: Group;
@@ -65,16 +80,7 @@ interface DisplayObject {
     // ?
     type: string;
   };
-  panelInterface: {
-    type: 'image' | 'image_src' | 'htmlwidget';
-    deps: {
-      name: string;
-      assets: {
-        url: string;
-        type: 'script' | 'stylesheet';
-      };
-    };
-  };
+  panelInterface: PanelInterface;
   imgSrcLookup: object;
   cogInfo: {
     [key: string]: CogInfo;
