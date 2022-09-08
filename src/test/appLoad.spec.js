@@ -43,18 +43,4 @@ describe('Trelliscope app', () => {
 
     await waitFor(() => expect(screen.getByText('Introduction message for you')).toBeInTheDocument());
   });
-
-  test('shows sort FooterChip', async () => {
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
-
-    await waitFor(() => expect(screen.queryByText('country')).toBeInTheDocument());
-  });
-
-  test('dismisses FooterChip', async () => {
-    render(<App config="/config.json" id="thisalsotheid" singlePageApp />);
-    
-    await waitFor(() => expect(screen.queryByText('country')).toBeInTheDocument());
-    await user.click(screen.queryByTestId('footerchip-close'));
-    await waitFor(() => expect(screen.queryByText('country')).not.toBeInTheDocument());
-  });
 });
