@@ -3,6 +3,10 @@
 
   &:hover {
     background: #f6f6f6;
+
+    .barLabel {
+      visibility: visible;
+    }
   }
 }
 
@@ -15,10 +19,6 @@
   &:hover {
     background: rgb(255, 192, 76);
     color: #000;
-
-    .barLabel {
-      visibility: visible;
-    }
   }
 
   &Active {
@@ -39,6 +39,7 @@
     position: absolute;
     line-height: 19px;
     right: 4px;
+    visibility: hidden;
   }
 
   &Text {
@@ -51,9 +52,7 @@
     display: inline-block;
     white-space: nowrap;
     margin-left: 5px;
-  }
-
-  hidden {
-
+    position: absolute;
+    bottom: 0;
   }
 }
