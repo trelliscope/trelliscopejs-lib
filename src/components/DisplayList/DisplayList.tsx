@@ -1,6 +1,5 @@
 import React from 'react';
 import { Action, Dispatch } from 'redux';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core';
@@ -10,7 +9,6 @@ import { selectedRelDispsSelector } from '../../selectors/display';
 import { appIdSelector, configSelector, selectedDisplaySelector } from '../../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
-import { configPropTypes, displayPropTypes } from '../../commonPropTypes';
 import styles from './DisplayList.module.scss';
 
 // TODO this should probably live as a return type
@@ -144,24 +142,6 @@ const DisplayList: React.FC<DisplayListProps> = ({
       ))}
     </div>
   );
-};
-
-DisplayList.propTypes = {
-  selectable: PropTypes.bool.isRequired,
-  displayItems: PropTypes.arrayOf(displayPropTypes.isRequired).isRequired,
-  displayGroups: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number.isRequired).isRequired).isRequired,
-  handleClick: PropTypes.func.isRequired,
-  cfg: configPropTypes.isRequired,
-  appId: PropTypes.string.isRequired,
-  selectedRelDisps: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-  selectedDisplay: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    group: PropTypes.string.isRequired,
-    desc: PropTypes.string.isRequired,
-  }).isRequired,
-  contentHeight: PropTypes.number.isRequired,
-  contentWidth: PropTypes.number.isRequired,
-  handleCheckbox: PropTypes.func.isRequired,
 };
 
 const styleSelector = createSelector(
