@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import SidebarLabels from './SidebarLabels';
+import SidebarLabels from './SidebarLabels/SidebarLabels';
 import SidebarLayout from './SidebarLayout';
 import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
