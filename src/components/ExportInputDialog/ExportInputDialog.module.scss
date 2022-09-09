@@ -1,0 +1,22 @@
+.exportInputDialog {
+  &TextField {
+    margin-bottom: 15px !important;
+  }
+
+  &Button {
+    margin: 8px !important;
+  }
+
+  &Description {
+    margin-top: 0;
+  }
+
+  &Wrapper {
+    &Right {
+      text-align: right;
+    }
+    &Center {
+      text-align: center;
+    }
+  }
+}
