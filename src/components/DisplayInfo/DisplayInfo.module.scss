@@ -1,0 +1,40 @@
+.displayInfo {
+  &Button {
+    position: absolute;
+    left: 48px;
+    box-sizing: border-box;
+    top: -1px;
+    display: inline-block;
+    height: 48px;
+    width: 47px;
+    font-size: 18px;
+    padding-top: 0px;
+    color: #9ba3af;
+    background: none;
+    text-align: center;
+    border-right: 1px solid #eaedf0;
+    border-bottom: 1px solid #eaedf0;
+    border-top: none;
+    border-left: none;
+
+    &:hover {
+      transition: background 250ms;
+      background: #eee;
+      cursor: pointer;
+    }
+  }
+
+  &Icon {
+    padding-left: 2px;
+    line-height: 48px;
+  }
+
+  &ModalContainer {
+    overflow-y: auto;
+    max-height: 520px;
+  }
+
+  &ButtonLeft {
+    left: 0;
+  }
+}

@@ -43,6 +43,14 @@ interface Display {
   keySig: string;
 }
 
+interface CurrentDisplayInfo {
+  didInvalidate: boolean;
+  info: DisplayObject;
+  isFetching: boolean;
+  isLoaded: boolean;
+  lastUpdated: number;
+}
+
 interface DisplayObject {
   name: string;
   // ?

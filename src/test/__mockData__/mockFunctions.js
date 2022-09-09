@@ -218,7 +218,7 @@ export const createDisplayObj = (options) => ({
     },
     continent: {
       type: 'factor',
-      dis: {
+      dist: {
         Africa: 52,
         Asia: 33,
         Europe: 30,
@@ -240,7 +240,7 @@ export const createDisplayObj = (options) => ({
       ncol: 6,
       arrange: 'row',
     },
-    label: ['country'],
+    labels: ['country'],
     sort: [
       {
         order: 1,
