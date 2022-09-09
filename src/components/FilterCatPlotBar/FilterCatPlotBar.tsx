@@ -8,14 +8,13 @@ interface FilterCatPlotBarProps {
   allActive: boolean;
   width: number;
   height: number;
-  divStyle: React.CSSProperties;
+  divStyle: object;
   d: { ct: number; mct: number; id: string };
   onClick: () => void;
 }
 
 const FilterCatPlotBar: React.FC<FilterCatPlotBarProps> = ({ onClick, d, height, width, divStyle, active, allActive }) => {
   const fontSize = Math.min(10, height - 6);
-  const labelFontSize = Math.min(9, height - 7);
   const label = d.ct === d.mct ? d.mct : `${d.ct} / ${d.mct}`;
   return (
     <div
@@ -26,12 +25,15 @@ const FilterCatPlotBar: React.FC<FilterCatPlotBarProps> = ({ onClick, d, height,
       tabIndex={0}
       style={divStyle}
     >
-      <div className={classNames(styles.bar, { [styles.barActive]: active, [styles.barAllActive]: allActive })}>
-        <div className={styles.barText} style={{ fontSize, lineHeight: `${height - 1}px`, width }}>
+      <div
+        className={classNames(styles.bar, { [styles.barActive]: active, [styles.barAllActive]: allActive })}
+        style={{ width, height: height - 1 }}
+      >
+        <div className={styles.barText} style={{ fontSize: `${fontSize}px`, lineHeight: `${height - 1}px`, width }}>
           <div className={styles.barTextInner}>{d.id}</div>
         </div>
       </div>
-      <div className={classNames(styles.barLabel)} style={{ fontSize: labelFontSize, lineHeight: `${height - 1}px` }}>
+      <div className={classNames(styles.barLabel)} style={{ lineHeight: `${height - 1}px` }}>
         {label}
       </div>
     </div>
@@ -43,7 +45,13 @@ FilterCatPlotBar.propTypes = {
   allActive: PropTypes.bool.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  divStyle: PropTypes.object.isRequired,
+  divStyle: PropTypes.shape({
+    height: PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired,
+    position: PropTypes.string.isRequired,
+    top: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+  }).isRequired,
   d: PropTypes.shape({
     ct: PropTypes.number.isRequired,
     mct: PropTypes.number.isRequired,
