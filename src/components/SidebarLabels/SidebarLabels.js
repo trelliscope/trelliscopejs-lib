@@ -9,10 +9,10 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox';
-import { setLabels } from '../actions';
-import { contentHeightSelector } from '../selectors/ui';
-import { labelsSelector, curDisplayInfoSelector } from '../selectors';
-import uiConsts from '../assets/styles/uiConsts';
+import { setLabels } from '../../actions';
+import { contentHeightSelector } from '../../selectors/ui';
+import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
+import uiConsts from '../../assets/styles/uiConsts';
 
 const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handleChange }) => {
   let content = <div />;
