@@ -1,20 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
-// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox';
 import { setLabels } from '../../actions';
 import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
+import styles from './SidebarLabels.module.scss';
 
-const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handleChange }) => {
+const SidebarLabels = ({ height, labels, cogInfo, curDisplayInfo, handleChange }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
@@ -30,8 +28,8 @@ const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handl
             return (
               <React.Fragment key={grp}>
                 {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <ListSubheader className={classes.cogGroupHeader}>
-                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
+                    <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </ListSubheader>
                 )}
                 {cogGroups[grp].sort().map((d) => (
@@ -59,33 +57,6 @@ const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handl
   return content;
 };
 
-SidebarLabels.propTypes = {
-  height: PropTypes.number.isRequired,
-  // sheet: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired,
-  cogInfo: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  rowDesc: {
-    color: '#888',
-    fontStyle: 'italic',
-  },
-  cogGroupHeader: {
-    background: '#90CAF9',
-    color: 'white',
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: '29px',
-  },
-  cogGroupText: {
-    paddingLeft: 20,
-  },
-};
-
 // ------ redux container ------
 
 const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
@@ -110,4 +81,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarLabels));
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLabels);

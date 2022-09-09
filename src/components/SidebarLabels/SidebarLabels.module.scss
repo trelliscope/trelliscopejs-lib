@@ -1,0 +1,20 @@
+.sidebarLabels {
+  &RowDesc {
+    color: #888;
+    font-style: italic;
+  }
+
+  &CogGroup {
+    &Header {
+      background: #90caf9 !important;
+      color: white !important;
+      font-weight: 400 !important;
+      font-size: 14px !important;
+      line-height: 29px !important;
+    }
+
+    &Text {
+      padding-left: 20px;
+    }
+  }
+}
