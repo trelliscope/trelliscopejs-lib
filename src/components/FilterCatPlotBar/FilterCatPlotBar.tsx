@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './FilterCatPlotBar.module.scss';
 
@@ -38,26 +37,6 @@ const FilterCatPlotBar: React.FC<FilterCatPlotBarProps> = ({ onClick, d, height,
       </div>
     </div>
   );
-};
-
-FilterCatPlotBar.propTypes = {
-  active: PropTypes.bool.isRequired,
-  allActive: PropTypes.bool.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  divStyle: PropTypes.shape({
-    height: PropTypes.number.isRequired,
-    left: PropTypes.number.isRequired,
-    position: PropTypes.string.isRequired,
-    top: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-  }).isRequired,
-  d: PropTypes.shape({
-    ct: PropTypes.number.isRequired,
-    mct: PropTypes.number.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default FilterCatPlotBar;
