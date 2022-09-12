@@ -23,7 +23,7 @@ const generateBreaks = (count, range) =>
 const generateDist = () => {
   const distObj = {};
   countries.forEach((country) => {
-    distObj[country] = 1;
+    distObj[country] = faker.datatype.number({ min: 0, max: 100 });
   });
 
   return distObj;
@@ -214,7 +214,7 @@ export const createDisplayObj = (options) => ({
       type: 'factor',
       dist: generateDist(),
       has_dist: true,
-      max: 1,
+      max: 100,
     },
     continent: {
       type: 'factor',
