@@ -1,7 +1,24 @@
 .sidebarLabels {
+  overflow-y: auto;
+  overflow-x: hidden;
+
   &RowDesc {
     color: #888;
     font-style: italic;
+  }
+
+  &List {
+    padding: 0;
+
+    &Checkbox {
+      height: 20px;
+      width: 20px;
+    }
+
+    &Item {
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+    }
   }
 
   &CogGroup {
