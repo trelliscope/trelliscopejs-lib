@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import { SB_CONFIG } from '../../constants';
 import styles from './SideButton.module.scss';
 
