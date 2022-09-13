@@ -1,0 +1,56 @@
+.sideButton {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 22px;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #c0c0c0;
+  user-select: none;
+  background: #b3b3b3;
+  transition: color 0.2s, background-color 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: #448aff;
+  }
+
+  &__active {
+    background: #fff;
+    color: #448aff;
+
+    &:hover {
+      background: #448aff;
+      color: #fff;
+    }
+  }
+
+  &Icon {
+    line-height: 22px;
+    height: 22px;
+    width: 48px;
+    position: absolute;
+    top: 8px;
+    left: 0;
+  }
+
+  &Label {
+    font-size: 11px;
+    line-height: 11px;
+    width: 48px;
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+  }
+
+  &__bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #c0c0c0;
+    border-bottom: none;
+  }
+}
