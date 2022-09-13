@@ -9,10 +9,10 @@ import intersection from 'lodash.intersection';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
-import { setSort, setLabels, setLayout } from '../actions';
-import { sidebarHeightSelector } from '../selectors/ui';
-import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../selectors';
-import uiConsts from '../assets/styles/uiConsts';
+import { setSort, setLabels, setLayout } from '../../actions';
+import { sidebarHeightSelector } from '../../selectors/ui';
+import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
+import uiConsts from '../../assets/styles/uiConsts';
 
 const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo }) => {
   let content = <div />;
