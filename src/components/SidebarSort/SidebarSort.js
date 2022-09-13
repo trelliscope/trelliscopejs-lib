@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
-// import Fab from '@material-ui/core/Button';
-// import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import { setSort, setLabels, setLayout } from '../../actions';
 import { sidebarHeightSelector } from '../../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
-import uiConsts from '../../assets/styles/uiConsts';
+import styles from './SidebarSort.module.scss';
 
-const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo }) => {
+const SidebarSort = ({ customStyles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   if (cogDesc) {
@@ -27,16 +24,15 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
     }
     content = (
       <div>
-        <div className={classes.tableWrap} style={styles.tableWrap}>
-          <table className={classes.table}>
+        <div className={styles.sidebarSortTableWrap} style={customStyles.tableWrap}>
+          <table className={styles.sidebarSortTable}>
             <tbody>
               {sort.map((d, i) => {
                 const ic = d.dir === 'asc' ? 'up' : 'down';
                 return (
-                  <tr className={classes.tr} key={`${d.name}_tr`}>
-                    <td className={classes.sortButton}>
+                  <tr className={styles.sidebarSortTableRow} key={`${d.name}_tr`}>
+                    <td className={styles.sidebarSortButton}>
                       <IconButton
-                        // style={{ width: 36, height: 30 }}
                         color="primary"
                         key={`${d.name}_button`}
                         onClick={() => {
@@ -48,12 +44,12 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
                         <i className={`icon-chevron-${ic}`} style={{ fontSize: 16 }} />
                       </IconButton>
                     </td>
-                    <td className={classes.labels}>
+                    <td className={styles.sidebarSortLabels}>
                       {d.name}
                       <br />
                       <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.name]}</span>
                     </td>
-                    <td className={classes.closeButton}>
+                    <td className={styles.sidebarSortButtonClose}>
                       <IconButton onClick={() => handleChange(i)}>
                         <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
                       </IconButton>
@@ -64,10 +60,10 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
             </tbody>
           </table>
         </div>
-        <div className={classes.notUsedHeader}>
+        <div className={styles.sidebarSortNotUsedHeader}>
           {sort.length === 0 ? 'Select a variable to sort on:' : notUsed.length === 0 ? '' : 'More variables:'}
         </div>
-        <div className={classes.notUsed} style={styles.notUsed}>
+        <div className={styles.sidebarSortNotUsed} style={customStyles.notUsed}>
           {Object.keys(cogGroups).map((grp) => {
             const curItems = intersection(notUsed, cogGroups[grp]);
             if (curItems.length === 0) {
@@ -76,8 +72,8 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
             return (
               <React.Fragment key={grp}>
                 {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <div className={classes.cogGroupHeader}>
-                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  <div className={styles.sidebarSortCogGroupHeader}>
+                    <span className={styles.sidebarSortCogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </div>
                 )}
                 {curItems.sort().map((d) => (
@@ -85,7 +81,7 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
                     <span data-tip data-for={`tooltip_${d}`}>
                       <button
                         type="button"
-                        className={classes.variable}
+                        className={styles.sidebarSortVariable}
                         key={`${d}_button`}
                         onClick={() => {
                           const sort2 = Object.assign([], sort);
@@ -113,103 +109,12 @@ const SidebarSort = ({ classes, styles, sort, cogDesc, labels, handleChange, add
 };
 
 SidebarSort.propTypes = {
-  styles: PropTypes.object.isRequired,
+  customStyles: PropTypes.object.isRequired,
   sort: PropTypes.array.isRequired,
   cogDesc: PropTypes.object.isRequired,
   labels: PropTypes.array.isRequired,
   handleChange: PropTypes.func.isRequired,
   addLabel: PropTypes.func.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  tableWrap: {
-    overflowY: 'auto',
-    overflowX: 'hidden',
-  },
-  table: {
-    width: uiConsts.sidebar.width - 5,
-    borderCollapse: 'collapse',
-    borderSpacing: 0,
-    tableLayout: 'fixed',
-  },
-  tr: {
-    width: uiConsts.sidebar.width - 5,
-    height: 48,
-    borderBottom: '1px solid rgb(224, 224, 224)',
-  },
-  sortButton: {
-    verticalAlign: 'middle',
-    width: 45,
-    textAlign: 'center',
-  },
-  labels: {
-    fontSize: 13,
-    height: 48,
-    width: uiConsts.sidebar.width - 45 - 45 - 5,
-    verticalAlign: 'middle',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-  },
-  closeButton: {
-    height: 48,
-    width: 45,
-    textAlign: 'center',
-    verticalAlign: 'middle',
-  },
-  notUsedHeader: {
-    height: 30,
-    lineHeight: '30px',
-    paddingLeft: 10,
-    boxSizing: 'border-box',
-    width: uiConsts.sidebar.width,
-    fontSize: 14,
-  },
-  notUsed: {
-    width: uiConsts.sidebar.width,
-    overflowY: 'auto',
-    boxSizing: 'border-box',
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-  },
-  variable: {
-    display: 'inline-block',
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
-    borderRadius: 10,
-    border: 0,
-    background: 'none',
-    paddingTop: '2px !important',
-    paddingBottom: '3px !important',
-    paddingLeft: '7px !important',
-    paddingRight: '7px !important',
-    margin: '3px !important',
-    fontSize: 12,
-    color: 'black',
-    cursor: 'pointer',
-    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-    '&:hover': {
-      transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-      background: '#ebebeb',
-    },
-  },
-  cogGroupHeader: {
-    background: '#90CAF9',
-    marginLeft: -10,
-    marginRight: -10,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
-    color: 'white',
-    fontWeight: 400,
-    fontSize: 14,
-  },
-  cogGroupText: {
-    paddingLeft: 20,
-  },
 };
 
 // ------ redux container ------
@@ -237,7 +142,7 @@ const stateSelector = createSelector(
       activeHeight = n * 51 - 25;
     }
     return {
-      styles: {
+      customStyles: {
         tableWrap: {
           maxHeight: activeHeight,
         },
@@ -270,4 +175,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarSort));
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarSort);
