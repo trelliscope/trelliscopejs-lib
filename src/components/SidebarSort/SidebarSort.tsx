@@ -1,3 +1,4 @@
+// FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -9,12 +10,13 @@ import Icon from '@material-ui/core/Icon';
 import { setSort, setLabels, setLayout } from '../../actions';
 import { sidebarHeightSelector } from '../../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
+import { RootState } from '../../store';
 import styles from './SidebarSort.module.scss';
 
 interface SortProps {
   dir: string;
   name: string;
-  order: number;
+  order?: number;
 }
 
 interface SidebarSortProps {
@@ -27,9 +29,14 @@ interface SidebarSortProps {
     };
   };
   sort: SortProps[];
-  cogDesc: { label: string; value: string | number; index: number }; // try again
+  cogDesc: {
+    label: string;
+    value: string;
+    index: string;
+    [key: string]: string;
+  };
   labels: string[];
-  handleChange: (arg1: SortProps[] | number) => void; // string or number??
+  handleChange: (arg1: SortProps[] | number) => void;
   addLabel: (name: string, label: string[]) => void;
   curDisplayInfo: CurrentDisplayInfo;
 }
@@ -43,9 +50,9 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
   addLabel,
   curDisplayInfo,
 }) => {
-  console.log(curDisplayInfo);
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
+  const sort2 = Object.assign([], sort) as SortProps[];
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
     for (let i = 0; i < sort.length; i += 1) {
@@ -68,7 +75,6 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
                         color="primary"
                         key={`${d.name}_button`}
                         onClick={() => {
-                          const sort2 = Object.assign([], sort);
                           sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
                           handleChange(sort2);
                         }}
@@ -116,7 +122,6 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
                         className={styles.sidebarSortVariable}
                         key={`${d}_button`}
                         onClick={() => {
-                          const sort2 = Object.assign([], sort);
                           sort2.push({ name: d, dir: 'asc' });
                           addLabel(d, labels);
                           handleChange(sort2);
@@ -143,7 +148,11 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
 // ------ redux container ------
 
 const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
-  const res = {};
+  const res: { [key: string]: string; label: string; value: string; index: string } = {
+    label: '',
+    value: '',
+    index: ''
+  };
   const ciKeys = Object.keys(cdi.info.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {
     res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
@@ -181,14 +190,16 @@ const stateSelector = createSelector(
   },
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: TS2345
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (sortSpec) => {
+  handleChange: (sortSpec: SortProps[] | number) => {
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ pageNum: 1 }));
   },
-  addLabel: (name, labels) => {
+  addLabel: (name: string, labels: string[]) => {
     // if a sort variable is being added, add a panel label for the variable
     if (labels.indexOf(name) < 0) {
       const newLabels = Object.assign([], labels);

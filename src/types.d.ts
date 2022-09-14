@@ -123,11 +123,3 @@ interface CogDistns {
     [key: string]: number;
   };
 }
-
-interface CurDisplayInfo {
-  didInvalidate: boolean;
-  info: DisplayObject;
-  isFetching: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-}
