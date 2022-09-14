@@ -1,27 +1,35 @@
+// FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import injectSheet from 'react-jss';
+import { Action, Dispatch } from 'redux';
 import { createSelector } from 'reselect';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
-// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox';
-import { setLabels } from '../actions';
-import { contentHeightSelector } from '../selectors/ui';
-import { labelsSelector, curDisplayInfoSelector } from '../selectors';
-import uiConsts from '../assets/styles/uiConsts';
+import { setLabels } from '../../actions';
+import { contentHeightSelector } from '../../selectors/ui';
+import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
+import uiConsts from '../../assets/styles/uiConsts';
+import styles from './SidebarLabels.module.scss';
 
-const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handleChange }) => {
+interface SidebarLabelsProps {
+  height: number;
+  labels: string[];
+  cogInfo: CogInfo;
+  curDisplayInfo: CurDisplayInfo;
+  handleChange: (arg1: string, arg2: string[]) => void;
+}
+
+const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, curDisplayInfo, handleChange }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
   if (ciKeys.length > 0) {
     content = (
-      <div style={{ height, overflowY: 'auto', overflowX: 'hidden' }}>
-        <List style={{ padding: 0 }}>
+      <div className={styles.sidebarLabels} style={{ height }}>
+        <List className={styles.sidebarLabelsList}>
           {Object.keys(cogGroups).map((grp) => {
             const curItems = cogGroups[grp];
             if (curItems.length === 0) {
@@ -30,22 +38,22 @@ const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handl
             return (
               <React.Fragment key={grp}>
                 {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <ListSubheader className={classes.cogGroupHeader}>
-                    <span className={classes.cogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
+                    <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </ListSubheader>
                 )}
-                {cogGroups[grp].sort().map((d) => (
+                {cogGroups[grp].sort().map((d: string) => (
                   <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name, labels)}>
                     <Checkbox
                       checked={labels.indexOf(cogInfo[d].name) !== -1}
-                      style={{ width: 20, height: 20 }}
+                      className={styles.sidebarLabelsListCheckbox}
                       tabIndex={-1}
                       disableRipple
                     />
                     <ListItemText
                       primary={cogInfo[d].name}
                       secondary={cogInfo[d].desc}
-                      style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                      className={styles.sidebarLabelsListItem}
                     />
                   </ListItem>
                 ))}
@@ -59,33 +67,6 @@ const SidebarLabels = ({ classes, height, labels, cogInfo, curDisplayInfo, handl
   return content;
 };
 
-SidebarLabels.propTypes = {
-  height: PropTypes.number.isRequired,
-  // sheet: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired,
-  cogInfo: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  rowDesc: {
-    color: '#888',
-    fontStyle: 'italic',
-  },
-  cogGroupHeader: {
-    background: '#90CAF9',
-    color: 'white',
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: '29px',
-  },
-  cogGroupText: {
-    paddingLeft: 20,
-  },
-};
-
 // ------ redux container ------
 
 const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
@@ -96,10 +77,16 @@ const stateSelector = createSelector(contentHeightSelector, labelsSelector, curD
   curDisplayInfo: cdi,
 }));
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: {
+  contentHeightSelector: number;
+  labelsSelector: string[];
+  curDisplayInfoSelector: CurDisplayInfo;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: TS2345
+}) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
-  handleChange: (value, labels) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  handleChange: (value: string, labels: string[]) => {
     const idx = labels.indexOf(value);
     if (idx === -1) {
       labels.push(value);
@@ -110,4 +97,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarLabels));
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLabels);

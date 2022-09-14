@@ -96,9 +96,11 @@ interface DisplayObject {
   cogDistns: {
     [key: string]: CogDistns;
   };
+  cogGroups: { [key: string]: Array<string> };
 }
 
 interface CogInfo {
+  [key: string]: { name: string; desc: string };
   name: string;
   desc: string;
   // ?
@@ -120,4 +122,12 @@ interface CogDistns {
   dis: {
     [key: string]: number;
   };
+}
+
+interface CurDisplayInfo {
+  didInvalidate: boolean;
+  info: DisplayObject;
+  isFetching: boolean;
+  isLoaded: boolean;
+  lastUpdated: number;
 }
