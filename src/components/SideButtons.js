@@ -124,7 +124,7 @@ class SideButtons extends React.Component {
           return (
             <SideButton
               key={`sidebutton_${d.title}`}
-              isActive={d.title === active}
+              active={d.title === active}
               icon={d.icon}
               title={d.title}
               label={d.label}
