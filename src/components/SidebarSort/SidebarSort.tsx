@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
@@ -11,7 +11,39 @@ import { sidebarHeightSelector } from '../../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
 import styles from './SidebarSort.module.scss';
 
-const SidebarSort = ({ customStyles, sort, cogDesc, labels, handleChange, addLabel, curDisplayInfo }) => {
+interface SortProps {
+  dir: string;
+  name: string;
+  order: number;
+}
+
+interface SidebarSortProps {
+  customStyles: {
+    tableWrap: {
+      maxHeight: number;
+    };
+    notUsed: {
+      height: number;
+    };
+  };
+  sort: SortProps[];
+  cogDesc: { label: string; value: string | number; index: number }; // try again
+  labels: string[];
+  handleChange: (arg1: SortProps[] | number) => void; // string or number??
+  addLabel: (name: string, label: string[]) => void;
+  curDisplayInfo: CurrentDisplayInfo;
+}
+
+const SidebarSort: React.FC<SidebarSortProps> = ({
+  customStyles,
+  sort,
+  cogDesc,
+  labels,
+  handleChange,
+  addLabel,
+  curDisplayInfo,
+}) => {
+  console.log(curDisplayInfo);
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   if (cogDesc) {
@@ -108,15 +140,6 @@ const SidebarSort = ({ customStyles, sort, cogDesc, labels, handleChange, addLab
   return content;
 };
 
-SidebarSort.propTypes = {
-  customStyles: PropTypes.object.isRequired,
-  sort: PropTypes.array.isRequired,
-  cogDesc: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  addLabel: PropTypes.func.isRequired,
-};
-
 // ------ redux container ------
 
 const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
@@ -160,7 +183,7 @@ const stateSelector = createSelector(
 
 const mapStateToProps = (state) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleChange: (sortSpec) => {
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ pageNum: 1 }));
