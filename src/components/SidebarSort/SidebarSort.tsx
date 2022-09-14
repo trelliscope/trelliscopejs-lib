@@ -114,7 +114,7 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
                     <span className={styles.sidebarSortCogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </div>
                 )}
-                {curItems.sort().map((d) => (
+                {curItems.sort().map((d: string) => (
                   <span key={`${d}_notused`}>
                     <span data-tip data-for={`tooltip_${d}`}>
                       <button
