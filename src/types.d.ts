@@ -131,3 +131,27 @@ interface CurDisplayInfo {
   isLoaded: boolean;
   lastUpdated: number;
 }
+
+interface CondDist {
+  breaks: number[];
+  delta: number;
+  dist: [
+    {
+      key: number;
+      value: number;
+    },
+  ];
+  log: boolean;
+  max: number;
+}
+
+interface Filter {
+  name: string;
+  orderValue: string;
+  type: string;
+  varType: string;
+  value: {
+    from: number;
+    to: number;
+  };
+}
