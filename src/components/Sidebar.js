@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import SidebarLabels from './SidebarLabels';
 import SidebarLayout from './SidebarLayout';
-import SidebarSort from './SidebarSort/SidebarSort';
+import SidebarSort from './SidebarSort';
 import SidebarFilter from './SidebarFilter';
 import SidebarViews from './SidebarViews';
 import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../selectors/ui';
