@@ -18,7 +18,7 @@ interface SidebarLabelsProps {
   height: number;
   labels: string[];
   cogInfo: CogInfo;
-  curDisplayInfo: CurDisplayInfo;
+  curDisplayInfo: CurrentDisplayInfo;
   handleChange: (arg1: string, arg2: string[]) => void;
 }
 
@@ -80,7 +80,7 @@ const stateSelector = createSelector(contentHeightSelector, labelsSelector, curD
 const mapStateToProps = (state: {
   contentHeightSelector: number;
   labelsSelector: string[];
-  curDisplayInfoSelector: CurDisplayInfo;
+  curDisplayInfoSelector: CurrentDisplayInfo;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: TS2345
 }) => stateSelector(state);

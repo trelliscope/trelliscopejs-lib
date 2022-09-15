@@ -124,14 +124,6 @@ interface CogDistns {
   };
 }
 
-interface CurDisplayInfo {
-  didInvalidate: boolean;
-  info: DisplayObject;
-  isFetching: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-}
-
 interface CondDist {
   breaks: number[];
   delta: number;
