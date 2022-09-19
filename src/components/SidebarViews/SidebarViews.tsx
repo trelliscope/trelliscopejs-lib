@@ -1,57 +1,37 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import injectSheet from 'react-jss';
 import { createSelector } from 'reselect';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { setLabels, setLayout, setSort, setFilter, setFilterView } from '../actions';
+import { setLabels, setLayout, setSort, setFilter, setFilterView } from '../../actions';
+import { contentHeightSelector } from '../../selectors/ui';
+import { curDisplayInfoSelector } from '../../selectors';
+import { cogInfoSelector } from '../../selectors/display';
+import uiConsts from '../../assets/styles/uiConsts';
 
-import { contentHeightSelector } from '../selectors/ui';
-import { curDisplayInfoSelector } from '../selectors';
-import { cogInfoSelector } from '../selectors/display';
-import uiConsts from '../assets/styles/uiConsts';
+import styles from './SidebarViews.module.scss';
 
-const SidebarViews = ({ height, views, cinfo, handleChange }) => {
-  const content = (
-    <div style={{ height, overflowY: 'auto' }}>
-      <List style={{ padding: 0 }}>
-        {views.map((value) => (
-          <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
-            <ListItemText
-              primary={value.name}
-              // secondary={value.desc}
-              // style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
-            />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-  return content;
-};
-
-SidebarViews.propTypes = {
-  height: PropTypes.number.isRequired,
-  // sheet: PropTypes.object.isRequired,
-  views: PropTypes.array.isRequired,
-  cinfo: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  rowDesc: {
-    color: '#888',
-    fontStyle: 'italic',
-  },
-};
+interface SidebarViewsProps {
+  height: number;
+  views: ViewItem[];
+  cinfo: { [key: string]: CogInfo };
+  handleChange: (state: string, cinfo: { [key: string]: CogInfo }) => void;
+}
+const SidebarViews: React.FC<SidebarViewsProps> = ({ height, views, cinfo, handleChange }) => (
+  <div className={styles.sidebarViews} style={{ height }}>
+    <List className={styles.sidebarViewsList}>
+      {views.map((value) => (
+        <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
+          <ListItemText primary={value.name} />
+        </ListItem>
+      ))}
+    </List>
+  </div>
+);
 
 // ------ redux container ------
-
 const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelector, cogInfoSelector, (ch, cdi, cinfo) => ({
   width: uiConsts.sidebar.width,
   height: ch - uiConsts.sidebar.header.height,
@@ -59,17 +39,21 @@ const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelect
   cinfo,
 }));
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: { contentHeight: number; curDisplay: CurrentDisplayInfo; cogInfo: CogInfo }) =>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: TS2345
+  stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
-  handleChange: (value, cinfo) => {
-    const hashItems = {};
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  handleChange: (value: string, cinfo: { [key: string]: CogInfo }) => {
+    const hashItems = {} as HashItem;
     value
       .replace('#', '')
       .split('&')
       .forEach((d) => {
         const tuple = d.split('=');
-        hashItems[tuple[0]] = tuple[[1]];
+        const [key, val] = tuple;
+        hashItems[key] = val;
       });
 
     if (hashItems.nrow && hashItems.ncol && hashItems.arr) {
@@ -93,7 +77,7 @@ const mapDispatchToProps = (dispatch) => ({
     }
 
     // sort
-    let sort = [];
+    let sort = [] as { order: number; name: string; dir: string }[];
     if (hashItems.sort) {
       sort = hashItems.sort.split(',').map((d, i) => {
         const vals = d.split(';');
@@ -107,27 +91,28 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSort(sort));
 
     // filter
-    const filter = {};
+    const filter = {} as SidebarViewsFilterKey;
     if (hashItems.filter) {
       const fltrs = hashItems.filter.split(',');
       fltrs.forEach((flt) => {
-        const fltItems = {};
+        const fltItems = {} as HashItem;
         flt.split(';').forEach((d) => {
           const tuple = d.split(':');
-          fltItems[tuple[0]] = tuple[[1]];
+          const [key, val] = tuple;
+          fltItems[key] = val;
         });
         // fltItems.var
         const fltState = {
           name: fltItems.var,
           type: fltItems.type,
           varType: cinfo[fltItems.var].type,
-        };
+        } as SidebarViewsFilter;
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
           fltState.value = fltItems.val.split('#').map(decodeURIComponent);
         } else if (fltItems.type === 'regex') {
           const { levels } = cinfo[fltItems.var];
-          const vals = [];
+          const vals = [] as string[];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
           levels.forEach((d) => {
             if (d.match(rval) !== null) {
@@ -138,8 +123,8 @@ const mapDispatchToProps = (dispatch) => ({
           fltState.value = vals;
           fltState.orderValue = 'ct,desc';
         } else if (fltItems.type === 'range') {
-          const from = fltItems.from ? parseFloat(fltItems.from, 10) : undefined;
-          const to = fltItems.to ? parseFloat(fltItems.to, 10) : undefined;
+          const from = fltItems.from ? parseFloat(fltItems.from) : undefined;
+          const to = fltItems.to ? parseFloat(fltItems.to) : undefined;
           fltState.value = { from, to };
           fltState.valid = true;
           if (from && to && from > to) {
@@ -160,4 +145,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(SidebarViews));
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarViews);

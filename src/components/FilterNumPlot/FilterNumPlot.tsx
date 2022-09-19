@@ -14,7 +14,7 @@ interface FilterNumPlotProps {
   width: number;
   height: number;
   condDist: CondDist;
-  filterState: Filter;
+  filterState: FilterNumPlotFilter;
   handleChange: (event: React.ChangeEvent<HTMLInputElement> | undefined) => void;
 }
 
