@@ -1,0 +1,57 @@
+.footer {
+  &Wrapper {
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    height: 30px;
+    padding-left: 10px;
+    margin: 0;
+    line-height: 30px;
+    font-size: 15px;
+    font-weight: 300;
+    background: #666666;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    z-index: 1001;
+  }
+
+  &Inner {
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    padding-right: 10px;
+  }
+
+  &Section {
+    &Wrapper {
+      display: flex;
+      flex-direction: row;
+    }
+
+    &Text {
+      margin-right: 3px;
+    }
+  }
+
+  &ChipWrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &Spacer {
+    width: 12px;
+  }
+
+  &FilterText {
+    margin-left: 5px;
+  }
+
+  &ButtonDiv {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}
