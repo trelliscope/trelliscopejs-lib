@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SetStateAction } from 'react';
 import classNames from 'classnames';
 import Mousetrap from 'mousetrap';
 import styles from './NumericInput.module.scss';
 
-const NumericInput = ({ arrows, value, size, min, max, step, onChange }) => {
-  const [newValue, setNewValue] = useState(value);
+interface NumericInputProps {
+  arrows?: boolean;
+  value: number;
+  size: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (arg1: number) => void;
+}
+
+const NumericInput: React.FC<NumericInputProps> = ({ arrows, value, size, min, max, step, onChange }) => {
+  const [newValue, setNewValue] = useState<number>(value);
 
   const increment = () => {
     const newVal = value + step;
@@ -22,9 +32,9 @@ const NumericInput = ({ arrows, value, size, min, max, step, onChange }) => {
     }
   };
 
-  const handleChange = (event) => {
-    setNewValue(event.target.value);
-    const val = parseFloat(event.target.value);
+  const handleChange = (event: { target: { value: string | number | SetStateAction<number> } }) => {
+    setNewValue(event.target.value as number);
+    const val = parseFloat(event.target.value as string);
     if (!Number.isNaN(val) && onChange) {
       let updateable = true;
       if (min && val < min) {
@@ -43,10 +53,6 @@ const NumericInput = ({ arrows, value, size, min, max, step, onChange }) => {
     const mousetrap = new Mousetrap();
     mousetrap.bind('up', () => increment());
     mousetrap.bind('down', () => decrement());
-    mousetrap.bind('esc', () => {
-      NumericInput.blur();
-      return false;
-    });
     mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'], (event) => event.stopPropagation());
     return () => {
       mousetrap.unbind('up');
@@ -55,20 +61,6 @@ const NumericInput = ({ arrows, value, size, min, max, step, onChange }) => {
       mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r']);
     };
   }, []);
-
-  let arrowElements = '';
-  if (arrows) {
-    arrowElements = (
-      <span>
-        <button type="button" key="up-button" className={styles.numericInputB} onClick={increment} tabIndex="-1">
-          <i className={styles.numericInputI} />
-        </button>
-        <button type="button" key="down-button" className={styles.numericInputB2} onClick={decrement} tabIndex="-1">
-          <i className={styles.numericInputI2} />
-        </button>
-      </span>
-    );
-  }
 
   return (
     <span className={styles.numericInputSpan}>
@@ -79,9 +71,22 @@ const NumericInput = ({ arrows, value, size, min, max, step, onChange }) => {
         value={newValue}
         onChange={handleChange}
       />
-      {arrowElements}
+      {arrows && (
+        <span>
+          <button type="button" key="up-button" className={styles.numericInputB} onClick={increment} tabIndex={-1}>
+            <i className={styles.numericInputI} />
+          </button>
+          <button type="button" key="down-button" className={styles.numericInputB2} onClick={decrement} tabIndex={-1}>
+            <i className={styles.numericInputI2} />
+          </button>
+        </span>
+      )}
     </span>
   );
+};
+
+NumericInput.defaultProps = {
+  arrows: false,
 };
 
 export default NumericInput;
