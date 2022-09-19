@@ -4,12 +4,12 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { createSelector } from 'reselect';
-import { windowWidthSelector, contentHeightSelector } from '../selectors/ui';
-import { filterCardinalitySelector } from '../selectors/cogData';
-import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../selectors';
-import FooterChip from './FooterChip';
-import ExportInputDialog from './ExportInputDialog';
-import uiConsts from '../assets/styles/uiConsts';
+import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
+import { filterCardinalitySelector } from '../../selectors/cogData';
+import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../../selectors';
+import FooterChip from '../FooterChip';
+import ExportInputDialog from '../ExportInputDialog';
+import uiConsts from '../../assets/styles/uiConsts';
 
 const Footer = ({ classes, style, sort, filter, nFilt, nPanels, displayInfo }) => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
