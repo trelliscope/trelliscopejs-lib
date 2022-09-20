@@ -137,13 +137,44 @@ interface CondDist {
   max: number;
 }
 
-interface Filter {
+interface FilterCommon {
   name: string;
   orderValue: string;
   type: string;
   varType: string;
+}
+interface FilterNumPlotFilter extends FilterCommon {
   value: {
     from: number;
     to: number;
   };
+}
+
+interface SidebarViewsFilter extends FilterCommon {
+  value: string[] | { from: number | undefined; to: number | undefined };
+  regex: string;
+  valid: boolean;
+}
+
+interface SidebarViewsFilterKey {
+  [key: string]: SidebarViewsFilter;
+}
+
+interface ViewItem {
+  name: string;
+  state: string;
+}
+
+interface HashItem {
+  [key: string]: string;
+  arr: string;
+  filter: string;
+  fv: string;
+  labels: string;
+  ncol: string;
+  nrow: string;
+  pg: string;
+  sidebar: string;
+  sort: string;
+  var: string;
 }
