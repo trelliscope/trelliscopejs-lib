@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { createSelector } from 'reselect';
@@ -58,15 +57,6 @@ const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
       <ExportInputDialog open={dialogOpen} handleClose={handleClose} displayInfo={displayInfo} />
     </div>
   );
-};
-
-Footer.propTypes = {
-  style: PropTypes.object.isRequired,
-  sort: PropTypes.array.isRequired,
-  filter: PropTypes.array.isRequired,
-  nFilt: PropTypes.number.isRequired,
-  displayInfo: PropTypes.object.isRequired,
-  nPanels: PropTypes.number,
 };
 
 Footer.defaultProps = () => ({
