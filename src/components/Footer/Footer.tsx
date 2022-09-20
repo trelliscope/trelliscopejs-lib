@@ -8,9 +8,22 @@ import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSele
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import uiConsts from '../../assets/styles/uiConsts';
+import { RootState } from '../../store';
 import styles from './Footer.module.scss';
 
-const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
+interface FooterProps {
+  style: {
+    width: number;
+    top: number;
+  };
+  sort: { name: string; icon: string }[];
+  filter: { name: string; text: string }[];
+  nFilt: number;
+  nPanels?: number;
+  displayInfo: DisplayObject;
+}
+
+const Footer: React.FC<FooterProps> = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -28,7 +41,7 @@ const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
           <div className={styles.footerSectionWrapper}>
             <div className={styles.footerSectionText}>Sorting on:</div>
             <div className={styles.footerChipWrapper}>
-              {sort.map((el, i) => (
+              {sort.map((el: { name: string; icon: string }, i: number) => (
                 <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
               ))}
             </div>
@@ -39,7 +52,7 @@ const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
           <div className={styles.footerSectionWrapper}>
             <div className={styles.footerSectionText}>Filtering on:</div>
             <div className={styles.footerChipWrapper}>
-              {filter.map((el, i) => (
+              {filter.map((el: { name: string; text: string }, i: number) => (
                 <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
               ))}
             </div>
@@ -59,9 +72,9 @@ const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
   );
 };
 
-Footer.defaultProps = () => ({
+Footer.defaultProps = {
   nPanels: 0,
-});
+};
 
 // ------ redux container ------
 
@@ -142,6 +155,8 @@ const stateSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: TS2345
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 export default connect(mapStateToProps)(Footer);
