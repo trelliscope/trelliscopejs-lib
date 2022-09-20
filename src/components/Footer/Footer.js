@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,7 @@ import uiConsts from '../../assets/styles/uiConsts';
 import styles from './Footer.module.scss';
 
 const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -22,47 +22,31 @@ const Footer = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
     setDialogOpen(false);
   };
 
-  let sortContent = '';
-  let filterContent = '';
-  let spacerContent = '';
-
-  if (sort.length > 0) {
-    sortContent = (
-      <div className={styles.footerSectionWrapper}>
-        <div className={styles.footerSectionText}>Sorting on:</div>
-        <div className={styles.footerChipWrapper}>
-          {sort.map((el, i) => (
-            <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (filter.length > 0) {
-    filterContent = (
-      <div className={styles.footerSectionWrapper}>
-        <div className={styles.footerSectionText}>Filtering on:</div>
-        <div className={styles.footerChipWrapper}>
-          {filter.map((el, i) => (
-            <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
-          ))}
-        </div>
-        <div className={styles.footerFilterText}>{`(${nFilt} of ${nPanels} panels)`}</div>
-      </div>
-    );
-  }
-
-  if (filter.length > 0 && sort.length > 0) {
-    spacerContent = <div className={styles.footerSpacer} />;
-  }
-
   return (
     <div className={styles.footerWrapper} style={style}>
       <div className={styles.footerInner}>
-        {sortContent}
-        {spacerContent}
-        {filterContent}
+        {sort.length > 0 && (
+          <div className={styles.footerSectionWrapper}>
+            <div className={styles.footerSectionText}>Sorting on:</div>
+            <div className={styles.footerChipWrapper}>
+              {sort.map((el, i) => (
+                <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
+              ))}
+            </div>
+          </div>
+        )}
+        {filter.length > 0 && sort.length > 0 && <div className={styles.footerSpacer} />}
+        {filter.length > 0 && (
+          <div className={styles.footerSectionWrapper}>
+            <div className={styles.footerSectionText}>Filtering on:</div>
+            <div className={styles.footerChipWrapper}>
+              {filter.map((el, i) => (
+                <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
+              ))}
+            </div>
+            <div className={styles.footerFilterText}>{`(${nFilt} of ${nPanels} panels)`}</div>
+          </div>
+        )}
       </div>
       {displayInfo.has_inputs && displayInfo.input_type === 'localStorage' && (
         <div className={styles.footerButtonDiv}>
