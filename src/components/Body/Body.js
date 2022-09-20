@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { windowWidthSelector, windowHeightSelector } from '../selectors/ui';
-import SideButtons from './SideButtons';
-import Sidebar from './Sidebar';
-import Content from './Content';
+import { windowWidthSelector, windowHeightSelector } from '../../selectors/ui';
+import SideButtons from '../SideButtons';
+import Sidebar from '../Sidebar';
+import Content from '../Content';
 
 const Body = ({ classes, width, height }) => (
   <div className={classes.body} style={{ width, height }}>
