@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { windowWidthSelector, windowHeightSelector } from '../../selectors/ui';
@@ -15,11 +14,6 @@ const Body = ({ width, height }) => (
     <Content />
   </div>
 );
-
-Body.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
 
 // ------ redux container ------
 
