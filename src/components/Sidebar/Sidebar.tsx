@@ -10,9 +10,16 @@ import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } 
 import { displayLoadedSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import uiConsts from '../../assets/styles/uiConsts';
+import { RootState } from '../../store';
 import styles from './Sidebar.module.scss';
 
-const Sidebar = ({ customStyles, active, displayLoaded }) => {
+interface SidebarProps {
+  customStyles: { sidebarContainer: { height: number; width: number } };
+  active: string;
+  displayLoaded: boolean;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ customStyles, active, displayLoaded }) => {
   if (active === '') {
     return <div className={`${styles.sidebarContainer} ${styles.sidebarHidden}`} style={customStyles.sidebarContainer} />;
   }
@@ -91,6 +98,8 @@ const stateSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: TS2345
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 export default connect(mapStateToProps)(Sidebar);
