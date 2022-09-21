@@ -6,8 +6,14 @@ import SideButtons from '../SideButtons';
 import Sidebar from '../Sidebar';
 import Content from '../Content';
 import styles from './Body.module.scss';
+import { RootState } from '../../store';
 
-const Body = ({ width, height }) => (
+interface BodyProps {
+  width: number;
+  height: number;
+}
+
+const Body: React.FC<BodyProps> = ({ width, height }) => (
   <div className={styles.body} style={{ width, height }}>
     <SideButtons />
     <Sidebar />
@@ -22,6 +28,6 @@ const stateSelector = createSelector(windowWidthSelector, windowHeightSelector, 
   height,
 }));
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 export default connect(mapStateToProps)(Body);
