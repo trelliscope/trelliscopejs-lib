@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { addClass, removeClass } from '../classManipulation';
-import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../selectors';
-import { sidebarActiveSelector, origWidthSelector, origHeightSelector } from '../selectors/ui';
-import { setFullscreen, windowResize } from '../actions';
-import uiConsts from '../assets/styles/uiConsts';
+import { addClass, removeClass } from '../../classManipulation';
+import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
+import { sidebarActiveSelector, origWidthSelector, origHeightSelector } from '../../selectors/ui';
+import { setFullscreen, windowResize } from '../../actions';
+import uiConsts from '../../assets/styles/uiConsts';
 
 class FullscreenButton extends React.Component {
   constructor(props) {
