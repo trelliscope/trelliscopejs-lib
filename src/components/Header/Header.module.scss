@@ -1,0 +1,54 @@
+.header {
+  &Container {
+    position: absolute;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    height: 48px;
+    background: #fff;
+    color: #000;
+    border-bottom: 1px solid #eaedf0;
+    border-top: 1px solid #eaedf0;
+    border-left: 1px solid #eaedf0;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 300;
+    z-index: 1010;
+  }
+
+  &SubContainer {
+    display: flex;
+    position: absolute;
+    top: 0;
+    height: 48px;
+  }
+
+  &NameDescContainer {
+    flex: 1 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &DisplayName {
+    vertical-align: top;
+    padding-left: 15px;
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &DisplayDesc {
+    vertical-align: top;
+    font-weight: 300;
+    padding-left: 15px;
+    padding-right: 8px;
+    font-size: 10px;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

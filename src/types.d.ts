@@ -43,12 +43,28 @@ interface Display {
   keySig: string;
 }
 
+interface SelectedDisplay {
+  group: string;
+  name: string;
+  desc: string;
+}
+
+// TODO this should probably live as a return type
+// of `displayGroupSelector` once that file is converted to TS
+type DisplayGroup = {
+  [key in string]: number[];
+};
+
 interface CurrentDisplayInfo {
   didInvalidate: boolean;
   info: DisplayObject;
   isFetching: boolean;
   isLoaded: boolean;
   lastUpdated: number;
+}
+
+interface DisplayList extends CurrentDisplayInfo {
+  list: DisplayObject[];
 }
 
 interface DisplayObject {
@@ -63,7 +79,7 @@ interface DisplayObject {
   n: number;
   height: number;
   width: number;
-  order: number;
+  order: number | string[];
   has_legend: boolean;
   has_inputs: boolean;
   // ?
