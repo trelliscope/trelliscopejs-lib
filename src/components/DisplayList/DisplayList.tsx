@@ -11,12 +11,6 @@ import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui'
 import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
 import styles from './DisplayList.module.scss';
 
-// TODO this should probably live as a return type
-// of `displayGroupSelector` once that file is converted to TS
-type DisplayGroup = {
-  [key in string]: number[];
-};
-
 interface DisplayListProps {
   selectable: boolean;
   displayItems: Display[];
@@ -38,12 +32,6 @@ interface DisplayListProps {
   ) => void;
   contentHeight: number;
   contentWidth: number;
-}
-
-interface SelectedDisplay {
-  group: string;
-  name: string;
-  desc: string;
 }
 
 const DisplayList: React.FC<DisplayListProps> = ({
