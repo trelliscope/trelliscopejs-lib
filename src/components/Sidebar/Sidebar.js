@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import SidebarLabels from '../SidebarLabels';
@@ -71,12 +70,6 @@ const Sidebar = ({ customStyles, active, displayLoaded }) => {
       {content}
     </div>
   );
-};
-
-Sidebar.propTypes = {
-  customStyles: PropTypes.object.isRequired,
-  active: PropTypes.string.isRequired,
-  displayLoaded: PropTypes.bool.isRequired,
 };
 
 // ------ redux container ------
