@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import SidebarLabels from './SidebarLabels';
-import SidebarLayout from './SidebarLayout';
-import SidebarSort from './SidebarSort';
-import SidebarFilter from './SidebarFilter';
-import SidebarViews from './SidebarViews';
-import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../selectors/ui';
-import { displayLoadedSelector } from '../selectors';
-import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../constants';
-import uiConsts from '../assets/styles/uiConsts';
+import SidebarLabels from '../SidebarLabels';
+import SidebarLayout from '../SidebarLayout';
+import SidebarSort from '../SidebarSort';
+import SidebarFilter from '../SidebarFilter';
+import SidebarViews from '../SidebarViews';
+import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../../selectors/ui';
+import { displayLoadedSelector } from '../../selectors';
+import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
+import uiConsts from '../../assets/styles/uiConsts';
 
 const Sidebar = ({ classes, styles, active, displayLoaded }) => {
   if (active === '') {
