@@ -7,6 +7,7 @@ import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HeaderLogo from '../HeaderLogo';
+import { RootState } from '../../store';
 import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../../actions';
 import { windowWidthSelector } from '../../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../../selectors/display';
@@ -162,16 +163,7 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {
-  appIdSelector: string;
-  windowWidthSelector: string;
-  displayListSelector: Display;
-  displayGroupsSelector: DisplayGroup;
-  selectedDisplay: SelectedDisplay;
-  relatedDisplayGroupSelector: DisplayGroup;
-  configSelector: Config;
-  dialogOpenSelector: boolean;
-}) =>
+const mapStateToProps = (state: RootState) =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: TS2345
   styleSelector(state);
