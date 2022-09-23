@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
 import { sidebarActiveSelector, origWidthSelector, origHeightSelector } from '../../selectors/ui';
 import { setFullscreen, windowResize } from '../../actions';
-import uiConsts from '../../assets/styles/uiConsts';
+import styles from './FullscreenButton.module.scss';
 
 class FullscreenButton extends React.Component {
   constructor(props) {
@@ -54,13 +53,10 @@ class FullscreenButton extends React.Component {
       return null;
     }
 
-    const { classes } = this.props;
-    const cls = fullscreen ? 'icon-minimize' : 'icon-maximize';
-
     return (
       <button
         type="button"
-        className={classes.button}
+        className={styles.fullscreenButton}
         onClick={() => {
           if (!fullscreen) {
             // toggling to fullscreen
@@ -69,14 +65,13 @@ class FullscreenButton extends React.Component {
           toggleFullscreen(!fullscreen, appId, { width: ww, height: hh }, this.yOffset);
         }}
       >
-        <i className={`${cls} ${classes.icon}`} />
+        <i className={classNames(styles.fullscreenButtonIcon, fullscreen ? 'icon-minimize' : 'icon-maximize')} />
       </button>
     );
   }
 }
 
 FullscreenButton.propTypes = {
-  classes: PropTypes.object.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   dialog: PropTypes.bool.isRequired,
   sidebar: PropTypes.string.isRequired,
@@ -85,30 +80,6 @@ FullscreenButton.propTypes = {
   toggleFullscreen: PropTypes.func.isRequired,
   ww: PropTypes.number.isRequired,
   hh: PropTypes.number.isRequired,
-};
-
-// ------ static styles ------
-
-const staticStyles = {
-  button: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    textAlign: 'center',
-    background: emphasize(uiConsts.footer.background, 0.2),
-    width: uiConsts.footer.height,
-    height: uiConsts.footer.height,
-    cursor: 'pointer',
-    border: 'none',
-    transition: 'all 100ms ease-in',
-    '&:hover': {
-      background: emphasize(uiConsts.footer.background, 0.3),
-    },
-  },
-  icon: {
-    color: emphasize(uiConsts.footer.background, 0.8),
-    fontSize: `${uiConsts.footer.height - 16}px`,
-  },
 };
 
 // ------ redux container ------
@@ -165,4 +136,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(FullscreenButton));
+export default connect(mapStateToProps, mapDispatchToProps)(FullscreenButton);
