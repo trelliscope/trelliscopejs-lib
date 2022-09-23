@@ -1,0 +1,107 @@
+.bounding {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+}
+
+.panel {
+  transition: 300ms ease;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  color: #bbb;
+
+  &Content {
+    transition: 300ms ease;
+    display: block;
+  }
+}
+
+.label {
+  &Table {
+    transition: 300ms ease;
+    padding: 0;
+    table-layout: fixed;
+    border-spacing: 0;
+    box-sizing: border-box;
+  }
+
+  &Row {
+    transition: 300ms ease;
+    background: #f6f6f6;
+
+    &:hover {
+      background: rgba(246, 246, 246, 0.4);
+
+      .labelClose {
+        display: block;
+      }
+    }
+  }
+
+  &Cell {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &NameCell {
+    border-right: 1px solid #fff;
+    font-weight: 400;
+  }
+
+  &Outer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  &Inner {
+    padding-right: 3px;
+    overflow: hidden;
+    white-space: normal;
+    vertical-align: middle;
+    position: relative;
+    cursor: default;
+  }
+
+  &Close {
+    transition: 1s;
+    position: absolute;
+    top: 0;
+    right: 2px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+    display: none;
+  }
+
+  &P {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.editButton {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0.5;
+}
+
+.formRow {
+  flex-wrap: unset;
+}
+
+

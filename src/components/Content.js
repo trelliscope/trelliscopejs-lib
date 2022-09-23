@@ -128,7 +128,6 @@ const Content = ({
               panelKey={el.key}
               labels={el.labels}
               labelArr={labels}
-              // iface={ci}
               panelRenderers={panelRenderers}
               panelData={panelData[el.key]}
               panelInterface={panelInterface}

@@ -5,6 +5,7 @@ const metricCount = 10;
 const metricKeys = [...Array(metricCount)].map((item, i) => `metric_${i}`);
 const countries = faker.helpers.uniqueArray(faker.address.country, rowCount);
 const continents = ['Asia', 'Europe', 'Africa', 'Americas', 'Oceania'];
+const links = faker.helpers.uniqueArray(faker.internet.url, rowCount);
 
 const generateMetricValues = () => {
   const obj = {};
@@ -77,6 +78,7 @@ export const createCogData = () => {
     return {
       country,
       continent: faker.helpers.arrayElement(continents),
+      normal_link: faker.helpers.arrayElement(links),
       ...generateMetricValues(),
       panelKey: country,
     };
@@ -197,6 +199,39 @@ export const createDisplayObj = (options) => ({
       log: null,
       levels: continents,
     },
+    normal_link: {
+      name: 'normal_link',
+      desc: faker.lorem.sentence(),
+      type: 'href',
+      group: 'condVar',
+      defLabel: faker.datatype.boolean(),
+      defActive: faker.datatype.boolean(),
+      filterable: faker.datatype.boolean(),
+      log: null,
+      levels: links,
+    },
+    radio: {
+      name: 'radio',
+      desc: faker.lorem.sentence(),
+      type: 'input_radio',
+      group: 'condVar',
+      defLabel: faker.datatype.boolean(),
+      defActive: faker.datatype.boolean(),
+      filterable: faker.datatype.boolean(),
+      log: null,
+      levels: ['a', 'b', 'c'],
+      options: faker.helpers.uniqueArray(faker.company.companyName, 3),
+    },
+    input_text: {
+      name: 'input_text',
+      desc: faker.lorem.sentence(),
+      type: 'input_text',
+      group: 'condVar',
+      defLabel: faker.datatype.boolean(),
+      defActive: faker.datatype.boolean(),
+      filterable: faker.datatype.boolean(),
+      log: null,
+    },
     ...generateDisplayObjMetrics(),
     panelKey: {
       name: 'panelKey',
@@ -228,6 +263,18 @@ export const createDisplayObj = (options) => ({
       has_dist: true,
       max: 52,
     },
+    normal_link: {
+      type: 'href',
+      has_dist: false,
+    },
+    radio: {
+      type: 'input_radio',
+      has_dist: false,
+    },
+    input_text: {
+      type: 'input_text',
+      has_dist: false,
+    },
     ...generateDisplayObjCogDistns(),
     panelKey: {
       type: 'key',
@@ -250,7 +297,7 @@ export const createDisplayObj = (options) => ({
     ],
   },
   cogGroups: {
-    condVar: ['country'],
+    condVar: ['country', 'normal_link', 'radio', 'input_text'],
     common: ['continent'],
     [faker.music.songName()]: metricKeys.slice(0, Math.round(metricKeys.length / 2)),
     [faker.music.songName()]: metricKeys.slice(Math.round(metricKeys.length / 2), metricKeys.length),

@@ -1,5 +1,5 @@
 interface Config {
-  display_base: '/displays/' | '/__self__/';
+  display_base: 'displays' | '__self__';
   data_type: 'json' | 'jsonp';
   cog_server: CogServer;
   split_layout: boolean;
@@ -7,6 +7,7 @@ interface Config {
   require_token: boolean;
   disclaimer: boolean;
 }
+
 
 interface CogServer {
   type: 'jsonp' | 'json';
@@ -19,14 +20,18 @@ type PanelInterfaceType = 'image' | 'image_src' | 'htmlwidget';
 
 type PanelInterfaceAssetType = 'script' | 'stylesheet';
 
+type CogType = 'factor' | 'numeric' | 'integer' | 'href' | 'href_hash' | 'input_text' | 'input_radio' | 'panelSrc' | 'panelSrcLocal' | 'key' | 'date' | 'time';
+
+interface PanelAsset {
+  url: string;
+  type: PanelInterfaceAssetType;
+}
+
 interface PanelInterface {
   type: PanelInterfaceType;
   deps: {
     name: string;
-    assets: {
-      url: string;
-      type: PanelInterfaceAssetType;
-    };
+    assets: PanelAsset[];
   };
 }
 
@@ -105,7 +110,9 @@ interface DisplayObject {
     type: string;
   };
   panelInterface: PanelInterface;
-  imgSrcLookup: object;
+  imgSrcLookup: {
+    [key: string]: string;
+  };
   cogInfo: {
     [key: string]: CogInfo;
   };
@@ -119,8 +126,7 @@ interface CogInfo {
   [key: string]: { name: string; desc: string };
   name: string;
   desc: string;
-  // ?
-  type: 'factor';
+  type: CogType;
   group: Group;
   defLabel: boolean;
   defActive: boolean;
@@ -131,6 +137,8 @@ interface CogInfo {
   nnna: number;
   breaks: number[];
   delta: number;
+  options: string[];
+  height: number;
 }
 
 interface CogDistns {
@@ -197,4 +205,37 @@ interface HashItem {
   sidebar: string;
   sort: string;
   var: string;
+}
+
+interface DisplayInfoState {
+  isFetching: boolean;
+  didInvalidate: boolean;
+  isLoaded: boolean;
+  lastUpdated: number;
+  info: DisplayObject;
+}
+
+type PanelData = string | { evals: string[]; x: any };
+
+type PanelLabel = {
+  name: string;
+  value: string | number;
+  type: CogType;
+  desc: string;
+}
+
+interface Dims {
+  contentWidth: number;
+  fontSize: number;
+  hOffset: number;
+  hh: number;
+  labelHeight: number;
+  labelPad: number;
+  labelWidth: number;
+  nLabels: 1;
+  pHeight: number;
+  pPad: number;
+  pWidth: number;
+  wOffset: number;
+  ww: number;
 }
