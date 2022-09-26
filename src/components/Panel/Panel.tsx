@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import getJSONP from 'jsonp';
 import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
@@ -19,7 +19,6 @@ interface PanelProps {
     };
   };
   panelInterface: PanelInterface;
-  // panelData: PanelData;
   displayInfo: {
     [key: string]: DisplayInfoState;
   };
@@ -42,7 +41,6 @@ const Panel: React.FC<PanelProps> = ({
   iColIndex,
   panelRenderers,
   panelInterface,
-  // panelData,
   displayInfo,
   curDisplayInfo,
   relDispPositions,
