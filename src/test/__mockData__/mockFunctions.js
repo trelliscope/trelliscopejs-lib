@@ -220,7 +220,7 @@ export const createDisplayObj = (options) => ({
       filterable: faker.datatype.boolean(),
       log: null,
       levels: ['a', 'b', 'c'],
-      options: faker.helpers.uniqueArray(faker.company.companyName, 3),
+      options: faker.helpers.uniqueArray(faker.company.name, 3),
     },
     input_text: {
       name: 'input_text',
