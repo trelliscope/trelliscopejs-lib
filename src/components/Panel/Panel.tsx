@@ -54,10 +54,6 @@ const Panel: React.FC<PanelProps> = ({
   const isSelfContained = panelData !== undefined && cfg.display_base === '__self__';
   let panelContent: React.ReactNode | null = null;
 
-  useEffect(() => {
-    console.log(isSelfContained);
-  }, []);
-
   useLayoutEffect(() => {
     const { name } = curDisplayInfo.info;
     const curIface = displayInfo[name].info.cogInterface;
