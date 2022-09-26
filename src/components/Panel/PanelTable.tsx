@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
 import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import ReactTooltip from 'react-tooltip';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
@@ -86,6 +87,11 @@ const PanelTable: React.FC<PanelTableProps> = ({
               >
                 <span style={inlineStyles.labelSpan}>{label.name}</span>
               </div>
+              {label.name !== label.desc && (
+                <ReactTooltip place="right" id={`tooltip_${panelKey}_${label.name}`}>
+                  <span>{label.desc}</span>
+                </ReactTooltip>
+              )}
             </td>
             <td className={styles.labelCell} style={inlineStyles.labelValueCell}>
               {label.type === 'href' && (
