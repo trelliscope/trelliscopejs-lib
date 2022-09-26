@@ -9,7 +9,7 @@ module.exports = {
       {
         type: 'confirm',
         name: 'unitTest',
-        message: 'Will this component have unit tests? (y/n)',
+        message: 'Will this component have unit tests?',
       },
     ];
 

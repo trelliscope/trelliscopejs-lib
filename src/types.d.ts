@@ -166,6 +166,10 @@ interface FilterNumPlotFilter extends FilterCommon {
   };
 }
 
+interface FilterNumFilter extends FilterNumPlotFilter {
+  valid: boolean;
+}
+
 interface SidebarViewsFilter extends FilterCommon {
   value: string[] | { from: number | undefined; to: number | undefined };
   regex: string;
