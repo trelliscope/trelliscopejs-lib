@@ -103,10 +103,11 @@ const Content = ({
     // so we need to add this to key to force it to re-draw
     let keyExtra = '';
     // TODO: see if we can get htmlwidget resize method to work instead
-    if (panelInterface.type === 'htmlwidget') {
+    // resize method seems to be working now, but we'll keep this in case
+    /* if (panelInterface.type === 'htmlwidget') {
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
       keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
-    }
+    } */
     if (relDispPositions.length > 0) {
       const relDispNames = relDispPositions.map((d) => d.name).join('_');
       let relDispSum = '';

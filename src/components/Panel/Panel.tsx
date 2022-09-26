@@ -127,7 +127,7 @@ const Panel: React.FC<PanelProps> = ({
         if (el) {
           el.style.width = `${dims.ww}px`;
           el.style.height = `${dims.hh}px`;
-          widget.resize(el, dims.ww, dims.hh);
+          widget.resize(el, dims.ww, dims.hh, {});
         }
       }
     }
