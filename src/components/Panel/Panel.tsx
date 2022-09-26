@@ -88,16 +88,7 @@ const Panel: React.FC<PanelProps> = ({
     return () => {
       abortController.abort();
     };
-  }, [
-    panelKey,
-    curDisplayInfo,
-    cfg.cog_server.info.base,
-    displayInfo,
-    cfg.cog_server.type,
-    dims.hh,
-    dims.ww,
-    panelRenderers,
-  ]);
+  }, []);
 
   // do post-rendering (if any)
   useLayoutEffect(() => {
