@@ -15,7 +15,7 @@ interface FilterNumPlotProps {
   height: number;
   condDist: CondDist;
   filterState: FilterNumPlotFilter;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement> | undefined) => void;
+  handleChange: (event: number[] | undefined) => void;
 }
 
 interface D3ParsType {
