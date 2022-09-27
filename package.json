@@ -75,6 +75,7 @@
     "@types/d3-brush": "^3.0.1",
     "@types/d3-scale": "^4.0.2",
     "@types/marked": "^4.0.7",
+    "@types/react-virtualized": "^9.21.21",
     "@typescript-eslint/parser": "^5.35.1",
     "cors-anywhere": "^0.4.4",
     "eslint": "^8.23.0",
