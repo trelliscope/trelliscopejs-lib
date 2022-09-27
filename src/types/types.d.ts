@@ -164,8 +164,12 @@ interface CondDist {
 interface FilterCommon {
   name: string;
   orderValue: string;
-  type: string;
+  type?: string;
   varType: string;
+}
+
+interface FilterCat extends FilterCommon {
+  value?: string[];
 }
 interface FilterNumPlotFilter extends FilterCommon {
   value: {
