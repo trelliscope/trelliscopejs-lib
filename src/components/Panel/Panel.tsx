@@ -103,7 +103,9 @@ const Panel: React.FC<PanelProps> = ({
           width = height / relDispPositions[i].aspect;
         }
         const panelRenderer = panelRenderers[name];
-        panelRenderer.fn(panelData, width, height, true, `${panelKey}_${name}`);
+        if (panelData) {
+          panelRenderer.fn(panelData, width, height, true, `${panelKey}_${name}`);
+        }
       }
     });
   });
