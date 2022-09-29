@@ -8,7 +8,6 @@ interface Config {
   disclaimer: boolean;
 }
 
-
 interface CogServer {
   type: 'jsonp' | 'json';
   info: { base: string };
@@ -20,7 +19,19 @@ type PanelInterfaceType = 'image' | 'image_src' | 'htmlwidget';
 
 type PanelInterfaceAssetType = 'script' | 'stylesheet';
 
-type CogType = 'factor' | 'numeric' | 'integer' | 'href' | 'href_hash' | 'input_text' | 'input_radio' | 'panelSrc' | 'panelSrcLocal' | 'key' | 'date' | 'time';
+type CogType =
+  | 'factor'
+  | 'numeric'
+  | 'integer'
+  | 'href'
+  | 'href_hash'
+  | 'input_text'
+  | 'input_radio'
+  | 'panelSrc'
+  | 'panelSrcLocal'
+  | 'key'
+  | 'date'
+  | 'time';
 
 interface PanelAsset {
   url: string;
@@ -170,6 +181,7 @@ interface FilterCommon {
 
 interface FilterCat extends FilterCommon {
   value?: string[];
+  regex?: string;
 }
 interface FilterNumPlotFilter extends FilterCommon {
   value: {
@@ -226,7 +238,7 @@ type PanelLabel = {
   value: string | number;
   type: CogType;
   desc: string;
-}
+};
 
 interface Dims {
   contentWidth: number;
@@ -242,4 +254,21 @@ interface Dims {
   pWidth: number;
   wOffset: number;
   ww: number;
+}
+
+interface FilterCatDist {
+  dist: { [key: string]: number };
+  has_dist: boolean;
+  max: number;
+  type: string;
+}
+
+interface CondDistFilterCat {
+  dist: { key: string; value: number }[];
+  idx: number[];
+  max: number;
+  orderValue: string;
+  reverseRows: true;
+  sumSelected: number;
+  totSelected: number;
 }

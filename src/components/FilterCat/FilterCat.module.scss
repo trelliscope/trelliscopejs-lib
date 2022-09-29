@@ -1,0 +1,36 @@
+.filterCat {
+  &Container {
+    width: 220px;
+    box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+  }
+
+  &PlotContainer {
+    width: 220px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+    z-index: 1000;
+  }
+
+  &InputContainer {
+    height: 39px;
+    width: 220px;
+    margin-bottom: -21px;
+    padding-top: 7px;
+    z-index: 100;
+    position: relative;
+  }
+
+  &ExtraOptionsInput {
+    float: right;
+    margin-top: -6px;
+    width: 28px;
+    transform: scale(0.6);
+    transform-origin: 0 0;
+  }
+}
