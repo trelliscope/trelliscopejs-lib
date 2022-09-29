@@ -1,6 +1,6 @@
 import { REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants';
 
-const _configReducer = (
+const configReducer = (
   state = {
     isFetching: false,
     isLoaded: false,
@@ -31,4 +31,4 @@ const _configReducer = (
   }
 };
 
-export default _configReducer;
+export default configReducer;

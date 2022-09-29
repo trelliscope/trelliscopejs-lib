@@ -73,17 +73,14 @@ const generateDisplayObjCogDistns = () => {
   return obj;
 };
 
-export const createCogData = () => {
-  return countries.map((country) => {
-    return {
-      country,
-      continent: faker.helpers.arrayElement(continents),
-      normal_link: faker.helpers.arrayElement(links),
-      ...generateMetricValues(),
-      panelKey: country,
-    };
-  });
-};
+export const createCogData = () =>
+  countries.map((country) => ({
+    country,
+    continent: faker.helpers.arrayElement(continents),
+    normal_link: faker.helpers.arrayElement(links),
+    ...generateMetricValues(),
+    panelKey: country,
+  }));
 
 export const createConfig = () => ({
   display_base: 'displays',

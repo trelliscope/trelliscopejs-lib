@@ -1,6 +1,6 @@
 import { REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants';
 
-const _displayInfoReducer = (state = {}, action) => {
+const displayInfoReducer = (state = {}, action) => {
   switch (action.type) {
     case REQUEST_DISPLAY:
       return {
@@ -28,4 +28,4 @@ const _displayInfoReducer = (state = {}, action) => {
   }
 };
 
-export default _displayInfoReducer;
+export default displayInfoReducer;
