@@ -1,6 +1,6 @@
 import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants';
 
-const _cogDataMutable = (
+const cogDataMutable = (
   state = {
     isFetching: false,
     isLoaded: false,
@@ -34,4 +34,4 @@ const _cogDataMutable = (
   }
 };
 
-export default _cogDataMutable;
+export default cogDataMutable;

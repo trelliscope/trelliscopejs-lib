@@ -37,6 +37,8 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
         } else {
           localStorage.setItem(lsKey, value);
         }
+
+        return data;
       })
       .catch((error) => {
         console.error('There was an error setting the input.', error);

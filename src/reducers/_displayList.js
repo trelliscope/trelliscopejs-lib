@@ -1,6 +1,6 @@
 import { REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST } from '../constants';
 
-const _displayListReducer = (
+const displayListReducer = (
   state = {
     isFetching: false,
     isLoaded: false,
@@ -31,4 +31,4 @@ const _displayListReducer = (
   }
 };
 
-export default _displayListReducer;
+export default displayListReducer;

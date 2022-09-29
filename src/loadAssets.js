@@ -13,19 +13,19 @@ export const loadAssetsSequential = (widgetAssets, configBase, callback) => {
   function loadScript(asset, url) {
     return new Promise((resolve, reject) => {
       // const head = document.getElementsByTagName('head')[0];
-      asset.onload = () => {
+      asset.addEventListener('load', () => {
         resolve(url);
-      };
-      asset.onerror = () => {
+      });
+      asset.addEventListener('error', () => {
         reject(url);
-      };
+      });
       // head.body.appendChild(asset);
       document.body.appendChild(asset);
     });
   }
 
   // save all Promises as array
-  let promises = [];
+  const promises = [];
 
   widgetAssets.assets.forEach((curAsset) => {
     let urls = curAsset.url;
