@@ -11,29 +11,12 @@ interface FilterCatPlotProps {
   height: number;
   width: number;
   cellHeight: number;
-  dist: Dist;
+  dist: FilterCatDist;
   condDist: CondDistFilterCat;
   filterState: FilterCat;
   sortOrder: string;
   handleChange: (state: FilterCat) => void;
   filterCardinality: number;
-}
-
-interface Dist {
-  dist: { [key: string]: number };
-  has_dist: boolean;
-  max: number;
-  type: string;
-}
-
-interface CondDistFilterCat {
-  dist: { key: string; value: number }[];
-  idx: number[];
-  max: number;
-  orderValue: string;
-  reverseRows: true;
-  sumSelected: number;
-  totSelected: number;
 }
 
 const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
