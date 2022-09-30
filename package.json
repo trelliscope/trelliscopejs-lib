@@ -31,6 +31,7 @@
     "react-delay": "^0.1.0",
     "react-dom": "^16.14.0",
     "react-ga": "^3.3.0",
+    "react-hotkeys-hook": "^3.4.7",
     "react-jss": "^10.4.0",
     "react-redux": "^7.2.1",
     "react-rnd": "^10.2.3",
