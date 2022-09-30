@@ -272,3 +272,10 @@ interface CondDistFilterCat {
   sumSelected: number;
   totSelected: number;
 }
+
+interface LayoutState {
+  nrow: number;
+  ncol: number;
+  arrange: 'row' | 'col';
+  pageNum: number;
+}
