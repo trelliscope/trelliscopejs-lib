@@ -1,0 +1,72 @@
+.displaySelect {
+  &AttnOuter {
+    position: absolute;
+    overflow: hidden;
+    height: 48px;
+    width: 48px;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  &AttnInner {
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    top: 0;
+    left: 0;
+    transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1), 0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    opacity: 1;
+    transform: scale(0.85);
+  }
+
+  &AttnEmpty {
+    position: absolute;
+    height: 48px;
+    width: 100%;
+    border-radius: 50%;
+    opacity: 0.16;
+    transition: transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms;
+    top: 0;
+    transform: scale(0.85);
+    background-color: rgba(0, 0, 0, 0.870588);
+  }
+
+  &FolderIcon {
+    padding-left: 3px;
+  }
+
+  &Button {
+    z-index: 8000;
+    position: absolute;
+    box-sizing: border-box;
+    top: -1; // cover up top app border
+    left: -1;
+    height: 48px;
+    width: 48px;
+    font-size: 18px;
+    line-height: 50px;
+    background: #448aff;
+    color: #fff;
+    text-align: center;
+    border: none;
+    transition: all 500ms ease-in;
+
+    &:hover {
+      transition: opacity 250ms;
+      opacity: 0.8;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  &ButtonInactive {
+    background: #ddd;
+    border-color: #ddd;
+
+    &:hover {
+      background: #ccc;
+      border-color: #ccc;
+    }
+  }
+}

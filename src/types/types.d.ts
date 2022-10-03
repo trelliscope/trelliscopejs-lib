@@ -46,6 +46,11 @@ interface PanelInterface {
   };
 }
 
+interface DisplaySelect {
+  list: Display[];
+  isLoaded: string;
+}
+
 interface Display {
   // ?
   group: Group;
