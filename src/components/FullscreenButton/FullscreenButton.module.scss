@@ -1,0 +1,21 @@
+.fullscreenButton {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  background: rgb(132, 132, 132);
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: none;
+  transition: all 100ms ease-in;
+
+  &:hover {
+    background: rgb(147, 147, 147);
+  }
+
+  &Icon {
+    color: rgb(224, 224, 224);
+    font-size: 14px;
+  }
+}
