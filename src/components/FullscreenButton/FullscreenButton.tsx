@@ -1,43 +1,54 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Mousetrap from 'mousetrap';
+import { Action, Dispatch } from 'redux';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
-import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
-import { sidebarActiveSelector, origWidthSelector, origHeightSelector } from '../../selectors/ui';
+import { fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
+import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
 import { setFullscreen, windowResize } from '../../actions';
+import { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
 
-const FullscreenButton = (sidebar) => {
+interface FullscreenButtonProps {
+  fullscreen: boolean;
+  appId: string;
+  singlePageApp: boolean;
+  ww: number;
+  hh: number;
+  toggleFullscreen: (
+    fullscreen: boolean,
+    appId: string,
+    appDims: { width: number; height: number },
+    yOffset: number,
+  ) => void;
+}
+
+interface NewDims {
+  width: number;
+  height: number;
+}
+
+const FullscreenButton: React.FC<FullscreenButtonProps> = ({
+  fullscreen,
+  appId,
+  singlePageApp,
+  ww,
+  hh,
+  toggleFullscreen,
+}) => {
   let yOffset = window.pageYOffset;
 
-  const { dialog } = sidebar;
-  const { fullscreen } = sidebar;
-  const { appId } = sidebar;
-  const { singlePageApp } = sidebar;
-  const { ww } = sidebar;
-  const { hh } = sidebar;
-  const { toggleFullscreen } = sidebar;
+  // console.log(sidebar, 'sidebar');
+  // console.log(dialog, 'dialog');
+  // console.log(fullscreen, 'fullscreen');
+  // console.log(appId, 'appId');
+  // console.log(singlePageApp, 'SPA');
+  // console.log(ww, 'ww');
+  // console.log(hh, 'hh');
 
-  useEffect(() => {
-    if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
-      Mousetrap.bindGlobal('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset));
-    }
-    if (!singlePageApp) {
-      if (fullscreen && sidebar === '' && !dialog) {
-        Mousetrap.bindGlobal('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset));
-      }
-      if (dialog) {
-        Mousetrap.unbind('esc');
-      }
-    }
-    return () => {
-      if (!singlePageApp && fullscreen && sidebar === '' && !dialog) {
-        Mousetrap.unbind('esc');
-      }
-    };
-  }, [singlePageApp, ww, hh]);
+  useHotkeys('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset));
 
   if (singlePageApp) {
     return null;
@@ -63,16 +74,12 @@ const FullscreenButton = (sidebar) => {
 // ------ redux container ------
 
 const stateSelector = createSelector(
-  sidebarActiveSelector,
-  dialogOpenSelector,
   fullscreenSelector,
   appIdSelector,
   singlePageAppSelector,
   origWidthSelector,
   origHeightSelector,
-  (sidebar, dialog, fullscreen, appId, singlePageApp, ww, hh) => ({
-    sidebar,
-    dialog,
+  (fullscreen, appId, singlePageApp, ww, hh) => ({
     fullscreen,
     appId,
     singlePageApp,
@@ -81,12 +88,12 @@ const stateSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleFullscreen: (fullscreen, appId, appDims, yOffset) => {
-    const el = document.getElementById(appId);
-    const newDims = {};
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  toggleFullscreen: (fullscreen: boolean, appId: string, appDims: { width: number; height: number }, yOffset: number) => {
+    const el = document.getElementById(appId) as HTMLElement;
+    const newDims = {} as NewDims;
     if (fullscreen) {
       addClass(document.body, 'trelliscope-fullscreen-body');
       addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
@@ -94,7 +101,7 @@ const mapDispatchToProps = (dispatch) => ({
       newDims.width = window.innerWidth;
       newDims.height = window.innerHeight;
       // move the div to the outside of the document to make sure it's on top
-      const bodyEl = document.getElementById('trelliscope-fullscreen-div');
+      const bodyEl = document.getElementById('trelliscope-fullscreen-div') as HTMLElement;
       bodyEl.style.display = 'block';
       bodyEl.appendChild(el);
     } else {
@@ -104,8 +111,10 @@ const mapDispatchToProps = (dispatch) => ({
       newDims.width = appDims.width;
       newDims.height = appDims.height;
       // move the div back to its parent element
-      document.getElementById(`${el.id}-parent`).appendChild(el);
-      document.getElementById('trelliscope-fullscreen-div').style.display = 'none';
+      const parentId = document.getElementById(`${el.id}-parent`) as HTMLElement;
+      parentId.appendChild(el);
+      const fullscreenDiv = document.getElementById('trelliscope-fullscreen-div') as HTMLElement;
+      fullscreenDiv.style.display = 'none';
       // restore to y offset we were at before going fullscreen
       window.scrollTo(window.pageXOffset, yOffset);
     }
