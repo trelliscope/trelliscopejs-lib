@@ -39,7 +39,7 @@ export const SB_VIEWS = 'Views';
 export const SB_CONFIG = 'Configuration';
 
 export const SB_LOOKUP = [SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS];
-export const SB_REV_LOOKUP = {};
+export const SB_REV_LOOKUP = {} as {[k: string]: number};
 SB_LOOKUP.forEach((d, i) => {
   SB_REV_LOOKUP[d] = i;
 });
