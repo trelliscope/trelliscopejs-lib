@@ -284,3 +284,9 @@ interface LayoutState {
   arrange: 'row' | 'col';
   pageNum: number;
 }
+
+interface PanelRenderers {
+  [key: string]: {
+    fn: (x: PanelData, width: number, height: number, post?: boolean, key?: string) => JSX.Element;
+  };
+}

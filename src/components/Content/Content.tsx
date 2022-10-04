@@ -1,15 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Swipeable } from 'react-swipeable';
 import { max } from 'd3-array';
-import Panel from './Panel';
-import { setLabels, setLayout } from '../actions';
-import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } from '../selectors/ui';
-import { cogInfoSelector } from '../selectors/display';
-import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/cogData';
+import { Dispatch } from 'redux';
+import { Swipeable } from 'react-swipeable';
+import Panel from '../Panel';
+import { setLabels, setLayout } from '../../actions';
 import {
   configSelector,
   cogInterfaceSelector,
@@ -22,11 +18,47 @@ import {
   pageNumSelector,
   localPanelsSelector,
   displayInfoSelector,
-} from '../selectors';
-import uiConsts from '../assets/styles/uiConsts';
+} from '../../selectors';
+import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
+import { cogInfoSelector } from '../../selectors/display';
+import { currentCogDataSelector, filterCardinalitySelector } from '../../selectors/cogData';
+import { RootState } from '../../store';
+import styles from './Content.module.scss';
 
-const Content = ({
-  classes,
+interface ContentProps {
+  contentStyle: {
+    width: number;
+    height: number;
+  };
+  ccd: { [key: string]: string | number; panelKey: string }[];
+  ci: DisplayObject['cogInterface'];
+  cinfo: DisplayObject['cogInfo'];
+  cfg: Config;
+  layout: LayoutState;
+  labels: string[];
+  dims: Dims;
+  panelRenderers: PanelRenderers;
+  panelInterface: PanelInterface;
+  curPage: number;
+  totPages: number;
+  panelData: { [key: string]: PanelData };
+  removeLabel: (label: string, labels: string[]) => void;
+  setPageNum: (dir: 'right' | 'left', curPage: number, totPages: number) => void;
+  curDisplayInfo: DisplayInfoState;
+  displayInfo: {
+    [key: string]: DisplayInfoState;
+  };
+  relDispPositions: {
+    height: number;
+    width: number;
+    aspect: number;
+    name: string;
+    left: number;
+    top: number;
+  }[];
+}
+
+const Content: React.FC<ContentProps> = ({
   contentStyle,
   ccd,
   ci,
@@ -37,7 +69,6 @@ const Content = ({
   dims,
   panelRenderers,
   panelInterface,
-  sidebar,
   curPage,
   totPages,
   panelData,
@@ -110,8 +141,7 @@ const Content = ({
     } */
     if (relDispPositions.length > 0) {
       const relDispNames = relDispPositions.map((d) => d.name).join('_');
-      let relDispSum = '';
-      relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height).reduce((a, b) => a + b);
+      const relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height).reduce((a, b) => a + b);
       keyExtra = `${keyExtra}_${relDispNames}_${relDispSum}_${labels.length}`;
       keyExtra += `_${contentStyle.height}`;
     }
@@ -121,7 +151,7 @@ const Content = ({
         onSwipedRight={() => setPageNum('right', curPage, totPages)}
         onSwipedLeft={() => setPageNum('left', curPage, totPages)}
       >
-        <div className={classes.content} style={contentStyle}>
+        <div className={styles.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
               key={`${el.key}${keyExtra}`}
@@ -130,7 +160,6 @@ const Content = ({
               labels={el.labels}
               labelArr={labels}
               panelRenderers={panelRenderers}
-              panelData={panelData[el.key]}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
@@ -149,48 +178,7 @@ const Content = ({
   return ret;
 };
 
-Content.propTypes = {
-  contentStyle: PropTypes.object.isRequired,
-  ccd: PropTypes.array.isRequired,
-  ci: PropTypes.object,
-  cinfo: PropTypes.object.isRequired,
-  cfg: PropTypes.object.isRequired,
-  layout: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired,
-  dims: PropTypes.object.isRequired,
-  panelRenderers: PropTypes.object.isRequired,
-  panelInterface: PropTypes.object,
-  sidebar: PropTypes.string.isRequired,
-  curPage: PropTypes.number.isRequired,
-  totPages: PropTypes.number.isRequired,
-  panelData: PropTypes.object.isRequired,
-  displayInfo: PropTypes.object.isRequired,
-  relDispPositions: PropTypes.array.isRequired,
-};
-
-Content.defaultProps = () => ({
-  ci: undefined,
-  panelInterface: undefined,
-});
-
-// ------ static styles ------
-
-const staticStyles = {
-  content: {
-    // border: '3px solid red',
-    background: '#fdfdfd',
-    position: 'absolute',
-    top: uiConsts.header.height,
-    right: 0,
-    boxSizing: 'border-box',
-    padding: 0,
-  },
-};
-
-// ------ redux container ------
-
-// used to find the width of the tds holding the labels
-const getTextWidth = (labels, size) => {
+const getTextWidth = (labels: string[], size: number): number => {
   const el = document.createElement('span');
   el.style.fontWeight = 'normal';
   el.style.fontSize = `${size}px`;
@@ -202,10 +190,10 @@ const getTextWidth = (labels, size) => {
     return docEl.offsetWidth;
   });
   document.body.removeChild(docEl);
-  return max(w);
+  return max(w) as number;
 };
 
-const relDispPositionsSelector = (state) => state.relDispPositions;
+const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
 
 const stateSelector = createSelector(
   contentWidthSelector,
@@ -246,15 +234,15 @@ const stateSelector = createSelector(
     rdp,
     di,
   ) => {
-    const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
+    const pPad = 2; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
-    let preW = Math.round(cw / layout.ncol, 0);
+    let preW = Math.round(cw / layout.ncol);
     // given this, compute panel height
-    let preH = Math.round(preW * aspect, 0);
+    let preH = Math.round(preW * aspect);
     if (preH * layout.nrow > ch) {
-      preH = Math.round(ch / layout.nrow, 0);
-      preW = Math.round(preH / aspect, 0);
+      preH = Math.round(ch / layout.nrow);
+      preW = Math.round(preH / aspect);
     }
     let labelHeight = Math.min(preW, preH) * 0.08;
     labelHeight = Math.max(Math.min(labelHeight, 26), 13);
@@ -268,16 +256,16 @@ const stateSelector = createSelector(
     const hExtra = (pPad + 2) * (layout.nrow + 1) + nLabels * labelHeight * layout.nrow;
 
     // first try stretching panels across full width:
-    let newW = Math.round((cw - wExtra) / layout.ncol, 0);
+    let newW = Math.round((cw - wExtra) / layout.ncol);
     // given this, compute panel height
-    let newH = Math.round(newW * aspect, 0);
+    let newH = Math.round(newW * aspect);
     let wOffset = 0;
 
     // check to see if this will make it too tall:
     // if so, do row-first full-height stretching
     if (newH * layout.nrow + hExtra > ch) {
-      newH = Math.round((ch - hExtra) / layout.nrow, 0);
-      newW = Math.round(newH / aspect, 0);
+      newH = Math.round((ch - hExtra) / layout.nrow);
+      newW = Math.round(newH / aspect);
       wOffset = (cw - (newW * layout.ncol + wExtra)) / 2;
     }
 
@@ -292,7 +280,7 @@ const stateSelector = createSelector(
 
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
 
-    const hOffset = uiConsts.header.height;
+    const hOffset = 48;
 
     return {
       contentStyle: {
@@ -333,10 +321,10 @@ const stateSelector = createSelector(
   },
 );
 
-const mapStateToProps = (state) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
-const mapDispatchToProps = (dispatch) => ({
-  removeLabel: (name, labels) => {
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  removeLabel: (name: string, labels: string[]) => {
     const idx = labels.indexOf(name);
     if (idx > -1) {
       const newLabels = Object.assign([], labels);
@@ -344,7 +332,7 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(setLabels(newLabels));
     }
   },
-  setPageNum: (dir, curPage, totPages) => {
+  setPageNum: (dir: 'right' | 'left', curPage: number, totPages: number) => {
     let n = curPage;
     if (dir === 'right') {
       n -= 1;
@@ -361,4 +349,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(staticStyles)(Content));
+export default connect(mapStateToProps, mapDispatchToProps)(Content);
