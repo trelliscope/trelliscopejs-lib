@@ -1,6 +1,5 @@
 import React from 'react';
 import { Action, Dispatch } from 'redux';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -28,11 +27,6 @@ const ErrorSnack: React.FC<ErrorSnackProps> = ({ errorMsg, handleClose }) => (
     ]}
   />
 );
-
-ErrorSnack.propTypes = {
-  errorMsg: PropTypes.string.isRequired,
-  handleClose: PropTypes.func.isRequired,
-};
 
 // ------ redux container ------
 

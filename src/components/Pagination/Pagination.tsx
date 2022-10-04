@@ -1,7 +1,6 @@
 // FIXME fix stateSelector after global state hand selectors have been typed
 import React, { useEffect } from 'react';
 import { Action, Dispatch } from 'redux';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Mousetrap from 'mousetrap';
@@ -140,17 +139,6 @@ const Pagination: React.FC<PaginationProps> = ({
       </div>
     </div>
   );
-};
-
-Pagination.propTypes = {
-  n: PropTypes.number.isRequired,
-  npp: PropTypes.number.isRequired,
-  totPages: PropTypes.number.isRequired,
-  totPanels: PropTypes.number.isRequired,
-  dialogOpen: PropTypes.bool.isRequired,
-  fullscreen: PropTypes.bool.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  cogData: PropTypes.object.isRequired,
 };
 
 // ------ redux container ------
