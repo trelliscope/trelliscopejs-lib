@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -306,12 +305,6 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
       </Dialog>
     </div>
   );
-};
-
-HeaderLogo.propTypes = {
-  setDialogOpen: PropTypes.func.isRequired,
-  windowHeight: PropTypes.number.isRequired,
-  fullscreen: PropTypes.bool.isRequired,
 };
 
 const styleSelector = createSelector(windowHeightSelector, fullscreenSelector, (wh, fullscreen) => ({
