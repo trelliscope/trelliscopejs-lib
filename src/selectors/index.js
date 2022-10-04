@@ -36,7 +36,7 @@ export const filterStateSelector = (state) => state.filter.state;
 export const filterViewSelector = (state) => state.filter.view;
 export const sortSelector = (state) => state.sort;
 export const layoutSelector = (state) => state.layout;
-export const labelsSelector = (state) => state.labels;
+export const labelsSelector = (state) => state.labels || [];
 
 export const configSelector = (state) => state._config.config;
 export const appIdSelector = (state) => state.appId;

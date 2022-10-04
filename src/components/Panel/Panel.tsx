@@ -13,11 +13,7 @@ interface PanelProps {
   dims: Dims;
   rowIndex: number;
   iColIndex: number;
-  panelRenderers: {
-    [key: string]: {
-      fn: (x: PanelData, width: number, height: number, post?: boolean, key?: string) => JSX.Element;
-    };
-  };
+  panelRenderers: PanelRenderers;
   panelInterface: PanelInterface;
   displayInfo: {
     [key: string]: DisplayInfoState;
