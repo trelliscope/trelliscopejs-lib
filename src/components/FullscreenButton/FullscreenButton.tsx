@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Action, Dispatch } from 'redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
-import { fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
+import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
 import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
 import { setFullscreen, windowResize } from '../../actions';
 import { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
 
 interface FullscreenButtonProps {
+  dialog: boolean;
   fullscreen: boolean;
   appId: string;
   singlePageApp: boolean;
@@ -31,6 +32,7 @@ interface NewDims {
 }
 
 const FullscreenButton: React.FC<FullscreenButtonProps> = ({
+  dialog,
   fullscreen,
   appId,
   singlePageApp,
@@ -41,14 +43,17 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({
   let yOffset = window.pageYOffset;
 
   // console.log(sidebar, 'sidebar');
-  // console.log(dialog, 'dialog');
-  // console.log(fullscreen, 'fullscreen');
+  console.log(dialog, 'dialog');
+  console.log(fullscreen, 'fullscreen');
   // console.log(appId, 'appId');
-  // console.log(singlePageApp, 'SPA');
+  console.log(singlePageApp, 'SPA');
+  console.log(fullscreen && !singlePageApp && !dialog, 'here');
   // console.log(ww, 'ww');
   // console.log(hh, 'hh');
 
-  useHotkeys('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset));
+  useHotkeys('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset), {
+    enabled: fullscreen && !singlePageApp && !dialog,
+  });
 
   if (singlePageApp) {
     return null;
@@ -74,12 +79,14 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({
 // ------ redux container ------
 
 const stateSelector = createSelector(
+  dialogOpenSelector,
   fullscreenSelector,
   appIdSelector,
   singlePageAppSelector,
   origWidthSelector,
   origHeightSelector,
-  (fullscreen, appId, singlePageApp, ww, hh) => ({
+  (dialog, fullscreen, appId, singlePageApp, ww, hh) => ({
+    dialog,
     fullscreen,
     appId,
     singlePageApp,
@@ -112,9 +119,13 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
       newDims.height = appDims.height;
       // move the div back to its parent element
       const parentId = document.getElementById(`${el.id}-parent`) as HTMLElement;
-      parentId.appendChild(el);
+      if (parentId) {
+        parentId.appendChild(el);
+      }
       const fullscreenDiv = document.getElementById('trelliscope-fullscreen-div') as HTMLElement;
-      fullscreenDiv.style.display = 'none';
+      if (fullscreenDiv) {
+        fullscreenDiv.style.display = 'none';
+      }
       // restore to y offset we were at before going fullscreen
       window.scrollTo(window.pageXOffset, yOffset);
     }

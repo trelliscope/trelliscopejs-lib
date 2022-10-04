@@ -118,7 +118,7 @@ const trelliscopeApp = (id, config, options) => {
   }
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
-    singlePageApp = false;
+    singlePageApp = true;
     fullscreen = true;
   }
 
