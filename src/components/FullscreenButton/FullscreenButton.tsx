@@ -42,15 +42,6 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({
 }) => {
   let yOffset = window.pageYOffset;
 
-  // console.log(sidebar, 'sidebar');
-  console.log(dialog, 'dialog');
-  console.log(fullscreen, 'fullscreen');
-  // console.log(appId, 'appId');
-  console.log(singlePageApp, 'SPA');
-  console.log(fullscreen && !singlePageApp && !dialog, 'here');
-  // console.log(ww, 'ww');
-  // console.log(hh, 'hh');
-
   useHotkeys('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset), {
     enabled: fullscreen && !singlePageApp && !dialog,
   });
