@@ -7,7 +7,7 @@ const configReducer = (
     didInvalidate: false,
     config: {},
   },
-  action,
+  action: { type: string; config: Config; receivedAt: number },
 ) => {
   switch (action.type) {
     case REQUEST_CONFIG:
