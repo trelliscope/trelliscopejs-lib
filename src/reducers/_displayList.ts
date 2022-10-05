@@ -7,7 +7,7 @@ const displayListReducer = (
     didInvalidate: false,
     list: [],
   },
-  action: { type: string; list: [Display]; receivedAt: number },
+  action: { type: string; list: Display[]; receivedAt: number },
 ) => {
   switch (action.type) {
     case REQUEST_DISPLAY_LIST:
