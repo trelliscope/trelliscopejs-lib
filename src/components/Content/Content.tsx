@@ -48,14 +48,7 @@ interface ContentProps {
   displayInfo: {
     [key: string]: DisplayInfoState;
   };
-  relDispPositions: {
-    height: number;
-    width: number;
-    aspect: number;
-    name: string;
-    left: number;
-    top: number;
-  }[];
+  relDispPositions: RelDispPositions[];
 }
 
 const Content: React.FC<ContentProps> = ({
