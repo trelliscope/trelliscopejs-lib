@@ -14,11 +14,40 @@
     border-left: none;
     border-top: none;
 
+    &Dialog {
+      width: 200px;
+      margin-top: 8px !important;
+      margin-bottom: 8px !important;
+    }
+
+    &Icon {
+      padding-left: 2px;
+      line-height: 45px;
+    }
+
     &:hover {
       transition: background 250ms;
       background: #eee;
       cursor: pointer;
     }
+  }
+
+  &BoxStyle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #ddd;
+    background: rgba(69, 138, 249, 0.4);
+  }
+
+  &Dialog {
+    z-index: 8000;
+    font-weight: 300;
+  }
+
+  &DialogActionText {
+    text-align: center;
+    width: 100%;
   }
 
   &TrHandle {

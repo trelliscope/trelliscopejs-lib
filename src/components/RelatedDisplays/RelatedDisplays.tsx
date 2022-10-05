@@ -21,21 +21,14 @@ import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui'
 import { selectedDisplaySelector, displayListSelector } from '../../selectors';
 import { setRelDispPositions } from '../../actions';
 import uiConsts from '../../assets/styles/uiConsts';
+import classNames from 'classnames';
+import { RootState } from '../../store';
 
 import styles from './RelatedDisplays.module.scss';
-import { RootState } from '../../store';
 
 const previewHeight = 400;
 
 const fixCSS = (value: string) => parseInt(value.replace('px', ''), 10);
-
-const boxStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  border: 'solid 1px #ddd',
-  background: 'rgba(69, 138, 249, 0.4)',
-};
 
 interface RelatedDisplaysProps {
   displayList: DisplaySelect;
@@ -110,7 +103,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
       {relDispPositions.map((d) => (
         <Rnd
           key={d.name}
-          style={boxStyle}
+          className={styles.relatedDisplaysBoxStyle}
           default={{
             width: previewHeight * d.width,
             height: previewHeight * d.height,
@@ -147,7 +140,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
   return (
     <div>
       <button type="button" onClick={handleOpen} className={styles.relatedDisplaysButton} style={propStyles.button}>
-        <i className="icon-open-add" style={{ paddingLeft: 2, lineHeight: '45px' }}>
+        <i className={classNames('icon-open-add', styles.relatedDisplaysButtonIcon)}>
           <Badge
             className={styles.relatedDisplaysBadge}
             classes={{ badge: styles.relatedDisplaysBadgeCircle }}
@@ -157,8 +150,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
       </button>
       <Dialog
         open={open}
-        className="trelliscope-app"
-        style={{ zIndex: 8000, fontWeight: 300 }}
+        className={classNames('trelliscope-app', styles.relatedDisplaysDialog)}
         onBackdropClick={handleClose}
         aria-labelledby="dialog-reldisp-title"
         maxWidth="md"
@@ -183,12 +175,10 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
           </div>
         </DialogContent>
         <DialogActions>
-          <div style={{ textAlign: 'center', width: '100%' }}>
+          <div className={styles.relatedDisplaysDialogActionText}>
             <Button
-              // variant="outlined"
-              style={{ width: 200 }}
               onClick={() => setStep(activeStep === 1 ? 0 : 1)}
-              className={styles.relatedDisplaysButton}
+              className={styles.relatedDisplaysButtonDialog}
               disabled={activeStep === 0 && selectedRelDisps.length === 0}
             >
               {activeStep === 0 ? '' : <ChevronLeftIcon />}
