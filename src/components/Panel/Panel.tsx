@@ -19,11 +19,7 @@ interface PanelProps {
     [key: string]: DisplayInfoState;
   };
   curDisplayInfo: DisplayInfoState;
-  relDispPositions: {
-    height: number;
-    aspect: number;
-    name: string;
-  }[];
+  relDispPositions: RelDispPositions[];
   removeLabel: (label: string, labels: string[]) => void;
 }
 

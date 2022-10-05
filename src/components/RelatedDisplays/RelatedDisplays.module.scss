@@ -1,0 +1,68 @@
+.relatedDisplays {
+  &Button {
+    position: absolute;
+    box-sizing: border-box;
+    top: -1;
+    transition: left 0.5s ease, background 250ms;
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+    font-size: 18px;
+    text-align: center;
+    border-right: 1px solid #eaedf0;
+    border-bottom: 1px solid #eaedf0;
+    border-left: none;
+    border-top: none;
+
+    &:hover {
+      transition: background 250ms;
+      background: #eee;
+      cursor: pointer;
+    }
+  }
+
+  &TrHandle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: rgba(69, 138, 249, 0.4);
+  }
+
+  &TlHandle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: rgba(69, 138, 249, 0.4);
+  }
+
+  &BrHandle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: rgba(69, 138, 249, 0.4);
+  }
+
+  &BlHandle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: rgba(69, 138, 249, 0.4);
+  }
+
+  &Badge {
+    padding-bottom: 27px;
+  }
+
+  &BadgeCircle {
+    background: rgba(69, 138, 249, 0.4);
+    color: #fff;
+  }
+}

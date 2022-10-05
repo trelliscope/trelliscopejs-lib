@@ -290,3 +290,16 @@ interface PanelRenderers {
     fn: (x: PanelData, width: number, height: number, post?: boolean, key?: string) => JSX.Element;
   };
 }
+
+interface RelDispPositions {
+  aspect: number;
+  col: number;
+  group: string;
+  height: number;
+  width: number;
+  idx: number;
+  left: number;
+  name: string;
+  row: number;
+  top: number;
+}
