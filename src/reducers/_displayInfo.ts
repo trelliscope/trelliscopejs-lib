@@ -1,6 +1,9 @@
 import { REQUEST_DISPLAY, RECEIVE_DISPLAY } from '../constants';
 
-const displayInfoReducer = (state = {} as DisplayInfoState, action: { type: string; name: string; info: DisplayObject; receivedAt: number; }) => {
+const displayInfoReducer = (
+  state = {} as DisplayInfoState,
+  action: { type: string; name: string; info: DisplayObject; receivedAt: number },
+) => {
   switch (action.type) {
     case REQUEST_DISPLAY:
       return {
