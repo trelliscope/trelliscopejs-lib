@@ -6,7 +6,7 @@ const cogDataMutable = (
     isLoaded: false,
     didInvalidate: false,
   },
-  action,
+  action: { type: string; crossfilter: { groupAll: () => void } | undefined; iface: CogInterface; receivedAt: number },
 ) => {
   switch (action.type) {
     case REQUEST_COGDATA:
