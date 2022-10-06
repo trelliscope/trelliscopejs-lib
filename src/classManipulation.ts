@@ -1,4 +1,4 @@
-export const hasClass = (el: { classList: { contains: (arg0: any) => any; }; className: string; }, className: any) => {
+export const hasClass = (el: HTMLElement, className: string) => {
   if (el.classList) {
     return el.classList.contains(className);
   }
