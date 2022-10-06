@@ -8,7 +8,6 @@ const panelRenderersReducer = (
     fn: (x: number | string, width: number, height: number) => void;
   },
 ) => {
-  console.log(state, 'state');
   switch (action.type) {
     case SET_PANEL_RENDERER:
       return {
