@@ -51,6 +51,14 @@ interface DisplaySelect {
   isLoaded: string;
 }
 
+interface CogInterface {
+  name: string;
+  // ?
+  group: Group;
+  // ?
+  type: string;
+}
+
 interface Display {
   // ?
   group: Group;
@@ -118,13 +126,7 @@ interface DisplayObject {
   split_layout: boolean;
   split_aspect: boolean;
   keySig: string;
-  cogInterface: {
-    name: string;
-    // ?
-    group: Group;
-    // ?
-    type: string;
-  };
+  cogInterface: CogInterface;
   panelInterface: PanelInterface;
   imgSrcLookup: {
     [key: string]: string;
