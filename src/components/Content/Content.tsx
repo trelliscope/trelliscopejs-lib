@@ -147,7 +147,7 @@ const Content: React.FC<ContentProps> = ({
         <div className={styles.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
-              key={`${el.key}${keyExtra}`}
+              key={el.key}
               cfg={cfg}
               panelKey={el.key}
               labels={el.labels}
