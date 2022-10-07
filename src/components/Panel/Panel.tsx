@@ -38,45 +38,61 @@ const Panel: React.FC<PanelProps> = ({
   relDispPositions,
   removeLabel,
 }) => {
-  const [panelData, setPanelData] = useState<PanelData>();
+  const [panelData, setPanelData] = useState<{ [key: string]: PanelData }>({});
   const [loaded, setLoaded] = useState<boolean>(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const isSelfContained = panelData !== undefined && cfg.display_base === '__self__';
   let panelContent: React.ReactNode | null = null;
 
   useLayoutEffect(() => {
-    const { name } = curDisplayInfo.info;
-    const curIface = displayInfo[name].info.cogInterface;
-    let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
-    filebase = `${filebase}/${curIface.name}`;
+    let names = [curDisplayInfo.info.name];
+    const abortControllers = [] as AbortController[];
 
-    const abortController = new AbortController();
-    const { signal } = abortController;
-
-    if (cfg.cog_server.type === 'jsonp') {
-      if (!window.__panel__) {
-        window.__panel__ = {};
-      }
-
-      window.__panel__[`_${panelKey}_${name}`] = (data: PanelData) => {
-        panelRenderers[name].fn(data, dims.ww, dims.hh, true, panelKey);
-        setPanelData(data);
-        setLoaded(true);
-      };
-
-      getJSONP(`${filebase}/jsonp/${panelKey}.jsonp`);
-    } else {
-      fetch(`${filebase}/json/${panelKey}.json`, { signal })
-        .then((response) => response.json())
-        .then((data) => {
-          panelRenderers[name].fn(data, dims.ww, dims.hh, true, panelKey);
-          setPanelData(data);
-          setLoaded(true);
-        });
+    if (relDispPositions.length > 0) {
+      names = relDispPositions.map((d) => d.name);
     }
 
+    names.forEach((name, i) => {
+      abortControllers[i] = new AbortController();
+      const { signal } = abortControllers[i];
+
+      const curIface = displayInfo[name].info.cogInterface;
+      let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
+      filebase = `${filebase}/${curIface.name}`;
+
+      let width = dims.ww;
+      let height = dims.hh;
+      if (relDispPositions.length > 0) {
+        width = dims.hh * relDispPositions[i].width;
+        height /= relDispPositions[i].aspect;
+      }
+
+      if (cfg.cog_server.type === 'jsonp') {
+        if (!window.__panel__) {
+          window.__panel__ = {};
+        }
+
+        window.__panel__[`_${panelKey}_${name}`] = (data: PanelData) => {
+          panelRenderers[name].fn(data, width, height, true, panelKey);
+
+          setPanelData((prevData) => ({ ...prevData, [name]: data }));
+          setLoaded(true);
+        };
+
+        getJSONP(`${filebase}/jsonp/${panelKey}.jsonp`);
+      } else {
+        fetch(`${filebase}/json/${panelKey}.json`, { signal })
+          .then((response) => response.json())
+          .then((data) => {
+            panelRenderers[name].fn(data, width, height, true, panelKey);
+            setPanelData((prevData) => ({ ...prevData, [name]: data }));
+            setLoaded(true);
+          });
+      }
+    });
+
     return () => {
-      abortController.abort();
+      abortControllers.forEach((ac) => ac.abort());
     };
   }, []);
 
@@ -94,9 +110,8 @@ const Panel: React.FC<PanelProps> = ({
           height = dims.hh * relDispPositions[i].height;
           width = height / relDispPositions[i].aspect;
         }
-        const panelRenderer = panelRenderers[name];
-        if (panelData) {
-          panelRenderer.fn(panelData, width, height, true, `${panelKey}_${name}`);
+        if (panelData.length) {
+          panelRenderers[name].fn(panelData[name], width, height, true, `${panelKey}_${name}`);
         }
       }
     });
@@ -124,19 +139,42 @@ const Panel: React.FC<PanelProps> = ({
   names.forEach((name) => {
     const isImageSrc = panelInterface.type === 'image_src';
     if (isImageSrc) {
-      panelContent = panelRenderers[name].fn(
-        displayInfo[name].info.imgSrcLookup[panelKey],
-        dims.ww,
-        dims.hh,
-        false,
-        panelKey,
-      );
+      panelContent = panelRenderers[name].fn(displayInfo[name].info.imgSrcLookup[name], dims.ww, dims.hh, false, panelKey);
     } else if (isSelfContained) {
-      panelContent = panelRenderers[name].fn(panelData, dims.ww, dims.hh, false, panelKey);
+      panelContent = panelRenderers[name].fn(panelData[name], dims.ww, dims.hh, false, panelKey);
     } else if (panelData !== undefined) {
-      panelContent = panelRenderers[name].fn(panelData, dims.ww, dims.hh, false, panelKey);
+      panelContent = panelRenderers[name].fn(panelData[name], dims.ww, dims.hh, false, panelKey);
     }
   });
+
+  if (loaded && relDispPositions.length > 0) {
+    panelContent = (
+      <div>
+        {relDispPositions.map((d, i) => {
+          let width = dims.ww;
+          let height = dims.hh;
+          if (relDispPositions.length > 0) {
+            height = dims.hh * relDispPositions[i].height;
+            width = height / relDispPositions[i].aspect;
+          }
+          return (
+            <div
+              key={d.name}
+              style={{
+                position: 'absolute',
+                top: d.top * dims.hh,
+                left: d.left * dims.hh,
+                height: d.height * dims.hh,
+                width: d.width * dims.hh,
+              }}
+            >
+              {panelRenderers[d.name].fn(panelData[d.name], width, height, false, panelKey)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   const bWidth = relDispPositions.length > 0 ? dims.contentWidth : dims.ww;
   const bRight =
