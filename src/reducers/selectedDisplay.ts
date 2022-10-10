@@ -6,7 +6,7 @@ export const selectedDisplay = (
     group: '',
     desc: '',
   },
-  action,
+  action: { type: string; name: string; group: string; desc: string },
 ) => {
   switch (action.type) {
     case SELECT_DISPLAY:
@@ -21,7 +21,7 @@ export const selectedDisplay = (
   return state;
 };
 
-export const relDispPositions = (state = [], action) => {
+export const relDispPositions = (state = [] as RelDispPositions[], action: { type: string; obj: string }) => {
   switch (action.type) {
     case SET_REL_DISP_POSITIONS:
       return Object.assign([], [], action.obj);
@@ -30,22 +30,14 @@ export const relDispPositions = (state = [], action) => {
   return state;
 };
 
-export const selectedRelDisps = (state = [], action) => {
+export const selectedRelDisps = (state: number[] = [], action: { type: string; which: string; val: number[] }) => {
   switch (action.type) {
     case SET_SELECTED_RELDISPS: {
-      const newState = Object.assign([], state);
-      if (action.which === 'add') {
-        if (newState.indexOf(action.val) < 0) {
-          newState.push(action.val);
-        }
-      } else if (action.which === 'remove') {
-        const idx = newState.indexOf(action.val);
-        if (idx > -1) {
-          newState.splice(idx, 1);
-        }
-      } else if (action.which === 'reset') {
+      const newState = Object.assign([] as number[], state);
+      if (action.which === 'reset') {
         return [];
-      } else if (action.which === 'set') {
+      }
+      if (action.which === 'set') {
         return action.val;
       }
       newState.sort();
