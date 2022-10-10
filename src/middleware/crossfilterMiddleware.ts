@@ -6,14 +6,17 @@
 import { Middleware } from 'redux';
 import type { RootState } from '../store';
 
+interface Dimension {
+  [key: string]: number;
+}
+
 const MAX_VALUE = 9007199254740992; // we want NAs to always get pushed back in sort
-const getNumVal = (d: { [key: string]: number }, name: string) =>
-  Number.isNaN(d[name] || d[name] === undefined) ? -MAX_VALUE : d[name];
-const getNumValSign = (d: { [key: string]: number }, name: string, dir: string) => {
+const getNumVal = (d: Dimension, name: string) => (Number.isNaN(d[name] || d[name] === undefined) ? -MAX_VALUE : d[name]);
+const getNumValSign = (d: Dimension, name: string, dir: string) => {
   const sign = dir === 'asc' ? 1 : 0;
   return Number.isNaN(d[name]) || d[name] === undefined ? sign * MAX_VALUE : d[name];
 };
-const getCatVal = (d: { [key: string]: number }, name: string) => (d[name] ? d[name] : 'NA');
+const getCatVal = (d: Dimension, name: string) => (d[name] ? d[name] : 'NA');
 
 const sortFn = (property: string) => {
   let sortOrder = 1;
@@ -58,7 +61,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         // numeric is always 'range' type
         if (action.filter[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension((d: { [key: string]: number }) => getNumVal(d, names[i]));
+            dimensions[names[i]] = cf.dimension((d: Dimension) => getNumVal(d, names[i]));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
@@ -81,7 +84,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
           }
         } else if (action.filter[names[i]].varType === 'factor') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension((d: { [key: string]: number }) => getCatVal(d, names[i]));
+            dimensions[names[i]] = cf.dimension((d: Dimension) => getCatVal(d, names[i]));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
@@ -123,9 +126,9 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
 
         if (dimensions[name] === undefined) {
           if (type === 'numeric') {
-            dimensions[name] = cf.dimension((d: { [key: string]: number }) => getNumVal(d, name));
+            dimensions[name] = cf.dimension((d: Dimension) => getNumVal(d, name));
           } else {
-            dimensions[name] = cf.dimension((d: { [key: string]: number }) => getCatVal(d, name));
+            dimensions[name] = cf.dimension((d: Dimension) => getCatVal(d, name));
           }
         }
 
@@ -161,17 +164,15 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         newState.splice(action.sort, 1);
       }
       if (newState.length === 0) {
-        dimensions.__sort = cf.dimension((d: { [key: string]: number }) => d.__index);
+        dimensions.__sort = cf.dimension((d: Dimension) => d.__index);
       } else if (newState.length === 1) {
         // if (action.filter[names[i]].varType === 'numeric') {
         const dispName = store.getState().selectedDisplay.name;
         const ci = store.getState()._displayInfo[dispName].info.cogInfo[newState[0].name];
         if (ci.type === 'factor') {
-          dimensions.__sort = cf.dimension((d: { [key: string]: number }) => getCatVal(d, newState[0].name));
+          dimensions.__sort = cf.dimension((d: Dimension) => getCatVal(d, newState[0].name));
         } else if (ci.type === 'numeric') {
-          dimensions.__sort = cf.dimension((d: { [key: string]: number }) =>
-            getNumValSign(d, newState[0].name, newState[0].dir),
-          );
+          dimensions.__sort = cf.dimension((d: Dimension) => getNumValSign(d, newState[0].name, newState[0].dir));
         }
       } else {
         const dat = cf.all();
@@ -196,11 +197,11 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
           sortSpec.push(`${newState[i].dir === 'asc' ? '' : '!'}${newState[i].name}`);
         }
         sortDat.sort(multiSort(sortSpec));
-        const idx = {} as { [key: string]: number };
+        const idx = {} as Dimension;
         for (let i = 0; i < sortDat.length; i += 1) {
           idx[sortDat[i].__index] = i;
         }
-        dimensions.__sort = cf.dimension((d: { [key: string]: number }) => idx[d.__index]);
+        dimensions.__sort = cf.dimension((d: Dimension) => idx[d.__index]);
       }
     }
   }
