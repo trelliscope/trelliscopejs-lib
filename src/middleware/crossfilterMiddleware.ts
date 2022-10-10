@@ -9,6 +9,9 @@ import type { RootState } from '../store';
 interface Dimension {
   [key: string]: number;
 }
+interface SortParam {
+  [key: string]: string | number;
+}
 
 const MAX_VALUE = 9007199254740992; // we want NAs to always get pushed back in sort
 const getNumVal = (d: Dimension, name: string) => (Number.isNaN(d[name] || d[name] === undefined) ? -MAX_VALUE : d[name]);
@@ -25,7 +28,7 @@ const sortFn = (property: string) => {
     sortOrder = -1;
     property2 = property2.substr(1);
   }
-  return (a: { [key: string]: string | number }, b: { [key: string]: string | number }) => {
+  return (a: SortParam, b: SortParam) => {
     const result = a[property2] < b[property2] ? -1 : a[property2] > b[property2] ? 1 : 0;
     return result * sortOrder;
   };
@@ -33,7 +36,7 @@ const sortFn = (property: string) => {
 
 const multiSort = (args: string[]) => {
   const props = args;
-  return (obj1: { [key: string]: string | number }, obj2: { [key: string]: string | number }) => {
+  return (obj1: SortParam, obj2: SortParam) => {
     let i = 0;
     let result = 0;
     while (result === 0 && i < props.length) {
@@ -178,7 +181,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         const dat = cf.all();
         const sortDat = [];
         for (let i = 0; i < dat.length; i += 1) {
-          const elem = { __index: dat[i].__index } as { [key: string]: string | number };
+          const elem = { __index: dat[i].__index } as SortParam;
           for (let j = 0; j < newState.length; j += 1) {
             const dispName = store.getState().selectedDisplay.name;
             const ci = store.getState()._displayInfo[dispName].info.cogInfo[newState[j].name];
