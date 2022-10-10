@@ -116,10 +116,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
 
       let names = [] as string[];
       if (action.which === 'add') {
-        // we need to set this to unknown first because action.name is being
-        // used as two different types, one a string and the other an object
-        // with active as a property as a string array.
-        names.push(action.name as unknown as string);
+        names.push(action.name);
       } else {
         names = action.name.active;
       }
