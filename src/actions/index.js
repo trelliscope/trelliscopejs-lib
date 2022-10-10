@@ -150,18 +150,6 @@ export const setSelectedRelDisps = (arr) => ({
 //   val
 // });
 
-export const addRelDisp = (i) => ({
-  type: SET_SELECTED_RELDISPS,
-  which: 'add',
-  val: i,
-});
-
-export const removeRelDisp = (i) => ({
-  type: SET_SELECTED_RELDISPS,
-  which: 'remove',
-  val: i,
-});
-
 export const resetRelDisps = (i) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
