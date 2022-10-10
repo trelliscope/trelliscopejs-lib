@@ -3,7 +3,7 @@
 // middleware to mutate the crossfilter dimensions whenever
 // SET_SORT or SET_FILTER operations are performed
 
-import { Middleware } from 'redux';
+import type { Middleware } from 'redux';
 import type { RootState } from '../store';
 
 interface Dimension {
