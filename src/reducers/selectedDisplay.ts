@@ -1,12 +1,13 @@
+import type { Reducer } from 'redux';
 import { SELECT_DISPLAY, SET_SELECTED_RELDISPS, SET_REL_DISP_POSITIONS } from '../constants';
 
-export const selectedDisplay = (
+export const selectedDisplay: Reducer = (
   state = {
     name: '',
     group: '',
     desc: '',
   },
-  action: { type: string; name: string; group: string; desc: string },
+  action,
 ) => {
   switch (action.type) {
     case SELECT_DISPLAY:

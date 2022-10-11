@@ -1,3 +1,4 @@
+import type { Reducer } from 'redux';
 import {
   SET_APP_ID,
   SET_DIALOG_OPEN,
@@ -9,7 +10,7 @@ import {
   SET_OPTIONS,
 } from '../constants';
 
-export const appId = (state = 'app', action) => {
+export const appId: Reducer = (state = 'app', action) => {
   switch (action.type) {
     case SET_APP_ID:
       return action.id;
@@ -18,7 +19,7 @@ export const appId = (state = 'app', action) => {
   return state;
 };
 
-export const options = (state = {}, action) => {
+export const options: Reducer = (state = {}, action) => {
   switch (action.type) {
     case SET_OPTIONS:
       return action.options;
@@ -27,7 +28,7 @@ export const options = (state = {}, action) => {
   return state;
 };
 
-export const dialog = (state = false, action) => {
+export const dialog: Reducer = (state = false, action) => {
   switch (action.type) {
     case SET_DIALOG_OPEN:
       return action.isOpen;
@@ -36,7 +37,7 @@ export const dialog = (state = false, action) => {
   return state;
 };
 
-export const dispSelectDialog = (state = false, action) => {
+export const dispSelectDialog: Reducer = (state = false, action) => {
   switch (action.type) {
     case SET_DISPSELECT_DIALOG_OPEN:
       return action.isOpen;
@@ -45,7 +46,7 @@ export const dispSelectDialog = (state = false, action) => {
   return state;
 };
 
-export const dispInfoDialog = (state = false, action) => {
+export const dispInfoDialog: Reducer = (state = false, action) => {
   switch (action.type) {
     case SET_DISPINFO_DIALOG_OPEN:
       return action.isOpen;
@@ -54,7 +55,7 @@ export const dispInfoDialog = (state = false, action) => {
   return state;
 };
 
-export const singlePageApp = (state = true, action) => {
+export const singlePageApp: Reducer = (state = true, action) => {
   switch (action.type) {
     case SET_SINGLE_PAGE_APP:
       return action.singlePageApp;
@@ -63,7 +64,7 @@ export const singlePageApp = (state = true, action) => {
   return state;
 };
 
-export const fullscreen = (state = true, action) => {
+export const fullscreen: Reducer = (state = true, action) => {
   switch (action.type) {
     case SET_FULLSCREEN:
       return action.fullscreen;
@@ -72,7 +73,7 @@ export const fullscreen = (state = true, action) => {
   return state;
 };
 
-export const errorMsg = (state = '', action) => {
+export const errorMsg: Reducer = (state = '', action) => {
   switch (action.type) {
     case SET_ERROR_MESSAGE:
       return action.msg;

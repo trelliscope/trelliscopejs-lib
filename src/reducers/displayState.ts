@@ -1,8 +1,9 @@
 import omit from 'lodash.omit';
 import { combineReducers } from 'redux';
+import type { Reducer } from 'redux';
 import { SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, SET_FILTER_VIEW } from '../constants';
 
-export const layout = (
+export const layout: Reducer = (
   state = {
     nrow: 1,
     ncol: 1,
@@ -30,7 +31,7 @@ export const layout = (
   return state;
 };
 
-export const labels = (state = [], action) => {
+export const labels: Reducer = (state = [], action) => {
   switch (action.type) {
     case SET_LABELS:
       return Object.assign([], [], action.labels);
@@ -39,7 +40,7 @@ export const labels = (state = [], action) => {
   return state;
 };
 
-export const sort = (state = [], action) => {
+export const sort: Reducer = (state = [], action) => {
   switch (action.type) {
     case SET_SORT: {
       if (typeof action.sort === 'number') {
@@ -57,12 +58,15 @@ export const sort = (state = [], action) => {
   return state;
 };
 
-const filterState = (state = {}, action) => {
+const filterState: Reducer = (state = {}, action) => {
   switch (action.type) {
     case SET_FILTER: {
       // action.filter should be an object to replace the previous state
       // but if it's a string, the filter with that name will be removed
       if (typeof action.filter === 'string' || action.filter instanceof String) {
+        // FIXME
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: TS2769 this conflicts with setting it as a reducer property and best practice. When refactoring to a slice we will need to fix this.
         return omit(state, action.filter);
       }
       if (action.filter === undefined) {
@@ -78,7 +82,7 @@ const filterState = (state = {}, action) => {
   return state;
 };
 
-const filterView = (state = { active: [], inactive: [] }, action) => {
+const filterView: Reducer = (state = { active: [], inactive: [] }, action) => {
   switch (action.type) {
     case SET_FILTER_VIEW: {
       let view = { ...state };

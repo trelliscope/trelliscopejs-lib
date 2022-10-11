@@ -1,13 +1,7 @@
+import type { Reducer } from 'redux';
 import { SET_PANEL_RENDERER } from '../constants';
 
-const panelRenderersReducer = (
-  state = {} as PanelRenderers,
-  action: {
-    type: string;
-    name: string;
-    fn: (x: number | string, width: number, height: number) => void;
-  },
-) => {
+const panelRenderersReducer: Reducer = (state = {}, action) => {
   switch (action.type) {
     case SET_PANEL_RENDERER:
       return {

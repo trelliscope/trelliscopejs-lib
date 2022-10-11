@@ -1,13 +1,14 @@
+import type { Reducer } from 'redux';
 import { REQUEST_DISPLAY_LIST, RECEIVE_DISPLAY_LIST } from '../constants';
 
-const displayListReducer = (
+const displayListReducer: Reducer = (
   state = {
     isFetching: false,
     isLoaded: false,
     didInvalidate: false,
     list: [],
   },
-  action: { type: string; list: Display[]; receivedAt: number },
+  action,
 ) => {
   switch (action.type) {
     case REQUEST_DISPLAY_LIST:
