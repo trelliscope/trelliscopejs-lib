@@ -1,13 +1,14 @@
+import type { Reducer } from 'redux';
 import { REQUEST_CONFIG, RECEIVE_CONFIG } from '../constants';
 
-const configReducer = (
+const configReducer: Reducer = (
   state = {
     isFetching: false,
     isLoaded: false,
     didInvalidate: false,
     config: {},
   },
-  action: { type: string; config: Config; receivedAt: number },
+  action,
 ) => {
   switch (action.type) {
     case REQUEST_CONFIG:

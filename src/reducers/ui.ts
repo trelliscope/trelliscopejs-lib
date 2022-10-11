@@ -1,9 +1,10 @@
+import type { Reducer } from 'redux';
 import { WINDOW_RESIZE, UPDATE_DIMS } from '../constants';
 
 const windowHeight = typeof window === 'object' ? window.innerHeight : null;
 const windowWidth = typeof window === 'object' ? window.innerWidth : null;
 
-const uiReducer = (
+const uiReducer: Reducer = (
   state = {
     windowHeight,
     windowWidth,

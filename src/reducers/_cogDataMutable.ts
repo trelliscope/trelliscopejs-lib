@@ -1,12 +1,13 @@
+import type { Reducer } from 'redux';
 import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants';
 
-const cogDataMutable = (
+const cogDataMutable: Reducer = (
   state = {
     isFetching: false,
     isLoaded: false,
     didInvalidate: false,
   },
-  action: { type: string; crossfilter: { groupAll: () => void } | undefined; iface: CogInterface; receivedAt: number },
+  action,
 ) => {
   switch (action.type) {
     case REQUEST_COGDATA:
