@@ -14,7 +14,7 @@ interface FilterNumPlotProps {
   width: number;
   height: number;
   condDist: CondDistFilterNum;
-  filterState: FilterNumPlotFilter;
+  filterState: Filter<FilterRange>;
   handleChange: (event: number[] | undefined) => void;
 }
 

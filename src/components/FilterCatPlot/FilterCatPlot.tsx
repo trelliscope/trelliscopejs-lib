@@ -13,9 +13,9 @@ interface FilterCatPlotProps {
   cellHeight: number;
   dist: FilterCatDist;
   condDist: CondDistFilterCat;
-  filterState: FilterCat;
+  filterState: Filter<FilterCat>;
   sortOrder: string;
-  handleChange: (state: FilterCat) => void;
+  handleChange: (state: Filter<FilterCat>) => void;
   filterCardinality: number;
 }
 
@@ -42,7 +42,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
       selectArr.push(val);
     }
 
-    let newState = {} as FilterCat;
+    let newState = {} as Filter<FilterCat>;
     if (selectArr.length === 0) {
       newState = {
         name: filterState.name,

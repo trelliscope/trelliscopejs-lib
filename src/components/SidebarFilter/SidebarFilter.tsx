@@ -17,10 +17,10 @@ import styles from './SidebarFilter.module.scss';
 interface SidebarFilterProps {
   inlineStyles: { [key: string]: CSSProperties };
   catHeight: number;
-  filter: { [key: string]: FilterCommon | FilterNumFilter | FilterCat };
+  filter: { [key: string]: Filter<FilterCat | FilterRange> };
   filterView: FilterView;
-  handleFilterChange: (filter: FilterNumStateChange | FilterCat | string) => void;
-  handleFilterSortChange: (filter: FilterCat) => void;
+  handleFilterChange: (filter: Filter<FilterCat | FilterRange> | string) => void;
+  handleFilterSortChange: (filter: Filter<FilterCat>) => void;
   handleViewChange: (x: string, which: 'add' | 'remove', labels: string[]) => void;
   labels: string[];
   cogInfo: { [key: string]: CogInfo };
@@ -60,7 +60,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
     const colContent = colFilters.map((curFilters) =>
       curFilters.map((d) => {
         if (filtDist[d]) {
-          let filterState = filter[d];
+          let filterState = filter[d] as Filter<FilterCat | FilterRange>;
           let headerExtra = '';
           const filterActive = filterState && filterState.value !== undefined;
 
@@ -80,7 +80,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
 
             itemContent = (
               <FilterCat
-                filterState={filterState}
+                filterState={filterState as Filter<FilterCat>}
                 height={Math.min(catHeight, nlvl * 15)}
                 dist={curDisplayInfo.info.cogDistns[d]}
                 condDist={filtDist[d] as CondDistFilterCat}
@@ -104,7 +104,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
             itemContent = (
               <FilterNum
                 name={d}
-                filterState={filterState as FilterNumFilter}
+                filterState={filterState as Filter<FilterRange>}
                 dist={curDisplayInfo.info.cogDistns[d]}
                 condDist={filtDist[d] as CondDistFilterNum}
                 handleChange={handleFilterChange}
@@ -245,7 +245,7 @@ const stateSelector = createSelector(
   labelsSelector,
   filterColSplitSelector,
   (filter, filterView, cogInfo, sh, curDisplayInfo, filtDist, labels, colSplit) => ({
-    styles: {
+    inlineStyles: {
       col1: {
         height: sh,
       },
@@ -285,19 +285,18 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     }
     dispatch(setFilterView(x, which));
   },
-  handleFilterChange: (x: FilterNumStateChange | FilterCat | string) => {
-    let obj: { [key: string]: FilterNumStateChange | FilterCat };
+  handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => {
     if (typeof x === 'string' || x instanceof String) {
       dispatch(setFilter(x));
     } else {
-      obj = {};
-      obj[x.name] = { ...x };
+      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
+      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
       dispatch(setFilter(obj));
     }
     dispatch(setLayout({ pageNum: 1 }));
   },
-  handleFilterSortChange: (x: FilterCat) => {
-    const obj: { [key: string]: FilterCat } = {};
+  handleFilterSortChange: (x: Filter<FilterCat>) => {
+    const obj: { [key: string]: Filter<FilterCat> } = {};
     obj[x.name] = x;
     dispatch(setFilter(obj));
   },

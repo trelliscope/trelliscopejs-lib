@@ -6,18 +6,10 @@ import styles from './FilterNum.module.scss';
 
 interface FilterNumProps {
   name: string;
-  filterState: FilterNumFilter;
+  filterState: Filter<FilterRange>;
   dist: CogDistns<CogDistnsNumeric>;
   condDist: CondDistFilterNum;
-  handleChange: (filterNumStateChange: FilterNumStateChange) => void;
-}
-
-interface FilterNumStateChange {
-  name: string;
-  type: string;
-  varType: string;
-  value?: { from: number | string | undefined; to: number | string | undefined };
-  valid: boolean;
+  handleChange: (filterNumStateChange: Filter<FilterRange>) => void;
 }
 
 const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist, handleChange }) => {
@@ -35,7 +27,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
   };
 
   const handleInput = (val: string, which: string) => {
-    let newState = {} as FilterNumStateChange;
+    let newState = {} as Filter<FilterRange>;
     const newVal = val === '' ? undefined : parseFloat(val);
     const lower = which === 'from' ? newVal : stateValue.from;
     const upper = which === 'to' ? newVal : stateValue.to;

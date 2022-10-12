@@ -178,55 +178,26 @@ interface CogDistnsNumeric {
   }
 }
 
-interface CondDist {
-  breaks: number[];
-  delta: number;
-  dist: [
-    {
-      key: number;
-      value: number;
-    },
-  ];
-  log: boolean;
-  max: number;
-}
-
-interface FilterCommon {
+declare type Filter<V> = {
   name: string;
-  orderValue: string;
-  type?: string;
   varType: string;
-  value: any; 
-}
-
-interface FilterCat extends FilterCommon {
-  value?: string[];
+  orderValue?: string;
+  type?: string;
   regex?: string;
-}
-interface FilterNumPlotFilter extends FilterCommon {
-  value: {
-    from: number;
-    to: number;
-  };
+  valid?: boolean;
+  value?: V;
 }
 
-interface FilterNumFilter extends FilterNumPlotFilter {
-  valid: boolean;
+type FilterCat = string[];
+
+type FilterRange = {
+  from?: number;
+  to?: number;
 }
 
 interface FilterView {
   active: string[];
   inactive: string[];
-}
-
-interface SidebarViewsFilter extends FilterCommon {
-  value: string[] | { from: number | undefined; to: number | undefined };
-  regex: string;
-  valid: boolean;
-}
-
-interface SidebarViewsFilterKey {
-  [key: string]: SidebarViewsFilter;
 }
 
 interface ViewItem {
