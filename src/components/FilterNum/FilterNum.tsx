@@ -4,28 +4,12 @@ import FilterNumPlot from '../FilterNumPlot';
 
 import styles from './FilterNum.module.scss';
 
-interface Dist {
-  dist: {
-    raw: {
-      breaks: number[];
-    };
-  };
-}
-
 interface FilterNumProps {
   name: string;
-  filterState: FilterNumFilter;
-  dist: Dist;
-  condDist: CondDist;
-  handleChange: (filterNumStateChange: FilterNumStateChange) => void;
-}
-
-interface FilterNumStateChange {
-  name: string;
-  type: string;
-  varType: string;
-  value?: { from: number | string | undefined; to: number | string | undefined };
-  valid: boolean;
+  filterState: Filter<FilterRange>;
+  dist: CogDistns<CogDistnsNumeric>;
+  condDist: CondDistFilterNum;
+  handleChange: (filterNumStateChange: Filter<FilterRange>) => void;
 }
 
 const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist, handleChange }) => {
@@ -43,7 +27,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
   };
 
   const handleInput = (val: string, which: string) => {
-    let newState = {} as FilterNumStateChange;
+    let newState = {} as Filter<FilterRange>;
     const newVal = val === '' ? undefined : parseFloat(val);
     const lower = which === 'from' ? newVal : stateValue.from;
     const upper = which === 'to' ? newVal : stateValue.to;

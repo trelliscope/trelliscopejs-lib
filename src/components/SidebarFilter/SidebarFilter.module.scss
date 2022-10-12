@@ -1,0 +1,164 @@
+.container {
+    width: 230px;
+    // display: 'inline-block',
+    // for dropdowns to not be hidden under other elements:
+    box-sizing: border-box;
+    z-index: 100; // + this.props.index,
+    position: relative;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.col1 {
+  position: absolute;
+  top: 25px;
+  left: 0;
+}
+
+.col2 {
+  position: absolute;
+  top: 25px;
+  left: 230px;
+  border-left: 1px solid #c1c1c1;
+}
+
+.notUsedHeader {
+  height: 30px;
+  line-height: 30px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 230px;
+  font-size: 14px;
+}
+
+.notUsedContainer {
+  width: 230px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 0 10px 10px;
+}
+
+.variable {
+  display: inline-block;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  border-radius: 10px;
+  padding: 2px 7px 3px !important;
+  border: 0;
+  background: #fff;
+  margin: 3px !important;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+  &:hover {
+    background: #ebebeb;
+  }
+}
+
+.variableActive {
+  background: #81C784;
+  color: #fff;
+
+  &:hover {
+    background: #81C784;
+  }
+}
+
+.allContainer {
+  width: 230px;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 230px;
+  // display: 'inline-block',
+  // for dropdowns to not be hidden under other elements:
+  box-sizing: border-box;
+  z-index: 100; // + this.props.index;
+  position: relative;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #c1c1c1;
+}
+
+.header {
+  height: 16px;
+  line-height: 15px;
+  width: 230px;
+  margin-top: 1px;
+  font-size: 12px;
+  position: relative;
+}
+
+.headerExtra {
+  position: absolute;
+  right: 38px;
+  height: 16px;
+  line-height: 15px;
+  font-size: 11px;
+  color: #777;
+}
+.headerName {
+  height: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: absolute;
+  left: 1px;
+  user-select: none;
+  cursor: default;
+  background: #999;
+}
+
+.headerNameActive {
+  background: #81C784;
+}
+
+.headerNameText {
+  color: white;
+}
+
+.headerIcon {
+  height: 16px;
+  color: #666;
+  cursor: pointer;
+  position: absolute;
+  border: none;
+  background: none;
+  margin-top: -1px;
+  padding: 0;
+  z-index: 1000;
+
+  &:hover {
+    transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    color: #aaa;
+  }
+}
+
+.headerIconHide {
+  visibility: hidden;
+}
+
+.headerClose {
+  right: 5px;
+}
+
+.headerReset {
+  right: 18px;
+}
+
+.cogGroupHeader {
+  background: #90CAF9;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.cogGroupText {
+  padding-left: 20px;
+}

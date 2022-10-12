@@ -15,13 +15,13 @@ import Badge from '@material-ui/core/Badge';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Position, Rnd } from 'react-rnd';
+import classNames from 'classnames';
 import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../../selectors';
 import { setRelDispPositions } from '../../actions';
 import uiConsts from '../../assets/styles/uiConsts';
-import classNames from 'classnames';
 import { RootState } from '../../store';
 
 import styles from './RelatedDisplays.module.scss';

@@ -13,8 +13,8 @@ interface FilterNumPlotProps {
   name: string;
   width: number;
   height: number;
-  condDist: CondDist;
-  filterState: FilterNumPlotFilter;
+  condDist: CondDistFilterNum;
+  filterState: Filter<FilterRange>;
   handleChange: (event: number[] | undefined) => void;
 }
 

@@ -15,7 +15,7 @@ export const cogFiltDistSelector = createSelector(
   filterViewSelector,
   curDisplayInfoSelector,
   (cogData, filter, filterView, cdi) => {
-    const result = {};
+    const result = {} as { [key: string]: CondDistFilterCat | CondDistFilterNum };
     if (cogData.iface && filterView.active && cogData.crossfilter && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
@@ -72,7 +72,7 @@ export const cogFiltDistSelector = createSelector(
             totSelected: selectedIdx.length,
             sumSelected,
             idx: selectedIdx.concat(notSelectedIdx),
-          };
+          } as CondDistFilterCat;
         } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
           const dist = cogData.groupRefs[keys[i]].all();
 
