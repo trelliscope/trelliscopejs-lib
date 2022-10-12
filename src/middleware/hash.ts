@@ -1,3 +1,5 @@
+import type { Middleware } from 'redux';
+import type { RootState } from '../store';
 import {
   SELECT_DISPLAY,
   SET_LAYOUT,
@@ -17,7 +19,7 @@ import {
 // };
 
 // this updates the window hash whenever the state changes
-export const hashFromState = (state) => {
+export const hashFromState = (state: RootState) => {
   // display
   const display = state.selectedDisplay;
   // layout
@@ -30,8 +32,8 @@ export const hashFromState = (state) => {
   const { labels } = state;
   // sort
   const { sort } = state; // TODO: should this be a deep copy?
-  sort.sort((a, b) => (a.order > b.order ? 1 : -1));
-  const sortStr = sort.map((d) => `${d.name};${d.dir}`).join(',');
+  sort.sort((a: Sort, b: Sort) => (a.order > b.order ? 1 : -1));
+  const sortStr = sort.map((d: Sort) => `${d.name};${d.dir}`).join(',');
   // filter
   const { filter } = state;
   const filterStrs = Object.keys(filter.state).map((k) => {
@@ -70,7 +72,7 @@ export const hashFromState = (state) => {
 // Filter Panels
 // Sort Panels
 
-export const hashMiddleware =
+export const hashMiddleware: Middleware<RootState> =
   ({ getState }) =>
   (next) =>
   (action) => {
