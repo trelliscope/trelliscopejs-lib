@@ -76,7 +76,7 @@
   // for dropdowns to not be hidden under other elements:
   box-sizing: border-box;
   z-index: 100; // + this.props.index;
-  position: 'relative';
+  position: relative;
   padding-bottom: 6px;
   border-bottom: 1px solid #c1c1c1;
 }
