@@ -4,19 +4,11 @@ import FilterNumPlot from '../FilterNumPlot';
 
 import styles from './FilterNum.module.scss';
 
-interface Dist {
-  dist: {
-    raw: {
-      breaks: number[];
-    };
-  };
-}
-
 interface FilterNumProps {
   name: string;
   filterState: FilterNumFilter;
-  dist: Dist;
-  condDist: CondDist;
+  dist: CogDistns<CogDistnsNumeric>;
+  condDist: CondDistFilterNum;
   handleChange: (filterNumStateChange: FilterNumStateChange) => void;
 }
 

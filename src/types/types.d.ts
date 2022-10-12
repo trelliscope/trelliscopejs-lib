@@ -159,11 +159,23 @@ interface CogInfo {
   height: number;
 }
 
-interface CogDistns {
+declare type CogDistns<D> = {
   type: 'factor' | 'numeric';
-  dis: {
-    [key: string]: number;
-  };
+  dist: D;
+  has_dist?: boolean;
+  max?: number;
+  log_default?: boolean;
+};
+
+interface CogDistnsFactor {
+  [key: string]: number;
+}
+
+interface CogDistnsNumeric {
+  raw: {
+    breaks: number[];
+    freq: number[];
+  }
 }
 
 interface CondDist {
@@ -184,6 +196,7 @@ interface FilterCommon {
   orderValue: string;
   type?: string;
   varType: string;
+  value: any; 
 }
 
 interface FilterCat extends FilterCommon {
@@ -199,6 +212,11 @@ interface FilterNumPlotFilter extends FilterCommon {
 
 interface FilterNumFilter extends FilterNumPlotFilter {
   valid: boolean;
+}
+
+interface FilterView {
+  active: string[];
+  inactive: string[];
 }
 
 interface SidebarViewsFilter extends FilterCommon {
@@ -275,9 +293,19 @@ interface CondDistFilterCat {
   idx: number[];
   max: number;
   orderValue: string;
-  reverseRows: true;
+  reverseRows: boolean;
   sumSelected: number;
   totSelected: number;
+  breaks: number[];
+}
+
+interface CondDistFilterNum {
+  dist: { key: number; value: number }[];
+  max: number;
+  breaks: number[];
+  delta: number;
+  range: [number, number];
+  log: boolean;
 }
 
 interface LayoutState {
@@ -285,6 +313,14 @@ interface LayoutState {
   ncol: number;
   arrange: 'row' | 'col';
   pageNum: number;
+}
+
+interface FilterNumStateChange {
+  name: string;
+  type: string;
+  varType: string;
+  value?: { from: number | string | undefined; to: number | string | undefined };
+  valid: boolean;
 }
 
 interface PanelRenderers {

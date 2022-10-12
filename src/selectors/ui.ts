@@ -2,12 +2,13 @@ import { createSelector } from 'reselect';
 import { SB_PANEL_FILTER } from '../constants';
 import { filterViewSelector, curDisplayInfoSelector } from '.';
 import uiConsts from '../assets/styles/uiConsts';
+import { RootState } from '../store';
 
-export const windowWidthSelector = (state) => state.ui.windowWidth;
-export const windowHeightSelector = (state) => state.ui.windowHeight;
-export const origWidthSelector = (state) => state.ui.origWidth;
-export const origHeightSelector = (state) => state.ui.origHeight;
-export const sidebarActiveSelector = (state) => state.sidebar.active;
+export const windowWidthSelector = (state: RootState) => state.ui.windowWidth;
+export const windowHeightSelector = (state: RootState) => state.ui.windowHeight;
+export const origWidthSelector = (state: RootState) => state.ui.origWidth;
+export const origHeightSelector = (state: RootState) => state.ui.origHeight;
+export const sidebarActiveSelector = (state: RootState) => state.sidebar.active;
 
 export const sidebarHeightSelector = createSelector(
   windowHeightSelector,
@@ -22,9 +23,9 @@ export const filterColSplitSelector = createSelector(
   (filt, cdi, sh) => {
     const keys = filt.active;
     if (keys === undefined) {
-      return { cutoff: null, heights: [0, 0] };
+      return { cutoff: null, heights: [0, 0] as [number, number] };
     }
-    const heights = keys.map((d) => {
+    const heights = keys.map((d: string) => {
       // 53 is the extra height of header/footer
       if (!cdi.isLoaded) {
         return 0;
@@ -65,7 +66,7 @@ export const filterColSplitSelector = createSelector(
 
     return {
       cutoff,
-      heights: [csum1, csum2],
+      heights: [csum1, csum2] as [number, number],
     };
   },
 );
@@ -75,7 +76,7 @@ export const contentWidthSelector = createSelector(
   sidebarActiveSelector,
   filterColSplitSelector,
   (ww, active, colSplit) => {
-    const sw = uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null));
+    const sw = uiConsts.sidebar.width * (1 + ((active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null) ? 1 : 0));
     return ww - uiConsts.sideButtons.width - (active === '' ? 0 : sw + 1);
   },
 );

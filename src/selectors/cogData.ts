@@ -15,7 +15,7 @@ export const cogFiltDistSelector = createSelector(
   filterViewSelector,
   curDisplayInfoSelector,
   (cogData, filter, filterView, cdi) => {
-    const result = {};
+    const result = {} as { [key: string]: any };
     if (cogData.iface && filterView.active && cogData.crossfilter && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
