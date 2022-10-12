@@ -10,6 +10,7 @@ import { appIdSelector, configSelector, selectedDisplaySelector } from '../../se
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
 import styles from './DisplayList.module.scss';
+import { RootState } from '../../store';
 
 interface DisplayListProps {
   selectable: boolean;
@@ -149,14 +150,7 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {
-  selectedDisplaySelector: Display;
-  selectedRelDispsSelector: number[];
-  configSelector: Config;
-  appIdSelector: string;
-  contentHeightSelector: number;
-  contentWidthSelector: number;
-}) => styleSelector(state);
+const mapStateToProps = (state: RootState) => styleSelector(state);
 
 const getRelDispPositions = (
   selectedDisplay: SelectedDisplay,

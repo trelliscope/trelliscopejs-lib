@@ -91,7 +91,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     dispatch(setSort(sort));
 
     // filter
-    const filter = {} as SidebarViewsFilterKey;
+    const filter = {} as { [key: string]: Filter<FilterCat | FilterRange> };
     if (hashItems.filter) {
       const fltrs = hashItems.filter.split(',');
       fltrs.forEach((flt) => {
@@ -106,7 +106,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
           name: fltItems.var,
           type: fltItems.type,
           varType: cinfo[fltItems.var].type,
-        } as SidebarViewsFilter;
+        } as Filter<FilterCat | FilterRange>;
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
           fltState.value = fltItems.val.split('#').map(decodeURIComponent);
