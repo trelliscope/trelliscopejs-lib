@@ -89,7 +89,7 @@ const stateSelector = createSelector(
   (ch, active, displayLoaded, colSplit) => ({
     customStyles: {
       sidebarContainer: {
-        width: uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null)),
+        width: uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0)),
         height: ch,
       },
     },
