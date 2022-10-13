@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { displayListSelector, curDisplayInfoSelector } from '.';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 
 export const relatedDisplayGroupsSelector = createSelector(curDisplayInfoSelector, displayListSelector, (cdi, dl) => {
   const res = {} as { [key: string]: number[] };
