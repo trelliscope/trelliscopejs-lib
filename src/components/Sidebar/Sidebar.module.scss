@@ -1,0 +1,40 @@
+.sidebar {
+  &Container {
+    transition-property: left;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+    position: absolute;
+    left: 48px;
+    top: 48px;
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid;
+    border-color: #c1c1c1 !important;
+    background: #fff;
+    z-index: 999;
+    overflow: hidden;
+  }
+
+  &Hidden {
+    transition-property: left;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+    left: -182px;
+  }
+
+  &Header {
+    padding-left: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #c1c1c1;
+    height: 25px;
+    line-height: 25px;
+    color: white;
+    border-left: 1px solid #ccc;
+  }
+
+  &Empty {
+    padding-left: 8px;
+    padding-top: 5px;
+  }
+}
