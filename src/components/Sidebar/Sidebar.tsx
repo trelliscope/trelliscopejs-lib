@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import SidebarLabels from '../SidebarLabels';
@@ -14,7 +14,7 @@ import { RootState } from '../../store';
 import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
-  customStyles: { sidebarContainer: { height: number; width: number } };
+  customStyles: { [key: string]: CSSProperties };
   active: string;
   displayLoaded: boolean;
 }
