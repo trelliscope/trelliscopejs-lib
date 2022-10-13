@@ -1,12 +1,12 @@
-export const getLocalStoragePrefix = (di) => `${di.group}_:_${di.name}_:`;
+export const getLocalStoragePrefix = (di: { group: string; name: string; }) => `${di.group}_:_${di.name}_:`;
 
-export const getLocalStorageKey = (di, panelKey, cogId) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
+export const getLocalStorageKey = (di: { group: string; name: string; }, panelKey: string, cogId: string) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
 
 // Stores a user-specified input value
 // Note that this always stores in localStorage
 // It additionaly stores to API if that is specified
 // localStorage is always used to keep track of inputs within the app
-export const setPanelCogInput = (di, value, panelKey, cogId) => {
+export const setPanelCogInput = (di: { input_type: string; group: string; name: string; input_api: { set: any; setRequestOptions: RequestInit | undefined; }; }, value: string, panelKey: string, cogId: string) => {
   const lsKey = getLocalStorageKey(di, panelKey, cogId);
 
   if (di.input_type === 'API') {
@@ -54,7 +54,7 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
   }
 };
 
-export const getInputsAPI = (di) => {
+export const getInputsAPI = (di: { group: string; name: string; input_api: { get: any; getRequestOptions: RequestInit | undefined; }; }) => {
   const queryObj = {
     display_id: `${di.group}___${di.name}`,
     display_version: 'v1',
