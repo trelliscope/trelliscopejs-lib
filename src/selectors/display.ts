@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
 import { displayListSelector, curDisplayInfoSelector } from '.';
+import type { RootState } from '../store';
 
 export const relatedDisplayGroupsSelector = createSelector(curDisplayInfoSelector, displayListSelector, (cdi, dl) => {
-  const res = {};
+  const res = {} as { [key: string]: number[] };
   if (cdi.isLoaded) {
     const { keySig } = cdi.info;
     const dispID = [cdi.info.group, cdi.info.name].join('/');
-    dl.list.forEach((d, i) => {
+    dl.list.forEach((d: Display, i: number) => {
       const sameKey = d.keySig === keySig;
       const curID = [d.group, d.name].join('/');
       if (sameKey && curID !== dispID) {
@@ -20,7 +21,7 @@ export const relatedDisplayGroupsSelector = createSelector(curDisplayInfoSelecto
   return res;
 });
 
-export const selectedRelDispsSelector = (state) => state.selectedRelDisps;
+export const selectedRelDispsSelector = (state: RootState) => state.selectedRelDisps;
 
 export const displayAspectsSelector = createSelector(
   curDisplayInfoSelector,
@@ -49,7 +50,7 @@ export const displayAspectsSelector = createSelector(
 export const cogInfoSelector = createSelector(curDisplayInfoSelector, (cdi) => (cdi.info.cogInfo ? cdi.info.cogInfo : {}));
 
 export const displayGroupsSelector = createSelector(displayListSelector, (dl) => {
-  const dispGroups = {};
+  const dispGroups = {} as DisplayGroup;
   if (dl.list) {
     for (let ii = 0; ii < dl.list.length; ii += 1) {
       if (!dispGroups[dl.list[ii].group]) {
