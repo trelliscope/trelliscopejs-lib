@@ -1,4 +1,5 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
+import type { CSSProperties } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import SidebarLabels from '../SidebarLabels';
