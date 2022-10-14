@@ -1,5 +1,5 @@
 import React from 'react';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
 import styles from './FooterChip.module.scss';
@@ -10,7 +10,7 @@ interface FooterChipProps {
   text: string;
   index: number;
   type: string;
-  handleStateClose: (arg0: { type: string; index: number; label: string; }) => void;
+  handleStateClose: (arg0: { type: string; index: number; label: string }) => void;
 }
 
 const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleStateClose }) => {
@@ -24,7 +24,7 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
   }
 
   return (
-    <div className={styles.footerChipWrapper} >
+    <div className={styles.footerChipWrapper}>
       <span className={styles.footerChipLabel}>
         {iconTag}
         {label}
@@ -53,7 +53,7 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleStateClose: (x: { type: string; index: number; label: string; }) => {
+  handleStateClose: (x: { type: string; index: number; label: string }) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));
       dispatch(setLayout({ pageNum: 1 }));

@@ -1,5 +1,6 @@
-import React, { CSSProperties, useState } from 'react';
-import { Action, Dispatch } from 'redux';
+import React, { useState } from 'react';
+import type { CSSProperties } from 'react';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -14,7 +15,8 @@ import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { Position, Rnd } from 'react-rnd';
+import { Rnd } from 'react-rnd';
+import type { Position } from 'react-rnd';
 import classNames from 'classnames';
 import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';

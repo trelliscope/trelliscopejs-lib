@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';

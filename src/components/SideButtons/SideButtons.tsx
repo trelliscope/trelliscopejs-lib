@@ -1,8 +1,9 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
+import type { CSSProperties } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { setActiveSidebar } from '../../actions';
 import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../../selectors';

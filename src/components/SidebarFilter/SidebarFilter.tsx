@@ -1,9 +1,10 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
+import type { CSSProperties } from 'react';
 import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import intersection from 'lodash.intersection';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { createSelector } from 'reselect';
 import FilterCat from '../FilterCat';
 import FilterNum from '../FilterNum';

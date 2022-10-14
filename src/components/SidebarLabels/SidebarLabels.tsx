@@ -1,7 +1,7 @@
 // FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import { connect } from 'react-redux';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { createSelector } from 'reselect';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';

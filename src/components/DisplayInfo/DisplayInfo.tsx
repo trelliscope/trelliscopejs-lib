@@ -1,5 +1,5 @@
 import React from 'react';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useHotkeys } from 'react-hotkeys-hook';

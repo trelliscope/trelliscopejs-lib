@@ -1,5 +1,6 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
-import { Action, Dispatch } from 'redux';
+import React, { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import DisplayInfo from '../DisplayInfo';
