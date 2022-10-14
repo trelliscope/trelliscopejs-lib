@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -8,7 +9,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
-import Mousetrap from 'mousetrap';
 import { createSelector } from 'reselect';
 import { fullscreenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
@@ -28,13 +28,11 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
   const handleClose = () => {
     setDialogOpen(false);
     setOpen(false);
-    Mousetrap.unbind('esc');
   };
 
   const handleOpen = () => {
     setDialogOpen(true);
     setOpen(true);
-    Mousetrap.bind('esc', handleClose);
   };
 
   // FIXME add typing for event once material ui is updated https://github.com/mui/material-ui/issues/17454
@@ -45,14 +43,10 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
 
   const handleKey = () => {
     setDialogOpen(true);
-    Mousetrap.bind('esc', handleClose);
   };
 
-  useEffect(() => {
-    if (fullscreen) {
-      Mousetrap.bind('a', handleKey);
-    }
-  }, []);
+  useHotkeys('a', handleKey, { enabled: fullscreen });
+  useHotkeys('esc', handleClose, { enabled: open });
 
   let keyNote;
   if (!fullscreen) {

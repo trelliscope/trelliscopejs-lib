@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Mousetrap from 'mousetrap';
+import { useHotkeys } from 'react-hotkeys-hook';
 import marked from 'marked';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -42,18 +42,15 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
   const handleClose = () => {
     setDialogOpen(false);
     setThisDialogOpen(false);
-    Mousetrap.unbind('esc');
   };
   const handleOpen = () => {
     setDialogOpen(true);
     setThisDialogOpen(true);
-    Mousetrap.bind('esc', handleClose);
   };
 
   const handleKey = () => {
     setDialogOpen(true);
     setThisDialogOpen(true);
-    Mousetrap.bind('esc', handleClose);
   };
 
   const moptions = {
@@ -62,14 +59,9 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
     stripPassoverAttribute: true,
   };
 
-  useEffect(() => {
-    if (active && fullscreen) {
-      Mousetrap.bind('i', handleKey);
-    }
-    return () => {
-      Mousetrap.unbind('i');
-    };
-  }, [active, fullscreen]);
+  useHotkeys('i', handleKey, { enabled: fullscreen && active });
+  useHotkeys('esc', handleClose, { enabled: isOpen });
+
   return (
     <div>
       <button
