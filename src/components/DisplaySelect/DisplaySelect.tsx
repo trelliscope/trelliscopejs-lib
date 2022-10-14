@@ -33,9 +33,8 @@ import {
   singlePageAppSelector,
   dispSelectDialogSelector,
 } from '../../selectors';
-
+import type { RootState } from '../../store';
 import styles from './DisplaySelect.module.scss';
-import { RootState } from '../../store';
 
 interface DisplaySelectProps {
   handleClick: (name: string, group: string, desc: string, cfg: Config, appId: string) => void;

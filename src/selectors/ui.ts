@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { SB_PANEL_FILTER } from '../constants';
 import { filterViewSelector, curDisplayInfoSelector } from '.';
 import uiConsts from '../assets/styles/uiConsts';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 
 export const windowWidthSelector = (state: RootState) => state.ui.windowWidth;
 export const windowHeightSelector = (state: RootState) => state.ui.windowHeight;

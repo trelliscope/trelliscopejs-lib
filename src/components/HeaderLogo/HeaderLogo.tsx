@@ -12,8 +12,8 @@ import Mousetrap from 'mousetrap';
 import { createSelector } from 'reselect';
 import { fullscreenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
+import type { RootState } from '../../store';
 import styles from './HeaderLogo.module.scss';
-import { RootState } from '../../store';
 
 interface HeaderLogoProps {
   setDialogOpen: (arg0: boolean) => void;

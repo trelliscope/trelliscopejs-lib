@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import NumericInput from '../NumericInput';
 import { layoutSelector } from '../../selectors';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import { setLayout, setRelDispPositions, setSelectedRelDisps } from '../../actions';
 import styles from './SidebarLayout.module.scss';
 

@@ -5,8 +5,8 @@ import { windowWidthSelector, windowHeightSelector } from '../../selectors/ui';
 import SideButtons from '../SideButtons';
 import Sidebar from '../Sidebar';
 import Content from '../Content';
+import type { RootState } from '../../store';
 import styles from './Body.module.scss';
-import { RootState } from '../../store';
 
 interface BodyProps {
   width: number;

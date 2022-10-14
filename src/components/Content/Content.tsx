@@ -22,7 +22,7 @@ import {
 import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
 import { cogInfoSelector } from '../../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../../selectors/cogData';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import styles from './Content.module.scss';
 
 interface ContentProps {

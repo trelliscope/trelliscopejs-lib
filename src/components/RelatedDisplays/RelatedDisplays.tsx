@@ -22,7 +22,7 @@ import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui'
 import { selectedDisplaySelector, displayListSelector } from '../../selectors';
 import { setRelDispPositions } from '../../actions';
 import uiConsts from '../../assets/styles/uiConsts';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 
 import styles from './RelatedDisplays.module.scss';
 

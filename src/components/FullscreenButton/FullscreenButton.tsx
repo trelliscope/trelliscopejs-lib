@@ -8,7 +8,7 @@ import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
 import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
 import { setFullscreen, windowResize } from '../../actions';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
 
 interface FullscreenButtonProps {

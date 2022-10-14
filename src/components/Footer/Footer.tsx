@@ -8,7 +8,7 @@ import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSele
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import uiConsts from '../../assets/styles/uiConsts';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import styles from './Footer.module.scss';
 
 interface FooterProps {
