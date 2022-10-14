@@ -1,9 +1,9 @@
 // FIXME fix stateSelector after global state hand selectors have been typed
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Mousetrap from 'mousetrap';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -60,20 +60,8 @@ const Pagination: React.FC<PaginationProps> = ({
     handleChange(totPages);
   };
 
-  useEffect(() => {
-    if (fullscreen) {
-      Mousetrap.bind('right', () => {
-        if (!dialogOpen) {
-          pageRight();
-        }
-      });
-      Mousetrap.bind('left', () => {
-        if (!dialogOpen) {
-          pageLeft();
-        }
-      });
-    }
-  }, []);
+  useHotkeys('right', pageRight, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
+  useHotkeys('left', pageLeft, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
 
   if (cogData.isFetching || (cogData.isLoaded && cogData.crossfilter === undefined)) {
     return <div className={styles.paginationProgress}>loading panels...</div>;

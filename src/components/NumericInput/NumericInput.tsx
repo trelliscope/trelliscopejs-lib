@@ -1,6 +1,6 @@
-import React, { useState, useEffect, SetStateAction } from 'react';
+import React, { useState, SetStateAction } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import classNames from 'classnames';
-import Mousetrap from 'mousetrap';
 import styles from './NumericInput.module.scss';
 
 interface NumericInputProps {
@@ -15,6 +15,8 @@ interface NumericInputProps {
 
 const NumericInput: React.FC<NumericInputProps> = ({ arrows, value, size, min, max, step, onChange }) => {
   const [newValue, setNewValue] = useState<number>(value);
+
+  console.log('im called::::');
 
   const increment = () => {
     const newVal = value + step;
@@ -49,18 +51,9 @@ const NumericInput: React.FC<NumericInputProps> = ({ arrows, value, size, min, m
     }
   };
 
-  useEffect(() => {
-    const mousetrap = new Mousetrap();
-    mousetrap.bind('up', () => increment());
-    mousetrap.bind('down', () => decrement());
-    mousetrap.bind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r'], (event) => event.stopPropagation());
-    return () => {
-      mousetrap.unbind('up');
-      mousetrap.unbind('down');
-      mousetrap.unbind('esc');
-      mousetrap.unbind(['left', 'right', 'g', 'l', 's', 'f', 'c', 'a', 'i', 'o', 'r']);
-    };
-  }, []);
+  useHotkeys('up', increment);
+  useHotkeys('down', decrement);
+  useHotkeys('left, right, g, l, s, f, c, a, i, o, r', (event) => event.stopPropagation());
 
   return (
     <span className={styles.numericInputSpan}>
