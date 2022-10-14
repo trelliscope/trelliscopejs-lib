@@ -1,6 +1,6 @@
 // FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
@@ -151,7 +151,7 @@ const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   const res: { [key: string]: string; label: string; value: string; index: string } = {
     label: '',
     value: '',
-    index: ''
+    index: '',
   };
   const ciKeys = Object.keys(cdi.info.cogInfo);
   for (let i = 0; i < ciKeys.length; i += 1) {

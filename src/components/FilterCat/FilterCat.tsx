@@ -3,7 +3,8 @@
 // click on a selected bar deselects it
 // regex overrides manual selections
 // if selections are made after regex, regex is cleared
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import type { SetStateAction } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';

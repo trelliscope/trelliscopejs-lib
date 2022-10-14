@@ -1,4 +1,5 @@
-import React, { useState, SetStateAction } from 'react';
+import React, { useState } from 'react';
+import type { SetStateAction } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import classNames from 'classnames';
 import styles from './NumericInput.module.scss';

@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
-import { NumberValue, ScaleLinear, scaleLinear } from 'd3-scale';
-import { Axis, axisBottom } from 'd3-axis';
+import { scaleLinear } from 'd3-scale';
+import type { NumberValue, ScaleLinear } from 'd3-scale';
+import { axisBottom } from 'd3-axis';
+import type { Axis } from 'd3-axis';
 // TODO d3 needs to be updated, event is flagged because the types file that we installed is on a newer version
 // and its not exported anymore, our typescript version is up to date and it also conflicts
 // so this is needed until we update the d3-selection.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: TS2305
-import { select, event as currentEvent, Selection, BaseType, filter } from 'd3-selection';
+import { select, event as currentEvent, filter } from 'd3-selection';
+import type { Selection, BaseType } from 'd3-selection';
 import { brushX } from 'd3-brush';
 
 interface FilterNumPlotProps {

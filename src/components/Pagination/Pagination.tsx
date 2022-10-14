@@ -1,7 +1,7 @@
 // FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import IconButton from '@material-ui/core/IconButton';

@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Action, Dispatch } from 'redux';
+import type { Action, Dispatch } from 'redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
@@ -11,6 +11,10 @@ import { setFullscreen, windowResize } from '../../actions';
 import type { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
 
+interface NewDims {
+  width: number;
+  height: number;
+}
 interface FullscreenButtonProps {
   dialog: boolean;
   fullscreen: boolean;
@@ -18,17 +22,7 @@ interface FullscreenButtonProps {
   singlePageApp: boolean;
   ww: number;
   hh: number;
-  toggleFullscreen: (
-    fullscreen: boolean,
-    appId: string,
-    appDims: { width: number; height: number },
-    yOffset: number,
-  ) => void;
-}
-
-interface NewDims {
-  width: number;
-  height: number;
+  toggleFullscreen: (fullscreen: boolean, appId: string, appDims: NewDims, yOffset: number) => void;
 }
 
 const FullscreenButton: React.FC<FullscreenButtonProps> = ({

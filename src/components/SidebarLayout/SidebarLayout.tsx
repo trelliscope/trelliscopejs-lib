@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import { createSelector } from 'reselect';
-import { Dispatch } from 'redux';
+import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import NumericInput from '../NumericInput';
 import { layoutSelector } from '../../selectors';
