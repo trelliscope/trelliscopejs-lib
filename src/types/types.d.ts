@@ -220,6 +220,12 @@ interface HashItem {
   var: string;
 }
 
+interface Sort {
+  order: number;
+  name: string;
+  dir: 'asc' | 'desc';
+}
+
 interface DisplayInfoState {
   isFetching: boolean;
   didInvalidate: boolean;
