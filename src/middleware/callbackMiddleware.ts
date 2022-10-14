@@ -1,7 +1,8 @@
 import { selectCallbacks } from '../selectors';
+import type { RootState } from '../store';
 
 interface GetStateProps {
-  getState: () => void;
+  getState: () => RootState;
 }
 
 // eslint-disable-next-line no-unused-vars

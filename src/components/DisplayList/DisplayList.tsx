@@ -9,8 +9,8 @@ import { selectedRelDispsSelector } from '../../selectors/display';
 import { appIdSelector, configSelector, selectedDisplaySelector } from '../../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
+import type { RootState } from '../../store';
 import styles from './DisplayList.module.scss';
-import { RootState } from '../../store';
 
 interface DisplayListProps {
   selectable: boolean;

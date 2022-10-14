@@ -17,6 +17,7 @@ import {
   dispInfoDialogSelector,
 } from '../../selectors';
 import { setDispInfoDialogOpen } from '../../actions';
+import type { RootState } from '../../store';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
@@ -159,12 +160,7 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {
-  selectedDisplay: Display;
-  curDisplayInfo: CurrentDisplayInfo;
-  fullscreenSelector: boolean;
-  dispInfoDialogSelector: boolean;
-}) => styleSelector(state);
+const mapStateToProps = (state: RootState) => styleSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   setThisDialogOpen: (isOpen: boolean) => {

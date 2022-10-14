@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import CatBar from '../FilterCatPlotBar';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import styles from './FilterCatPlot.module.scss';
 
 interface FilterCatPlotProps {

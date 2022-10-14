@@ -11,7 +11,7 @@ import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } 
 import { displayLoadedSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import uiConsts from '../../assets/styles/uiConsts';
-import { RootState } from '../../store';
+import type { RootState } from '../../store';
 import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
