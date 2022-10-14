@@ -16,8 +16,6 @@ interface NumericInputProps {
 const NumericInput: React.FC<NumericInputProps> = ({ arrows, value, size, min, max, step, onChange }) => {
   const [newValue, setNewValue] = useState<number>(value);
 
-  console.log('im called::::');
-
   const increment = () => {
     const newVal = value + step;
     setNewValue(newVal);
