@@ -1,12 +1,12 @@
-export const getLocalStoragePrefix = (di) => `${di.group}_:_${di.name}_:`;
+export const getLocalStoragePrefix = (di: DisplayObject) => `${di.group}_:_${di.name}_:`;
 
-export const getLocalStorageKey = (di, panelKey, cogId) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
+export const getLocalStorageKey = (di: DisplayObject, panelKey: string, cogId: string) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
 
 // Stores a user-specified input value
 // Note that this always stores in localStorage
 // It additionaly stores to API if that is specified
 // localStorage is always used to keep track of inputs within the app
-export const setPanelCogInput = (di, value, panelKey, cogId) => {
+export const setPanelCogInput = (di: DisplayObject, value: string, panelKey: string, cogId: string) => {
   const lsKey = getLocalStorageKey(di, panelKey, cogId);
 
   if (di.input_type === 'API') {
@@ -54,7 +54,7 @@ export const setPanelCogInput = (di, value, panelKey, cogId) => {
   }
 };
 
-export const getInputsAPI = (di) => {
+export const getInputsAPI = (di: DisplayObject) => {
   const queryObj = {
     display_id: `${di.group}___${di.name}`,
     display_version: 'v1',
@@ -64,9 +64,9 @@ export const getInputsAPI = (di) => {
     .map((e) => e.join('='))
     .join('&');
   fetch(`${di.input_api.get}?${qry}`, di.input_api.getRequestOptions)
-    .then((response) => {
+    .then(async (response) => {
       const isJson = response.headers.get('content-type')?.includes('application/json');
-      const data = isJson && response.json();
+      const data = isJson && await response.json();
       if (!response.ok) {
         // get error message from body or default to response status
         const error = (data && data.message) || response.status;

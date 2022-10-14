@@ -112,7 +112,7 @@ interface DisplayObject {
   has_legend: boolean;
   has_inputs: boolean;
   // ?
-  input_type: 'localStorage' | undefined;
+  input_type: 'localStorage' | 'API' | undefined;
   input_email: string;
   // ?
   input_csv_vars: Array;
@@ -121,6 +121,7 @@ interface DisplayObject {
     set: function;
     get: function;
     getRequestOptions: function;
+    setRequestOptions: function;
   };
   gaID: string;
   split_layout: boolean;
