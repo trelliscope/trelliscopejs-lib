@@ -25,6 +25,8 @@ export const selectedDisplay: Reducer = (
 export const relDispPositions = (state = [] as RelDispPositions[], action: { type: string; obj: string }) => {
   switch (action.type) {
     case SET_REL_DISP_POSITIONS:
+      console.log('SET_REL_DISP_POSITIONS', action.obj);
+      
       return Object.assign([], [], action.obj);
     default:
   }

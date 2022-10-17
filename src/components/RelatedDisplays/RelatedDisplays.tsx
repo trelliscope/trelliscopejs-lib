@@ -153,7 +153,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
       <Dialog
         open={open}
         className={classNames('trelliscope-app', styles.relatedDisplaysDialog)}
-        onBackdropClick={handleClose}
+        onClose={handleClose}
         aria-labelledby="dialog-reldisp-title"
         maxWidth="md"
         fullWidth
@@ -251,6 +251,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     }
     const newPositions = { ...relDispPositions };
     newPositions[idx] = newPos;
+    console.log(newPositions);
+
     dispatch(setRelDispPositions(newPositions));
   },
 });
