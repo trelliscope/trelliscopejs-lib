@@ -234,7 +234,19 @@ interface DisplayInfoState {
   info: DisplayObject;
 }
 
-type PanelData = string | { evals: string[]; x: any };
+interface HTMLWidget {
+  widgets: HTMLWidgetInstance[];
+  initialize: (el: HTMLElement, width: number, height: number) => void;
+  evaluateStringMember: (data: HTMLWidgetData['x'], evals: HTMLWidgetData['evals']) => void;
+}
+
+interface HTMLWidgetIntance {
+  find: (selector: string) => HTMLElement;
+}
+
+interface HTMLWidgetData { evals: string[]; x: unknown, jsHooks: unknown[] }
+
+type PanelData = string | HTMLWidgetData;
 
 type PanelLabel = {
   name: string;

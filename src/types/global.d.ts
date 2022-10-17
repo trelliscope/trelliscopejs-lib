@@ -3,7 +3,7 @@ export {};
 declare global {
   interface Window {
     __panel__: { [key: string]: (json2: PanelData) => void };
-    HTMLWidgets: any;
+    HTMLWidgets: HTMLWidget;
   }
 }
 

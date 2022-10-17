@@ -251,8 +251,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     }
     const newPositions = { ...relDispPositions };
     newPositions[idx] = newPos;
-    console.log(newPositions);
-
     dispatch(setRelDispPositions(newPositions));
   },
 });
