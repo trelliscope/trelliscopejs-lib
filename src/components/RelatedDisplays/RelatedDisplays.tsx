@@ -257,7 +257,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 
 const mapStateToProps = (state: RootState) => styleSelector(state);
 
-// FIXME the selector file needs to be typed.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 export default connect(mapStateToProps, mapDispatchToProps)(RelatedDisplays);
