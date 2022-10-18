@@ -1,9 +1,8 @@
 import React from 'react';
-import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { Button, Divider, FormControlLabel, Input, Radio, RadioGroup } from '@material-ui/core';
 import { createSelector } from 'reselect';
 import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import NumericInput from '../NumericInput';
 import { layoutSelector } from '../../selectors';
 import type { RootState } from '../../store';
 import { setLayout, setRelDispPositions, setSelectedRelDisps } from '../../actions';
@@ -16,96 +15,101 @@ interface SidebarLayoutProps {
   resetRelDisps: () => void;
 }
 
-const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, handleChange, resetRelDisps }) => (
-  <>
-    {hasRelDisps ? (
-      <div className={styles.relDisp}>
-        <div className={styles.relDispText}>Grid layout cannot be changed when viewing related displays.</div>
-        <div className={styles.relDispButton}>
-          <Button variant="outlined" color="primary" onClick={resetRelDisps} size="small">
-            Remove Related Displays
-          </Button>
-        </div>
-      </div>
-    ) : (
-      <>
-        <div className={styles.row}>
-          <div className={styles.label}>Rows:</div>
-          <div className={styles.nInput}>
-            <NumericInput
-              arrows
-              value={layout.nrow}
-              size={3}
-              min={1}
-              max={15}
-              step={1}
-              onChange={(nr) =>
-                handleChange({ nrow: nr, ncol: layout.ncol, arrange: layout.arrange, pageNum: layout.pageNum })
-              }
-            />
+const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, handleChange, resetRelDisps }) => {
+  const handleLayoutChange = (value: string, isRow: boolean) => {
+    const num = parseInt(value, 10);
+    if (num > 15 || num < 0) return;
+    handleChange({
+      nrow: isRow ? num : layout.nrow,
+      ncol: !isRow ? num : layout.ncol,
+      arrange: layout.arrange,
+      pageNum: layout.pageNum,
+    });
+  };
+
+  return (
+    <>
+      {hasRelDisps ? (
+        <div className={styles.relDisp}>
+          <div className={styles.relDispText}>Grid layout cannot be changed when viewing related displays.</div>
+          <div className={styles.relDispButton}>
+            <Button variant="outlined" color="primary" onClick={resetRelDisps} size="small">
+              Remove Related Displays
+            </Button>
           </div>
         </div>
-        <Divider />
-        <div className={styles.row}>
-          <div className={styles.label}>Columns:</div>
-          <div className={styles.nInput}>
-            <NumericInput
-              arrows
-              value={layout.ncol}
-              size={3}
-              min={1}
-              max={15}
-              step={1}
-              onChange={(nc) =>
-                handleChange({ nrow: layout.nrow, ncol: nc, arrange: layout.arrange, pageNum: layout.pageNum })
-              }
-            />
+      ) : (
+        <>
+          <div className={styles.row}>
+            <div className={styles.label}>Rows:</div>
+            <div className={styles.nInput}>
+              <input
+                value={layout.nrow}
+                min={1}
+                max={15}
+                type="number"
+                onChange={(e) => handleLayoutChange(e.target.value, true)}
+              />
+            </div>
           </div>
-        </div>
-        <Divider />
-        <div className={styles.row}>Arrangement:</div>
-        <div className={styles.row}>
-          <RadioGroup
-            name="arrangement"
-            value={layout.arrange}
-            onChange={(e, ar) =>
-              handleChange({
-                nrow: layout.nrow,
-                ncol: layout.ncol,
-                arrange: ar as LayoutState['arrange'],
-                pageNum: layout.pageNum,
-              })
-            }
-          >
-            <FormControlLabel
-              value="row"
-              control={<Radio />}
-              label={
-                <span className={styles.inputLabelSpan}>
-                  By row
-                  <i className={`icon-byrow ${styles.inputIcon}`} />
-                </span>
+          <Divider />
+          <div className={styles.row}>
+            <div className={styles.label}>Columns:</div>
+            <div className={styles.nInput}>
+              <input
+                value={layout.ncol}
+                min={1}
+                max={15}
+                type="number"
+                onChange={(e) => handleLayoutChange(e.target.value, false)}
+              />
+            </div>
+          </div>
+          <Divider />
+          <div className={styles.row}>Arrangement:</div>
+          <div className={styles.row}>
+            <RadioGroup
+              name="arrangement"
+              value={layout.arrange}
+              onChange={(e, ar) =>
+                handleChange({
+                  nrow: layout.nrow,
+                  ncol: layout.ncol,
+                  arrange: ar as LayoutState['arrange'],
+                  pageNum: layout.pageNum,
+                })
               }
-              className={styles.inputRadio}
-            />
-            <FormControlLabel
-              value="column"
-              control={<Radio />}
-              label={
-                <span className={styles.inputLabelSpan}>
-                  By column
-                  <i className={`icon-bycol ${styles.inputIcon}`} />
-                </span>
-              }
-              className={styles.inputRadio}
-            />
-          </RadioGroup>
-        </div>
-        <Divider />
-      </>
-    )}
-  </>
-);
+            >
+              <FormControlLabel
+                value="row"
+                control={<Radio />}
+                label={
+                  <span className={styles.inputLabelSpan}>
+                    By row
+                    <i className={`icon-byrow ${styles.inputIcon}`} />
+                  </span>
+                }
+                className={styles.inputRadio}
+              />
+              <FormControlLabel
+                value="column"
+                control={<Radio />}
+                label={
+                  <span className={styles.inputLabelSpan}>
+                    By column
+                    <i className={`icon-bycol ${styles.inputIcon}`} />
+                  </span>
+                }
+                className={styles.inputRadio}
+              />
+            </RadioGroup>
+          </div>
+          <Divider />
+        </>
+      )}
+    </>
+  );
+};
 
 const selectedRelDispsSelector = (state: RootState) => state.selectedRelDisps;
 
