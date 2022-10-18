@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Divider, FormControlLabel, Input, Radio, RadioGroup } from '@material-ui/core';
+import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import { createSelector } from 'reselect';
 import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
