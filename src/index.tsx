@@ -62,8 +62,6 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
   let singlePageApp = false;
   let fullscreen = false;
 
-  console.log(!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth), 'asdf')
-
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
     fullscreen = true;
@@ -86,7 +84,6 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
           .call(el?.parentNode?.childNodes)
           .map((d: { nodeType: number }) => d.nodeType !== 3 && d.nodeType !== 8)
           .filter(Boolean).length - 1;
-      console.log(nSiblings, 'nSiblings');
       if (nSiblings === 0) {
         el.style.height = `${el?.parentNode?.firstElementChild?.clientHeight}px`;
         el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
