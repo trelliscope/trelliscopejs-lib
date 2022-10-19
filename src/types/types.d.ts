@@ -244,11 +244,7 @@ interface HTMLWidgetIntance {
   find: (selector: string) => HTMLElement;
 }
 
-interface HTMLWidgetData {
-  evals: string[];
-  x: unknown;
-  jsHooks: unknown[];
-}
+interface HTMLWidgetData { evals: string[]; x: unknown, jsHooks: unknown[] }
 
 type PanelData = string | HTMLWidgetData;
 
