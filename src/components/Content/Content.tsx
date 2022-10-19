@@ -37,11 +37,9 @@ interface ContentProps {
   layout: LayoutState;
   labels: string[];
   dims: Dims;
-  panelRenderers: PanelRenderers;
   panelInterface: PanelInterface;
   curPage: number;
   totPages: number;
-  panelData: { [key: string]: PanelData };
   removeLabel: (label: string, labels: string[]) => void;
   setPageNum: (dir: 'right' | 'left', curPage: number, totPages: number) => void;
   curDisplayInfo: DisplayInfoState;
@@ -60,11 +58,9 @@ const Content: React.FC<ContentProps> = ({
   layout,
   labels,
   dims,
-  panelRenderers,
   panelInterface,
   curPage,
   totPages,
-  panelData,
   removeLabel,
   setPageNum,
   curDisplayInfo,
@@ -77,10 +73,10 @@ const Content: React.FC<ContentProps> = ({
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
   }
-  const hasRenderers = names.every((name) => panelRenderers[name] && panelRenderers[name].fn !== null);
+
   const hasDisplayInfo = names.every((name) => displayInfo[name] && displayInfo[name].isLoaded);
 
-  if (ci && ccd && cinfo && hasRenderers && hasDisplayInfo && panelInterface) {
+  if (ci && ccd && cinfo && hasDisplayInfo) {
     const panelKeys = [];
     const panelLabels = [];
 
@@ -152,7 +148,6 @@ const Content: React.FC<ContentProps> = ({
               panelKey={el.key}
               labels={el.labels}
               labelArr={labels}
-              panelRenderers={panelRenderers}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
@@ -198,7 +193,6 @@ const stateSelector = createSelector(
   labelsSelector,
   cogInfoSelector,
   configSelector,
-  panelRenderersSelector,
   curDisplayInfoSelector,
   sidebarActiveSelector,
   pageNumSelector,
@@ -207,26 +201,7 @@ const stateSelector = createSelector(
   localPanelsSelector,
   relDispPositionsSelector,
   displayInfoSelector,
-  (
-    cw,
-    ch,
-    ccd,
-    ci,
-    layout,
-    aspect,
-    labels,
-    cinfo,
-    cfg,
-    panelRenderers,
-    cdi,
-    sidebar,
-    curPage,
-    card,
-    npp,
-    localPanels,
-    rdp,
-    di,
-  ) => {
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, cdi, sidebar, curPage, card, npp, localPanels, rdp, di) => {
     const pPad = 2; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
@@ -301,7 +276,6 @@ const stateSelector = createSelector(
         pPad,
         contentWidth: cw,
       },
-      panelRenderers,
       panelInterface: cdi.info.panelInterface,
       sidebar,
       curPage,

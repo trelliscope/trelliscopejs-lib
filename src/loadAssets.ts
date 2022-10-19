@@ -59,10 +59,11 @@ export const loadAssetsSequential = (widgetAssets: WidgetAssets, configBase: str
 
   Promise.all(promises)
     .then(() => {
-      // console.log('all scripts loaded');
-      callback();
+      if (callback) {
+        callback();
+      }
     })
-    .catch((script) => {
+    .catch(() => {
       // console.log(script + ' failed to load');
     });
 };

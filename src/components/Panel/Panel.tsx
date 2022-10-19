@@ -3,7 +3,7 @@ import getJSONP from 'jsonp';
 import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
 import styles from './Panel.module.scss';
-import { findWidget } from '../../loadAssets';
+import PanelGraphic from '../PanelGraphic';
 
 interface PanelProps {
   labels: PanelLabel[];
@@ -13,7 +13,6 @@ interface PanelProps {
   dims: Dims;
   rowIndex: number;
   iColIndex: number;
-  panelRenderers: PanelRenderers;
   panelInterface: PanelInterface;
   displayInfo: {
     [key: string]: DisplayInfoState;
@@ -31,7 +30,6 @@ const Panel: React.FC<PanelProps> = ({
   dims,
   rowIndex,
   iColIndex,
-  panelRenderers,
   panelInterface,
   displayInfo,
   curDisplayInfo,
@@ -39,10 +37,9 @@ const Panel: React.FC<PanelProps> = ({
   removeLabel,
 }) => {
   const [panelData, setPanelData] = useState<{ [key: string]: PanelData }>({});
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const panelRef = useRef<HTMLDivElement>(null);
   const isSelfContained = panelData !== undefined && cfg.display_base === '__self__';
-  let panelContent: React.ReactNode | null = null;
+  const [loaded, setLoaded] = useState<boolean>(isSelfContained || panelInterface.type === 'image_src');
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     let names = [curDisplayInfo.info.name];
@@ -57,37 +54,30 @@ const Panel: React.FC<PanelProps> = ({
       const { signal } = abortControllers[i];
 
       const curIface = displayInfo[name].info.cogInterface;
-      let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
-      filebase = `${filebase}/${curIface.name}`;
 
-      let width = dims.ww;
-      let height = dims.hh;
-      if (relDispPositions.length > 0) {
-        width = dims.hh * relDispPositions[i].width;
-        height /= relDispPositions[i].aspect;
-      }
+      if (!loaded) {
+        let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
+        filebase = `${filebase}/${curIface.name}`;
 
-      if (cfg.cog_server.type === 'jsonp') {
-        if (!window.__panel__) {
-          window.__panel__ = {};
-        }
+        if (cfg.cog_server.type === 'jsonp') {
+          if (!window.__panel__) {
+            window.__panel__ = {};
+          }
 
-        window.__panel__[`_${panelKey}_${name}`] = (data: PanelData) => {
-          panelRenderers[name].fn(data, width, height, true, panelKey);
-
-          setPanelData((prevData) => ({ ...prevData, [name]: data }));
-          setLoaded(true);
-        };
-
-        getJSONP(`${filebase}/jsonp/${panelKey}.jsonp`);
-      } else {
-        fetch(`${filebase}/json/${panelKey}.json`, { signal })
-          .then((response) => response.json())
-          .then((data) => {
-            panelRenderers[name].fn(data, width, height, true, panelKey);
+          window.__panel__[`_${panelKey}_${name}`] = (data: PanelData) => {
             setPanelData((prevData) => ({ ...prevData, [name]: data }));
             setLoaded(true);
-          });
+          };
+
+          getJSONP(`${filebase}/jsonp/${panelKey}.jsonp`);
+        } else {
+          fetch(`${filebase}/json/${panelKey}.json`, { signal })
+            .then((response) => response.json())
+            .then((data) => {
+              setPanelData((prevData) => ({ ...prevData, [name]: data }));
+              setLoaded(true);
+            });
+        }
       }
     });
 
@@ -96,84 +86,9 @@ const Panel: React.FC<PanelProps> = ({
     };
   }, []);
 
-  // do post-rendering (if any)
-  useLayoutEffect(() => {
-    let names = [curDisplayInfo.info.name];
-    if (relDispPositions.length > 0) {
-      names = relDispPositions.map((d) => d.name);
-    }
-    names.forEach((name, i) => {
-      if (loaded) {
-        let width = dims.ww;
-        let height = dims.hh;
-        if (relDispPositions.length > 0) {
-          height = dims.hh * relDispPositions[i].height;
-          width = height / relDispPositions[i].aspect;
-        }
-        if (panelData.length) {
-          panelRenderers[name].fn(panelData[name], width, height, true, `${panelKey}_${name}`);
-        }
-      }
-    });
-  });
-
-  useLayoutEffect(() => {
-    if (loaded && panelInterface.type === 'htmlwidget') {
-      const widget = findWidget(panelInterface?.deps?.name);
-      if (widget) {
-        const el = document.getElementById(`widget_${panelKey}`);
-        if (el) {
-          el.style.width = `${dims.ww}px`;
-          el.style.height = `${dims.hh}px`;
-          widget.resize(el, dims.ww, dims.hh, {});
-        }
-      }
-    }
-  }, [dims.hh, dims.ww, loaded, panelInterface?.deps?.name, panelInterface.type, panelKey]);
-
   let names = [curDisplayInfo.info.name];
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
-  }
-
-  names.forEach((name) => {
-    const isImageSrc = panelInterface.type === 'image_src';
-    if (isImageSrc) {
-      panelContent = panelRenderers[name].fn(displayInfo[name].info.imgSrcLookup[name], dims.ww, dims.hh, false, panelKey);
-    } else if (isSelfContained) {
-      panelContent = panelRenderers[name].fn(panelData[name], dims.ww, dims.hh, false, panelKey);
-    } else if (panelData !== undefined) {
-      panelContent = panelRenderers[name].fn(panelData[name], dims.ww, dims.hh, false, panelKey);
-    }
-  });
-
-  if (loaded && relDispPositions.length > 0) {
-    panelContent = (
-      <div>
-        {relDispPositions.map((d, i) => {
-          let width = dims.ww;
-          let height = dims.hh;
-          if (relDispPositions.length > 0) {
-            height = dims.hh * relDispPositions[i].height;
-            width = height / relDispPositions[i].aspect;
-          }
-          return (
-            <div
-              key={d.name}
-              style={{
-                position: 'absolute',
-                top: d.top * dims.hh,
-                left: d.left * dims.hh,
-                height: d.height * dims.hh,
-                width: d.width * dims.hh,
-              }}
-            >
-              {panelRenderers[d.name].fn(panelData[d.name], width, height, false, panelKey)}
-            </div>
-          );
-        })}
-      </div>
-    );
   }
 
   const bWidth = relDispPositions.length > 0 ? dims.contentWidth : dims.ww;
@@ -202,8 +117,64 @@ const Panel: React.FC<PanelProps> = ({
   return (
     <div className={styles.bounding} style={inlineStyles.bounding} ref={panelRef}>
       <div className={styles.panel} style={inlineStyles.panel}>
-        {loaded ? panelContent : <div>&apos;loading...&apos;</div>}
+        {loaded ? (
+          <>
+            {relDispPositions.length > 0 ? (
+              <>
+                {relDispPositions.map((panel, i) => {
+                  let width = dims.ww;
+                  let height = dims.hh;
+                  if (relDispPositions.length > 0) {
+                    height = dims.hh * relDispPositions[i].height;
+                    width = height / relDispPositions[i].aspect;
+                  }
+                  return (
+                    <div
+                      key={panel.name}
+                      style={{
+                        position: 'absolute',
+                        top: panel.top * dims.hh,
+                        left: panel.left * dims.hh,
+                        height: panel.height * dims.hh,
+                        width: panel.width * dims.hh,
+                      }}
+                    >
+                      <PanelGraphic
+                        name={panelInterface?.deps?.name}
+                        type={panelInterface?.type}
+                        data={panelData[panel.name]}
+                        imgSrcLookup={displayInfo[panel.name].info.imgSrcLookup[panelKey]}
+                        key={panel.name}
+                        panelKey={panelKey}
+                        width={width}
+                        height={height}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {names.map((name) => (
+                  <PanelGraphic
+                    name={panelInterface?.deps?.name}
+                    type={panelInterface.type}
+                    data={panelData[name]}
+                    imgSrcLookup={displayInfo[name].info.imgSrcLookup[panelKey]}
+                    key={name}
+                    panelKey={panelKey}
+                    width={dims.ww}
+                    height={dims.hh}
+                  />
+                ))}
+              </>
+            )}
+          </>
+        ) : (
+          <div>&apos;loading...&apos;</div>
+        )}
       </div>
+
       <PanelTable
         labels={labels}
         curDisplayInfo={curDisplayInfo}
