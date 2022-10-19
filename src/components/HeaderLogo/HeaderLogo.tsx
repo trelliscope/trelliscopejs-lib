@@ -41,11 +41,7 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
     setTabNumber(value);
   };
 
-  const handleKey = () => {
-    setDialogOpen(true);
-  };
-
-  useHotkeys('a', handleKey, { enabled: fullscreen });
+  useHotkeys('a', handleOpen, { enabled: fullscreen });
   useHotkeys('esc', handleClose, { enabled: open });
 
   let keyNote;
