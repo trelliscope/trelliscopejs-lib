@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/lodash.intersection": "^4.4.7",
+    "@types/webpack-env": "^1.18.0",
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.6",
     "crossfilter2": "^1.5.4",

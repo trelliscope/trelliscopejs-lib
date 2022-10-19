@@ -1,9 +1,10 @@
 import React from 'react';
+import type { CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
@@ -32,13 +33,13 @@ import worker from './test/__mockData__/worker';
 
 // import appData from './appData';
 
-const trelliscopeApp = (id, config, options) => {
+const trelliscopeApp = (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => {
   // Sets up msw worker for mocking api calls
   if (options && options.mockData) {
     worker.start();
   }
 
-  const el = document.getElementById(id);
+  const el = document.getElementById(id) as HTMLElement;
 
   addClass(el, 'trelliscope-app');
   addClass(el, 'trelliscope-app-container');
@@ -48,17 +49,20 @@ const trelliscopeApp = (id, config, options) => {
   if (el.style.overflow !== 'hidden') {
     el.style.overflow = 'hidden';
   }
-  el.style['font-family'] = '"Open Sans", sans-serif';
-  el.style['font-weight'] = 300;
-  el.style['-webkit-tap-highlight-color'] = 'rgba(0,0,0,0)';
+  el.style['font-family' as unknown as number] = '"Open Sans", sans-serif';
+  el.style['font-weight' as unknown as number] = '300';
+  el.style['-webkit-tap-highlight-color' as unknown as number] = 'rgba(0,0,0,0)';
 
   // if there is only one div in the whole document and it doesn't have dimensions
   // then we treat this as a single-page application
-  const noHeight = el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
+  const noHeight =
+    el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
   const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
   let fullscreen = false;
+
+  console.log(!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth), 'asdf')
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
@@ -79,17 +83,18 @@ const trelliscopeApp = (id, config, options) => {
     if (noHeight) {
       const nSiblings =
         [].slice
-          .call(el.parentNode.childNodes)
-          .map((d) => d.nodeType !== 3 && d.nodeType !== 8)
-          .reduce((a, b) => a + b) - 1;
+          .call(el?.parentNode?.childNodes)
+          .map((d: { nodeType: number }) => d.nodeType !== 3 && d.nodeType !== 8)
+          .filter(Boolean).length - 1;
+      console.log(nSiblings, 'nSiblings');
       if (nSiblings === 0) {
-        el.style.height = `${el.parentNode.clientHeight}px`;
-        el.style.width = `${el.parentNode.clientWidth}px`;
+        el.style.height = `${el?.parentNode?.firstElementChild?.clientHeight}px`;
+        el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
       }
     }
 
     // give 'el' a new parent so we know where to move div back to after fullscreen
-    const parent = el.parentNode;
+    const parent = el.parentNode as ParentNode;
     const wrapper = document.createElement('div');
     wrapper.id = `${el.id}-parent`;
     parent.replaceChild(wrapper, el);
@@ -106,7 +111,7 @@ const trelliscopeApp = (id, config, options) => {
 
   // need to store original app dims (constant) if it isn't a SPA
   // this will only be used in that case, but store it always anyway
-  const appDims = {};
+  const appDims = {} as CSSProperties;
 
   // set size of app
   if (singlePageApp) {
@@ -167,7 +172,7 @@ const trelliscopeApp = (id, config, options) => {
   // });
   // this.themeV0 = themeV0;
 
-  const themeV1 = createMuiTheme({
+  const themeV1 = createTheme({
     palette: {
       primary: { light: blue.A100, main: blue.A200 }, // '#4285f4', // lightBlue500,
       secondary: { light: lightBlue[200], main: lightBlue[700] },
@@ -204,13 +209,13 @@ const trelliscopeApp = (id, config, options) => {
   }
 
   return {
-    resize: (width, height) => {
+    resize: (width: number, height: number) => {
       el.style.height = `${height}px`;
       el.style.width = `${width}px`;
       store.dispatch(setAppDims({ width, height }));
       store.dispatch(windowResize({ width, height }));
     },
-    setLayout: (nrow, ncol) => {
+    setLayout: (nrow: number, ncol: number) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
     // setFilter: (x) => {
