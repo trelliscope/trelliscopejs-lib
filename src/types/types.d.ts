@@ -176,7 +176,7 @@ interface CogDistnsNumeric {
   raw: {
     breaks: number[];
     freq: number[];
-  };;
+  };
 }
 
 declare type Filter<V> = {
@@ -330,8 +330,4 @@ interface RelDispPositions {
   name: string;
   row: number;
   top: number;
-}
-
-interface Window {
-  trelliscopeApp: (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => void;
 }

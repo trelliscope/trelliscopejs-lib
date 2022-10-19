@@ -1,6 +1,5 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -50,19 +49,20 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
   if (el.style.overflow !== 'hidden') {
     el.style.overflow = 'hidden';
   }
-  el.style['font-family' as unknown as number as unknown as number] = '"Open Sans", sans-serif';
-  el.style['font-weight' as unknown as number as unknown as number] = ''300'';
-  el.style['-webkit-tap-highlight-color' as unknown as number as unknown as number] = 'rgba(0,0,0,0)';
+  el.style['font-family' as unknown as number] = '"Open Sans", sans-serif';
+  el.style['font-weight' as unknown as number] = '300';
+  el.style['-webkit-tap-highlight-color' as unknown as number] = 'rgba(0,0,0,0)';
 
   // if there is only one div in the whole document and it doesn't have dimensions
   // then we treat this as a single-page application
   const noHeight =
-   
     el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
   const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
   let fullscreen = false;
+
+  console.log(!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth), 'asdf')
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
@@ -86,6 +86,7 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
           .call(el?.parentNode?.childNodes)
           .map((d: { nodeType: number }) => d.nodeType !== 3 && d.nodeType !== 8)
           .filter(Boolean).length - 1;
+      console.log(nSiblings, 'nSiblings');
       if (nSiblings === 0) {
         el.style.height = `${el?.parentNode?.firstElementChild?.clientHeight}px`;
         el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
