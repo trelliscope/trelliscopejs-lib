@@ -313,12 +313,6 @@ interface FilterNumStateChange {
   valid: boolean;
 }
 
-interface PanelRenderers {
-  [key: string]: {
-    fn: (x: PanelData, width: number, height: number, post?: boolean, key?: string) => JSX.Element;
-  };
-}
-
 interface RelDispPositions {
   aspect: number;
   col: number;

@@ -12,7 +12,6 @@ import {
   layoutSelector,
   aspectSelector,
   labelsSelector,
-  panelRenderersSelector,
   curDisplayInfoSelector,
   nPerPageSelector,
   pageNumSelector,

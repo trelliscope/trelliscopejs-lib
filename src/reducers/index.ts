@@ -3,7 +3,6 @@ import sidebar from './sidebar';
 import ui from './ui';
 import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog, options } from './app';
 import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';
-import panelRenderers from './panelRenderer';
 import { layout, labels, sort, filter } from './displayState';
 import _config from './_config';
 import _displayList from './_displayList';
@@ -25,7 +24,6 @@ const reducers = combineReducers({
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,
-  panelRenderers,
   layout,
   labels,
   sort,
