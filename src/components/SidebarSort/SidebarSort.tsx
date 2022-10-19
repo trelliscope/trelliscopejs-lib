@@ -1,4 +1,3 @@
-// FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -190,8 +189,6 @@ const stateSelector = createSelector(
   },
 );
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
