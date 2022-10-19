@@ -244,7 +244,11 @@ interface HTMLWidgetIntance {
   find: (selector: string) => HTMLElement;
 }
 
-interface HTMLWidgetData { evals: string[]; x: unknown, jsHooks: unknown[] }
+interface HTMLWidgetData {
+  evals: string[];
+  x: unknown;
+  jsHooks: unknown[];
+}
 
 type PanelData = string | HTMLWidgetData;
 
@@ -330,4 +334,8 @@ interface RelDispPositions {
   name: string;
   row: number;
   top: number;
+}
+
+interface Window {
+  trelliscopeApp: (id: string, config: string, options: { logger?: boolean; mockData?: any }) => void;
 }
