@@ -153,7 +153,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
       <Dialog
         open={open}
         className={classNames('trelliscope-app', styles.relatedDisplaysDialog)}
-        onBackdropClick={handleClose}
+        onClose={handleClose}
         aria-labelledby="dialog-reldisp-title"
         maxWidth="md"
         fullWidth
