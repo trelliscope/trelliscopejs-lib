@@ -1,4 +1,3 @@
-// FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Action, Dispatch } from 'redux';
@@ -12,6 +11,7 @@ import { setLabels } from '../../actions';
 import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
+import { RootState } from '../../store';
 import styles from './SidebarLabels.module.scss';
 
 interface SidebarLabelsProps {
@@ -77,13 +77,7 @@ const stateSelector = createSelector(contentHeightSelector, labelsSelector, curD
   curDisplayInfo: cdi,
 }));
 
-const mapStateToProps = (state: {
-  contentHeightSelector: number;
-  labelsSelector: string[];
-  curDisplayInfoSelector: CurrentDisplayInfo;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: TS2345
-}) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleChange: (value: string, labels: string[]) => {
