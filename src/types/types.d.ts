@@ -176,7 +176,7 @@ interface CogDistnsNumeric {
   raw: {
     breaks: number[];
     freq: number[];
-  };
+  };;
 }
 
 declare type Filter<V> = {
