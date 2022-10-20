@@ -335,3 +335,7 @@ interface RelDispPositions {
 interface Window {
   trelliscopeApp: (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => void;
 }
+
+interface CogData {
+  [key: string]: string | number;
+}

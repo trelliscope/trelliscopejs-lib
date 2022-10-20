@@ -1,4 +1,3 @@
-// FIXME fix stateSelector after global state hand selectors have been typed
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import type { Action, Dispatch } from 'redux';
@@ -12,6 +11,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import { setLayout } from '../../actions';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { filterCardinalitySelector } from '../../selectors/cogData';
+import { RootState } from '../../store';
 import styles from './Pagination.module.scss';
 
 interface PaginationProps {
@@ -22,8 +22,7 @@ interface PaginationProps {
   dialogOpen: boolean;
   fullscreen: boolean;
   handleChange: (arg0: number) => void;
-  // FIXME fix once cogData is typed
-  cogData: any;
+  cogData: CogData;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -149,17 +148,7 @@ const stateSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: {
-  pageNumSelector: number;
-  filterCardinalitySelector: number;
-  nPerPageSelector: number;
-  dialogOpenSelector: boolean;
-  fullscreenSelector: boolean;
-  // FIXME fix once cogData is typed
-  cogDataSelector: any;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: TS2345
-}) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleChange: (n: number) => {
