@@ -36,9 +36,10 @@ interface ExportInputDialogProps {
   displayInfo: DisplayObject;
 }
 
-interface LooseObject {
-  // TODO figure out what the exact typing is
-  [key: string]: any;
+interface Data {
+  [key: string]: {
+    [key: string]: string | null;
+  };
 }
 
 const USERNAME = '__trelliscope_username';
@@ -108,12 +109,12 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   };
 
   const ccols = displayInfo.input_csv_vars || [];
-  const data: LooseObject = {};
-  const cols: string[] = [];
+  const data = {} as Data;
+  const cols = [] as string[];
   Object.keys(localStorage).forEach((key) => {
     if (storageItems.includes(key)) {
       const parts = key.split('_:_');
-      const panelKey: string = parts[2];
+      const panelKey = parts[2];
       if (data[panelKey] === undefined) {
         data[panelKey] = {};
       }
@@ -127,7 +128,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const header = ['panelKey'];
   // array of panel keys so we can search to get columns we need if ccols defined
   const cd = cogData.crossfilter.all();
-  const pk = cd.map((dd: LooseObject) => dd.panelKey);
+  const pk = cd.map((dd: Data) => dd.panelKey);
   header.push(...ccols, ...cols);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
@@ -136,7 +137,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
       const idx = pk.indexOf(kk);
       rcdat.push(ccols.map((cc: string | number) => cd[idx][cc]));
     }
-    const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc].replace(/"/g, '""')}"` : ''));
+    const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc]?.replace(/"/g, '""')}"` : ''));
     const extra = [];
     if (ii === 0) {
       extra.push(
