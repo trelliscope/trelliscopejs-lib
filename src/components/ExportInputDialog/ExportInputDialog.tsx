@@ -41,11 +41,18 @@ interface LooseObject {
   [key: string]: any;
 }
 
+const USERNAME = '__trelliscope_username';
+const EMAIL = '__trelliscope_email';
+const JOBTITLE = '__trelliscope_jobtitle';
+const OTHERINFO = '__trelliscope_otherinfo';
+
+const storageItems = [USERNAME, EMAIL, JOBTITLE, OTHERINFO];
+
 const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose, displayInfo }) => {
-  const [fullName, setFullName] = useState<string>(localStorage.getItem('__trelliscope_username') || '');
-  const [email, setEmail] = useState<string>(localStorage.getItem('__trelliscope_email') || '');
-  const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem('__trelliscope_jobtitle') || '');
-  const [otherInfo, setOtherInfo] = useState<string>(localStorage.getItem('__trelliscope_otherinfo') || '');
+  const [fullName, setFullName] = useState<string>(localStorage.getItem(USERNAME) || '');
+  const [email, setEmail] = useState<string>(localStorage.getItem(EMAIL) || '');
+  const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem(JOBTITLE) || '');
+  const [otherInfo, setOtherInfo] = useState<string>(localStorage.getItem(OTHERINFO) || '');
   const [activeStep, setActiveStep] = useState<number>(0);
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
 
@@ -72,26 +79,24 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
 
   const steps = ['User info', 'Download csv', 'Compose email'];
 
-  const id = `${displayInfo.group}_:_${displayInfo.name}`;
-
   const handleNameChange = (event: { target: { value: string } }) => {
     setFullName(event.target.value);
-    localStorage.setItem('__trelliscope_username', event.target.value);
+    localStorage.setItem(USERNAME, event.target.value);
   };
 
   const handleEmailChange = (event: { target: { value: string } }) => {
     setEmail(event.target.value);
-    localStorage.setItem('__trelliscope_email', event.target.value);
+    localStorage.setItem(EMAIL, event.target.value);
   };
 
   const handleJobTitleChange = (event: { target: { value: string } }) => {
     setJobTitle(event.target.value);
-    localStorage.setItem('__trelliscope_jobtitle', event.target.value);
+    localStorage.setItem(JOBTITLE, event.target.value);
   };
 
   const handleOtherInfoChange = (event: { target: { value: string } }) => {
     setOtherInfo(event.target.value);
-    localStorage.setItem('__trelliscope_otherinfo', event.target.value);
+    localStorage.setItem(OTHERINFO, event.target.value);
   };
 
   const handleNext = () => {
@@ -102,13 +107,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const keyMatch = new RegExp(`^${id}`);
-
   const ccols = displayInfo.input_csv_vars || [];
   const data: LooseObject = {};
   const cols: string[] = [];
   Object.keys(localStorage).forEach((key) => {
-    if (keyMatch.test(key)) {
+    if (storageItems.includes(key)) {
       const parts = key.split('_:_');
       const panelKey: string = parts[2];
       if (data[panelKey] === undefined) {
@@ -138,10 +141,10 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     if (ii === 0) {
       extra.push(
         ...[
-          `"${(localStorage.getItem('__trelliscope_username') || '').replace(/"/g, '""')}"`,
-          `"${(localStorage.getItem('__trelliscope_email') || '').replace(/"/g, '""')}"`,
-          `"${(localStorage.getItem('__trelliscope_jobtitle') || '').replace(/"/g, '""')}"`,
-          `"${(localStorage.getItem('__trelliscope_otherinfo') || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem(USERNAME) || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem(EMAIL) || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem(JOBTITLE) || '').replace(/"/g, '""')}"`,
+          `"${(localStorage.getItem(OTHERINFO) || '').replace(/"/g, '""')}"`,
           new Date().toISOString(),
         ],
       );
@@ -163,8 +166,12 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
 
   const clearInputs = () => {
     Object.keys(localStorage).forEach((key) => {
-      if (keyMatch.test(key)) {
+      if (storageItems.includes(key)) {
         localStorage.removeItem(key);
+        setFullName('');
+        setEmail('');
+        setJobTitle('');
+        setOtherInfo('');
       }
     });
   };
