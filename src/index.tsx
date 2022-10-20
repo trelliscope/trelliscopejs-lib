@@ -55,8 +55,7 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
 
   // if there is only one div in the whole document and it doesn't have dimensions
   // then we treat this as a single-page application
-  const noHeight =
-    el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
+  const noHeight = el.style.height === undefined || el.style.height === '' || el.style.height === '100%';
   const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
@@ -231,8 +230,12 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
 trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+// trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
+// trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
+// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
 // trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
+// trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
 
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
