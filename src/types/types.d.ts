@@ -61,10 +61,6 @@ interface DisplaySelect {
   isLoaded: string;
 }
 
-interface CogData {
-  [key: string]: string | number;
-}
-
 interface CogInterface {
   name: string;
   // ?
