@@ -1,8 +1,11 @@
-import crossfilter from 'crossfilter2';
+import crossfilter, { Crossfilter } from 'crossfilter2';
 import ReactGA from 'react-ga';
 import getJSONP from 'browser-jsonp';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { loadAssetsSequential } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
+import { AppDispatch, RootState } from '../store';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
@@ -34,9 +37,9 @@ import {
   SET_OPTIONS,
 } from '../constants';
 
-const getJSON = (obj: { url: string, callback: (data: unknown) => void}) =>
+const getJSON = (obj: { url: string, callback: (data: never) => void}) =>
   fetch(obj.url)
-    .then((response) => response.json())
+    .then((response) => response.json() as never)
     .then((json) => obj.callback(json));
 
 export const setAppID = (id: string) => ({
@@ -59,7 +62,7 @@ export const setSinglePageApp = (singlePageApp: boolean) => ({
   singlePageApp,
 });
 
-export const windowResize = (dims: Dims) => ({ type: WINDOW_RESIZE, dims });
+export const windowResize = (dims: { width: number; height: number; }) => ({ type: WINDOW_RESIZE, dims });
 
 export const setAppDims = (dims: Dims) => ({ type: UPDATE_DIMS, dims });
 
@@ -73,7 +76,7 @@ export const receiveConfig = (json: Config) => ({
   receivedAt: Date.now(),
 });
 
-export const setActiveSidebar = (active: boolean) => ({
+export const setActiveSidebar = (active: string) => ({
   type: ACTIVE_SIDEBAR,
   active,
 });
@@ -93,7 +96,7 @@ export const setDispInfoDialogOpen = (isOpen: boolean) => ({
   isOpen,
 });
 
-export const setLayout = (layout: LayoutState) => ({
+export const setLayout = (layout: { nrow?: number; ncol?: number, arrange?: 'row' | 'col'; pageNum?: number}) => ({
   type: SET_LAYOUT,
   layout,
 });
@@ -103,17 +106,17 @@ export const setLabels = (labels: string[]) => ({
   labels,
 });
 
-export const setSort = (sort: Sort) => ({
+export const setSort = (sort?: Sort[] | number) => ({
   type: SET_SORT,
   sort,
 });
 
-export const setFilter = (filter: {}) => ({
+export const setFilter = (filter?: { [key: string]: Filter<FilterCat | FilterRange> } | string) => ({
   type: SET_FILTER,
   filter,
 });
 
-export const setFilterView = (name: FilterView, which: 'set' | 'add' | 'remove') => ({
+export const setFilterView = (name: FilterView | string, which?: 'set' | 'add' | 'remove') => ({
   type: SET_FILTER_VIEW,
   name,
   which,
@@ -123,7 +126,7 @@ export const requestDisplayList = () => ({
   type: REQUEST_DISPLAY_LIST,
 });
 
-export const receiveDisplayList = (json: DisplayObject[]) => ({
+export const receiveDisplayList = (json: Display[]) => ({
   type: RECEIVE_DISPLAY_LIST,
   list: json,
   receivedAt: Date.now(),
@@ -147,13 +150,13 @@ export const setSelectedRelDisps = (arr: number[]) => ({
 //   val
 // });
 
-export const resetRelDisps = (i: number[]) => ({
+export const resetRelDisps = (i?: number[]) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
   val: i,
 });
 
-export const setRelDispPositions = (obj: RelDispPositions) => ({
+export const setRelDispPositions = (obj: RelDispPositions[]) => ({
   type: SET_REL_DISP_POSITIONS,
   obj,
 });
@@ -164,7 +167,7 @@ export const requestDisplay = (name: string, group: string) => ({
   group,
 });
 
-export const receiveDisplay = (name: string, group: string, json: Display) => ({
+export const receiveDisplay = (name: string, group: string, json: DisplayObject) => ({
   type: RECEIVE_DISPLAY,
   name,
   group,
@@ -172,7 +175,7 @@ export const receiveDisplay = (name: string, group: string, json: Display) => ({
   receivedAt: Date.now(),
 });
 
-const receiveCogData = (iface: CogInterface, json: CogInterface) => ({
+const receiveCogData = (iface: CogInterface, json?: Crossfilter<CogData>) => ({
   type: RECEIVE_COGDATA,
   iface,
   crossfilter: json,
@@ -189,19 +192,20 @@ export const setErrorMessage = (msg: string) => ({
   msg,
 });
 
-const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, hash) => {
-  const hashItems = {};
+const setCogDatAndState = (iface: CogInterface, cogDatJson: CogData[], dObjJson: DisplayObject, dispatch: AppDispatch, hash: string): void => {
+  let hashItems = {} as HashItem;
   hash
     .replace('#', '')
     .split('&')
     .forEach((d) => {
-      const tuple = d.split('=');
-      hashItems[tuple[0]] = tuple[[1]];
+      const tuple: string[] = d.split('=');
+      hashItems = { ...hashItems, [tuple[0]]: tuple[1] };
     });
-
+    
   for (let i = 0; i < cogDatJson.length; i += 1) {
     cogDatJson[i].__index = i; // eslint-disable-line no-param-reassign
   }
+  
   dispatch(receiveCogData(iface, crossfilter(cogDatJson)));
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
@@ -231,7 +235,7 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, 
   dispatch(setLayout(layout));
   // need to do page number separately because it is recomputed when nrow/ncol are changed
   if (hashItems.pg) {
-    dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
+    dispatch(setLayout({ ...layout, pageNum: parseInt(hashItems.pg, 10) }));
   }
 
   // labels
@@ -249,34 +253,34 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, 
       return {
         order: i + 1,
         name: vals[0],
-        dir: vals[1],
+        dir: vals[1] as SortDir,
       };
     });
   }
   dispatch(setSort(sort));
 
   // filter
-  const filter = dObjJson.state.filter ? dObjJson.state.filter : {};
+  const filter = (dObjJson.state.filter ? dObjJson.state.filter : {}) as { [key: string]: Filter<FilterCat | FilterRange> };
   if (hashItems.filter) {
     const fltrs = hashItems.filter.split(',');
     fltrs.forEach((flt) => {
-      const fltItems = {};
+      let fltItems = {} as FilterItem;
       flt.split(';').forEach((d) => {
         const tuple = d.split(':');
-        fltItems[tuple[0]] = tuple[[1]];
+        fltItems = { ...fltItems, [tuple[0]]: tuple[1] };
       });
       // fltItems.var
       const fltState = {
         name: fltItems.var,
         type: fltItems.type,
         varType: dObjJson.cogInfo[fltItems.var].type,
-      };
+      } as Filter<FilterCat | FilterRange>;
       if (fltItems.type === 'select') {
         fltState.orderValue = 'ct,desc';
         fltState.value = fltItems.val.split('#').map(decodeURIComponent);
       } else if (fltItems.type === 'regex') {
         const { levels } = dObjJson.cogInfo[fltItems.var];
-        const vals = [];
+        const vals = [] as string[];
         const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
         levels.forEach((d) => {
           if (d.match(rval) !== null) {
@@ -287,8 +291,9 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, 
         fltState.value = vals;
         fltState.orderValue = 'ct,desc';
       } else if (fltItems.type === 'range') {
-        const from = fltItems.from ? parseFloat(fltItems.from, 10) : undefined;
-        const to = fltItems.to ? parseFloat(fltItems.to, 10) : undefined;
+
+        const from = fltItems.from ? parseFloat(fltItems.from) : undefined;
+        const to = fltItems.to ? parseFloat(fltItems.to) : undefined;
         fltState.value = { from, to };
         fltState.valid = true;
         if (from && to && from > to) {
@@ -308,7 +313,7 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, 
   const fvObj = {
     active: [],
     inactive: [],
-  };
+  } as FilterView;
 
   for (let i = 0; i < ciKeys.length; i += 1) {
     if (dObjJson.cogInfo[ciKeys[i]].filterable) {
@@ -325,7 +330,7 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson, dObjJson, dispatch, 
   dispatch(setFilter(filter));
 };
 
-const setPanelInfo = (dObjJson, cfg) => {
+const setPanelInfo = (dObjJson: DisplayObject, cfg: Config) => {
   if (dObjJson.panelInterface.type === 'htmlwidget') {
     if (cfg.config_base) {
       // this will set the panelRenderer but only after assets have been loaded
@@ -335,19 +340,19 @@ const setPanelInfo = (dObjJson, cfg) => {
 };
 
 export const fetchDisplay =
-  (name, group, cfg, id = '', hash = '', getCogData = true) =>
+  (name: string, group: string, cfg: Config, id = '', hash = '', getCogData = true): ThunkAction<void, RootState, unknown, AnyAction> =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
     const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
     const cdCallback = `__loadCogData__${id}_${group}_${name}`;
 
-    window[ldCallback] = (dObjJson) => {
+    window[ldCallback] = (dObjJson: DisplayObject) => {
       const iface = dObjJson.cogInterface;
       // now that displayObj is available, we can set the state with this data
       dispatch(receiveDisplay(name, group, dObjJson));
 
-      setPanelInfo(dObjJson, cfg, dispatch);
+      setPanelInfo(dObjJson, cfg);
 
       if (dObjJson.showMdDesc) {
         dispatch(setDispInfoDialogOpen(true));
@@ -359,7 +364,7 @@ export const fetchDisplay =
         // TODO: perhaps do a quick load of initial panels while cog data is loading...
         // (to do this, have displayObj store initial panel keys and cogs)
 
-        window[cdCallback] = (cogDatJson) => {
+        window[cdCallback] = (cogDatJson: CogData[]) => {
           // once cog data is loaded, set the state with this data
           // but first add an index column to the data so we can
           // preserve original order or do multi-column sorts
@@ -415,12 +420,12 @@ export const fetchDisplay =
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
 export const fetchDisplayList =
-  (config = 'config.jsonp', id = '', singlePageApp = false) =>
+  (config: string | SelfContainedConfig = 'config.jsonp', id = '', singlePageApp = false): ThunkAction<void, RootState, unknown, AnyAction> =>
   (dispatch) => {
     // don't read from the hash if not in single-page-app mode
     const hash = singlePageApp ? window.location.hash : '';
 
-    const selfContained = !(typeof config === 'string' || config instanceof String);
+    const selfContained = !(typeof config === 'string');
 
     if (!selfContained) {
       dispatch(requestConfig());
@@ -430,7 +435,7 @@ export const fetchDisplayList =
 
       const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
-      const getConfigBase = (txt) => {
+      const getConfigBase = (txt: string) => {
         let res = txt;
         if (!/^https?:\/\/|^file:\/\/|^\//.test(txt)) {
           res = configBase;
@@ -441,10 +446,10 @@ export const fetchDisplayList =
         return res;
       };
 
-      window[cfgCallback] = (cfg) => {
+      window[cfgCallback] = (cfg: Config) => {
         // if display_base is empty, we want to use same path as config
         // eslint-disable-next-line no-param-reassign
-        cfg.display_base = getConfigBase(cfg.display_base);
+        cfg.display_base = getConfigBase(cfg.display_base) as Config['display_base'];
         cfg.config_base = configBase; // eslint-disable-line no-param-reassign
         // eslint-disable-next-line no-param-reassign
         cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
@@ -474,7 +479,7 @@ export const fetchDisplayList =
           }
         }
 
-        window[dlCallback] = (json: DisplayObject[]) => {
+        window[dlCallback] = (json: Display[]) => {
           json.sort((a, b) => {
             const v1 = a.order === undefined ? 1 : a.order;
             const v2 = b.order === undefined ? 1 : b.order;
@@ -484,13 +489,13 @@ export const fetchDisplayList =
           dispatch(receiveDisplayList(json));
           // check to see if a display is specified already in the URL
           // and load it if it is
-          const hashItems = {};
+          let hashItems = {} as HashItem;;
           hash
             .replace('#', '')
             .split('&')
             .forEach((d) => {
               const tuple = d.split('=');
-              hashItems[tuple[0]] = tuple[[1]];
+              hashItems = { ...hashItems, [tuple[0]]: tuple[1] };
             });
           if (hashItems.display) {
             const names = json.map((d) => d.name);
@@ -527,11 +532,11 @@ export const fetchDisplayList =
       // try json first and if the file isn't there, try jsonp
 
       const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
-      const configExt = config.match(extRegex)[0];
+      const configExt = (config.match(extRegex) || [])[0];
 
       if (configExt === '.jsonp') {
         getJSONP({
-          url: config,
+          url: `${config}`,
           callbackName: cfgCallback,
           error: (err) => dispatch(setErrorMessage(
             `Couldn't load config: ${err.url}`
@@ -560,6 +565,6 @@ export const fetchDisplayList =
       dispatch(receiveCogData(iface));
       dispatch(setLocalPanels(config.panels));
       setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
-      setPanelInfo(config.displayObj, config.config, dispatch);
+      setPanelInfo(config.displayObj, config.config);
     }
   };

@@ -1,7 +1,7 @@
 interface BrowserJSONPOptions {
   url: string;
   data?: { [key: string]: unknown };
-  success?: (data: unknown) => void;
+  success?: (data: never) => void;
   error?: (err: { url: string, event: ErrorEvent }) => void;
   complete?: (data: { url: string, event: Event }) => void;
   beforeSend?: (emptyObj: unknown, params: BrowserJSONPOptions) => void;

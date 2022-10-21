@@ -77,14 +77,14 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     }
 
     // sort
-    let sort = [] as { order: number; name: string; dir: string }[];
+    let sort = [] as Sort[];
     if (hashItems.sort) {
       sort = hashItems.sort.split(',').map((d, i) => {
         const vals = d.split(';');
         return {
           order: i + 1,
           name: vals[0],
-          dir: vals[1],
+          dir: vals[1] as SortDir,
         };
       });
     }

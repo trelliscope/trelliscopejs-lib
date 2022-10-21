@@ -6,6 +6,16 @@ interface Config {
   has_legend: boolean;
   require_token: boolean;
   disclaimer: boolean;
+  config_base?: unknown;
+  ga_id?: string;
+}
+
+interface SelfContainedConfig {
+  config: Config;
+  displayList: Display[];
+  displayObj: DisplayObject;
+  panels: PanelInterface[];
+  cogData: CogData[];
 }
 
 interface CogServer {
@@ -34,7 +44,7 @@ type CogType =
   | 'time';
 
 interface PanelAsset {
-  url: string;
+  url: string[];
   type: PanelInterfaceAssetType;
 }
 
@@ -49,6 +59,10 @@ interface PanelInterface {
 interface DisplaySelect {
   list: Display[];
   isLoaded: string;
+}
+
+interface CogData {
+  [key: string]: string | number;
 }
 
 interface CogInterface {
@@ -126,6 +140,14 @@ interface DisplayObject {
   gaID: string;
   split_layout: boolean;
   split_aspect: boolean;
+  state: {
+    labels: string[];
+    layout: LayoutState;
+    sort: Sort[];
+    sidebar: number;
+    filter: { [key: string]: Filter<FilterCat | FilterRange> };
+    fv: string[];
+  },
   keySig: string;
   cogInterface: CogInterface;
   panelInterface: PanelInterface;
@@ -201,6 +223,14 @@ interface FilterView {
   inactive: string[];
 }
 
+type FilterItem = {
+  var: string;
+  type: string;
+  val: string;
+  from: string;
+  to: string;
+}
+
 interface ViewItem {
   name: string;
   state: string;
@@ -208,7 +238,7 @@ interface ViewItem {
 
 interface HashItem {
   [key: string]: string;
-  arr: string;
+  arr: 'row' | 'col';
   filter: string;
   fv: string;
   labels: string;
@@ -223,8 +253,10 @@ interface HashItem {
 interface Sort {
   order: number;
   name: string;
-  dir: 'asc' | 'desc';
+  dir: SortDir;
 }
+
+type SortDir = 'asc' | 'desc';
 
 interface DisplayInfoState {
   isFetching: boolean;
