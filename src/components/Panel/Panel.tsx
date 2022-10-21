@@ -68,14 +68,10 @@ const Panel: React.FC<PanelProps> = ({
             setPanelData((prevData) => ({ ...prevData, [name]: data }));
             setLoaded(true);
           };
-          try {
-            getJSONP({
-              url: `${filebase}/jsonp/${panelKey}.jsonp`,
-              callbackName: `__panel_${panelKey}_${name}`,
-            });
-          } catch (e) {
-            console.log(e);
-          }
+          getJSONP({
+            url: `${filebase}/jsonp/${panelKey}.jsonp`,
+            callbackName: `__panel_${panelKey}_${name}`,
+          });
         } else {
           fetch(`${filebase}/json/${panelKey}.json`, { signal })
             .then((response) => response.json())
