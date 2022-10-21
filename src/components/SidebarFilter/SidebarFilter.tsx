@@ -288,7 +288,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   },
   handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => {
     if (typeof x === 'string' || x instanceof String) {
-      dispatch(setFilter(x));
+      dispatch(setFilter(x as string));
     } else {
       const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
       obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react';
-import getJSONP from 'jsonp';
+import getJSONP from 'browser-jsonp';
 import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
 import styles from './Panel.module.scss';
@@ -68,8 +68,10 @@ const Panel: React.FC<PanelProps> = ({
             setPanelData((prevData) => ({ ...prevData, [name]: data }));
             setLoaded(true);
           };
-
-          getJSONP(`${filebase}/jsonp/${panelKey}.jsonp`);
+          getJSONP({
+            url: `${filebase}/jsonp/${panelKey}.jsonp`,
+            callbackName: `__panel_${panelKey}_${name}`,
+          });
         } else {
           fetch(`${filebase}/json/${panelKey}.json`, { signal })
             .then((response) => response.json())

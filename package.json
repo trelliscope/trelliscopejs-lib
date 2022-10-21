@@ -20,7 +20,6 @@
     "dompurify": "^2.1.1",
     "eslint-config-prettier": "^8.5.0",
     "fingerprintjs2": "^2.1.2",
-    "jsonp": "^0.2.1",
     "lodash.intersection": "^4.4.0",
     "lodash.omit": "^4.5.0",
     "marked": "^1.2.0",

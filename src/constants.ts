@@ -21,7 +21,6 @@ export const REQUEST_DISPLAY_LIST = 'REQUEST_DISPLAY_LIST' as string;
 export const RECEIVE_DISPLAY_LIST = 'RECEIVE_DISPLAY_LIST' as string;
 export const REQUEST_COGDATA = 'REQUEST_COGDATA' as string;
 export const RECEIVE_COGDATA = 'RECEIVE_COGDATA' as string;
-export const SET_PANEL_RENDERER = 'SET_PANEL_RENDERER' as string;
 export const WINDOW_RESIZE = 'WINDOW_RESIZE' as string;
 export const UPDATE_DIMS = 'UPDATE_DIMS' as string;
 export const REQUEST_CONFIG = 'REQUEST_CONFIG' as string;

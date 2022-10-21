@@ -27,7 +27,7 @@ interface SidebarSortProps {
       height: number;
     };
   };
-  sort: SortProps[];
+  sort: Sort[];
   cogDesc: {
     label: string;
     value: string;
@@ -35,7 +35,7 @@ interface SidebarSortProps {
     [key: string]: string;
   };
   labels: string[];
-  handleChange: (arg1: SortProps[] | number) => void;
+  handleChange: (arg1: Sort[] | number) => void;
   addLabel: (name: string, label: string[]) => void;
   curDisplayInfo: CurrentDisplayInfo;
 }
@@ -51,7 +51,7 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
 }) => {
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
-  const sort2 = Object.assign([], sort) as SortProps[];
+  const sort2 = Object.assign([], sort) as Sort[];
   if (cogDesc) {
     const notUsed = Object.keys(cogDesc);
     for (let i = 0; i < sort.length; i += 1) {
@@ -121,7 +121,8 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
                         className={styles.sidebarSortVariable}
                         key={`${d}_button`}
                         onClick={() => {
-                          sort2.push({ name: d, dir: 'asc' });
+                          const order = sort.length === 0 ? 1 : sort[sort.length - 1].order + 1;
+                          sort2.push({ name: d, dir: 'asc', order });
                           addLabel(d, labels);
                           handleChange(sort2);
                         }}
@@ -192,7 +193,7 @@ const stateSelector = createSelector(
 const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (sortSpec: SortProps[] | number) => {
+  handleChange: (sortSpec: Sort[] | number) => {
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ pageNum: 1 }));
   },

@@ -158,7 +158,7 @@ const getRelDispPositions = (
   displayInfo: Display[],
   contentHeight: number,
   contentWidth: number,
-) => {
+): RelDispPositions[] => {
   const dnames = displayInfo.map((d: Display) => d.name);
   const idx = dnames.indexOf(selectedDisplay.name);
   const disps = [idx, ...relDisps];

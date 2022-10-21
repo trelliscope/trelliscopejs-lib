@@ -1,12 +1,3 @@
-interface WidgetAsset {
-  url: string[];
-  type: string;
-}
-
-interface WidgetAssets {
-  assets: WidgetAsset[];
-}
-
 export const findWidget = (name: string) => {
   const { widgets } = window.HTMLWidgets;
   for (let i = 0; i < widgets.length; i += 1) {
@@ -17,7 +8,7 @@ export const findWidget = (name: string) => {
   return undefined;
 };
 
-export const loadAssetsSequential = (widgetAssets: WidgetAssets, configBase: string, callback: () => void) => {
+export const loadAssetsSequential = (widgetAssets: PanelInterface['deps'], configBase: Config['config_base'], callback?: () => void) => {
   function loadScript(asset: HTMLScriptElement | HTMLLinkElement, url: string) {
     return new Promise((resolve, reject) => {
       asset.addEventListener('load', () => {
