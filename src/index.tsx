@@ -1,5 +1,4 @@
 import React from 'react';
-import type { CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -107,7 +106,7 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
 
   // need to store original app dims (constant) if it isn't a SPA
   // this will only be used in that case, but store it always anyway
-  const appDims = {} as CSSProperties;
+  const appDims = {} as { width: number; height: number };
 
   // set size of app
   if (singlePageApp) {

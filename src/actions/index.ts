@@ -47,7 +47,7 @@ export const setAppID = (id: string) => ({
   id,
 });
 
-export const setOptions = (options: { logger: boolean, mockData: boolean}) => ({
+export const setOptions = (options: { logger?: boolean, mockData?: boolean}) => ({
   type: SET_OPTIONS,
   options,
 });
@@ -64,7 +64,7 @@ export const setSinglePageApp = (singlePageApp: boolean) => ({
 
 export const windowResize = (dims: { width: number; height: number; }) => ({ type: WINDOW_RESIZE, dims });
 
-export const setAppDims = (dims: Dims) => ({ type: UPDATE_DIMS, dims });
+export const setAppDims = (dims: { width: number; height: number; }) => ({ type: UPDATE_DIMS, dims });
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG,
