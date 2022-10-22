@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
-import type { Action, Dispatch } from 'redux';
+import type { Action } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import DisplayInfo from '../DisplayInfo';
@@ -164,18 +165,12 @@ const styleSelector = createSelector(
   }),
 );
 
-const mapStateToProps = (state: RootState) =>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: TS2345
-  styleSelector(state);
+const mapStateToProps = (state: RootState) => styleSelector(state);
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
   selectDisplay: (name: string, group: string, desc: string, cfg: Config, appId: string, hash: string) => {
     dispatch(setSelectedDisplay(name, group, desc));
-    // FIXME need to change the index.js actions file to be in typescript and return proper types for this method action
-    // once complete remove eslint disable and ts ignore, it seems that its the way the fetchDisplay is structured it needs to have a return value
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     dispatch(fetchDisplay(name, group, cfg, appId, hash));
   },
   doSetDialogOpen: (isOpen: boolean) => {
@@ -183,7 +178,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   },
 });
 
-// FIXME similar to the above this is throwing errors because the selector file needs to be typed.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
