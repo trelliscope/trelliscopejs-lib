@@ -1,5 +1,6 @@
 import React from 'react';
-import type { Action, Dispatch } from 'redux';
+import type { Action } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core';
@@ -241,7 +242,7 @@ const getRelDispPositions = (
   return relDispPositions;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
@@ -261,10 +262,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
       }
     } else if (newRelDisps.indexOf(i) < 0) {
       // if it is being checked we also need to load the display
-      // FIXME need to change the index.js actions file to be in typescript and return proper types for this method action
-      // once complete remove eslint disable and ts ignore, it seems that its the way the fetchDisplay is structured it needs to have a return value
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       dispatch(fetchDisplay(displayItems[i].name, displayItems[i].group, cfg, appId, '', false));
       newRelDisps.push(i);
     }
