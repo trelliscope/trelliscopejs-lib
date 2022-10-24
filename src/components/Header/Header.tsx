@@ -109,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({
       {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
         <RelatedDisplays setDialogOpen={doSetDialogOpen} />
       )}
-      <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={doSetDialogOpen} />
+      {selectedDisplay.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={doSetDialogOpen} />}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
         <div className={styles.headerNameDescContainer}>
