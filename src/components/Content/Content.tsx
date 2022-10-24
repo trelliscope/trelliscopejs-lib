@@ -87,8 +87,8 @@ const Content: React.FC<ContentProps> = ({
         curLabels.push({
           name: labels[j],
           value: ccd[i][labels[j]],
-          type: cinfo[labels[j]].type,
-          desc: cinfo[labels[j]].desc,
+          type: cinfo[labels[j]]?.type,
+          desc: cinfo[labels[j]]?.desc,
         });
       }
       panelLabels.push(curLabels);
