@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
-import type { Action, Dispatch } from 'redux';
+import type { Action } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
@@ -179,11 +180,9 @@ const styleSelector = createSelector(
   }),
 );
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 const mapStateToProps = (state: RootState) => styleSelector(state);
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
   handleClick: (name: string, group: string, desc: string, cfg: Config, appId: string) => {
     // need to clear out state for new display...
     // first close sidebars for safety
@@ -198,10 +197,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name, group, desc));
-    // FIXME need to change the index.js actions file to be in typescript and return proper types for this method action
-    // once complete remove eslint disable and ts ignore, it seems that its the way the fetchDisplay is structured it needs to have a return value
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     dispatch(fetchDisplay(name, group, cfg, appId, ''));
   },
   setDispDialogOpen: (isOpen: boolean) => {
@@ -209,7 +204,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   },
 });
 
-// FIXME similar to the above this is throwing errors because the selector file needs to be typed.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 export default connect(mapStateToProps, mapDispatchToProps)(DisplaySelect);
