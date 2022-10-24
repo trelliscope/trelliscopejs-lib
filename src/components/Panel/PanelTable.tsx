@@ -219,7 +219,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                 </div>
               )}
 
-              {!specialRenderTypes.some((specialType) => label.type.includes(specialType)) && (
+              {!specialRenderTypes.some((specialType) => label?.type?.includes(specialType)) && (
                 <div className={styles.labelOuter}>
                   <div className={styles.labelInner} style={inlineStyles.labelInner}>
                     <span className={styles.labelP} style={inlineStyles.labelSpan}>
