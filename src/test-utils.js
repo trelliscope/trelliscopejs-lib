@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
-import { createTheme, MuiThemeProvider } from '@material-ui/core';
+import { createTheme, MuiThemeProvider } from '@mui/material';
 import { Provider } from 'react-redux';
 import store from './store';
 import { setAppDims, setAppID, setFullscreen, setOptions, setSinglePageApp } from './actions';

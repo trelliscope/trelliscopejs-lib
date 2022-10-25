@@ -1,6 +1,6 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import FilterNumPlot from '../FilterNumPlot';
 
 import styles from './FilterNum.module.scss';

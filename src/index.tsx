@@ -3,13 +3,13 @@ import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
-import blue from '@material-ui/core/colors/blue';
-import lightBlue from '@material-ui/core/colors/lightBlue';
-// import red from '@material-ui/core/colors/red';
+import blue from '@mui/material/colors/blue';
+import lightBlue from '@mui/material/colors/lightBlue';
+// import red from '@mui/material/colors/red';
 // const blueA200 = blue['A200'];
 // const lightBlue700 = lightBlue['lightBlue'];
 // const redA200 = red['A200']
@@ -184,21 +184,21 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
   });
 
   root.render(
-    <MuiThemeProvider theme={themeV1}>
+    <ThemeProvider theme={themeV1}>
       <Provider store={store}>
         <App config={config} id={id} singlePageApp={singlePageApp} />
       </Provider>
-    </MuiThemeProvider>,
+    </ThemeProvider>,
   );
 
   if (module.hot) {
     module.hot.accept('./App', () => {
       root.render(
-        <MuiThemeProvider theme={themeV1}>
+        <ThemeProvider theme={themeV1}>
           <Provider store={store}>
             <App config={config} id={id} singlePageApp={singlePageApp} />
           </Provider>
-        </MuiThemeProvider>,
+        </ThemeProvider>,
       );
     });
   }
