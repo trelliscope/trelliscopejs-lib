@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -39,6 +39,8 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
   }
 
   const el = document.getElementById(id) as HTMLElement;
+  const container = document.getElementById(id) as HTMLElement;
+  const root = ReactDOMClient.createRoot(container);
 
   addClass(el, 'trelliscope-app');
   addClass(el, 'trelliscope-app-container');
@@ -181,24 +183,22 @@ const trelliscopeApp = (id: string, config: string, options: { logger?: boolean;
     },
   });
 
-  ReactDOM.render(
+  root.render(
     <MuiThemeProvider theme={themeV1}>
       <Provider store={store}>
         <App config={config} id={id} singlePageApp={singlePageApp} />
       </Provider>
     </MuiThemeProvider>,
-    document.getElementById(id),
   );
 
   if (module.hot) {
     module.hot.accept('./App', () => {
-      ReactDOM.render(
+      root.render(
         <MuiThemeProvider theme={themeV1}>
           <Provider store={store}>
             <App config={config} id={id} singlePageApp={singlePageApp} />
           </Provider>
         </MuiThemeProvider>,
-        document.getElementById(id),
       );
     });
   }
