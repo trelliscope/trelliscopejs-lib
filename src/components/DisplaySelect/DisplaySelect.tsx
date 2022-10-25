@@ -5,11 +5,11 @@ import type { Action } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
 import {
   setSelectedDisplay,

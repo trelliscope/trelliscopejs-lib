@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
-import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import ReactTooltip from 'react-tooltip';
 import styles from './Panel.module.scss';
 
@@ -183,12 +183,14 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       setTextInputOpen('');
                       setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
                     }}
-                    onEnter={() => {
-                      setTextInputValue(
-                        localStorage.getItem(
-                          `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
-                        ) || '',
-                      );
+                    TransitionProps={{
+                      onEnter: () => {
+                        setTextInputValue(
+                          localStorage.getItem(
+                            `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
+                          ) || '',
+                        );
+                      },
                     }}
                     anchorOrigin={{
                       vertical: 'top',

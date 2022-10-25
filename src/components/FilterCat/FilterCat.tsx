@@ -5,11 +5,11 @@
 // if selections are made after regex, regex is cleared
 import React, { useEffect, useState } from 'react';
 import type { SetStateAction } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FilterCatPlot from '../FilterCatPlot';
 
 import styles from './FilterCat.module.scss';

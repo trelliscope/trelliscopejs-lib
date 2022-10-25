@@ -2,8 +2,8 @@ import React from 'react';
 import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Snackbar from '@material-ui/core/Snackbar';
-import Button from '@material-ui/core/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
 import { setErrorMessage } from '../../actions';
 
 interface ErrorSnackProps {
