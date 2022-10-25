@@ -64,10 +64,7 @@ const filterState: Reducer = (state = {}, action) => {
       // action.filter should be an object to replace the previous state
       // but if it's a string, the filter with that name will be removed
       if (typeof action.filter === 'string' || action.filter instanceof String) {
-        // FIXME
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore: TS2769 this conflicts with setting it as a reducer property and best practice. When refactoring to a slice we will need to fix this.
-        return omit(state, action.filter);
+        return omit(state, action.filter as string);
       }
       if (action.filter === undefined) {
         return {};
