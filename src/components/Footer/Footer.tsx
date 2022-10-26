@@ -155,8 +155,6 @@ const stateSelector = createSelector(
   }),
 );
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 const mapStateToProps = (state: RootState) => stateSelector(state);
 
 export default connect(mapStateToProps)(Footer);

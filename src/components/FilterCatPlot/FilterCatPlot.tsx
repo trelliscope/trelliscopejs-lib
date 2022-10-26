@@ -116,8 +116,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   const fc = filterCardinality;
 
   return (
-    // FIXME we should be able to fix this once updating react and react-virtualized
-    // this issue is related to versioning of our dependencies
+    // FIXME react-virtualized needs to be updated to react 18
     // https://github.com/bvaughn/react-virtualized/issues/1739
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: 2786
@@ -140,8 +139,6 @@ const stateSelector = createSelector(filterCardinalitySelector, (filterCardinali
   filterCardinality,
 }));
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
 const mapStateToProps = (state: RootState) => stateSelector(state);
 
 export default connect(mapStateToProps)(FilterCatPlot);
