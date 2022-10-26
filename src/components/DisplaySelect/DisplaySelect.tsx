@@ -14,7 +14,6 @@ import DisplayList from '../DisplayList';
 import {
   setSelectedDisplay,
   fetchDisplay,
-  setActiveSidebar,
   setLabels,
   setLayout,
   setSort,
@@ -24,6 +23,7 @@ import {
   resetRelDisps,
   setRelDispPositions,
 } from '../../actions';
+import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { displayGroupsSelector } from '../../selectors/display';
 import {
   appIdSelector,

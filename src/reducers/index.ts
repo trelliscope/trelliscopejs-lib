@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import sidebar from './sidebar';
+import sidebar from '../slices/sidebarSlice';
 import ui from './ui';
 import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog, options } from './app';
 import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';

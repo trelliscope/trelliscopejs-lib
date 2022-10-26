@@ -4,17 +4,17 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import type { Action, Dispatch } from 'redux';
-import { setActiveSidebar } from '../../actions';
 import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../../constants';
 import SideButton from '../SideButton';
 import styles from './SideButtons.module.scss';
+import { setActiveSidebar } from '../../slices/sidebarSlice';
 
 type Button = {
   icon: string;
   label: string;
-  title: string;
+  title: SidebarType;
   key: string;
 };
 
@@ -22,41 +22,41 @@ const buttons: Button[] = [
   {
     icon: 'icon-th',
     label: 'Grid',
-    title: SB_PANEL_LAYOUT,
+    title: SB_PANEL_LAYOUT as SidebarType,
     key: 'g',
   },
   {
     icon: 'icon-list-ul',
     label: 'Labels',
-    title: SB_PANEL_LABELS,
+    title: SB_PANEL_LABELS as SidebarType,
     key: 'l',
   },
   {
     icon: 'icon-filter',
     label: 'Filter',
-    title: SB_PANEL_FILTER,
+    title: SB_PANEL_FILTER as SidebarType,
     key: 'f',
   },
   {
     icon: 'icon-sort-amount-asc',
     label: 'Sort',
-    title: SB_PANEL_SORT,
+    title: SB_PANEL_SORT as SidebarType,
     key: 's',
   },
   {
     icon: 'icon-views',
     label: 'Views',
-    title: SB_VIEWS,
+    title: SB_VIEWS as SidebarType,
     key: 'v',
   },
 ];
 
 interface SideButtonsProps {
   fullscreen: boolean;
-  active: string;
+  active: SidebarType;
   hasViews: boolean;
   dialogOpen: boolean;
-  setActive: (active: string) => void;
+  setActive: (active: SidebarType) => void;
   inlineStyles: {
     [key: string]: CSSProperties;
   };
@@ -73,7 +73,7 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
     } else if (e.key === 'Escape' || e.key === 'Enter') {
       setActive('');
     } else {
-      const which = buttons.reduce<string[]>((prev, current) => {
+      const which = buttons.reduce<SidebarType[]>((prev, current) => {
         if (current.key === e.key) {
           return [...prev, current.title];
         }
@@ -135,7 +135,7 @@ const stateSelector = createSelector(
 );
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  setActive: (n: string) => {
+  setActive: (n: SidebarType) => {
     dispatch(setActiveSidebar(n));
   },
 });
