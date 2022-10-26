@@ -10,6 +10,7 @@ import { contentHeightSelector } from '../../selectors/ui';
 import { curDisplayInfoSelector } from '../../selectors';
 import { cogInfoSelector } from '../../selectors/display';
 import uiConsts from '../../assets/styles/uiConsts';
+import { RootState } from '../../store';
 
 import styles from './SidebarViews.module.scss';
 
@@ -39,10 +40,7 @@ const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelect
   cinfo,
 }));
 
-const mapStateToProps = (state: { contentHeight: number; curDisplay: CurrentDisplayInfo; cogInfo: CogInfo }) =>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: TS2345
-  stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleChange: (value: string, cinfo: { [key: string]: CogInfo }) => {
