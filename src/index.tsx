@@ -28,14 +28,14 @@ import reducers from './reducers';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
-import worker from './test/__mockData__/worker';
 
 // import appData from './appData';
 
-const trelliscopeApp = (id: string, config: string, options: { logger?: boolean; mockData?: boolean } = {}) => {
+const trelliscopeApp = async (id: string, config: string, options: { logger?: boolean; mockData?: boolean } = {}) => {
   // Sets up msw worker for mocking api calls
-  if (options && options.mockData) {
-    worker.start();
+  if (process.env.NODE_ENV !== 'production' && options.mockData) {
+    const worker = await import('./test/__mockData__/worker');
+    worker.default.start();
   }
 
   const el = document.getElementById(id) as HTMLElement;
