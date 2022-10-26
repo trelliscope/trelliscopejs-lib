@@ -32,7 +32,7 @@ import worker from './test/__mockData__/worker';
 
 // import appData from './appData';
 
-const trelliscopeApp = (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => {
+const trelliscopeApp = (id: string, config: string, options: { logger?: boolean; mockData?: boolean } = {}) => {
   // Sets up msw worker for mocking api calls
   if (options && options.mockData) {
     worker.start();
@@ -228,7 +228,7 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
 // trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
-trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
