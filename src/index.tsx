@@ -33,10 +33,10 @@ import * as serviceWorker from './serviceWorker';
 
 const trelliscopeApp = async (id: string, config: string, options: { logger?: boolean; mockData?: boolean } = {}) => {
   // Sets up msw worker for mocking api calls
-  if (process.env.NODE_ENV !== 'production' && options.mockData) {
+  /* if (process.env.NODE_ENV !== 'production' && options.mockData) {
     const worker = await import('./test/__mockData__/worker');
     worker.default.start();
-  }
+  } */
 
   const el = document.getElementById(id) as HTMLElement;
 
