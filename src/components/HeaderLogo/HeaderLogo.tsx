@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -35,8 +36,7 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
     setOpen(true);
   };
 
-  // FIXME add typing for event once material ui is updated https://github.com/mui/material-ui/issues/17454
-  const handleChange = (event: any, value: number) => {
+  const handleChange = (event: SyntheticEvent, value: number) => {
     event.preventDefault();
     setTabNumber(value);
   };
