@@ -1,5 +1,5 @@
 interface Config {
-  display_base: 'displays' | '__self__';
+  display_base: 'displays';
   data_type: 'json' | 'jsonp';
   cog_server: CogServer;
   split_layout: boolean;
@@ -8,14 +8,6 @@ interface Config {
   disclaimer: boolean;
   config_base?: unknown;
   ga_id?: string;
-}
-
-interface SelfContainedConfig {
-  config: Config;
-  displayList: Display[];
-  displayObj: DisplayObject;
-  panels: PanelInterface[];
-  cogData: CogData[];
 }
 
 interface CogServer {
