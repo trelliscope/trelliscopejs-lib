@@ -7,7 +7,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
 import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
-import { setFullscreen, windowResize } from '../../actions';
+import { setFullscreen } from '../../actions';
+import { windowResize } from '../../slices/uiSlice';
 import type { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
 
@@ -85,7 +86,7 @@ const mapStateToProps = (state: RootState) => stateSelector(state);
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   toggleFullscreen: (fullscreen: boolean, appId: string, appDims: { width: number; height: number }, yOffset: number) => {
     const el = document.getElementById(appId) as HTMLElement;
-    const newDims = {} as NewDims;
+    const newDims = { width: 0, height: 0 } as NewDims;
     if (fullscreen) {
       addClass(document.body, 'trelliscope-fullscreen-body');
       addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
