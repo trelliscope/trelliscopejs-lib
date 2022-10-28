@@ -34,11 +34,11 @@ interface D3ParsType {
   ys: ScaleLinear<number, number>;
 }
 
-const FilterNumPlot: React.FC<FilterNumPlotProps> = ({ name, width, height, condDist, filterState, handleChange }) => {
-  const HistPlotD3 = {} as filter;
-  let d3pars = {} as D3ParsType;
-  let d3node = {} as Selection<SVGGElement | BaseType, unknown, null, undefined>;
+const HistPlotD3 = {} as filter;
+let d3node = {} as Selection<SVGGElement | BaseType, unknown, null, undefined>;
+let d3pars = {} as D3ParsType;
 
+const FilterNumPlot: React.FC<FilterNumPlotProps> = ({ name, width, height, condDist, filterState, handleChange }) => {
   useEffect(() => {
     // we don't expect most props to change so we'll set things here
     // so we don't recompute every time the plots updates
@@ -60,7 +60,7 @@ const FilterNumPlot: React.FC<FilterNumPlotProps> = ({ name, width, height, cond
     const barPath = (dat: [{ key: number; value: number }], pars: D3ParsType) => {
       const path = [];
       let i = 0;
-      const n = dat.length;
+      const n = dat?.length;
       let d;
       let h;
       while (i < n) {
@@ -87,167 +87,13 @@ const FilterNumPlot: React.FC<FilterNumPlotProps> = ({ name, width, height, cond
     };
 
     d3node.call(HistPlotD3.enter.bind(this, { name, width, height, condDist, filterState, handleChange }, d3pars));
-  }, [filterState, d3node, name, width, height, condDist, handleChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     d3pars?.ys?.domain([0, condDist?.max]);
     d3node.call(HistPlotD3.update.bind(this, { name, width, height, condDist, filterState, handleChange }, d3pars));
-  }, [condDist]);
-
-  HistPlotD3.enter = (props: FilterNumPlotProps, pars: D3ParsType, selection: filter) => {
-    const brushClipMove = () => {
-      const curRange = currentEvent.selection;
-      selection
-        .select('#cliprect')
-        .attr('x', curRange[0])
-        .attr('width', curRange[1] - curRange[0]);
-    };
-
-    // cut long decimals from the brush down to 5 significant digits
-    // or in the case of numbers that are 10^5 or higher, just omit decimals
-    const fixNumber = (x: number) => {
-      const prec = Math.max(Math.floor(Math.log10(Math.abs(x))), 5);
-      return parseFloat(x.toPrecision(prec));
-    };
-
-    const brushed = () => {
-      if (currentEvent.sourceEvent) {
-        if (currentEvent.selection) {
-          const newRange = currentEvent.selection.map((d: number) => fixNumber(pars.xs.invert(d)));
-          props.handleChange(newRange);
-        } else {
-          selection
-            .select('#cliprect')
-            .attr('x', pars.xs(pars.xrange[0]))
-            .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
-          props.handleChange(undefined);
-        }
-      }
-    };
-
-    const histBrush = brushX()
-      .extent([
-        [pars.sidePad, 1],
-        [props.width - pars.sidePad, pars.height + 1],
-      ])
-      .handleSize(10);
-
-    histBrush.on('brush', brushClipMove).on('end', brushed);
-
-    const plotArea = selection.append('g');
-
-    const selRange = Object.assign([], pars.xrange) as number[];
-    if (props.filterState.value) {
-      if (props.filterState.value.from) {
-        selRange[0] = props.filterState.value.from;
-      }
-      if (props.filterState.value.to) {
-        selRange[1] = props.filterState.value.to;
-      }
-    }
-
-    // clipping region to match brush and hide foreground bars
-    plotArea
-      .append('clipPath')
-      .attr('id', `clip-${props.name}`)
-      .append('rect')
-      .attr('id', 'cliprect')
-      .attr('x', pars.xs(selRange[0]))
-      .attr('width', pars.xs(selRange[1]) - pars.xs(selRange[0]))
-      .attr('height', props.height - pars.axisPad);
-
-    // background bars
-    plotArea.append('path').attr('class', 'bar background').datum(props.condDist.dist).attr('fill', '#ddd');
-
-    plotArea
-      .append('path')
-      .attr('class', 'bar foreground')
-      .datum(props.condDist.dist)
-      .attr('clip-path', `url(#clip-${props.name})`);
-
-    if (props.filterState.value) {
-      plotArea.selectAll('.foreground').attr('fill', 'rgb(255, 170, 10)');
-    } else {
-      plotArea.selectAll('.foreground').attr('fill', 'rgb(255, 210, 127)');
-    }
-
-    const gAxis = selection
-      .append('g')
-      .attr('class', 'axis')
-      .attr('transform', `translate(0,${props.height - pars.axisPad + 1})`)
-      .call(pars.axis);
-
-    // style the axis
-    gAxis
-      .select('path')
-      .attr('fill', 'none')
-      .attr('stroke', '#000')
-      .attr('stroke-opacity', 0.4)
-      .attr('shape-rendering', 'crispEdges');
-    gAxis.selectAll('.tick').attr('opacity', 0.4);
-
-    const gBrush = plotArea.append('g').attr('class', 'brush').call(histBrush);
-
-    if (props.filterState.value) {
-      gBrush.call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
-    }
-
-    // style the brush
-    gBrush
-      .select('rect.selection')
-      .attr('fill', 'rgb(255, 210, 127)')
-      .attr('fill-opacity', '0.125')
-      .attr('stroke', 'rgb(255, 170, 10)')
-      .attr('stroke-opacity', '0.2');
-
-    gBrush.selectAll('rect').attr('height', pars.height);
-
-    selection.selectAll('.bar').attr('d', (d: [{ key: number; value: number }]) => pars.barPath(d, pars));
-  };
-
-  HistPlotD3.update = (props: FilterNumPlotProps, pars: D3ParsType, selection: filter) => {
-    selection
-      .selectAll('.bar')
-      .attr('d', null)
-      .datum(props.condDist.dist)
-      .attr('d', (d: [{ key: number; value: number }]) => pars.barPath(d, pars));
-
-    // brush needs to reflect updated range
-    if (props.filterState.value !== undefined) {
-      let fFrom = props.filterState.value.from;
-      let fTo = props.filterState.value.to;
-
-      // explicitly set from = min or to = max if not specified
-      if (fFrom === undefined) {
-        fFrom = pars.xrange[0]; // eslint-disable-line prefer-destructuring
-      }
-      if (fTo === undefined) {
-        fTo = pars.xrange[1]; // eslint-disable-line prefer-destructuring
-      }
-      //
-      if (fTo > fFrom) {
-        selection.select('.brush').call(brushX().move, [pars.xs(fFrom), pars.xs(fTo)]);
-        // make sure the selection matches the new brush
-        selection
-          .select('#cliprect')
-          .attr('x', pars.xs(fFrom))
-          .attr('width', pars.xs(fTo) - pars.xs(fFrom));
-        // set foreground to darker color
-        selection.selectAll('path.foreground').attr('fill', 'rgb(255, 170, 10)');
-      }
-    } else {
-      // we need to remove the brush
-      selection.select('.brush').call(brushX().move, null);
-      // set the foreground to a lighter orange
-      selection.selectAll('path.foreground').attr('fill', 'rgb(255, 210, 127)');
-
-      // and clear the mask
-      selection
-        .select('#cliprect')
-        .attr('x', pars.xs(pars.xrange[0]))
-        .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
-    }
-  };
+  }, [condDist, filterState, handleChange, height, name, width]);
 
   return (
     <svg
@@ -261,3 +107,158 @@ const FilterNumPlot: React.FC<FilterNumPlotProps> = ({ name, width, height, cond
 };
 
 export default FilterNumPlot;
+
+HistPlotD3.enter = (props: FilterNumPlotProps, pars: D3ParsType, selection: filter) => {
+  const brushClipMove = () => {
+    const curRange = currentEvent.selection;
+    selection
+      .select('#cliprect')
+      .attr('x', curRange[0])
+      .attr('width', curRange[1] - curRange[0]);
+  };
+
+  // cut long decimals from the brush down to 5 significant digits
+  // or in the case of numbers that are 10^5 or higher, just omit decimals
+  const fixNumber = (x: number) => {
+    const prec = Math.max(Math.floor(Math.log10(Math.abs(x))), 5);
+    return parseFloat(x.toPrecision(prec));
+  };
+
+  const brushed = () => {
+    if (currentEvent.sourceEvent) {
+      if (currentEvent.selection) {
+        const newRange = currentEvent.selection.map((d: number) => fixNumber(pars.xs.invert(d)));
+        props.handleChange(newRange);
+      } else {
+        selection
+          .select('#cliprect')
+          .attr('x', pars.xs(pars.xrange[0]))
+          .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
+        props.handleChange(undefined);
+      }
+    }
+  };
+
+  const histBrush = brushX()
+    .extent([
+      [pars.sidePad, 1],
+      [props.width - pars.sidePad, pars.height + 1],
+    ])
+    .handleSize(10);
+
+  histBrush.on('brush', brushClipMove).on('end', brushed);
+
+  const plotArea = selection.append('g');
+
+  const selRange = Object.assign([], pars.xrange) as number[];
+  if (props.filterState.value) {
+    if (props.filterState.value.from) {
+      selRange[0] = props.filterState.value.from;
+    }
+    if (props.filterState.value.to) {
+      selRange[1] = props.filterState.value.to;
+    }
+  }
+
+  // clipping region to match brush and hide foreground bars
+  plotArea
+    .append('clipPath')
+    .attr('id', `clip-${props.name}`)
+    .append('rect')
+    .attr('id', 'cliprect')
+    .attr('x', pars.xs(selRange[0]))
+    .attr('width', pars.xs(selRange[1]) - pars.xs(selRange[0]))
+    .attr('height', props.height - pars.axisPad);
+
+  // background bars
+  plotArea.append('path').attr('class', 'bar background').datum(props.condDist.dist).attr('fill', '#ddd');
+
+  plotArea
+    .append('path')
+    .attr('class', 'bar foreground')
+    .datum(props.condDist.dist)
+    .attr('clip-path', `url(#clip-${props.name})`);
+
+  if (props.filterState.value) {
+    plotArea.selectAll('.foreground').attr('fill', 'rgb(255, 170, 10)');
+  } else {
+    plotArea.selectAll('.foreground').attr('fill', 'rgb(255, 210, 127)');
+  }
+
+  const gAxis = selection
+    .append('g')
+    .attr('class', 'axis')
+    .attr('transform', `translate(0,${props.height - pars.axisPad + 1})`)
+    .call(pars.axis);
+
+  // style the axis
+  gAxis
+    .select('path')
+    .attr('fill', 'none')
+    .attr('stroke', '#000')
+    .attr('stroke-opacity', 0.4)
+    .attr('shape-rendering', 'crispEdges');
+  gAxis.selectAll('.tick').attr('opacity', 0.4);
+
+  const gBrush = plotArea.append('g').attr('class', 'brush').call(histBrush);
+
+  if (props.filterState.value) {
+    gBrush.call(histBrush.move, [pars.xs(selRange[0]), pars.xs(selRange[1])]);
+  }
+
+  // style the brush
+  gBrush
+    .select('rect.selection')
+    .attr('fill', 'rgb(255, 210, 127)')
+    .attr('fill-opacity', '0.125')
+    .attr('stroke', 'rgb(255, 170, 10)')
+    .attr('stroke-opacity', '0.2');
+
+  gBrush.selectAll('rect').attr('height', pars.height);
+
+  selection.selectAll('.bar').attr('d', (d: [{ key: number; value: number }]) => pars.barPath(d, pars));
+};
+
+HistPlotD3.update = (props: FilterNumPlotProps, pars: D3ParsType, selection: filter) => {
+  selection
+    .selectAll('.bar')
+    .attr('d', null)
+    .datum(props.condDist.dist)
+    .attr('d', (d: [{ key: number; value: number }]) => pars.barPath(d, pars));
+
+  // brush needs to reflect updated range
+  if (props.filterState.value !== undefined) {
+    let fFrom = props.filterState.value.from;
+    let fTo = props.filterState.value.to;
+
+    // explicitly set from = min or to = max if not specified
+    if (fFrom === undefined) {
+      fFrom = pars.xrange[0]; // eslint-disable-line prefer-destructuring
+    }
+    if (fTo === undefined) {
+      fTo = pars.xrange[1]; // eslint-disable-line prefer-destructuring
+    }
+    //
+    if (fTo > fFrom) {
+      selection.select('.brush').call(brushX().move, [pars.xs(fFrom), pars.xs(fTo)]);
+      // make sure the selection matches the new brush
+      selection
+        .select('#cliprect')
+        .attr('x', pars.xs(fFrom))
+        .attr('width', pars.xs(fTo) - pars.xs(fFrom));
+      // set foreground to darker color
+      selection.selectAll('path.foreground').attr('fill', 'rgb(255, 170, 10)');
+    }
+  } else {
+    // we need to remove the brush
+    selection.select('.brush').call(brushX().move, null);
+    // set the foreground to a lighter orange
+    selection.selectAll('path.foreground').attr('fill', 'rgb(255, 210, 127)');
+
+    // and clear the mask
+    selection
+      .select('#cliprect')
+      .attr('x', pars.xs(pars.xrange[0]))
+      .attr('width', pars.xs(pars.xrange[1]) - pars.xs(pars.xrange[0]));
+  }
+};
