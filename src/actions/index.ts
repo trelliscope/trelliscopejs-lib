@@ -6,13 +6,13 @@ import { ThunkAction } from 'redux-thunk';
 import { loadAssetsSequential } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
 import { AppDispatch, RootState } from '../store';
+import { setActiveSidebar } from '../slices/sidebarSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
   WINDOW_RESIZE,
   UPDATE_DIMS,
   SET_ERROR_MESSAGE,
-  ACTIVE_SIDEBAR,
   SET_LAYOUT,
   SET_LABELS,
   SET_SORT,
@@ -74,11 +74,6 @@ export const receiveConfig = (json: Config) => ({
   type: RECEIVE_CONFIG,
   config: json,
   receivedAt: Date.now(),
-});
-
-export const setActiveSidebar = (active: string) => ({
-  type: ACTIVE_SIDEBAR,
-  active,
 });
 
 export const setDialogOpen = (isOpen: boolean) => ({

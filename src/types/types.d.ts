@@ -361,3 +361,5 @@ interface Window {
 interface CogData {
   [key: string]: string | number;
 }
+
+type SidebarType = 'Panel Grid Layout' | 'Filter Panels' | 'Sort Panels' | 'Show/Hide Labels' | 'Views' | 'Configuration' | '';
