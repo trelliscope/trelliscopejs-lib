@@ -113,6 +113,7 @@ const FilterCat: React.FC<FilterCatProps> = ({
           style={regexInput}
           value={filterState.type === 'regex' ? filterState.regex : ''}
           onChange={(e) => handleRegex(e.target.value)}
+          variant="standard"
         />
         <div className={styles.filterCatExtraOptionsInput}>
           {/* this is an issue with the iconButton in materialUi not having the type for an onClick in the props

@@ -126,6 +126,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
           type="number"
           value={stateValue.from ? stateValue.from : ''}
           onChange={(e) => handleInput(e.target.value, 'from')}
+          variant="standard"
         />
         <div className={`${styles.filterNumRangeInputText} ${styles.filterNumRangeInputTextDash}`}>-</div>
         <TextField
@@ -138,6 +139,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
           type="number"
           value={stateValue.to ? stateValue.to : ''}
           onChange={(e) => handleInput(e.target.value, 'to')}
+          variant="standard"
         />
       </div>
     </div>
