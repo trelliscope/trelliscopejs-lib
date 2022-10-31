@@ -129,7 +129,6 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   // array of panel keys so we can search to get columns we need if ccols defined
   const cd = cogData.crossfilter.all();
   const pk = cd.map((dd: Data) => dd.panelKey);
-  header.push(...ccols, ...cols);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
     const rcdat = [];
@@ -137,11 +136,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
       const idx = pk.indexOf(kk);
       rcdat.push(ccols.map((cc: string | number) => cd[idx][cc]));
     }
-    const rdat = cols.map((cc) => (data[kk][cc] ? `"${data[kk][cc]?.replace(/"/g, '""')}"` : ''));
     const extra = [];
     if (ii === 0) {
       extra.push(
         ...[
+          'values',
           `"${(localStorage.getItem(USERNAME) || '').replace(/"/g, '""')}"`,
           `"${(localStorage.getItem(EMAIL) || '').replace(/"/g, '""')}"`,
           `"${(localStorage.getItem(JOBTITLE) || '').replace(/"/g, '""')}"`,
@@ -152,7 +151,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     } else {
       extra.push(...['', '', '', '', '']);
     }
-    return [kk, ...rcdat, rdat, extra];
+    return [...rcdat, extra];
   });
 
   const downloadCsv = () => {
