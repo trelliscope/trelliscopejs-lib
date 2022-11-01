@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
-import { createTheme, MuiThemeProvider } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Provider } from 'react-redux';
 import store from './store';
 import { setAppDims, setAppID, setFullscreen, setOptions, setSinglePageApp } from './actions';
@@ -18,9 +18,9 @@ store.dispatch(setSinglePageApp(singlePageApp));
 store.dispatch(setAppDims({ width: 500, height: 500 }));
 
 const Providers = ({ children }) => (
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <Provider store={store}>{children}</Provider>
-  </MuiThemeProvider>
+  </ThemeProvider>
 );
 
 Providers.propTypes = {
