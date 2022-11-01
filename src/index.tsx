@@ -22,7 +22,8 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';
@@ -231,9 +232,9 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
+trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
-trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
+// trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
 

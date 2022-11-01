@@ -5,7 +5,8 @@ import { max } from 'd3-array';
 import { Dispatch } from 'redux';
 import { Swipeable } from 'react-swipeable';
 import Panel from '../Panel';
-import { setLabels, setLayout } from '../../actions';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import {
   configSelector,
   cogInterfaceSelector,

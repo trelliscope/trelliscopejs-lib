@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { setLabels } from '../../actions';
+import { setLabels } from '../../slices/labelsSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
@@ -82,12 +82,13 @@ const mapStateToProps = (state: RootState) => stateSelector(state);
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleChange: (value: string, labels: string[]) => {
     const idx = labels.indexOf(value);
+    let newLabels = labels;
     if (idx === -1) {
-      labels.push(value);
+      newLabels = [...labels, value];
     } else {
-      labels.splice(idx, 1);
+      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
     }
-    dispatch(setLabels(labels));
+    dispatch(setLabels(newLabels));
   },
 });
 

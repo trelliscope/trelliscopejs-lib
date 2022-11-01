@@ -11,10 +11,10 @@ import { setActiveSidebar } from '../slices/sidebarSlice';
 import { receiveConfig, requestConfig } from '../slices/configSlice';
 import { receiveDisplayList } from '../slices/displayListSlice';
 import { setSelectedDisplay } from '../slices/selectedDisplaySlice';
-import { setLayout } from '../slices/layoutSlice';
-import { setLabels } from '../slices/labelsSlice';
 import { setSort } from '../slices/sortSlice';
 import { setFilter, setFilterView } from '../slices/filterSlice';
+import { setLayout } from '../slices/layoutSlice';
+import { setLabels } from '../slices/labelsSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,

@@ -277,7 +277,7 @@ interface Dims {
   labelHeight: number;
   labelPad: number;
   labelWidth: number;
-  nLabels: 1;
+  nLabels: number;
   pHeight: number;
   pPad: number;
   pWidth: number;
