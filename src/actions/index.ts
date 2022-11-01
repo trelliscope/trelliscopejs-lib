@@ -38,7 +38,7 @@ import {
   SET_OPTIONS,
 } from '../constants';
 
-const getJSON = (obj: { url: string, callback: (data: never) => void}) =>
+const getJSON = (obj: { url: string; callback: (data: never) => void }) =>
   fetch(obj.url)
     .then((response) => response.json() as never)
     .then((json) => obj.callback(json));
@@ -48,7 +48,7 @@ export const setAppID = (id: string) => ({
   id,
 });
 
-export const setOptions = (options: { logger?: boolean, mockData?: boolean}) => ({
+export const setOptions = (options: { logger?: boolean; mockData?: boolean }) => ({
   type: SET_OPTIONS,
   options,
 });
@@ -63,9 +63,9 @@ export const setSinglePageApp = (singlePageApp: boolean) => ({
   singlePageApp,
 });
 
-export const windowResize = (dims: { width: number; height: number; }) => ({ type: WINDOW_RESIZE, dims });
+export const windowResize = (dims: { width: number; height: number }) => ({ type: WINDOW_RESIZE, dims });
 
-export const setAppDims = (dims: { width: number; height: number; }) => ({ type: UPDATE_DIMS, dims });
+export const setAppDims = (dims: { width: number; height: number }) => ({ type: UPDATE_DIMS, dims });
 
 export const requestConfig = () => ({
   type: REQUEST_CONFIG,
@@ -92,7 +92,7 @@ export const setDispInfoDialogOpen = (isOpen: boolean) => ({
   isOpen,
 });
 
-export const setLayout = (layout: { nrow?: number; ncol?: number, arrange?: 'row' | 'col'; pageNum?: number}) => ({
+export const setLayout = (layout: { nrow?: number; ncol?: number; arrange?: 'row' | 'col'; pageNum?: number }) => ({
   type: SET_LAYOUT,
   layout,
 });
@@ -188,7 +188,13 @@ export const setErrorMessage = (msg: string) => ({
   msg,
 });
 
-const setCogDatAndState = (iface: CogInterface, cogDatJson: CogData[], dObjJson: DisplayObject, dispatch: AppDispatch, hash: string): void => {
+const setCogDatAndState = (
+  iface: CogInterface,
+  cogDatJson: CogData[],
+  dObjJson: DisplayObject,
+  dispatch: AppDispatch,
+  hash: string,
+): void => {
   let hashItems = {} as HashItem;
   hash
     .replace('#', '')
@@ -197,11 +203,11 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson: CogData[], dObjJson:
       const tuple: string[] = d.split('=');
       hashItems = { ...hashItems, [tuple[0]]: tuple[1] };
     });
-    
+
   for (let i = 0; i < cogDatJson.length; i += 1) {
     cogDatJson[i].__index = i; // eslint-disable-line no-param-reassign
   }
-  
+
   dispatch(receiveCogData(iface, crossfilter(cogDatJson)));
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
@@ -287,7 +293,6 @@ const setCogDatAndState = (iface: CogInterface, cogDatJson: CogData[], dObjJson:
         fltState.value = vals;
         fltState.orderValue = 'ct,desc';
       } else if (fltItems.type === 'range') {
-
         const from = fltItems.from ? parseFloat(fltItems.from) : undefined;
         const to = fltItems.to ? parseFloat(fltItems.to) : undefined;
         fltState.value = { from, to };
@@ -336,7 +341,14 @@ const setPanelInfo = (dObjJson: DisplayObject, cfg: Config) => {
 };
 
 export const fetchDisplay =
-  (name: string, group: string, cfg: Config, id = '', hash = '', getCogData = true): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (
+    name: string,
+    group: string,
+    cfg: Config,
+    id = '',
+    hash = '',
+    getCogData = true,
+  ): ThunkAction<void, RootState, unknown, AnyAction> =>
   (dispatch) => {
     dispatch(requestDisplay(name, group));
 
@@ -372,9 +384,7 @@ export const fetchDisplay =
           getJSONP({
             url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
             callbackName: 'cdCallback',
-            error: (err) => dispatch(setErrorMessage(
-              `Couldn't load cognostics data: ${err.url}`
-            ))
+            error: (err) => dispatch(setErrorMessage(`Couldn't load cognostics data: ${err.url}`)),
           });
         } else {
           getJSON({
@@ -399,9 +409,7 @@ export const fetchDisplay =
       getJSONP({
         url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
         callbackName: 'ldCallback',
-        error: (err) => dispatch(setErrorMessage(
-          `Couldn't load display object: ${err.url}`
-        ))
+        error: (err) => dispatch(setErrorMessage(`Couldn't load display object: ${err.url}`)),
       });
     } else {
       getJSON({
@@ -416,151 +424,127 @@ export const fetchDisplay =
 // the display list is only loaded once at the beginning
 // but it needs the config so we'll load config first
 export const fetchDisplayList =
-  (config: string | SelfContainedConfig = 'config.jsonp', id = '', singlePageApp = false): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (config = 'config.jsonp', id = '', singlePageApp = false): ThunkAction<void, RootState, unknown, AnyAction> =>
   (dispatch) => {
     // don't read from the hash if not in single-page-app mode
     const hash = singlePageApp ? window.location.hash : '';
 
-    const selfContained = !(typeof config === 'string');
+    dispatch(requestConfig());
 
-    if (!selfContained) {
-      dispatch(requestConfig());
+    const dlCallback = `__loadDisplayList__${id}`;
+    const cfgCallback = `__loadTrscopeConfig__${id}`;
 
-      const dlCallback = `__loadDisplayList__${id}`;
-      const cfgCallback = `__loadTrscopeConfig__${id}`;
+    const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
 
-      const configBase = config.replace(/[^\/]*$/, ''); // eslint-disable-line no-useless-escape
-
-      const getConfigBase = (txt: string) => {
-        let res = txt;
-        if (!/^https?:\/\/|^file:\/\/|^\//.test(txt)) {
-          res = configBase;
-          if (txt !== '') {
-            res += `${txt}/`;
-          }
+    const getConfigBase = (txt: string) => {
+      let res = txt;
+      if (!/^https?:\/\/|^file:\/\/|^\//.test(txt)) {
+        res = configBase;
+        if (txt !== '') {
+          res += `${txt}/`;
         }
-        return res;
-      };
+      }
+      return res;
+    };
 
-      window[cfgCallback] = (cfg: Config) => {
-        // if display_base is empty, we want to use same path as config
-        // eslint-disable-next-line no-param-reassign
-        cfg.display_base = getConfigBase(cfg.display_base) as Config['display_base'];
-        cfg.config_base = configBase; // eslint-disable-line no-param-reassign
-        // eslint-disable-next-line no-param-reassign
-        cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
-        dispatch(receiveConfig(cfg));
+    window[cfgCallback] = (cfg: Config) => {
+      // if display_base is empty, we want to use same path as config
+      // eslint-disable-next-line no-param-reassign
+      cfg.display_base = getConfigBase(cfg.display_base) as Config['display_base'];
+      cfg.config_base = configBase; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      cfg.cog_server.info.base = getConfigBase(cfg.cog_server.info.base);
+      dispatch(receiveConfig(cfg));
 
-        // register with google analytics if specified
-        if (cfg.ga_id) {
-          ReactGA.initialize(cfg.ga_id);
+      // register with google analytics if specified
+      if (cfg.ga_id) {
+        ReactGA.initialize(cfg.ga_id);
+      }
+
+      if (cfg.require_token === true) {
+        const id1 = `${window.devicePixelRatio || ''}${navigator.userAgent.replace(/\D+/g, '')}`;
+        const id2 = `${navigator.language.length || ''}${window.screen.colorDepth || ''}`;
+        const id3 = `${new Date().getTimezoneOffset()}${navigator.platform.length || ''}`;
+        const id4 = `${window.screen.height || ''}${window.screen.width || ''}${window.screen.pixelDepth || ''}`;
+        const id5 = `${new Date().toLocaleDateString().replace(/\D+/g, '')}`;
+        const token = `${id1}${id2}${id3}${id4}${id5}`;
+        // console.log(token);
+        // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
+        if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
+          dispatch(
+            setErrorMessage(
+              'Visualization could not be loaded because it is not embedded in a properly authenticated website.',
+            ),
+          );
+          return;
         }
+      }
 
-        if (cfg.require_token === true) {
-          const id1 = `${window.devicePixelRatio || ''}${navigator.userAgent.replace(/\D+/g, '')}`;
-          const id2 = `${navigator.language.length || ''}${window.screen.colorDepth || ''}`;
-          const id3 = `${new Date().getTimezoneOffset()}${navigator.platform.length || ''}`;
-          const id4 = `${window.screen.height || ''}${window.screen.width || ''}${window.screen.pixelDepth || ''}`;
-          const id5 = `${new Date().toLocaleDateString().replace(/\D+/g, '')}`;
-          const token = `${id1}${id2}${id3}${id4}${id5}`;
-          // console.log(token);
-          // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
-          if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
-            dispatch(
-              setErrorMessage(
-                'Visualization could not be loaded because it is not embedded in a properly authenticated website.',
-              ),
-            );
-            return;
-          }
-        }
-
-        window[dlCallback] = (json: Display[]) => {
-          json.sort((a, b) => {
-            const v1 = a.order === undefined ? 1 : a.order;
-            const v2 = b.order === undefined ? 1 : b.order;
-            return v1 > v2 ? 1 : -1;
-          });
-
-          dispatch(receiveDisplayList(json));
-          // check to see if a display is specified already in the URL
-          // and load it if it is
-          let hashItems = {} as HashItem;;
-          hash
-            .replace('#', '')
-            .split('&')
-            .forEach((d) => {
-              const tuple = d.split('=');
-              hashItems = { ...hashItems, [tuple[0]]: tuple[1] };
-            });
-          if (hashItems.display) {
-            const names = json.map((d) => d.name);
-            const idx = names.indexOf(hashItems.display);
-            if (idx > -1) {
-              const dObj = json[idx];
-              dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
-              dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
-            }
-          } else if (singlePageApp && json.length > 1) {
-            dispatch(setDialogOpen(true));
-            dispatch(setDispSelectDialogOpen(true));
-          }
-        };
-
-        if (cfg.data_type === 'jsonp') {
-          getJSONP({
-            url: `${cfg.display_base}displayList.jsonp`,
-            callbackName: dlCallback,
-            error: (err) => dispatch(setErrorMessage(
-              `Couldn't load display list: ${err.url}`
-            ))
-          });
-        } else {
-          getJSON({
-            url: `${cfg.display_base}displayList.json`,
-            callback: window[dlCallback],
-          }).catch(() => {
-            dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}displayList.json`));
-          });
-        }
-      };
-      // load the config to start
-      // try json first and if the file isn't there, try jsonp
-
-      const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
-      const configExt = (config.match(extRegex) || [])[0];
-
-      if (configExt === '.jsonp') {
-        getJSONP({
-          url: `${config}`,
-          callbackName: cfgCallback,
-          error: (err) => dispatch(setErrorMessage(
-            `Couldn't load config: ${err.url}`
-          ))
+      window[dlCallback] = (json: Display[]) => {
+        json.sort((a, b) => {
+          const v1 = a.order === undefined ? 1 : a.order;
+          const v2 = b.order === undefined ? 1 : b.order;
+          return v1 > v2 ? 1 : -1;
         });
-      } else if (configExt === '.json') {
-        getJSON({
-          url: config,
-          callback: window[cfgCallback],
+
+        dispatch(receiveDisplayList(json));
+        // check to see if a display is specified already in the URL
+        // and load it if it is
+        let hashItems = {} as HashItem;
+        hash
+          .replace('#', '')
+          .split('&')
+          .forEach((d) => {
+            const tuple = d.split('=');
+            hashItems = { ...hashItems, [tuple[0]]: tuple[1] };
+          });
+        if (hashItems.display) {
+          const names = json.map((d) => d.name);
+          const idx = names.indexOf(hashItems.display);
+          if (idx > -1) {
+            const dObj = json[idx];
+            dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
+            dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
+          }
+        } else if (singlePageApp && json.length > 1) {
+          dispatch(setDialogOpen(true));
+          dispatch(setDispSelectDialogOpen(true));
+        }
+      };
+
+      if (cfg.data_type === 'jsonp') {
+        getJSONP({
+          url: `${cfg.display_base}displayList.jsonp`,
+          callbackName: dlCallback,
+          error: (err) => dispatch(setErrorMessage(`Couldn't load display list: ${err.url}`)),
         });
       } else {
-        dispatch(setErrorMessage(`Config specified as ${config} must have extension '.json' or '.jsonp'`));
+        getJSON({
+          url: `${cfg.display_base}displayList.json`,
+          callback: window[dlCallback],
+        }).catch(() => {
+          dispatch(setErrorMessage(`Couldn't load display list: ${cfg.display_base}displayList.json`));
+        });
       }
-    } else {
-      // all data for rendering app is self-contained in document
-      dispatch(receiveConfig(config.config));
-      dispatch(receiveDisplayList(config.displayList));
-      const { name } = config.displayList[0];
-      const { group } = config.displayList[0];
-      const { desc } = config.displayList[0];
+    };
+    // load the config to start
+    // try json first and if the file isn't there, try jsonp
 
-      dispatch(setSelectedDisplay(name, group, desc));
-      dispatch(requestDisplay(name, group));
-      const iface = config.displayObj.cogInterface;
-      dispatch(receiveDisplay(name, group, config.displayObj));
-      dispatch(receiveCogData(iface));
-      dispatch(setLocalPanels(config.panels));
-      setCogDatAndState(iface, config.cogData, config.displayObj, dispatch, '');
-      setPanelInfo(config.displayObj, config.config);
+    const extRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i; // eslint-disable-line no-useless-escape
+    const configExt = (config.match(extRegex) || [])[0];
+
+    if (configExt === '.jsonp') {
+      getJSONP({
+        url: `${config}`,
+        callbackName: cfgCallback,
+        error: (err) => dispatch(setErrorMessage(`Couldn't load config: ${err.url}`)),
+      });
+    } else if (configExt === '.json') {
+      getJSON({
+        url: config,
+        callback: window[cfgCallback],
+      });
+    } else {
+      dispatch(setErrorMessage(`Config specified as ${config} must have extension '.json' or '.jsonp'`));
     }
   };
