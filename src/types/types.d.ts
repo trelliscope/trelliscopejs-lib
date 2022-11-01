@@ -1,3 +1,5 @@
+import type {} from 'redux-thunk/extend-redux'
+
 interface Config {
   display_base: 'displays';
   data_type: 'json' | 'jsonp';
@@ -353,3 +355,5 @@ interface Window {
 interface CogData {
   [key: string]: string | number;
 }
+
+type SidebarType = 'Panel Grid Layout' | 'Filter Panels' | 'Sort Panels' | 'Show/Hide Labels' | 'Views' | 'Configuration' | '';
