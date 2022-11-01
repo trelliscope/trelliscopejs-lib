@@ -44,8 +44,8 @@ export const hashFromState = (state: RootState) => {
     } else if (flt.type === 'regex') {
       res = `var:${flt.name};type:regex;val:${encodeURIComponent(flt.regex)}`;
     } else if (flt.type === 'range') {
-      const from = flt.value.from ? flt.value.from : '';
-      const to = flt.value.to ? flt.value.to : '';
+      const from = flt?.value?.from ? flt?.value?.from : '';
+      const to = flt?.value?.to ? flt?.value?.to : '';
       res = `var:${flt.name};type:range;from:${from};to:${to}`;
     }
     return res;
