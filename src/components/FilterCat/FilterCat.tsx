@@ -118,8 +118,14 @@ const FilterCat: React.FC<FilterCatProps> = ({
         <div className={styles.filterCatExtraOptionsInput}>
           {/* this is an issue with the iconButton in materialUi not having the type for an onClick in the props
           // @ts-ignore */}
-          <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleMenuIconClick}>
-            <MoreVertIcon />
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleMenuIconClick}
+            sx={{ width: 25, height: 25 }}
+          >
+            <MoreVertIcon sx={{ width: 15, height: 15 }} />
           </IconButton>
           <Menu id="long-menu" open={menuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
             {sortOptions.map((d) => (
