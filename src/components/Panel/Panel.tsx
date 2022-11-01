@@ -37,8 +37,7 @@ const Panel: React.FC<PanelProps> = ({
   removeLabel,
 }) => {
   const [panelData, setPanelData] = useState<{ [key: string]: PanelData }>({});
-  const isSelfContained = panelData !== undefined && cfg.display_base === '__self__';
-  const [loaded, setLoaded] = useState<boolean>(isSelfContained || panelInterface.type === 'image_src');
+  const [loaded, setLoaded] = useState<boolean>(panelInterface.type === 'image_src');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
