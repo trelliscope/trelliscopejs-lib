@@ -1,5 +1,3 @@
-import type {} from 'redux-thunk/extend-redux'
-
 interface Config {
   display_base: 'displays';
   data_type: 'json' | 'jsonp';

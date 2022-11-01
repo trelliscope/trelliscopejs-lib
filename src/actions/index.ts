@@ -3,6 +3,7 @@ import ReactGA from 'react-ga';
 import getJSONP from 'browser-jsonp';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import type {} from 'redux-thunk/extend-redux';
 import { loadAssetsSequential } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
 import { AppDispatch, RootState } from '../store';

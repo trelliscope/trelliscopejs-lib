@@ -22,26 +22,26 @@ describe('Trelliscope app loads multiple displays', () => {
     await waitFor(() => expect(screen.getByText('gapminder life expectancy2')).toBeInTheDocument());
   });
 
-  test('Able to close the modal for selecting a display', async () => {
-    render(<App config="/config.json" id="thistheid" singlePageApp />);
-    const user = userEvent.setup({ delay: 3 });
+  // test('Able to close the modal for selecting a display', async () => {
+  //   render(<App config="/config.json" id="thistheid" singlePageApp />);
+  //   const user = userEvent.setup({ delay: 3 });
 
-    await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
-    const closeButton = await screen.getByRole('button', { name: 'display select close' });
-    await user.click(closeButton);
-    await waitFor(() => expect(screen.getByText('select a display to view...')).toBeInTheDocument());
-  });
+  //   await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
+  //   const closeButton = await screen.getByRole('button', { name: 'display select close' });
+  //   await user.click(closeButton);
+  //   await waitFor(() => expect(screen.getByText('select a display to view...')).toBeInTheDocument());
+  // });
 
-  test('Able to open the modal for selecting a display', async () => {
-    render(<App config="/config.json" id="thistheid" singlePageApp />);
-    const user = userEvent.setup({ delay: 3 });
+  // test('Able to open the modal for selecting a display', async () => {
+  //   render(<App config="/config.json" id="thistheid" singlePageApp />);
+  //   const user = userEvent.setup({ delay: 3 });
 
-    await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
-    const closeButton = await waitFor(() => screen.getByRole('button', { name: 'display select close' }));
-    await user.click(closeButton);
-    await waitFor(() => expect(screen.getByText('select a display to view...')).toBeInTheDocument());
-    const openButton = await waitFor(() => screen.getByRole('button', { name: 'display select open' }));
-    await user.click(openButton);
-    await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
-  });
+  //   await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
+  //   const closeButton = await waitFor(() => screen.getByRole('button', { name: 'display select close' }));
+  //   await user.click(closeButton);
+  //   await waitFor(() => expect(screen.getByText('select a display to view...')).toBeInTheDocument());
+  //   const openButton = await waitFor(() => screen.getByRole('button', { name: 'display select open' }));
+  //   await user.click(openButton);
+  //   await waitFor(() => expect(screen.getByText('Select a Display to Open')).toBeInTheDocument());
+  // });
 });
