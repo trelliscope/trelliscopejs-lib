@@ -8,6 +8,7 @@ import { loadAssetsSequential } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
 import { AppDispatch, RootState } from '../store';
 import { setActiveSidebar } from '../slices/sidebarSlice';
+import { receiveConfig, requestConfig } from '../slices/configSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
@@ -25,8 +26,6 @@ import {
   REQUEST_DISPLAY_LIST,
   RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA,
-  REQUEST_CONFIG,
-  RECEIVE_CONFIG,
   SET_DIALOG_OPEN,
   SET_LOCAL_PANELS,
   SB_LOOKUP,
@@ -66,16 +65,6 @@ export const setSinglePageApp = (singlePageApp: boolean) => ({
 export const windowResize = (dims: { width: number; height: number }) => ({ type: WINDOW_RESIZE, dims });
 
 export const setAppDims = (dims: { width: number; height: number }) => ({ type: UPDATE_DIMS, dims });
-
-export const requestConfig = () => ({
-  type: REQUEST_CONFIG,
-});
-
-export const receiveConfig = (json: Config) => ({
-  type: RECEIVE_CONFIG,
-  config: json,
-  receivedAt: Date.now(),
-});
 
 export const setDialogOpen = (isOpen: boolean) => ({
   type: SET_DIALOG_OPEN,
