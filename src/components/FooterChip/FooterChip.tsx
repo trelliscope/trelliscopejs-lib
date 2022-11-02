@@ -1,7 +1,9 @@
 import React from 'react';
 import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
+import { setFilterView, setFilter } from '../../actions';
+import { setSort } from '../../slices/sortSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import styles from './FooterChip.module.scss';
 
 interface FooterChipProps {

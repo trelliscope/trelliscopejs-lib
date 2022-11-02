@@ -5,6 +5,9 @@
 
 import type { Middleware } from 'redux';
 import type { RootState } from '../store';
+import { sortSlice } from '../slices/sortSlice';
+
+const { setSort } = sortSlice.actions;
 
 interface Dimension {
   [key: string]: number;
@@ -144,7 +147,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         }
       });
     }
-  } else if (action.type === 'SET_SORT' && action.sort !== undefined) {
+  } else if (action.type === setSort.type && action.payload !== undefined) {
     // if only sorting on one variable, make a sort dimension according to that variable
     // if more than one variable, crossfilter can only handle sorting on one dimension
     // so we have to get sort index of entire data set and create a new dimension
@@ -158,10 +161,10 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
       if (dimensions.__sort) {
         dimensions.__sort.remove();
       }
-      let newState = action.sort;
-      if (typeof action.sort === 'number') {
+      let newState = action.payload;
+      if (typeof action.payload === 'number') {
         newState = Object.assign([], [], store.getState().sort);
-        newState.splice(action.sort, 1);
+        newState.splice(action.payload, 1);
       }
       if (newState.length === 0) {
         dimensions.__sort = cf.dimension((d: Dimension) => d.__index);

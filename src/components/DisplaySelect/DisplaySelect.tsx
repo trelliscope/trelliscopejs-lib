@@ -11,16 +11,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
-import {
-  fetchDisplay,
-  setLabels,
-  setLayout,
-  setSort,
-  setFilter,
-  setFilterView,
-  setDispSelectDialogOpen,
-  resetRelDisps,
-} from '../../actions';
+import { fetchDisplay, setFilter, setFilterView, setDispSelectDialogOpen, resetRelDisps } from '../../actions';
+import { setSort } from '../../slices/sortSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { displayGroupsSelector } from '../../selectors/display';
 import {
