@@ -40,8 +40,8 @@
     z-index: 8000;
     position: absolute;
     box-sizing: border-box;
-    top: -1; // cover up top app border
-    left: -1;
+    top: -1px; // cover up top app border
+    left: -1px;
     height: 48px;
     width: 48px;
     font-size: 18px;
