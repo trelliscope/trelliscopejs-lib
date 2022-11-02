@@ -22,6 +22,7 @@ import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } fr
 import { cogInfoSelector } from '../../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../../selectors/cogData';
 import type { RootState } from '../../store';
+import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import styles from './Content.module.scss';
 
 interface ContentProps {
@@ -45,7 +46,7 @@ interface ContentProps {
   displayInfo: {
     [key: string]: DisplayInfoState;
   };
-  relDispPositions: RelDispPositions[];
+  relDispPositions: RelDispPositionsState[];
 }
 
 const Content: React.FC<ContentProps> = ({

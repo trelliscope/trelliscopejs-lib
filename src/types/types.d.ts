@@ -74,12 +74,6 @@ interface Display {
   keySig: string;
 }
 
-interface SelectedDisplay {
-  group: string;
-  name: string;
-  desc: string;
-}
-
 // TODO this should probably live as a return type
 // of `displayGroupSelector` once that file is converted to TS
 type DisplayGroup = {
@@ -135,7 +129,7 @@ interface DisplayObject {
     sidebar: number;
     filter: { [key: string]: Filter<FilterCat | FilterRange> };
     fv: string[];
-  },
+  };
   keySig: string;
   cogInterface: CogInterface;
   panelInterface: PanelInterface;
@@ -217,7 +211,7 @@ type FilterItem = {
   val: string;
   from: string;
   to: string;
-}
+};
 
 interface ViewItem {
   name: string;
@@ -264,7 +258,11 @@ interface HTMLWidgetIntance {
   find: (selector: string) => HTMLElement;
 }
 
-interface HTMLWidgetData { evals: string[]; x: unknown, jsHooks: unknown[] }
+interface HTMLWidgetData {
+  evals: string[];
+  x: unknown;
+  jsHooks: unknown[];
+}
 
 type PanelData = string | HTMLWidgetData;
 
@@ -333,19 +331,6 @@ interface FilterNumStateChange {
   valid: boolean;
 }
 
-interface RelDispPositions {
-  aspect: number;
-  col: number;
-  group: string;
-  height: number;
-  width: number;
-  idx: number;
-  left: number;
-  name: string;
-  row: number;
-  top: number;
-}
-
 interface Window {
   trelliscopeApp: (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => void;
 }
@@ -354,4 +339,11 @@ interface CogData {
   [key: string]: string | number;
 }
 
-type SidebarType = 'Panel Grid Layout' | 'Filter Panels' | 'Sort Panels' | 'Show/Hide Labels' | 'Views' | 'Configuration' | '';
+type SidebarType =
+  | 'Panel Grid Layout'
+  | 'Filter Panels'
+  | 'Sort Panels'
+  | 'Show/Hide Labels'
+  | 'Views'
+  | 'Configuration'
+  | '';

@@ -9,8 +9,12 @@ import Checkbox from '@mui/material/Checkbox';
 import { selectedRelDispsSelector } from '../../selectors/display';
 import { appIdSelector, configSelector, selectedDisplaySelector } from '../../selectors';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
-import { setSelectedRelDisps, setRelDispPositions, setLayout, fetchDisplay } from '../../actions';
+import { setLayout, fetchDisplay } from '../../actions';
 import type { RootState } from '../../store';
+import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
+import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
+import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
+import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplayList.module.scss';
 
 interface DisplayListProps {
@@ -20,12 +24,12 @@ interface DisplayListProps {
   handleClick: (name: string, group: string, desc: string) => void;
   cfg: Config;
   appId: string;
-  selectedDisplay: SelectedDisplay;
+  selectedDisplay: SelectedDisplayState;
   selectedRelDisps: number[];
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: SelectedDisplay,
+    selectedDisplay: SelectedDisplayState,
     displayItems: Display[],
     contentHeight: number,
     contentWidth: number,
@@ -154,12 +158,12 @@ const styleSelector = createSelector(
 const mapStateToProps = (state: RootState) => styleSelector(state);
 
 const getRelDispPositions = (
-  selectedDisplay: SelectedDisplay,
+  selectedDisplay: SelectedDisplayState,
   relDisps: number[],
   displayInfo: Display[],
   contentHeight: number,
   contentWidth: number,
-): RelDispPositions[] => {
+): RelDispPositionsState[] => {
   const dnames = displayInfo.map((d: Display) => d.name);
   const idx = dnames.indexOf(selectedDisplay.name);
   const disps = [idx, ...relDisps];
@@ -246,7 +250,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>)
   handleCheckbox: (
     i: number,
     selectedRelDisps: number[],
-    selectedDisplay: SelectedDisplay,
+    selectedDisplay: SelectedDisplayState,
     displayItems: Display[],
     contentHeight: number,
     contentWidth: number,

@@ -22,10 +22,10 @@ import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../../selectors';
-import { setRelDispPositions } from '../../actions';
 import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
-
+import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
+import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import styles from './RelatedDisplays.module.scss';
 
 const previewHeight = 400;
@@ -40,10 +40,10 @@ interface RelatedDisplaysProps {
   selectedRelDisps: number[];
   contentHeight: number;
   contentWidth: number;
-  relDispPositions: RelDispPositions[];
+  relDispPositions: RelDispPositionsState[];
   handleResize: (
-    pos: RelDispPositions,
-    relDispPositions: RelDispPositions[],
+    pos: RelDispPositionsState,
+    relDispPositions: RelDispPositionsState[],
     x: number,
     y: number,
     width: number,
@@ -229,8 +229,8 @@ const styleSelector = createSelector(
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleResize: (
-    pos: RelDispPositions,
-    relDispPositions: RelDispPositions[],
+    pos: RelDispPositionsState,
+    relDispPositions: RelDispPositionsState[],
     x: number,
     y: number,
     width: number,
