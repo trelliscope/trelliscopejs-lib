@@ -14,12 +14,11 @@ import { setSelectedDisplay } from '../slices/selectedDisplaySlice';
 import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
 import { setSort } from '../slices/sortSlice';
+import { setFilter, setFilterView } from '../slices/filterSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
   SET_ERROR_MESSAGE,
-  SET_FILTER,
-  SET_FILTER_VIEW,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
   RECEIVE_COGDATA,
@@ -71,17 +70,6 @@ export const setDispSelectDialogOpen = (isOpen: boolean) => ({
 export const setDispInfoDialogOpen = (isOpen: boolean) => ({
   type: SET_DISPINFO_DIALOG_OPEN,
   isOpen,
-});
-
-export const setFilter = (filter?: { [key: string]: Filter<FilterCat | FilterRange> } | string) => ({
-  type: SET_FILTER,
-  filter,
-});
-
-export const setFilterView = (name: FilterView | string, which?: 'set' | 'add' | 'remove') => ({
-  type: SET_FILTER_VIEW,
-  name,
-  which,
 });
 
 // export const setSelectedView = (val) => ({
@@ -269,7 +257,7 @@ const setCogDatAndState = (
       }
     }
   }
-  dispatch(setFilterView(fvObj, 'set'));
+  dispatch(setFilterView({ name: fvObj, which: 'set' }));
   dispatch(setFilter(filter));
 };
 

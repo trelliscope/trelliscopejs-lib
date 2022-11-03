@@ -10,7 +10,7 @@ import _config from '../slices/configSlice';
 import layout from '../slices/layoutSlice';
 import labels from '../slices/labelsSlice';
 import sort from '../slices/sortSlice';
-import { filter } from './displayState';
+import filter from '../slices/filterSlice';
 import _displayInfo from './_displayInfo';
 import _cogDataMutable from './_cogDataMutable';
 import _localPanels from './_localPanels';

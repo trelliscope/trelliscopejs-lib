@@ -6,8 +6,10 @@
 import type { Middleware } from 'redux';
 import type { RootState } from '../store';
 import { sortSlice } from '../slices/sortSlice';
+import { filterSlice } from '../slices/filterSlice';
 
 const { setSort } = sortSlice.actions;
+const { setFilter, setFilterView } = filterSlice.actions;
 
 interface Dimension {
   [key: string]: number;
@@ -51,21 +53,21 @@ const multiSort = (args: string[]) => {
 };
 
 const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (action) => {
-  if (action.type === 'SET_FILTER' && action.filter) {
+  if (action.type === setFilter.type && action.payload) {
     const cf = store.getState()._cogDataMutable.crossfilter;
     const dimensions = store.getState()._cogDataMutable.dimensionRefs;
     const groups = store.getState()._cogDataMutable.groupRefs;
-    if (typeof action.filter === 'string' || action.filter instanceof String) {
-      dimensions[action.filter].filter(null); // .remove(), .filterAll() ?
+    if (typeof action.payload === 'string' || action.payload instanceof String) {
+      dimensions[action.payload].filter(null); // .remove(), .filterAll() ?
     } else {
-      const names = Object.keys(action.filter);
+      const names = Object.keys(action.payload);
       if (names.length === 0 && dimensions) {
         // all filters were reset - remove them all...
         Object.keys(store.getState().filter.state).forEach((nn) => dimensions[nn].filter(null));
       }
       for (let i = 0; i < names.length; i += 1) {
         // numeric is always 'range' type
-        if (action.filter[names[i]].varType === 'numeric') {
+        if (action.payload[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
             dimensions[names[i]] = cf.dimension((d: Dimension) => getNumVal(d, names[i]));
           }
@@ -78,17 +80,17 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
               Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
             );
           }
-          if (action.filter[names[i]].value === undefined) {
+          if (action.payload[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
           } else {
-            let fromVal = action.filter[names[i]].value.from;
-            let toVal = action.filter[names[i]].value.to;
+            let fromVal = action.payload[names[i]].value.from;
+            let toVal = action.payload[names[i]].value.to;
             fromVal = fromVal === undefined ? -Infinity : fromVal;
             toVal = toVal === undefined ? Infinity : toVal;
             // want to be inclusive on both ends
             dimensions[names[i]].filterFunction((d: number) => d >= fromVal && d <= toVal);
           }
-        } else if (action.filter[names[i]].varType === 'factor') {
+        } else if (action.payload[names[i]].varType === 'factor') {
           if (dimensions[names[i]] === undefined) {
             dimensions[names[i]] = cf.dimension((d: Dimension) => getCatVal(d, names[i]));
           }
@@ -96,32 +98,32 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
             // group.dispose(); // to get rid of previous group
             groups[names[i]] = dimensions[names[i]].group();
           }
-          if (action.filter[names[i]].value === undefined) {
+          if (action.payload[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
           } else {
             // handle select and regex (regex same as select as value is already populated)
-            const selectVals = action.filter[names[i]].value;
+            const selectVals = action.payload[names[i]].value;
             dimensions[names[i]].filter((d: number) => selectVals.indexOf(d) > -1);
           }
         }
       }
     }
-  } else if (action.type === 'SET_FILTER_VIEW') {
+  } else if (action.type === setFilterView.type) {
     // need to make sure any filter in view has a dimension and group
     // so we can create bar charts / histograms
     // also if the filter is hidden and inactive, we should remove the dimension
     // .remove() ?
-    if (action.which === 'add' || action.which === 'set') {
+    if (action.payload.which === 'add' || action.payload.which === 'set') {
       const cf = store.getState()._cogDataMutable.crossfilter;
       const dimensions = store.getState()._cogDataMutable.dimensionRefs;
       const groups = store.getState()._cogDataMutable.groupRefs;
       const dispName = store.getState().selectedDisplay.name;
 
       let names = [] as string[];
-      if (action.which === 'add') {
-        names.push(action.name);
+      if (action.payload.which === 'add') {
+        names.push(action.payload.name);
       } else {
-        names = action.name.active;
+        names = action.payload.name.active;
       }
 
       names.forEach((name: string) => {
