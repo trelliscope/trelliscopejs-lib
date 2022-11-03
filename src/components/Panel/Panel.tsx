@@ -4,6 +4,7 @@ import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
 import styles from './Panel.module.scss';
 import PanelGraphic from '../PanelGraphic';
+import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 
 interface PanelProps {
   labels: PanelLabel[];
@@ -18,7 +19,7 @@ interface PanelProps {
     [key: string]: DisplayInfoState;
   };
   curDisplayInfo: DisplayInfoState;
-  relDispPositions: RelDispPositions[];
+  relDispPositions: RelDispPositionsState[];
   removeLabel: (label: string, labels: string[]) => void;
 }
 

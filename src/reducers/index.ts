@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import sidebar from '../slices/sidebarSlice';
+import selectedDisplay from '../slices/selectedDisplaySlice';
+import relDispPositions from '../slices/relDispPositionsSlice';
+import selectedRelDisps from '../slices/selectedRelDispsSlice';
 import ui from './ui';
 import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog, options } from './app';
-import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';
 import { layout, labels, sort, filter } from './displayState';
 import _config from '../slices/configSlice';
 import _displayList from './_displayList';

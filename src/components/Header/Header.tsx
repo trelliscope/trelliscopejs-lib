@@ -10,7 +10,7 @@ import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HeaderLogo from '../HeaderLogo';
 import type { RootState } from '../../store';
-import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../../actions';
+import { fetchDisplay, setDialogOpen } from '../../actions';
 import { windowWidthSelector } from '../../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../../selectors/display';
 import {
@@ -21,6 +21,7 @@ import {
   dialogOpenSelector,
 } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
+import { SelectedDisplayState, setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import styles from './Header.module.scss';
 
 interface HeaderProps {
@@ -28,7 +29,7 @@ interface HeaderProps {
   appId: string;
   displayList: DisplayList;
   displayGroups: DisplayGroup;
-  selectedDisplay: SelectedDisplay;
+  selectedDisplay: SelectedDisplayState;
   relatedDisplayGroups: DisplayGroup;
   dialogOpen: boolean;
   selectDisplay: (name: string, group: string, desc: string, cfg: Config, appId: string, hash: string) => void;
@@ -169,8 +170,7 @@ const mapStateToProps = (state: RootState) => styleSelector(state);
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
   selectDisplay: (name: string, group: string, desc: string, cfg: Config, appId: string, hash: string) => {
-    dispatch(setSelectedDisplay(name, group, desc));
-
+    dispatch(setSelectedDisplay({ name, group, desc }));
     dispatch(fetchDisplay(name, group, cfg, appId, hash));
   },
   doSetDialogOpen: (isOpen: boolean) => {

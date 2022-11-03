@@ -12,7 +12,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
 import {
-  setSelectedDisplay,
   fetchDisplay,
   setLabels,
   setLayout,
@@ -21,7 +20,6 @@ import {
   setFilterView,
   setDispSelectDialogOpen,
   resetRelDisps,
-  setRelDispPositions,
 } from '../../actions';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { displayGroupsSelector } from '../../selectors/display';
@@ -35,6 +33,8 @@ import {
   dispSelectDialogSelector,
 } from '../../selectors';
 import type { RootState } from '../../store';
+import { SelectedDisplayState, setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import styles from './DisplaySelect.module.scss';
 
 interface DisplaySelectProps {
@@ -45,7 +45,7 @@ interface DisplaySelectProps {
   fullscreen: boolean;
   isOpen: boolean;
   appId: string;
-  selectedDisplay: SelectedDisplay;
+  selectedDisplay: SelectedDisplayState;
   displayList: DisplaySelect;
   displayGroups: DisplayGroup;
 }
@@ -196,7 +196,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>)
     dispatch(setFilter({}));
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
-    dispatch(setSelectedDisplay(name, group, desc));
+    dispatch(setSelectedDisplay({ name, group, desc }));
     dispatch(fetchDisplay(name, group, cfg, appId, ''));
   },
   setDispDialogOpen: (isOpen: boolean) => {

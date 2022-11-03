@@ -20,7 +20,6 @@ import {
   SET_SORT,
   SET_FILTER,
   SET_FILTER_VIEW,
-  SELECT_DISPLAY,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST,
@@ -32,7 +31,6 @@ import {
   SET_DISPSELECT_DIALOG_OPEN,
   SET_SELECTED_RELDISPS,
   SET_DISPINFO_DIALOG_OPEN,
-  SET_REL_DISP_POSITIONS,
   SET_SINGLE_PAGE_APP,
   SET_OPTIONS,
 } from '../constants';
@@ -117,19 +115,6 @@ export const receiveDisplayList = (json: Display[]) => ({
   receivedAt: Date.now(),
 });
 
-export const setSelectedDisplay = (name: string, group: string, desc: string) => ({
-  type: SELECT_DISPLAY,
-  name,
-  group,
-  desc,
-});
-
-export const setSelectedRelDisps = (arr: number[]) => ({
-  type: SET_SELECTED_RELDISPS,
-  which: 'set',
-  val: arr,
-});
-
 // export const setSelectedView = (val) => ({
 //   type: SET_SELECTED_VIEW,
 //   val
@@ -139,11 +124,6 @@ export const resetRelDisps = (i?: number[]) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
   val: i,
-});
-
-export const setRelDispPositions = (obj: RelDispPositions[]) => ({
-  type: SET_REL_DISP_POSITIONS,
-  obj,
 });
 
 export const requestDisplay = (name: string, group: string) => ({
@@ -492,7 +472,7 @@ export const fetchDisplayList =
           const idx = names.indexOf(hashItems.display);
           if (idx > -1) {
             const dObj = json[idx];
-            dispatch(setSelectedDisplay(dObj.name, dObj.group, dObj.desc));
+            dispatch(setSelectedDisplay({ name: dObj.name, group: dObj.group, desc: dObj.desc }));
             dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
           }
         } else if (singlePageApp && json.length > 1) {

@@ -5,7 +5,9 @@ import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { layoutSelector } from '../../selectors';
 import type { RootState } from '../../store';
-import { setLayout, setRelDispPositions, setSelectedRelDisps } from '../../actions';
+import { setLayout } from '../../actions';
+import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
+import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './SidebarLayout.module.scss';
 
 interface SidebarLayoutProps {
