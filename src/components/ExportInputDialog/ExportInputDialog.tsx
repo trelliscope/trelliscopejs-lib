@@ -198,7 +198,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
           </Stepper>
           {activeStep === 0 && (
             <div>
-              <DialogContentText>
+              <DialogContentText className={styles.exportInputDialogContentText}>
                 Before exporting the inputs you have provided, we would like to gather some information about you. Please
                 provide at least your full name, after which you will be able to click the &apos;Export&apos; tab in this
                 window to proceed with the export.
