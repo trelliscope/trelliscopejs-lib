@@ -3,16 +3,16 @@ import thunkMiddleware from 'redux-thunk';
 import callbackMiddleware from './middleware/callbackMiddleware';
 import crossfilterMiddleware from './middleware/crossfilterMiddleware';
 import { hashMiddleware } from './middleware/hash';
-import reducers from './reducers';
+import reducer from './reducers';
 
 const store = configureStore({
-  reducer: reducers,
+  reducer,
   middleware: [thunkMiddleware, crossfilterMiddleware, callbackMiddleware, hashMiddleware],
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;
 
-export type RootState = ReturnType<typeof reducers>;
+export type RootState = ReturnType<typeof reducer>;
 
 export type AppDispatch = typeof store.dispatch;

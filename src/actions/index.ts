@@ -12,8 +12,6 @@ import { receiveConfig, requestConfig } from '../slices/configSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
-  WINDOW_RESIZE,
-  UPDATE_DIMS,
   SET_ERROR_MESSAGE,
   SET_LAYOUT,
   SET_LABELS,
@@ -59,10 +57,6 @@ export const setSinglePageApp = (singlePageApp: boolean) => ({
   type: SET_SINGLE_PAGE_APP,
   singlePageApp,
 });
-
-export const windowResize = (dims: { width: number; height: number }) => ({ type: WINDOW_RESIZE, dims });
-
-export const setAppDims = (dims: { width: number; height: number }) => ({ type: UPDATE_DIMS, dims });
 
 export const setDialogOpen = (isOpen: boolean) => ({
   type: SET_DIALOG_OPEN,

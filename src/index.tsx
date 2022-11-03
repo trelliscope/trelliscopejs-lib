@@ -22,7 +22,8 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { windowResize, setAppDims, setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { windowResize, setAppDims } from './slices/uiSlice';
 import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';
 import App from './App';
@@ -228,7 +229,7 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
 // trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
-trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
+// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
