@@ -50,7 +50,7 @@ interface PanelInterface {
 
 interface DisplaySelect {
   list: Display[];
-  isLoaded: string;
+  isLoaded: boolean;
 }
 
 interface CogInterface {
@@ -86,10 +86,6 @@ interface CurrentDisplayInfo {
   isFetching: boolean;
   isLoaded: boolean;
   lastUpdated: number;
-}
-
-interface DisplayList extends CurrentDisplayInfo {
-  list: DisplayObject[];
 }
 
 interface DisplayObject {

@@ -3,7 +3,7 @@
 import { createSelector } from 'reselect';
 import type { RootState } from '../store';
 
-export const displayListSelector = (state: RootState) => state._displayList;
+export const displayListSelector = (state: RootState) => state.displayList;
 export const displayInfoSelector = (state: RootState) => state._displayInfo;
 export const curDisplayInfoSelector = (state: RootState) => {
   if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {

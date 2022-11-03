@@ -9,6 +9,8 @@ import { getInputsAPI } from '../inputUtils';
 import { AppDispatch, RootState } from '../store';
 import { setActiveSidebar } from '../slices/sidebarSlice';
 import { receiveConfig, requestConfig } from '../slices/configSlice';
+import { receiveDisplayList } from '../slices/displayListSlice';
+import { setSelectedDisplay } from '../slices/selectedDisplaySlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
@@ -20,8 +22,6 @@ import {
   SET_FILTER_VIEW,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
-  REQUEST_DISPLAY_LIST,
-  RECEIVE_DISPLAY_LIST,
   RECEIVE_COGDATA,
   SET_DIALOG_OPEN,
   SET_LOCAL_PANELS,
@@ -97,16 +97,6 @@ export const setFilterView = (name: FilterView | string, which?: 'set' | 'add' |
   type: SET_FILTER_VIEW,
   name,
   which,
-});
-
-export const requestDisplayList = () => ({
-  type: REQUEST_DISPLAY_LIST,
-});
-
-export const receiveDisplayList = (json: Display[]) => ({
-  type: RECEIVE_DISPLAY_LIST,
-  list: json,
-  receivedAt: Date.now(),
 });
 
 // export const setSelectedView = (val) => ({
@@ -431,8 +421,6 @@ export const fetchDisplayList =
         const id4 = `${window.screen.height || ''}${window.screen.width || ''}${window.screen.pixelDepth || ''}`;
         const id5 = `${new Date().toLocaleDateString().replace(/\D+/g, '')}`;
         const token = `${id1}${id2}${id3}${id4}${id5}`;
-        // console.log(token);
-        // console.log(localStorage.getItem('TRELLISCOPE_TOKEN') === token);
         if (localStorage.getItem('TRELLISCOPE_TOKEN') !== token) {
           dispatch(
             setErrorMessage(
@@ -449,7 +437,6 @@ export const fetchDisplayList =
           const v2 = b.order === undefined ? 1 : b.order;
           return v1 > v2 ? 1 : -1;
         });
-
         dispatch(receiveDisplayList(json));
         // check to see if a display is specified already in the URL
         // and load it if it is

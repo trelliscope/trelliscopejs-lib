@@ -33,7 +33,8 @@ import {
   dispSelectDialogSelector,
 } from '../../selectors';
 import type { RootState } from '../../store';
-import { SelectedDisplayState, setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import styles from './DisplaySelect.module.scss';
 
