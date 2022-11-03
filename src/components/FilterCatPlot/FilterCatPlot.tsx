@@ -4,9 +4,8 @@ import { createSelector } from 'reselect';
 import { Grid } from 'react-virtualized';
 import type { GridCellProps } from 'react-virtualized';
 import { filterCardinalitySelector } from '../../selectors/cogData';
-import CatBar from '../FilterCatPlotBar';
+import FilterCatPlotBar from '../FilterCatPlotBar';
 import type { RootState } from '../../store';
-import styles from './FilterCatPlot.module.scss';
 
 interface FilterCatPlotProps {
   height: number;
@@ -93,7 +92,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
     // allActive indicates that none are selected in the filter
     // in which case we want them to show up in color rather than gray
     return (
-      <CatBar
+      <FilterCatPlotBar
         key={`${x.rowIndex}_${barCt}_${sortOrder}`}
         divStyle={x.style}
         // this is needed for the cellRenderer to work and not throw a warning
@@ -103,7 +102,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
         active={active}
         allActive={filterState.value === undefined}
         height={cellHeight}
-        width={(barSize / barMax) * (width - 1) + 1}
+        width={(barSize / barMax) * (width - 1) + 1 || 0}
         onClick={() => handleSelect(barName, active)}
         d={{ ct: barCt, mct: dist.dist[barName], id: barName }}
       />
