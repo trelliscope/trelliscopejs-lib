@@ -21,13 +21,15 @@ import {
   dialogOpenSelector,
 } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
-import { SelectedDisplayState, setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
 import styles from './Header.module.scss';
+import type { DisplayListState } from '../../slices/displayListSlice';
 
 interface HeaderProps {
   cfg: Config;
   appId: string;
-  displayList: DisplayList;
+  displayList: DisplayListState;
   displayGroups: DisplayGroup;
   selectedDisplay: SelectedDisplayState;
   relatedDisplayGroups: DisplayGroup;
