@@ -15,8 +15,8 @@ export const appId: Reducer = (state = 'app', action) => {
     case SET_APP_ID:
       return action.id;
     default:
+      return state;
   }
-  return state;
 };
 
 export const options: Reducer = (state = {}, action) => {
@@ -24,8 +24,8 @@ export const options: Reducer = (state = {}, action) => {
     case SET_OPTIONS:
       return action.options;
     default:
+      return state;
   }
-  return state;
 };
 
 export const dialog: Reducer = (state = false, action) => {
@@ -33,8 +33,8 @@ export const dialog: Reducer = (state = false, action) => {
     case SET_DIALOG_OPEN:
       return action.isOpen;
     default:
+      return state;
   }
-  return state;
 };
 
 export const dispSelectDialog: Reducer = (state = false, action) => {
@@ -42,8 +42,8 @@ export const dispSelectDialog: Reducer = (state = false, action) => {
     case SET_DISPSELECT_DIALOG_OPEN:
       return action.isOpen;
     default:
+      return state;
   }
-  return state;
 };
 
 export const dispInfoDialog: Reducer = (state = false, action) => {
@@ -51,8 +51,8 @@ export const dispInfoDialog: Reducer = (state = false, action) => {
     case SET_DISPINFO_DIALOG_OPEN:
       return action.isOpen;
     default:
+      return state;
   }
-  return state;
 };
 
 export const singlePageApp: Reducer = (state = true, action) => {
@@ -60,8 +60,8 @@ export const singlePageApp: Reducer = (state = true, action) => {
     case SET_SINGLE_PAGE_APP:
       return action.singlePageApp;
     default:
+      return state;
   }
-  return state;
 };
 
 export const fullscreen: Reducer = (state = true, action) => {
@@ -69,8 +69,8 @@ export const fullscreen: Reducer = (state = true, action) => {
     case SET_FULLSCREEN:
       return action.fullscreen;
     default:
+      return state;
   }
-  return state;
 };
 
 export const errorMsg: Reducer = (state = '', action) => {
@@ -78,6 +78,6 @@ export const errorMsg: Reducer = (state = '', action) => {
     case SET_ERROR_MESSAGE:
       return action.msg;
     default:
+      return state;
   }
-  return state;
 };

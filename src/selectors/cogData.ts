@@ -74,10 +74,10 @@ export const cogFiltDistSelector = createSelector(
             idx: selectedIdx.concat(notSelectedIdx),
           } as CondDistFilterCat;
         } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
-          const dist = cogData.groupRefs[keys[i]].all();
+          const dist = cogData?.groupRefs[keys[i]]?.all();
 
           let maxVal = 0;
-          for (let j = 0; j < dist.length; j += 1) {
+          for (let j = 0; j < dist?.length; j += 1) {
             if (dist[j].value > maxVal) {
               maxVal = dist[j].value;
             }

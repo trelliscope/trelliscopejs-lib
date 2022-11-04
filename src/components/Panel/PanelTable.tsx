@@ -28,6 +28,8 @@ const PanelTable: React.FC<PanelTableProps> = ({
 }) => {
   const [textInputOpen, setTextInputOpen] = useState('');
   const [textInputValue, setTextInputValue] = useState('');
+  const [inputUpdateCount, setInputUpdateCount] = useState(0);
+
   const tableRef = useRef<HTMLTableElement>(null);
 
   const inlineStyles = {
@@ -129,9 +131,10 @@ const PanelTable: React.FC<PanelTableProps> = ({
                           `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
                         ) || ''
                       }
-                      onClick={(event: React.MouseEvent<HTMLInputElement>) => {
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         if (event.currentTarget?.value) {
                           setPanelCogInput(curDisplayInfo.info, event.currentTarget?.value, panelKey, label.name);
+                          setInputUpdateCount(inputUpdateCount + 1);
 
                           try {
                             (document.activeElement as HTMLElement).blur();
@@ -182,6 +185,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                     onClose={() => {
                       setTextInputOpen('');
                       setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
+                      setInputUpdateCount(inputUpdateCount + 1);
                     }}
                     TransitionProps={{
                       onEnter: () => {
