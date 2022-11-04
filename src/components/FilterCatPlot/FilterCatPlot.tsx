@@ -6,7 +6,6 @@ import type { GridCellProps } from 'react-virtualized';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import CatBar from '../FilterCatPlotBar';
 import type { RootState } from '../../store';
-import styles from './FilterCatPlot.module.scss';
 
 interface FilterCatPlotProps {
   height: number;

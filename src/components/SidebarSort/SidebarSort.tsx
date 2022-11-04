@@ -12,12 +12,6 @@ import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../sele
 import type { RootState } from '../../store';
 import styles from './SidebarSort.module.scss';
 
-interface SortProps {
-  dir: string;
-  name: string;
-  order?: number;
-}
-
 interface SidebarSortProps {
   customStyles: {
     tableWrap: {

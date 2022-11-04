@@ -120,19 +120,19 @@ const Content: React.FC<ContentProps> = ({
 
     // HACK: htmlwidget panels won't resize properly when layout or sidebar is toggled
     // so we need to add this to key to force it to re-draw
-    let keyExtra = '';
+    // let keyExtra = '';
     // TODO: see if we can get htmlwidget resize method to work instead
     // resize method seems to be working now, but we'll keep this in case
     /* if (panelInterface.type === 'htmlwidget') {
       keyExtra = `_${layout.nrow}_${layout.ncol}_${sidebar}_${labels.length}`;
       keyExtra += `_${contentStyle.width}_${contentStyle.height}`;
     } */
-    if (relDispPositions.length > 0) {
+    /* if (relDispPositions.length > 0) {
       const relDispNames = relDispPositions.map((d) => d.name).join('_');
       const relDispSum = relDispPositions.map((d) => d.left + d.top + d.width + d.height).reduce((a, b) => a + b);
       keyExtra = `${keyExtra}_${relDispNames}_${relDispSum}_${labels.length}`;
       keyExtra += `_${contentStyle.height}`;
-    }
+    } */
 
     ret = (
       <Swipeable
