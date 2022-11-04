@@ -22,7 +22,7 @@
     "fingerprintjs2": "^2.1.2",
     "lodash.intersection": "^4.4.0",
     "lodash.omit": "^4.5.0",
-    "marked": "^1.2.0",
+    "marked": "^4.0.10",
     "msw": "^0.47.3",
     "prop-types": "^15.7.2",
     "react": "^18.2.0",
