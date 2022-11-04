@@ -12,7 +12,9 @@ import { cogFiltDistSelector } from '../../selectors/cogData';
 import { sidebarHeightSelector, filterColSplitSelector } from '../../selectors/ui';
 import { cogInfoSelector } from '../../selectors/display';
 import { curDisplayInfoSelector, filterStateSelector, filterViewSelector, labelsSelector } from '../../selectors';
-import { setFilterView, setFilter, setLayout, setLabels } from '../../actions';
+import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import styles from './SidebarFilter.module.scss';
 
 interface SidebarFilterProps {
@@ -284,7 +286,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
         dispatch(setLabels(newLabels));
       }
     }
-    dispatch(setFilterView(x, which));
+    dispatch(setFilterView({ name: x, which }));
   },
   handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => {
     if (typeof x === 'string' || x instanceof String) {

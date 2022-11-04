@@ -1,7 +1,9 @@
 import React from 'react';
 import type { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { setFilterView, setFilter, setLayout, setSort } from '../../actions';
+import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { setSort } from '../../slices/sortSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import styles from './FooterChip.module.scss';
 
 interface FooterChipProps {
@@ -58,7 +60,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
       dispatch(setSort(x.index));
       dispatch(setLayout({ pageNum: 1 }));
     } else if (x.type === 'filter') {
-      dispatch(setFilterView(x.label, 'remove'));
+      dispatch(setFilterView({ name: x.label, which: 'remove' }));
       dispatch(setFilter(x.label));
       dispatch(setLayout({ pageNum: 1 }));
     }

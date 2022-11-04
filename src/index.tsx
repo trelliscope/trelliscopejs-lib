@@ -22,7 +22,8 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';

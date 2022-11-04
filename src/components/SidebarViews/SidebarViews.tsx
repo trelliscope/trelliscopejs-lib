@@ -5,7 +5,10 @@ import { createSelector } from 'reselect';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { setLabels, setLayout, setSort, setFilter, setFilterView } from '../../actions';
+import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { setSort } from '../../slices/sortSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { curDisplayInfoSelector } from '../../selectors';
 import { cogInfoSelector } from '../../selectors/display';
@@ -138,7 +141,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 
     // filterView (just add - if something's already there we won't remove it)
     if (hashItems.fv) {
-      hashItems.fv.split(',').map((el) => dispatch(setFilterView(el, 'add')));
+      hashItems.fv.split(',').map((el) => dispatch(setFilterView({ name: el, which: 'add' })));
     }
   },
 });

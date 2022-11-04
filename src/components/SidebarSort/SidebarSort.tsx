@@ -6,17 +6,13 @@ import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
 import IconButton from '@mui/material/IconButton';
 import Icon from '@mui/material/Icon';
-import { setSort, setLabels, setLayout } from '../../actions';
+import { setSort } from '../../slices/sortSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import { sidebarHeightSelector } from '../../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
 import type { RootState } from '../../store';
 import styles from './SidebarSort.module.scss';
-
-interface SortProps {
-  dir: string;
-  name: string;
-  order?: number;
-}
 
 interface SidebarSortProps {
   customStyles: {

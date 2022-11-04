@@ -11,15 +11,14 @@ import { setActiveSidebar } from '../slices/sidebarSlice';
 import { receiveConfig, requestConfig } from '../slices/configSlice';
 import { receiveDisplayList } from '../slices/displayListSlice';
 import { setSelectedDisplay } from '../slices/selectedDisplaySlice';
+import { setSort } from '../slices/sortSlice';
+import { setFilter, setFilterView } from '../slices/filterSlice';
+import { setLayout } from '../slices/layoutSlice';
+import { setLabels } from '../slices/labelsSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
   SET_ERROR_MESSAGE,
-  SET_LAYOUT,
-  SET_LABELS,
-  SET_SORT,
-  SET_FILTER,
-  SET_FILTER_VIEW,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
   RECEIVE_COGDATA,
@@ -71,32 +70,6 @@ export const setDispSelectDialogOpen = (isOpen: boolean) => ({
 export const setDispInfoDialogOpen = (isOpen: boolean) => ({
   type: SET_DISPINFO_DIALOG_OPEN,
   isOpen,
-});
-
-export const setLayout = (layout: { nrow?: number; ncol?: number; arrange?: 'row' | 'col'; pageNum?: number }) => ({
-  type: SET_LAYOUT,
-  layout,
-});
-
-export const setLabels = (labels: string[]) => ({
-  type: SET_LABELS,
-  labels,
-});
-
-export const setSort = (sort?: Sort[] | number) => ({
-  type: SET_SORT,
-  sort,
-});
-
-export const setFilter = (filter?: { [key: string]: Filter<FilterCat | FilterRange> } | string) => ({
-  type: SET_FILTER,
-  filter,
-});
-
-export const setFilterView = (name: FilterView | string, which?: 'set' | 'add' | 'remove') => ({
-  type: SET_FILTER_VIEW,
-  name,
-  which,
 });
 
 // export const setSelectedView = (val) => ({
@@ -201,9 +174,9 @@ const setCogDatAndState = (
   dispatch(setLabels(labels));
 
   // sort
-  let { sort } = dObjJson.state;
+  
   if (hashItems.sort) {
-    sort = hashItems.sort.split(',').map((d, i) => {
+    const hashSort = hashItems.sort.split(',').map((d, i) => {
       const vals = d.split(';');
       return {
         order: i + 1,
@@ -211,8 +184,12 @@ const setCogDatAndState = (
         dir: vals[1] as SortDir,
       };
     });
+
+    dispatch(setSort(hashSort));
+  } else {
+    const { sort } = dObjJson.state;
+    dispatch(setSort(sort));
   }
-  dispatch(setSort(sort));
 
   // filter
   const filter = (dObjJson.state.filter ? dObjJson.state.filter : {}) as { [key: string]: Filter<FilterCat | FilterRange> };
@@ -280,7 +257,7 @@ const setCogDatAndState = (
       }
     }
   }
-  dispatch(setFilterView(fvObj, 'set'));
+  dispatch(setFilterView({ name: fvObj, which: 'set' }));
   dispatch(setFilter(filter));
 };
 

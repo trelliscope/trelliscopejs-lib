@@ -2,14 +2,18 @@ import type { Middleware } from 'redux';
 import type { RootState } from '../store';
 import {
   SELECT_DISPLAY,
-  SET_LAYOUT,
-  SET_LABELS,
-  SET_SORT,
-  SET_FILTER,
   ACTIVE_SIDEBAR,
-  SET_FILTER_VIEW,
   SB_REV_LOOKUP,
 } from '../constants';
+import { sortSlice } from '../slices/sortSlice';
+import { labelsSlice } from '../slices/labelsSlice';
+import { layoutSlice } from '../slices/layoutSlice';
+import { filterSlice } from '../slices/filterSlice';
+
+const { setSort } = sortSlice.actions;
+const { setLabels } = labelsSlice.actions;
+const { setLayout } = layoutSlice.actions;
+const { setFilter, setFilterView } = filterSlice.actions;
 
 // const layoutLookup = {
 //   pg: 'pageNum',
@@ -31,7 +35,7 @@ export const hashFromState = (state: RootState) => {
   // labels
   const { labels } = state;
   // sort
-  const { sort } = state; // TODO: should this be a deep copy?
+  const sort = [...state.sort]; // TODO: should this be a deep copy?
   sort.sort((a: Sort, b: Sort) => (a.order > b.order ? 1 : -1));
   const sortStr = sort.map((d: Sort) => `${d.name};${d.dir}`).join(',');
   // filter
@@ -40,12 +44,14 @@ export const hashFromState = (state: RootState) => {
     const flt = filter.state[k];
     let res = '';
     if (flt.type === 'select') {
-      res = `var:${flt.name};type:select;val:${flt.value.map(encodeURIComponent).join('#')}`;
+      const value = flt.value as FilterCat;
+      res = `var:${flt.name};type:select;val:${value.map(encodeURIComponent).join('#')}`;
     } else if (flt.type === 'regex') {
-      res = `var:${flt.name};type:regex;val:${encodeURIComponent(flt.regex)}`;
+      res = `var:${flt.name};type:regex;val:${encodeURIComponent(flt.regex as string)}`;
     } else if (flt.type === 'range') {
-      const from = flt?.value?.from ? flt?.value?.from : '';
-      const to = flt?.value?.to ? flt?.value?.to : '';
+      const value = flt.value as FilterRange;
+      const from = value.from ? value.from : '';
+      const to = value.to ? value.to : '';
       res = `var:${flt.name};type:range;from:${from};to:${to}`;
     }
     return res;
@@ -78,7 +84,7 @@ export const hashMiddleware: Middleware<RootState> =
   (action) => {
     if (!getState().singlePageApp) return next(action);
 
-    const types = [SELECT_DISPLAY, SET_LAYOUT, SET_LABELS, SET_SORT, SET_FILTER, ACTIVE_SIDEBAR, SET_FILTER_VIEW];
+    const types = [SELECT_DISPLAY, setLayout.type, setLabels.type, setSort.type, setFilter.type, ACTIVE_SIDEBAR, setFilterView.type];
     const result = next(action);
     if (types.indexOf(action.type) > -1) {
       const hash = hashFromState(getState());

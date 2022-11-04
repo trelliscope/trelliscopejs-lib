@@ -11,16 +11,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
-import {
-  fetchDisplay,
-  setLabels,
-  setLayout,
-  setSort,
-  setFilter,
-  setFilterView,
-  setDispSelectDialogOpen,
-  resetRelDisps,
-} from '../../actions';
+import { fetchDisplay, setDispSelectDialogOpen, resetRelDisps } from '../../actions';
+import { FilterState, setFilter, setFilterView } from '../../slices/filterSlice';
+import { setSort } from '../../slices/sortSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { displayGroupsSelector } from '../../selectors/display';
 import {
@@ -193,7 +188,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>)
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
     dispatch(setLayout({ pageNum: 1 }));
-    dispatch(setFilterView({ active: [], inactive: [] }));
+    dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
     dispatch(setFilter({}));
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));

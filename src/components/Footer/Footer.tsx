@@ -10,6 +10,7 @@ import ExportInputDialog from '../ExportInputDialog';
 import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
 import styles from './Footer.module.scss';
+import { FilterState } from '../../slices/filterSlice';
 
 interface FooterProps {
   style: {
@@ -95,7 +96,7 @@ const sortInfoSelector = createSelector(sortSelector, curDisplayInfoSelector, (s
   return res;
 });
 
-const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector, (filter, cdi) => {
+const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector, (filter: FilterState, cdi) => {
   const keys = Object.keys(filter.state);
   const res = [];
   for (let i = 0; i < keys.length; i += 1) {
@@ -103,29 +104,31 @@ const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector
     if (curState.value !== undefined) {
       let text = '';
       if (curState.varType === 'numeric') {
-        if (curState.value.from === undefined && curState.value.to !== undefined) {
-          text = `< ${curState.value.to}`;
-        } else if (curState.value.from !== undefined && curState.value.to === undefined) {
-          text = `> ${curState.value.from}`;
-        } else if (curState.value.from !== undefined && curState.value.to !== undefined) {
-          text = `${curState.value.from} -- ${curState.value.to}`;
+        const { from, to } = curState.value as FilterRange;
+        if (from === undefined && to !== undefined) {
+          text = `< ${to}`;
+        } else if (from !== undefined && to === undefined) {
+          text = `> ${from}`;
+        } else if (from !== undefined && to !== undefined) {
+          text = `${from} -- ${to}`;
         }
       } else if (curState.varType === 'factor') {
         const charLimit = 15;
-        const n = curState.value.length;
+        const value = curState.value as FilterCat;
+        const n = value.length;
         let textLength = 0;
         let idx = 0;
         while (idx < n && textLength <= charLimit) {
-          textLength = textLength + curState.value[idx].length + 2;
+          textLength = textLength + value[idx].length + 2;
           idx += 1;
         }
         if (idx === n) {
           // build a string of selected values
-          text = curState.value.sort().join(', ');
+          text = value.sort().join(', ');
         } else {
           // just show "k of n"
           const tot = cdi.info.cogInfo[curState.name].levels.length;
-          text = `${curState.value.length} of ${tot}`;
+          text = `${value.length} of ${tot}`;
         }
       }
       res.push({ name: keys[i], text });
