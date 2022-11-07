@@ -335,6 +335,24 @@ interface CogData {
   [key: string]: string | number;
 }
 
+interface CogDataMutable {
+  isFetching: boolean;
+  isLoaded: boolean;
+  didInvalidate: boolean;
+  crossfilter: import('../../node_modules/crossfilter2').Crossfilter<CogData>;
+  dimensionRefs: import('../../node_modules/crossfilter2').Dimension<
+    CogData,
+    import('../../node_modules/crossfilter2').NaturallyOrderedValue
+  >;
+  groupRefs: import('../../node_modules/crossfilter2').Group<
+    CogData,
+    import('../../node_modules/crossfilter2').NaturallyOrderedValue,
+    number
+  >;
+  iface: CogInterface;
+  // _localPanels: any;
+}
+
 type SidebarType =
   | 'Panel Grid Layout'
   | 'Filter Panels'

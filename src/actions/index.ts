@@ -15,13 +15,18 @@ import { setSort } from '../slices/sortSlice';
 import { setFilter, setFilterView } from '../slices/filterSlice';
 import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
+import { receiveCogData } from '../slices/cogDataMutableSlice';
 import {
   SET_APP_ID,
   SET_FULLSCREEN,
   SET_ERROR_MESSAGE,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
-  RECEIVE_COGDATA,
+  REQUEST_DISPLAY_LIST,
+  RECEIVE_DISPLAY_LIST,
+  // RECEIVE_COGDATA,
+  REQUEST_CONFIG,
+  RECEIVE_CONFIG,
   SET_DIALOG_OPEN,
   SET_LOCAL_PANELS,
   SB_LOOKUP,
@@ -97,12 +102,12 @@ export const receiveDisplay = (name: string, group: string, json: DisplayObject)
   receivedAt: Date.now(),
 });
 
-const receiveCogData = (iface: CogInterface, json?: Crossfilter<CogData>) => ({
-  type: RECEIVE_COGDATA,
-  iface,
-  crossfilter: json,
-  receivedAt: Date.now(),
-});
+// const receiveCogData = (iface: CogInterface, json?: Crossfilter<CogData>) => ({
+//   type: RECEIVE_COGDATA,
+//   iface,
+//   crossfilter: json,
+//   receivedAt: Date.now(),
+// });
 
 export const setLocalPanels = (dat: unknown) => ({
   type: SET_LOCAL_PANELS,
@@ -134,10 +139,10 @@ const setCogDatAndState = (
     cogDatJson[i].__index = i; // eslint-disable-line no-param-reassign
   }
 
-  dispatch(receiveCogData(iface, crossfilter(cogDatJson)));
+  dispatch(receiveCogData({ iface, crossfilter: crossfilter(cogDatJson) }));
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
-
+  crossfilter(cogDatJson);
   // sidebar
   let sb = dObjJson.state.sidebar;
   if (hashItems.sidebar) {
@@ -298,7 +303,11 @@ export const fetchDisplay =
 
       // set cog data state as pending while it loads
       if (getCogData) {
-        dispatch(receiveCogData(iface));
+        dispatch(
+          receiveCogData({
+            iface,
+          }),
+        );
         // TODO: perhaps do a quick load of initial panels while cog data is loading...
         // (to do this, have displayObj store initial panel keys and cogs)
 

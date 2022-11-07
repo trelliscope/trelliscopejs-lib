@@ -157,8 +157,8 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
     // this isn't efficient but sorting is expected to happen at much lower frequency
     // than filtering and the user can tolerate more latency with sorting than filtering
 
-    const cf = store.getState()._cogDataMutable.crossfilter;
-    const dimensions = store.getState()._cogDataMutable.dimensionRefs;
+    const cf = store.getState().cogDataMutable.crossfilter;
+    const dimensions = store.getState().cogDataMutable.dimensionRefs;
     if (dimensions) {
       if (dimensions.__sort) {
         dimensions.__sort.remove();

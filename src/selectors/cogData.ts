@@ -18,7 +18,7 @@ export const cogFiltDistSelector = createSelector(
     const result = {} as { [key: string]: CondDistFilterCat | CondDistFilterNum };
     if (cogData.iface && filterView.active && cogData.crossfilter && cogData.iface.type === 'JSON') {
       // for every active filter, calculate the conditional distribution
-      const keys = filterView.active;
+      const keys = filterView.active as string[];
       for (let i = 0; i < keys.length; i += 1) {
         if (cdi.info.cogInfo[keys[i]].type === 'factor') {
           const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ? filter[keys[i]].orderValue : 'ct,desc';
@@ -105,6 +105,7 @@ export const currentCogDataSelector = createSelector(
   filterStateSelector,
   sortSelector,
   (cd, pnum, npp, filt, sort) => {
+    console.log(cd, 'cd');
     let result = [];
     if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
       if (sort.length === 1) {

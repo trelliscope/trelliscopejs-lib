@@ -1,5 +1,5 @@
 import type { Reducer } from 'redux';
-import { REQUEST_COGDATA, RECEIVE_COGDATA } from '../constants';
+import { RECEIVE_COGDATA } from '../constants';
 
 const cogDataMutable: Reducer = (
   state = {
@@ -10,13 +10,6 @@ const cogDataMutable: Reducer = (
   action,
 ) => {
   switch (action.type) {
-    case REQUEST_COGDATA:
-      return {
-        ...state,
-        isFetching: true,
-        isLoaded: false,
-        didInvalidate: false,
-      };
     case RECEIVE_COGDATA:
       return {
         ...state,
