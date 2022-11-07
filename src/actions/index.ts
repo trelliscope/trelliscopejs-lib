@@ -24,7 +24,6 @@ import {
   RECEIVE_DISPLAY,
   REQUEST_DISPLAY_LIST,
   RECEIVE_DISPLAY_LIST,
-  // RECEIVE_COGDATA,
   REQUEST_CONFIG,
   RECEIVE_CONFIG,
   SET_DIALOG_OPEN,
@@ -101,13 +100,6 @@ export const receiveDisplay = (name: string, group: string, json: DisplayObject)
   info: json,
   receivedAt: Date.now(),
 });
-
-// const receiveCogData = (iface: CogInterface, json?: Crossfilter<CogData>) => ({
-//   type: RECEIVE_COGDATA,
-//   iface,
-//   crossfilter: json,
-//   receivedAt: Date.now(),
-// });
 
 export const setLocalPanels = (dat: unknown) => ({
   type: SET_LOCAL_PANELS,

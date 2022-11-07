@@ -54,9 +54,9 @@ const multiSort = (args: string[]) => {
 
 const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (action) => {
   if (action.type === setFilter.type && action.payload) {
-    const cf = store.getState()._cogDataMutable.crossfilter;
-    const dimensions = store.getState()._cogDataMutable.dimensionRefs;
-    const groups = store.getState()._cogDataMutable.groupRefs;
+    const cf = store.getState().cogDataMutable.crossfilter;
+    const dimensions = store.getState().cogDataMutable.dimensionRefs;
+    const groups = store.getState().cogDataMutable.groupRefs;
     if (typeof action.payload === 'string' || action.payload instanceof String) {
       dimensions[action.payload].filter(null); // .remove(), .filterAll() ?
     } else {
@@ -114,9 +114,9 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
     // also if the filter is hidden and inactive, we should remove the dimension
     // .remove() ?
     if (action.payload.which === 'add' || action.payload.which === 'set') {
-      const cf = store.getState()._cogDataMutable.crossfilter;
-      const dimensions = store.getState()._cogDataMutable.dimensionRefs;
-      const groups = store.getState()._cogDataMutable.groupRefs;
+      const cf = store.getState().cogDataMutable.crossfilter;
+      const dimensions = store.getState().cogDataMutable.dimensionRefs;
+      const groups = store.getState().cogDataMutable.groupRefs;
       const dispName = store.getState().selectedDisplay.name;
 
       let names = [] as string[];
