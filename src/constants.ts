@@ -1,17 +1,6 @@
-export const SET_APP_ID = 'SET_APP_ID' as string;
-export const SET_OPTIONS = 'SET_OPTIONS' as string;
-export const SET_SINGLE_PAGE_APP = 'SET_SINGLE_PAGE_APP' as string;
-export const SET_FULLSCREEN = 'SET_FULLSCREEN' as string;
-export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN' as string;
 export const SET_APP_DIMS = 'SET_APP_DIMS' as string;
-export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE' as string;
-export const SET_DISPSELECT_DIALOG_OPEN = 'SET_DISPSELECT_DIALOG_OPEN' as string;
-export const SET_DISPINFO_DIALOG_OPEN = 'SET_DISPINFO_DIALOG_OPEN' as string;
 
 export const ACTIVE_SIDEBAR = 'ACTIVE_SIDEBAR' as string;
-export const SET_LAYOUT = 'SET_LAYOUT' as string;
-export const SET_LABELS = 'SET_LABELS' as string;
-export const SET_SORT = 'SET_SORT' as string;
 export const SELECT_DISPLAY = 'SELECT_DISPLAY' as string;
 export const REQUEST_DISPLAY = 'REQUEST_DISPLAY' as string;
 export const RECEIVE_DISPLAY = 'RECEIVE_DISPLAY' as string;

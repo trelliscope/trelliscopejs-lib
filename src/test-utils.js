@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Provider } from 'react-redux';
 import store from './store';
-import { setAppID, setFullscreen, setOptions, setSinglePageApp } from './actions';
+import { setAppID, setFullscreen, setOptions, setSinglePageApp } from './slices/appSlice';
 import { setAppDims } from './slices/uiSlice';
 
 const singlePageApp = true;

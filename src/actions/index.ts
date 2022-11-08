@@ -7,6 +7,7 @@ import type {} from 'redux-thunk/extend-redux';
 import { loadAssetsSequential } from '../loadAssets';
 import { getInputsAPI } from '../inputUtils';
 import { AppDispatch, RootState } from '../store';
+import { setDispInfoDialogOpen, setDispSelectDialogOpen, setDialogOpen, setErrorMessage } from '../slices/appSlice';
 import { setActiveSidebar } from '../slices/sidebarSlice';
 import { receiveConfig, requestConfig } from '../slices/configSlice';
 import { receiveDisplayList } from '../slices/displayListSlice';
@@ -17,64 +18,17 @@ import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
 import { receiveCogData } from '../slices/cogDataMutableSlice';
 import {
-  SET_APP_ID,
-  SET_FULLSCREEN,
-  SET_ERROR_MESSAGE,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
-  REQUEST_DISPLAY_LIST,
-  RECEIVE_DISPLAY_LIST,
-  REQUEST_CONFIG,
-  RECEIVE_CONFIG,
-  SET_DIALOG_OPEN,
   SET_LOCAL_PANELS,
   SB_LOOKUP,
-  SET_DISPSELECT_DIALOG_OPEN,
   SET_SELECTED_RELDISPS,
-  SET_DISPINFO_DIALOG_OPEN,
-  SET_SINGLE_PAGE_APP,
-  SET_OPTIONS,
 } from '../constants';
 
 const getJSON = (obj: { url: string; callback: (data: never) => void }) =>
   fetch(obj.url)
     .then((response) => response.json() as never)
     .then((json) => obj.callback(json));
-
-export const setAppID = (id: string) => ({
-  type: SET_APP_ID,
-  id,
-});
-
-export const setOptions = (options: { logger?: boolean; mockData?: boolean }) => ({
-  type: SET_OPTIONS,
-  options,
-});
-
-export const setFullscreen = (fullscreen: boolean) => ({
-  type: SET_FULLSCREEN,
-  fullscreen,
-});
-
-export const setSinglePageApp = (singlePageApp: boolean) => ({
-  type: SET_SINGLE_PAGE_APP,
-  singlePageApp,
-});
-
-export const setDialogOpen = (isOpen: boolean) => ({
-  type: SET_DIALOG_OPEN,
-  isOpen,
-});
-
-export const setDispSelectDialogOpen = (isOpen: boolean) => ({
-  type: SET_DISPSELECT_DIALOG_OPEN,
-  isOpen,
-});
-
-export const setDispInfoDialogOpen = (isOpen: boolean) => ({
-  type: SET_DISPINFO_DIALOG_OPEN,
-  isOpen,
-});
 
 // export const setSelectedView = (val) => ({
 //   type: SET_SELECTED_VIEW,
@@ -104,11 +58,6 @@ export const receiveDisplay = (name: string, group: string, json: DisplayObject)
 export const setLocalPanels = (dat: unknown) => ({
   type: SET_LOCAL_PANELS,
   dat,
-});
-
-export const setErrorMessage = (msg: string) => ({
-  type: SET_ERROR_MESSAGE,
-  msg,
 });
 
 const setCogDatAndState = (

@@ -16,7 +16,7 @@ import {
   fullscreenSelector,
   dispInfoDialogSelector,
 } from '../../selectors';
-import { setDispInfoDialogOpen } from '../../actions';
+import { setDispInfoDialogOpen } from '../../slices/appSlice';
 import type { RootState } from '../../store';
 import styles from './DisplayInfo.module.scss';
 

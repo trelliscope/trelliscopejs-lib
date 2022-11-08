@@ -10,7 +10,8 @@ import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HeaderLogo from '../HeaderLogo';
 import type { RootState } from '../../store';
-import { fetchDisplay, setDialogOpen } from '../../actions';
+import { fetchDisplay } from '../../actions';
+import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../../selectors/display';
 import {

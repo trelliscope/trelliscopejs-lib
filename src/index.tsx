@@ -22,7 +22,7 @@ import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
-import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './slices/appSlice';
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import { currentCogDataSelector } from './selectors/cogData';
@@ -141,7 +141,7 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
 
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
-    if (store.getState().fullscreen) {
+    if (store.getState().app.fullscreen) {
       store.dispatch(
         windowResize({
           height: window.innerHeight,

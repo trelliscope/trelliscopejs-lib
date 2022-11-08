@@ -7,7 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
 import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
-import { setFullscreen } from '../../actions';
+import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
 import type { RootState } from '../../store';
 import styles from './FullscreenButton.module.scss';
