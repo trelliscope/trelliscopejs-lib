@@ -16,7 +16,6 @@ import {
   curDisplayInfoSelector,
   nPerPageSelector,
   pageNumSelector,
-  localPanelsSelector,
   displayInfoSelector,
 } from '../../selectors';
 import { contentWidthSelector, sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
@@ -199,10 +198,9 @@ const stateSelector = createSelector(
   pageNumSelector,
   filterCardinalitySelector,
   nPerPageSelector,
-  localPanelsSelector,
   relDispPositionsSelector,
   displayInfoSelector,
-  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, cdi, sidebar, curPage, card, npp, localPanels, rdp, di) => {
+  (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, cdi, sidebar, curPage, card, npp, rdp, di) => {
     const pPad = 2; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
@@ -245,8 +243,6 @@ const stateSelector = createSelector(
       wOffset = 0;
     }
 
-    const panelData = localPanels;
-
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
 
     const hOffset = 48;
@@ -281,7 +277,6 @@ const stateSelector = createSelector(
       sidebar,
       curPage,
       totPages: Math.ceil(card / npp),
-      panelData,
       curDisplayInfo: cdi,
       displayInfo: di,
       relDispPositions: rdp,

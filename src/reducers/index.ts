@@ -13,7 +13,6 @@ import _config from '../slices/configSlice';
 import filter from '../slices/filterSlice';
 import _displayInfo from './_displayInfo';
 import _cogDataMutable from './_cogDataMutable';
-import _localPanels from './_localPanels';
 
 
 const reducers = combineReducers({
@@ -38,7 +37,6 @@ const reducers = combineReducers({
   displayList,
   _displayInfo,
   _cogDataMutable,
-  _localPanels,
 });
 
 export default reducers;

@@ -26,7 +26,6 @@ export const displayLoadedSelector = (state: RootState) => {
 
 export const cogInterfaceSelector = (state: RootState) => state._cogDataMutable.iface;
 export const cogDataSelector = (state: RootState) => state._cogDataMutable;
-export const localPanelsSelector = (state: RootState) => state._localPanels;
 
 export const pageNumSelector = (state: RootState) => (state.layout.pageNum ? state.layout.pageNum : -1);
 export const nPerPageSelector = (state: RootState) => state.layout.nrow * state.layout.ncol;
