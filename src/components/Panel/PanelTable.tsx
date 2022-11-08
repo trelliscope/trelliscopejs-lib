@@ -55,7 +55,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
     },
     labelNameCell: {
       paddingLeft: dims.labelPad / 2 + 2,
-      paddingRIght: dims.labelPad / 2 + 2,
+      paddingRight: dims.labelPad / 2 + 2,
       width: dims.labelWidth,
     },
     labelValueCell: {
