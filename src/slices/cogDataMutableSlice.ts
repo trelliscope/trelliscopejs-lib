@@ -25,9 +25,26 @@ export const cogDataMutableSlice = createSlice({
       state.iface = action.payload.iface;
       state.lastUpdated = Date.now();
     },
+    setDimensionSort: (state, action: PayloadAction<Dimension<CogData, NaturallyOrderedValue>>) => {
+      state.dimensionRefs = { __sort: action.payload };
+    },
+    setDimension: (state, action: PayloadAction<{ key: string; dimension: Dimension<CogData, NaturallyOrderedValue> }>) => {
+      if (!state.dimensionRefs) {
+        state.dimensionRefs = {} as
+          | { __sort: Dimension<CogData, NaturallyOrderedValue> }
+          | { [key: string]: Dimension<CogData, NaturallyOrderedValue> };
+      }
+      state.dimensionRefs[action.payload.key] = action.payload.dimension;
+    },
+    setGroup: (state, action: PayloadAction<{ key: string; group: Group<CogData, string, number> }>) => {
+      if (!state.groupRefs) {
+        state.groupRefs = {} as { [key: string]: Group<CogData, string, number> };
+      }
+      state.groupRefs[action.payload.key] = action.payload.group;
+    },
   },
 });
 
-export const { receiveCogData } = cogDataMutableSlice.actions;
+export const { receiveCogData, setDimensionSort, setDimension, setGroup } = cogDataMutableSlice.actions;
 
 export default cogDataMutableSlice.reducer;

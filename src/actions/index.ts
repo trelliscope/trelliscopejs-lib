@@ -1,4 +1,4 @@
-import crossfilter, { Crossfilter } from 'crossfilter2';
+import crossfilter from 'crossfilter2';
 import ReactGA from 'react-ga';
 import getJSONP from 'browser-jsonp';
 import { AnyAction } from 'redux';

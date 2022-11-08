@@ -7,6 +7,7 @@ import type { Middleware } from 'redux';
 import type { RootState } from '../store';
 import { sortSlice } from '../slices/sortSlice';
 import { filterSlice } from '../slices/filterSlice';
+import { setDimensionSort, setDimension, setGroup } from '../slices/cogDataMutableSlice';
 
 const { setSort } = sortSlice.actions;
 const { setFilter, setFilterView } = filterSlice.actions;
@@ -115,7 +116,6 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
     // .remove() ?
     if (action.payload.which === 'add' || action.payload.which === 'set') {
       const cf = store.getState().cogDataMutable.crossfilter;
-      const dimensions = store.getState().cogDataMutable.dimensionRefs;
       const groups = store.getState().cogDataMutable.groupRefs;
       const dispName = store.getState().selectedDisplay.name;
 
@@ -129,22 +129,26 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
       names.forEach((name: string) => {
         const { type } = store.getState()._displayInfo[dispName].info.cogInfo[name];
 
-        if (dimensions[name] === undefined) {
-          if (type === 'numeric') {
-            dimensions[name] = cf.dimension((d: Dimension) => getNumVal(d, name));
-          } else {
-            dimensions[name] = cf.dimension((d: Dimension) => getCatVal(d, name));
-          }
+        if (type === 'numeric') {
+          next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getNumVal(d, name)) }));
+        } else {
+          next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getCatVal(d, name)) }));
         }
 
         if (groups[name] === undefined) {
+          const dimensions = store.getState().cogDataMutable.dimensionRefs;
           if (type === 'numeric') {
             const ci = store.getState()._displayInfo[dispName].info.cogInfo[name];
-            groups[name] = dimensions[name].group((d: number) =>
-              Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
+            next(
+              setGroup({
+                key: name,
+                group: dimensions[name].group((d: number) =>
+                  Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
+                ),
+              }),
             );
           } else {
-            groups[name] = dimensions[name].group();
+            next(setGroup({ key: name, group: dimensions[name].group() }));
           }
         }
       });
@@ -169,15 +173,14 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         newState.splice(action.payload, 1);
       }
       if (newState.length === 0) {
-        dimensions.__sort = cf.dimension((d: Dimension) => d.__index);
+        next(setDimensionSort(cf.dimension((d: Dimension) => d.__index)));
       } else if (newState.length === 1) {
-        // if (action.filter[names[i]].varType === 'numeric') {
         const dispName = store.getState().selectedDisplay.name;
         const ci = store.getState()._displayInfo[dispName].info.cogInfo[newState[0].name];
         if (ci.type === 'factor') {
-          dimensions.__sort = cf.dimension((d: Dimension) => getCatVal(d, newState[0].name));
+          next(setDimensionSort(cf.dimension((d: Dimension) => getCatVal(d, newState[0].name))));
         } else if (ci.type === 'numeric') {
-          dimensions.__sort = cf.dimension((d: Dimension) => getNumValSign(d, newState[0].name, newState[0].dir));
+          next(setDimensionSort(cf.dimension((d: Dimension) => getNumValSign(d, newState[0].name, newState[0].dir))));
         }
       } else {
         const dat = cf.all();
@@ -206,7 +209,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         for (let i = 0; i < sortDat.length; i += 1) {
           idx[sortDat[i].__index] = i;
         }
-        dimensions.__sort = cf.dimension((d: Dimension) => idx[d.__index]);
+        next(setDimensionSort(cf.dimension((d: Dimension) => idx[d.__index])));
       }
     }
   }
