@@ -342,19 +342,9 @@ interface CogDataMutable {
   didInvalidate: boolean;
   lastUpdated?: number;
   crossfilter?: import('../../node_modules/crossfilter2').Crossfilter<CogData>;
-  dimensionRefs?:
-    | {
-        __sort: import('../../node_modules/crossfilter2').Dimension<
-          CogData,
-          import('../../node_modules/crossfilter2').NaturallyOrderedValue
-        >;
-      }
-    | {
-        [key: string]: import('../../node_modules/crossfilter2').Dimension<
-          CogData,
-          import('../../node_modules/crossfilter2').NaturallyOrderedValue
-        >;
-      };
+  dimensionRefs: {
+    [key: string]: import('../../node_modules/crossfilter2').Dimension<CogData, string | number>;
+  };
   groupRefs?: {
     [key: string]: import('../../node_modules/crossfilter2').Group<
       CogData,

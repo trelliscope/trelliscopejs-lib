@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Crossfilter, Dimension, Group, NaturallyOrderedValue } from 'crossfilter2';
+import { Crossfilter, Dimension, Group } from 'crossfilter2';
 
 const initialState: CogDataMutable = {
   isFetching: false,
   isLoaded: false,
   didInvalidate: false,
+  dimensionRefs: {},
 };
 
 export const cogDataMutableSlice = createSlice({
@@ -14,25 +15,21 @@ export const cogDataMutableSlice = createSlice({
   reducers: {
     receiveCogData: (state, action: PayloadAction<{ iface: CogInterface; crossfilter?: Crossfilter<CogData> }>) => {
       state.isFetching = false;
-      state.didInvalidate = false;
       state.isLoaded = true;
+      state.didInvalidate = false;
       state.crossfilter = action.payload.crossfilter;
-      state.dimensionRefs = {} as
-        | { __sort: Dimension<CogData, NaturallyOrderedValue> }
-        | { [key: string]: Dimension<CogData, NaturallyOrderedValue> };
+      state.dimensionRefs = {} as CogDataMutable['dimensionRefs'];
       state.groupRefs = {} as { [key: string]: Group<CogData, string, number> };
       state.allRef = action.payload.crossfilter !== undefined ? action.payload.crossfilter.groupAll() : undefined;
       state.iface = action.payload.iface;
       state.lastUpdated = Date.now();
     },
-    setDimensionSort: (state, action: PayloadAction<Dimension<CogData, NaturallyOrderedValue>>) => {
+    setDimensionSort: (state, action: PayloadAction<Dimension<CogData, string | number>>) => {
       state.dimensionRefs = { __sort: action.payload };
     },
-    setDimension: (state, action: PayloadAction<{ key: string; dimension: Dimension<CogData, NaturallyOrderedValue> }>) => {
+    setDimension: (state, action: PayloadAction<{ key: string; dimension: Dimension<CogData, string | number> }>) => {
       if (!state.dimensionRefs) {
-        state.dimensionRefs = {} as
-          | { __sort: Dimension<CogData, NaturallyOrderedValue> }
-          | { [key: string]: Dimension<CogData, NaturallyOrderedValue> };
+        state.dimensionRefs = {} as CogDataMutable['dimensionRefs'];
       }
       state.dimensionRefs[action.payload.key] = action.payload.dimension;
     },
