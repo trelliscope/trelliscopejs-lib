@@ -128,7 +128,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const header = ['panelKey'];
   // array of panel keys so we can search to get columns we need if ccols defined
   const cd = cogData.crossfilter.all();
-  const pk = cd.map((dd: Data) => dd.panelKey);
+  const pk = cd.map((dd: CogData) => dd.panelKey);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
     const rcdat = [];

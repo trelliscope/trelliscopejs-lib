@@ -293,7 +293,7 @@ interface FilterCatDist {
 }
 
 interface CondDistFilterCat {
-  dist: { key: string; value: number }[];
+  dist: import('../../node_modules/crossfilter2').Grouping<string, number>[];
   idx: number[];
   max: number;
   orderValue: string;
@@ -304,7 +304,7 @@ interface CondDistFilterCat {
 }
 
 interface CondDistFilterNum {
-  dist: { key: number; value: number }[];
+  dist: import('../../node_modules/crossfilter2').Grouping<string, number>[];
   max: number;
   breaks: number[];
   delta: number;
@@ -333,6 +333,32 @@ interface Window {
 
 interface CogData {
   [key: string]: string | number;
+  panelKey: string;
+}
+
+interface CogDataMutable {
+  isFetching: boolean;
+  isLoaded: boolean;
+  didInvalidate: boolean;
+  lastUpdated?: number;
+  crossfilter?: import('../../node_modules/crossfilter2').Crossfilter<CogData>;
+  dimensionRefs: {
+    [key: string]: import('../../node_modules/crossfilter2').Dimension<CogData, string | number>;
+  };
+  groupRefs?: {
+    [key: string]: import('../../node_modules/crossfilter2').Group<
+      CogData,
+      import('../../node_modules/crossfilter2').NaturallyOrderedValue,
+      number
+    >;
+  };
+  allRef?:
+    | import('../../node_modules/crossfilter2').GroupAll<
+        CogData,
+        import('../../node_modules/crossfilter2').NaturallyOrderedValue
+      >
+    | undefined;
+  iface?: CogInterface;
 }
 
 type SidebarType =

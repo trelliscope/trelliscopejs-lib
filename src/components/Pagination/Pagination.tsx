@@ -22,7 +22,7 @@ interface PaginationProps {
   dialogOpen: boolean;
   fullscreen: boolean;
   handleChange: (arg0: number) => void;
-  cogData: CogData;
+  cogData: CogDataMutable;
 }
 
 const Pagination: React.FC<PaginationProps> = ({

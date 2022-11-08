@@ -12,7 +12,7 @@ import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, d
 import _config from '../slices/configSlice';
 import filter from '../slices/filterSlice';
 import _displayInfo from './_displayInfo';
-import _cogDataMutable from './_cogDataMutable';
+import cogDataMutable from '../slices/cogDataMutableSlice';
 
 
 const reducers = combineReducers({
@@ -36,7 +36,7 @@ const reducers = combineReducers({
   _config,
   displayList,
   _displayInfo,
-  _cogDataMutable,
+  cogDataMutable,
 });
 
 export default reducers;

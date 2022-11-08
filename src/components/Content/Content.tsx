@@ -31,7 +31,7 @@ interface ContentProps {
     height: number;
   };
   ccd: { [key: string]: string | number; panelKey: string }[];
-  ci: DisplayObject['cogInterface'];
+  ci?: DisplayObject['cogInterface'];
   cinfo: DisplayObject['cogInfo'];
   cfg: Config;
   layout: LayoutState;
@@ -311,5 +311,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(setLayout({ pageNum: n }));
   },
 });
+
+
+Content.defaultProps = {
+  ci: {} as CogInterface,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

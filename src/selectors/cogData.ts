@@ -1,3 +1,4 @@
+import { Grouping } from 'crossfilter2';
 import { createSelector } from 'reselect';
 import {
   cogDataSelector,
@@ -23,15 +24,15 @@ export const cogFiltDistSelector = createSelector(
         if (cdi.info.cogInfo[keys[i]].type === 'factor') {
           const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ? filter[keys[i]].orderValue : 'ct,desc';
 
-          let dist = [];
+          let dist = [] as Grouping<string, number>[];
           // if sort order is count, use .top to get sorted
           // if it is by id (label), use .all to get that order
-          if (cogData.groupRefs[keys[i]]) {
+          if (cogData?.groupRefs?.[keys[i]]) {
             if (orderValue && orderValue.substring(0, 3) === 'ct') {
               // cogData.groupRefs[keys[i]].order(d => -d);
-              dist = cogData.groupRefs[keys[i]].top(Infinity);
+              dist = cogData.groupRefs[keys[i]].top(Infinity) as Grouping<string, number>[];
             } else {
-              dist = cogData.groupRefs[keys[i]].all();
+              dist = cogData.groupRefs[keys[i]].all() as Grouping<string, number>[];
             }
           }
 
@@ -52,7 +53,7 @@ export const cogFiltDistSelector = createSelector(
           // would it be more efficient as a crossfilter group reducer?
           const selectedIdx = [];
           const notSelectedIdx = [];
-          const filterVals = filter[keys[i]] && filter[keys[i]].value ? filter[keys[i]].value as FilterCat : [];
+          const filterVals = filter[keys[i]] && filter[keys[i]].value ? (filter[keys[i]].value as FilterCat) : [];
           let sumSelected = 0;
           for (let j = 0; j < dist.length; j += 1) {
             const val = filterVals.indexOf(dist[j].key);
@@ -74,7 +75,7 @@ export const cogFiltDistSelector = createSelector(
             idx: selectedIdx.concat(notSelectedIdx),
           } as CondDistFilterCat;
         } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
-          const dist = cogData?.groupRefs[keys[i]]?.all();
+          const dist = cogData?.groupRefs?.[keys[i]]?.all() || [];
 
           let maxVal = 0;
           for (let j = 0; j < dist?.length; j += 1) {
@@ -90,7 +91,7 @@ export const cogFiltDistSelector = createSelector(
             delta: cdi.info.cogInfo[keys[i]].delta,
             range: cdi.info.cogInfo[keys[i]].range,
             log: cdi.info.cogInfo[keys[i]].log,
-          };
+          } as CondDistFilterNum;
         }
       }
     }
@@ -105,7 +106,7 @@ export const currentCogDataSelector = createSelector(
   filterStateSelector,
   sortSelector,
   (cd, pnum, npp, filt, sort) => {
-    let result = [];
+    let result: CogData[] = [];
     if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
       if (sort.length === 1) {
         if (sort[0].dir === 'asc') {
@@ -141,6 +142,12 @@ export const currentCogDataSelector = createSelector(
 //   },
 // );
 
-export const filterCardinalitySelector = createSelector(cogDataSelector, filterStateSelector, (cd, filt) =>
-  cd.allRef === undefined && filt ? 0 : cd.allRef.value(),
-);
+export const filterCardinalitySelector = createSelector(cogDataSelector, filterStateSelector, (cd, filt) => {
+  if (cd.allRef === undefined && filt) {
+    return 0;
+  }
+  if (cd.allRef !== undefined) {
+    return cd?.allRef?.value() as number;
+  }
+  return 0;
+});
