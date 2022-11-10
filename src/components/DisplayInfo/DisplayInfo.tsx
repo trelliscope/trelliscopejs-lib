@@ -18,11 +18,12 @@ import {
 } from '../../selectors';
 import { setDispInfoDialogOpen } from '../../slices/appSlice';
 import type { RootState } from '../../store';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
   singleDisplay: boolean;
-  curDisplayInfo: CurrentDisplayInfo;
+  curDisplayInfo: DisplayInfoState;
   isOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
   setThisDialogOpen: (isOpen: boolean) => void;

@@ -15,6 +15,7 @@ import { curDisplayInfoSelector, filterStateSelector, filterViewSelector, labels
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './SidebarFilter.module.scss';
 
 interface SidebarFilterProps {
@@ -27,7 +28,7 @@ interface SidebarFilterProps {
   handleViewChange: (x: string, which: 'add' | 'remove', labels: string[]) => void;
   labels: string[];
   cogInfo: { [key: string]: CogInfo };
-  curDisplayInfo: CurrentDisplayInfo;
+  curDisplayInfo: DisplayInfoState;
   filtDist: { [key: string]: CondDistFilterCat | CondDistFilterNum };
   colSplit: { cutoff: number | null; heights: [number, number] };
 }

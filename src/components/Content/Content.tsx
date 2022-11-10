@@ -23,6 +23,7 @@ import { cogInfoSelector } from '../../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../../selectors/cogData';
 import type { RootState } from '../../store';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './Content.module.scss';
 
 interface ContentProps {

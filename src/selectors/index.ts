@@ -1,25 +1,26 @@
 // cross-component selectors go here
 // otherwise they go in the component files
 import { createSelector } from 'reselect';
+import { DisplayInfoState } from '../slices/displayInfoSlice';
 import type { RootState } from '../store';
 
 export const displayListSelector = (state: RootState) => state.displayList;
-export const displayInfoSelector = (state: RootState) => state._displayInfo;
+export const displayInfoSelector = (state: RootState) => state.displayInfo;
 export const curDisplayInfoSelector = (state: RootState) => {
-  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
-    return state._displayInfo[state.selectedDisplay.name];
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state.displayInfo[state.selectedDisplay.name]) {
+    return state.displayInfo[state.selectedDisplay.name];
   }
   return {
     isFetching: true,
     isLoaded: false,
     didInvalidate: false,
     info: {},
-  };
+  } as DisplayInfoState;
 };
 export const selectedDisplaySelector = (state: RootState) => state.selectedDisplay;
 export const displayLoadedSelector = (state: RootState) => {
-  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
-    return state._displayInfo[state.selectedDisplay.name].isLoaded;
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state.displayInfo[state.selectedDisplay.name]) {
+    return state.displayInfo[state.selectedDisplay.name].isLoaded;
   }
   return false;
 };

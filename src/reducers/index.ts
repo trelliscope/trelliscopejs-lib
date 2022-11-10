@@ -11,9 +11,8 @@ import sort from '../slices/sortSlice';
 import app from '../slices/appSlice';
 import _config from '../slices/configSlice';
 import filter from '../slices/filterSlice';
-import _displayInfo from './_displayInfo';
+import displayInfo from '../slices/displayInfoSlice';
 import cogDataMutable from '../slices/cogDataMutableSlice';
-
 
 const reducers = combineReducers({
   app,
@@ -28,7 +27,7 @@ const reducers = combineReducers({
   filter,
   _config,
   displayList,
-  _displayInfo,
+  displayInfo,
   cogDataMutable,
 });
 

@@ -12,13 +12,14 @@ import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
 import { RootState } from '../../store';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './SidebarLabels.module.scss';
 
 interface SidebarLabelsProps {
   height: number;
   labels: string[];
-  cogInfo: CogInfo;
-  curDisplayInfo: CurrentDisplayInfo;
+  cogInfo: { [key: string]: CogInfo };
+  curDisplayInfo: DisplayInfoState;
   handleChange: (arg1: string, arg2: string[]) => void;
 }
 
@@ -42,7 +43,7 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, 
                     <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </ListSubheader>
                 )}
-                {cogGroups[grp].sort().map((d: string) => (
+                {[...cogGroups[grp]].sort().map((d: string) => (
                   <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name, labels)}>
                     <Checkbox
                       checked={labels.indexOf(cogInfo[d].name) !== -1}

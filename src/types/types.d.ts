@@ -80,18 +80,11 @@ type DisplayGroup = {
   [key in string]: number[];
 };
 
-interface CurrentDisplayInfo {
-  didInvalidate: boolean;
-  info: DisplayObject;
-  isFetching: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-}
-
 interface DisplayObject {
   name: string;
   // ?
   group: Group;
+  views: ViewItem[];
   desc: string;
   mdDesc: string;
   mdTitle: string;
@@ -142,7 +135,6 @@ interface DisplayObject {
 }
 
 interface CogInfo {
-  [key: string]: { name: string; desc: string };
   name: string;
   desc: string;
   type: CogType;
@@ -235,15 +227,6 @@ interface Sort {
 }
 
 type SortDir = 'asc' | 'desc';
-
-interface DisplayInfoState {
-  isFetching: boolean;
-  didInvalidate: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-  info: DisplayObject;
-}
-
 interface HTMLWidget {
   widgets: HTMLWidgetInstance[];
   initialize: (el: HTMLElement, width: number, height: number) => void;
