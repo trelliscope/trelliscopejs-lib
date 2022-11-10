@@ -17,17 +17,7 @@ import { setFilter, setFilterView } from '../slices/filterSlice';
 import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
 import { receiveCogData } from '../slices/cogDataMutableSlice';
-import {
-  SET_APP_ID,
-  SET_FULLSCREEN,
-  SET_ERROR_MESSAGE,
-  SET_DIALOG_OPEN,
-  REQUEST_DISPLAY,
-  RECEIVE_DISPLAY,
-  SET_LOCAL_PANELS,
-  SB_LOOKUP,
-  SET_SELECTED_RELDISPS,
-} from '../constants';
+import { SET_LOCAL_PANELS, SB_LOOKUP, SET_SELECTED_RELDISPS } from '../constants';
 import { receiveDisplay, requestDisplay } from '../slices/displayInfoSlice';
 
 const getJSON = (obj: { url: string; callback: (data: never) => void }) =>
