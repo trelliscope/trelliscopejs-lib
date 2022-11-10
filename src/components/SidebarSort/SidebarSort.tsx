@@ -12,6 +12,7 @@ import { setLayout } from '../../slices/layoutSlice';
 import { sidebarHeightSelector } from '../../selectors/ui';
 import { sortSelector, curDisplayInfoSelector, labelsSelector } from '../../selectors';
 import type { RootState } from '../../store';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './SidebarSort.module.scss';
 
 interface SidebarSortProps {
@@ -33,7 +34,7 @@ interface SidebarSortProps {
   labels: string[];
   handleChange: (arg1: Sort[] | number) => void;
   addLabel: (name: string, label: string[]) => void;
-  curDisplayInfo: CurrentDisplayInfo;
+  curDisplayInfo: DisplayInfoState;
 }
 
 const SidebarSort: React.FC<SidebarSortProps> = ({

@@ -2,9 +2,10 @@ import React, { useRef, useState, useLayoutEffect } from 'react';
 import getJSONP from 'browser-jsonp';
 import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
-import styles from './Panel.module.scss';
 import PanelGraphic from '../PanelGraphic';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import styles from './Panel.module.scss';
 
 interface PanelProps {
   labels: PanelLabel[];

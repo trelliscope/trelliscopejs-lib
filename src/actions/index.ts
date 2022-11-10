@@ -18,12 +18,17 @@ import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
 import { receiveCogData } from '../slices/cogDataMutableSlice';
 import {
+  SET_APP_ID,
+  SET_FULLSCREEN,
+  SET_ERROR_MESSAGE,
+  SET_DIALOG_OPEN,
   REQUEST_DISPLAY,
   RECEIVE_DISPLAY,
   SET_LOCAL_PANELS,
   SB_LOOKUP,
   SET_SELECTED_RELDISPS,
 } from '../constants';
+import { receiveDisplay, requestDisplay } from '../slices/displayInfoSlice';
 
 const getJSON = (obj: { url: string; callback: (data: never) => void }) =>
   fetch(obj.url)
@@ -39,20 +44,6 @@ export const resetRelDisps = (i?: number[]) => ({
   type: SET_SELECTED_RELDISPS,
   which: 'reset',
   val: i,
-});
-
-export const requestDisplay = (name: string, group: string) => ({
-  type: REQUEST_DISPLAY,
-  name,
-  group,
-});
-
-export const receiveDisplay = (name: string, group: string, json: DisplayObject) => ({
-  type: RECEIVE_DISPLAY,
-  name,
-  group,
-  info: json,
-  receivedAt: Date.now(),
 });
 
 export const setLocalPanels = (dat: unknown) => ({
@@ -97,19 +88,20 @@ const setCogDatAndState = (
   // (need to set layout before others because the default layout is 1,1
   //   and will be temporarily honored if this is set later)
   const { layout } = dObjJson.state;
+  const newLayout = { ...layout };
   if (hashItems.nrow) {
-    layout.nrow = parseInt(hashItems.nrow, 10);
+    newLayout.nrow = parseInt(hashItems.nrow, 10);
   }
   if (hashItems.ncol) {
-    layout.ncol = parseInt(hashItems.ncol, 10);
+    newLayout.ncol = parseInt(hashItems.ncol, 10);
   }
   if (hashItems.arr) {
-    layout.arrange = hashItems.arr;
+    newLayout.arrange = hashItems.arr;
   }
-  dispatch(setLayout(layout));
+  dispatch(setLayout(newLayout));
   // need to do page number separately because it is recomputed when nrow/ncol are changed
   if (hashItems.pg) {
-    dispatch(setLayout({ ...layout, pageNum: parseInt(hashItems.pg, 10) }));
+    dispatch(setLayout({ ...newLayout, pageNum: parseInt(hashItems.pg, 10) }));
   }
 
   // labels
@@ -120,7 +112,7 @@ const setCogDatAndState = (
   dispatch(setLabels(labels));
 
   // sort
-  
+
   if (hashItems.sort) {
     const hashSort = hashItems.sort.split(',').map((d, i) => {
       const vals = d.split(';');
@@ -226,7 +218,7 @@ export const fetchDisplay =
     getCogData = true,
   ): ThunkAction<void, RootState, unknown, AnyAction> =>
   (dispatch) => {
-    dispatch(requestDisplay(name, group));
+    dispatch(requestDisplay({ name, group }));
 
     const ldCallback = `__loadDisplayObj__${id}_${group}_${name}`;
     const cdCallback = `__loadCogData__${id}_${group}_${name}`;
@@ -234,7 +226,7 @@ export const fetchDisplay =
     window[ldCallback] = (dObjJson: DisplayObject) => {
       const iface = dObjJson.cogInterface;
       // now that displayObj is available, we can set the state with this data
-      dispatch(receiveDisplay(name, group, dObjJson));
+      dispatch(receiveDisplay({ name, group, info: dObjJson }));
 
       setPanelInfo(dObjJson, cfg);
 

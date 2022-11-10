@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ReactTooltip from 'react-tooltip';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {

@@ -76,7 +76,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
             // group.dispose(); // to get rid of previous group
             // create group that bins into histogram breaks
             const dispName = store.getState().selectedDisplay.name;
-            const ci = store.getState()._displayInfo[dispName].info.cogInfo[names[i]];
+            const ci = store.getState().displayInfo[dispName].info.cogInfo[names[i]];
             groups[names[i]] = dimensions[names[i]].group((d: number) =>
               Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
             );
@@ -127,7 +127,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
       }
 
       names.forEach((name: string) => {
-        const { type } = store.getState()._displayInfo[dispName].info.cogInfo[name];
+        const { type } = store.getState().displayInfo[dispName].info.cogInfo[name];
 
         if (type === 'numeric') {
           next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getNumVal(d, name)) }));
@@ -138,7 +138,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         if (groups[name] === undefined) {
           const dimensions = store.getState().cogDataMutable.dimensionRefs;
           if (type === 'numeric') {
-            const ci = store.getState()._displayInfo[dispName].info.cogInfo[name];
+            const ci = store.getState().displayInfo[dispName].info.cogInfo[name];
             next(
               setGroup({
                 key: name,
@@ -176,7 +176,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         next(setDimensionSort(cf.dimension((d: Dimension) => d.__index)));
       } else if (newState.length === 1) {
         const dispName = store.getState().selectedDisplay.name;
-        const ci = store.getState()._displayInfo[dispName].info.cogInfo[newState[0].name];
+        const ci = store.getState().displayInfo[dispName].info.cogInfo[newState[0].name];
         if (ci.type === 'factor') {
           next(setDimensionSort(cf.dimension((d: Dimension) => getCatVal(d, newState[0].name))));
         } else if (ci.type === 'numeric') {
@@ -189,7 +189,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
           const elem = { __index: dat[i].__index } as SortParam;
           for (let j = 0; j < newState.length; j += 1) {
             const dispName = store.getState().selectedDisplay.name;
-            const ci = store.getState()._displayInfo[dispName].info.cogInfo[newState[j].name];
+            const ci = store.getState().displayInfo[dispName].info.cogInfo[newState[j].name];
             if (ci.type === 'factor') {
               // TODO: make custom getCatVal that returns first and last ascii value
               // otherwise NA panels can show up in between other panels
