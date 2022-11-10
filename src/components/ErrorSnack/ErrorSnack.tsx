@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
-import { setErrorMessage } from '../../actions';
+import { setErrorMessage } from '../../slices/appSlice';
+import { RootState } from '../../store';
 
 interface ErrorSnackProps {
   errorMsg: string;
@@ -30,13 +31,13 @@ const ErrorSnack: React.FC<ErrorSnackProps> = ({ errorMsg, handleClose }) => (
 
 // ------ redux container ------
 
-const errorSelector = (state: { errorMsg: string }) => state.errorMsg;
+const errorSelector = (state: RootState) => state.app.errorMsg;
 
 const stateSelector = createSelector(errorSelector, (errorMsg) => ({
   errorMsg,
 }));
 
-const mapStateToProps = (state: { errorMsg: string }) => stateSelector(state);
+const mapStateToProps = (state: RootState) => stateSelector(state);
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   handleClose: () => {

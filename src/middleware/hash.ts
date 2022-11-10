@@ -82,7 +82,7 @@ export const hashMiddleware: Middleware<RootState> =
   ({ getState }) =>
   (next) =>
   (action) => {
-    if (!getState().singlePageApp) return next(action);
+    if (!getState().app.singlePageApp) return next(action);
 
     const types = [SELECT_DISPLAY, setLayout.type, setLabels.type, setSort.type, setFilter.type, ACTIVE_SIDEBAR, setFilterView.type];
     const result = next(action);

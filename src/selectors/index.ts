@@ -38,15 +38,15 @@ export const layoutSelector = (state: RootState) => state.layout;
 export const labelsSelector = (state: RootState) => state.labels || [];
 
 export const configSelector = (state: RootState) => state._config.config;
-export const appIdSelector = (state: RootState) => state.appId;
-export const singlePageAppSelector = (state: RootState) => state.singlePageApp;
-export const fullscreenSelector = (state: RootState) => state.fullscreen;
+export const appIdSelector = (state: RootState) => state.app.appId;
+export const singlePageAppSelector = (state: RootState) => state.app.singlePageApp;
+export const fullscreenSelector = (state: RootState) => state.app.fullscreen;
 
-export const dialogOpenSelector = (state: RootState) => state.dialog;
-export const dispSelectDialogSelector = (state: RootState) => state.dispSelectDialog;
-export const dispInfoDialogSelector = (state: RootState) => state.dispInfoDialog;
+export const dialogOpenSelector = (state: RootState) => state.app.dialog;
+export const dispSelectDialogSelector = (state: RootState) => state.app.dispSelectDialog;
+export const dispInfoDialogSelector = (state: RootState) => state.app.dispInfoDialog;
 
-export const selectCallbacks = (state: RootState) => state?.options?.callbacks;
+export const selectCallbacks = (state: RootState) => state?.app.options?.callbacks;
 
 export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   if (cdi.isLoaded) {
