@@ -315,7 +315,7 @@ interface AppOptions {
   mockData?: boolean;
   callbacks?: {
     [key: string]: () => void;
-  }
+  };
 }
 interface Window {
   trelliscopeApp: (id: string, config: string, options: AppOptions) => void;
@@ -332,7 +332,7 @@ interface CogDataMutable {
   didInvalidate: boolean;
   lastUpdated?: number;
   crossfilter?: import('../../node_modules/crossfilter2').Crossfilter<CogData>;
-  dimensionRefs: {
+  dimensionRefs?: {
     [key: string]: import('../../node_modules/crossfilter2').Dimension<CogData, string | number>;
   };
   groupRefs?: {
