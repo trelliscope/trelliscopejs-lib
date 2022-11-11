@@ -6,7 +6,6 @@ const initialState: CogDataMutable = {
   isFetching: false,
   isLoaded: false,
   didInvalidate: false,
-  dimensionRefs: {},
 };
 
 export const cogDataMutableSlice = createSlice({
@@ -31,7 +30,9 @@ export const cogDataMutableSlice = createSlice({
       if (!state.dimensionRefs) {
         state.dimensionRefs = {} as CogDataMutable['dimensionRefs'];
       }
-      state.dimensionRefs[action.payload.key] = action.payload.dimension;
+      if (state.dimensionRefs) {
+        state.dimensionRefs[action.payload.key] = action.payload.dimension;
+      }
     },
     setGroup: (state, action: PayloadAction<{ key: string; group: Group<CogData, string, number> }>) => {
       if (!state.groupRefs) {

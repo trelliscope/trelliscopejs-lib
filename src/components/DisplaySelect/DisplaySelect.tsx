@@ -11,7 +11,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
-import { fetchDisplay, resetRelDisps } from '../../actions';
+import { fetchDisplay } from '../../actions';
 import { setDispSelectDialogOpen } from '../../slices/appSlice';
 import { FilterState, setFilter, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
@@ -32,6 +32,7 @@ import type { RootState } from '../../store';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
+import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
 
 interface DisplaySelectProps {
@@ -185,7 +186,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>)
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
-    dispatch(resetRelDisps());
+    dispatch(setSelectedRelDisps([]));
     dispatch(setLabels([]));
     dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
     dispatch(setLayout({ pageNum: 1 }));
