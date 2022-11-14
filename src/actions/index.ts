@@ -17,29 +17,13 @@ import { setFilter, setFilterView } from '../slices/filterSlice';
 import { setLayout } from '../slices/layoutSlice';
 import { setLabels } from '../slices/labelsSlice';
 import { receiveCogData } from '../slices/cogDataMutableSlice';
-import { SET_LOCAL_PANELS, SB_LOOKUP, SET_SELECTED_RELDISPS } from '../constants';
+import { SB_LOOKUP } from '../constants';
 import { receiveDisplay, requestDisplay } from '../slices/displayInfoSlice';
 
 const getJSON = (obj: { url: string; callback: (data: never) => void }) =>
   fetch(obj.url)
     .then((response) => response.json() as never)
     .then((json) => obj.callback(json));
-
-// export const setSelectedView = (val) => ({
-//   type: SET_SELECTED_VIEW,
-//   val
-// });
-
-export const resetRelDisps = (i?: number[]) => ({
-  type: SET_SELECTED_RELDISPS,
-  which: 'reset',
-  val: i,
-});
-
-export const setLocalPanels = (dat: unknown) => ({
-  type: SET_LOCAL_PANELS,
-  dat,
-});
 
 const setCogDatAndState = (
   iface: CogInterface,

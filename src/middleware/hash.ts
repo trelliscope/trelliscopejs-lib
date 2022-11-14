@@ -1,26 +1,19 @@
 import type { Middleware } from 'redux';
 import type { RootState } from '../store';
-import {
-  SELECT_DISPLAY,
-  ACTIVE_SIDEBAR,
-  SB_REV_LOOKUP,
-} from '../constants';
+import { SB_REV_LOOKUP } from '../constants';
 import { sortSlice } from '../slices/sortSlice';
 import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
 import { filterSlice } from '../slices/filterSlice';
+import { selectedDisplaySlice } from '../slices/selectedDisplaySlice';
+import { sidebarSlice } from '../slices/sidebarSlice';
 
 const { setSort } = sortSlice.actions;
 const { setLabels } = labelsSlice.actions;
 const { setLayout } = layoutSlice.actions;
 const { setFilter, setFilterView } = filterSlice.actions;
-
-// const layoutLookup = {
-//   pg: 'pageNum',
-//   arr: 'arrange',
-//   nrow: 'nrow',
-//   ncol: 'ncol'
-// };
+const { setSelectedDisplay } = selectedDisplaySlice.actions;
+const { setActiveSidebar } = sidebarSlice.actions;
 
 // this updates the window hash whenever the state changes
 export const hashFromState = (state: RootState) => {
@@ -28,9 +21,6 @@ export const hashFromState = (state: RootState) => {
   const display = state.selectedDisplay;
   // layout
   const { layout } = state;
-  // const layoutPars = Object.keys(layoutLookup).map((el) => (
-  //   layout[layoutLookup[el]] ? `${el}=${layout[layoutLookup[el]]}` : ''
-  // )).filter((a) => a !== '').join('&');
   const layoutPars = `nrow=${layout.nrow}&ncol=${layout.ncol}&arr=${layout.arrange}&pg=${layout.pageNum}`;
   // labels
   const { labels } = state;
@@ -56,7 +46,6 @@ export const hashFromState = (state: RootState) => {
     }
     return res;
   });
-  // http://localhost:3000/#display=gapminder_lifeexp&nrow=1&ncol=4&arr=row&pg=4&labels=country,continent,lifeExp_mean&sort=lifeExp_mean;asc&filter=var:continent;type:select;val:Africa,var:country;type:regex;val:a,var:lifeExp_mean;type:range;from:45.476;to:58.333
 
   // sidebar
   const { sidebar } = state;
@@ -84,14 +73,20 @@ export const hashMiddleware: Middleware<RootState> =
   (action) => {
     if (!getState().app.singlePageApp) return next(action);
 
-    const types = [SELECT_DISPLAY, setLayout.type, setLabels.type, setSort.type, setFilter.type, ACTIVE_SIDEBAR, setFilterView.type];
+    const types = [
+      setSelectedDisplay.type,
+      setLayout.type,
+      setLabels.type,
+      setSort.type,
+      setFilter.type,
+      setActiveSidebar.type,
+      setFilterView.type,
+    ];
     const result = next(action);
     if (types.indexOf(action.type) > -1) {
       const hash = hashFromState(getState());
       if (window.location.hash !== hash) {
         window.location.hash = hash;
-        // window.history.pushState(hash, undefined, `#${hash}`);
-        // window.history.pushState(hash, undefined, '');
       }
     }
     return result;
