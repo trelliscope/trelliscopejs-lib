@@ -1,6 +1,6 @@
 .filterCat {
   &Container {
-    width: 220px;
+    width: var(--filterCat-continer-width);
     box-sizing: border-box;
     padding-left: 5px;
     padding-right: 5px;
@@ -8,7 +8,7 @@
   }
 
   &PlotContainer {
-    width: 220px;
+    width: var(--filterCat-continer-width);
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -18,8 +18,8 @@
   }
 
   &InputContainer {
-    height: 39px;
-    width: 220px;
+    height: var(--filterCat-input-containter-height);
+    width: var(--filterCat-continer-width);
     margin-bottom: -21px;
     padding-top: 7px;
     z-index: 100;

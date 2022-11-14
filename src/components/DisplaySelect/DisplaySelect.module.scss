@@ -2,8 +2,8 @@
   &AttnOuter {
     position: absolute;
     overflow: hidden;
-    height: 48px;
-    width: 48px;
+    height: var(--displaySelect-height);
+    width: var(--displaySelect-width);
     top: 0;
     left: 0;
     pointer-events: none;
@@ -11,25 +11,25 @@
 
   &AttnInner {
     position: absolute;
-    height: 48px;
-    width: 48px;
+    height: var(--displaySelect-height);
+    width: var(--displaySelect-width);
     top: 0;
     left: 0;
-    transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1), 0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    transition: var(--displaySelect-inner-transition);
     opacity: 1;
     transform: scale(0.85);
   }
 
   &AttnEmpty {
     position: absolute;
-    height: 48px;
+    height: var(--displaySelect-height);
     width: 100%;
-    border-radius: 50%;
+    border-radius: var(--displaySelect-empty-border-radius);
     opacity: 0.16;
-    transition: transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms;
+    transition: var(--displaySelect-empty-transition);
     top: 0;
     transform: scale(0.85);
-    background-color: rgba(0, 0, 0, 0.870588);
+    background-color: var(--black-200);
   }
 
   &FolderIcon {
@@ -42,31 +42,31 @@
     box-sizing: border-box;
     top: -1px; // cover up top app border
     left: -1px;
-    height: 48px;
-    width: 48px;
-    font-size: 18px;
-    line-height: 50px;
-    background: #448aff;
-    color: #fff;
+    height: var(--displaySelect-height);
+    width: var(--displaySelect-width);
+    font-size: var(--displaySelect-button-font-size);
+    line-height: var(--displaySelect-button-line-height);
+    background: var(--blue-200);
+    color: var(--white);
     text-align: center;
     border: none;
-    transition: all 500ms ease-in;
+    transition: var(--displaySelect-button-transition);
 
     &:hover {
-      transition: opacity 250ms;
+      transition: var(--displaySelect-button-hover-transition);
       opacity: 0.8;
-      color: #fff;
+      color: var(--white);
       cursor: pointer;
     }
   }
 
   &ButtonInactive {
-    background: #ddd;
-    border-color: #ddd;
+    background: var(--gray);
+    border-color: var(--gray);
 
     &:hover {
-      background: #ccc;
-      border-color: #ccc;
+      background: var(--gray-100);
+      border-color: var(--gray-100);
     }
   }
 }

@@ -4,15 +4,15 @@
     box-sizing: border-box;
     top: 0;
     left: 0;
-    height: 48px;
-    background: #fff;
-    color: #000;
-    border-bottom: 1px solid #eaedf0;
-    border-top: 1px solid #eaedf0;
-    border-left: 1px solid #eaedf0;
+    height: var(--header-container-height);
+    background: var(--white);
+    color: var(--black);
+    border-bottom: var(--border-2);
+    border-top: var(--border-2);
+    border-left: var(--border-2);
     margin: 0;
-    font-size: 16px;
-    font-weight: 300;
+    font-size: var(--header-container-font-size);
+    font-weight: var(--header-container-font-weight);
     z-index: 1010;
   }
 
@@ -20,7 +20,7 @@
     display: flex;
     position: absolute;
     top: 0;
-    height: 48px;
+    height: var(--header-container-height);
   }
 
   &NameDescContainer {
@@ -34,7 +34,7 @@
   &DisplayName {
     vertical-align: top;
     padding-left: 15px;
-    font-size: 17px;
+    font-size: var(--header-displayName-font-size);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,10 +42,10 @@
 
   &DisplayDesc {
     vertical-align: top;
-    font-weight: 300;
+    font-weight: var(--header-displayDesc-font-weight);
     padding-left: 15px;
     padding-right: 8px;
-    font-size: 10px;
+    font-size: var(--header-displayDesc-font-size);
     font-style: italic;
     white-space: nowrap;
     overflow: hidden;

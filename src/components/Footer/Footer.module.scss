@@ -3,14 +3,14 @@
     position: absolute;
     box-sizing: border-box;
     left: 0;
-    height: 30px;
+    height: var(--footer-wrapper-height);
     padding-left: 10px;
     margin: 0;
-    line-height: 30px;
-    font-size: 15px;
+    line-height: var(--footer-wrapper-line-height);
+    font-size: var(--footer-wrapper-font-size);
     font-weight: 300;
-    background: #666666;
-    color: white;
+    background: var(--gray-1300);
+    color: var(--white);
     display: flex;
     flex-direction: row;
     overflow-x: auto;
@@ -42,7 +42,7 @@
   }
 
   &Spacer {
-    width: 12px;
+    width: var(--footer-spacer-width);
   }
 
   &FilterText {

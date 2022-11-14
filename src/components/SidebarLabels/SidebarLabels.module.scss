@@ -3,7 +3,7 @@
   overflow-x: hidden;
 
   &RowDesc {
-    color: #888;
+    color: var(--gray-900);
     font-style: italic;
   }
 
@@ -11,8 +11,8 @@
     padding: 0;
 
     &Checkbox {
-      height: 20px;
-      width: 20px;
+      height: var(--sidebarLabels-listCheckbox-height);
+      width: var(--sidebarLabels-listCheckbox-width);
     }
 
     &Item {
@@ -24,11 +24,11 @@
 
   &CogGroup {
     &Header {
-      background: #90caf9 !important;
-      color: white !important;
-      font-weight: 400 !important;
-      font-size: 14px !important;
-      line-height: 29px !important;
+      background: var(--blue) !important;
+      color: var(--white) !important;
+      font-weight: var(--sidebarLabels-cogGroupHeader-font-weight) !important;
+      font-size: var(--sidebarLabels-cogGroupHeader-font-size) !important;
+      line-height: var(--sidebarLabels-cogGroupHeader-line-height) !important;
     }
 
     &Text {

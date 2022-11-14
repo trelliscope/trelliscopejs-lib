@@ -1,12 +1,12 @@
 .container {
-    width: 230px;
+    width: var(--sidebarFilter-width);
     // display: 'inline-block',
     // for dropdowns to not be hidden under other elements:
     box-sizing: border-box;
     z-index: 100; // + this.props.index,
     position: relative;
     padding-bottom: 6px;
-    border-bottom: 1px solid #c1c1c1;
+    border-bottom: var(--border-6);
 }
 
 .col1 {
@@ -19,20 +19,20 @@
   position: absolute;
   top: 25px;
   left: 230px;
-  border-left: 1px solid #c1c1c1;
+  border-left: var(--border-6);
 }
 
 .notUsedHeader {
-  height: 30px;
-  line-height: 30px;
+  height: var(--sidebarFilter-notUsedHeader-height);
+  line-height: var(--sidebarFilter-notUsedHeader-line-height);
   padding-left: 10px;
   box-sizing: border-box;
-  width: 230px;
-  font-size: 14px;
+  width: var(--sidebarFilter-width);
+  font-size: var(--sidebarFilter-notUsedHeader-font-size);
 }
 
 .notUsedContainer {
-  width: 230px;
+  width: var(--sidebarFilter-width);
   overflow-y: auto;
   box-sizing: border-box;
   padding: 0 10px 10px;
@@ -40,86 +40,86 @@
 
 .variable {
   display: inline-block;
-  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-  border-radius: 10px;
+  box-shadow: var(--sidebarFilter-variable-box-shadow);
+  border-radius: var(--sidebarFilter-variable-border-radius);
   padding: 2px 7px 3px !important;
   border: 0;
-  background: #fff;
+  background: var(--white);
   margin: 3px !important;
-  font-size: 12px;
+  font-size: var(--sidebarFilter-variable-font-size);
   cursor: pointer;
-  color: #000;
-  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  color: var(--black);
+  transition: var(--sidebarFilter-variable-transition);
 
   &:hover {
-    background: #ebebeb;
+    background: var(--white-500);
   }
 }
 
 .variableActive {
-  background: #81C784;
-  color: #fff;
+  background: var(--green);
+  color: var(--white);
 
   &:hover {
-    background: #81C784;
+    background: var(--green);
   }
 }
 
 .allContainer {
-  width: 230px;
+  width: var(--sidebarFilter-width);
   box-sizing: border-box;
 }
 
 .container {
-  width: 230px;
+  width: var(--sidebarFilter-width);
   // display: 'inline-block',
   // for dropdowns to not be hidden under other elements:
   box-sizing: border-box;
   z-index: 100; // + this.props.index;
   position: relative;
   padding-bottom: 6px;
-  border-bottom: 1px solid #c1c1c1;
+  border-bottom: var(--border-6);
 }
 
 .header {
-  height: 16px;
-  line-height: 15px;
-  width: 230px;
+  height: var(--sidebarFilter-height);
+  line-height: var(--sidebarFilter-header-line-height);
+  width: var(--sidebarFilter-width);
   margin-top: 1px;
-  font-size: 12px;
+  font-size: var(--sidebarFilter-header-font-size);
   position: relative;
 }
 
 .headerExtra {
   position: absolute;
   right: 38px;
-  height: 16px;
-  line-height: 15px;
-  font-size: 11px;
-  color: #777;
+  height: var(--sidebarFilter-height);
+  line-height: var(--sidebarFilter-header-line-height);
+  font-size: var(--sidebarFilter-headerExtra-font-size);
+  color: var(--gray-1100);
 }
 .headerName {
-  height: 16px;
+  height: var(--sidebarFilter-height);
   padding-left: 5px;
   padding-right: 5px;
   position: absolute;
   left: 1px;
   user-select: none;
   cursor: default;
-  background: #999;
+  background: var(--gray-700);
 }
 
 .headerNameActive {
-  background: #81C784;
+  background: var(--green);
 }
 
 .headerNameText {
-  color: white;
+  color: var(--white);
 }
 
 .headerIcon {
-  height: 16px;
-  color: #666;
+  height: var(--sidebarFilter-height);
+  color: var(--gray-1300);
   cursor: pointer;
   position: absolute;
   border: none;
@@ -129,8 +129,8 @@
   z-index: 1000;
 
   &:hover {
-    transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-    color: #aaa;
+    transition: var(--sidebarFilter-headerIcon-hover-transition);
+    color: var(--gray-500);
   }
 }
 
@@ -147,16 +147,16 @@
 }
 
 .cogGroupHeader {
-  background: #90CAF9;
+  background: var(--blue);
   margin-left: -10px;
   margin-right: -10px;
   margin-top: 10px;
   margin-bottom: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
-  color: white;
-  font-weight: 400;
-  font-size: 14px;
+  color: var(--white);
+  font-weight: var(--sidebarFilter-cogGroupHeader-font-weight);
+  font-size: var(--sidebarFilter-cogGroupHeader-font-size);
 }
 
 .cogGroupText {

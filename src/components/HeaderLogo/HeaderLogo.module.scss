@@ -4,30 +4,30 @@
   right: 0;
   cursor: pointer;
   border: none;
-  height: 48px;
+  height: var(--headerLogo-height);
   text-align: center;
-  width: 130px;
-  font-size: 17px;
-  background: #ff4308;
-  color: white;
+  width: var(--headerLogo-width);
+  font-size: var(--headerLogo-font-size);
+  background: var(--red-200);
+  color: var(--white);
 
   &Icon {
     position: absolute;
     top: 1px;
     right: 1px;
-    color: rgb(255, 142, 106);
+    color: var(--red);
   }
 
   &Dialog {
     &Headline {
-      font-size: 24px;
+      font-size: var(--headerLogo-dialogHeadline-font-size);
       padding-top: 16px;
       margin-bottom: 12px;
-      font-weight: 400;
+      font-weight: var(--headerLogo-dialogHeadline-font-weight);
     }
 
     &Div {
-      font-size: 18px;
+      font-size: var(--headerLogo-dialogDiv-font-size);
       padding-left: 10px;
       padding-right: 10px;
       z-index: 5000;
@@ -43,8 +43,8 @@
     }
 
     &Code {
-      color: #ff5252;
-      font-size: 20px;
+      color: var(--red-100);
+      font-size: var(--headerLogo-dialogCode-font-size);
     }
 
     &P {
@@ -63,13 +63,13 @@
     }
 
     &Hi {
-      color: #ff5252;
+      color: var(--red-100);
     }
   }
 
   &Keynote {
     margin-bottom: 0;
-    color: #888;
+    color: var(--gray-900);
     font-style: italic;
   }
 }
