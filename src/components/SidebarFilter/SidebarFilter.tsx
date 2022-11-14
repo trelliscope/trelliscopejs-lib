@@ -128,7 +128,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                     <span className={styles.headerNameText}>{d}</span>
                   </span>
                 </div>
-                <ReactTooltip place="right" id={`hdtooltip_${d}`}>
+                <ReactTooltip className={styles.sidebarFilterTooltip} place="right" id={`hdtooltip_${d}`}>
                   <span>{cogInfo[d].desc}</span>
                 </ReactTooltip>
                 <div className={styles.headerExtra}>{headerExtra}</div>
@@ -194,7 +194,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                     <span className={styles.cogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </div>
                 )}
-                {cogGroups[grp].sort().map((d) => (
+                {[...cogGroups[grp]].sort().map((d) => (
                   <React.Fragment key={`${d}_${displId}`}>
                     {inames.includes(d) && (
                       <span>
@@ -211,7 +211,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                             {d}
                           </button>
                         </span>
-                        <ReactTooltip place="right" id={`tooltip_${d}`}>
+                        <ReactTooltip className={styles.sidebarFilterTooltip} place="right" id={`tooltip_${d}`}>
                           <span>{cogInfo[d].desc}</span>
                         </ReactTooltip>
                       </span>
