@@ -194,7 +194,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                     <span className={styles.cogGroupText}>{`${grp} (${curItems.length})`}</span>
                   </div>
                 )}
-                {cogGroups[grp].sort().map((d) => (
+                {[...cogGroups[grp]].sort().map((d) => (
                   <React.Fragment key={`${d}_${displId}`}>
                     {inames.includes(d) && (
                       <span>
