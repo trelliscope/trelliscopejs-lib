@@ -3,31 +3,31 @@
     position: absolute;
     box-sizing: border-box;
     top: -1px;
-    transition: left 0.5s ease, background 250ms;
+    transition: var(--relatedDisplays-button-transition);
     display: inline-block;
-    height: 48px;
-    width: 48px;
-    font-size: 18px;
+    height: var(--relatedDisplays-button-height);
+    width: var(--relatedDisplays-button-width);
+    font-size: var(--relatedDisplays-button-font-size);
     text-align: center;
-    border-right: 1px solid #eaedf0;
-    border-bottom: 1px solid #eaedf0;
+    border-right: var(--border-2);
+    border-bottom: var(--border-2);
     border-left: none;
     border-top: none;
 
     &Dialog {
-      width: 200px;
+      width: var(--relatedDisplays-buttonDialog-width);
       margin-top: 8px !important;
       margin-bottom: 8px !important;
     }
 
     &Icon {
       padding-left: 2px;
-      line-height: 45px;
+      line-height: var(--relatedDisplays-buttonIcon-line-height);
     }
 
     &:hover {
-      transition: background 250ms;
-      background: #eee;
+      transition: var(--relatedDisplays-button-hover-transition);
+      background: var(--white-300);
       cursor: pointer;
     }
   }
@@ -36,13 +36,13 @@
     display: flex !important;
     align-items: center;
     justify-content: center;
-    border: solid 1px #ddd;
-    background: rgba(69, 138, 249, 0.4);
+    border: var(--border-4);
+    background: var(--blue-300);
   }
 
   &Dialog {
     z-index: 8000;
-    font-weight: 300;
+    font-weight: var(--relatedDisplays-dialog-font-weight);
   }
 
   &DialogActionText {
@@ -54,36 +54,36 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 8px;
-    height: 8px;
-    background: rgba(69, 138, 249, 0.4);
+    width: var(--relatedDisplays-handle-width);
+    height: var(--relatedDisplays-handle-height);
+    background: var(--blue-300);
   }
 
   &TlHandle {
     position: absolute;
     top: 0;
     left: 0;
-    width: 8px;
-    height: 8px;
-    background: rgba(69, 138, 249, 0.4);
+    width: var(--relatedDisplays-handle-width);
+    height: var(--relatedDisplays-handle-height);
+    background: var(--blue-300);
   }
 
   &BrHandle {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 8px;
-    height: 8px;
-    background: rgba(69, 138, 249, 0.4);
+    width: var(--relatedDisplays-handle-width);
+    height: var(--relatedDisplays-handle-height);
+    background: var(--blue-300);
   }
 
   &BlHandle {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 8px;
-    height: 8px;
-    background: rgba(69, 138, 249, 0.4);
+    width: var(--relatedDisplays-handle-width);
+    height: var(--relatedDisplays-handle-height);
+    background: var(--blue-300);
   }
 
   &Badge {
@@ -91,7 +91,7 @@
   }
 
   &BadgeCircle {
-    background: rgba(69, 138, 249, 0.4);
-    color: #fff;
+    background: var(--blue-300);
+    color: var(--white);
   }
 }

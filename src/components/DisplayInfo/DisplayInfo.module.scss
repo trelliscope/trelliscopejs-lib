@@ -5,33 +5,33 @@
     box-sizing: border-box;
     top: -1px;
     display: inline-block;
-    height: 48px;
-    width: 47px;
-    font-size: 18px;
+    height: var(--displayInfo-button-height);
+    width: var(--displayInfo-button-width);
+    font-size: var(--displayInfo-button-font-size);
     padding-top: 0px;
-    color: #9ba3af;
+    color: var(--gray-600);
     background: none;
     text-align: center;
-    border-right: 1px solid #eaedf0;
-    border-bottom: 1px solid #eaedf0;
+    border-right: var(--border-2);
+    border-bottom: var(--border-2);
     border-top: none;
     border-left: none;
 
     &:hover {
-      transition: background 250ms;
-      background: #eee;
+      transition: var(--displayInfo-button-hover-transition);
+      background: var(--white-300);
       cursor: pointer;
     }
   }
 
   &Icon {
     padding-left: 2px;
-    line-height: 48px;
+    line-height: var(--displayInfo-icon-line-height);
   }
 
   &ModalContainer {
     overflow-y: auto;
-    max-height: 520px;
+    max-height: var(--dispayInfo-container-max-height);
   }
 
   &ButtonLeft {

@@ -1,0 +1,221 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+:root {
+  // color system
+  --white: #fff;
+  --white-100: #fdfdfd;
+  --white-200: #f6f6f6;
+  --white-300: #eee;
+  --white-400: #eaedf0;
+  --white-500: #ebebeb;
+  --white-600: #e0e0e0;
+  --black: #000;
+  --black-100: #000000cc;
+  --black-200: #000000de;
+  --black-300: #00000038;
+  --black-400: #00000066;
+  --black-500: #0000001e;
+  --gray: #ddd;
+  --gray-100: #ccc;
+  --gray-200: #c1c1c1;
+  --gray-300: #c0c0c0;
+  --gray-350: #bbb;
+  --gray-400: #b3b3b3;
+  --gray-500: #aaa;
+  --gray-600: #9ba3af;
+  --gray-700: #999;
+  --gray-800: #939393;
+  --gray-900: #888;
+  --gray-1000: #848484;
+  --gray-1100: #777;
+  --gray-1200: #f6f6f666;
+  --gray-1300: #666;
+  --gray-1400: #444;
+  --red: #ff8e6a;
+  --red-100: #ff5252;
+  --red-200: #ff4308;
+  --blue: #90caf9;
+  --blue-100: #458af9e6;
+  --blue-200: #448aff;
+  --blue-300: #458af966;
+  --orange: #ffd27f;
+  --orange-100: #ffc04c;
+  --orange-200: #ffaa0a;
+  --green: #81c784;
+
+  // border
+  --border: 1px solid;
+  --border-1: 1px solid var(--white);
+  --border-2: 1px solid var(--white-400);
+  --border-3: 1px solid var(white-600);
+  --border-4: 1px solid var(--gray);
+  --border-5: 1px solid var(--gray-100);
+  --border-6: 1px solid var(--gray-200);
+  --border-7: 1px solid var(--gray-300);
+  --border-8: 10px;
+
+  //size
+  --displayInfo-button-height: 48px;
+  --displayInfo-button-width: 47px;
+  --dispayInfo-container-max-height: 520px;
+  --displayList-container-height: 400px;
+  --displayList-grid-list-width: 700px;
+  --displaySelect-height: 48px;
+  --displaySelect-width: 48px;
+  --filterCat-width: 220px;
+  --filterCat-input-containter-height: 39px;
+  --filterNum-width: 220px;
+  --filterNum-plot-container-height: 100px;
+  --footer-wrapper-height: 30px;
+  --footer-spacer-width: 12px;
+  --footerChip-wrapper-height: 22px;
+  --footerChip-closeIcon-height: 21px;
+  --footerChip-closeIcon-width: 21px;
+  --fullscreenButton-height: 30px;
+  --fullscreenButton-width: 30px;
+  --header-container-height: 48px;
+  --headerLogo-height: 48px;
+  --headerLogo-width: 130px;
+  --pagination-button-height: 38px;
+  --pagination-button-width: 38px;
+  --pagination-buttonWrap-height: 48px;
+  --pagination-buttonWrap-width: 38px;
+  --pagination-buttonDiv-height: 38px;
+  --pagination-buttonDiv-width: 38px;
+  --pagination-buttonText-height: 10px;
+  --pagination-buttonText-width: 48px;
+  --pagination-label-height: 48px;
+  --pagination-progress-width: 120px;
+  --relatedDisplays-button-height: 48px;
+  --relatedDisplays-button-width: 48px;
+  --relatedDisplays-buttonDialog-width: 200px;
+  --relatedDisplays-handle-height: 8px;
+  --relatedDisplays-handle-width: 8px;
+  --sidebar-container-header-height: 25px;
+  --sidebarFilter-height: 16px;
+  --sidebarFilter-width: 230px;
+  --sidebarFilter-notUsedHeader-height: 30px;
+  --sidebarLabels-listCheckbox-height: 20px;
+  --sidebarLabels-listCheckbox-width: 20px;
+  --sidebarLayout-row-height: 42px;
+  --sidebarLayout-row-width: 230px;
+  --sidebarSort-table-height: 48px;
+  --sidebarSort-table-width: 225px;
+  --sidebarSort-button-height: 48px;
+  --sidebarSort-button-width: 45px;
+  --sidebarSort-labels-height: 48px;
+  --sidebarSort-labels-width: 135px;
+  --sidebarSort-notUsed-width: 230px;
+  --sidebarSort-notUsedHeader-height: 30px;
+  --sideButton-height: 48px;
+  --sideButton-width: 48px;
+  --sideButton-icon-height: 22px;
+  --sideButtons-container-width: 48px;
+  --sideButtons-spacer-height: 25px;
+
+  //line-height
+  --displayInfo-icon-line-height: 48px;
+  --displaySelect-button-line-height: 50px;
+  --filterCatPlotBar-label-line-height: 19px;
+  --footer-wrapper-line-height: 30px;
+  --footerChip-label-line-height: 20px;
+  --pagination-buttonText-line-height: 10px;
+  --pagination-progress-line-height: 48px;
+  --relatedDisplays-buttonIcon-line-height: 45px;
+  --sidebar-container-header-line-height: 25px;
+  --sidebarFilter-notUsedHeader-line-height: 30px;
+  --sidebarFilter-header-line-height: 15px;
+  --sidebarLabels-cogGroupHeader-line-height: 29px;
+  --sidebarLayout-label-line-height: 28px;
+  --sidebarLayout-inputLabelSpan-line-height: 40px;
+  --sideButton-line-height: 48px;
+  --sideButton-icon-line-height: 22px;
+  --sideButton-label-line-height: 11px;
+
+  //font-size
+  --displayInfo-button-font-size: 18px;
+  --displayList-grid-title-font-size: 15px;
+  --displayList-grid-subtitle-font-size: 11px;
+  --displaySelect-button-font-size: 18px;
+  --filterCatPlotBar-label-font-size: 10px;
+  --filterNum-range-input-font-size: 13px;
+  --footer-wrapper-font-size: 15px;
+  --footerChip-label-font-size: 12px;
+  --footerChip-text-font-size: 11px;
+  --fullscreenButton-icon-font-size: 14px;
+  --header-container-font-size: 16px;
+  --header-displayName-font-size: 17px;
+  --header-displayDesc-font-size: 10px;
+  --headerLogo-font-size: 17px;
+  --headerLogo-dialogHeadline-font-size: 24px;
+  --headerLogo-dialogDiv-font-size: 18px;
+  --headerLogo-dialogCode-font-size: 20px;
+  --pagination-buttonText-font-size: 10px;
+  --pagination-icon-font-size: 10px;
+  --pagination-progress-font-size: 14px;
+  --relatedDisplays-button-font-size: 18px;
+  --sidebar-container-header-font-size: 16px;
+  --sidebarFilter-notUsedHeader-font-size: 14px;
+  --sidebarFilter-variable-font-size: 12px;
+  --sidebarFilter-header-font-size: 12px;
+  --sidebarFilter-headerExtra-font-size: 11px;
+  --sidebarFilter-cogGroupHeader-font-size: 14px;
+  --sidebarLabels-cogGroupHeader-font-size: 14px;
+  --sidebarLayout-row-font-size: 16px;
+  --sidebarLayout-inputLabelSpan-font-size: 16px;
+  --sidebarLayout-inputIcon-font-size: 23px;
+  --sidebarLayout-relDisp-font-size: 14px;
+  --sidebarSort-labels-font-size: 13px;
+  --sidebarSort-notUsedHeader-font-size: 14px;
+  --sidebarSort-variable-font-size: 12px;
+  --sidebarSort-cogGroupHeader-font-size: 14px;
+  --sideButton-font-size: 22px;
+  --sideButton-label-font-size: 11px;
+
+
+  //font-weight
+  --displayList-grid-title-font-weight: 400;
+  --footerChip-label-font-weight: 400;
+  --header-container-font-weight: 300;
+  --header-displayDesc-font-weight: 300;
+  --headerLogo-dialogHeadline-font-weight: 400;
+  --panel-nameCell-font-weight: 400;
+  --relatedDisplays-dialog-font-weight: 300;
+  --sidebarFilter-cogGroupHeader-font-weight: 400;
+  --sidebarLabels-cogGroupHeader-font-weight: 400;
+  --sidebarSort-cogGroupHeader-font-weight: 400;
+
+  //border-radius
+  --displaySelect-empty-border-radius: 50%;
+  --footerChip-wrapper-border-radius: 10px;
+  --sidebarFilter-variable-border-radius: 10px;
+  --sidebarSort-variable-border-radius: 10px;
+
+  //transition
+  --displayInfo-button-hover-transition: background 250ms;
+  --displaySelect-inner-transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1),
+    0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --displaySelect-empty-transition: transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms;
+  --displaySelect-button-transition: all 500ms ease-in;
+  --displaySelect-button-hover-transition: opacity 250ms;
+  --footerChip-closeIcon-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --fullscreenButton-transition: all 100ms ease-in;
+  --panel-transition: 300ms ease;
+  --panel-bounding-transition: all 300ms ease;
+  --panel-close-transition: 1s;
+  --relatedDisplays-button-transition: left 0.5s ease, background 250ms;
+  --relatedDisplays-button-hover-transition: background 250ms;
+  --sidebar-transition: left 300ms ease;
+  --sidebarFilter-variable-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --sidebarFilter-headerIcon-hover-transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --sidebarSort-variable-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --sideButton-transition: color 0.2s, background-color 0.2s;
+  --sideButtons-spacer-transition: height 0.2s;
+
+  //shadow
+  --sidebarFilter-variable-box-shadow: var(--black-500) 0px 1px 6px, var(--black-500) 0px 1px 4px;
+  --sidebarSort-variable-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+}

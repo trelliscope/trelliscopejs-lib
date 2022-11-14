@@ -3,19 +3,19 @@
   right: 0;
   bottom: 0;
   text-align: center;
-  background: rgb(132, 132, 132);
-  width: 30px;
-  height: 30px;
+  background: var(--gray-1000);
+  width: var(--fullscreenButton-height);
+  height: var(--fullscreenButton-width);
   cursor: pointer;
   border: none;
-  transition: all 100ms ease-in;
+  transition: var(--fullscreenButton-transition);
 
   &:hover {
-    background: rgb(147, 147, 147);
+    background: var(--gray-800);
   }
 
   &Icon {
-    color: rgb(224, 224, 224);
-    font-size: 14px;
+    color: var(--white-600);
+    font-size: var(--fullscreenButton-icon-font-size);
   }
 }

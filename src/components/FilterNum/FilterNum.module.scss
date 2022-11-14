@@ -6,8 +6,8 @@
   }
 
   &PlotContainer {
-    width: 220px;
-    height: 100px;
+    width: var(--filterNum-width);
+    height: var(--filterNum-plot-container-height);
     position: relative;
     overflow: hidden;
     cursor: default;
@@ -16,7 +16,7 @@
   }
 
   &InputContainer {
-    width: 220px;
+    width: var(--filterNum-width);
     margin-bottom: -12px;
     padding-bottom: 8px;
     padding-top: 4px;
@@ -26,7 +26,7 @@
   }
 
   &RangeInputText {
-    font-size: 13px;
+    font-size: var(--filterNum-range-input-font-size);
     padding-right: 10px;
     display: inline-block;
   }

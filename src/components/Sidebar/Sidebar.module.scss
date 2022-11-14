@@ -1,36 +1,32 @@
 .sidebar {
   &Container {
-    transition-property: left;
-    transition-duration: 300ms;
-    transition-timing-function: ease;
+    transition: var(--sidebar-transition);
     position: absolute;
     left: 48px;
     top: 48px;
     height: 100%;
     box-sizing: border-box;
-    border-right: 1px solid;
-    border-color: #c1c1c1 !important;
-    background: #fff;
+    border-right: var(--border);
+    border-color: var(--gray-200) !important;
+    background: var(--white);
     z-index: 999;
     overflow: hidden;
   }
 
   &Hidden {
-    transition-property: left;
-    transition-duration: 300ms;
-    transition-timing-function: ease;
+    transition: var(--sidebar-transition);
     left: -182px;
   }
 
   &Header {
     padding-left: 10px;
     box-sizing: border-box;
-    font-size: 16px;
-    background: #c1c1c1;
-    height: 25px;
-    line-height: 25px;
-    color: white;
-    border-left: 1px solid #ccc;
+    font-size: var(--sidebar-container-header-font-size);
+    background: var(--gray-200);
+    height: var(--sidebar-container-header-height);
+    line-height: var(--sidebar-container-header-line-height);
+    color: var(--white);
+    border-left: var(--border-5);
   }
 
   &Empty {
