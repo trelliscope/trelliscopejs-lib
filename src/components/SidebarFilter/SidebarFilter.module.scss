@@ -1,12 +1,12 @@
 .container {
-    width: 230px;
-    // display: 'inline-block',
-    // for dropdowns to not be hidden under other elements:
-    box-sizing: border-box;
-    z-index: 100; // + this.props.index,
-    position: relative;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #c1c1c1;
+  width: 230px;
+  // display: 'inline-block',
+  // for dropdowns to not be hidden under other elements:
+  box-sizing: border-box;
+  z-index: 100; // + this.props.index,
+  position: relative;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #c1c1c1;
 }
 
 .col1 {
@@ -57,11 +57,11 @@
 }
 
 .variableActive {
-  background: #81C784;
+  background: #81c784;
   color: #fff;
 
   &:hover {
-    background: #81C784;
+    background: #81c784;
   }
 }
 
@@ -110,7 +110,7 @@
 }
 
 .headerNameActive {
-  background: #81C784;
+  background: #81c784;
 }
 
 .headerNameText {
@@ -147,7 +147,7 @@
 }
 
 .cogGroupHeader {
-  background: #90CAF9;
+  background: #90caf9;
   margin-left: -10px;
   margin-right: -10px;
   margin-top: 10px;
@@ -161,4 +161,8 @@
 
 .cogGroupText {
   padding-left: 20px;
+}
+
+.sidebarFilterTooltip {
+  z-index: 1001 !important;
 }
