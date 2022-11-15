@@ -19,7 +19,7 @@ interface SidebarLayoutProps {
 
 const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, handleChange, resetRelDisps }) => {
   const handleLayoutChange = (value: string, isRow: boolean) => {
-    const num = parseInt(value, 10);
+    const num = parseInt(value || '1', 10);
     if (num > 15 || num < 0) return;
     handleChange({
       nrow: isRow ? num : layout.nrow,
