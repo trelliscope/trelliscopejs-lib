@@ -71,7 +71,9 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
                         color="primary"
                         key={`${d.name}_button`}
                         onClick={() => {
-                          sort2[i].dir = sort2[i].dir === 'asc' ? 'desc' : 'asc';
+                          const sortObj = { ...sort2[i] };
+                          sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
+                          sort2[i] = sortObj;
                           handleChange(sort2);
                         }}
                       >
