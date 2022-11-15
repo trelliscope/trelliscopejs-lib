@@ -103,6 +103,31 @@ const Header: React.FC = () => {
     },
   };
 
+  const stylesComputed = {
+    headerContainer: {
+      width: windowWidth,
+    },
+    headerSubContainer: {
+      left:
+        uiConsts.header.height *
+        ((dlLength <= 1 ? 0 : 1) +
+          (selectedDisplay.name === '' ? 0 : 1) +
+          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
+      width:
+        windowWidth -
+        (uiConsts.header.height *
+          ((dlLength <= 1 ? 0 : 1) +
+            (selectedDisplay.name === '' ? 0 : 1) +
+            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
+          uiConsts.header.logoWidth +
+          30),
+    },
+    displayName: {
+      lineHeight: `${selectedDisplay.desc === '' ? 48 : 26}px`,
+      paddingTop: selectedDisplay.desc === '' ? 0 : 5,
+    },
+  };
+
   useEffect(() => {
     // handle loading a single display if necessary
     // TODO: Why do this here? Why not in actions/index.js?
