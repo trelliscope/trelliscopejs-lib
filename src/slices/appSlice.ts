@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 
 export interface AppState {
   appId: string;
@@ -10,6 +11,7 @@ export interface AppState {
   singlePageApp: boolean;
   fullscreen: boolean;
   errorMsg: string;
+  configPath: string;
 }
 
 const initialState: AppState = {
@@ -21,6 +23,7 @@ const initialState: AppState = {
   singlePageApp: true,
   fullscreen: true,
   errorMsg: '',
+  configPath: '',
 };
 
 export const appSlice = createSlice({
@@ -30,7 +33,7 @@ export const appSlice = createSlice({
     setAppID: (state, action: PayloadAction<string>) => {
       state.appId = action.payload;
     },
-    setOptions: (state, action: PayloadAction<any>) => {
+    setOptions: (state, action: PayloadAction<AppOptions>) => {
       state.options = action.payload;
     },
     setDialogOpen: (state, action: PayloadAction<boolean>) => {
@@ -51,6 +54,9 @@ export const appSlice = createSlice({
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMsg = action.payload;
     },
+    setConfigPath: (state, action: PayloadAction<string>) => {
+      state.configPath = action.payload;
+    },
   },
 });
 
@@ -63,6 +69,10 @@ export const {
   setSinglePageApp,
   setFullscreen,
   setErrorMessage,
+  setConfigPath,
 } = appSlice.actions;
+
+export const appIDSelector = (state: RootState) => state.app.appId;
+export const configPathSelector = (state: RootState) => state.app.configPath;
 
 export default appSlice.reducer;
