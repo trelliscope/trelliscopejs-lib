@@ -3,11 +3,12 @@ import thunkMiddleware from 'redux-thunk';
 import callbackMiddleware from './middleware/callbackMiddleware';
 import crossfilterMiddleware from './middleware/crossfilterMiddleware';
 import { hashMiddleware } from './middleware/hash';
+import { configAPI } from './slices/configAPI';
 import reducer from './reducers';
 
 const store = configureStore({
   reducer,
-  middleware: [thunkMiddleware, crossfilterMiddleware, callbackMiddleware, hashMiddleware],
+  middleware: [configAPI.middleware, thunkMiddleware, crossfilterMiddleware, callbackMiddleware, hashMiddleware],
   devTools: process.env.NODE_ENV !== 'production',
 });
 
