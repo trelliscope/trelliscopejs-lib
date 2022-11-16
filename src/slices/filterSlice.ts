@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import omit from 'lodash.omit';
 
 export interface FilterState {
   state: {
     [key: string]: Filter<FilterCat | FilterRange>;
-  },
+  };
   view: FilterView;
 }
 
@@ -14,11 +14,11 @@ const initialState: FilterState = {
   view: {
     active: [],
     inactive: [],
-  }
+  },
 };
 
 export const filterSlice = createSlice({
-  name: "filter",
+  name: 'filter',
   initialState,
   reducers: {
     setFilter: (state, action: PayloadAction<FilterState['state'] | string | undefined>) => {
@@ -32,15 +32,17 @@ export const filterSlice = createSlice({
         state.state = { ...state.state, ...action.payload };
       }
     },
-    setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set', name: string | FilterView}>) => {
+    setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
       const { view } = state;
       const { which, name } = action.payload;
       if (which === 'remove') {
         const idxA = view.active.indexOf(name as string);
+        console.log('idxA::::::;', idxA);
         if (idxA > -1) {
           view.active.splice(idxA, 1);
         }
         const idxI = view.inactive.indexOf(name as string);
+        console.log('idxI::::::;', idxI);
         if (idxI < 0) {
           view.inactive.push(name as string);
         }
@@ -56,7 +58,7 @@ export const filterSlice = createSlice({
       } else if (which === 'set') {
         state.view = name as FilterView;
       }
-    }
+    },
   },
 });
 
