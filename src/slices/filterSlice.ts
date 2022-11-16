@@ -37,12 +37,10 @@ export const filterSlice = createSlice({
       const { which, name } = action.payload;
       if (which === 'remove') {
         const idxA = view.active.indexOf(name as string);
-        console.log('idxA::::::;', idxA);
         if (idxA > -1) {
           view.active.splice(idxA, 1);
         }
         const idxI = view.inactive.indexOf(name as string);
-        console.log('idxI::::::;', idxI);
         if (idxI < 0) {
           view.inactive.push(name as string);
         }
