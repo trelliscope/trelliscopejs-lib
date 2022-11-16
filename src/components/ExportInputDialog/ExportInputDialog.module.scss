@@ -11,8 +11,8 @@
     margin-top: 0;
   }
 
-  &ContentText {
-    margin: 20px 0 !important;
+  &Container &ContentText {
+    margin: 20px 0;
   }
 
   &Wrapper {
