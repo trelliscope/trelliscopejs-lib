@@ -4,7 +4,7 @@
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 
 :root {
-  // color system
+  // color
   --white: #fff;
   --white-100: #fdfdfd;
   --white-200: #f6f6f6;
@@ -57,14 +57,14 @@
   --border-7: 1px solid var(--gray-300);
   --border-8: 10px;
 
-  //size
-  --displayInfo-button-height: 48px;
-  --displayInfo-button-width: 47px;
+  // size
+  --displayInfo-button-height: var(--header-container-height);
+  --displayInfo-button-width: var(--header-container-height);
   --dispayInfo-container-max-height: 520px;
   --displayList-container-height: 400px;
   --displayList-grid-list-width: 700px;
-  --displaySelect-height: 48px;
-  --displaySelect-width: 48px;
+  --displaySelect-height: var(--header-container-height);
+  --displaySelect-width: var(--header-container-height);
   --filterCat-width: 220px;
   --filterCat-input-containter-height: 39px;
   --filterNum-width: 220px;
@@ -76,8 +76,8 @@
   --footerChip-closeIcon-width: 21px;
   --fullscreenButton-height: 30px;
   --fullscreenButton-width: 30px;
-  --header-container-height: 48px;
-  --headerLogo-height: 48px;
+  --header-container-height: calc(var(--header-container) * 1px);
+  --headerLogo-height: var(--header-container-height);
   --headerLogo-width: 130px;
   --pagination-button-height: 38px;
   --pagination-button-width: 38px;
@@ -89,8 +89,8 @@
   --pagination-buttonText-width: 48px;
   --pagination-label-height: 48px;
   --pagination-progress-width: 120px;
-  --relatedDisplays-button-height: 48px;
-  --relatedDisplays-button-width: 48px;
+  --relatedDisplays-button-height: var(--header-container-height);
+  --relatedDisplays-button-width: var(--header-container-height);
   --relatedDisplays-buttonDialog-width: 200px;
   --relatedDisplays-handle-height: 8px;
   --relatedDisplays-handle-width: 8px;
@@ -111,12 +111,12 @@
   --sidebarSort-notUsed-width: 230px;
   --sidebarSort-notUsedHeader-height: 30px;
   --sideButton-height: 48px;
-  --sideButton-width: 48px;
+  --sideButton-width: var(--header-container-height);
   --sideButton-icon-height: 22px;
-  --sideButtons-container-width: 48px;
+  --sideButtons-container-width: var(--header-container-height);
   --sideButtons-spacer-height: 25px;
 
-  //line-height
+  // line-height
   --displayInfo-icon-line-height: 48px;
   --displaySelect-button-line-height: 50px;
   --filterCatPlotBar-label-line-height: 19px;
@@ -135,7 +135,7 @@
   --sideButton-icon-line-height: 22px;
   --sideButton-label-line-height: 11px;
 
-  //font-size
+  // font-size
   --displayInfo-button-font-size: 18px;
   --displayList-grid-title-font-size: 15px;
   --displayList-grid-subtitle-font-size: 11px;
@@ -175,8 +175,7 @@
   --sideButton-font-size: 22px;
   --sideButton-label-font-size: 11px;
 
-
-  //font-weight
+  // font-weight
   --displayList-grid-title-font-weight: 400;
   --footerChip-label-font-weight: 400;
   --header-container-font-weight: 300;
@@ -188,13 +187,13 @@
   --sidebarLabels-cogGroupHeader-font-weight: 400;
   --sidebarSort-cogGroupHeader-font-weight: 400;
 
-  //border-radius
+  // border-radius
   --displaySelect-empty-border-radius: 50%;
   --footerChip-wrapper-border-radius: 10px;
   --sidebarFilter-variable-border-radius: 10px;
   --sidebarSort-variable-border-radius: 10px;
 
-  //transition
+  // transition
   --displayInfo-button-hover-transition: background 250ms;
   --displaySelect-inner-transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1),
     0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
@@ -215,7 +214,19 @@
   --sideButton-transition: color 0.2s, background-color 0.2s;
   --sideButtons-spacer-transition: height 0.2s;
 
-  //shadow
+  // shadow
   --sidebarFilter-variable-box-shadow: var(--black-500) 0px 1px 6px, var(--black-500) 0px 1px 4px;
   --sidebarSort-variable-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+
+  // padding
+  --sideButtons-container-padding-top: var(--header-container-height);
+  // margin
+
+  // position
+  --content-position-top: var(--header-container-height);
+  --displayInfo-button-position-left: var(--header-container-height);
+  --sidebar-container-position: var(--header-container-height);
+
+    // number
+    --header-container: 48;
 }

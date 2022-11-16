@@ -18,6 +18,7 @@ import {
 } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import getCustomProperties from '../../getCustomProperties';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
@@ -33,6 +34,7 @@ const Header: React.FC = () => {
   const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
   const [singleLoaded, setSingleLoaded] = useState(selectedDisplay.name !== '');
   const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
+  const [headerHeight] = getCustomProperties(['--header-container']);
 
   const stylesComputed = {
     headerContainer: {
@@ -40,13 +42,13 @@ const Header: React.FC = () => {
     },
     headerSubContainer: {
       left:
-        uiConsts.header.height *
+      headerHeight *
         ((dlLength <= 1 ? 0 : 1) +
           (selectedDisplay.name === '' ? 0 : 1) +
           (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
       width:
         windowWidth -
-        (uiConsts.header.height *
+        (headerHeight *
           ((dlLength <= 1 ? 0 : 1) +
             (selectedDisplay.name === '' ? 0 : 1) +
             (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +

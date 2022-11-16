@@ -24,6 +24,7 @@ import { currentCogDataSelector, filterCardinalitySelector } from '../../selecto
 import type { RootState } from '../../store';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import getCustomProperties from '../../getCustomProperties';
 import styles from './Content.module.scss';
 
 interface ContentProps {
@@ -246,7 +247,9 @@ const stateSelector = createSelector(
 
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
 
-    const hOffset = 48;
+    const [headerHeight] = getCustomProperties(['--header-container']);
+
+    const hOffset = headerHeight;
 
     return {
       contentStyle: {
@@ -312,7 +315,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(setLayout({ pageNum: n }));
   },
 });
-
 
 Content.defaultProps = {
   ci: {} as CogInterface,

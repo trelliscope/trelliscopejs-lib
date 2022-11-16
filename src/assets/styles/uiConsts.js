@@ -3,7 +3,6 @@
 const uiConsts = {
   fontFamily: '"Open Sans", sans-serif',
   header: {
-    height: 48,
     fontSize: 16,
     borderColor: '#eaedf0',
     background: 'white',

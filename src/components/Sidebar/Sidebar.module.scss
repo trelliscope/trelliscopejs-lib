@@ -2,8 +2,8 @@
   &Container {
     transition: var(--sidebar-transition);
     position: absolute;
-    left: 48px;
-    top: 48px;
+    left: var(--sidebar-container-position);
+    top: var(--sidebar-container-position);
     height: 100%;
     box-sizing: border-box;
     border-right: var(--border);

@@ -3,6 +3,9 @@ import { SB_PANEL_FILTER } from '../constants';
 import { filterViewSelector, curDisplayInfoSelector } from '.';
 import uiConsts from '../assets/styles/uiConsts';
 import type { RootState } from '../store';
+import getCustomProperties from '../getCustomProperties';
+
+const [headerHeight] = getCustomProperties(['--header-container']);
 
 export const windowWidthSelector = (state: RootState) => state.ui.windowWidth;
 export const windowHeightSelector = (state: RootState) => state.ui.windowHeight;
@@ -12,7 +15,7 @@ export const sidebarActiveSelector = (state: RootState) => state.sidebar.active;
 
 export const sidebarHeightSelector = createSelector(
   windowHeightSelector,
-  (wh) => wh - uiConsts.header.height - uiConsts.footer.height - uiConsts.sidebar.header.height,
+  (wh) => wh - headerHeight - uiConsts.footer.height - headerHeight,
 );
 
 // keep track of how high each filter entry is so we can spill over into a new column
@@ -76,12 +79,12 @@ export const contentWidthSelector = createSelector(
   sidebarActiveSelector,
   filterColSplitSelector,
   (ww, active, colSplit) => {
-    const sw = uiConsts.sidebar.width * (1 + ((active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null) ? 1 : 0));
-    return ww - uiConsts.sideButtons.width - (active === '' ? 0 : sw + 1);
+    const sw = uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0));
+    return ww - headerHeight - (active === '' ? 0 : sw + 1);
   },
 );
 
 export const contentHeightSelector = createSelector(
   windowHeightSelector,
-  (wh) => wh - uiConsts.header.height - uiConsts.footer.height,
+  (wh) => wh - headerHeight - uiConsts.footer.height,
 );

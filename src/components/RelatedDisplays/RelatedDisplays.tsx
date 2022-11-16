@@ -26,6 +26,7 @@ import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
+import getCustomProperties from '../../getCustomProperties';
 import styles from './RelatedDisplays.module.scss';
 
 const previewHeight = 400;
@@ -197,6 +198,8 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
   );
 };
 
+const [headerHeight] = getCustomProperties(['--header-container']);
+
 // ------ redux container ------
 
 const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
@@ -212,7 +215,7 @@ const styleSelector = createSelector(
   (dl, sd, rdg, ch, cw, srd, rdp) => ({
     propStyles: {
       button: {
-        left: uiConsts.header.height * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
+        left: headerHeight * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
         background: srd.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
         color: srd.length === 0 ? uiConsts.header.button.color : 'white',
       },

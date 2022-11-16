@@ -1,7 +1,7 @@
 .displayInfo {
   &Button {
     position: absolute;
-    left: 48px;
+    left: var(--displayInfo-button-position-left);
     box-sizing: border-box;
     top: -1px;
     display: inline-block;
