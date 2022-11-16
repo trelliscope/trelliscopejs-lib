@@ -1,11 +1,24 @@
 import { createSelector } from 'reselect';
 import { SB_PANEL_FILTER } from '../constants';
 import { filterViewSelector, curDisplayInfoSelector } from '.';
-import uiConsts from '../assets/styles/uiConsts';
 import type { RootState } from '../store';
 import getCustomProperties from '../getCustomProperties';
 
-const [headerHeight] = getCustomProperties(['--header-container']);
+const [
+  headerHeight,
+  footerHeight,
+  sidebarWidth,
+  sidebarFilterCatHeight,
+  sidebarFilterNumHeight,
+  sidebarFilterVariablesHeight,
+] = getCustomProperties([
+  '--header-height',
+  '--footer-height',
+  '--sidebar-width',
+  '--sidebar-filter-cat-height',
+  '--sidebar-filter-num-height',
+  '--sidebar-filter-variables-height',
+]) as number[];
 
 export const windowWidthSelector = (state: RootState) => state.ui.windowWidth;
 export const windowHeightSelector = (state: RootState) => state.ui.windowHeight;
@@ -15,7 +28,7 @@ export const sidebarActiveSelector = (state: RootState) => state.sidebar.active;
 
 export const sidebarHeightSelector = createSelector(
   windowHeightSelector,
-  (wh) => wh - headerHeight - uiConsts.footer.height - headerHeight,
+  (wh) => wh - headerHeight - footerHeight - headerHeight,
 );
 
 // keep track of how high each filter entry is so we can spill over into a new column
@@ -36,10 +49,10 @@ export const filterColSplitSelector = createSelector(
       if (cdi.info.cogInfo[d].type === 'factor') {
         // if the number of levels is small then only make the box that tall
         const nlvl = cdi.info.cogInfo[d].levels ? cdi.info.cogInfo[d].levels.length : 1000;
-        return Math.min(uiConsts.sidebar.filter.cat.height, nlvl * 15) + 54;
+        return Math.min(sidebarFilterCatHeight, nlvl * 15) + 54;
       }
       if (cdi.info.cogInfo[d].type === 'numeric') {
-        return uiConsts.sidebar.filter.num.height + 54;
+        return sidebarFilterNumHeight + 54;
       }
       return 0;
     });
@@ -63,7 +76,7 @@ export const filterColSplitSelector = createSelector(
     }
 
     // case where it's one column but not enough space for extra variables
-    if (cutoff === null && csum1 + 30 + uiConsts.sidebar.filter.variables.height > sh) {
+    if (cutoff === null && csum1 + 30 + sidebarFilterVariablesHeight > sh) {
       cutoff = heights.length;
     }
 
@@ -79,12 +92,9 @@ export const contentWidthSelector = createSelector(
   sidebarActiveSelector,
   filterColSplitSelector,
   (ww, active, colSplit) => {
-    const sw = uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0));
+    const sw = sidebarWidth * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0));
     return ww - headerHeight - (active === '' ? 0 : sw + 1);
   },
 );
 
-export const contentHeightSelector = createSelector(
-  windowHeightSelector,
-  (wh) => wh - headerHeight - uiConsts.footer.height,
-);
+export const contentHeightSelector = createSelector(windowHeightSelector, (wh) => wh - headerHeight - footerHeight);

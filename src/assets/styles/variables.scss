@@ -76,7 +76,7 @@
   --footerChip-closeIcon-width: 21px;
   --fullscreenButton-height: 30px;
   --fullscreenButton-width: 30px;
-  --header-container-height: calc(var(--header-container) * 1px);
+  --header-container-height: calc(var(--header-height) * 1px);
   --headerLogo-height: var(--header-container-height);
   --headerLogo-width: 130px;
   --pagination-button-height: 38px;
@@ -227,6 +227,13 @@
   --displayInfo-button-position-left: var(--header-container-height);
   --sidebar-container-position: var(--header-container-height);
 
-    // number
-    --header-container: 48;
+  // number
+  --header-height: 48;
+  --logo-width: 130;
+  --footer-height: 30;
+  --sidebar-width: 230;
+  --sidebar-header-height: 25;
+  --sidebar-filter-cat-height: 125;
+  --sidebar-filter-num-height: 100;
+  --sidebar-filter-variables-height: 50;
 }

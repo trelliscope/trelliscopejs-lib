@@ -113,7 +113,7 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
   );
 };
 
-const [headerHeight] = getCustomProperties(['--header-container']);
+const [headerHeight] = getCustomProperties(['--header-height']) as number[];
 
 // ------ redux container ------
 

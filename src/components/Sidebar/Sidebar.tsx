@@ -10,8 +10,8 @@ import SidebarViews from '../SidebarViews';
 import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../../selectors/ui';
 import { displayLoadedSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
-import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
+import getCustomProperties from '../../getCustomProperties';
 import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
@@ -80,6 +80,8 @@ const Sidebar: React.FC<SidebarProps> = ({ customStyles, active, displayLoaded }
   );
 };
 
+const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
+
 // ------ redux container ------
 
 const stateSelector = createSelector(
@@ -90,7 +92,7 @@ const stateSelector = createSelector(
   (ch, active, displayLoaded, colSplit) => ({
     customStyles: {
       sidebarContainer: {
-        width: uiConsts.sidebar.width * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0)),
+        width: sidebarWidth * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0)),
         height: ch,
       },
     },

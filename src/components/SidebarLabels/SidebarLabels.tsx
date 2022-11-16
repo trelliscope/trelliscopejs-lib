@@ -10,9 +10,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { setLabels } from '../../slices/labelsSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
-import uiConsts from '../../assets/styles/uiConsts';
 import { RootState } from '../../store';
 import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import getCustomProperties from '../../getCustomProperties';
 import styles from './SidebarLabels.module.scss';
 
 interface SidebarLabelsProps {
@@ -68,11 +68,13 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, 
   return content;
 };
 
+const [sidebarWidth, sidebarHeaderHeight] = getCustomProperties(['--sidebar-width', '--sidebar-header-height']) as number[];
+
 // ------ redux container ------
 
 const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
-  width: uiConsts.sidebar.width,
-  height: ch - uiConsts.sidebar.header.height,
+  width: sidebarWidth,
+  height: ch - sidebarHeaderHeight,
   labels,
   cogInfo: cdi.info.cogInfo,
   curDisplayInfo: cdi,

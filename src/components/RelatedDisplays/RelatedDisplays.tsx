@@ -22,7 +22,6 @@ import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { selectedDisplaySelector, displayListSelector } from '../../selectors';
-import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
@@ -198,7 +197,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
   );
 };
 
-const [headerHeight] = getCustomProperties(['--header-container']);
+const [headerHeight] = getCustomProperties(['--header-height']) as number[];
 
 // ------ redux container ------
 
@@ -217,7 +216,7 @@ const styleSelector = createSelector(
       button: {
         left: headerHeight * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
         background: srd.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
-        color: srd.length === 0 ? uiConsts.header.button.color : 'white',
+        color: srd.length === 0 ? '#9ba3af' : 'white',
       },
     },
     displayList: dl,

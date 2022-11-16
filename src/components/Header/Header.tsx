@@ -16,7 +16,6 @@ import {
   selectedDisplaySelector,
   dialogOpenSelector,
 } from '../../selectors';
-import uiConsts from '../../assets/styles/uiConsts';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './Header.module.scss';
@@ -34,7 +33,7 @@ const Header: React.FC = () => {
   const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
   const [singleLoaded, setSingleLoaded] = useState(selectedDisplay.name !== '');
   const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
-  const [headerHeight] = getCustomProperties(['--header-container']);
+  const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
   const stylesComputed = {
     headerContainer: {
@@ -42,7 +41,7 @@ const Header: React.FC = () => {
     },
     headerSubContainer: {
       left:
-      headerHeight *
+        headerHeight *
         ((dlLength <= 1 ? 0 : 1) +
           (selectedDisplay.name === '' ? 0 : 1) +
           (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
@@ -52,7 +51,7 @@ const Header: React.FC = () => {
           ((dlLength <= 1 ? 0 : 1) +
             (selectedDisplay.name === '' ? 0 : 1) +
             (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
-          uiConsts.header.logoWidth +
+          logoWidth +
           30),
     },
     displayName: {

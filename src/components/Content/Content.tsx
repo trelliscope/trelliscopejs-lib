@@ -247,7 +247,7 @@ const stateSelector = createSelector(
 
     const labelWidth = getTextWidth(labels, fontSize) + labelPad;
 
-    const [headerHeight] = getCustomProperties(['--header-container']);
+    const [headerHeight] = getCustomProperties(['--header-height']) as number[];
 
     const hOffset = headerHeight;
 
