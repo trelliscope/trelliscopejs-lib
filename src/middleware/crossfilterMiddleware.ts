@@ -56,15 +56,17 @@ const multiSort = (args: string[]) => {
 const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (action) => {
   if (action.type === setFilter.type && action.payload) {
     const cf = store.getState().cogDataMutable.crossfilter;
-    const dimensions = store.getState().cogDataMutable.dimensionRefs;
-    const groups = store.getState().cogDataMutable.groupRefs;
+    const dimensionsState = store.getState().cogDataMutable.dimensionRefs;
+    const dimensions = { ...dimensionsState };
+    const groupsState = store.getState().cogDataMutable.groupRefs;
+    const groups = { ...groupsState };
     if (typeof action.payload === 'string' || action.payload instanceof String) {
       dimensions[action.payload].filter(null); // .remove(), .filterAll() ?
     } else {
       const names = Object.keys(action.payload);
       if (names.length === 0 && dimensions) {
         // all filters were reset - remove them all...
-        Object.keys(store.getState().filter.state).forEach((nn) => dimensions[nn].filter(null));
+        Object.keys(store.getState().filter.state).forEach((nn) => dimensions[nn]?.filter(null));
       }
       for (let i = 0; i < names.length; i += 1) {
         // numeric is always 'range' type
