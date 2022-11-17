@@ -1,18 +1,18 @@
 .exportInputDialog {
   &TextField {
-    margin-bottom: 15px !important;
+    margin-bottom: var(--margin-9) !important;
   }
 
   &Button {
-    margin: 8px !important;
+    margin: var(--margin-6) !important;
   }
 
   &Description {
-    margin-top: 0;
+    margin-top: var(--margin-0);
   }
 
   &Container &ContentText {
-    margin: 20px 0;
+    margin: var(--margin-10) var(--margin-0);
   }
 
   &Wrapper {

@@ -5,7 +5,7 @@
   line-height: var(--sideButton-line-height);
   text-align: center;
   vertical-align: middle;
-  font-size: var(--sideButton-font-size);
+  font-size: var(--text-5xl);
   color: var(--white);
   border: none;
   border-bottom: var(--border-7);
@@ -38,7 +38,7 @@
   }
 
   &Label {
-    font-size: var(--sideButton-label-font-size);
+    font-size: var(--text-2xs);
     line-height: var(--sideButton-label-line-height);
     width: var(--sideButton-width);
     position: absolute;

@@ -2,7 +2,7 @@
   transition: var(--panel-bounding-transition);
   position: absolute;
   overflow: hidden;
-  padding: 0;
+  padding: var(--padding-0);
   box-sizing: border-box;
   border: var(--border-4);
 }
@@ -23,7 +23,7 @@
 .label {
   &Table {
     transition: var(--panel-transition);
-    padding: 0;
+    padding: var(--padding-0);
     table-layout: fixed;
     border-spacing: 0;
     box-sizing: border-box;
@@ -43,13 +43,13 @@
   }
 
   &Cell {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: var(--padding-0);
+    padding-bottom: var(--padding-0);
   }
 
   &NameCell {
     border-right: var(--border-1);
-    font-weight: var(--panel-nameCell-font-weight);
+    font-weight: var(--font-normal);
   }
 
   &Outer {
@@ -58,7 +58,7 @@
   }
 
   &Inner {
-    padding-right: 3px;
+    padding-right: var(--padding-1);
     overflow: hidden;
     white-space: normal;
     vertical-align: middle;
@@ -75,15 +75,15 @@
     cursor: pointer;
     border: none;
     background: none;
-    padding: 0;
-    margin: 0;
+    padding: var(--padding-0);
+    margin: var(--margin-0);
     opacity: 0.5;
     display: none;
   }
 
   &P {
     width: 100%;
-    margin: 0;
+    margin: var(--margin-0);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -94,8 +94,8 @@
   cursor: pointer;
   border: none;
   background: none;
-  padding: 0;
-  margin: 0;
+  padding: var(--padding-0);
+  margin: var(--margin-0);
   opacity: 0.5;
 }
 

@@ -5,7 +5,7 @@
     box-sizing: border-box;
     z-index: 100; // + this.props.index,
     position: relative;
-    padding-bottom: 6px;
+    padding-bottom: var(--padding-4);
     border-bottom: var(--border-6);
 }
 
@@ -25,28 +25,28 @@
 .notUsedHeader {
   height: var(--sidebarFilter-notUsedHeader-height);
   line-height: var(--sidebarFilter-notUsedHeader-line-height);
-  padding-left: 10px;
+  padding-left: var(--padding-7);
   box-sizing: border-box;
   width: var(--sidebarFilter-width);
-  font-size: var(--sidebarFilter-notUsedHeader-font-size);
+  font-size: var(--text-base);
 }
 
 .notUsedContainer {
   width: var(--sidebarFilter-width);
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 0 10px 10px;
+  padding: 0 var(--padding-7) var(--padding-7);
 }
 
 .variable {
   display: inline-block;
   box-shadow: var(--sidebarFilter-variable-box-shadow);
-  border-radius: var(--sidebarFilter-variable-border-radius);
-  padding: 2px 7px 3px !important;
+  border-radius: var(--rounded);
+  padding: var(--padding-px) var(--padding-5) var(--padding-1) !important;
   border: 0;
   background: var(--white);
-  margin: 3px !important;
-  font-size: var(--sidebarFilter-variable-font-size);
+  margin: var(--margin-2) !important;
+  font-size: var(--text-xs);
   cursor: pointer;
   color: var(--black);
   transition: var(--sidebarFilter-variable-transition);
@@ -77,7 +77,7 @@
   box-sizing: border-box;
   z-index: 100; // + this.props.index;
   position: relative;
-  padding-bottom: 6px;
+  padding-bottom: var(--padding-4);
   border-bottom: var(--border-6);
 }
 
@@ -85,8 +85,8 @@
   height: var(--sidebarFilter-height);
   line-height: var(--sidebarFilter-header-line-height);
   width: var(--sidebarFilter-width);
-  margin-top: 1px;
-  font-size: var(--sidebarFilter-header-font-size);
+  margin-top: var(--margin-1);
+  font-size: var(--text-xs);
   position: relative;
 }
 
@@ -95,13 +95,13 @@
   right: 38px;
   height: var(--sidebarFilter-height);
   line-height: var(--sidebarFilter-header-line-height);
-  font-size: var(--sidebarFilter-headerExtra-font-size);
+  font-size: var(--text-2xs);
   color: var(--gray-1100);
 }
 .headerName {
   height: var(--sidebarFilter-height);
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: var(--padding-3);
+  padding-right: var(--padding-3);
   position: absolute;
   left: 1px;
   user-select: none;
@@ -124,8 +124,8 @@
   position: absolute;
   border: none;
   background: none;
-  margin-top: -1px;
-  padding: 0;
+  margin-top: var(--neg-margin-1);
+  padding: var(--padding-0);
   z-index: 1000;
 
   &:hover {
@@ -148,19 +148,19 @@
 
 .cogGroupHeader {
   background: var(--blue);
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  margin-left: var(--neg-margin-7);
+  margin-right: var(--neg-margin-7);
+  margin-top: var(--margin-7);
+  margin-bottom: var(--margin-7);
+  padding-top: var(--padding-3);
+  padding-bottom: var(--padding-3);
   color: var(--white);
-  font-weight: var(--sidebarFilter-cogGroupHeader-font-weight);
-  font-size: var(--sidebarFilter-cogGroupHeader-font-size);
+  font-weight: var(--font-normal);
+  font-size: var(--text-base);
 }
 
 .cogGroupText {
-  padding-left: 20px;
+  padding-left: var(--padding-11);
 }
 
 .sidebarFilterTooltip {

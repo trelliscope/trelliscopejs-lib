@@ -4,30 +4,30 @@
   }
 
   &Button {
-    width: var(--pagination-button-width);
-    height: var(--pagination-button-height);
+    width: var(--pagination-button-size);
+    height: var(--pagination-button-size);
     border: 0;
-    padding: 0;
+    padding: var(--padding-0);
 
     &Wrap {
-      width: var(--pagination-button-width);
-      height: var(--pagination-button-height);
+      width: var(--pagination-button-size);
+      height: var(--pagination-button-size);
       display: inline-block;
     }
 
     &Div {
-      width: var(--pagination-buttonDiv-height);
-      height: var(--pagination-buttonDiv-width);
-      padding-left: 5px;
+      width: var(--pagination-buttonDiv-size);
+      height: var(--pagination-buttonDiv-size);
+      padding-left: var(--padding-3);
     }
 
     &Text {
-      font-size: var(--pagination-buttonText-font-size);
+      font-size: var(--text-3xs);
       width: var(--pagination-buttonText-width);
       height: var(--pagination-buttonText-height);
       line-height: var(--pagination-buttonText-line-height);
       text-align: center;
-      margin-top: -5px;
+      margin-top: var(--neg-margin-4);
     }
   }
 
@@ -43,13 +43,13 @@
   }
 
   &Icon {
-    font-size: var(--pagination-icon-font-size);
-    padding: 6px;
+    font-size: var(--text-3xs);
+    padding: var(--padding-4);
   }
 
   &Progress {
     width: var(--pagination-progress-width);
-    font-size: var(--pagination-progress-font-size);
+    font-size: var(--text-base);
     color: var(--gray-1400);
     line-height: var(--pagination-progress-line-height);
   }

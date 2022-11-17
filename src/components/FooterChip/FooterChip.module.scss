@@ -4,11 +4,11 @@
     box-sizing: border-box;
     display: flex;
     text-decoration: none;
-    margin-left: 3px;
-    margin-top: 4px;
-    padding: 0;
+    margin-left: var(--margin-2);
+    margin-top: var(--margin-3);
+    padding: var(--padding-0);
     outline: none;
-    border-radius: var(--footerChip-wrapper-border-radius);
+    border-radius: var(--rounded);
     white-space: nowrap;
     width: -webkit-fit-content;
     background: var(--blue);
@@ -18,18 +18,18 @@
 
   &Label {
     color: var(--white);
-    font-size: var(--footerChip-label-font-size);
-    font-weight: var(--footerChip-label-font-weigh);
+    font-size: var(--text-xs);
+    font-weight: var(--font-normal);
     line-height: var(--footerChip-label-line-height);
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: var(--padding-8);
+    padding-right: var(--padding-8);
     white-space: nowrap;
     -webkit-user-select: none;
   }
 
   &Text {
-    padding-left: 5px;
-    font-size: var(--footerChip-text-font-size);
+    padding-left: var(--padding-3);
+    font-size: var(--text-2xs);
     font-style: italic;
   }
 
@@ -37,11 +37,11 @@
     display: inline-block;
     color: var(--black-300);
     fill: var(--black-300);
-    height: var(--footerChip-closeIcon-height);
-    width: var(--footerChip-closeIcon-width);
+    height: var(--footerChip-closeIcon-size);
+    width: var(--footerChip-closeIcon-size);
     transition: var(--footerChip-closeIcon-transition);
     cursor: pointer;
-    margin: 1px 1px 0px -8px;
+    margin: var(--margin-1) var(--margin-1) var(--margin-0) var(--neg-margin-6);
     -webkit-user-select: none;
 
     &:hover {
@@ -51,6 +51,6 @@
   }
 
   &IndIcon {
-    padding-right: 5px;
+    padding-right: var(--padding-3);
   }
 }

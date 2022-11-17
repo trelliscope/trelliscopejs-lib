@@ -19,9 +19,9 @@
   }
 
   &Header {
-    padding-left: 10px;
+    padding-left: var(--padding-7);
     box-sizing: border-box;
-    font-size: var(--sidebar-container-header-font-size);
+    font-size: var(--text-xl);
     background: var(--gray-200);
     height: var(--sidebar-container-header-height);
     line-height: var(--sidebar-container-header-line-height);
@@ -30,7 +30,7 @@
   }
 
   &Empty {
-    padding-left: 8px;
-    padding-top: 5px;
+    padding-left: var(--padding-6);
+    padding-top: var(--padding-3);
   }
 }
