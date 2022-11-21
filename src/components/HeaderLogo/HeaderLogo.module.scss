@@ -38,7 +38,7 @@
     }
 
     &Ul {
-      margin-top: var(--margin-0);
+      margin-top: 0;
       break-inside: avoid-column;
     }
 
@@ -68,7 +68,7 @@
   }
 
   &Keynote {
-    margin-bottom: var(--margin-0);
+    margin-bottom: 0;
     color: var(--gray-900);
     font-style: italic;
   }

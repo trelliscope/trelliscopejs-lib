@@ -6,7 +6,7 @@
     text-decoration: none;
     margin-left: var(--margin-2);
     margin-top: var(--margin-3);
-    padding: var(--padding-0);
+    padding: 0;
     outline: none;
     border-radius: var(--rounded);
     white-space: nowrap;
@@ -41,7 +41,7 @@
     width: var(--footerChip-closeIcon-size);
     transition: var(--footerChip-closeIcon-transition);
     cursor: pointer;
-    margin: var(--margin-1) var(--margin-1) var(--margin-0) var(--neg-margin-6);
+    margin: var(--margin-1) var(--margin-1) 0 var(--neg-margin-6);
     -webkit-user-select: none;
 
     &:hover {
