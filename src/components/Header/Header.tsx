@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import type { CSSProperties } from 'react';
-import type { Action } from 'redux';
-import type { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import DisplayInfo from '../DisplayInfo';
 import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HeaderLogo from '../HeaderLogo';
-import type { RootState } from '../../store';
 import { fetchDisplay } from '../../actions';
 import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
@@ -23,37 +18,46 @@ import {
 } from '../../selectors';
 import uiConsts from '../../assets/styles/uiConsts';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
 import styles from './Header.module.scss';
-import type { DisplayListState } from '../../slices/displayListSlice';
 
-interface HeaderProps {
-  cfg: Config;
-  appId: string;
-  displayList: DisplayListState;
-  displayGroups: DisplayGroup;
-  selectedDisplay: SelectedDisplayState;
-  relatedDisplayGroups: DisplayGroup;
-  dialogOpen: boolean;
-  selectDisplay: (name: string, group: string, desc: string, cfg: Config, appId: string, hash: string) => void;
-  doSetDialogOpen: (isOpen: boolean) => void;
-  stylesComputed: { [key: string]: CSSProperties };
-}
-
-const Header: React.FC<HeaderProps> = ({
-  cfg,
-  appId,
-  displayList,
-  selectDisplay,
-  relatedDisplayGroups,
-  displayGroups,
-  dialogOpen,
-  selectedDisplay,
-  doSetDialogOpen,
-  stylesComputed,
-}) => {
+const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const displayList = useSelector(displayListSelector);
+  const appId = useSelector(appIdSelector);
+  const cfg = useSelector(configSelector);
+  const dialogOpen = useSelector(dialogOpenSelector);
+  const displayGroups = useSelector(displayGroupsSelector);
+  const windowWidth = useSelector(windowWidthSelector);
+  const dlLength = Object.keys(displayList).length;
+  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
   const [singleLoaded, setSingleLoaded] = useState(selectedDisplay.name !== '');
   const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
+
+  const stylesComputed = {
+    headerContainer: {
+      width: windowWidth,
+    },
+    headerSubContainer: {
+      left:
+        uiConsts.header.height *
+        ((dlLength <= 1 ? 0 : 1) +
+          (selectedDisplay.name === '' ? 0 : 1) +
+          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
+      width:
+        windowWidth -
+        (uiConsts.header.height *
+          ((dlLength <= 1 ? 0 : 1) +
+            (selectedDisplay.name === '' ? 0 : 1) +
+            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
+          uiConsts.header.logoWidth +
+          30),
+    },
+    displayName: {
+      lineHeight: `${selectedDisplay.desc === '' ? 48 : 26}px`,
+      paddingTop: selectedDisplay.desc === '' ? 0 : 5,
+    },
+  };
 
   useEffect(() => {
     // handle loading a single display if necessary
@@ -64,17 +68,21 @@ const Header: React.FC<HeaderProps> = ({
     if (!singleLoaded && singleDisplay && selectedDisplay.name !== '') {
       setSingleLoaded(true);
     } else if (!singleLoaded && singleDisplay) {
-      selectDisplay(
-        displayList.list[0].name,
-        displayList.list[0].group,
-        displayList.list[0].desc,
-        cfg,
-        appId,
-        window.location.hash,
+      dispatch(
+        setSelectedDisplay({
+          name: displayList.list[0].name,
+          group: displayList.list[0].group,
+          desc: displayList.list[0].desc,
+        }),
       );
+      dispatch(fetchDisplay(displayList.list[0].name, displayList.list[0].group, cfg, appId, window.location.hash));
       setSingleLoaded(true);
     }
-  }, [selectedDisplay, displayList, singleLoaded, singleDisplay, selectDisplay, cfg, appId]);
+  }, [selectedDisplay, displayList, singleLoaded, singleDisplay, cfg, appId, dispatch]);
+
+  const handleDialogOpen = (isOpen: boolean) => {
+    dispatch(setDialogOpen(isOpen));
+  };
 
   let displayName;
   let displayDesc = '';
@@ -109,11 +117,11 @@ const Header: React.FC<HeaderProps> = ({
   }
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
-      {listLoaded && !singleDisplay && <DisplaySelect setDialogOpen={doSetDialogOpen} />}
+      {listLoaded && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
       {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
-        <RelatedDisplays setDialogOpen={doSetDialogOpen} />
+        <RelatedDisplays setDialogOpen={handleDialogOpen} />
       )}
-      {selectedDisplay.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={doSetDialogOpen} />}
+      {selectedDisplay.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} />}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
         <div className={styles.headerNameDescContainer}>
@@ -124,61 +132,9 @@ const Header: React.FC<HeaderProps> = ({
         </div>
         <div className={styles.headerPaginationContainer}>{pagination}</div>
       </div>
-      <HeaderLogo setDialogOpen={doSetDialogOpen} />
+      <HeaderLogo setDialogOpen={handleDialogOpen} />
     </div>
   );
 };
 
-const styleSelector = createSelector(
-  appIdSelector,
-  windowWidthSelector,
-  displayListSelector,
-  displayGroupsSelector,
-  selectedDisplaySelector,
-  relatedDisplayGroupsSelector,
-  configSelector,
-  dialogOpenSelector,
-  (appId, ww, dl, dg, sd, rdg, cfg, dialogOpen) => ({
-    stylesComputed: {
-      headerContainer: {
-        width: ww,
-      },
-      headerSubContainer: {
-        left:
-          uiConsts.header.height *
-          ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)),
-        width:
-          ww -
-          (uiConsts.header.height *
-            ((dl.list.length <= 1 ? 0 : 1) + (sd.name === '' ? 0 : 1) + (Object.keys(rdg).length === 0 ? 0 : 1)) +
-            uiConsts.header.logoWidth +
-            30),
-      },
-      displayName: {
-        lineHeight: `${sd.desc === '' ? 48 : 26}px`,
-        paddingTop: sd.desc === '' ? 0 : 5,
-      },
-    },
-    appId,
-    cfg,
-    displayList: dl,
-    displayGroups: dg,
-    selectedDisplay: sd,
-    relatedDisplayGroups: rdg,
-    dialogOpen,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
-  selectDisplay: (name: string, group: string, desc: string, cfg: Config, appId: string, hash: string) => {
-    dispatch(setSelectedDisplay({ name, group, desc }));
-    dispatch(fetchDisplay(name, group, cfg, appId, hash));
-  },
-  doSetDialogOpen: (isOpen: boolean) => {
-    dispatch(setDialogOpen(isOpen));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;
