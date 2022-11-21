@@ -11,14 +11,14 @@
     padding: 0;
 
     &Checkbox {
-      height: var(--sidebarLabels-listCheckbox-height);
-      width: var(--sidebarLabels-listCheckbox-width);
+      height: var(--sidebarLabels-listCheckbox-size);
+      width: var(--sidebarLabels-listCheckbox-size);
     }
 
     &Item {
       white-space: nowrap !important;
       text-overflow: ellipsis !important;
-      margin-left: 10px;
+      margin-left: var(--margin-7);
     }
   }
 
@@ -26,13 +26,13 @@
     &Header {
       background: var(--blue) !important;
       color: var(--white) !important;
-      font-weight: var(--sidebarLabels-cogGroupHeader-font-weight) !important;
-      font-size: var(--sidebarLabels-cogGroupHeader-font-size) !important;
+      font-weight: var(--font-normal) !important;
+      font-size: var(--text-base) !important;
       line-height: var(--sidebarLabels-cogGroupHeader-line-height) !important;
     }
 
     &Text {
-      padding-left: 20px;
+      padding-left: var(--padding-11);
     }
   }
 }

@@ -4,8 +4,8 @@
   bottom: 0;
   text-align: center;
   background: var(--gray-1000);
-  width: var(--fullscreenButton-height);
-  height: var(--fullscreenButton-width);
+  width: var(--fullscreenButton-size);
+  height: var(--fullscreenButton-size);
   cursor: pointer;
   border: none;
   transition: var(--fullscreenButton-transition);
@@ -16,6 +16,6 @@
 
   &Icon {
     color: var(--white-600);
-    font-size: var(--fullscreenButton-icon-font-size);
+    font-size: var(--text-base);
   }
 }

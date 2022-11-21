@@ -4,7 +4,7 @@
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 
 :root {
-  // color system
+  // color
   --white: #fff;
   --white-100: #fdfdfd;
   --white-200: #f6f6f6;
@@ -57,49 +57,39 @@
   --border-7: 1px solid var(--gray-300);
   --border-8: 10px;
 
-  //size
-  --displayInfo-button-height: 48px;
-  --displayInfo-button-width: 47px;
+  // size
+  --displayInfo-button-size: var(--header-container-height);
   --dispayInfo-container-max-height: 520px;
   --displayList-container-height: 400px;
   --displayList-grid-list-width: 700px;
-  --displaySelect-height: 48px;
-  --displaySelect-width: 48px;
-  --filterCat-width: 220px;
+  --displaySelect-size: var(--header-container-height);
+  --filter-width: 220px;
   --filterCat-input-containter-height: 39px;
-  --filterNum-width: 220px;
   --filterNum-plot-container-height: 100px;
   --footer-wrapper-height: 30px;
   --footer-spacer-width: 12px;
   --footerChip-wrapper-height: 22px;
-  --footerChip-closeIcon-height: 21px;
-  --footerChip-closeIcon-width: 21px;
-  --fullscreenButton-height: 30px;
-  --fullscreenButton-width: 30px;
-  --header-container-height: 48px;
-  --headerLogo-height: 48px;
+  --footerChip-closeIcon-size: 21px;
+  --fullScreenButton-size: 30px;
+  --header-container-height: calc(var(--header-height) * 1px);
+  --headerLogo-height: var(--header-container-height);
   --headerLogo-width: 130px;
-  --pagination-button-height: 38px;
-  --pagination-button-width: 38px;
+  --pagination-button-size: 38px;
   --pagination-buttonWrap-height: 48px;
   --pagination-buttonWrap-width: 38px;
-  --pagination-buttonDiv-height: 38px;
-  --pagination-buttonDiv-width: 38px;
+  --pagination-buttonDiv-size: 38px;
   --pagination-buttonText-height: 10px;
   --pagination-buttonText-width: 48px;
   --pagination-label-height: 48px;
   --pagination-progress-width: 120px;
-  --relatedDisplays-button-height: 48px;
-  --relatedDisplays-button-width: 48px;
+  --relatedDisplays-button-size: var(--header-container-height);
   --relatedDisplays-buttonDialog-width: 200px;
-  --relatedDisplays-handle-height: 8px;
-  --relatedDisplays-handle-width: 8px;
+  --relatedDisplays-handle-size: 8px;
   --sidebar-container-header-height: 25px;
   --sidebarFilter-height: 16px;
   --sidebarFilter-width: 230px;
   --sidebarFilter-notUsedHeader-height: 30px;
-  --sidebarLabels-listCheckbox-height: 20px;
-  --sidebarLabels-listCheckbox-width: 20px;
+  --sidebarLabels-listCheckbox-size: 20px;
   --sidebarLayout-row-height: 42px;
   --sidebarLayout-row-width: 230px;
   --sidebarSort-table-height: 48px;
@@ -111,12 +101,12 @@
   --sidebarSort-notUsed-width: 230px;
   --sidebarSort-notUsedHeader-height: 30px;
   --sideButton-height: 48px;
-  --sideButton-width: 48px;
+  --sideButton-width: var(--header-container-height);
   --sideButton-icon-height: 22px;
-  --sideButtons-container-width: 48px;
+  --sideButtons-container-width: var(--header-container-height);
   --sideButtons-spacer-height: 25px;
 
-  //line-height
+  // line-height
   --displayInfo-icon-line-height: 48px;
   --displaySelect-button-line-height: 50px;
   --filterCatPlotBar-label-line-height: 19px;
@@ -135,66 +125,30 @@
   --sideButton-icon-line-height: 22px;
   --sideButton-label-line-height: 11px;
 
-  //font-size
-  --displayInfo-button-font-size: 18px;
-  --displayList-grid-title-font-size: 15px;
-  --displayList-grid-subtitle-font-size: 11px;
-  --displaySelect-button-font-size: 18px;
-  --filterCatPlotBar-label-font-size: 10px;
-  --filterNum-range-input-font-size: 13px;
-  --footer-wrapper-font-size: 15px;
-  --footerChip-label-font-size: 12px;
-  --footerChip-text-font-size: 11px;
-  --fullscreenButton-icon-font-size: 14px;
-  --header-container-font-size: 16px;
-  --header-displayName-font-size: 17px;
-  --header-displayDesc-font-size: 10px;
-  --headerLogo-font-size: 17px;
-  --headerLogo-dialogHeadline-font-size: 24px;
-  --headerLogo-dialogDiv-font-size: 18px;
-  --headerLogo-dialogCode-font-size: 20px;
-  --pagination-buttonText-font-size: 10px;
-  --pagination-icon-font-size: 10px;
-  --pagination-progress-font-size: 14px;
-  --relatedDisplays-button-font-size: 18px;
-  --sidebar-container-header-font-size: 16px;
-  --sidebarFilter-notUsedHeader-font-size: 14px;
-  --sidebarFilter-variable-font-size: 12px;
-  --sidebarFilter-header-font-size: 12px;
-  --sidebarFilter-headerExtra-font-size: 11px;
-  --sidebarFilter-cogGroupHeader-font-size: 14px;
-  --sidebarLabels-cogGroupHeader-font-size: 14px;
-  --sidebarLayout-row-font-size: 16px;
-  --sidebarLayout-inputLabelSpan-font-size: 16px;
-  --sidebarLayout-inputIcon-font-size: 23px;
-  --sidebarLayout-relDisp-font-size: 14px;
-  --sidebarSort-labels-font-size: 13px;
-  --sidebarSort-notUsedHeader-font-size: 14px;
-  --sidebarSort-variable-font-size: 12px;
-  --sidebarSort-cogGroupHeader-font-size: 14px;
-  --sideButton-font-size: 22px;
-  --sideButton-label-font-size: 11px;
+  // font-size
+  --text-3xs: 10px;
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-lg: 15px;
+  --text-xl: 16px;
+  --text-2xl: 17px;
+  --text-3xl: 18px;
+  --text-4xl: 20px;
+  --text-5xl: 22px;
+  --text-6xl: 23px;
+  --text-7xl: 24px;
 
+  // font-weight
+  --font-light: 300;
+  --font-normal: 400;
 
-  //font-weight
-  --displayList-grid-title-font-weight: 400;
-  --footerChip-label-font-weight: 400;
-  --header-container-font-weight: 300;
-  --header-displayDesc-font-weight: 300;
-  --headerLogo-dialogHeadline-font-weight: 400;
-  --panel-nameCell-font-weight: 400;
-  --relatedDisplays-dialog-font-weight: 300;
-  --sidebarFilter-cogGroupHeader-font-weight: 400;
-  --sidebarLabels-cogGroupHeader-font-weight: 400;
-  --sidebarSort-cogGroupHeader-font-weight: 400;
+  // border-radius
+  --rounded: 10px;
+  --rounded-50: 50%;
 
-  //border-radius
-  --displaySelect-empty-border-radius: 50%;
-  --footerChip-wrapper-border-radius: 10px;
-  --sidebarFilter-variable-border-radius: 10px;
-  --sidebarSort-variable-border-radius: 10px;
-
-  //transition
+  // transition
   --displayInfo-button-hover-transition: background 250ms;
   --displaySelect-inner-transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1),
     0ms opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
@@ -215,7 +169,70 @@
   --sideButton-transition: color 0.2s, background-color 0.2s;
   --sideButtons-spacer-transition: height 0.2s;
 
-  //shadow
+  // shadow
   --sidebarFilter-variable-box-shadow: var(--black-500) 0px 1px 6px, var(--black-500) 0px 1px 4px;
   --sidebarSort-variable-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+
+  // padding
+  --sideButtons-container-padding-top: var(--header-container-height);
+  --padding-px: 2px;
+  --padding-1: 3px;
+  --padding-2: 4px;
+  --padding-3: 5px;
+  --padding-4: 6px;
+  --padding-5: 7px;
+  --padding-6: 8px;
+  --padding-7: 10px;
+  --padding-8: 12px;
+  --padding-9: 15px;
+  --padding-10: 16px;
+  --padding-11: 20px;
+  --padding-12: 27px;
+
+  // margin
+  --margin-px: 1em;
+  --margin-1: 1px;
+  --margin-2: 3px;
+  --margin-3: 4px;
+  --margin-4: 5px;
+  --margin-5: 6px;
+  --margin-6: 8px;
+  --margin-7: 10px;
+  --margin-8: 12px;
+  --margin-9: 15px;
+  --margin-10: 20px;
+  --margin-11: 21px;
+  --margin-12: 24px;
+  --margin-13: 27px;
+  --margin-14: 28px;
+  --neg-margin-px: calc(var(--margin-px) * -1);
+  --neg-margin-1: calc(var(--margin-1) * -1);
+  --neg-margin-2: calc(var(--margin-2) * -1);
+  --neg-margin-3: calc(var(--margin-3) * -1);
+  --neg-margin-4: calc(var(--margin-4) * -1);
+  --neg-margin-5: calc(var(--margin-5) * -1);
+  --neg-margin-6: calc(var(--margin-6) * -1);
+  --neg-margin-7: calc(var(--margin-7) * -1);
+  --neg-margin-8: calc(var(--margin-8) * -1);
+  --neg-margin-9: calc(var(--margin-9) * -1);
+  --neg-margin-10: calc(var(--margin-10) * -1);
+  --neg-margin-11: calc(var(--margin-11) * -1);
+  --neg-margin-12: calc(var(--margin-12) * -1);
+  --neg-margin-13: calc(var(--margin-13) * -1);
+  --neg-margin-14: calc(var(--margin-14) * -1);
+
+  // position
+  --content-position-top: var(--header-container-height);
+  --displayInfo-button-position-left: var(--header-container-height);
+  --sidebar-container-position: var(--header-container-height);
+
+  // number
+  --header-height: 48;
+  --logo-width: 130;
+  --footer-height: 30;
+  --sidebar-width: 230;
+  --sidebar-header-height: 25;
+  --sidebar-filter-cat-height: 125;
+  --sidebar-filter-num-height: 100;
+  --sidebar-filter-variables-height: 50;
 }

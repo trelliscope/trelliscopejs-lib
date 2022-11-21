@@ -1,8 +1,8 @@
 .row {
-  padding: 8px 15px 6px;
+  padding: var(--padding-6) var(--padding-9) var(--padding-4);
   height: var(--sidebarLayout-row-height);
   box-sizing: border-box;
-  font-size: var(--sidebarLayout-row-font-size);
+  font-size: var(--text-xl);
   width: var(--sidebarLayout-row-width);
   display: inline-block;
 }
@@ -16,35 +16,35 @@
   float: right;
 
   input[type='number' i] {
-    padding: 5px;
+    padding: var(--padding-3);
   }
 }
 
 .inputRadio {
-  margin-bottom: 5px;
+  margin-bottom: var(--margin-4);
   margin-top: 0;
 }
 
 .inputLabelSpan {
   line-height: var(--sidebarLayout-inputLabelSpan-line-height);
   vertical-align: middle;
-  font-size: var(--sidebarLayout-inputLabelSpan-font-size);
+  font-size: var(--text-xl);
 }
 
 .inputIcon {
-  font-size: var(--sidebarLayout-inputIcon-font-size);
-  padding-left: 6px;
+  font-size: var(--text-6xl);
+  padding-left: var(--padding-4);
   vertical-align: text-bottom;
 }
 
 .relDisp {
-  font-size: var(--sidebarLayout-relDisp-font-size);
-  padding-left: 6px;
+  font-size: var(--text-base);
+  padding-left: var(--padding-4);
   vertical-align: text-bottom;
 }
 
 .relDispText {
-  padding-bottom: 10px;
+  padding-bottom: var(--padding-7);
 }
 
 .relDispButton {

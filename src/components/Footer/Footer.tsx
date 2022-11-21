@@ -7,10 +7,10 @@ import { filterCardinalitySelector } from '../../selectors/cogData';
 import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
-import uiConsts from '../../assets/styles/uiConsts';
 import type { RootState } from '../../store';
-import styles from './Footer.module.scss';
 import { FilterState } from '../../slices/filterSlice';
+import getCustomProperties from '../../getCustomProperties';
+import styles from './Footer.module.scss';
 
 interface FooterProps {
   style: {
@@ -137,6 +137,8 @@ const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector
   return res;
 });
 
+const [headerHeight, footerHeight] = getCustomProperties(['--header-height', '--footer-height']) as number[];
+
 const stateSelector = createSelector(
   windowWidthSelector,
   sortInfoSelector,
@@ -147,8 +149,8 @@ const stateSelector = createSelector(
   contentHeightSelector,
   (ww, sort, filter, nFilt, cdi, singlePage, ch) => ({
     style: {
-      width: ww - (singlePage ? 0 : uiConsts.footer.height),
-      top: ch + uiConsts.header.height,
+      width: ww - (singlePage ? 0 : footerHeight),
+      top: ch + headerHeight,
     },
     sort,
     filter,

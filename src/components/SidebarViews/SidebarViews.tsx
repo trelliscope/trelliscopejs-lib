@@ -12,9 +12,8 @@ import { setLayout } from '../../slices/layoutSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { curDisplayInfoSelector } from '../../selectors';
 import { cogInfoSelector } from '../../selectors/display';
-import uiConsts from '../../assets/styles/uiConsts';
 import { RootState } from '../../store';
-
+import getCustomProperties from '../../getCustomProperties';
 import styles from './SidebarViews.module.scss';
 
 interface SidebarViewsProps {
@@ -35,10 +34,12 @@ const SidebarViews: React.FC<SidebarViewsProps> = ({ height, views, cinfo, handl
   </div>
 );
 
+const [sidebarWidth, sidebarHeaderHeight] = getCustomProperties(['--sidebar-width', 'sidebarHeaderHeight']) as number[];
+
 // ------ redux container ------
 const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelector, cogInfoSelector, (ch, cdi, cinfo) => ({
-  width: uiConsts.sidebar.width,
-  height: ch - uiConsts.sidebar.header.height,
+  width: sidebarWidth,
+  height: ch - sidebarHeaderHeight,
   views: cdi.info.views,
   cinfo,
 }));

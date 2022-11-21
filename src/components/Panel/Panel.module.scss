@@ -49,7 +49,7 @@
 
   &NameCell {
     border-right: var(--border-1);
-    font-weight: var(--panel-nameCell-font-weight);
+    font-weight: var(--font-normal);
   }
 
   &Outer {
@@ -58,7 +58,7 @@
   }
 
   &Inner {
-    padding-right: 3px;
+    padding-right: var(--padding-1);
     overflow: hidden;
     white-space: normal;
     vertical-align: middle;

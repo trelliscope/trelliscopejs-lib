@@ -2,8 +2,8 @@
   &AttnOuter {
     position: absolute;
     overflow: hidden;
-    height: var(--displaySelect-height);
-    width: var(--displaySelect-width);
+    height: var(--displaySelect-size);
+    width: var(--displaySelect-size);
     top: 0;
     left: 0;
     pointer-events: none;
@@ -11,8 +11,8 @@
 
   &AttnInner {
     position: absolute;
-    height: var(--displaySelect-height);
-    width: var(--displaySelect-width);
+    height: var(--displaySelect-size);
+    width: var(--displaySelect-size);
     top: 0;
     left: 0;
     transition: var(--displaySelect-inner-transition);
@@ -22,9 +22,9 @@
 
   &AttnEmpty {
     position: absolute;
-    height: var(--displaySelect-height);
+    height: var(--displaySelect-size);
     width: 100%;
-    border-radius: var(--displaySelect-empty-border-radius);
+    border-radius: var(--rounded-50);
     opacity: 0.16;
     transition: var(--displaySelect-empty-transition);
     top: 0;
@@ -33,7 +33,7 @@
   }
 
   &FolderIcon {
-    padding-left: 3px;
+    padding-left: var(--padding-1);
   }
 
   &Button {
@@ -42,9 +42,9 @@
     box-sizing: border-box;
     top: -1px; // cover up top app border
     left: -1px;
-    height: var(--displaySelect-height);
-    width: var(--displaySelect-width);
-    font-size: var(--displaySelect-button-font-size);
+    height: var(--displaySelect-size);
+    width: var(--displaySelect-size);
+    font-size: var(--text-3xl);
     line-height: var(--displaySelect-button-line-height);
     background: var(--blue-200);
     color: var(--white);

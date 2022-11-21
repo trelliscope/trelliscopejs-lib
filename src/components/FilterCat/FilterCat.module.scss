@@ -1,14 +1,14 @@
 .filterCat {
   &Container {
-    width: var(--filterCat-continer-width);
+    width: var(--filter-width);
     box-sizing: border-box;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 5px;
+    padding-left: var(--padding-3);
+    padding-right: var(--padding-3);
+    padding-top: var(--padding-3);
   }
 
   &PlotContainer {
-    width: var(--filterCat-continer-width);
+    width: var(--filter-width);
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -19,16 +19,16 @@
 
   &InputContainer {
     height: var(--filterCat-input-containter-height);
-    width: var(--filterCat-continer-width);
-    margin-bottom: -21px;
-    padding-top: 7px;
+    width: var(--filter-width);
+    margin-bottom: var(--neg-margin-11);
+    padding-top: var(--padding-5);
     z-index: 100;
     position: relative;
   }
 
   &ExtraOptionsInput {
     float: right;
-    margin-top: -27px;
-    margin-right: 6px;
+    margin-top: var(--neg-margin-13);
+    margin-right: var(--margin-5);
   }
 }

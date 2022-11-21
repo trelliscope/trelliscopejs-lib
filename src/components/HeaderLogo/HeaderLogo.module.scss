@@ -7,7 +7,7 @@
   height: var(--headerLogo-height);
   text-align: center;
   width: var(--headerLogo-width);
-  font-size: var(--headerLogo-font-size);
+  font-size: var(--text-2xl);
   background: var(--red-200);
   color: var(--white);
 
@@ -20,21 +20,21 @@
 
   &Dialog {
     &Headline {
-      font-size: var(--headerLogo-dialogHeadline-font-size);
-      padding-top: 16px;
-      margin-bottom: 12px;
-      font-weight: var(--headerLogo-dialogHeadline-font-weight);
+      font-size: var(--text-7xl);
+      padding-top: var(--padding-10);
+      margin-bottom: var(--margin-8);
+      font-weight: var(--font-normal);
     }
 
     &Div {
-      font-size: var(--headerLogo-dialogDiv-font-size);
-      padding-left: 10px;
-      padding-right: 10px;
+      font-size: var(--text-3xl);
+      padding-left: var(--padding-7);
+      padding-right: var(--padding-7);
       z-index: 5000;
     }
 
     &H4 {
-      margin-bottom: 5px;
+      margin-bottom: var(--margin-4);
     }
 
     &Ul {
@@ -44,22 +44,22 @@
 
     &Code {
       color: var(--red-100);
-      font-size: var(--headerLogo-dialogCode-font-size);
+      font-size: var(--text-4xl);
     }
 
     &P {
       text-indent: -20px;
-      padding-left: 20px;
-      margin-top: 1em;
+      padding-left: var(--padding-11);
+      margin-top: var(--margin-px);
     }
 
     &P2 {
-      padding-left: 20px;
+      padding-left: var(--padding-11);
     }
 
     &P22 {
       text-indent: 0;
-      padding-left: 20px;
+      padding-left: var(--padding-11);
     }
 
     &Hi {

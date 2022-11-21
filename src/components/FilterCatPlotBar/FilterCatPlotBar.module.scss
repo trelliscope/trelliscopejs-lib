@@ -32,7 +32,7 @@
   }
 
   &Label {
-    font-size: var(--filterCatPlotBar-label-font-size);
+    font-size: var(--text-3xs);
     color: var(--gray-1400);
     text-align: center;
     cursor: default;
@@ -51,7 +51,7 @@
   &TextInner {
     display: inline-block;
     white-space: nowrap;
-    margin-left: 5px;
+    margin-left: var(--margin-4);
     position: absolute;
     bottom: 0;
   }

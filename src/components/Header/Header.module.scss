@@ -11,8 +11,8 @@
     border-top: var(--border-2);
     border-left: var(--border-2);
     margin: 0;
-    font-size: var(--header-container-font-size);
-    font-weight: var(--header-container-font-weight);
+    font-size: var(--text-xl);
+    font-weight: var(--font-light);
     z-index: 1010;
   }
 
@@ -33,8 +33,8 @@
 
   &DisplayName {
     vertical-align: top;
-    padding-left: 15px;
-    font-size: var(--header-displayName-font-size);
+    padding-left: var(--padding-9);
+    font-size: var(--text-2xl);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,10 +42,10 @@
 
   &DisplayDesc {
     vertical-align: top;
-    font-weight: var(--header-displayDesc-font-weight);
-    padding-left: 15px;
-    padding-right: 8px;
-    font-size: var(--header-displayDesc-font-size);
+    font-weight: var(--font-light);
+    padding-left: var(--padding-9);
+    padding-right: var(--padding-6);
+    font-size: var(--text-3xs);
     font-style: italic;
     white-space: nowrap;
     overflow: hidden;

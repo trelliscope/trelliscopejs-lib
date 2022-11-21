@@ -8,8 +8,9 @@ import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui
 import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../../constants';
 import SideButton from '../SideButton';
-import styles from './SideButtons.module.scss';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
+import getCustomProperties from '../../getCustomProperties';
+import styles from './SideButtons.module.scss';
 
 type Button = {
   icon: string;
@@ -112,6 +113,8 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
   );
 };
 
+const [headerHeight] = getCustomProperties(['--header-height']) as number[];
+
 // ------ redux container ------
 
 const stateSelector = createSelector(
@@ -123,10 +126,10 @@ const stateSelector = createSelector(
   (ch, active, dialogOpen, fullscreen, cdi) => ({
     inlineStyles: {
       sideButtonsContainer: {
-        height: ch + 48,
+        height: ch + headerHeight,
       },
     },
-    width: 48,
+    width: headerHeight,
     active,
     dialogOpen,
     fullscreen,

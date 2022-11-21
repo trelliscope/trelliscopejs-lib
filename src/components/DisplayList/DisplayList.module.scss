@@ -13,7 +13,7 @@
   &Grid {
     &List {
       width: var(--displayList-grid-list-width);
-      margin-bottom: 24px;
+      margin-bottom: var(--margin-12);
     }
 
     &Tile {
@@ -21,14 +21,14 @@
     }
 
     &Title {
-      font-weight: var(--displayList-grid-title-font-weight);
+      font-weight: var(--font-normal);
       color: var(--red-100);
-      font-size: var(--displayList-grid-title-font-size);
+      font-size: var(--text-lg);
     }
 
     &SubTitle {
       font-style: italic;
-      font-size: var(--displayList-grid-subtitle-font-size);
+      font-size: var(--text-2xs);
     }
   }
   &Img {

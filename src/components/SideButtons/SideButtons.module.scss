@@ -3,7 +3,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: 48px;
+    padding-top: var(--sideButtons-container-padding-top);
     width: var(--sideButtons-container-width);
     background: var(--gray-300);
     box-sizing: border-box;
