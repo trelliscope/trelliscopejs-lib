@@ -1,86 +1,32 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import { createSelector } from 'reselect';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
-import type { RootState } from '../../store';
-import { FilterState } from '../../slices/filterSlice';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './Footer.module.scss';
 
-interface FooterProps {
-  style: {
-    width: number;
-    top: number;
-  };
-  sort: { name: string; icon: string }[];
-  filter: { name: string; text: string }[];
-  nFilt: number;
-  nPanels?: number;
-  displayInfo: DisplayObject;
-}
-
-const Footer: React.FC<FooterProps> = ({ style, sort, filter, nFilt, nPanels, displayInfo }) => {
+const Footer: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const sort = useSelector(sortSelector);
+  const cdi = useSelector(curDisplayInfoSelector);
+  const filter = useSelector(filterSelector);
+  const windowWidth = useSelector(windowWidthSelector);
+  const contentHeight = useSelector(contentHeightSelector);
+  const singlePage = useSelector(singlePageAppSelector);
+  const nFilt = useSelector(filterCardinalitySelector);
+  const keys = Object.keys(filter.state);
+  const [headerHeight, footerHeight] = getCustomProperties(['--header-height', '--footer-height']) as number[];
 
-  const handleClickOpen = () => {
-    setDialogOpen(true);
+  const style = {
+    width: windowWidth - (singlePage ? 0 : footerHeight),
+    top: contentHeight + headerHeight,
   };
 
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
-  return (
-    <div className={styles.footerWrapper} style={style}>
-      <div className={styles.footerInner}>
-        {sort.length > 0 && (
-          <div className={styles.footerSectionWrapper}>
-            <div className={styles.footerSectionText}>Sorting on:</div>
-            <div className={styles.footerChipWrapper}>
-              {sort.map((el: { name: string; icon: string }, i: number) => (
-                <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
-              ))}
-            </div>
-          </div>
-        )}
-        {filter.length > 0 && sort.length > 0 && <div className={styles.footerSpacer} />}
-        {filter.length > 0 && (
-          <div className={styles.footerSectionWrapper}>
-            <div className={styles.footerSectionText}>Filtering on:</div>
-            <div className={styles.footerChipWrapper}>
-              {filter.map((el: { name: string; text: string }, i: number) => (
-                <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
-              ))}
-            </div>
-            <div className={styles.footerFilterText}>{`(${nFilt} of ${nPanels} panels)`}</div>
-          </div>
-        )}
-      </div>
-      {displayInfo.has_inputs && displayInfo.input_type === 'localStorage' && (
-        <div className={styles.footerButtonDiv}>
-          <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
-            Export Inputs
-          </Button>
-        </div>
-      )}
-      <ExportInputDialog open={dialogOpen} handleClose={handleClose} displayInfo={displayInfo} />
-    </div>
-  );
-};
-
-Footer.defaultProps = {
-  nPanels: 0,
-};
-
-// ------ redux container ------
-
-const sortInfoSelector = createSelector(sortSelector, curDisplayInfoSelector, (sort, cdi) => {
-  const res = [];
+  const sortRes = [];
   for (let i = 0; i < sort.length; i += 1) {
     const { name } = sort[i];
     const { type } = cdi.info.cogInfo[name];
@@ -91,14 +37,10 @@ const sortInfoSelector = createSelector(sortSelector, curDisplayInfoSelector, (s
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${sort[i].dir}`;
-    res.push({ name, icon });
+    sortRes.push({ name, icon });
   }
-  return res;
-});
 
-const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector, (filter: FilterState, cdi) => {
-  const keys = Object.keys(filter.state);
-  const res = [];
+  const filterRes = [];
   for (let i = 0; i < keys.length; i += 1) {
     const curState = filter.state[keys[i]];
     if (curState.value !== undefined) {
@@ -131,35 +73,54 @@ const filterInfoSelector = createSelector(filterSelector, curDisplayInfoSelector
           text = `${value.length} of ${tot}`;
         }
       }
-      res.push({ name: keys[i], text });
+      filterRes.push({ name: keys[i], text });
     }
   }
-  return res;
-});
 
-const [headerHeight, footerHeight] = getCustomProperties(['--header-height', '--footer-height']) as number[];
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
 
-const stateSelector = createSelector(
-  windowWidthSelector,
-  sortInfoSelector,
-  filterInfoSelector,
-  filterCardinalitySelector,
-  curDisplayInfoSelector,
-  singlePageAppSelector,
-  contentHeightSelector,
-  (ww, sort, filter, nFilt, cdi, singlePage, ch) => ({
-    style: {
-      width: ww - (singlePage ? 0 : footerHeight),
-      top: ch + headerHeight,
-    },
-    sort,
-    filter,
-    nFilt,
-    displayInfo: cdi.info,
-    nPanels: cdi.info.n,
-  }),
-);
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
 
-const mapStateToProps = (state: RootState) => stateSelector(state);
+  return (
+    <div className={styles.footerWrapper} style={style}>
+      <div className={styles.footerInner}>
+        {sortRes.length > 0 && (
+          <div className={styles.footerSectionWrapper}>
+            <div className={styles.footerSectionText}>Sorting on:</div>
+            <div className={styles.footerChipWrapper}>
+              {sortRes.map((el: { name: string; icon: string }, i: number) => (
+                <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
+              ))}
+            </div>
+          </div>
+        )}
+        {filterRes.length > 0 && sortRes.length > 0 && <div className={styles.footerSpacer} />}
+        {filterRes.length > 0 && (
+          <div className={styles.footerSectionWrapper}>
+            <div className={styles.footerSectionText}>Filtering on:</div>
+            <div className={styles.footerChipWrapper}>
+              {filterRes.map((el: { name: string; text: string }, i: number) => (
+                <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
+              ))}
+            </div>
+            <div className={styles.footerFilterText}>{`(${nFilt} of ${cdi.info.n} panels)`}</div>
+          </div>
+        )}
+      </div>
+      {cdi.info.has_inputs && cdi.info.input_type === 'localStorage' && (
+        <div className={styles.footerButtonDiv}>
+          <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
+            Export Inputs
+          </Button>
+        </div>
+      )}
+      <ExportInputDialog open={dialogOpen} handleClose={handleClose} displayInfo={cdi.info} />
+    </div>
+  );
+};
 
-export default connect(mapStateToProps)(Footer);
+export default Footer;
