@@ -4,11 +4,19 @@ import callbackMiddleware from './middleware/callbackMiddleware';
 import crossfilterMiddleware from './middleware/crossfilterMiddleware';
 import { hashMiddleware } from './middleware/hash';
 import { configAPI } from './slices/configAPI';
+import { displayListAPI } from './slices/displayListAPI';
 import reducer from './reducers';
 
 const store = configureStore({
   reducer,
-  middleware: [configAPI.middleware, thunkMiddleware, crossfilterMiddleware, callbackMiddleware, hashMiddleware],
+  middleware: [
+    configAPI.middleware,
+    displayListAPI.middleware,
+    thunkMiddleware,
+    crossfilterMiddleware,
+    callbackMiddleware,
+    hashMiddleware,
+  ],
   devTools: process.env.NODE_ENV !== 'production',
 });
 

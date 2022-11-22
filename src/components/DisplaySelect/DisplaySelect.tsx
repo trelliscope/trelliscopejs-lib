@@ -30,6 +30,7 @@ import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
+import { useDisplayList } from '../../slices/displayListAPI';
 
 interface DisplaySelectProps {
   setDialogOpen: (isOpen: boolean) => void;
@@ -47,6 +48,9 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
 
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
+  const { data: displayList, isSuccess } = useDisplayList();
+
+  console.log('DisplaySelect', displayList);
 
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
@@ -58,7 +62,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   };
 
   const handleOpen = () => {
-    if (displayList && displayList.isLoaded) {
+    if (displayList && isSuccess) {
       setDialogOpen(true);
       handleDispDialogOpen(true);
     }
@@ -99,7 +103,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   useEffect(() => {
     const attnInterval = setInterval(() => {
       const elem = attnCircle as HTMLDivElement | undefined;
-      if (selectedDisplay.name !== '') {
+      if (selectedDisplay !== '') {
         clearInterval(attnInterval);
       }
       if (elem) {
@@ -109,17 +113,15 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     }, 750);
   }, []);
 
-  const isLoaded = displayList && displayList.isLoaded;
-
   return (
     <div>
       <button
         type="button"
         aria-label="display select open"
         onClick={handleOpen}
-        className={classNames({ [styles.displaySelectButton]: true, [styles.displaySelectButtonInactive]: !isLoaded })}
+        className={classNames({ [styles.displaySelectButton]: true, [styles.displaySelectButtonInactive]: !isSuccess })}
       >
-        {(selectedDisplay.name === '' || !isOpen) && (
+        {(selectedDisplay === '' || !isOpen) && (
           <div className={styles.displaySelectAttnOuter}>
             <div className={styles.displaySelectAttnInner}>
               <div
@@ -147,7 +149,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
         <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
         <DialogContent>
           <DisplayList
-            displayItems={displayList.list}
+            displayItems={displayList}
             displayGroups={displayGroups}
             handleClick={handleSelect}
             selectable={false}
