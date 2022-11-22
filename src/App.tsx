@@ -8,7 +8,7 @@ import Body from './components/Body';
 import Footer from './components/Footer';
 import FullscreenButton from './components/FullscreenButton';
 import ErrorSnack from './components/ErrorSnack';
-import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './slices/appSlice';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 
 import './assets/styles/main.css';
@@ -20,7 +20,7 @@ interface AppProps {
   id: string;
   singlePageApp?: boolean;
   options?: AppOptions;
-  fullscreen: boolean;
+  fullscreen?: boolean;
   appDims: { width: number; height: number };
 }
 
@@ -33,12 +33,13 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
 
   useEffect(() => {
     dispatch(setAppID(id));
+    dispatch(setPaths(config));
     dispatch(setOptions(options));
     dispatch(setFullscreen(fullscreen));
     dispatch(setSinglePageApp(singlePageApp));
     dispatch(windowResize(appDims));
     dispatch(setAppDims(appDims));
-    dispatch(fetchDisplayList(config, id, singlePageApp));
+    // dispatch(fetchDisplayList(config, id, singlePageApp));
   }, []);
 
   return (
@@ -55,6 +56,7 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
 App.defaultProps = {
   singlePageApp: false,
   options: {},
+  fullscreen: false,
 };
 
 export default App;

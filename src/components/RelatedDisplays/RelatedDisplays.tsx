@@ -118,7 +118,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
   } as CSSProperties;
 
   const stepContent = [
-    <DisplayList displayItems={displayList.list} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
+    <DisplayList displayItems={displayList} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
     <div style={parentBoundary}>
       {relDispPositions.map((d) => (
         <Rnd

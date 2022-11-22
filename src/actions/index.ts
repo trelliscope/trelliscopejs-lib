@@ -346,7 +346,7 @@ export const fetchDisplayList =
           const idx = names.indexOf(hashItems.display);
           if (idx > -1) {
             const dObj = json[idx];
-            dispatch(setSelectedDisplay({ name: dObj.name, group: dObj.group, desc: dObj.desc }));
+            dispatch(setSelectedDisplay(dObj.name));
             dispatch(fetchDisplay(dObj.name, dObj.group, cfg, id, hash));
           }
         } else if (singlePageApp && json.length > 1) {

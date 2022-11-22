@@ -14,6 +14,7 @@ import filter from '../slices/filterSlice';
 import displayInfo from '../slices/displayInfoSlice';
 import cogDataMutable from '../slices/cogDataMutableSlice';
 import { configAPI } from '../slices/configAPI';
+import { displayListAPI } from '../slices/displayListAPI';
 
 const reducers = combineReducers({
   app,
@@ -27,10 +28,11 @@ const reducers = combineReducers({
   sort,
   filter,
   _config,
-  displayList,
+  // displayList,
   displayInfo,
   cogDataMutable,
   [configAPI.reducerPath]: configAPI.reducer,
+  [displayListAPI.reducerPath]: displayListAPI.reducer,
 });
 
 export default reducers;

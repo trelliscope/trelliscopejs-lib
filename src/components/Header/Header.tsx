@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
@@ -7,39 +7,27 @@ import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
-import { fetchDisplay } from '../../actions';
 import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../../selectors/display';
-import {
-  appIdSelector,
-  configSelector,
-  displayListSelector,
-  selectedDisplaySelector,
-  dialogOpenSelector,
-  pageNumSelector,
-  nPerPageSelector,
-  fullscreenSelector,
-  cogDataSelector,
-} from '../../selectors';
-import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import getCustomProperties from '../../getCustomProperties';
+import { dialogOpenSelector, pageNumSelector, nPerPageSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import { setLayout } from '../../slices/layoutSlice';
+import getCustomProperties from '../../getCustomProperties';
+import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import styles from './Header.module.scss';
+import { useDisplayList } from '../../slices/displayListAPI';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const displayList = useSelector(displayListSelector);
-  const appId = useSelector(appIdSelector);
-  const cfg = useSelector(configSelector);
+  const { data: displayList = [], isSuccess } = useDisplayList();
+
   const dialogOpen = useSelector(dialogOpenSelector);
   const displayGroups = useSelector(displayGroupsSelector);
   const windowWidth = useSelector(windowWidthSelector);
-  const dlLength = Object.keys(displayList).length;
-  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const dlLength = displayList?.length || 0;
+  const selectedDisplay = useSelectedDisplay();
   const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
-  const [singleLoaded, setSingleLoaded] = useState(selectedDisplay.name !== '');
   const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
@@ -98,56 +86,10 @@ const Header: React.FC = () => {
           30),
     },
     displayName: {
-      lineHeight: `${selectedDisplay.desc === '' ? 48 : 26}px`,
-      paddingTop: selectedDisplay.desc === '' ? 0 : 5,
+      lineHeight: `${selectedDisplay.description === '' ? 48 : 26}px`,
+      paddingTop: selectedDisplay.description === '' ? 0 : 5,
     },
   };
-
-  const stylesComputed = {
-    headerContainer: {
-      width: windowWidth,
-    },
-    headerSubContainer: {
-      left:
-        uiConsts.header.height *
-        ((dlLength <= 1 ? 0 : 1) +
-          (selectedDisplay.name === '' ? 0 : 1) +
-          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
-      width:
-        windowWidth -
-        (uiConsts.header.height *
-          ((dlLength <= 1 ? 0 : 1) +
-            (selectedDisplay.name === '' ? 0 : 1) +
-            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
-          uiConsts.header.logoWidth +
-          30),
-    },
-    displayName: {
-      lineHeight: `${selectedDisplay.desc === '' ? 48 : 26}px`,
-      paddingTop: selectedDisplay.desc === '' ? 0 : 5,
-    },
-  };
-
-  useEffect(() => {
-    // handle loading a single display if necessary
-    // TODO: Why do this here? Why not in actions/index.js?
-    const isSingleDisplay = displayList.isLoaded && displayList.list.length <= 1;
-    setSingleDisplay(isSingleDisplay);
-
-    if (!singleLoaded && singleDisplay && selectedDisplay.name !== '') {
-      setSingleLoaded(true);
-    } else if (!singleLoaded && singleDisplay) {
-      dispatch(
-        setSelectedDisplay({
-          name: displayList.list[0].name,
-          group: displayList.list[0].group,
-          desc: displayList.list[0].desc,
-        }),
-      );
-      dispatch(fetchDisplay(displayList.list[0].name, displayList.list[0].group, cfg, appId, window.location.hash));
-      setSingleLoaded(true);
-    }
-  }, [selectedDisplay, displayList, singleLoaded, singleDisplay, cfg, appId, dispatch]);
 
   const handleDialogOpen = (isOpen: boolean) => {
     dispatch(setDialogOpen(isOpen));
@@ -159,11 +101,10 @@ const Header: React.FC = () => {
   let pagination;
   const displayLoaded = selectedDisplay.name !== '';
   const nGroups = Object.keys(displayGroups).length;
-  const listLoaded = displayList.isLoaded;
 
   if (displayLoaded) {
     if (nGroups > 1) {
-      displayName = `${selectedDisplay.group} /
+      displayName = `/
         ${selectedDisplay.name}`;
     } else {
       // Takes file name and replaces underscores with space to make title
@@ -172,7 +113,7 @@ const Header: React.FC = () => {
     if (!singleDisplay) {
       iconStyle = { color: '#aaa', fontSize: 12 };
     }
-    displayDesc = selectedDisplay.desc;
+    displayDesc = selectedDisplay.description;
     pagination = (
       <Pagination
         n={n}
@@ -190,7 +131,7 @@ const Header: React.FC = () => {
     );
   } else if (singleDisplay) {
     displayName = 'loading...';
-  } else if (!dialogOpen && displayList.list.length > 0) {
+  } else if (!dialogOpen && displayList?.length > 0) {
     displayName = (
       <span className={styles.headerNameDescContainerIcon}>
         <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -201,7 +142,7 @@ const Header: React.FC = () => {
 
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
-      {listLoaded && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
+      {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
       {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
         <RelatedDisplays setDialogOpen={handleDialogOpen} />
       )}
