@@ -11,10 +11,11 @@ import { setLayout } from '../../slices/layoutSlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplayList.module.scss';
+import { IDisplayListItem } from '../../types/configs';
 
 interface DisplayListProps {
   selectable: boolean;
-  displayItems: Display[];
+  displayItems: IDisplayListItem[];
   displayGroups: DisplayGroup;
   handleClick: (name: string, group: string, desc: string) => void;
 }
@@ -153,7 +154,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
                   if (selectable) {
                     handleCheckbox(i);
                   } else {
-                    handleClick(displayItems[i].name, displayItems[i].group, displayItems[i].desc);
+                    handleClick(displayItems[i].name);
                   }
                 }}
               >
