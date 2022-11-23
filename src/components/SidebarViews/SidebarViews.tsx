@@ -125,7 +125,7 @@ const SidebarViews: React.FC = () => {
     <div className={styles.sidebarViews} style={{ height }}>
       <List className={styles.sidebarViewsList}>
         {views.map((value) => (
-          <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
+          <ListItem key={value.name} dense button onClick={() => handleChange(value.state)}>
             <ListItemText primary={value.name} />
           </ListItem>
         ))}

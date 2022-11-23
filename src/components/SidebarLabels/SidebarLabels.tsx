@@ -51,7 +51,7 @@ const SidebarLabels: React.FC = () => {
                   </ListSubheader>
                 )}
                 {[...cogGroups[grp]].sort().map((d: string) => (
-                  <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name, labels)}>
+                  <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name)}>
                     <Checkbox
                       checked={labels.indexOf(cogInfo[d].name) !== -1}
                       className={styles.sidebarLabelsListCheckbox}
