@@ -22,7 +22,7 @@ const SidebarViews: React.FC = () => {
   const { views } = cdi.info;
   const cinfo = useSelector(cogInfoSelector);
 
-  const handleChange = (value: string, cogInfo: { [key: string]: CogInfo }) => {
+  const handleChange = (value: string) => {
     const hashItems = {} as HashItem;
     value
       .replace('#', '')
@@ -82,13 +82,13 @@ const SidebarViews: React.FC = () => {
         const fltState = {
           name: fltItems.var,
           type: fltItems.type,
-          varType: cogInfo[fltItems.var].type,
+          varType: cinfo[fltItems.var].type,
         } as Filter<FilterCat | FilterRange>;
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
           fltState.value = fltItems.val.split('#').map(decodeURIComponent);
         } else if (fltItems.type === 'regex') {
-          const { levels } = cogInfo[fltItems.var];
+          const { levels } = cinfo[fltItems.var];
           const vals = [] as string[];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
           levels.forEach((d) => {
