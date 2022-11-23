@@ -1,7 +1,5 @@
 import React from 'react';
-import type { CSSProperties } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useSelector } from 'react-redux';
 import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
 import SidebarSort from '../SidebarSort';
@@ -10,17 +8,24 @@ import SidebarViews from '../SidebarViews';
 import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../../selectors/ui';
 import { displayLoadedSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
-import type { RootState } from '../../store';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './Sidebar.module.scss';
 
-interface SidebarProps {
-  customStyles: { [key: string]: CSSProperties };
-  active: string;
-  displayLoaded: boolean;
-}
+const Sidebar: React.FC = () => {
+  const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
 
-const Sidebar: React.FC<SidebarProps> = ({ customStyles, active, displayLoaded }) => {
+  const contentHeight = useSelector(contentHeightSelector);
+  const active = useSelector(sidebarActiveSelector);
+  const displayLoaded = useSelector(displayLoadedSelector);
+  const filterColSplit = useSelector(filterColSplitSelector);
+
+  const customStyles = {
+    sidebarContainer: {
+      width: sidebarWidth * (1 + (active === SB_PANEL_FILTER && filterColSplit && filterColSplit.cutoff !== null ? 1 : 0)),
+      height: contentHeight,
+    },
+  };
+
   if (active === '') {
     return <div className={`${styles.sidebarContainer} ${styles.sidebarHidden}`} style={customStyles.sidebarContainer} />;
   }
@@ -80,27 +85,4 @@ const Sidebar: React.FC<SidebarProps> = ({ customStyles, active, displayLoaded }
   );
 };
 
-const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
-
-// ------ redux container ------
-
-const stateSelector = createSelector(
-  contentHeightSelector,
-  sidebarActiveSelector,
-  displayLoadedSelector,
-  filterColSplitSelector,
-  (ch, active, displayLoaded, colSplit) => ({
-    customStyles: {
-      sidebarContainer: {
-        width: sidebarWidth * (1 + (active === SB_PANEL_FILTER && colSplit && colSplit.cutoff !== null ? 1 : 0)),
-        height: ch,
-      },
-    },
-    active,
-    displayLoaded,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-export default connect(mapStateToProps)(Sidebar);
+export default Sidebar;
