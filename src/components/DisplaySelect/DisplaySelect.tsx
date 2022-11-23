@@ -1,9 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { connect } from 'react-redux';
-import type { Action } from 'redux';
-import type { ThunkDispatch } from 'redux-thunk';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -25,69 +22,76 @@ import {
   displayListSelector,
   fullscreenSelector,
   selectedDisplaySelector,
-  singlePageAppSelector,
   dispSelectDialogSelector,
 } from '../../selectors';
-import type { RootState } from '../../store';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import type { SelectedDisplayState } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
 
 interface DisplaySelectProps {
-  handleClick: (name: string, group: string, desc: string, cfg: Config, appId: string) => void;
   setDialogOpen: (isOpen: boolean) => void;
-  setDispDialogOpen: (isOpen: boolean) => void;
-  cfg: Config;
-  fullscreen: boolean;
-  isOpen: boolean;
-  appId: string;
-  selectedDisplay: SelectedDisplayState;
-  displayList: DisplaySelect;
-  displayGroups: DisplayGroup;
 }
 
-const DisplaySelect: React.FC<DisplaySelectProps> = ({
-  handleClick,
-  setDialogOpen,
-  setDispDialogOpen,
-  cfg,
-  fullscreen,
-  isOpen,
-  appId,
-  selectedDisplay,
-  displayList,
-  displayGroups,
-}) => {
+const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
+  const dispatch = useDispatch();
+  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const displayList = useSelector(displayListSelector);
+  const displayGroups = useSelector(displayGroupsSelector);
+  const appId = useSelector(appIdSelector);
+  const cfg = useSelector(configSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const isOpen = useSelector(dispSelectDialogSelector);
+
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
 
-  const handleClose = useCallback(() => {
+  const handleDispDialogOpen = (dispIsOpen: boolean) => {
+    dispatch(setDispSelectDialogOpen(dispIsOpen));
+  };
+
+  const handleClose = () => {
     setDialogOpen(false);
-    setDispDialogOpen(false);
-  }, [setDialogOpen, setDispDialogOpen]);
+    handleDispDialogOpen(false);
+  };
 
   useHotkeys('esc', handleClose, { enabled: isOpen });
 
   const handleOpen = () => {
     if (displayList && displayList.isLoaded) {
       setDialogOpen(true);
-      setDispDialogOpen(true);
+      handleDispDialogOpen(true);
     }
   };
 
-  const handleKey = useCallback(() => {
+  const handleClick = (name: string, group: string, desc: string) => {
+    // need to clear out state for new display...
+    // first close sidebars for safety
+    // (there is an issue when the filter sidebar stays open when changing - revisit this)
+    dispatch(setActiveSidebar(''));
+    dispatch(setSelectedRelDisps([]));
+    dispatch(setLabels([]));
+    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
+    dispatch(setLayout({ pageNum: 1 }));
+    dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
+    dispatch(setFilter({}));
+    dispatch(setSort([]));
+    dispatch(setRelDispPositions([]));
+    dispatch(setSelectedDisplay({ name, group, desc }));
+    dispatch(fetchDisplay(name, group, cfg, appId, ''));
+  };
+
+  const handleKey = () => {
     setDialogOpen(true);
-    setDispDialogOpen(true);
-  }, [setDialogOpen, setDispDialogOpen]);
+    handleDispDialogOpen(true);
+  };
 
   useHotkeys('o', handleKey, { enabled: fullscreen });
 
   const handleSelect = (name: string, group: string, desc: string) => {
-    handleClick(name, group, desc, cfg, appId);
+    handleClick(name, group, desc);
     setDialogOpen(false);
-    setDispDialogOpen(false);
+    handleDispDialogOpen(false);
   };
 
   useEffect(() => {
@@ -155,51 +159,4 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const styleSelector = createSelector(
-  selectedDisplaySelector,
-  displayListSelector,
-  displayGroupsSelector,
-  configSelector,
-  appIdSelector,
-  singlePageAppSelector,
-  fullscreenSelector,
-  dispSelectDialogSelector,
-  (selectedDisplay, displayList, displayGroups, cfg, appId, singlePageApp, fullscreen, isOpen) => ({
-    appId,
-    cfg,
-    selectedDisplay,
-    displayList,
-    displayGroups,
-    singlePageApp,
-    fullscreen,
-    isOpen,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, Action>) => ({
-  handleClick: (name: string, group: string, desc: string, cfg: Config, appId: string) => {
-    // need to clear out state for new display...
-    // first close sidebars for safety
-    // (there is an issue when the filter sidebar stays open when changing - revisit this)
-    dispatch(setActiveSidebar(''));
-    dispatch(setSelectedRelDisps([]));
-    dispatch(setLabels([]));
-    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
-    dispatch(setLayout({ pageNum: 1 }));
-    dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
-    dispatch(setFilter({}));
-    dispatch(setSort([]));
-    dispatch(setRelDispPositions([]));
-    dispatch(setSelectedDisplay({ name, group, desc }));
-    dispatch(fetchDisplay(name, group, cfg, appId, ''));
-  },
-  setDispDialogOpen: (isOpen: boolean) => {
-    dispatch(setDispSelectDialogOpen(isOpen));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DisplaySelect);
+export default DisplaySelect;

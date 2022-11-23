@@ -1,7 +1,5 @@
 import React from 'react';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import marked from 'marked';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -17,41 +15,36 @@ import {
   dispInfoDialogSelector,
 } from '../../selectors';
 import { setDispInfoDialogOpen } from '../../slices/appSlice';
-import type { RootState } from '../../store';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
   singleDisplay: boolean;
-  curDisplayInfo: DisplayInfoState;
-  isOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
-  setThisDialogOpen: (isOpen: boolean) => void;
-  fullscreen: boolean;
-  active: boolean;
 }
 
-const DisplayInfo: React.FC<DisplayInfoProps> = ({
-  curDisplayInfo,
-  singleDisplay,
-  isOpen,
-  setDialogOpen,
-  setThisDialogOpen,
-  fullscreen,
-  active,
-}) => {
+const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen }) => {
+  const dispatch = useDispatch();
+  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const isOpen = useSelector(dispInfoDialogSelector);
+  const active = selectedDisplay.name !== '';
+
+  const handleDispInfoDialogOpen = (dispInfoIsOpen: boolean) => {
+    dispatch(setDispInfoDialogOpen(dispInfoIsOpen));
+  };
   const handleClose = () => {
     setDialogOpen(false);
-    setThisDialogOpen(false);
+    handleDispInfoDialogOpen(false);
   };
   const handleOpen = () => {
     setDialogOpen(true);
-    setThisDialogOpen(true);
+    handleDispInfoDialogOpen(true);
   };
 
   const handleKey = () => {
     setDialogOpen(true);
-    setThisDialogOpen(true);
+    handleDispInfoDialogOpen(true);
   };
 
   const moptions = {
@@ -138,27 +131,4 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const styleSelector = createSelector(
-  selectedDisplaySelector,
-  curDisplayInfoSelector,
-  fullscreenSelector,
-  dispInfoDialogSelector,
-  (selectedDisplay, curDisplayInfo, fullscreen, isOpen) => ({
-    curDisplayInfo,
-    fullscreen,
-    active: selectedDisplay.name !== '',
-    isOpen,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  setThisDialogOpen: (isOpen: boolean) => {
-    dispatch(setDispInfoDialogOpen(isOpen));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayInfo);
+export default DisplayInfo;
