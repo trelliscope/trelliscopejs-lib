@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import type { Action, Dispatch } from 'redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -10,20 +8,29 @@ import Checkbox from '@mui/material/Checkbox';
 import { setLabels } from '../../slices/labelsSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
-import { RootState } from '../../store';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './SidebarLabels.module.scss';
 
-interface SidebarLabelsProps {
-  height: number;
-  labels: string[];
-  cogInfo: { [key: string]: CogInfo };
-  curDisplayInfo: DisplayInfoState;
-  handleChange: (arg1: string, arg2: string[]) => void;
-}
+const SidebarLabels: React.FC = () => {
+  const dispatch = useDispatch();
+  const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
+  const ch = useSelector(contentHeightSelector);
+  const height = ch - sidebarHeaderHeight;
+  const labels = useSelector(labelsSelector);
+  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const { cogInfo } = curDisplayInfo.info;
 
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, curDisplayInfo, handleChange }) => {
+  const handleChange = (value: string, labelsArray: string[]) => {
+    const idx = labelsArray.indexOf(value);
+    let newLabels = labelsArray;
+    if (idx === -1) {
+      newLabels = [...labelsArray, value];
+    } else {
+      newLabels = [...labelsArray.slice(0, idx), ...labelsArray.slice(idx + 1)];
+    }
+    dispatch(setLabels(newLabels));
+  };
+
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
@@ -68,31 +75,4 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, 
   return content;
 };
 
-const [sidebarWidth, sidebarHeaderHeight] = getCustomProperties(['--sidebar-width', '--sidebar-header-height']) as number[];
-
-// ------ redux container ------
-
-const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
-  width: sidebarWidth,
-  height: ch - sidebarHeaderHeight,
-  labels,
-  cogInfo: cdi.info.cogInfo,
-  curDisplayInfo: cdi,
-}));
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (value: string, labels: string[]) => {
-    const idx = labels.indexOf(value);
-    let newLabels = labels;
-    if (idx === -1) {
-      newLabels = [...labels, value];
-    } else {
-      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
-    }
-    dispatch(setLabels(newLabels));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarLabels);
+export default SidebarLabels;
