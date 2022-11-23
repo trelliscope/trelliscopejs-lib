@@ -21,7 +21,7 @@ import classNames from 'classnames';
 import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
-import { selectedDisplaySelector, displayListSelector } from '../../selectors';
+import { selectedDisplaySelector, displayListSelector, relDispPositionsSelector } from '../../selectors';
 import type { RootState } from '../../store';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
@@ -200,8 +200,6 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
 const [headerHeight] = getCustomProperties(['--header-height']) as number[];
 
 // ------ redux container ------
-
-const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
 
 const styleSelector = createSelector(
   displayListSelector,
