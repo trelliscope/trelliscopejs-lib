@@ -1,8 +1,6 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -11,30 +9,22 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { setLayout } from '../../slices/layoutSlice';
 import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { filterCardinalitySelector } from '../../selectors/cogData';
-import { RootState } from '../../store';
 import styles from './Pagination.module.scss';
 
-interface PaginationProps {
-  n: number;
-  npp: number;
-  totPages: number;
-  totPanels: number;
-  dialogOpen: boolean;
-  fullscreen: boolean;
-  handleChange: (arg0: number) => void;
-  cogData: CogDataMutable;
-}
+const Pagination: React.FC = () => {
+  const dispatch = useDispatch();
+  const n = useSelector(pageNumSelector);
+  const totPanels = useSelector(filterCardinalitySelector);
+  const npp = useSelector(nPerPageSelector);
+  const dialogOpen = useSelector(dialogOpenSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const cogData = useSelector(cogDataSelector);
+  const totPages = Math.ceil(totPanels / npp);
 
-const Pagination: React.FC<PaginationProps> = ({
-  n,
-  npp,
-  totPages,
-  totPanels,
-  dialogOpen,
-  fullscreen,
-  handleChange,
-  cogData,
-}) => {
+  const handleChange = (pageNum: number) => {
+    dispatch(setLayout({ pageNum }));
+  };
+
   const pageLeft = () => {
     let nn = n - 1;
     if (nn < 1) {
@@ -128,32 +118,4 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const stateSelector = createSelector(
-  pageNumSelector,
-  filterCardinalitySelector,
-  nPerPageSelector,
-  dialogOpenSelector,
-  fullscreenSelector,
-  cogDataSelector,
-  (n, card, npp, dialogOpen, fullscreen, cogData) => ({
-    n,
-    totPanels: card,
-    totPages: Math.ceil(card / npp),
-    npp,
-    dialogOpen,
-    fullscreen,
-    cogData,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (n: number) => {
-    dispatch(setLayout({ pageNum: n }));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Pagination);
+export default Pagination;

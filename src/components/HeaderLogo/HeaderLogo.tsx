@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -10,19 +10,17 @@ import DialogActions from '@mui/material/DialogActions';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
-import { createSelector } from 'reselect';
 import { fullscreenSelector } from '../../selectors';
 import { windowHeightSelector } from '../../selectors/ui';
-import type { RootState } from '../../store';
 import styles from './HeaderLogo.module.scss';
 
 interface HeaderLogoProps {
   setDialogOpen: (arg0: boolean) => void;
-  fullscreen: boolean;
-  windowHeight: number;
 }
 
-const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, windowHeight }) => {
+const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen }) => {
+  const windowHeight = useSelector(windowHeightSelector);
+  const fullscreen = useSelector(fullscreenSelector);
   const [tabNumber, setTabNumber] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -297,11 +295,4 @@ const HeaderLogo: React.FC<HeaderLogoProps> = ({ setDialogOpen, fullscreen, wind
   );
 };
 
-const styleSelector = createSelector(windowHeightSelector, fullscreenSelector, (wh, fullscreen) => ({
-  windowHeight: wh,
-  fullscreen,
-}));
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-export default connect(mapStateToProps)(HeaderLogo);
+export default HeaderLogo;
