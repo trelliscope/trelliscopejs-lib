@@ -1,7 +1,5 @@
 import React from 'react';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,42 +10,19 @@ import { setLayout } from '../../slices/layoutSlice';
 import { contentHeightSelector } from '../../selectors/ui';
 import { curDisplayInfoSelector } from '../../selectors';
 import { cogInfoSelector } from '../../selectors/display';
-import { RootState } from '../../store';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './SidebarViews.module.scss';
 
-interface SidebarViewsProps {
-  height: number;
-  views: ViewItem[];
-  cinfo: { [key: string]: CogInfo };
-  handleChange: (state: string, cinfo: { [key: string]: CogInfo }) => void;
-}
-const SidebarViews: React.FC<SidebarViewsProps> = ({ height, views, cinfo, handleChange }) => (
-  <div className={styles.sidebarViews} style={{ height }}>
-    <List className={styles.sidebarViewsList}>
-      {views.map((value) => (
-        <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
-          <ListItemText primary={value.name} />
-        </ListItem>
-      ))}
-    </List>
-  </div>
-);
+const SidebarViews: React.FC = () => {
+  const dispatch = useDispatch();
+  const [sidebarHeaderHeight] = getCustomProperties(['sidebarHeaderHeight']) as number[];
+  const ch = useSelector(contentHeightSelector);
+  const height = ch - sidebarHeaderHeight;
+  const cdi = useSelector(curDisplayInfoSelector);
+  const { views } = cdi.info;
+  const cinfo = useSelector(cogInfoSelector);
 
-const [sidebarWidth, sidebarHeaderHeight] = getCustomProperties(['--sidebar-width', 'sidebarHeaderHeight']) as number[];
-
-// ------ redux container ------
-const stateSelector = createSelector(contentHeightSelector, curDisplayInfoSelector, cogInfoSelector, (ch, cdi, cinfo) => ({
-  width: sidebarWidth,
-  height: ch - sidebarHeaderHeight,
-  views: cdi.info.views,
-  cinfo,
-}));
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (value: string, cinfo: { [key: string]: CogInfo }) => {
+  const handleChange = (value: string, cogInfo: { [key: string]: CogInfo }) => {
     const hashItems = {} as HashItem;
     value
       .replace('#', '')
@@ -107,13 +82,13 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
         const fltState = {
           name: fltItems.var,
           type: fltItems.type,
-          varType: cinfo[fltItems.var].type,
+          varType: cogInfo[fltItems.var].type,
         } as Filter<FilterCat | FilterRange>;
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
           fltState.value = fltItems.val.split('#').map(decodeURIComponent);
         } else if (fltItems.type === 'regex') {
-          const { levels } = cinfo[fltItems.var];
+          const { levels } = cogInfo[fltItems.var];
           const vals = [] as string[];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
           levels.forEach((d) => {
@@ -144,7 +119,19 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
     if (hashItems.fv) {
       hashItems.fv.split(',').map((el) => dispatch(setFilterView({ name: el, which: 'add' })));
     }
-  },
-});
+  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarViews);
+  return (
+    <div className={styles.sidebarViews} style={{ height }}>
+      <List className={styles.sidebarViewsList}>
+        {views.map((value) => (
+          <ListItem key={value.name} dense button onClick={() => handleChange(value.state, cinfo)}>
+            <ListItemText primary={value.name} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+};
+
+export default SidebarViews;
