@@ -126,17 +126,17 @@ const Content: React.FC = () => {
   const displayInfo = di;
   const relDispPositions = rdp;
 
-  const removeLabel = (name: string, labelsArray: string[]) => {
-    const idx = labelsArray.indexOf(name);
+  const removeLabel = (name: string) => {
+    const idx = labels.indexOf(name);
     if (idx > -1) {
-      const newLabels = Object.assign([], labelsArray);
+      const newLabels = Object.assign([], labels);
       newLabels.splice(idx, 1);
       dispatch(setLabels(newLabels));
     }
   };
 
-  const setPageNum = (dir: 'right' | 'left', curPageNum: number, totPagesNum: number) => {
-    let n = curPageNum;
+  const setPageNum = (dir: 'right' | 'left') => {
+    let n = curPage;
     if (dir === 'right') {
       n -= 1;
       if (n < 1) {
@@ -144,7 +144,7 @@ const Content: React.FC = () => {
       }
     } else {
       n += 1;
-      if (n > totPagesNum) {
+      if (n > totPages) {
         n -= 1;
       }
     }
@@ -202,10 +202,7 @@ const Content: React.FC = () => {
     panelMatrix.sort((a, b) => (a.key > b.key ? 1 : b.key > a.key ? -1 : 0));
 
     ret = (
-      <Swipeable
-        onSwipedRight={() => setPageNum('right', curPage, totPages)}
-        onSwipedLeft={() => setPageNum('left', curPage, totPages)}
-      >
+      <Swipeable onSwipedRight={() => setPageNum('right')} onSwipedLeft={() => setPageNum('left')}>
         <div className={styles.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
