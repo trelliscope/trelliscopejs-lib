@@ -24,6 +24,7 @@ export const displayLoadedSelector = (state: RootState) => {
   }
   return false;
 };
+export const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
 
 export const cogInterfaceSelector = (state: RootState) => state.cogDataMutable.iface;
 export const cogDataSelector = (state: RootState) => state.cogDataMutable;
@@ -58,4 +59,15 @@ export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   return 0;
 });
 
-export const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
+export const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
+  const res: { [key: string]: string; label: string; value: string; index: string } = {
+    label: '',
+    value: '',
+    index: '',
+  };
+  const ciKeys = Object.keys(cdi.info.cogInfo);
+  for (let i = 0; i < ciKeys.length; i += 1) {
+    res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
+  }
+  return res;
+});

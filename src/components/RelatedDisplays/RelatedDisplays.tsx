@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -22,7 +20,6 @@ import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
 import { selectedDisplaySelector, displayListSelector, relDispPositionsSelector } from '../../selectors';
-import type { RootState } from '../../store';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import getCustomProperties from '../../getCustomProperties';
@@ -33,40 +30,55 @@ const previewHeight = 400;
 const fixCSS = (value: string) => parseInt(value.replace('px', ''), 10);
 
 interface RelatedDisplaysProps {
-  displayList: DisplaySelect;
-  relatedDisplayGroups: DisplayGroup;
   setDialogOpen: (isOpen: boolean) => void;
-  active: boolean;
-  selectedRelDisps: number[];
-  contentHeight: number;
-  contentWidth: number;
-  relDispPositions: RelDispPositionsState[];
-  handleResize: (
+}
+
+const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
+  const [open, setOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [headerHeight] = getCustomProperties(['--header-height']) as number[];
+
+  const dispatch = useDispatch();
+  const displayList = useSelector(displayListSelector);
+  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
+  const contentHeight = useSelector(contentHeightSelector);
+  const contentWidth = useSelector(contentWidthSelector);
+  const selectedRelDisps = useSelector(selectedRelDispsSelector);
+  const relDispPositions = useSelector(relDispPositionsSelector);
+  const propStyles = {
+    button: {
+      left: headerHeight * (selectedDisplay.name === '' || Object.keys(relatedDisplayGroups).length === 0 ? 0 : 2) - 1,
+      background: selectedRelDisps.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
+      color: selectedRelDisps.length === 0 ? '#9ba3af' : 'white',
+    },
+  };
+  const active = Object.keys(relatedDisplayGroups).length > 0;
+
+  const handleResize = (
     pos: RelDispPositionsState,
-    relDispPositions: RelDispPositionsState[],
     x: number,
     y: number,
     width: number,
     height: number,
     prvwHeight: number,
-  ) => void;
-  propStyles: { [key: string]: CSSProperties };
-}
+  ) => {
+    const names = relDispPositions.map((d) => d.name);
+    const idx = names.indexOf(pos.name);
+    const newPos = { ...pos };
+    newPos.left = x / prvwHeight;
+    newPos.top = y / prvwHeight;
 
-const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
-  displayList,
-  relatedDisplayGroups,
-  setDialogOpen,
-  active,
-  selectedRelDisps,
-  contentHeight,
-  contentWidth,
-  relDispPositions,
-  handleResize,
-  propStyles,
-}) => {
-  const [open, setOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
+    if (width) {
+      newPos.width = width / prvwHeight;
+    }
+    if (height) {
+      newPos.height = height / prvwHeight;
+    }
+    const newPositions = { ...relDispPositions };
+    newPositions[idx] = newPos;
+    dispatch(setRelDispPositions(newPositions));
+  };
 
   const handleOpen = () => {
     setDialogOpen(true);
@@ -115,18 +127,10 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
           bounds="parent"
           lockAspectRatio
           onDragStop={(e, a) => {
-            handleResize(d, relDispPositions, a.x, a.y, previewHeight * d.width, previewHeight * d.height, previewHeight);
+            handleResize(d, a.x, a.y, previewHeight * d.width, previewHeight * d.height, previewHeight);
           }}
           onResizeStop={(e, direction, ref: HTMLElement, delta, position: Position) => {
-            handleResize(
-              d,
-              relDispPositions,
-              position.x,
-              position.y,
-              fixCSS(ref.style.width),
-              fixCSS(ref.style.height),
-              previewHeight,
-            );
+            handleResize(d, position.x, position.y, fixCSS(ref.style.width), fixCSS(ref.style.height), previewHeight);
           }}
         >
           <div className={styles.relatedDisplaysTrHandle} />
@@ -197,64 +201,4 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({
   );
 };
 
-const [headerHeight] = getCustomProperties(['--header-height']) as number[];
-
-// ------ redux container ------
-
-const styleSelector = createSelector(
-  displayListSelector,
-  selectedDisplaySelector,
-  relatedDisplayGroupsSelector,
-  contentHeightSelector,
-  contentWidthSelector,
-  selectedRelDispsSelector,
-  relDispPositionsSelector,
-  (dl, sd, rdg, ch, cw, srd, rdp) => ({
-    propStyles: {
-      button: {
-        left: headerHeight * (sd.name === '' || Object.keys(rdg).length === 0 ? 0 : 2) - 1,
-        background: srd.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
-        color: srd.length === 0 ? '#9ba3af' : 'white',
-      },
-    },
-    displayList: dl,
-    relatedDisplayGroups: rdg,
-    active: Object.keys(rdg).length > 0,
-    contentHeight: ch,
-    contentWidth: cw,
-    selectedRelDisps: srd,
-    relDispPositions: rdp,
-  }),
-);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleResize: (
-    pos: RelDispPositionsState,
-    relDispPositions: RelDispPositionsState[],
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    prvwHeight: number,
-  ) => {
-    const names = relDispPositions.map((d) => d.name);
-    const idx = names.indexOf(pos.name);
-    const newPos = { ...pos };
-    newPos.left = x / prvwHeight;
-    newPos.top = y / prvwHeight;
-
-    if (width) {
-      newPos.width = width / prvwHeight;
-    }
-    if (height) {
-      newPos.height = height / prvwHeight;
-    }
-    const newPositions = { ...relDispPositions };
-    newPositions[idx] = newPos;
-    dispatch(setRelDispPositions(newPositions));
-  },
-});
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-export default connect(mapStateToProps, mapDispatchToProps)(RelatedDisplays);
+export default RelatedDisplays;
