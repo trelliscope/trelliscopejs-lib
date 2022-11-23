@@ -20,13 +20,13 @@ const SidebarLabels: React.FC = () => {
   const curDisplayInfo = useSelector(curDisplayInfoSelector);
   const { cogInfo } = curDisplayInfo.info;
 
-  const handleChange = (value: string, labelsArray: string[]) => {
-    const idx = labelsArray.indexOf(value);
-    let newLabels = labelsArray;
+  const handleChange = (value: string) => {
+    const idx = labels.indexOf(value);
+    let newLabels = labels;
     if (idx === -1) {
-      newLabels = [...labelsArray, value];
+      newLabels = [...labels, value];
     } else {
-      newLabels = [...labelsArray.slice(0, idx), ...labelsArray.slice(idx + 1)];
+      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
     }
     dispatch(setLabels(newLabels));
   };
