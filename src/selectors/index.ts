@@ -49,6 +49,8 @@ export const dispInfoDialogSelector = (state: RootState) => state.app.dispInfoDi
 
 export const selectCallbacks = (state: RootState) => state?.app.options?.callbacks;
 
+export const errorSelector = (state: RootState) => state.app.errorMsg;
+
 export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   if (cdi.isLoaded) {
     return cdi.info.height / cdi.info.width;
