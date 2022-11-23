@@ -126,10 +126,10 @@ const Content: React.FC = () => {
   const displayInfo = di;
   const relDispPositions = rdp;
 
-  const removeLabel = (name: string) => {
-    const idx = labels.indexOf(name);
+  const removeLabel = (name: string, labelsArray: string[]) => {
+    const idx = labelsArray.indexOf(name);
     if (idx > -1) {
-      const newLabels = Object.assign([], labels);
+      const newLabels = Object.assign([], labelsArray);
       newLabels.splice(idx, 1);
       dispatch(setLabels(newLabels));
     }
@@ -202,7 +202,10 @@ const Content: React.FC = () => {
     panelMatrix.sort((a, b) => (a.key > b.key ? 1 : b.key > a.key ? -1 : 0));
 
     ret = (
-      <Swipeable onSwipedRight={() => setPageNum('right')} onSwipedLeft={() => setPageNum('left')}>
+      <Swipeable
+        onSwipedRight={() => setPageNum('right')}
+        onSwipedLeft={() => setPageNum('left')}
+      >
         <div className={styles.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
