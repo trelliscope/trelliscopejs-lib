@@ -24,6 +24,7 @@ export const displayLoadedSelector = (state: RootState) => {
   }
   return false;
 };
+export const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
 
 export const cogInterfaceSelector = (state: RootState) => state.cogDataMutable.iface;
 export const cogDataSelector = (state: RootState) => state.cogDataMutable;
