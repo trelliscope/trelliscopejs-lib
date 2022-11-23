@@ -55,3 +55,5 @@ export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   }
   return 0;
 });
+
+export const selectedRelDispsSelector = (state: RootState) => state.selectedRelDisps;
