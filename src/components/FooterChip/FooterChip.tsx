@@ -1,6 +1,5 @@
 import React from 'react';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLayout } from '../../slices/layoutSlice';
@@ -12,10 +11,22 @@ interface FooterChipProps {
   text: string;
   index: number;
   type: string;
-  handleStateClose: (arg0: { type: string; index: number; label: string }) => void;
 }
 
-const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleStateClose }) => {
+const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type }) => {
+  const dispatch = useDispatch();
+
+  const handleStateClose = (x: { type: string; index: number; label: string }) => {
+    if (x.type === 'sort') {
+      dispatch(setSort(x.index));
+      dispatch(setLayout({ pageNum: 1 }));
+    } else if (x.type === 'filter') {
+      dispatch(setFilterView({ name: x.label, which: 'remove' }));
+      dispatch(setFilter(x.label));
+      dispatch(setLayout({ pageNum: 1 }));
+    }
+  };
+
   let iconTag;
   if (icon !== '') {
     iconTag = <i className={`${icon} ${styles.footerChipIndIcon}`} />;
@@ -50,21 +61,4 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
   );
 };
 
-// ------ redux container ------
-
-const mapStateToProps = () => ({});
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleStateClose: (x: { type: string; index: number; label: string }) => {
-    if (x.type === 'sort') {
-      dispatch(setSort(x.index));
-      dispatch(setLayout({ pageNum: 1 }));
-    } else if (x.type === 'filter') {
-      dispatch(setFilterView({ name: x.label, which: 'remove' }));
-      dispatch(setFilter(x.label));
-      dispatch(setLayout({ pageNum: 1 }));
-    }
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FooterChip);
+export default FooterChip;
