@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useSelector } from 'react-redux';
 import { Grid } from 'react-virtualized';
 import type { GridCellProps } from 'react-virtualized';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import FilterCatPlotBar from '../FilterCatPlotBar';
-import type { RootState } from '../../store';
 
 interface FilterCatPlotProps {
   height: number;
@@ -16,7 +14,6 @@ interface FilterCatPlotProps {
   filterState: Filter<FilterCat>;
   sortOrder: string;
   handleChange: (state: Filter<FilterCat>) => void;
-  filterCardinality: number;
 }
 
 const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
@@ -28,8 +25,8 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   filterState,
   sortOrder,
   handleChange,
-  filterCardinality,
 }) => {
+  const filterCardinality = useSelector(filterCardinalitySelector);
   const handleSelect = (val: string, active: boolean) => {
     const selectArr = Object.assign([], filterState.value) as string[];
     if (active) {
@@ -132,12 +129,4 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const stateSelector = createSelector(filterCardinalitySelector, (filterCardinality) => ({
-  filterCardinality,
-}));
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-export default connect(mapStateToProps)(FilterCatPlot);
+export default FilterCatPlot;
