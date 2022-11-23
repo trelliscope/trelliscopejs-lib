@@ -1,9 +1,6 @@
 import React from 'react';
-import type { CSSProperties } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import type { Action, Dispatch } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
 import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../../constants';
@@ -52,18 +49,26 @@ const buttons: Button[] = [
   },
 ];
 
-interface SideButtonsProps {
-  fullscreen: boolean;
-  active: SidebarType;
-  hasViews: boolean;
-  dialogOpen: boolean;
-  setActive: (active: SidebarType) => void;
-  inlineStyles: {
-    [key: string]: CSSProperties;
-  };
-}
+const SideButtons: React.FC = () => {
+  const dispatch = useDispatch();
+  const [headerHeight] = getCustomProperties(['--header-height']) as number[];
+  const ch = useSelector(contentHeightSelector);
+  const active = useSelector(sidebarActiveSelector);
+  const dialogOpen = useSelector(dialogOpenSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const cdi = useSelector(curDisplayInfoSelector);
+  const hasViews = (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false;
 
-const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews, dialogOpen, setActive, inlineStyles }) => {
+  const inlineStyles = {
+    sideButtonsContainer: {
+      height: ch + headerHeight,
+    },
+  };
+
+  const handleSetActive = (n: SidebarType) => {
+    dispatch(setActiveSidebar(n));
+  };
+
   const handleKey = (e: KeyboardEvent) => {
     if (e.key === 'v' && !hasViews) {
       return;
@@ -72,7 +77,7 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
     if ((e?.target as Element)?.nodeName === 'INPUT' || dialogOpen) {
       e.stopPropagation();
     } else if (e.key === 'Escape' || e.key === 'Enter') {
-      setActive('');
+      handleSetActive('');
     } else {
       const which = buttons.reduce<SidebarType[]>((prev, current) => {
         if (current.key === e.key) {
@@ -82,7 +87,7 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
       }, []);
 
       if (which.length > 0) {
-        setActive(which[0]);
+        handleSetActive(which[0]);
       }
     }
   };
@@ -105,7 +110,7 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
             label={button.label}
             title={button.title}
             active={active === button.title}
-            onClick={() => setActive(button.title)}
+            onClick={() => handleSetActive(button.title)}
           />
         );
       })}
@@ -113,34 +118,4 @@ const SideButtons: React.FC<SideButtonsProps> = ({ fullscreen, active, hasViews,
   );
 };
 
-const [headerHeight] = getCustomProperties(['--header-height']) as number[];
-
-// ------ redux container ------
-
-const stateSelector = createSelector(
-  contentHeightSelector,
-  sidebarActiveSelector,
-  dialogOpenSelector,
-  fullscreenSelector,
-  curDisplayInfoSelector,
-  (ch, active, dialogOpen, fullscreen, cdi) => ({
-    inlineStyles: {
-      sideButtonsContainer: {
-        height: ch + headerHeight,
-      },
-    },
-    width: headerHeight,
-    active,
-    dialogOpen,
-    fullscreen,
-    hasViews: (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false,
-  }),
-);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  setActive: (n: SidebarType) => {
-    dispatch(setActiveSidebar(n));
-  },
-});
-
-export default connect(stateSelector, mapDispatchToProps)(SideButtons);
+export default SideButtons;
