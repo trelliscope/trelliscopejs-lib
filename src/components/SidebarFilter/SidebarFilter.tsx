@@ -1,11 +1,8 @@
 import React from 'react';
-import type { CSSProperties } from 'react';
 import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import intersection from 'lodash.intersection';
-import type { Action, Dispatch } from 'redux';
-import { createSelector } from 'reselect';
 import FilterCat from '../FilterCat';
 import FilterNum from '../FilterNum';
 import { cogFiltDistSelector } from '../../selectors/cogData';
@@ -15,38 +12,65 @@ import { curDisplayInfoSelector, filterStateSelector, filterViewSelector, labels
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './SidebarFilter.module.scss';
 
-interface SidebarFilterProps {
-  inlineStyles: { [key: string]: CSSProperties };
-  catHeight: number;
-  filter: { [key: string]: Filter<FilterCat | FilterRange> };
-  filterView: FilterView;
-  handleFilterChange: (filter: Filter<FilterCat | FilterRange> | string) => void;
-  handleFilterSortChange: (filter: Filter<FilterCat>) => void;
-  handleViewChange: (x: string, which: 'add' | 'remove', labels: string[]) => void;
-  labels: string[];
-  cogInfo: { [key: string]: CogInfo };
-  curDisplayInfo: DisplayInfoState;
-  filtDist: { [key: string]: CondDistFilterCat | CondDistFilterNum };
-  colSplit: { cutoff: number | null; heights: [number, number] };
-}
+const SidebarFilter: React.FC = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(filterStateSelector);
+  const filterView = useSelector(filterViewSelector);
+  const cogInfo = useSelector(cogInfoSelector);
+  const sidebarHeight = useSelector(sidebarHeightSelector);
+  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const filtDist = useSelector(cogFiltDistSelector);
+  const labels = useSelector(labelsSelector);
+  const colSplit = useSelector(filterColSplitSelector);
+  const catHeight = 125;
 
-const SidebarFilter: React.FC<SidebarFilterProps> = ({
-  inlineStyles,
-  catHeight,
-  filter,
-  filterView,
-  cogInfo,
-  curDisplayInfo,
-  filtDist,
-  colSplit,
-  handleViewChange,
-  handleFilterChange,
-  handleFilterSortChange,
-  labels,
-}) => {
+  const inlineStyles = {
+    col1: {
+      height: sidebarHeight,
+    },
+    col2: {
+      height: sidebarHeight,
+      display: colSplit.cutoff === null ? 'none' : 'inline',
+    },
+    notUsedContainer: {
+      height: sidebarHeight - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1],
+    },
+    allContainer: {
+      height: sidebarHeight,
+    },
+  };
+
+  const handleViewChange = (x: string, which: 'add' | 'remove') => {
+    // if a filter is being added to the view, add a panel label for the variable
+    if (which === 'add') {
+      if (labels.indexOf(x) < 0) {
+        const newLabels = Object.assign([], labels);
+        newLabels.push(x);
+        dispatch(setLabels(newLabels));
+      }
+    }
+    dispatch(setFilterView({ name: x, which }));
+  };
+
+  const handleFilterChange = (x: Filter<FilterCat | FilterRange> | string) => {
+    if (typeof x === 'string' || x instanceof String) {
+      dispatch(setFilter(x as string));
+    } else {
+      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
+      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
+      dispatch(setFilter(obj));
+    }
+    dispatch(setLayout({ pageNum: 1 }));
+  };
+
+  const handleFilterSortChange = (x: Filter<FilterCat>) => {
+    const obj: { [key: string]: Filter<FilterCat> } = {};
+    obj[x.name] = x;
+    dispatch(setFilter(obj));
+  };
+
   let content = <div />;
   const displId = curDisplayInfo.info.name;
   const { cogGroups } = curDisplayInfo.info;
@@ -136,7 +160,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                   type="button"
                   key={`${d}_${displId}-close-icon`}
                   className={`${styles.headerIcon} ${styles.headerClose}`}
-                  onMouseDown={() => handleViewChange(d, 'remove', [])}
+                  onMouseDown={() => handleViewChange(d, 'remove')}
                 >
                   <i className="icon-times-circle" />
                 </button>
@@ -206,7 +230,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
                               [styles.variableActive]: filter[d] && filter[d].value !== undefined,
                             })}
                             key={`${d}_${displId}_button_${inames.length}`}
-                            onClick={() => handleViewChange(d, 'add', labels)}
+                            onClick={() => handleViewChange(d, 'add')}
                           >
                             {d}
                           </button>
@@ -239,71 +263,4 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
   return content;
 };
 
-const stateSelector = createSelector(
-  filterStateSelector,
-  filterViewSelector,
-  cogInfoSelector,
-  sidebarHeightSelector,
-  curDisplayInfoSelector,
-  cogFiltDistSelector,
-  labelsSelector,
-  filterColSplitSelector,
-  (filter, filterView, cogInfo, sh, curDisplayInfo, filtDist, labels, colSplit) => ({
-    inlineStyles: {
-      col1: {
-        height: sh,
-      },
-      col2: {
-        height: sh,
-        display: colSplit.cutoff === null ? 'none' : 'inline',
-      },
-      notUsedContainer: {
-        height: sh - 35 - colSplit.heights[colSplit.cutoff === null ? 0 : 1],
-      },
-      allContainer: {
-        height: sh,
-      },
-    },
-    catHeight: 125,
-    filter,
-    filterView,
-    cogInfo,
-    curDisplayInfo,
-    filtDist,
-    labels,
-    colSplit,
-  }),
-);
-
-const mapStateToProps = (state: never) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleViewChange: (x: string, which: 'add' | 'remove', labels: string[]) => {
-    // if a filter is being added to the view, add a panel label for the variable
-    if (which === 'add') {
-      if (labels.indexOf(x) < 0) {
-        const newLabels = Object.assign([], labels);
-        newLabels.push(x);
-        dispatch(setLabels(newLabels));
-      }
-    }
-    dispatch(setFilterView({ name: x, which }));
-  },
-  handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => {
-    if (typeof x === 'string' || x instanceof String) {
-      dispatch(setFilter(x as string));
-    } else {
-      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
-      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
-      dispatch(setFilter(obj));
-    }
-    dispatch(setLayout({ pageNum: 1 }));
-  },
-  handleFilterSortChange: (x: Filter<FilterCat>) => {
-    const obj: { [key: string]: Filter<FilterCat> } = {};
-    obj[x.name] = x;
-    dispatch(setFilter(obj));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarFilter);
+export default SidebarFilter;
