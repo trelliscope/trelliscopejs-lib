@@ -159,7 +159,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
                 }}
               >
                 <img
-                  src={`${cfg.cog_server.info.base}/${displayItems[i]?.group}/${displayItems[i].name}/thumb.png`}
+                  src={`${cfg.cog_server.info.base}/displays/${displayItems[i].name}/thumb.png`}
                   alt={displayItems[i].name}
                   className={styles.displayListImg}
                   key={`img${i}`}
@@ -180,12 +180,12 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
                   title={<div className={styles.displayListGridTitle}>{displayItems[i].name.replace(/_/g, ' ')}</div>}
                   subtitle={
                     <span style={{ fontSize: 13 }}>
-                      {displayItems[i].desc}
+                      {displayItems[i].description}
                       <br />
                       <span className={styles.displayListGridSubtitle}>
-                        {displayItems[i].n}
+                        {/* {displayItems[i].n} */}
                         &nbsp;panels,
-                        {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)}
+                        {/* {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)} */}
                       </span>
                     </span>
                   }

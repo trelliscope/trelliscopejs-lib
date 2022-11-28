@@ -21,7 +21,6 @@ import { displayGroupsSelector } from '../../selectors/display';
 import {
   appIdSelector,
   configSelector,
-  displayListSelector,
   fullscreenSelector,
   selectedDisplaySelector,
   dispSelectDialogSelector,
@@ -39,7 +38,6 @@ interface DisplaySelectProps {
 const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const dispatch = useDispatch();
   const selectedDisplay = useSelector(selectedDisplaySelector);
-  const displayList = useSelector(displayListSelector);
   const displayGroups = useSelector(displayGroupsSelector);
   const appId = useSelector(appIdSelector);
   const cfg = useSelector(configSelector);
