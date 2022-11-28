@@ -165,7 +165,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
         <DialogTitle id="dialog-reldisp-title">View Related Displays Simultaneously</DialogTitle>
         <DialogContent>
           <div>
-            <Stepper alternativeLabel nonLinear activeStep={activeStep}>
+            <Stepper className={styles.relatedDisplaysStepper} alternativeLabel nonLinear activeStep={activeStep}>
               <Step>
                 <StepButton onClick={() => setStep(0)}>
                   {`Select related displays (${selectedRelDisps.length} selected)`}
