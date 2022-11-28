@@ -42,6 +42,8 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
     // dispatch(fetchDisplayList(config, id, singlePageApp));
   }, []);
 
+  console.log('App render');
+
   return (
     <>
       <Header />

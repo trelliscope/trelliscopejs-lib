@@ -6,12 +6,14 @@ import { hashMiddleware } from './middleware/hash';
 import { configAPI } from './slices/configAPI';
 import { displayListAPI } from './slices/displayListAPI';
 import reducer from './reducers';
+import { metaDataAPI } from './slices/metaDataAPI';
 
 const store = configureStore({
   reducer,
   middleware: [
     configAPI.middleware,
     displayListAPI.middleware,
+    metaDataAPI.middleware,
     thunkMiddleware,
     crossfilterMiddleware,
     callbackMiddleware,

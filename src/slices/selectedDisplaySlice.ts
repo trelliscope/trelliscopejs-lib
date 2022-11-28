@@ -12,9 +12,7 @@ export const selectedDisplaySlice = createSlice({
   name: 'selectedDisplay',
   initialState,
   reducers: {
-    setSelectedDisplay: (state, action: PayloadAction<SelectedDisplayState>) => {
-      state = action.payload;
-    },
+    setSelectedDisplay: (state, action: PayloadAction<SelectedDisplayState>) => action.payload,
   },
 });
 

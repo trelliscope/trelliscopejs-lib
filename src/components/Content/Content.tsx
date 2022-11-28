@@ -22,6 +22,7 @@ import { cogInfoSelector } from '../../selectors/display';
 import { currentCogDataSelector, filterCardinalitySelector } from '../../selectors/cogData';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './Content.module.scss';
+import { useMetaData } from '../../slices/metaDataAPI';
 
 const Content: React.FC = () => {
   const dispatch = useDispatch();
@@ -153,6 +154,12 @@ const Content: React.FC = () => {
 
   let ret = <div />;
 
+  console.log(ccd);
+
+  const { data: metaData } = useMetaData();
+
+  console.log(metaData);
+
   let names = [curDisplayInfo.info.name];
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
@@ -202,10 +209,7 @@ const Content: React.FC = () => {
     panelMatrix.sort((a, b) => (a.key > b.key ? 1 : b.key > a.key ? -1 : 0));
 
     ret = (
-      <Swipeable
-        onSwipedRight={() => setPageNum('right')}
-        onSwipedLeft={() => setPageNum('left')}
-      >
+      <Swipeable onSwipedRight={() => setPageNum('right')} onSwipedLeft={() => setPageNum('left')}>
         <div className={styles.content} style={contentStyle}>
           {panelMatrix.map((el) => (
             <Panel
