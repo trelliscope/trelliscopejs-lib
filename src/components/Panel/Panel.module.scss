@@ -65,6 +65,11 @@
     position: relative;
     cursor: default;
     display: flex;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
   }
 
   &Close {
@@ -79,6 +84,12 @@
     margin: 0;
     opacity: 0.5;
     display: none;
+
+    svg {
+      margin-top: 1px;
+      width: 12px;
+      height: 12px;
+    }
   }
 
   &P {

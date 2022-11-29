@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
+import CancelIcon from '@mui/icons-material/Cancel';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { useDispatch, useSelector } from 'react-redux';
 import intersection from 'lodash.intersection';
 import FilterCat from '../FilterCat';
@@ -162,7 +164,7 @@ const SidebarFilter: React.FC = () => {
                   className={`${styles.headerIcon} ${styles.headerClose}`}
                   onMouseDown={() => handleViewChange(d, 'remove')}
                 >
-                  <i className="icon-times-circle" />
+                  <CancelIcon />
                 </button>
                 <button
                   type="button"
@@ -174,7 +176,7 @@ const SidebarFilter: React.FC = () => {
                   })}
                   onMouseDown={() => handleFilterChange(filterState.name)}
                 >
-                  <i className="icon-undo" />
+                  <ReplayIcon />
                 </button>
               </div>
               {itemContent}

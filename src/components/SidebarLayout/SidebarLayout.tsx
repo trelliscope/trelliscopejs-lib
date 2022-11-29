@@ -1,4 +1,6 @@
 import React from 'react';
+import TableRowsRoundedIcon from '@mui/icons-material/TableRowsRounded';
+import ViewWeekRoundedIcon from '@mui/icons-material/ViewWeekRounded';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { layoutSelector, selectedRelDispsSelector } from '../../selectors';
@@ -18,7 +20,7 @@ const SidebarLayout: React.FC = () => {
   const resetRelDisps = () => {
     dispatch(setSelectedRelDisps([]));
     dispatch(setRelDispPositions([]));
-  }
+  };
 
   const handleLayoutChange = (value: string, isRow: boolean) => {
     const num = parseInt(value || '1', 10);
@@ -88,10 +90,10 @@ const SidebarLayout: React.FC = () => {
                 value="row"
                 control={<Radio />}
                 label={
-                  <span className={styles.inputLabelSpan}>
-                    By row
-                    <i className={`icon-byrow ${styles.inputIcon}`} />
-                  </span>
+                  <div className={styles.inputLabelSpan}>
+                    By Row
+                    <TableRowsRoundedIcon />
+                  </div>
                 }
                 className={styles.inputRadio}
               />
@@ -101,7 +103,7 @@ const SidebarLayout: React.FC = () => {
                 label={
                   <span className={styles.inputLabelSpan}>
                     By column
-                    <i className={`icon-bycol ${styles.inputIcon}`} />
+                    <ViewWeekRoundedIcon />
                   </span>
                 }
                 className={styles.inputRadio}

@@ -21,8 +21,8 @@
     }
 
     &Icon {
-      padding-left: var(--padding-px);
-      line-height: var(--relatedDisplays-buttonIcon-line-height);
+      display: flex;
+      justify-content: center;
     }
 
     &:hover {
