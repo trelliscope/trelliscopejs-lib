@@ -4,7 +4,7 @@ import DisplayInfo from '../DisplayInfo';
 import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
-import HeaderLogo from '../HeaderLogo';
+import HelpInfo from '../HelpInfo';
 import { fetchDisplay } from '../../actions';
 import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
         </div>
         <div className={styles.headerPaginationContainer}>{pagination}</div>
       </div>
-      <HeaderLogo setDialogOpen={handleDialogOpen} />
+      <HelpInfo setDialogOpen={handleDialogOpen} />
     </div>
   );
 };

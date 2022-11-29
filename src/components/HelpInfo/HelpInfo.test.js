@@ -3,11 +3,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import HeaderLogo from './HeaderLogo';
+import HelpInfo from './HelpInfo';
 
 const mockStore = configureStore([]);
 
-describe('HeaderLogo component', () => {
+describe('HelpInfo component', () => {
   let store;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('HeaderLogo component', () => {
   test('renders logo', async () => {
     render(
       <Provider store={store}>
-        <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+        <HelpInfo fullscreen={false} setDialogOpen={() => {}} />
       </Provider>,
     );
 
@@ -32,7 +32,7 @@ describe('HeaderLogo component', () => {
   // test('dialog opens on click', async () => {
   //   render(
   //     <Provider store={store}>
-  //       <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+  //       <HelpInfo fullscreen={false} setDialogOpen={() => {}} />
   //     </Provider>,
   //   );
 
@@ -44,7 +44,7 @@ describe('HeaderLogo component', () => {
   // test('shortcuts tab opens on click', async () => {
   //   render(
   //     <Provider store={store}>
-  //       <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+  //       <HelpInfo fullscreen={false} setDialogOpen={() => {}} />
   //     </Provider>,
   //   );
 
@@ -57,7 +57,7 @@ describe('HeaderLogo component', () => {
   // test('credits tab opens on click', async () => {
   //   render(
   //     <Provider store={store}>
-  //       <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+  //       <HelpInfo fullscreen={false} setDialogOpen={() => {}} />
   //     </Provider>,
   //   );
 
@@ -70,7 +70,7 @@ describe('HeaderLogo component', () => {
   // test('dialog closes on close', async () => {
   //   render(
   //     <Provider store={store}>
-  //       <HeaderLogo fullscreen={false} setDialogOpen={() => {}} />
+  //       <HelpInfo fullscreen={false} setDialogOpen={() => {}} />
   //     </Provider>,
   //   );
 
