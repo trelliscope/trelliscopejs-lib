@@ -7,12 +7,14 @@ import { configAPI } from './slices/configAPI';
 import { displayListAPI } from './slices/displayListAPI';
 import reducer from './reducers';
 import { metaDataAPI } from './slices/metaDataAPI';
+import { displayInfoAPI } from './slices/displayInfoAPI';
 
 const store = configureStore({
   reducer,
   middleware: [
     configAPI.middleware,
     displayListAPI.middleware,
+    displayInfoAPI.middleware,
     metaDataAPI.middleware,
     thunkMiddleware,
     crossfilterMiddleware,

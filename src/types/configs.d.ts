@@ -2,9 +2,9 @@
 /* meta                                                   */
 /* ------------------------------------------------------ */
 
-export type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph';
-export type GraphDirection = 'none' | 'from' | 'to';
-export type CurrencyCode =
+type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph';
+type GraphDirection = 'none' | 'from' | 'to';
+type CurrencyCode =
   | 'AED'
   | 'AFN'
   | 'ALL'
@@ -187,7 +187,7 @@ export type CurrencyCode =
   | 'ZMW'
   | 'ZWL';
 
-export interface IMeta {
+interface IMeta {
   varname: string;
   type: MetaType;
   label: string;
@@ -196,34 +196,34 @@ export interface IMeta {
   sortable: boolean;
 }
 
-export interface INumberMeta extends IMeta {
+interface INumberMeta extends IMeta {
   digits: number | null; // should be integer
   locale: boolean;
 }
 
-export interface ICurrencyMeta extends IMeta {
+interface ICurrencyMeta extends IMeta {
   code: CurrencyCode;
 }
 
-export interface IStringMeta extends IMeta {}
+interface IStringMeta extends IMeta {}
 
-export interface IFactorMeta extends IMeta {
+interface IFactorMeta extends IMeta {
   levels: string[];
 }
 
-export interface IDateMeta extends IMeta {}
+interface IDateMeta extends IMeta {}
 
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
-export interface IDatetimeMeta extends IMeta {
+interface IDatetimeMeta extends IMeta {
   timezone: string;
 }
 
-export interface IHrefMeta extends IMeta {}
+interface IHrefMeta extends IMeta {}
 
-export interface IGeoMeta extends IMeta {}
+interface IGeoMeta extends IMeta {}
 
-export interface IGraphMeta extends IMeta {
+interface IGraphMeta extends IMeta {
   idvarname: string;
   direction: GraphDirection;
 }
@@ -232,95 +232,95 @@ export interface IGraphMeta extends IMeta {
 /* inputs                                                 */
 /* ------------------------------------------------------ */
 
-export type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
+type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
 
-export interface IInput {
+interface IInput {
   name: string;
   label: string;
   active: boolean;
   type: InputType;
 }
 
-export interface IRadioInput extends IInput {
+interface IRadioInput extends IInput {
   options: string[];
 }
 
-export interface ICheckboxInput extends IInput {
+interface ICheckboxInput extends IInput {
   options: string[];
 }
 
-export interface ISelectInput extends IInput {
+interface ISelectInput extends IInput {
   options: string[];
 }
 
-export interface IMultiselectInput extends IInput {
+interface IMultiselectInput extends IInput {
   options: string[];
 }
 
-export interface ITextInput extends IInput {
+interface ITextInput extends IInput {
   width: number;
   height: number;
 }
 
-export interface INumberInput extends IInput {}
+interface INumberInput extends IInput {}
 
 /* ------------------------------------------------------ */
 /* states                                                 */
 /* ------------------------------------------------------ */
 
-export type StateType = 'layout' | 'labels' | 'sort' | 'filter';
-export type LayoutArrangeType = 'rows' | 'cols';
-export type SortDirType = 'asc' | 'desc';
-export type FilterType = 'category' | 'numberrange' | 'daterange' | 'datetimerange';
+type StateType = 'layout' | 'labels' | 'sort' | 'filter';
+type LayoutArrangeType = 'rows' | 'cols';
+type SortDirType = 'asc' | 'desc';
+type FilterType = 'category' | 'numberrange' | 'daterange' | 'datetimerange';
 
-export interface IDisplayState {
+interface IDisplayState {
   layout: ILayoutState;
   labels: ILabelState;
   sort: ISortState[];
   filter: IFilterState[];
 }
 
-export interface IState {
+interface IState {
   type: StateType;
 }
 
-export interface ILayoutState extends IState {
+interface ILayoutState extends IState {
   nrow: number;
   ncol: number;
   arrange: LayoutArrangeType;
   page: number;
 }
 
-export interface ILabelState extends IState {
+interface ILabelState extends IState {
   varnames: string[];
 }
 
-export interface ISortState extends IState {
+interface ISortState extends IState {
   varname: string;
   dir: SortDirType;
 }
 
-export interface IFilterState extends IState {
+interface IFilterState extends IState {
   varname: string;
   filtertype: FilterType;
 }
 
-export interface ICategoryFilterState extends IFilterState {
+interface ICategoryFilterState extends IFilterState {
   regexp: string | null;
   values: string[];
 }
 
-export interface INumberRangeFilterState extends IFilterState {
+interface INumberRangeFilterState extends IFilterState {
   min: number | null;
   max: number | null;
 }
 
-export interface IDateRangeFilterState extends IFilterState {
+interface IDateRangeFilterState extends IFilterState {
   min: Date | null;
   max: Date | null;
 }
 
-export interface IDatetimeRangeFilterState extends IFilterState {
+interface IDatetimeRangeFilterState extends IFilterState {
   min: Date | null;
   max: Date | null;
 }
@@ -329,7 +329,7 @@ export interface IDatetimeRangeFilterState extends IFilterState {
 /* view                                                   */
 /* ------------------------------------------------------ */
 
-export interface IView {
+interface IView {
   name: string;
   state: IDisplayState;
 }
@@ -338,9 +338,9 @@ export interface IView {
 /* display                                                */
 /* ------------------------------------------------------ */
 
-export type PanelType = 'img' | 'iframe' | 'REST';
+type PanelType = 'img' | 'iframe' | 'REST';
 
-export interface IDisplay {
+interface IDisplay {
   name: string;
   description: string;
   tags: string[];
@@ -356,7 +356,7 @@ export interface IDisplay {
 /* display list                                           */
 /* ------------------------------------------------------ */
 
-export interface IDisplayListItem {
+interface IDisplayListItem {
   name: string;
   description: string;
   tags: string[];
@@ -366,9 +366,9 @@ export interface IDisplayListItem {
 /* config                                                 */
 /* ------------------------------------------------------ */
 
-export type AppDataType = 'jsonp' | 'json';
+type AppDataType = 'jsonp' | 'json';
 
-export interface IConfig {
+interface IConfig {
   name: string;
   data_type: AppDataType;
   id: string;

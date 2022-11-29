@@ -10,49 +10,48 @@ const JSONPBaseQuery =
   (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string }, unknown, unknown> =>
   ({ url, id, dataType, displayName }) =>
     new Promise((resolve) => {
-      const metaDataCallback = `__loadMetaData__${id}`;
+      const displayInfoCallback = `__loadDisplayInfo__${id}`;
       const displayPath = getGroupName(displayName);
 
-      window[metaDataCallback] = (data: { [key: string]: any }) => {
+      window[displayInfoCallback] = (data: IDisplay) => {
         resolve({ data });
       };
 
       if (dataType === 'jsonp') {
         getJSONP({
-          url: `${url}/displays/${displayPath}/metaData.jsonp`,
-          callbackName: metaDataCallback,
+          url: `${url}/displays/${displayPath}/displayInfo.jsonp`,
+          callbackName: displayInfoCallback,
           error: (err) => {
             resolve({ error: err });
           },
         });
       } else {
-        fetch(`${url}/display/${displayPath}/metaData.json`)
+        fetch(`${url}/display/${displayPath}/displayInfo.json`)
           .then((res) => res.json())
-          .then(window[metaDataCallback]);
+          .then(window[displayInfoCallback]);
       }
     });
 
-export const metaDataAPI = createApi({
-  reducerPath: 'metaData',
+export const displayInfoAPI = createApi({
+  reducerPath: 'displayInfo',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getMetaData: builder.query<
-      { [key: string]: unknown },
-      { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }
-    >({
+    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }>({
       query: ({ url, id, dataType, displayName }) => ({ url, id, dataType, displayName }),
     }),
   }),
 });
 
-export const { useGetMetaDataQuery } = metaDataAPI;
+console.log(displayInfoAPI);
 
-export const useMetaData = () => {
+export const { useGetDisplayInfoQuery } = displayInfoAPI;
+
+export const useDisplayInfo = () => {
   const appId = useSelector(selectAppId);
   const basePath = useSelector(selectBasePath);
   const dataType = useDataType();
   const selectedDisplay = useSelectedDisplay();
-  return useGetMetaDataQuery(
+  return useGetDisplayInfoQuery(
     { url: basePath, id: appId, dataType, displayName: selectedDisplay?.name || '' },
     { skip: !dataType || !basePath || !selectedDisplay?.name },
   );

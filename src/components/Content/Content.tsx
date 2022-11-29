@@ -23,6 +23,7 @@ import { currentCogDataSelector, filterCardinalitySelector } from '../../selecto
 import getCustomProperties from '../../getCustomProperties';
 import styles from './Content.module.scss';
 import { useMetaData } from '../../slices/metaDataAPI';
+import { useDisplayInfo, useGetDisplayInfoQuery } from '../../slices/displayInfoAPI';
 
 const Content: React.FC = () => {
   const dispatch = useDispatch();
@@ -157,8 +158,9 @@ const Content: React.FC = () => {
   console.log(ccd);
 
   const { data: metaData } = useMetaData();
+  const { data: displayInfoData } = useDisplayInfo();
 
-  console.log(metaData);
+  console.log(metaData, displayInfoData);
 
   let names = [curDisplayInfo.info.name];
   if (relDispPositions.length > 0) {
@@ -188,7 +190,7 @@ const Content: React.FC = () => {
 
     const panelMatrix = [];
 
-    for (let i = 0; i < ccd.length; i += 1) {
+    for (let i = 0; i < metaData.length; i += 1) {
       let rr;
       let cc;
       if (layout.arrange === 'row') {

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 
 export interface DisplayInfoState {
   isFetching: boolean;
@@ -40,5 +41,7 @@ export const displayInfoSlice = createSlice({
 });
 
 export const { requestDisplay, receiveDisplay } = displayInfoSlice.actions;
+
+export const selectDisplayInfo = (state: RootState) => state.displayInfo;
 
 export default displayInfoSlice.reducer;

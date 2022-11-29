@@ -10,6 +10,7 @@ import FullscreenButton from './components/FullscreenButton';
 import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
+import DataProvider from './components/DataProvider';
 
 import './assets/styles/main.css';
 import './assets/fonts/IcoMoon/style.css';
@@ -45,13 +46,13 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
   console.log('App render');
 
   return (
-    <>
+    <DataProvider client={{}}>
       <Header />
       <Body />
       <Footer />
       <FullscreenButton />
       <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
-    </>
+    </DataProvider>
   );
 };
 
