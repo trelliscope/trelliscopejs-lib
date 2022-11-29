@@ -3,17 +3,15 @@ import styles from './FooterChip.module.scss';
 
 interface FooterChipProps {
   label: string;
-  icon: string;
   text: string;
   index: number;
   type: string;
   handleClose: (x: { label: string; index: number; type: string }) => void;
 }
 
-const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleClose }) => (
+const FooterChip: React.FC<FooterChipProps> = ({ label, text, index, type, handleClose }) => (
   <div className={styles.footerChipWrapper}>
     <span className={styles.footerChipLabel}>
-      {icon !== '' && <i className={`${icon} ${styles.footerChipIndIcon}`} />}
       {label}
       {text !== '' && <span className={styles.footerChipText}>{`(${text})`}</span>}
     </span>

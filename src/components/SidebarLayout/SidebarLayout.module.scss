@@ -29,6 +29,12 @@
   line-height: var(--sidebarLayout-inputLabelSpan-line-height);
   vertical-align: middle;
   font-size: var(--text-xl);
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-left: 5px;
+  }
 }
 
 .inputIcon {

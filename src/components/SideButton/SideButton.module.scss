@@ -14,6 +14,13 @@
   transition: var(--sideButton-transition);
   cursor: pointer;
 
+  &Test {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   &:hover {
     background: var(--blue-200);
   }
@@ -32,18 +39,13 @@
     line-height: var(--sideButton-icon-line-height);
     height: var(--sideButton-icon-height);
     width: var(--sideButton-width);
-    position: absolute;
-    top: 8px;
-    left: 0;
+    padding-bottom: 10px;
   }
 
   &Label {
     font-size: var(--text-2xs);
     line-height: var(--sideButton-label-line-height);
     width: var(--sideButton-width);
-    position: absolute;
-    bottom: 4px;
-    left: 0;
   }
 
   &__bottom {

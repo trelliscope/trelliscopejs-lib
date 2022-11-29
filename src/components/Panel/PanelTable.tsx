@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
+import CancelIcon from '@mui/icons-material/Cancel';
+import LaunchIcon from '@mui/icons-material/Launch';
 import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ReactTooltip from 'react-tooltip';
@@ -100,7 +102,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
               {label.type === 'href' && (
                 <div className={styles.labelInner} style={inlineStyles.labelInner}>
                   <a style={inlineStyles.labelSpan} href={label.value as string} rel="noopener noreferrer" target="_blank">
-                    <i className="icon-open" style={inlineStyles.linkIcon} />
+                    <LaunchIcon />
                   </a>
                 </div>
               )}
@@ -115,7 +117,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       window.location.reload();
                     }}
                   >
-                    <i className="icon-open" style={inlineStyles.linkIcon} />
+                    <LaunchIcon />
                   </a>
                 </div>
               )}
@@ -239,7 +241,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                     style={inlineStyles.labelClose}
                     onClick={() => onLabelRemove(label.name, labelArr)}
                   >
-                    <i className="icon-times-circle" />
+                    <CancelIcon />
                   </button>
                 </div>
               )}

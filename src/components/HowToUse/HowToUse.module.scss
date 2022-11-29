@@ -50,4 +50,14 @@
   &Hi {
     color: var(--red-100);
   }
+
+  &ContentContainer {
+    margin-top: var(--margin-px);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &InlineIcon {
+    vertical-align: middle;
+  }
 }

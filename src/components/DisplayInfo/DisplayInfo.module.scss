@@ -25,8 +25,8 @@
   }
 
   &Icon {
-    padding-left: var(--padding-px);
-    line-height: var(--displayInfo-icon-line-height);
+    display: flex;
+    justify-content: center;
   }
 
   &ModalContainer {

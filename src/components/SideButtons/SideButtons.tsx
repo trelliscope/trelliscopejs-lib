@@ -10,7 +10,6 @@ import getCustomProperties from '../../getCustomProperties';
 import styles from './SideButtons.module.scss';
 
 type Button = {
-  icon: string;
   label: string;
   title: SidebarType;
   key: string;
@@ -18,31 +17,26 @@ type Button = {
 
 const buttons: Button[] = [
   {
-    icon: 'icon-th',
     label: 'Grid',
     title: SB_PANEL_LAYOUT as SidebarType,
     key: 'g',
   },
   {
-    icon: 'icon-list-ul',
     label: 'Labels',
     title: SB_PANEL_LABELS as SidebarType,
     key: 'l',
   },
   {
-    icon: 'icon-filter',
     label: 'Filter',
     title: SB_PANEL_FILTER as SidebarType,
     key: 'f',
   },
   {
-    icon: 'icon-sort-amount-asc',
     label: 'Sort',
     title: SB_PANEL_SORT as SidebarType,
     key: 's',
   },
   {
-    icon: 'icon-views',
     label: 'Views',
     title: SB_VIEWS as SidebarType,
     key: 'v',
@@ -106,7 +100,6 @@ const SideButtons: React.FC = () => {
         return (
           <SideButton
             key={button.label}
-            icon={button.icon}
             label={button.label}
             title={button.title}
             active={active === button.title}

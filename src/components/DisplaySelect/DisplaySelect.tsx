@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDispatch, useSelector } from 'react-redux';
+import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
 import classNames from 'classnames';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -129,7 +130,9 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
             </div>
           </div>
         )}
-        <i className={`icon-folder-open ${styles.displaySelectFolderIcon}`} />
+        <div className={styles.displaySelectFolderIcon}>
+          <InsertChartOutlinedOutlinedIcon />
+        </div>
       </button>
       <Dialog
         open={isOpen}

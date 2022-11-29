@@ -33,7 +33,8 @@
   }
 
   &FolderIcon {
-    padding-left: var(--padding-1);
+    display: flex;
+    justify-content: center;
   }
 
   &Button {

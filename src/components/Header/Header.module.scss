@@ -29,6 +29,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &Icon {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &DisplayName {

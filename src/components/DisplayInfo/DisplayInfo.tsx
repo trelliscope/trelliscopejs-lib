@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import marked from 'marked';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -66,7 +67,9 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen 
           singleDisplay ? [styles.displayInfoButton, styles.displayInfoButtonLeft] : styles.displayInfoButton,
         )}
       >
-        <i className={classNames(styles.displayInfoIcon, 'icon-info_outline')} />
+        <div className={styles.displayInfoIcon}>
+          <InfoOutlinedIcon />
+        </div>
       </button>
       <Dialog
         open={isOpen}
