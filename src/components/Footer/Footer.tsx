@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
 import { filterCardinalitySelector } from '../../selectors/cogData';
@@ -7,9 +7,13 @@ import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSele
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import getCustomProperties from '../../getCustomProperties';
+import { setSort } from '../../slices/sortSlice';
+import { setLayout } from '../../slices/layoutSlice';
+import { setFilter, setFilterView } from '../../slices/filterSlice';
 import styles from './Footer.module.scss';
 
 const Footer: React.FC = () => {
+  const dispatch = useDispatch();
   const [dialogOpen, setDialogOpen] = useState(false);
   const sort = useSelector(sortSelector);
   const cdi = useSelector(curDisplayInfoSelector);
@@ -85,6 +89,17 @@ const Footer: React.FC = () => {
     setDialogOpen(false);
   };
 
+  const handleStateClose = (x: { type: string; index: number; label: string }) => {
+    if (x.type === 'sort') {
+      dispatch(setSort(x.index));
+      dispatch(setLayout({ pageNum: 1 }));
+    } else if (x.type === 'filter') {
+      dispatch(setFilterView({ name: x.label, which: 'remove' }));
+      dispatch(setFilter(x.label));
+      dispatch(setLayout({ pageNum: 1 }));
+    }
+  };
+
   return (
     <div className={styles.footerWrapper} style={style}>
       <div className={styles.footerInner}>
@@ -93,7 +108,15 @@ const Footer: React.FC = () => {
             <div className={styles.footerSectionText}>Sorting on:</div>
             <div className={styles.footerChipWrapper}>
               {sortRes.map((el: { name: string; icon: string }, i: number) => (
-                <FooterChip key={`${el.name}_sortchip`} label={el.name} icon={el.icon} text="" index={i} type="sort" />
+                <FooterChip
+                  key={`${el.name}_sortchip`}
+                  label={el.name}
+                  icon={el.icon}
+                  text=""
+                  index={i}
+                  type="sort"
+                  handleClose={handleStateClose}
+                />
               ))}
             </div>
           </div>
@@ -104,7 +127,15 @@ const Footer: React.FC = () => {
             <div className={styles.footerSectionText}>Filtering on:</div>
             <div className={styles.footerChipWrapper}>
               {filterRes.map((el: { name: string; text: string }, i: number) => (
-                <FooterChip key={`${el.name}_filterchip`} label={el.name} icon="" text={el.text} index={i} type="filter" />
+                <FooterChip
+                  key={`${el.name}_filterchip`}
+                  label={el.name}
+                  icon=""
+                  text={el.text}
+                  index={i}
+                  type="filter"
+                  handleClose={handleStateClose}
+                />
               ))}
             </div>
             <div className={styles.footerFilterText}>{`(${nFilt} of ${cdi.info.n} panels)`}</div>
