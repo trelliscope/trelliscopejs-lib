@@ -1,0 +1,58 @@
+.shortcuts {
+  font-size: var(--text-3xl);
+  padding-left: var(--padding-7);
+  padding-right: var(--padding-7);
+  z-index: 5000;
+
+  &Div {
+    width: 50%;
+    display: block;
+    float: left;
+  }
+
+  &Headline {
+    font-size: var(--text-7xl);
+    padding-top: var(--padding-10);
+    margin-bottom: var(--margin-8);
+    font-weight: var(--font-normal);
+  }
+
+  &H4 {
+    margin-bottom: var(--margin-4);
+  }
+
+  &Ul {
+    margin-top: 0;
+    break-inside: avoid-column;
+  }
+
+  &Code {
+    color: var(--red-100);
+    font-size: var(--text-4xl);
+  }
+
+  &P {
+    text-indent: -20px;
+    padding-left: var(--padding-11);
+    margin-top: var(--margin-px);
+  }
+
+  &P2 {
+    padding-left: var(--padding-11);
+  }
+
+  &P22 {
+    text-indent: 0;
+    padding-left: var(--padding-11);
+  }
+
+  &Hi {
+    color: var(--red-100);
+  }
+
+  &Keynote {
+    margin-bottom: 0;
+    color: var(--gray-900);
+    font-style: italic;
+  }
+}
