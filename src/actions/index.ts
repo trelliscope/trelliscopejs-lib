@@ -49,6 +49,10 @@ const setCogDatAndState = (
   // now we can safely set several other default states that depend
   // on either display or cog data or can't be set until this data is loaded
   crossfilter(cogDatJson);
+
+  console.log(crossfilter(cogDatJson));
+  window.crossfilter = crossfilter(cogDatJson);
+
   // sidebar
   let sb = dObjJson.state.sidebar;
   if (hashItems.sidebar) {

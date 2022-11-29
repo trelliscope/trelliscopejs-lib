@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { metaDataAPI } from './metaDataAPI';
 import omit from 'lodash.omit';
 
 export interface FilterState {

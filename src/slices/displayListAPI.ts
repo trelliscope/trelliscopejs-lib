@@ -1,7 +1,6 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { IDisplayListItem } from '../types/configs';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 
