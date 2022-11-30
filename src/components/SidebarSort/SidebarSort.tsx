@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
 import IconButton from '@mui/material/IconButton';
@@ -63,37 +65,38 @@ const SidebarSort: React.FC = () => {
         <div className={styles.sidebarSortTableWrap} style={customStyles.tableWrap}>
           <table className={styles.sidebarSortTable}>
             <tbody>
-              {sort.map((d, i) => {
-                const ic = d.dir === 'asc' ? 'up' : 'down';
-                return (
-                  <tr className={styles.sidebarSortTableRow} key={`${d.name}_tr`}>
-                    <td className={styles.sidebarSortButton}>
-                      <IconButton
-                        color="primary"
-                        key={`${d.name}_button`}
-                        onClick={() => {
-                          const sortObj = { ...sort2[i] };
-                          sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
-                          sort2[i] = sortObj;
-                          handleChange(sort2);
-                        }}
-                      >
-                        <i className={`icon-chevron-${ic}`} style={{ fontSize: 16 }} />
-                      </IconButton>
-                    </td>
-                    <td className={styles.sidebarSortLabels}>
-                      {d.name}
-                      <br />
-                      <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.name]}</span>
-                    </td>
-                    <td className={styles.sidebarSortButtonClose}>
-                      <IconButton onClick={() => handleChange(i)}>
-                        <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
-                      </IconButton>
-                    </td>
-                  </tr>
-                );
-              })}
+              {sort.map((d, i) => (
+                <tr className={styles.sidebarSortTableRow} key={`${d.name}_tr`}>
+                  <td className={styles.sidebarSortButton}>
+                    <IconButton
+                      color="primary"
+                      key={`${d.name}_button`}
+                      onClick={() => {
+                        const sortObj = { ...sort2[i] };
+                        sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
+                        sort2[i] = sortObj;
+                        handleChange(sort2);
+                      }}
+                    >
+                      {d.dir === 'asc' ? (
+                        <KeyboardArrowUpIcon fontSize="large" />
+                      ) : (
+                        <KeyboardArrowDownIcon fontSize="large" />
+                      )}
+                    </IconButton>
+                  </td>
+                  <td className={styles.sidebarSortLabels}>
+                    {d.name}
+                    <br />
+                    <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.name]}</span>
+                  </td>
+                  <td className={styles.sidebarSortButtonClose}>
+                    <IconButton onClick={() => handleChange(i)}>
+                      <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
+                    </IconButton>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

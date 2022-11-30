@@ -20,7 +20,6 @@ import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
 import './assets/styles/variables.scss';
-import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
 import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './slices/appSlice';

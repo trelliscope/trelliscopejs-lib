@@ -10,12 +10,12 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
-import Badge from '@mui/material/Badge';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Rnd } from 'react-rnd';
 import type { Position } from 'react-rnd';
 import classNames from 'classnames';
+import AddchartIcon from '@mui/icons-material/Addchart';
 import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
@@ -146,13 +146,9 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
   return (
     <div>
       <button type="button" onClick={handleOpen} className={styles.relatedDisplaysButton} style={propStyles.button}>
-        <i className={classNames('icon-open-add', styles.relatedDisplaysButtonIcon)}>
-          <Badge
-            className={styles.relatedDisplaysBadge}
-            classes={{ badge: styles.relatedDisplaysBadgeCircle }}
-            badgeContent={selectedRelDisps.length}
-          />
-        </i>
+        <div className={styles.relatedDisplaysButtonIcon}>
+          <AddchartIcon />
+        </div>
       </button>
       <Dialog
         open={open}
@@ -165,7 +161,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
         <DialogTitle id="dialog-reldisp-title">View Related Displays Simultaneously</DialogTitle>
         <DialogContent>
           <div>
-            <Stepper alternativeLabel nonLinear activeStep={activeStep}>
+            <Stepper className={styles.relatedDisplaysStepper} alternativeLabel nonLinear activeStep={activeStep}>
               <Step>
                 <StepButton onClick={() => setStep(0)}>
                   {`Select related displays (${selectedRelDisps.length} selected)`}

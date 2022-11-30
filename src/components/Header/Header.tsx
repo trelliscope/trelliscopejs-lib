@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import WestIcon from '@mui/icons-material/West';
 import DisplayInfo from '../DisplayInfo';
 import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
@@ -110,8 +111,8 @@ const Header: React.FC = () => {
     displayName = 'loading...';
   } else if (!dialogOpen && displayList.list.length > 0) {
     displayName = (
-      <span>
-        <i className="icon-arrow-left" />
+      <span className={styles.headerNameDescContainerIcon}>
+        <WestIcon />
         &nbsp;select a display to view...
       </span>
     );

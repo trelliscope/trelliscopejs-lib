@@ -18,11 +18,12 @@
       width: var(--relatedDisplays-buttonDialog-width);
       margin-top: var(--margin-6) !important;
       margin-bottom: var(--margin-6) !important;
+      color: var(--black) !important;
     }
 
     &Icon {
-      padding-left: var(--padding-px);
-      line-height: var(--relatedDisplays-buttonIcon-line-height);
+      display: flex;
+      justify-content: center;
     }
 
     &:hover {
@@ -30,6 +31,10 @@
       background: var(--white-300);
       cursor: pointer;
     }
+  }
+
+  &Stepper {
+    margin-bottom: var(--margin-12);
   }
 
   &BoxStyle {

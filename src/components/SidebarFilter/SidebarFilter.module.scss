@@ -1,12 +1,12 @@
 .container {
-    width: var(--sidebarFilter-width);
-    // display: 'inline-block',
-    // for dropdowns to not be hidden under other elements:
-    box-sizing: border-box;
-    z-index: 100; // + this.props.index,
-    position: relative;
-    padding-bottom: var(--padding-4);
-    border-bottom: var(--border-6);
+  width: var(--sidebarFilter-width);
+  // display: 'inline-block',
+  // for dropdowns to not be hidden under other elements:
+  box-sizing: border-box;
+  z-index: 100; // + this.props.index,
+  position: relative;
+  padding-bottom: var(--padding-4);
+  border-bottom: var(--border-6);
 }
 
 .col1 {
@@ -127,6 +127,12 @@
   margin-top: var(--neg-margin-1);
   padding: 0;
   z-index: 1000;
+
+  svg {
+    margin-top: 2px;
+    width: 14px;
+    height: 14px;
+  }
 
   &:hover {
     transition: var(--sidebarFilter-headerIcon-hover-transition);

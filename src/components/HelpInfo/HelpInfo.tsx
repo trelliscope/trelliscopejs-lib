@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
-import classNames from 'classnames';
+import HelpIcon from '@mui/icons-material/Help';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -48,7 +48,7 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
       <button type="button" onClick={handleOpen} className={styles.helpInfo}>
         Trelliscope
         <div className={styles.helpInfoIcon}>
-          <i className={classNames('icon-help', styles.helpInfoIcon)} />
+          <HelpIcon fontSize="small" />
         </div>
       </button>
       <Dialog
