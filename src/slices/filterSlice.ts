@@ -1,17 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { metaDataAPI } from './metaDataAPI';
 import omit from 'lodash.omit';
+import { displayInfoAPI } from './displayInfoAPI';
 
 export interface FilterState {
-  state: {
-    [key: string]: Filter<FilterCat | FilterRange>;
-  };
+  state: IFilterState[];
   view: FilterView;
 }
 
 const initialState: FilterState = {
-  state: {},
+  state: [],
   view: {
     active: [],
     inactive: [],
@@ -24,13 +22,11 @@ export const filterSlice = createSlice({
   reducers: {
     setFilter: (state, action: PayloadAction<FilterState['state'] | string | undefined>) => {
       if (typeof action.payload === 'string') {
-        state.state = omit(state.state, action.payload);
-      } else if (action.payload === undefined) {
-        state.state = {};
-      } else if (Object.keys(action.payload).length === 0) {
-        state.state = {};
+        state.state = state.state.filter((f) => f.varname !== action.payload);
+      } else if (action.payload === undefined || Object.keys(action.payload).length === 0) {
+        state.state = [];
       } else {
-        state.state = { ...state.state, ...action.payload };
+        state.state = [...state.state, ...action.payload];
       }
     },
     setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
@@ -58,6 +54,16 @@ export const filterSlice = createSlice({
         state.view = name as FilterView;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
+      const { filter } = action.payload.state;
+      if (filter === undefined || filter.length === 0) {
+        state.state = [];
+      } else {
+        state.state = [...state.state, ...filter];
+      }
+    });
   },
 });
 
