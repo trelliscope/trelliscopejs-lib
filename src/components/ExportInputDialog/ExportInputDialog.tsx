@@ -10,8 +10,8 @@ import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import SendIcon from '@mui/icons-material/Send';
-import SaveIcon from '@mui/icons-material/Save';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { cogDataSelector } from '../../selectors';
 import styles from './ExportInputDialog.module.scss';
 
@@ -253,7 +253,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
                   variant="contained"
                   color="primary"
                   className={styles.exportInputDialogButton}
-                  endIcon={<SaveIcon />}
+                  endIcon={<FontAwesomeIcon icon={faDownload} />}
                   onClick={downloadCsv}
                 >
                   Download CSV
@@ -279,7 +279,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
                   variant="contained"
                   color="primary"
                   className={styles.exportInputDialogButton}
-                  endIcon={<SendIcon />}
+                  endIcon={<FontAwesomeIcon icon={faPaperPlane} />}
                   onClick={sendMail}
                 >
                   Compose Email

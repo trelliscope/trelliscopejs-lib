@@ -1,8 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMaximize, faMinimize } from '@fortawesome/free-solid-svg-icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { addClass, removeClass } from '../../classManipulation';
 import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
@@ -86,7 +85,9 @@ const FullscreenButton: React.FC = () => {
         toggleFullscreen(!fullscreen, appId, { width: ww, height: hh }, yOffset);
       }}
     >
-      <div className={styles.fullscreenButtonIcon}>{!fullscreen ? <OpenInFullIcon /> : <CloseFullscreenIcon />}</div>
+      <div className={styles.fullscreenButtonIcon}>
+        {!fullscreen ? <FontAwesomeIcon icon={faMaximize} size="lg" /> : <FontAwesomeIcon icon={faMinimize} size="lg" />}
+      </div>
     </button>
   );
 };

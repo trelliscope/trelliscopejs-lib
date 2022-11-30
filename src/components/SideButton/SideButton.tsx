@@ -1,9 +1,6 @@
 import React from 'react';
-import AppsIcon from '@mui/icons-material/Apps';
-import ListIcon from '@mui/icons-material/List';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import SortIcon from '@mui/icons-material/Sort';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTags, faFilter, faSort, faEye, faGrip } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import { SB_CONFIG } from '../../constants';
 import styles from './SideButton.module.scss';
@@ -28,11 +25,11 @@ const SideButton: React.FC<SideButtonProps> = ({ className, active, title, label
   >
     <div className={styles.sideButtonTest}>
       <div className={styles.sideButtonIcon}>
-        {label === 'Grid' && <AppsIcon fontSize="large" />}
-        {label === 'Labels' && <ListIcon fontSize="large" />}
-        {label === 'Filter' && <FilterAltIcon fontSize="large" />}
-        {label === 'Sort' && <SortIcon fontSize="large" />}
-        {label === 'Views' && <VisibilityIcon fontSize="large" />}
+        {label === 'Grid' && <FontAwesomeIcon icon={faGrip} />}
+        {label === 'Labels' && <FontAwesomeIcon icon={faTags} />}
+        {label === 'Filter' && <FontAwesomeIcon icon={faFilter} />}
+        {label === 'Sort' && <FontAwesomeIcon icon={faSort} />}
+        {label === 'Views' && <FontAwesomeIcon icon={faEye} />}
       </div>
       <div className={styles.sideButtonLabel}>{label}</div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
 import IconButton from '@mui/material/IconButton';
@@ -78,11 +78,7 @@ const SidebarSort: React.FC = () => {
                         handleChange(sort2);
                       }}
                     >
-                      {d.dir === 'asc' ? (
-                        <KeyboardArrowUpIcon fontSize="large" />
-                      ) : (
-                        <KeyboardArrowDownIcon fontSize="large" />
-                      )}
+                      {d.dir === 'asc' ? <FontAwesomeIcon icon={faAngleUp} /> : <FontAwesomeIcon icon={faAngleDown} />}
                     </IconButton>
                   </td>
                   <td className={styles.sidebarSortLabels}>

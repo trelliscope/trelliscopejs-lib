@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import WestIcon from '@mui/icons-material/West';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import DisplayInfo from '../DisplayInfo';
 import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
@@ -112,7 +113,7 @@ const Header: React.FC = () => {
   } else if (!dialogOpen && displayList.list.length > 0) {
     displayName = (
       <span className={styles.headerNameDescContainerIcon}>
-        <WestIcon />
+        <FontAwesomeIcon icon={faArrowLeftLong} />
         &nbsp;select a display to view...
       </span>
     );

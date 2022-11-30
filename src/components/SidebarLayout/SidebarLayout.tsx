@@ -1,6 +1,6 @@
 import React from 'react';
-import TableRowsOutlinedIcon from '@mui/icons-material/TableRowsOutlined';
-import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical, faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { layoutSelector, selectedRelDispsSelector } from '../../selectors';
@@ -92,7 +92,7 @@ const SidebarLayout: React.FC = () => {
                 label={
                   <div className={styles.inputLabelSpan}>
                     By Row
-                    <TableRowsOutlinedIcon />
+                    <FontAwesomeIcon icon={faGripHorizontal} />
                   </div>
                 }
                 className={styles.inputRadio}
@@ -103,7 +103,7 @@ const SidebarLayout: React.FC = () => {
                 label={
                   <span className={styles.inputLabelSpan}>
                     By column
-                    <ViewWeekOutlinedIcon />
+                    <FontAwesomeIcon icon={faGripVertical} />
                   </span>
                 }
                 className={styles.inputRadio}

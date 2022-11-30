@@ -9,7 +9,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import FilterCatPlot from '../FilterCatPlot';
 
 import styles from './FilterCat.module.scss';
@@ -127,7 +128,7 @@ const FilterCat: React.FC<FilterCatProps> = ({
             onClick={handleMenuIconClick}
             sx={{ width: 25, height: 25 }}
           >
-            <MoreVertIcon sx={{ width: 15, height: 15 }} />
+            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
           </IconButton>
           <Menu id="long-menu" open={menuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
             {sortOptions.map((d) => (

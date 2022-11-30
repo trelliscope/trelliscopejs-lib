@@ -25,6 +25,10 @@
     padding-right: var(--padding-8);
     white-space: nowrap;
     -webkit-user-select: none;
+
+    svg {
+      padding-right: 5px;
+    }
   }
 
   &Text {
