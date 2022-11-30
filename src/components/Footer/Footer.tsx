@@ -100,8 +100,6 @@ const Footer: React.FC = () => {
     }
   };
 
-  console.log(sortRes);
-
   return (
     <div className={styles.footerWrapper} style={style}>
       <div className={styles.footerInner}>
