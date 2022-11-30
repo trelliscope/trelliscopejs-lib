@@ -155,12 +155,10 @@ const Content: React.FC = () => {
 
   let ret = <div />;
 
-  console.log(ccd);
-
   const { data: metaData } = useMetaData();
   const { data: displayInfoData } = useDisplayInfo();
 
-  console.log(metaData, displayInfoData);
+  console.log(displayInfoData);
 
   let names = [curDisplayInfo.info.name];
   if (relDispPositions.length > 0) {
