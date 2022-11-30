@@ -1,54 +1,39 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { setLayout } from '../../slices/layoutSlice';
-import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
-import { filterCardinalitySelector } from '../../selectors/cogData';
 import styles from './Pagination.module.scss';
 
-const Pagination: React.FC = () => {
-  const dispatch = useDispatch();
-  const n = useSelector(pageNumSelector);
-  const totPanels = useSelector(filterCardinalitySelector);
-  const npp = useSelector(nPerPageSelector);
-  const dialogOpen = useSelector(dialogOpenSelector);
-  const fullscreen = useSelector(fullscreenSelector);
-  const cogData = useSelector(cogDataSelector);
-  const totPages = Math.ceil(totPanels / npp);
+interface PaginationProps {
+  n: number;
+  totPanels: number;
+  npp: number;
+  dialogOpen: boolean;
+  fullscreen: boolean;
+  cogData: CogDataMutable;
+  totPages: number;
+  pageLeft: () => void;
+  pageRight: () => void;
+  pageFirst: () => void;
+  pageLast: () => void;
+}
 
-  const handleChange = (pageNum: number) => {
-    dispatch(setLayout({ pageNum }));
-  };
-
-  const pageLeft = () => {
-    let nn = n - 1;
-    if (nn < 1) {
-      nn += 1;
-    }
-    return handleChange(nn);
-  };
-
-  const pageRight = () => {
-    let nn = n + 1;
-    if (nn > totPages) {
-      nn -= 1;
-    }
-    return handleChange(nn);
-  };
-
-  const pageFirst = () => {
-    handleChange(1);
-  };
-
-  const pageLast = () => {
-    handleChange(totPages);
-  };
-
+const Pagination: React.FC<PaginationProps> = ({
+  n,
+  totPanels,
+  npp,
+  dialogOpen,
+  fullscreen,
+  cogData,
+  totPages,
+  pageLeft,
+  pageRight,
+  pageFirst,
+  pageLast,
+}) => {
   useHotkeys('right', pageRight, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
   useHotkeys('left', pageLeft, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
 
@@ -73,15 +58,15 @@ const Pagination: React.FC = () => {
       </span>
     );
   }
-  const txt = (
-    <span>
-      {pRange}
-      <span>{` of ${totPanels}`}</span>
-    </span>
-  );
+
   return (
     <div className={styles.paginationOuter}>
-      <div className={styles.paginationLabel}>{txt}</div>
+      <div className={styles.paginationLabel}>
+        <span>
+          {pRange}
+          <span>{` of ${totPanels}`}</span>
+        </span>
+      </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
