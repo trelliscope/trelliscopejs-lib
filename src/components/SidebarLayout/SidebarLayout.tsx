@@ -1,6 +1,6 @@
 import React from 'react';
-import TableRowsRoundedIcon from '@mui/icons-material/TableRowsRounded';
-import ViewWeekRoundedIcon from '@mui/icons-material/ViewWeekRounded';
+import TableRowsOutlinedIcon from '@mui/icons-material/TableRowsOutlined';
+import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { layoutSelector, selectedRelDispsSelector } from '../../selectors';
@@ -92,7 +92,7 @@ const SidebarLayout: React.FC = () => {
                 label={
                   <div className={styles.inputLabelSpan}>
                     By Row
-                    <TableRowsRoundedIcon />
+                    <TableRowsOutlinedIcon />
                   </div>
                 }
                 className={styles.inputRadio}
@@ -103,7 +103,7 @@ const SidebarLayout: React.FC = () => {
                 label={
                   <span className={styles.inputLabelSpan}>
                     By column
-                    <ViewWeekRoundedIcon />
+                    <ViewWeekOutlinedIcon />
                   </span>
                 }
                 className={styles.inputRadio}
