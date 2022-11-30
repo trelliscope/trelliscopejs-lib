@@ -15,7 +15,6 @@ const DataContext = React.createContext({});
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const { data: metaData } = useMetaData();
-  const {};
   if (metaData) {
     cf.add(metaData);
     console.log(metaData);
