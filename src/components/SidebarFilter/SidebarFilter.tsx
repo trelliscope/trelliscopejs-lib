@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
-import CancelIcon from '@mui/icons-material/Cancel';
-import ReplayIcon from '@mui/icons-material/Replay';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import intersection from 'lodash.intersection';
 import FilterCat from '../FilterCat';
@@ -164,7 +164,7 @@ const SidebarFilter: React.FC = () => {
                   className={`${styles.headerIcon} ${styles.headerClose}`}
                   onMouseDown={() => handleViewChange(d, 'remove')}
                 >
-                  <CancelIcon />
+                  <FontAwesomeIcon icon={faXmark} />
                 </button>
                 <button
                   type="button"
@@ -176,7 +176,7 @@ const SidebarFilter: React.FC = () => {
                   })}
                   onMouseDown={() => handleFilterChange(filterState.name)}
                 >
-                  <ReplayIcon />
+                  <FontAwesomeIcon icon={faRotateLeft} />
                 </button>
               </div>
               {itemContent}

@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
-import CancelIcon from '@mui/icons-material/Cancel';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faArrowUpRightFromSquare, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import ReactTooltip from 'react-tooltip';
 import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './Panel.module.scss';
@@ -102,7 +101,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
               {label.type === 'href' && (
                 <div className={styles.labelInner} style={inlineStyles.labelInner}>
                   <a style={inlineStyles.labelSpan} href={label.value as string} rel="noopener noreferrer" target="_blank">
-                    <LaunchIcon />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
                 </div>
               )}
@@ -117,7 +116,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       window.location.reload();
                     }}
                   >
-                    <LaunchIcon />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
                 </div>
               )}
@@ -179,7 +178,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       }}
                       onClick={() => setTextInputOpen(label.name)}
                     >
-                      <EditIcon style={{ fontSize: dims.fontSize }} />
+                      <FontAwesomeIcon icon={faPencil} />
                     </button>
                   </div>
                   <Popover
@@ -241,7 +240,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                     style={inlineStyles.labelClose}
                     onClick={() => onLabelRemove(label.name, labelArr)}
                   >
-                    <CancelIcon />
+                    <FontAwesomeIcon icon={faXmark} />
                   </button>
                 </div>
               )}

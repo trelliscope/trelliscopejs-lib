@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
-import HelpIcon from '@mui/icons-material/Help';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -48,7 +49,7 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
       <button type="button" onClick={handleOpen} className={styles.helpInfo}>
         Trelliscope
         <div className={styles.helpInfoIcon}>
-          <HelpIcon fontSize="small" />
+          <FontAwesomeIcon icon={faCircleQuestion} />
         </div>
       </button>
       <Dialog

@@ -1,17 +1,24 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown91, faArrowDown19, faArrowDownZA, faArrowDownAZ } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styles from './FooterChip.module.scss';
 
 interface FooterChipProps {
   label: string;
+  icon: string;
   text: string;
   index: number;
   type: string;
   handleClose: (x: { label: string; index: number; type: string }) => void;
 }
 
-const FooterChip: React.FC<FooterChipProps> = ({ label, text, index, type, handleClose }) => (
+const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleClose }) => (
   <div className={styles.footerChipWrapper}>
     <span className={styles.footerChipLabel}>
+      {icon.includes('alpha-asc') && <FontAwesomeIcon icon={faArrowDownAZ} />}
+      {icon.includes('alpha-desc') && <FontAwesomeIcon icon={faArrowDownZA} />}
+      {icon.includes('numeric-asc') && <FontAwesomeIcon icon={faArrowDown19} />}
+      {icon.includes('numeric-desc') && <FontAwesomeIcon icon={faArrowDown91} />}
       {label}
       {text !== '' && <span className={styles.footerChipText}>{`(${text})`}</span>}
     </span>

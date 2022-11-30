@@ -10,12 +10,11 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Rnd } from 'react-rnd';
 import type { Position } from 'react-rnd';
 import classNames from 'classnames';
-import AddchartIcon from '@mui/icons-material/Addchart';
 import DisplayList from '../DisplayList';
 import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
@@ -147,7 +146,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
     <div>
       <button type="button" onClick={handleOpen} className={styles.relatedDisplaysButton} style={propStyles.button}>
         <div className={styles.relatedDisplaysButtonIcon}>
-          <AddchartIcon />
+          <FontAwesomeIcon icon={faFolderPlus} size="lg" />
         </div>
       </button>
       <Dialog
@@ -183,9 +182,9 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
               className={styles.relatedDisplaysButtonDialog}
               disabled={activeStep === 0 && selectedRelDisps.length === 0}
             >
-              {activeStep === 0 ? '' : <ChevronLeftIcon />}
+              {activeStep === 0 ? '' : <FontAwesomeIcon icon={faChevronLeft} />}
               {activeStep === 0 ? 'Set Layout' : 'Select Displays'}
-              {activeStep === 0 ? <ChevronRightIcon /> : ''}
+              {activeStep === 0 ? <FontAwesomeIcon icon={faChevronRight} /> : ''}
             </Button>
           </div>
           <Button color="secondary" onClick={handleClose}>

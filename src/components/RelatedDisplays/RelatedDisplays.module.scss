@@ -19,6 +19,11 @@
       margin-top: var(--margin-6) !important;
       margin-bottom: var(--margin-6) !important;
       color: var(--black) !important;
+
+      svg {
+        margin-left: var(--margin-2);
+        margin-right: var(--margin-2);
+      }
     }
 
     &Icon {
