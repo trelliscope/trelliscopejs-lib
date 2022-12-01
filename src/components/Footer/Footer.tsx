@@ -107,10 +107,11 @@ const Footer: React.FC = () => {
           <div className={styles.footerSectionWrapper}>
             <div className={styles.footerSectionText}>Sorting on:</div>
             <div className={styles.footerChipWrapper}>
-              {sortRes.map((el: { name: string }, i: number) => (
+              {sortRes.map((el: { name: string; icon: string }, i: number) => (
                 <FooterChip
                   key={`${el.name}_sortchip`}
                   label={el.name}
+                  icon={el.icon}
                   text=""
                   index={i}
                   type="sort"
@@ -129,6 +130,7 @@ const Footer: React.FC = () => {
                 <FooterChip
                   key={`${el.name}_filterchip`}
                   label={el.name}
+                  icon=""
                   text={el.text}
                   index={i}
                   type="filter"

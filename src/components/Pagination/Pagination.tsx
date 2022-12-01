@@ -1,10 +1,8 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import LastPageIcon from '@mui/icons-material/LastPage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
 import styles from './Pagination.module.scss';
 
 interface PaginationProps {
@@ -70,7 +68,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
-            <FirstPageIcon />
+            <FontAwesomeIcon icon={faBackwardStep} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>First</div>
@@ -78,7 +76,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
-            <ChevronLeftIcon />
+            <FontAwesomeIcon icon={faChevronLeft} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Prev</div>
@@ -86,7 +84,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageRight()}>
-            <ChevronRightIcon />
+            <FontAwesomeIcon icon={faChevronRight} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Next</div>
@@ -94,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
-            <LastPageIcon />
+            <FontAwesomeIcon icon={faForwardStep} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Last</div>

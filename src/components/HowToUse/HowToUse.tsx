@@ -1,11 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import AppsIcon from '@mui/icons-material/Apps';
-import ListIcon from '@mui/icons-material/List';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import SortIcon from '@mui/icons-material/Sort';
-import ReplayIcon from '@mui/icons-material/Replay';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTags, faFilter, faSort, faGrip, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { windowHeightSelector } from '../../selectors/ui';
 import styles from './HowToUse.module.scss';
 
@@ -46,7 +42,7 @@ const HowToUse: React.FC = () => {
       </p>
       <div className={styles.howToUseContentContainer}>
         <div className={styles.howToUseHi}>
-          <AppsIcon />
+          <FontAwesomeIcon icon={faGrip} />
         </div>
         <div>
           &nbsp;
@@ -57,7 +53,7 @@ const HowToUse: React.FC = () => {
       </div>
       <div className={styles.howToUseContentContainer}>
         <div className={styles.howToUseHi}>
-          <ListIcon />
+          <FontAwesomeIcon icon={faTags} />
         </div>
         <div>
           &nbsp;
@@ -71,7 +67,7 @@ const HowToUse: React.FC = () => {
       </div>
       <div className={styles.howToUseContentContainer}>
         <div className={styles.howToUseHi}>
-          <FilterAltIcon />
+          <FontAwesomeIcon icon={faFilter} />
         </div>
         <div>
           &nbsp;
@@ -105,7 +101,7 @@ const HowToUse: React.FC = () => {
             To reset a filter variable, you can either clear out the fields, deselect the selections made in the distribution
             plots, or click the&nbsp;
             <span className={styles.howToUseInlineIcon}>
-              <ReplayIcon fontSize="small" />
+              <FontAwesomeIcon icon={faRotateLeft} size="xs" />
             </span>
             &nbsp;button located at the top right of the filter box for that variable. This icon is only available if there
             is an active filter for the variable.
@@ -113,7 +109,7 @@ const HowToUse: React.FC = () => {
           <p className={styles.howToUseP22}>
             To close a filter box, click the&nbsp;
             <span className={styles.howToUseInlineIcon}>
-              <CancelIcon fontSize="small" />
+              <FontAwesomeIcon icon={faXmark} size="xs" />
             </span>
             &nbsp;button located at the top right of the filter box. Note that if there is an active filter on the variable,
             its button in the &quot;More variables&quot; section will be green to indicate this.
@@ -122,7 +118,7 @@ const HowToUse: React.FC = () => {
       </div>
       <div className={styles.howToUseContentContainer}>
         <div className={styles.howToUseHi}>
-          <SortIcon />
+          <FontAwesomeIcon icon={faSort} />
         </div>
         <div>
           <strong>Sort: </strong>
@@ -136,7 +132,7 @@ const HowToUse: React.FC = () => {
       <div className={styles.howToUseP}>
         The active filter and sort state are displayed at the bottom of the page in the footer. Clicking the&nbsp;
         <span className={styles.howToUseInlineIcon}>
-          <CancelIcon fontSize="small" />
+          <FontAwesomeIcon icon={faXmark} size="xs" />
         </span>
         &nbsp;button for anything listed in the footer will remove the sorting or filtering on that variable.
       </div>
