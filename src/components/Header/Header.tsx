@@ -17,9 +17,15 @@ import {
   displayListSelector,
   selectedDisplaySelector,
   dialogOpenSelector,
+  pageNumSelector,
+  nPerPageSelector,
+  fullscreenSelector,
+  cogDataSelector,
 } from '../../selectors';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import getCustomProperties from '../../getCustomProperties';
+import { filterCardinalitySelector } from '../../selectors/cogData';
+import { setLayout } from '../../slices/layoutSlice';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
@@ -36,6 +42,41 @@ const Header: React.FC = () => {
   const [singleLoaded, setSingleLoaded] = useState(selectedDisplay.name !== '');
   const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
+
+  const n = useSelector(pageNumSelector);
+  const totPanels = useSelector(filterCardinalitySelector);
+  const npp = useSelector(nPerPageSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const cogData = useSelector(cogDataSelector);
+  const totPages = Math.ceil(totPanels / npp);
+
+  const handleChange = (pageNum: number) => {
+    dispatch(setLayout({ pageNum }));
+  };
+
+  const pageLeft = () => {
+    let nn = n - 1;
+    if (nn < 1) {
+      nn += 1;
+    }
+    return handleChange(nn);
+  };
+
+  const pageRight = () => {
+    let nn = n + 1;
+    if (nn > totPages) {
+      nn -= 1;
+    }
+    return handleChange(nn);
+  };
+
+  const pageFirst = () => {
+    handleChange(1);
+  };
+
+  const pageLast = () => {
+    handleChange(totPages);
+  };
 
   const stylesComputed = {
     headerContainer: {
@@ -107,7 +148,21 @@ const Header: React.FC = () => {
       iconStyle = { color: '#aaa', fontSize: 12 };
     }
     displayDesc = selectedDisplay.desc;
-    pagination = <Pagination />;
+    pagination = (
+      <Pagination
+        n={n}
+        totPanels={totPanels}
+        npp={npp}
+        dialogOpen={dialogOpen}
+        fullscreen={fullscreen}
+        cogData={cogData}
+        totPages={totPages}
+        pageLeft={pageLeft}
+        pageRight={pageRight}
+        pageFirst={pageFirst}
+        pageLast={pageLast}
+      />
+    );
   } else if (singleDisplay) {
     displayName = 'loading...';
   } else if (!dialogOpen && displayList.list.length > 0) {
