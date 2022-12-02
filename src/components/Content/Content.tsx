@@ -24,6 +24,7 @@ import getCustomProperties from '../../getCustomProperties';
 import styles from './Content.module.scss';
 import { useMetaData } from '../../slices/metaDataAPI';
 import { useDisplayInfo, useGetDisplayInfoQuery } from '../../slices/displayInfoAPI';
+import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 
 const Content: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Content: React.FC = () => {
   const npp = useSelector(nPerPageSelector);
   const rdp = useSelector(relDispPositionsSelector);
   const di = useSelector(displayInfoSelector);
+  const selectedDisplay = useSelectedDisplay();
 
   const pPad = 2; // padding on either side of the panel
   // height of row of cog label depends on overall panel height / width
@@ -156,29 +158,29 @@ const Content: React.FC = () => {
   let ret = <div />;
 
   const { data: metaData } = useMetaData();
-  const { data: displayInfoData } = useDisplayInfo();
+  const { data: displayInfoData, isSuccess } = useDisplayInfo();
 
   console.log(displayInfoData);
 
-  let names = [curDisplayInfo.info.name];
+  /* let names = [selectedDisplay?.name];
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
-  }
+  } */
 
-  const hasDisplayInfo = names.every((name) => displayInfo[name] && displayInfo[name].isLoaded);
+  // const hasDisplayInfo = names.every((name) => displayInfoData[name || ''] && displayInfoData[name].isLoaded);
 
-  if (ci && ccd && cinfo && hasDisplayInfo) {
+  if (/* ci &&  */ metaData && cinfo && isSuccess) {
     const panelKeys = [];
     const panelLabels = [];
 
-    for (let i = 0; i < ccd.length; i += 1) {
-      panelKeys.push(ccd[i].panelKey);
+    for (let i = 0; i < metaData.length; i += 1) {
+      panelKeys.push(i);
       const curLabels = [];
 
       for (let j = 0; j < labels.length; j += 1) {
         curLabels.push({
           name: labels[j],
-          value: ccd[i][labels[j]],
+          value: metaData[i][labels[j]],
           type: cinfo[labels[j]]?.type,
           desc: cinfo[labels[j]]?.desc,
         });
@@ -215,9 +217,11 @@ const Content: React.FC = () => {
             <Panel
               key={el.key}
               cfg={cfg}
+              name={displayInfoData[selectedDisplay?.name || '']?.name}
               panelKey={el.key}
               labels={el.labels}
               labelArr={labels}
+              type={displayInfoData.panel_type}
               panelInterface={panelInterface}
               removeLabel={removeLabel}
               dims={dims}
