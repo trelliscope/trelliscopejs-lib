@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { getGroupName } from '../utils';
+import { snakeCase } from '../utils';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
@@ -11,7 +11,7 @@ const JSONPBaseQuery =
   ({ url, id, dataType, displayName }) =>
     new Promise((resolve) => {
       const displayInfoCallback = `__loadDisplayInfo__${id}`;
-      const displayPath = getGroupName(displayName);
+      const displayPath = snakeCase(displayName);
 
       window[displayInfoCallback] = (data: IDisplay) => {
         resolve({ data });

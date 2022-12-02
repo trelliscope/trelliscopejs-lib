@@ -16,6 +16,8 @@ interface PanelProps {
   rowIndex: number;
   iColIndex: number;
   panelInterface: PanelInterface;
+  type: PanelType;
+  name: string;
   displayInfo: {
     [key: string]: DisplayInfoState;
   };
@@ -36,10 +38,12 @@ const Panel: React.FC<PanelProps> = ({
   displayInfo,
   curDisplayInfo,
   relDispPositions,
+  type,
+  name,
   removeLabel,
 }) => {
   const [panelData, setPanelData] = useState<{ [key: string]: PanelData }>({});
-  const [loaded, setLoaded] = useState<boolean>(panelInterface.type === 'image_src');
+  const [loaded, setLoaded] = useState<boolean>(type === 'img');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -143,8 +147,8 @@ const Panel: React.FC<PanelProps> = ({
                       }}
                     >
                       <PanelGraphic
-                        name={panelInterface?.deps?.name}
-                        type={panelInterface?.type}
+                        name={name}
+                        type={type}
                         data={panelData[panel.name]}
                         imgSrcLookup={displayInfo[panel.name].info.imgSrcLookup[panelKey]}
                         key={panel.name}
@@ -158,11 +162,11 @@ const Panel: React.FC<PanelProps> = ({
               </>
             ) : (
               <>
-                {names.map((name) => (
+                {names.map((n) => (
                   <PanelGraphic
-                    name={panelInterface?.deps?.name}
-                    type={panelInterface.type}
-                    data={panelData[name]}
+                    name={name}
+                    type={type}
+                    data={panelData[n]}
                     imgSrcLookup={displayInfo[name].info.imgSrcLookup[panelKey]}
                     key={name}
                     panelKey={panelKey}

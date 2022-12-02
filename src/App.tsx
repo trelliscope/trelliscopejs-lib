@@ -13,7 +13,6 @@ import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 
 import './assets/styles/main.css';
-import './assets/fonts/IcoMoon/style.css';
 import './assets/fonts/OpenSans/style.css';
 
 interface AppProps {

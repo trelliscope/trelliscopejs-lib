@@ -19,7 +19,6 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     cf.add(metaData);
     console.log(metaData);
   }
-  console.log('DataProvider', client);
 
   return <DataContext.Provider value={{}}>{children}</DataContext.Provider>;
 };

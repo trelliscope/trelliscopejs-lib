@@ -1,17 +1,18 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { getGroupName } from '../utils';
+import { snakeCase } from '../utils';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 
+// TODO - see if we can create a generic base query function that can be used by all the APIs
 const JSONPBaseQuery =
   (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string }, unknown, unknown> =>
   ({ url, id, dataType, displayName }) =>
     new Promise((resolve) => {
       const metaDataCallback = `__loadMetaData__${id}`;
-      const displayPath = getGroupName(displayName);
+      const displayPath = snakeCase(displayName);
 
       window[metaDataCallback] = (data: { [key: string]: any }) => {
         resolve({ data });
