@@ -74,20 +74,20 @@ const Header: React.FC = () => {
       left:
         headerHeight *
         ((dlLength <= 1 ? 0 : 1) +
-          (selectedDisplay.name === '' ? 0 : 1) +
-          (Object.keys(relatedDisplayGroups).length === 0 ? -1 : 1)),
+          (selectedDisplay?.name === '' ? 0 : 1) +
+          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
       width:
         windowWidth -
         (headerHeight *
           ((dlLength <= 1 ? 0 : 1) +
-            (selectedDisplay.name === '' ? 0 : 1) +
-            (Object.keys(relatedDisplayGroups).length === 0 ? -1 : 1)) +
+            (selectedDisplay?.name === '' ? 0 : 1) +
+            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
           logoWidth +
           30),
     },
     displayName: {
-      lineHeight: `${selectedDisplay.description === '' ? 48 : 26}px`,
-      paddingTop: selectedDisplay.description === '' ? 0 : 5,
+      lineHeight: `${selectedDisplay?.desc === '' ? 48 : 26}px`,
+      paddingTop: selectedDisplay?.desc === '' ? 0 : 5,
     },
   };
 
@@ -99,21 +99,21 @@ const Header: React.FC = () => {
   let displayDesc = '';
   let iconStyle = { visibility: 'hidden' } as { [key: string]: string | number };
   let pagination;
-  const displayLoaded = selectedDisplay.name !== '';
+  const displayLoaded = selectedDisplay?.name !== '';
   const nGroups = Object.keys(displayGroups).length;
 
   if (displayLoaded) {
     if (nGroups > 1) {
       displayName = `/
-        ${selectedDisplay.name}`;
+        ${selectedDisplay?.name}`;
     } else {
       // Takes file name and replaces underscores with space to make title
-      displayName = selectedDisplay.name.replace(/_/g, ' ');
+      displayName = selectedDisplay?.name.replace(/_/g, ' ');
     }
     if (!singleDisplay) {
       iconStyle = { color: '#aaa', fontSize: 12 };
     }
-    displayDesc = selectedDisplay.description;
+    displayDesc = selectedDisplay?.description;
     pagination = (
       <Pagination
         n={n}
@@ -146,7 +146,7 @@ const Header: React.FC = () => {
       {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
         <RelatedDisplays setDialogOpen={handleDialogOpen} />
       )}
-      {selectedDisplay.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} />}
+      {selectedDisplay?.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} />}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
         <div className={styles.headerNameDescContainer}>
