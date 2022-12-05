@@ -3,32 +3,16 @@ import { useSelector } from 'react-redux';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { cogDataSelector } from '../../selectors';
+import UserInfo from '../UserInfo';
+import DownloadCsv from '../DownloadCsv';
+import ComposeEmail from '../ComposeEmail';
 import styles from './ExportInputDialog.module.scss';
-
-// function TabPanel(props) {
-//   const { children, value, index } = props;
-
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`full-width-tabpanel-${index}`}
-//       aria-labelledby={`full-width-tab-${index}`}
-//     >
-//       {value === index && <div>{children}</div>}
-//     </div>
-//   );
-// }
 
 interface ExportInputDialogProps {
   open: boolean;
@@ -197,96 +181,19 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
             ))}
           </Stepper>
           {activeStep === 0 && (
-            <div className={styles.exportInputDialogContainer}>
-              <DialogContentText className={styles.exportInputDialogContentText}>
-                Before exporting the inputs you have provided, we would like to gather some information about you. Please
-                provide at least your full name, after which you will be able to click the &apos;Export&apos; tab in this
-                window to proceed with the export.
-              </DialogContentText>
-              <div>
-                <TextField
-                  className={styles.exportInputDialogTextField}
-                  required
-                  label="Full Name"
-                  fullWidth
-                  value={fullName}
-                  onChange={handleNameChange}
-                />
-                <TextField
-                  className={styles.exportInputDialogTextField}
-                  label="Email Address"
-                  fullWidth
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-                <TextField
-                  className={styles.exportInputDialogTextField}
-                  label="Job Title"
-                  fullWidth
-                  value={jobTitle}
-                  onChange={handleJobTitleChange}
-                />
-                <TextField
-                  className={styles.exportInputDialogTextField}
-                  multiline
-                  rows={3}
-                  label="Additional Contact Information"
-                  fullWidth
-                  value={otherInfo}
-                  onChange={handleOtherInfoChange}
-                />
-              </div>
-            </div>
+            <UserInfo
+              fullName={fullName}
+              email={email}
+              jobTitle={jobTitle}
+              otherInfo={otherInfo}
+              handleNameChange={handleNameChange}
+              handleEmailChange={handleEmailChange}
+              handleJobTitleChange={handleJobTitleChange}
+              handleOtherInfoChange={handleOtherInfoChange}
+            />
           )}
-          {activeStep === 1 && (
-            <div>
-              <DialogContentText id="alert-dialog-description">
-                <p className={styles.exportInputDialogDescription}>
-                  {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
-                </p>
-                <p>
-                  {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
-                </p>
-              </DialogContentText>
-              <div className={styles.exportInputDialogWrapperCenter}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={styles.exportInputDialogButton}
-                  endIcon={<FontAwesomeIcon icon={faDownload} />}
-                  onClick={downloadCsv}
-                >
-                  Download CSV
-                </Button>
-              </div>
-            </div>
-          )}
-          {activeStep === 2 && (
-            <div>
-              <DialogContentText id="alert-dialog-description">
-                <p className={styles.exportInputDialogDescription}>
-                  {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
-                </p>
-                <p>
-                  <strong>
-                    Note: You must manually attach the csv file downloaded in the previous step to this email prior to
-                    sending.
-                  </strong>
-                </p>
-              </DialogContentText>
-              <div className={styles.exportInputDialogWrapperCenter}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={styles.exportInputDialogButton}
-                  endIcon={<FontAwesomeIcon icon={faPaperPlane} />}
-                  onClick={sendMail}
-                >
-                  Compose Email
-                </Button>
-              </div>
-            </div>
-          )}
+          {activeStep === 1 && <DownloadCsv displayInfo={displayInfo} downloadCsv={downloadCsv} />}
+          {activeStep === 2 && <ComposeEmail displayInfo={displayInfo} sendMail={sendMail} />}
           <div className={styles.exportInputDialogWrapperRight}>
             <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
               Back
