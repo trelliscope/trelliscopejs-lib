@@ -1,23 +1,76 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
 import SidebarSort from '../SidebarSort';
 import SidebarFilter from '../SidebarFilter';
 import SidebarViews from '../SidebarViews';
-import { contentHeightSelector, sidebarActiveSelector, filterColSplitSelector } from '../../selectors/ui';
-import { displayLoadedSelector } from '../../selectors';
+import {
+  contentHeightSelector,
+  sidebarActiveSelector,
+  filterColSplitSelector,
+  sidebarHeightSelector,
+} from '../../selectors/ui';
+import {
+  curDisplayInfoSelector,
+  displayLoadedSelector,
+  filterStateSelector,
+  filterViewSelector,
+  labelsSelector,
+} from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
+import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { setLabels } from '../../slices/labelsSlice';
+import { setLayout } from '../../slices/layoutSlice';
+import { cogInfoSelector } from '../../selectors/display';
+import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
 
 const Sidebar: React.FC = () => {
   const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
-
+  const dispatch = useDispatch();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
   const displayLoaded = useSelector(displayLoadedSelector);
   const filterColSplit = useSelector(filterColSplitSelector);
+  const filter = useSelector(filterStateSelector);
+  const filterView = useSelector(filterViewSelector);
+  const cogInfo = useSelector(cogInfoSelector);
+  const sidebarHeight = useSelector(sidebarHeightSelector);
+  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const filtDist = useSelector(cogFiltDistSelector);
+  const labels = useSelector(labelsSelector);
+  const colSplit = useSelector(filterColSplitSelector);
+
+  const handleViewChange = (x: string, which: 'add' | 'remove') => {
+    // if a filter is being added to the view, add a panel label for the variable
+    if (which === 'add') {
+      if (labels.indexOf(x) < 0) {
+        const newLabels = Object.assign([], labels);
+        newLabels.push(x);
+        dispatch(setLabels(newLabels));
+      }
+    }
+    dispatch(setFilterView({ name: x, which }));
+  };
+
+  const handleFilterChange = (x: Filter<FilterCat | FilterRange> | string) => {
+    if (typeof x === 'string' || x instanceof String) {
+      dispatch(setFilter(x as string));
+    } else {
+      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
+      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
+      dispatch(setFilter(obj));
+    }
+    dispatch(setLayout({ pageNum: 1 }));
+  };
+
+  const handleFilterSortChange = (x: Filter<FilterCat>) => {
+    const obj: { [key: string]: Filter<FilterCat> } = {};
+    obj[x.name] = x;
+    dispatch(setFilter(obj));
+  };
 
   const customStyles = {
     sidebarContainer: {
@@ -47,7 +100,18 @@ const Sidebar: React.FC = () => {
       case SB_PANEL_FILTER:
         content = (
           <div>
-            <SidebarFilter />
+            <SidebarFilter
+              filter={filter}
+              filterView={filterView}
+              cogInfo={cogInfo}
+              sidebarHeight={sidebarHeight}
+              curDisplayInfo={curDisplayInfo}
+              filtDist={filtDist}
+              colSplit={colSplit}
+              handleViewChange={handleViewChange}
+              handleFilterChange={handleFilterChange}
+              handleFilterSortChange={handleFilterSortChange}
+            />
           </div>
         );
         break;

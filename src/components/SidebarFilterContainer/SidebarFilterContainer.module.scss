@@ -1,0 +1,86 @@
+.sidebarFilterContainer {
+  width: var(--sidebarFilter-width);
+  // display: 'inline-block',
+  // for dropdowns to not be hidden under other elements:
+  box-sizing: border-box;
+  z-index: 100; // + this.props.index,
+  position: relative;
+  padding-bottom: var(--padding-4);
+  border-bottom: var(--border-6);
+
+  &Header {
+    height: var(--sidebarFilter-height);
+    line-height: var(--sidebarFilter-header-line-height);
+    width: var(--sidebarFilter-width);
+    margin-top: var(--margin-1);
+    font-size: var(--text-xs);
+    position: relative;
+
+    &Extra {
+      position: absolute;
+      right: 38px;
+      height: var(--sidebarFilter-height);
+      line-height: var(--sidebarFilter-header-line-height);
+      font-size: var(--text-2xs);
+      color: var(--gray-1100);
+    }
+
+    &Name {
+      height: var(--sidebarFilter-height);
+      padding-left: var(--padding-3);
+      padding-right: var(--padding-3);
+      position: absolute;
+      left: 1px;
+      user-select: none;
+      cursor: default;
+      background: var(--gray-700);
+
+      &Active {
+        background: var(--green);
+      }
+
+      &Text {
+        color: var(--white);
+      }
+    }
+
+    &Icon {
+      height: var(--sidebarFilter-height);
+      color: var(--gray-1300);
+      cursor: pointer;
+      position: absolute;
+      border: none;
+      background: none;
+      margin-top: var(--neg-margin-1);
+      padding: 0;
+      z-index: 1000;
+
+      svg {
+        margin-top: 2px;
+        width: 14px;
+        height: 14px;
+      }
+
+      &:hover {
+        transition: var(--sidebarFilter-headerIcon-hover-transition);
+        color: var(--gray-500);
+      }
+
+      &Hide {
+        visibility: hidden;
+      }
+    }
+
+    &Close {
+      right: 5px;
+    }
+
+    &Reset {
+      right: 18px;
+    }
+  }
+
+  &Tooltip {
+    z-index: 1001 !important;
+  }
+}
