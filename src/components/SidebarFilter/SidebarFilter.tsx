@@ -1,33 +1,41 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
-import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
 import intersection from 'lodash.intersection';
 import FilterCat from '../FilterCat';
 import FilterNum from '../FilterNum';
-import { cogFiltDistSelector } from '../../selectors/cogData';
-import { sidebarHeightSelector, filterColSplitSelector } from '../../selectors/ui';
-import { cogInfoSelector } from '../../selectors/display';
-import { curDisplayInfoSelector, filterStateSelector, filterViewSelector, labelsSelector } from '../../selectors';
-import { setFilter, setFilterView } from '../../slices/filterSlice';
-import { setLabels } from '../../slices/labelsSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import SidebarFilterNotUsed from '../SidebarFilterNotUsed';
+import SidebarFilterContainer from '../SidebarFilterContainer';
 import styles from './SidebarFilter.module.scss';
 
-const SidebarFilter: React.FC = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector(filterStateSelector);
-  const filterView = useSelector(filterViewSelector);
-  const cogInfo = useSelector(cogInfoSelector);
-  const sidebarHeight = useSelector(sidebarHeightSelector);
-  const curDisplayInfo = useSelector(curDisplayInfoSelector);
-  const filtDist = useSelector(cogFiltDistSelector);
-  const labels = useSelector(labelsSelector);
-  const colSplit = useSelector(filterColSplitSelector);
-  const catHeight = 125;
+interface SidebarFilterProps {
+  filter: { [key: string]: Filter<FilterCat | FilterRange> };
+  filterView: FilterView;
+  cogInfo: { [key: string]: CogInfo };
+  sidebarHeight: number;
+  curDisplayInfo: DisplayInfoState;
+  filtDist: { [key: string]: CondDistFilterCat | CondDistFilterNum };
+  colSplit: {
+    cutoff: number | null;
+    heights: [number, number];
+  };
+  handleViewChange: (x: string, which: 'add' | 'remove') => void;
+  handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => void;
+  handleFilterSortChange: (x: Filter<FilterCat>) => void;
+}
 
+const SidebarFilter: React.FC<SidebarFilterProps> = ({
+  filter,
+  filterView,
+  cogInfo,
+  sidebarHeight,
+  curDisplayInfo,
+  filtDist,
+  colSplit,
+  handleViewChange,
+  handleFilterChange,
+  handleFilterSortChange,
+}) => {
+  const catHeight = 125;
   const inlineStyles = {
     col1: {
       height: sidebarHeight,
@@ -42,35 +50,6 @@ const SidebarFilter: React.FC = () => {
     allContainer: {
       height: sidebarHeight,
     },
-  };
-
-  const handleViewChange = (x: string, which: 'add' | 'remove') => {
-    // if a filter is being added to the view, add a panel label for the variable
-    if (which === 'add') {
-      if (labels.indexOf(x) < 0) {
-        const newLabels = Object.assign([], labels);
-        newLabels.push(x);
-        dispatch(setLabels(newLabels));
-      }
-    }
-    dispatch(setFilterView({ name: x, which }));
-  };
-
-  const handleFilterChange = (x: Filter<FilterCat | FilterRange> | string) => {
-    if (typeof x === 'string' || x instanceof String) {
-      dispatch(setFilter(x as string));
-    } else {
-      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
-      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
-      dispatch(setFilter(obj));
-    }
-    dispatch(setLayout({ pageNum: 1 }));
-  };
-
-  const handleFilterSortChange = (x: Filter<FilterCat>) => {
-    const obj: { [key: string]: Filter<FilterCat> } = {};
-    obj[x.name] = x;
-    dispatch(setFilter(obj));
   };
 
   let content = <div />;
@@ -88,7 +67,7 @@ const SidebarFilter: React.FC = () => {
     const colFilters = [col1filters, col2filters];
 
     const colContent = colFilters.map((curFilters) =>
-      curFilters.map((d) => {
+      curFilters.map((d: string) => {
         if (filtDist[d]) {
           let filterState = filter[d] as Filter<FilterCat | FilterRange>;
           let headerExtra = '';
@@ -142,45 +121,17 @@ const SidebarFilter: React.FC = () => {
             );
           }
           return (
-            <div key={`${d}_${displId}`} className={styles.container}>
-              <div className={styles.header}>
-                <div
-                  className={classNames({
-                    [styles.headerName]: true,
-                    [styles.headerNameActive]: filterActive,
-                  })}
-                >
-                  <span data-tip data-for={`hdtooltip_${d}`}>
-                    <span className={styles.headerNameText}>{d}</span>
-                  </span>
-                </div>
-                <ReactTooltip className={styles.sidebarFilterTooltip} place="right" id={`hdtooltip_${d}`}>
-                  <span>{cogInfo[d].desc}</span>
-                </ReactTooltip>
-                <div className={styles.headerExtra}>{headerExtra}</div>
-                <button
-                  type="button"
-                  key={`${d}_${displId}-close-icon`}
-                  className={`${styles.headerIcon} ${styles.headerClose}`}
-                  onMouseDown={() => handleViewChange(d, 'remove')}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
-                </button>
-                <button
-                  type="button"
-                  key={`${d}_${displId}-reset-icon`}
-                  className={classNames({
-                    [styles.headerIcon]: true,
-                    [styles.headerReset]: true,
-                    [styles.headerIconHide]: !filterActive,
-                  })}
-                  onMouseDown={() => handleFilterChange(filterState.name)}
-                >
-                  <FontAwesomeIcon icon={faRotateLeft} />
-                </button>
-              </div>
-              {itemContent}
-            </div>
+            <SidebarFilterContainer
+              cogInfo={cogInfo}
+              handleViewChange={handleViewChange}
+              handleFilterChange={handleFilterChange}
+              filterActive={filterActive}
+              headerExtra={headerExtra}
+              displId={displId}
+              filterState={filterState}
+              itemContent={itemContent}
+              d={d}
+            />
           );
         }
         return '';
@@ -192,13 +143,13 @@ const SidebarFilter: React.FC = () => {
     const inames = intersection(cogNames, filterView.inactive);
     if ((inlineStyles?.notUsedContainer?.height || 0) < 170 && extraIdx === 1) {
       colContent[extraIdx].push(
-        <div key="notUsedHeader" className={styles.notUsedHeader}>
+        <div key="notUsedHeader" className={styles.sidebarFilterNotUsedHeader}>
           Remove filters to select more.
         </div>,
       );
     } else {
       colContent[extraIdx].push(
-        <div key="notUsedHeader" className={styles.notUsedHeader}>
+        <div key="notUsedHeader" className={styles.sidebarFilterNotUsedHeader}>
           {filterView.active.length === 0
             ? 'Select a variable to filter on:'
             : filterView.inactive.length === 0
@@ -207,56 +158,24 @@ const SidebarFilter: React.FC = () => {
         </div>,
       );
       colContent[extraIdx].push(
-        <div key="notUsed" className={styles.notUsedContainer} style={inlineStyles.notUsedContainer}>
-          {Object.keys(cogGroups).map((grp) => {
-            const curItems = intersection(inames, cogGroups[grp]);
-            if (curItems.length === 0) {
-              return null;
-            }
-            return (
-              <React.Fragment key={grp}>
-                {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <div className={styles.cogGroupHeader}>
-                    <span className={styles.cogGroupText}>{`${grp} (${curItems.length})`}</span>
-                  </div>
-                )}
-                {[...cogGroups[grp]].sort().map((d) => (
-                  <React.Fragment key={`${d}_${displId}`}>
-                    {inames.includes(d) && (
-                      <span>
-                        <span data-tip data-for={`tooltip_${d}`}>
-                          <button
-                            type="button"
-                            className={classNames({
-                              [styles.variable]: true,
-                              [styles.variableActive]: filter[d] && filter[d].value !== undefined,
-                            })}
-                            key={`${d}_${displId}_button_${inames.length}`}
-                            onClick={() => handleViewChange(d, 'add')}
-                          >
-                            {d}
-                          </button>
-                        </span>
-                        <ReactTooltip className={styles.sidebarFilterTooltip} place="right" id={`tooltip_${d}`}>
-                          <span>{cogInfo[d].desc}</span>
-                        </ReactTooltip>
-                      </span>
-                    )}
-                  </React.Fragment>
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </div>,
+        <SidebarFilterNotUsed
+          filter={filter}
+          cogInfo={cogInfo}
+          handleViewChange={handleViewChange}
+          inlineStyles={inlineStyles}
+          cogGroups={cogGroups}
+          inames={inames}
+          displId={displId}
+        />,
       );
     }
 
     content = (
-      <div className={styles.allContainer} style={inlineStyles.allContainer}>
-        <div className={styles.col1} style={inlineStyles.col1}>
+      <div className={styles.sidebarFilterAllContainer} style={inlineStyles.allContainer}>
+        <div className={styles.sidebarFilterCol1} style={inlineStyles.col1}>
           {colContent[0]}
         </div>
-        <div className={styles.col2} style={inlineStyles.col2}>
+        <div className={styles.sidebarFilterCol2} style={inlineStyles.col2}>
           {colContent[1]}
         </div>
       </div>
