@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit' ;
-import type { PayloadAction } from '@reduxjs/toolkit' ;
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface AppState {
   appId: string;
@@ -10,7 +10,7 @@ export interface AppState {
   singlePageApp: boolean;
   fullscreen: boolean;
   errorMsg: string;
-};
+}
 
 const initialState: AppState = {
   appId: 'app',
@@ -54,6 +54,15 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setAppID, setOptions, setDialogOpen, setDispSelectDialogOpen, setDispInfoDialogOpen, setSinglePageApp, setFullscreen, setErrorMessage } = appSlice.actions;
+export const {
+  setAppID,
+  setOptions,
+  setDialogOpen,
+  setDispSelectDialogOpen,
+  setDispInfoDialogOpen,
+  setSinglePageApp,
+  setFullscreen,
+  setErrorMessage,
+} = appSlice.actions;
 
 export default appSlice.reducer;
