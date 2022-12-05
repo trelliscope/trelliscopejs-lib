@@ -1,18 +1,13 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
-import { setErrorMessage } from '../../slices/appSlice';
-import { errorSelector } from '../../selectors';
 
-const ErrorSnack: React.FC = () => {
-  const dispatch = useDispatch();
-  const errorMsg = useSelector(errorSelector);
-  const handleClose = () => {
-    dispatch(setErrorMessage(''));
-  };
+interface ErrorSnackInterface {
+  errorMsg: string;
+  handleClose: () => void;
+}
 
-  return (
+const ErrorSnack: React.FC<ErrorSnackInterface> = ({errorMsg, handleClose}) => (
     <Snackbar
       anchorOrigin={{
         vertical: 'bottom',
@@ -28,6 +23,5 @@ const ErrorSnack: React.FC = () => {
       ]}
     />
   );
-};
 
 export default ErrorSnack;
