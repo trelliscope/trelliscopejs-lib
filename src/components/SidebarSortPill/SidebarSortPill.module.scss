@@ -1,0 +1,51 @@
+.sidebarSortPill {
+  &NotUsed {
+    width: var(--sidebarSort-notUsed-width);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-left: var(--padding-7);
+    padding-right: var(--padding-7);
+    padding-bottom: var(--padding-7);
+  }
+
+  &Variable {
+    display: inline-block;
+    box-shadow: var(--sidebarSort-variable-box-shadow);
+    border-radius: var(--rounded);
+    border: 0;
+    background: none;
+    padding-top: var(--padding-px) !important;
+    padding-bottom: var(--padding-1) !important;
+    padding-left: var(--padding-5) !important;
+    padding-right: var(--padding-5) !important;
+    margin: var(--margin-2) !important;
+    font-size: var(--text-xs);
+    color: black;
+    cursor: pointer;
+    transition: var(--sidebarSort-variable-transition);
+
+    &:hover {
+      transition: var(--sidebarSort-variable-transition);
+      background: var(--white-500);
+    }
+  }
+
+  &CogGroup {
+    &Header {
+      background: var(--blue);
+      margin-left: var(--neg-margin-7);
+      margin-right: var(--neg-margin-7);
+      margin-top: var(--margin-7);
+      margin-bottom: var(--margin-7);
+      padding-top: var(--padding-3);
+      padding-bottom: var(--padding-3);
+      color: var(--white);
+      font-weight: var(--font-normal);
+      font-size: var(--text-base);
+    }
+
+    &Text {
+      padding-left: var(--padding-11);
+    }
+  }
+}

@@ -66,9 +66,11 @@ export const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
     value: '',
     index: '',
   };
-  const ciKeys = Object.keys(cdi.info.cogInfo);
-  for (let i = 0; i < ciKeys.length; i += 1) {
-    res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
+  if (cdi?.info?.cogInfo) {
+    const ciKeys = Object.keys(cdi.info.cogInfo);
+    for (let i = 0; i < ciKeys.length; i += 1) {
+      res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
+    }
   }
   return res;
 });
