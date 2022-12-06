@@ -1,51 +1,4 @@
 .sidebarSort {
-  &Table {
-    width: var(--sidebarSort-table-width);
-    border-collapse: collapse;
-    border-spacing: 0;
-    table-layout: fixed;
-
-    &Wrap {
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    &Row {
-      width: var(--sidebarSort-table-width);
-      height: var(--sidebarSort-table-height);
-      border-bottom: var(border-3);
-    }
-  }
-
-  &Tr {
-    width: var(--sidebarSort-table-width);
-    height: var(--sidebarSort-table-height);
-    border-bottom: var(border-3);
-  }
-
-  &Button {
-    vertical-align: middle;
-    width: var(--sidebarSort-button-width);
-    text-align: center;
-
-    &Close {
-      height: var(--sidebarSort-button-height);
-      width: var(--sidebarSort-button-width);
-      text-align: center;
-      vertical-align: middle;
-    }
-  }
-
-  &Labels {
-    font-size: var(--text-sm);
-    height: var(--sidebarSort-labels-height);
-    width: var(--sidebarSort-labels-width);
-    vertical-align: middle;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   &NotUsed {
     width: var(--sidebarSort-notUsed-width);
     overflow-y: auto;
@@ -61,47 +14,6 @@
       box-sizing: border-box;
       width: var(--sidebarSort-notUsed-width);
       font-size: var(--text-base);
-    }
-  }
-
-  &Variable {
-    display: inline-block;
-    box-shadow: var(--sidebarSort-variable-box-shadow);
-    border-radius: var(--rounded);
-    border: 0;
-    background: none;
-    padding-top: var(--padding-px) !important;
-    padding-bottom: var(--padding-1) !important;
-    padding-left: var(--padding-5) !important;
-    padding-right: var(--padding-5) !important;
-    margin: var(--margin-2) !important;
-    font-size: var(--text-xs);
-    color: black;
-    cursor: pointer;
-    transition: var(--sidebarSort-variable-transition);
-
-    &:hover {
-      transition: var(--sidebarSort-variable-transition);
-      background: var(--white-500);
-    }
-  }
-
-  &CogGroup {
-    &Header {
-      background: var(--blue);
-      margin-left: var(--neg-margin-7);
-      margin-right: var(--neg-margin-7);
-      margin-top: var(--margin-7);
-      margin-bottom: var(--margin-7);
-      padding-top: var(--padding-3);
-      padding-bottom: var(--padding-3);
-      color: var(--white);
-      font-weight: var(--font-normal);
-      font-size: var(--text-base);
-    }
-
-    &Text {
-      padding-left: var(--padding-11);
     }
   }
 }

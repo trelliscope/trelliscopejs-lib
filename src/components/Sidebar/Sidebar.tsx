@@ -17,12 +17,15 @@ import {
   filterStateSelector,
   filterViewSelector,
   labelsSelector,
+  sortSelector,
+  cogDescSelector,
 } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
+import { setSort } from '../../slices/sortSlice';
 import { cogInfoSelector } from '../../selectors/display';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
@@ -43,6 +46,8 @@ const Sidebar: React.FC = () => {
   const filtDist = useSelector(cogFiltDistSelector);
   const labels = useSelector(labelsSelector);
   const colSplit = useSelector(filterColSplitSelector);
+  const sort = useSelector(sortSelector);
+  const cogDesc = useSelector(cogDescSelector);
   const ch = useSelector(contentHeightSelector);
 
   const handleLabelChange = (value: string) => {
@@ -84,6 +89,38 @@ const Sidebar: React.FC = () => {
     obj[x.name] = x;
     dispatch(setFilter(obj));
   };
+
+  const handleSortChange = (sortSpec: Sort[] | number) => {
+    dispatch(setSort(sortSpec));
+    dispatch(setLayout({ pageNum: 1 }));
+  };
+
+  const addSortLabel = (name: string) => {
+    // if a sort variable is being added, add a panel label for the variable
+    if (labels.indexOf(name) < 0) {
+      const newLabels = Object.assign([], labels);
+      newLabels.push(name);
+      dispatch(setLabels(newLabels));
+    }
+  };
+
+  const activeIsTaller = sort.length * 51 > sidebarHeight - 2 * 51;
+  let activeHeight = 51 * sort.length;
+  if (activeIsTaller) {
+    const n = Math.ceil((sidebarHeight * 0.6) / 51);
+    activeHeight = n * 51 - 25;
+  }
+
+  const sort2 = Object.assign([], sort) as Sort[];
+  const notUsed = Object.keys(cogDesc);
+  if (cogDesc) {
+    for (let i = 0; i < sort.length; i += 1) {
+      const index = notUsed.indexOf(sort[i].name);
+      if (index > -1) {
+        notUsed.splice(index, 1);
+      }
+    }
+  }
 
   const customStyles = {
     sidebarContainer: {
@@ -131,7 +168,17 @@ const Sidebar: React.FC = () => {
       case SB_PANEL_SORT:
         content = (
           <div>
-            <SidebarSort />
+            <SidebarSort
+              handleSortChange={handleSortChange}
+              addSortLabel={addSortLabel}
+              sort={sort}
+              curDisplayInfo={curDisplayInfo}
+              cogDesc={cogDesc}
+              sidebarHeight={sidebarHeight}
+              activeHeight={activeHeight}
+              sort2={sort2}
+              notUsed={notUsed}
+            />
           </div>
         );
         break;
