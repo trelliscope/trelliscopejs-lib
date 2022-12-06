@@ -64,50 +64,6 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
   let singlePageApp = false;
   let fullscreen = false;
 
-  if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
-    singlePageApp = true;
-    fullscreen = true;
-    // el.parentNode.nodeName === 'BODY'
-    el.style.width = '100%';
-    el.style.height = '100%';
-    addClass(document.body, 'trelliscope-fullscreen-body');
-    addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-  } else {
-    const bodyEl = document.createElement('div');
-    bodyEl.style.width = '100%';
-    bodyEl.style.height = '100%';
-    bodyEl.style.display = 'none';
-    bodyEl.id = 'trelliscope-fullscreen-div';
-    document.getElementsByTagName('body')[0].appendChild(bodyEl);
-
-    if (noHeight) {
-      const nSiblings =
-        [].slice
-          .call(el?.parentNode?.childNodes)
-          .map((d: { nodeType: number }) => d.nodeType !== 3 && d.nodeType !== 8)
-          .filter(Boolean).length - 1;
-      if (nSiblings === 0) {
-        el.style.height = `${el?.parentNode?.firstElementChild?.clientHeight}px`;
-        el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
-      }
-    }
-
-    // give 'el' a new parent so we know where to move div back to after fullscreen
-    const parent = el.parentNode as ParentNode;
-    const wrapper = document.createElement('div');
-    wrapper.id = `${el.id}-parent`;
-    parent.replaceChild(wrapper, el);
-    // set element as child of wrapper
-    wrapper.appendChild(el);
-
-    // if (el.style.height === undefined) {
-    //   el.style.height = ?
-    // }
-    // if (el.style.width === undefined) {
-    //   el.style.width = ?
-    // }
-  }
-
   // need to store original app dims (constant) if it isn't a SPA
   // this will only be used in that case, but store it always anyway
   const appDims = {} as { width: number; height: number };
