@@ -28,6 +28,7 @@ import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
 
 const Sidebar: React.FC = () => {
+  const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
   const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
   const dispatch = useDispatch();
   const contentHeight = useSelector(contentHeightSelector);
@@ -42,6 +43,18 @@ const Sidebar: React.FC = () => {
   const filtDist = useSelector(cogFiltDistSelector);
   const labels = useSelector(labelsSelector);
   const colSplit = useSelector(filterColSplitSelector);
+  const ch = useSelector(contentHeightSelector);
+
+  const handleLabelChange = (value: string) => {
+    const idx = labels.indexOf(value);
+    let newLabels = labels;
+    if (idx === -1) {
+      newLabels = [...labels, value];
+    } else {
+      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
+    }
+    dispatch(setLabels(newLabels));
+  };
 
   const handleViewChange = (x: string, which: 'add' | 'remove') => {
     // if a filter is being added to the view, add a panel label for the variable
@@ -125,7 +138,14 @@ const Sidebar: React.FC = () => {
       case SB_PANEL_LABELS:
         content = (
           <div>
-            <SidebarLabels />
+            <SidebarLabels
+              sidebarHeaderHeight={sidebarHeaderHeight}
+              ch={ch}
+              labels={labels}
+              curDisplayInfo={curDisplayInfo}
+              cogInfo={cogInfo}
+              handleLabelChange={handleLabelChange}
+            />
           </div>
         );
         break;
