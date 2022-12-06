@@ -25,36 +25,37 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({
   handleLabelChange,
 }) => {
   const height = ch - sidebarHeaderHeight;
-  let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
-  if (ciKeys.length > 0) {
-    content = (
-      <div className={styles.sidebarLabels} style={{ height }}>
-        <List className={styles.sidebarLabelsList}>
-          {Object.keys(cogGroups).map((grp) => {
-            const curItems = cogGroups[grp];
-            if (curItems.length === 0) {
-              return null;
-            }
-            return (
-              <React.Fragment key={grp}>
-                {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
-                    <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
-                  </ListSubheader>
-                )}
-                {[...cogGroups[grp]].sort().map((d: string) => (
-                  <SidebarLabelPill labels={labels} cogInfo={cogInfo} d={d} handleLabelChange={handleLabelChange} />
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </List>
-      </div>
-    );
-  }
-  return content;
+
+  return (
+    <>
+      {ciKeys.length > 0 && (
+        <div className={styles.sidebarLabels} style={{ height }}>
+          <List className={styles.sidebarLabelsList}>
+            {Object.keys(cogGroups).map((grp) => {
+              const curItems = cogGroups[grp];
+              if (curItems.length === 0) {
+                return null;
+              }
+              return (
+                <React.Fragment key={grp}>
+                  {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                    <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
+                      <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
+                    </ListSubheader>
+                  )}
+                  {[...cogGroups[grp]].sort().map((d: string) => (
+                    <SidebarLabelPill labels={labels} cogInfo={cogInfo} d={d} handleLabelChange={handleLabelChange} />
+                  ))}
+                </React.Fragment>
+              );
+            })}
+          </List>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default SidebarLabels;
