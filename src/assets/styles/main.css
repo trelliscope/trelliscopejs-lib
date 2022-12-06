@@ -1,23 +1,10 @@
-.trelliscope-fullscreen-body {
+.trelliscope-spa {
+  height: 100vh !important;
+  width: 100vw !important;
+}
+
+body {
   margin: 0;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-}
-
-.trelliscope-fullscreen-html {
-  height: 100vh;
-  width: 100vw;
-}
-
-.trelliscope-fullscreen-el {
-  z-index: 7000;
-  width: 100% !important;
-  height: 100% !important;
-  position: fixed !important;
-  /* transition: all 500ms ease-in; */
-  top: 0;
-  left: 0;
 }
 
 .trelliscope-app-container {
@@ -28,6 +15,7 @@
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   line-height: normal;
+  z-index: 99999 !important;
 }
 
 .trelliscope-app button {
