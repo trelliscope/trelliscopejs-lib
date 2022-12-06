@@ -8,7 +8,9 @@ import SidebarFilterContainer from '../SidebarFilterContainer';
 import styles from './SidebarFilter.module.scss';
 
 interface SidebarFilterProps {
-  filter: { [key: string]: Filter<FilterCat | FilterRange> };
+  filter: {
+    [key: string]: Filter<FilterCat | FilterRange>;
+  };
   filterView: FilterView;
   cogInfo: { [key: string]: CogInfo };
   sidebarHeight: number;

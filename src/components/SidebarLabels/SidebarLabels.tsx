@@ -1,36 +1,30 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListSubheader from '@mui/material/ListSubheader';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import { setLabels } from '../../slices/labelsSlice';
-import { contentHeightSelector } from '../../selectors/ui';
-import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
-import getCustomProperties from '../../getCustomProperties';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import SidebarLabelPill from '../SidebarLabelPill';
 import styles from './SidebarLabels.module.scss';
 
-const SidebarLabels: React.FC = () => {
-  const dispatch = useDispatch();
-  const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
-  const ch = useSelector(contentHeightSelector);
-  const height = ch - sidebarHeaderHeight;
-  const labels = useSelector(labelsSelector);
-  const curDisplayInfo = useSelector(curDisplayInfoSelector);
-  const { cogInfo } = curDisplayInfo.info;
-
-  const handleChange = (value: string) => {
-    const idx = labels.indexOf(value);
-    let newLabels = labels;
-    if (idx === -1) {
-      newLabels = [...labels, value];
-    } else {
-      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
-    }
-    dispatch(setLabels(newLabels));
+interface SidebarLabelsProps {
+  sidebarHeaderHeight: number;
+  ch: number;
+  labels: string[];
+  curDisplayInfo: DisplayInfoState;
+  cogInfo: {
+    [key: string]: CogInfo;
   };
+  handleLabelChange: (value: string) => void;
+}
 
+const SidebarLabels: React.FC<SidebarLabelsProps> = ({
+  sidebarHeaderHeight,
+  ch,
+  labels,
+  curDisplayInfo,
+  cogInfo,
+  handleLabelChange,
+}) => {
+  const height = ch - sidebarHeaderHeight;
   let content = <div />;
   const { cogGroups } = curDisplayInfo.info;
   const ciKeys = Object.keys(cogInfo);
@@ -51,19 +45,7 @@ const SidebarLabels: React.FC = () => {
                   </ListSubheader>
                 )}
                 {[...cogGroups[grp]].sort().map((d: string) => (
-                  <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name)}>
-                    <Checkbox
-                      checked={labels.indexOf(cogInfo[d].name) !== -1}
-                      className={styles.sidebarLabelsListCheckbox}
-                      tabIndex={-1}
-                      disableRipple
-                    />
-                    <ListItemText
-                      primary={cogInfo[d].name}
-                      secondary={cogInfo[d].desc}
-                      className={styles.sidebarLabelsListItem}
-                    />
-                  </ListItem>
+                  <SidebarLabelPill labels={labels} cogInfo={cogInfo} d={d} handleLabelChange={handleLabelChange} />
                 ))}
               </React.Fragment>
             );
