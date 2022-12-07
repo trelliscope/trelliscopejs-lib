@@ -71,7 +71,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
     radioDiv: {
       transform: `scale(${dims.labelHeight / 29})`,
       transformOrigin: 'left top',
-      marginTop: '-4px',
+      marginTop: '-2px',
     },
   };
 
@@ -169,7 +169,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
                     ) || ''}
                   </div>
-                  <div>
+                  <div className={styles.editButtonContainer}>
                     <button
                       type="button"
                       className={styles.editButton}
