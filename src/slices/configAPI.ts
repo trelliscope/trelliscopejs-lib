@@ -15,9 +15,7 @@ const getConfigBase = (txt: string, configBase: string) => {
 };
 
 const JSONPBaseQuery =
-  (
-    { baseUrl }: { baseUrl: string } = { baseUrl: '' },
-  ): BaseQueryFn<
+  (): BaseQueryFn<
     {
       url: string;
       id: string;
@@ -44,7 +42,7 @@ const JSONPBaseQuery =
           },
         });
       } else {
-        fetch(`${baseUrl}${url}`)
+        fetch(url)
           .then((res) => res.json())
           .then(window[cfgCallback]);
       }
@@ -62,9 +60,13 @@ export const configAPI = createApi({
 
 export const { useGetConfigQuery } = configAPI;
 
-export const useDataType = () => {
+export const useConfig = () => {
   const appId = useSelector(selectAppId);
   const configPath = useSelector(selectConfigPath);
-  const { data: config } = useGetConfigQuery({ config: configPath, id: appId }, { skip: !configPath || !appId });
-  return config?.data_type || 'jsonp';
+  return useGetConfigQuery({ config: configPath, id: appId }, { skip: !configPath || !appId });
+};
+
+export const useDataType = () => {
+  const { data: config } = useConfig();
+  return config?.data_type;
 };
