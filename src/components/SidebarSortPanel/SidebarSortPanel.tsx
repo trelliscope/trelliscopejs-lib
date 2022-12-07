@@ -1,8 +1,7 @@
 import React from 'react';
 import IconButton from '@mui/material/IconButton';
-import Icon from '@mui/material/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import styles from './SidebarSortPanel.module.scss';
 
 interface SidebarSortPanelProps {
@@ -48,7 +47,7 @@ const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, s
                 </td>
                 <td className={styles.sidebarSortPanelButtonClose}>
                   <IconButton onClick={() => handleSortChange(i)}>
-                    <Icon className="icon-times" style={{ fontSize: 16, color: '#aaa' }} />
+                    <FontAwesomeIcon icon={faXmark} size="xs" />
                   </IconButton>
                 </td>
               </tr>
