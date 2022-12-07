@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
@@ -129,89 +130,53 @@ const Sidebar: React.FC = () => {
     },
   };
 
-  if (active === '') {
-    return <div className={`${styles.sidebarContainer} ${styles.sidebarHidden}`} style={customStyles.sidebarContainer} />;
-  }
-
-  let content;
-  if (active === SB_CONFIG) {
-    content = <div className={styles.sidebarEmpty}>Configuration...</div>;
-  } else if (!displayLoaded) {
-    content = <div className={styles.sidebarEmpty}>Load a display...</div>;
-  } else {
-    switch (active) {
-      case SB_PANEL_LAYOUT:
-        content = (
-          <div>
-            <SidebarLayout />
-          </div>
-        );
-        break;
-      case SB_PANEL_FILTER:
-        content = (
-          <div>
-            <SidebarFilter
-              filter={filter}
-              filterView={filterView}
-              cogInfo={cogInfo}
-              sidebarHeight={sidebarHeight}
-              curDisplayInfo={curDisplayInfo}
-              filtDist={filtDist}
-              colSplit={colSplit}
-              handleViewChange={handleViewChange}
-              handleFilterChange={handleFilterChange}
-              handleFilterSortChange={handleFilterSortChange}
-            />
-          </div>
-        );
-        break;
-      case SB_PANEL_SORT:
-        content = (
-          <div>
-            <SidebarSort
-              handleSortChange={handleSortChange}
-              addSortLabel={addSortLabel}
-              sort={sort}
-              curDisplayInfo={curDisplayInfo}
-              cogDesc={cogDesc}
-              sidebarHeight={sidebarHeight}
-              activeHeight={activeHeight}
-              sort2={sort2}
-              notUsed={notUsed}
-            />
-          </div>
-        );
-        break;
-      case SB_PANEL_LABELS:
-        content = (
-          <div>
-            <SidebarLabels
-              sidebarHeaderHeight={sidebarHeaderHeight}
-              ch={ch}
-              labels={labels}
-              curDisplayInfo={curDisplayInfo}
-              cogInfo={cogInfo}
-              handleLabelChange={handleLabelChange}
-            />
-          </div>
-        );
-        break;
-      case SB_VIEWS:
-        content = (
-          <div>
-            <SidebarViews />
-          </div>
-        );
-        break;
-      default:
-        content = '';
-    }
-  }
-
   return (
-    <div className={styles.sidebarContainer} style={customStyles.sidebarContainer}>
+    <div
+      className={classNames(active === '' ? [styles.sidebarHidden, styles.sidebarContainer] : styles.sidebarContainer)}
+      style={customStyles.sidebarContainer}
+    >
       <div className={styles.sidebarHeader}>{active}</div>
-      {content}
+      {active === SB_CONFIG && <div className={styles.sidebarEmpty}>Configuration...</div>}
+      {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
+      {active === SB_PANEL_LAYOUT && <SidebarLayout />}
+      {active === SB_PANEL_FILTER && (
+        <SidebarFilter
+          filter={filter}
+          filterView={filterView}
+          cogInfo={cogInfo}
+          sidebarHeight={sidebarHeight}
+          curDisplayInfo={curDisplayInfo}
+          filtDist={filtDist}
+          colSplit={colSplit}
+          handleViewChange={handleViewChange}
+          handleFilterChange={handleFilterChange}
+          handleFilterSortChange={handleFilterSortChange}
+        />
+      )}
+      {active === SB_PANEL_SORT && (
+        <SidebarSort
+          handleSortChange={handleSortChange}
+          addSortLabel={addSortLabel}
+          sort={sort}
+          curDisplayInfo={curDisplayInfo}
+          cogDesc={cogDesc}
+          sidebarHeight={sidebarHeight}
+          activeHeight={activeHeight}
+          sort2={sort2}
+          notUsed={notUsed}
+        />
+      )}
+      {active === SB_PANEL_LABELS && (
+        <SidebarLabels
+          sidebarHeaderHeight={sidebarHeaderHeight}
+          ch={ch}
+          labels={labels}
+          curDisplayInfo={curDisplayInfo}
+          cogInfo={cogInfo}
+          handleLabelChange={handleLabelChange}
+        />
+      )}
+      {active === SB_VIEWS && <SidebarViews />}
     </div>
   );
 };
