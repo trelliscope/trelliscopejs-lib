@@ -51,6 +51,9 @@ const Sidebar: React.FC = () => {
   const cogDesc = useSelector(cogDescSelector);
   const ch = useSelector(contentHeightSelector);
 
+  const height = contentHeight - sidebarHeaderHeight;
+  const { views } = curDisplayInfo.info;
+
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
     let newLabels = labels;
@@ -102,6 +105,105 @@ const Sidebar: React.FC = () => {
       const newLabels = Object.assign([], labels);
       newLabels.push(name);
       dispatch(setLabels(newLabels));
+    }
+  };
+
+  const handleViewsChange = (value: string) => {
+    const hashItems = {} as HashItem;
+    value
+      .replace('#', '')
+      .split('&')
+      .forEach((d) => {
+        const tuple = d.split('=');
+        const [key, val] = tuple;
+        hashItems[key] = val;
+      });
+
+    if (hashItems.nrow && hashItems.ncol && hashItems.arr) {
+      const layout = {
+        nrow: parseInt(hashItems.nrow, 10),
+        ncol: parseInt(hashItems.ncol, 10),
+        arrange: hashItems.arr,
+      };
+      dispatch(setLayout(layout));
+    }
+
+    // need to do page number separately because it is recomputed when nrow/ncol are changed
+    if (hashItems.pg) {
+      dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
+    }
+
+    // labels
+    if (hashItems.labels) {
+      const viewsLabels = hashItems.labels.split(',');
+      dispatch(setLabels(viewsLabels));
+    }
+
+    // sort
+    let viewsSort = [] as Sort[];
+    if (hashItems.sort) {
+      viewsSort = hashItems.sort.split(',').map((d, i) => {
+        const vals = d.split(';');
+        return {
+          order: i + 1,
+          name: vals[0],
+          dir: vals[1] as SortDir,
+        };
+      });
+    }
+    dispatch(setSort(viewsSort));
+
+    // filter
+    const viewsFilter = {} as { [key: string]: Filter<FilterCat | FilterRange> };
+    if (hashItems.filter) {
+      const fltrs = hashItems.filter.split(',');
+      fltrs.forEach((flt) => {
+        const fltItems = {} as HashItem;
+        flt.split(';').forEach((d) => {
+          const tuple = d.split(':');
+          const [key, val] = tuple;
+          fltItems[key] = val;
+        });
+        // fltItems.var
+        const fltState = {
+          name: fltItems.var,
+          type: fltItems.type,
+          varType: cogInfo[fltItems.var].type,
+        } as Filter<FilterCat | FilterRange>;
+        if (fltItems.type === 'select') {
+          fltState.orderValue = 'ct,desc';
+          fltState.value = fltItems.val.split('#').map(decodeURIComponent);
+        } else if (fltItems.type === 'regex') {
+          const { levels } = cogInfo[fltItems.var];
+          const vals = [] as string[];
+          const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
+          levels.forEach((d) => {
+            if (d.match(rval) !== null) {
+              vals.push(d);
+            }
+          });
+          fltState.regex = fltItems.val;
+          fltState.value = vals;
+          fltState.orderValue = 'ct,desc';
+        } else if (fltItems.type === 'range') {
+          const from = fltItems.from ? parseFloat(fltItems.from) : undefined;
+          const to = fltItems.to ? parseFloat(fltItems.to) : undefined;
+          fltState.value = { from, to };
+          fltState.valid = true;
+          if (from && to && from > to) {
+            fltState.valid = false;
+          }
+        }
+        viewsFilter[fltItems.var] = fltState;
+      });
+    }
+    // first need to reset them all
+    dispatch(setFilter({}));
+    dispatch(setFilter(viewsFilter));
+
+    // filterView (just add - if something's already there we won't remove it)
+    if (hashItems.fv) {
+      hashItems.fv.split(',').map((el) => dispatch(setFilterView({ name: el, which: 'add' })));
     }
   };
 
@@ -176,7 +278,7 @@ const Sidebar: React.FC = () => {
           handleLabelChange={handleLabelChange}
         />
       )}
-      {active === SB_VIEWS && <SidebarViews />}
+      {active === SB_VIEWS && <SidebarViews handleViewsChange={handleViewsChange} height={height} views={views} />}
     </div>
   );
 };
