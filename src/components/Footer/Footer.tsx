@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
 import { filterCardinalitySelector } from '../../selectors/cogData';
-import { curDisplayInfoSelector, filterSelector, sortSelector, singlePageAppSelector } from '../../selectors';
+import { filterSelector, sortSelector, singlePageAppSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import getCustomProperties from '../../getCustomProperties';
@@ -11,12 +11,13 @@ import { setSort } from '../../slices/sortSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import styles from './Footer.module.scss';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 const Footer: React.FC = () => {
   const dispatch = useDispatch();
+  const { data: displayInfo } = useDisplayInfo();
   const [dialogOpen, setDialogOpen] = useState(false);
   const sort = useSelector(sortSelector);
-  const cdi = useSelector(curDisplayInfoSelector);
   const filter = useSelector(filterSelector);
   const windowWidth = useSelector(windowWidthSelector);
   const contentHeight = useSelector(contentHeightSelector);
@@ -29,19 +30,26 @@ const Footer: React.FC = () => {
     width: windowWidth - (singlePage ? 0 : footerHeight),
     top: contentHeight + headerHeight,
   };
+  const cdi = {
+    info: {
+      cogInfo: {
+        jeff: 'jeff',
+      },
+    },
+  };
 
   const sortRes = [];
   for (let i = 0; i < sort.length; i += 1) {
-    const { name } = sort[i];
-    const { type } = cdi.info.cogInfo[name];
+    const { varname } = sort[i];
+    const { type } = displayInfo?.metas.find((m) => m.varname === varname) || {};
     let icon = 'icon-sort-amount';
     if (type === 'factor') {
       icon = 'icon-sort-alpha';
-    } else if (type === 'numeric') {
+    } else if (type === 'number') {
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${sort[i].dir}`;
-    sortRes.push({ name, icon });
+    sortRes.push({ varname, icon });
   }
 
   const filterRes = [];
@@ -93,11 +101,11 @@ const Footer: React.FC = () => {
   const handleStateClose = (x: { type: string; index: number; label: string }) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));
-      dispatch(setLayout({ pageNum: 1 }));
+      dispatch(setLayout({ page: 1 }));
     } else if (x.type === 'filter') {
       dispatch(setFilterView({ name: x.label, which: 'remove' }));
       dispatch(setFilter(x.label));
-      dispatch(setLayout({ pageNum: 1 }));
+      dispatch(setLayout({ page: 1 }));
     }
   };
 
@@ -108,10 +116,10 @@ const Footer: React.FC = () => {
           <div className={styles.footerSectionWrapper}>
             <div className={styles.footerSectionText}>Sorting on:</div>
             <div className={styles.footerChipWrapper}>
-              {sortRes.map((el: { name: string; icon: string }, i: number) => (
+              {sortRes.map((el: { varname: string; icon: string }, i: number) => (
                 <FooterChip
-                  key={`${el.name}_sortchip`}
-                  label={el.name}
+                  key={`${el.varname}_sortchip`}
+                  label={el.varname}
                   icon={el.icon}
                   text=""
                   index={i}

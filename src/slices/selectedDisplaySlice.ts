@@ -31,8 +31,6 @@ export const selectSelectedDisplay = (state: RootState) => state.selectedDisplay
 
 export const useSelectedDisplay = () => {
   const { data: displayList } = useDisplayList();
-  console.log(displayList);
-
   const selectedDisplay = useSelector(selectSelectedDisplay);
   return displayList?.find((display) => display.name === selectedDisplay);
 };

@@ -48,8 +48,6 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
   const { data: displayList, isSuccess } = useDisplayList();
 
-  console.log('DisplaySelect', displayList);
-
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
   };
