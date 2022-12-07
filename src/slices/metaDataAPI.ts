@@ -38,7 +38,7 @@ export const metaDataAPI = createApi({
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
     getMetaData: builder.query<
-      { [key: string]: unknown },
+      { [key: string]: unknown[] },
       { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }
     >({
       query: ({ url, id, dataType, displayName }) => ({ url, id, dataType, displayName }),

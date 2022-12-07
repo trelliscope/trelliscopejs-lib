@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import omit from 'lodash.omit';
+import difference from 'lodash.difference';
+import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 
 export interface FilterState {
@@ -63,10 +64,17 @@ export const filterSlice = createSlice({
       } else {
         state.state = [...state.state, ...filter];
       }
+
+      const filterables = action.payload.metas.filter((m) => m.filterable).map((m) => m.varname);
+      const active = state.state.map((f) => f.varname);
+      state.view.active = active;
+      state.view.inactive = difference(filterables, active);
     });
   },
 });
 
 export const { setFilter, setFilterView } = filterSlice.actions;
+
+export const selectFilterState = (state: RootState) => state.filter.state;
 
 export default filterSlice.reducer;
