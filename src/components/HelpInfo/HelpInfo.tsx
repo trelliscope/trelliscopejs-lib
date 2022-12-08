@@ -41,7 +41,8 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
     setTabNumber(value);
   };
 
-  useHotkeys('h', handleOpen, { enabled: fullscreen });
+  useHotkeys('h', handleOpen, { enabled: fullscreen && !open });
+  useHotkeys('h', handleClose, { enabled: fullscreen && open });
   useHotkeys('esc', handleClose, { enabled: open });
 
   return (
