@@ -56,8 +56,8 @@ const Shortcuts: React.FC = () => {
               &ensp;open &quot;Display Info&quot; dialog
             </li>
             <li>
-              <code className={styles.shortcutsCode}>a</code>
-              &ensp;open &quot;About&quot; dialog
+              <code className={styles.shortcutsCode}>h</code>
+              &ensp;open &quot;Help/About&quot; dialog
             </li>
             <li>
               <code className={styles.shortcutsCode}>esc</code>
