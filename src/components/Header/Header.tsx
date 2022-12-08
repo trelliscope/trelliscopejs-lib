@@ -87,13 +87,13 @@ const Header: React.FC = () => {
         headerHeight *
         ((dlLength <= 1 ? 0 : 1) +
           (selectedDisplay.name === '' ? 0 : 1) +
-          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
+          (Object.keys(relatedDisplayGroups).length === 0 ? -1 : 1)),
       width:
         windowWidth -
         (headerHeight *
           ((dlLength <= 1 ? 0 : 1) +
             (selectedDisplay.name === '' ? 0 : 1) +
-            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
+            (Object.keys(relatedDisplayGroups).length === 0 ? -1 : 1)) +
           logoWidth +
           30),
     },
@@ -173,6 +173,7 @@ const Header: React.FC = () => {
       </span>
     );
   }
+
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
       {listLoaded && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}

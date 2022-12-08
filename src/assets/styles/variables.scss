@@ -202,6 +202,7 @@
   --margin-12: 24px;
   --margin-13: 27px;
   --margin-14: 28px;
+  --margin-15: 50px;
   --neg-margin-px: calc(var(--margin-px) * -1);
   --neg-margin-1: calc(var(--margin-1) * -1);
   --neg-margin-2: calc(var(--margin-2) * -1);
@@ -217,6 +218,7 @@
   --neg-margin-12: calc(var(--margin-12) * -1);
   --neg-margin-13: calc(var(--margin-13) * -1);
   --neg-margin-14: calc(var(--margin-14) * -1);
+  --neg-margin-15: calc(var(--margin-15) * -1);
 
   // position
   --content-position-top: var(--header-container-height);
