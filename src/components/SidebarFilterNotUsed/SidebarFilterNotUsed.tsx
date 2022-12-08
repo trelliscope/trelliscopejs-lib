@@ -36,33 +36,34 @@ const SidebarFilterNotUsed: React.FC<SidebarFilterNotUsedProps> = ({
   inames,
   displId,
 }) => (
-    <div key="notUsed" className={styles.sidebarFilterNotUsed} style={inlineStyles.notUsedContainer}>
-      {Object.keys(cogGroups).map((grp) => {
-        const curItems = intersection(inames, cogGroups[grp]);
-        if (curItems.length === 0) {
-          return null;
-        }
-        return (
-          <React.Fragment key={grp}>
-            {!['condVar', 'common', 'panelKey'].includes(grp) && (
-              <div className={styles.sidebarFilterNotUsedCogGroupHeader}>
-                <span className={styles.sidebarFilterNotUsedCogGroupText}>{`${grp} (${curItems.length})`}</span>
-              </div>
-            )}
-            {[...cogGroups[grp]].sort().map((d) => (
-              <SidebarFilterPill
-                filter={filter}
-                cogInfo={cogInfo}
-                handleViewChange={handleViewChange}
-                inames={inames}
-                displId={displId}
-                d={d}
-              />
-            ))}
-          </React.Fragment>
-        );
-      })}
-    </div>
-  );
+  <div key="notUsed" className={styles.sidebarFilterNotUsed} style={inlineStyles.notUsedContainer}>
+    {Object.keys(cogGroups).map((grp) => {
+      const curItems = intersection(inames, cogGroups[grp]);
+      if (curItems.length === 0) {
+        return null;
+      }
+      return (
+        <React.Fragment key={grp}>
+          {!['condVar', 'common', 'panelKey'].includes(grp) && (
+            <div className={styles.sidebarFilterNotUsedCogGroupHeader}>
+              <span className={styles.sidebarFilterNotUsedCogGroupText}>{`${grp} (${curItems.length})`}</span>
+            </div>
+          )}
+          {[...cogGroups[grp]].sort().map((d) => (
+            <SidebarFilterPill
+              filter={filter}
+              cogInfo={cogInfo}
+              handleViewChange={handleViewChange}
+              inames={inames}
+              displId={displId}
+              d={d}
+              key={`${d}_${displId}`}
+            />
+          ))}
+        </React.Fragment>
+      );
+    })}
+  </div>
+);
 
 export default SidebarFilterNotUsed;
