@@ -130,6 +130,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
             filterState={filterState}
             itemContent={itemContent}
             d={d}
+            key={`${d}_${displId}`}
           />
         );
       }
@@ -165,6 +166,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
         cogGroups={cogGroups}
         inames={inames}
         displId={displId}
+        key={displId}
       />,
     );
   }

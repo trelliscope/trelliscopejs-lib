@@ -46,7 +46,13 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({
                     </ListSubheader>
                   )}
                   {[...cogGroups[grp]].sort().map((d: string) => (
-                    <SidebarLabelPill labels={labels} cogInfo={cogInfo} d={d} handleLabelChange={handleLabelChange} />
+                    <SidebarLabelPill
+                      labels={labels}
+                      cogInfo={cogInfo}
+                      d={d}
+                      handleLabelChange={handleLabelChange}
+                      key={`${d}_${grp}`}
+                    />
                   ))}
                 </React.Fragment>
               );
