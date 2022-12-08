@@ -15,7 +15,6 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   line-height: normal;
-  z-index: 99999 !important;
 }
 
 .trelliscope-app button {
