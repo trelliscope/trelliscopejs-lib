@@ -88,13 +88,14 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
     setDialogOpen(true);
     setOpen(true);
   };
-  useHotkeys('r', handleKey, { enabled: active });
 
   const handleClose = () => {
     setDialogOpen(false);
     setOpen(false);
   };
 
+  useHotkeys('r', handleKey, { enabled: active && !open });
+  useHotkeys('r', handleClose, { enabled: active && open });
   useHotkeys('esc', handleClose, { enabled: open });
 
   const setStep = (step: number) => {

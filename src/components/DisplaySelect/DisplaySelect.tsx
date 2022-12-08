@@ -57,8 +57,6 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     handleDispDialogOpen(false);
   };
 
-  useHotkeys('esc', handleClose, { enabled: isOpen });
-
   const handleOpen = () => {
     if (displayList && displayList.isLoaded) {
       setDialogOpen(true);
@@ -88,7 +86,9 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     handleDispDialogOpen(true);
   };
 
-  useHotkeys('o', handleKey, { enabled: fullscreen });
+  useHotkeys('o', handleKey, { enabled: fullscreen && !isOpen });
+  useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
+  useHotkeys('esc', handleClose, { enabled: isOpen });
 
   const handleSelect = (name: string, group: string, desc: string) => {
     handleClick(name, group, desc);

@@ -55,7 +55,8 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen 
     stripPassoverAttribute: true,
   };
 
-  useHotkeys('i', handleKey, { enabled: fullscreen && active });
+  useHotkeys('i', handleKey, { enabled: fullscreen && active && !isOpen });
+  useHotkeys('i', handleClose, { enabled: fullscreen && active && isOpen });
   useHotkeys('esc', handleClose, { enabled: isOpen });
 
   return (
