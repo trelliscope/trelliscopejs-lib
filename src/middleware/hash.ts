@@ -40,8 +40,8 @@ export const hashFromState = (state: RootState) => {
       res = `var:${flt.name};type:regex;val:${encodeURIComponent(flt.regex as string)}`;
     } else if (flt.type === 'range') {
       const value = flt.value as FilterRange;
-      const from = value.from ? value.from : '';
-      const to = value.to ? value.to : '';
+      const from = value?.from ? value?.from : '';
+      const to = value?.to ? value?.to : '';
       res = `var:${flt.name};type:range;from:${from};to:${to}`;
     }
     return res;
