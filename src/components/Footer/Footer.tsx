@@ -61,20 +61,21 @@ const Footer: React.FC = () => {
       } else if (curState.varType === 'factor') {
         const charLimit = 15;
         const value = curState.value as FilterCat;
-        const n = value.length;
+        const mutableValue = [...value];
+        const n = mutableValue.length;
         let textLength = 0;
         let idx = 0;
         while (idx < n && textLength <= charLimit) {
-          textLength = textLength + value[idx].length + 2;
+          textLength = textLength + mutableValue[idx].length + 2;
           idx += 1;
         }
         if (idx === n) {
           // build a string of selected values
-          text = value.sort().join(', ');
+          text = mutableValue.sort().join(', ');
         } else {
           // just show "k of n"
           const tot = cdi.info.cogInfo[curState.name].levels.length;
-          text = `${value.length} of ${tot}`;
+          text = `${mutableValue.length} of ${tot}`;
         }
       }
       filterRes.push({ name: keys[i], text });
