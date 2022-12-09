@@ -121,6 +121,7 @@ const HowToUse: React.FC = () => {
           <FontAwesomeIcon icon={faSort} />
         </div>
         <div>
+          &nbsp;
           <strong>Sort: </strong>
           In the &quot;Sort&quot; sidebar, a list of variables which are currently being sorted by (if any) will be listed at
           the top, followed by a list of &quot;More variables&quot; that can added to the sorting specification. Panels are
