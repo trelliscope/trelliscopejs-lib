@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
       } else if (curState.varType === 'factor') {
         const charLimit = 15;
         const value = curState.value as FilterCat;
-        const mutableValue = { ...value };
+        const mutableValue = [...value];
         const n = mutableValue.length;
         let textLength = 0;
         let idx = 0;
