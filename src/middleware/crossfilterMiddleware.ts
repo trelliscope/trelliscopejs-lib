@@ -120,6 +120,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
       const cf = store.getState().cogDataMutable.crossfilter;
       const groups = store.getState().cogDataMutable.groupRefs;
       const dispName = store.getState().selectedDisplay.name;
+      const dimensions = store.getState().cogDataMutable.dimensionRefs;
 
       let names = [] as string[];
       if (action.payload.which === 'add') {
@@ -131,26 +132,28 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
       names.forEach((name: string) => {
         const { type } = store.getState().displayInfo[dispName].info.cogInfo[name];
 
-        if (type === 'numeric') {
-          next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getNumVal(d, name)) }));
-        } else {
-          next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getCatVal(d, name)) }));
+        if (dimensions[name] === undefined) {
+          if (type === 'numeric') {
+            next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getNumVal(d, name)) }));
+          } else {
+            next(setDimension({ key: name, dimension: cf.dimension((d: Dimension) => getCatVal(d, name)) }));
+          }
         }
 
         if (groups[name] === undefined) {
-          const dimensions = store.getState().cogDataMutable.dimensionRefs;
+          const newDimensions = store.getState().cogDataMutable.dimensionRefs;
           if (type === 'numeric') {
             const ci = store.getState().displayInfo[dispName].info.cogInfo[name];
             next(
               setGroup({
                 key: name,
-                group: dimensions[name].group((d: number) =>
+                group: newDimensions[name]?.group((d: number) =>
                   Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
                 ),
               }),
             );
           } else {
-            next(setGroup({ key: name, group: dimensions[name].group() }));
+            next(setGroup({ key: name, group: newDimensions[name]?.group() }));
           }
         }
       });
