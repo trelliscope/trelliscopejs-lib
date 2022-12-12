@@ -3,31 +3,32 @@ import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import SidebarSortPanel from '../SidebarSortPanel';
 import styles from './SidebarSort.module.scss';
 import SidebarSortPill from '../SidebarSortPill';
+import { useSelector } from 'react-redux';
+import { selectSort } from '../../slices/sortSlice';
 
 interface SidebarSortProps {
   handleSortChange: (sortSpec: Sort[] | number) => void;
   addSortLabel: (name: string) => void;
-  sort: Sort[];
   curDisplayInfo: DisplayInfoState;
   cogDesc: { [key: string]: string };
   sidebarHeight: number;
   activeHeight: number;
-  sort2: Sort[];
   notUsed: string[];
 }
 
 const SidebarSort: React.FC<SidebarSortProps> = ({
   handleSortChange,
   addSortLabel,
-  sort,
   curDisplayInfo,
   cogDesc,
   sidebarHeight,
   activeHeight,
-  sort2,
   notUsed,
 }) => {
   const { cogGroups } = curDisplayInfo.info;
+  const sort = useSelector(selectSort);
+  const sort2 = Object.assign([], sort) as ISortState[];
+
   return (
     <div>
       {cogDesc && (

@@ -18,7 +18,6 @@ import {
   filterStateSelector,
   filterViewSelector,
   labelsSelector,
-  sortSelector,
   cogDescSelector,
 } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
@@ -26,7 +25,7 @@ import getCustomProperties from '../../getCustomProperties';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
-import { setSort } from '../../slices/sortSlice';
+import { selectSort, setSort } from '../../slices/sortSlice';
 import { cogInfoSelector } from '../../selectors/display';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
@@ -47,12 +46,14 @@ const Sidebar: React.FC = () => {
   const filtDist = useSelector(cogFiltDistSelector);
   const labels = useSelector(labelsSelector);
   const colSplit = useSelector(filterColSplitSelector);
-  const sort = useSelector(sortSelector);
+  const sort = useSelector(selectSort);
   const cogDesc = useSelector(cogDescSelector);
   const ch = useSelector(contentHeightSelector);
 
   const height = contentHeight - sidebarHeaderHeight;
   const { views } = curDisplayInfo.info;
+
+  console.log(curDisplayInfo);
 
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);

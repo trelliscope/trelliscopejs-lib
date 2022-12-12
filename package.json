@@ -25,6 +25,7 @@
     "fingerprintjs2": "^2.1.2",
     "lodash.difference": "^4.5.0",
     "lodash.intersection": "^4.4.0",
+    "lodash.keyby": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "marked": "^1.2.0",
     "msw": "^0.47.3",
@@ -43,6 +44,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "sort-es": "^1.6.3",
     "throttle-debounce": "^2.3.0"
   },
   "scripts": {
