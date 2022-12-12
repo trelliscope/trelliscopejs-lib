@@ -9,9 +9,9 @@ interface SidebarSortPillProps {
   sidebarHeight: number;
   activeHeight: number;
   addSortLabel: (name: string) => void;
-  handleSortChange: (sortSpec: Sort[] | number) => void;
-  sort: Sort[];
-  sort2: Sort[];
+  handleSortChange: (sortSpec: ISortState[] | number) => void;
+  sort: ISortState[];
+  sort2: ISortState[];
   cogDesc: { [key: string]: string };
 }
 
@@ -31,6 +31,8 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
       height: sidebarHeight - activeHeight - 30,
     },
   };
+  console.log(cogGroups);
+
   return (
     <div className={styles.sidebarSortPill}>
       <div className={styles.sidebarSortPillNotUsed} style={customStyles.notUsed}>

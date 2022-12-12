@@ -25,6 +25,8 @@ const ContentNew: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const layout = useSelector(selectLayout);
 
+  console.log(data);
+
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,

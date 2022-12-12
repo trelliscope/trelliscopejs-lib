@@ -4,11 +4,11 @@ import {
   cogDataSelector,
   filterStateSelector,
   filterViewSelector,
-  sortSelector,
   curDisplayInfoSelector,
   pageNumSelector,
   nPerPageSelector,
 } from '.';
+import { selectSort } from '../slices/sortSlice';
 
 export const cogFiltDistSelector = createSelector(
   cogDataSelector,
@@ -104,7 +104,7 @@ export const currentCogDataSelector = createSelector(
   pageNumSelector,
   nPerPageSelector,
   filterStateSelector,
-  sortSelector,
+  selectSort,
   (cd, pnum, npp, filt, sort) => {
     let result: CogData[] = [];
     if (cd.dimensionRefs && cd.dimensionRefs.__sort && filt && sort) {
