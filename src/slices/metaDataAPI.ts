@@ -6,15 +6,17 @@ import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 
+export const metaIndex: unique symbol = Symbol('metaIndex');
+
 // TODO - see if we can create a generic base query function that can be used by all the APIs
 const JSONPBaseQuery =
-  (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string }, unknown, unknown> =>
+  (): BaseQueryFn<{ url: string; id: string; dataType: string | undefined; displayName: string }, Datum[]> =>
   ({ url, id, dataType, displayName }) =>
     new Promise((resolve) => {
       const metaDataCallback = `__loadMetaData__${id}`;
       const displayPath = snakeCase(displayName);
 
-      window[metaDataCallback] = (data: { [key: string]: any }) => {
+      window[metaDataCallback] = (data: Datum[]) => {
         resolve({ data });
       };
 
@@ -38,10 +40,11 @@ export const metaDataAPI = createApi({
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
     getMetaData: builder.query<
-      { [key: string]: unknown[] },
-      { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }
+      { [key: string]: string | number }[],
+      { url: string; id: string; dataType: 'jsonp' | 'json' | undefined; displayName: string }
     >({
       query: ({ url, id, dataType, displayName }) => ({ url, id, dataType, displayName }),
+      transformResponse: (response) => response.map((datum, i) => ({ ...datum, [metaIndex]: i })),
     }),
   }),
 });

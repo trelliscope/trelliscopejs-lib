@@ -373,3 +373,7 @@ interface IConfig {
   data_type: AppDataType;
   id: string;
 }
+
+interface Datum {
+  [key: string | unique symbol]: string | number;
+}

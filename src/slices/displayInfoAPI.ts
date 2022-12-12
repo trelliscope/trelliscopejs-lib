@@ -56,3 +56,8 @@ export const useDisplayInfo = () => {
     { skip: !dataType || !basePath || !selectedDisplay?.name },
   );
 };
+
+export const useDisplayMetas = () => {
+  const displayInfo = useDisplayInfo();
+  return displayInfo.data?.metas;
+};

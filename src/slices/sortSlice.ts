@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../app/store';
 import { displayInfoAPI } from './displayInfoAPI';
 
 const initialState: ISortState[] = [];
@@ -21,12 +22,11 @@ export const sortSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
-      const { sort } = action.payload.state;
-      return sort;
-    });
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => action.payload.state.sort);
   },
 });
+
+export const selectSort = (state: RootState) => state.sort;
 
 export const { setSort } = sortSlice.actions;
 
