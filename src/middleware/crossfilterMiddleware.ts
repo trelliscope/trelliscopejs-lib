@@ -61,7 +61,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
     const groupsState = store.getState().cogDataMutable.groupRefs;
     const groups = { ...groupsState };
     if (typeof action.payload === 'string' || action.payload instanceof String) {
-      dimensions[action.payload].filter(null); // .remove(), .filterAll() ?
+      dimensions[action.payload]?.filter(null); // .remove(), .filterAll() ?
     } else {
       const names = Object.keys(action.payload);
       if (names.length === 0 && dimensions) {
