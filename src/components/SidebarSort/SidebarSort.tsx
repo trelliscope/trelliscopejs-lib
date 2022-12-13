@@ -1,33 +1,41 @@
 import React from 'react';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
-import SidebarSortPanel from '../SidebarSortPanel';
-import styles from './SidebarSort.module.scss';
-import SidebarSortPill from '../SidebarSortPill';
 import { useSelector } from 'react-redux';
+import SidebarSortPanel from '../SidebarSortPanel';
+import SidebarSortPill from '../SidebarSortPill';
 import { selectSort } from '../../slices/sortSlice';
+import { useMetaGroups } from '../../slices/displayInfoAPI';
+import styles from './SidebarSort.module.scss';
 
 interface SidebarSortProps {
   handleSortChange: (sortSpec: Sort[] | number) => void;
   addSortLabel: (name: string) => void;
-  curDisplayInfo: DisplayInfoState;
   cogDesc: { [key: string]: string };
   sidebarHeight: number;
   activeHeight: number;
-  notUsed: string[];
 }
 
 const SidebarSort: React.FC<SidebarSortProps> = ({
   handleSortChange,
   addSortLabel,
-  curDisplayInfo,
   cogDesc,
   sidebarHeight,
   activeHeight,
-  notUsed,
 }) => {
-  const { cogGroups } = curDisplayInfo.info;
   const sort = useSelector(selectSort);
   const sort2 = Object.assign([], sort) as ISortState[];
+  const metaGroups = useMetaGroups() || {};
+
+  const notUsed = Object.keys(metaGroups);
+  if (cogDesc) {
+    for (let i = 0; i < sort.length; i += 1) {
+      const index = notUsed.indexOf(sort[i].name);
+      if (index > -1) {
+        notUsed.splice(index, 1);
+      }
+    }
+  }
+
+  console.log(metaGroups);
 
   return (
     <div>
@@ -45,7 +53,7 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
           </div>
           <SidebarSortPill
             notUsed={notUsed}
-            cogGroups={cogGroups}
+            metaGroups={metaGroups}
             sidebarHeight={sidebarHeight}
             activeHeight={activeHeight}
             addSortLabel={addSortLabel}

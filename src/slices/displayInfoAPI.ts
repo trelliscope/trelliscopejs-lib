@@ -61,3 +61,26 @@ export const useDisplayMetas = () => {
   const displayInfo = useDisplayInfo();
   return displayInfo.data?.metas;
 };
+
+export const commonTagsKey = '__common__';
+export const useMetaGroups = () => {
+  const metas = useDisplayMetas();
+
+  return metas?.reduce<{ [index: string | symbol]: string[] }>(
+    (acc, meta) => {
+      const tags = meta.tags || [];
+      if (tags.length === 0) {
+        acc[commonTagsKey].push(meta.varname);
+        return acc;
+      }
+      tags.forEach((tag) => {
+        if (!acc[tag]) {
+          acc[tag] = [];
+        }
+        acc[tag].push(meta.varname);
+      });
+      return acc;
+    },
+    { [commonTagsKey]: [] },
+  );
+};
