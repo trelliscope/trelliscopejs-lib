@@ -5,9 +5,9 @@ import { faAngleUp, faAngleDown, faXmark } from '@fortawesome/free-solid-svg-ico
 import styles from './SidebarSortPanel.module.scss';
 
 interface SidebarSortPanelProps {
-  handleSortChange: (sortSpec: Sort[] | number) => void;
-  sort: Sort[];
-  sort2: Sort[];
+  handleSortChange: (sortSpec: ISortState[] | number) => void;
+  sort: ISortState[];
+  sort2: ISortState[];
   activeHeight: number;
   cogDesc: { [key: string]: string };
 }
@@ -24,11 +24,11 @@ const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, s
         <table className={styles.sidebarSortPanelTable}>
           <tbody>
             {sort.map((d, i) => (
-              <tr className={styles.sidebarSortPanelTableRow} key={`${d.name}_tr`}>
+              <tr className={styles.sidebarSortPanelTableRow} key={`${d.varname}_tr`}>
                 <td className={styles.sidebarSortPanelButton}>
                   <IconButton
                     color="primary"
-                    key={`${d.name}_button`}
+                    key={`${d.varname}_button`}
                     onClick={() => {
                       const sortObj = { ...sort2[i] };
                       sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
@@ -41,9 +41,9 @@ const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, s
                   </IconButton>
                 </td>
                 <td className={styles.sidebarSortPanelLabels}>
-                  {d.name}
+                  {d.varname}
                   <br />
-                  <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.name]}</span>
+                  <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.varname]}</span>
                 </td>
                 <td className={styles.sidebarSortPanelButtonClose}>
                   <IconButton onClick={() => handleSortChange(i)}>

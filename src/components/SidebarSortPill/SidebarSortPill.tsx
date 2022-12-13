@@ -5,7 +5,7 @@ import styles from './SidebarSortPill.module.scss';
 
 interface SidebarSortPillProps {
   notUsed: string[];
-  cogGroups: { [key: string]: string[] };
+  metaGroups: { [key: string | symbol]: string[] };
   sidebarHeight: number;
   activeHeight: number;
   addSortLabel: (name: string) => void;
@@ -17,7 +17,7 @@ interface SidebarSortPillProps {
 
 const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
   notUsed,
-  cogGroups,
+  metaGroups,
   sidebarHeight,
   activeHeight,
   addSortLabel,
@@ -31,19 +31,21 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
       height: sidebarHeight - activeHeight - 30,
     },
   };
-  console.log(cogGroups);
+  console.log(metaGroups);
 
   return (
     <div className={styles.sidebarSortPill}>
       <div className={styles.sidebarSortPillNotUsed} style={customStyles.notUsed}>
-        {Object.keys(cogGroups).map((grp) => {
-          const curItems = intersection(notUsed, cogGroups[grp]);
+        {Object.keys(metaGroups).map((grp) => {
+          const curItems = /* intersection(notUsed,  */ metaGroups[grp]; /* ) */
+          console.log(curItems, metaGroups[grp], notUsed);
+
           if (curItems.length === 0) {
             return null;
           }
           return (
             <React.Fragment key={grp}>
-              {!['condVar', 'common', 'panelKey'].includes(grp) && (
+              {!['condVar', '__common__', 'panelKey'].includes(grp) && (
                 <div className={styles.sidebarSortPillCogGroupHeader}>
                   <span className={styles.sidebarSortPillCogGroupText}>{`${grp} (${curItems.length})`}</span>
                 </div>
