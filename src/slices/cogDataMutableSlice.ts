@@ -24,7 +24,7 @@ export const cogDataMutableSlice = createSlice({
       state.lastUpdated = Date.now();
     },
     setDimensionSort: (state, action: PayloadAction<Dimension<CogData, string | number>>) => {
-      state.dimensionRefs = { __sort: action.payload };
+      state.dimensionRefs = { ...state.dimensionRefs, __sort: action.payload };
     },
     setDimension: (state, action: PayloadAction<{ key: string; dimension: Dimension<CogData, string | number> }>) => {
       if (!state.dimensionRefs) {
