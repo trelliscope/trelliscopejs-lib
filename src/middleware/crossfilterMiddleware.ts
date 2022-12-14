@@ -72,7 +72,6 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         if (action.payload[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
             next(setDimension({ key: names[i], dimension: cf.dimension((d: Dimension) => getNumVal(d, names[i])) }));
-            dimensions[names[i]] = cf.dimension((d: Dimension) => getNumVal(d, names[i]));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
