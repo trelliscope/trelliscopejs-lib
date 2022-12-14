@@ -14,7 +14,6 @@ import {
 } from '../../selectors/ui';
 import {
   curDisplayInfoSelector,
-  displayLoadedSelector,
   filterStateSelector,
   filterViewSelector,
   labelsSelector,
@@ -29,14 +28,15 @@ import { selectSort, setSort } from '../../slices/sortSlice';
 import { cogInfoSelector } from '../../selectors/display';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 const Sidebar: React.FC = () => {
   const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
   const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
   const dispatch = useDispatch();
+  const { isSuccess: displayLoaded } = useDisplayInfo();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
-  const displayLoaded = useSelector(displayLoadedSelector);
   const filterColSplit = useSelector(filterColSplitSelector);
   const filter = useSelector(filterStateSelector);
   const filterView = useSelector(filterViewSelector);
