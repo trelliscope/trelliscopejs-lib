@@ -1,5 +1,4 @@
 import React from 'react';
-import intersection from 'lodash.intersection';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarSortPill.module.scss';
 
@@ -33,13 +32,13 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
   };
   console.log(metaGroups);
 
+  const activeSorts = sort.map((d) => d.varname);
+
   return (
     <div className={styles.sidebarSortPill}>
       <div className={styles.sidebarSortPillNotUsed} style={customStyles.notUsed}>
         {Object.keys(metaGroups).map((grp) => {
-          const curItems = /* intersection(notUsed,  */ metaGroups[grp]; /* ) */
-          console.log(curItems, metaGroups[grp], notUsed);
-
+          const curItems = metaGroups[grp].filter((d) => !activeSorts.includes(d));
           if (curItems.length === 0) {
             return null;
           }
