@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
+import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarFilterContainer.module.scss';
 
 interface SidebarFilterContainerProps {
@@ -36,13 +36,12 @@ const SidebarFilterContainer: React.FC<SidebarFilterContainerProps> = ({
           [styles.sidebarFilterContainerHeaderNameActive]: filterActive,
         })}
       >
-        <span data-tip data-for={`hdtooltip_${d}`}>
-          <span className={styles.sidebarFilterContainerHeaderNameText}>{d}</span>
-        </span>
+        <Tooltip title={cogInfo[d].desc} placement="right" id={`hdtooltip_${d}`} followCursor arrow>
+          <span data-tip data-for={`hdtooltip_${d}`}>
+            <span className={styles.sidebarFilterContainerHeaderNameText}>{d}</span>
+          </span>
+        </Tooltip>
       </div>
-      <ReactTooltip className={styles.sidebarFilterContainerTooltip} place="right" id={`hdtooltip_${d}`}>
-        <span>{cogInfo[d].desc}</span>
-      </ReactTooltip>
       <div className={styles.sidebarFilterContainerHeaderExtra}>{headerExtra}</div>
       <button
         type="button"

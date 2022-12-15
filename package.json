@@ -36,7 +36,6 @@
     "react-rnd": "^10.2.3",
     "react-scripts": "5.0.1",
     "react-swipeable": "^5.5.1",
-    "react-tooltip": "^4.2.10",
     "react-virtualized": "^9.22.3",
     "redux": "^4.2.0",
     "redux-logger": "^3.0.6",

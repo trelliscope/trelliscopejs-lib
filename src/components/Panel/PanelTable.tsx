@@ -2,8 +2,7 @@ import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faArrowUpRightFromSquare, faPencil } from '@fortawesome/free-solid-svg-icons';
-import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@mui/material';
-import ReactTooltip from 'react-tooltip';
+import { FormControlLabel, Popover, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
 import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './Panel.module.scss';
 
@@ -89,13 +88,14 @@ const PanelTable: React.FC<PanelTableProps> = ({
                 data-tip
                 data-for={`tooltip_${panelKey}_${label.name}`}
               >
-                <span style={inlineStyles.labelSpan}>{label.name}</span>
+                {label.name !== label.desc ? (
+                  <Tooltip title={label.desc} placement="right" id={`tooltip_${panelKey}_${label.name}`} followCursor arrow>
+                    <span style={inlineStyles.labelSpan}>{label.name}</span>
+                  </Tooltip>
+                ) : (
+                  <span style={inlineStyles.labelSpan}>{label.name}</span>
+                )}
               </div>
-              {label.name !== label.desc && (
-                <ReactTooltip place="right" id={`tooltip_${panelKey}_${label.name}`}>
-                  <span>{label.desc}</span>
-                </ReactTooltip>
-              )}
             </td>
             <td className={styles.labelCell} style={inlineStyles.labelValueCell}>
               {label.type === 'href' && (
