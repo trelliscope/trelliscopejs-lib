@@ -89,7 +89,22 @@ const PanelTable: React.FC<PanelTableProps> = ({
                 data-for={`tooltip_${panelKey}_${label.name}`}
               >
                 {label.name !== label.desc ? (
-                  <Tooltip title={label.desc} placement="right" id={`tooltip_${panelKey}_${label.name}`} followCursor arrow>
+                  <Tooltip
+                    title={label.desc}
+                    placement="bottom"
+                    id={`tooltip_${panelKey}_${label.name}`}
+                    arrow
+                    PopperProps={{
+                      modifiers: [
+                        {
+                          name: 'offset',
+                          options: {
+                            offset: [0, -10],
+                          },
+                        },
+                      ],
+                    }}
+                  >
                     <span style={inlineStyles.labelSpan}>{label.name}</span>
                   </Tooltip>
                 ) : (
