@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
+import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarFilterPill.module.scss';
 
 interface SidebarFilterPillProps {
@@ -16,22 +16,21 @@ const SidebarFilterPill: React.FC<SidebarFilterPillProps> = ({ filter, cogInfo, 
   <React.Fragment key={`${d}_${displId}`}>
     {inames.includes(d) && (
       <span>
-        <span data-tip data-for={`tooltip_${d}`}>
-          <button
-            type="button"
-            className={classNames({
-              [styles.sidebarFilterPillVariable]: true,
-              [styles.sidebarFilterPillVariableActive]: filter[d] && filter[d].value !== undefined,
-            })}
-            key={`${d}_${displId}_button_${inames.length}`}
-            onClick={() => handleViewChange(d, 'add')}
-          >
-            {d}
-          </button>
-        </span>
-        <ReactTooltip className={styles.sidebarFilterPillTooltip} place="right" id={`tooltip_${d}`}>
-          <span>{cogInfo[d].desc}</span>
-        </ReactTooltip>
+        <Tooltip title={cogInfo[d].desc} placement="right" id={`tooltip_${d}`} followCursor arrow>
+          <span data-tip data-for={`tooltip_${d}`}>
+            <button
+              type="button"
+              className={classNames({
+                [styles.sidebarFilterPillVariable]: true,
+                [styles.sidebarFilterPillVariableActive]: filter[d] && filter[d].value !== undefined,
+              })}
+              key={`${d}_${displId}_button_${inames.length}`}
+              onClick={() => handleViewChange(d, 'add')}
+            >
+              {d}
+            </button>
+          </span>
+        </Tooltip>
       </span>
     )}
   </React.Fragment>

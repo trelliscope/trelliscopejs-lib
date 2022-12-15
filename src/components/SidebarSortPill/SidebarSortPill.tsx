@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import intersection from 'lodash.intersection';
+import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarSortPill.module.scss';
 
 interface SidebarSortPillProps {
@@ -47,26 +47,25 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                 </div>
               )}
               {curItems.sort().map((d: string) => (
-                <span key={`${d}_notused`}>
-                  <span data-tip data-for={`tooltip_${d}`}>
-                    <button
-                      type="button"
-                      className={styles.sidebarSortPillVariable}
-                      key={`${d}_button`}
-                      onClick={() => {
-                        const order = sort.length === 0 ? 1 : sort[sort.length - 1].order + 1;
-                        sort2.push({ name: d, dir: 'asc', order });
-                        addSortLabel(d);
-                        handleSortChange(sort2);
-                      }}
-                    >
-                      {d}
-                    </button>
+                <Tooltip title={cogDesc[d]} placement="right" id={`tooltip_${d}`} followCursor arrow>
+                  <span key={`${d}_notused`}>
+                    <span data-tip data-for={`tooltip_${d}`}>
+                      <button
+                        type="button"
+                        className={styles.sidebarSortPillVariable}
+                        key={`${d}_button`}
+                        onClick={() => {
+                          const order = sort.length === 0 ? 1 : sort[sort.length - 1].order + 1;
+                          sort2.push({ name: d, dir: 'asc', order });
+                          addSortLabel(d);
+                          handleSortChange(sort2);
+                        }}
+                      >
+                        {d}
+                      </button>
+                    </span>
                   </span>
-                  <ReactTooltip place="right" id={`tooltip_${d}`}>
-                    <span>{cogDesc[d]}</span>
-                  </ReactTooltip>
-                </span>
+                </Tooltip>
               ))}
             </React.Fragment>
           );
