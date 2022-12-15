@@ -36,7 +36,22 @@ const SidebarFilterContainer: React.FC<SidebarFilterContainerProps> = ({
           [styles.sidebarFilterContainerHeaderNameActive]: filterActive,
         })}
       >
-        <Tooltip title={cogInfo[d].desc} placement="right" id={`hdtooltip_${d}`} followCursor arrow>
+        <Tooltip
+          title={cogInfo[d].desc}
+          placement="right"
+          id={`hdtooltip_${d}`}
+          arrow
+          PopperProps={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, -3],
+                },
+              },
+            ],
+          }}
+        >
           <span data-tip data-for={`hdtooltip_${d}`}>
             <span className={styles.sidebarFilterContainerHeaderNameText}>{d}</span>
           </span>

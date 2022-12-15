@@ -47,7 +47,22 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                 </div>
               )}
               {curItems.sort().map((d: string) => (
-                <Tooltip title={cogDesc[d]} placement="right" id={`tooltip_${d}`} followCursor arrow>
+                <Tooltip
+                  title={cogDesc[d]}
+                  placement="right"
+                  id={`tooltip_${d}`}
+                  arrow
+                  PopperProps={{
+                    modifiers: [
+                      {
+                        name: 'offset',
+                        options: {
+                          offset: [0, -10],
+                        },
+                      },
+                    ],
+                  }}
+                >
                   <span key={`${d}_notused`}>
                     <span data-tip data-for={`tooltip_${d}`}>
                       <button

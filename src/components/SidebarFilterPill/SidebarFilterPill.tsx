@@ -16,7 +16,22 @@ const SidebarFilterPill: React.FC<SidebarFilterPillProps> = ({ filter, cogInfo, 
   <React.Fragment key={`${d}_${displId}`}>
     {inames.includes(d) && (
       <span>
-        <Tooltip title={cogInfo[d].desc} placement="right" id={`tooltip_${d}`} followCursor arrow>
+        <Tooltip
+          title={cogInfo[d].desc}
+          placement="right"
+          id={`tooltip_${d}`}
+          arrow
+          PopperProps={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, -10],
+                },
+              },
+            ],
+          }}
+        >
           <span data-tip data-for={`tooltip_${d}`}>
             <button
               type="button"
