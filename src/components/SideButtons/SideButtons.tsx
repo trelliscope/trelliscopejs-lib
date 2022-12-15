@@ -87,7 +87,7 @@ const SideButtons: React.FC = () => {
   };
 
   useHotkeys('g, l, f, s, c, v, Enter', handleKey, { enabled: fullscreen }, [hasViews]);
-  useHotkeys('esc', handleKey, { enabled: fullscreen && !!active });
+  useHotkeys('esc', handleKey, { enabled: fullscreen && !!active && !dialogOpen });
 
   return (
     <div className={styles.sideButtonsContainer} style={inlineStyles.sideButtonsContainer}>
