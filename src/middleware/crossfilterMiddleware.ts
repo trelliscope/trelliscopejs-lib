@@ -56,8 +56,7 @@ const multiSort = (args: string[]) => {
 const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (action) => {
   if (action.type === setFilter.type && action.payload) {
     const cf = store.getState().cogDataMutable.crossfilter;
-    const dimensionsState = store.getState().cogDataMutable.dimensionRefs;
-    const dimensions = { ...dimensionsState };
+    const dimensions = store.getState().cogDataMutable.dimensionRefs;
     const groupsState = store.getState().cogDataMutable.groupRefs;
     const groups = { ...groupsState };
     if (typeof action.payload === 'string' || action.payload instanceof String) {
@@ -72,15 +71,21 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         // numeric is always 'range' type
         if (action.payload[names[i]].varType === 'numeric') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension((d: Dimension) => getNumVal(d, names[i]));
+            next(setDimension({ key: names[i], dimension: cf.dimension((d: Dimension) => getNumVal(d, names[i])) }));
           }
           if (groups[names[i]] === undefined) {
             // group.dispose(); // to get rid of previous group
             // create group that bins into histogram breaks
             const dispName = store.getState().selectedDisplay.name;
             const ci = store.getState().displayInfo[dispName].info.cogInfo[names[i]];
-            groups[names[i]] = dimensions[names[i]].group((d: number) =>
-              Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
+            const dimensionsFresh = store.getState().cogDataMutable.dimensionRefs;
+            next(
+              setGroup({
+                key: names[i],
+                group: dimensionsFresh[names[i]].group((d: number) =>
+                  Number.isNaN(d) || d === undefined ? null : ci.breaks[Math.floor((d - ci.breaks[0]) / ci.delta)],
+                ),
+              }),
             );
           }
           if (action.payload[names[i]].value === undefined) {
@@ -95,18 +100,20 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
           }
         } else if (action.payload[names[i]].varType === 'factor') {
           if (dimensions[names[i]] === undefined) {
-            dimensions[names[i]] = cf.dimension((d: Dimension) => getCatVal(d, names[i]));
+            next(setDimension({ key: names[i], dimension: cf.dimension((d: Dimension) => getCatVal(d, names[i])) }));
           }
           if (groups[names[i]] === undefined) {
+            const dimensionsFresh = store.getState().cogDataMutable.dimensionRefs;
             // group.dispose(); // to get rid of previous group
-            groups[names[i]] = dimensions[names[i]].group();
+            next(setGroup({ key: names[i], group: dimensionsFresh[names[i]]?.group() }));
           }
           if (action.payload[names[i]].value === undefined) {
             dimensions[names[i]].filter(null); // .filterAll()
           } else {
             // handle select and regex (regex same as select as value is already populated)
             const selectVals = action.payload[names[i]].value;
-            dimensions[names[i]].filter((d: number) => selectVals.indexOf(d) > -1);
+            const dimensionsFresh = store.getState().cogDataMutable.dimensionRefs;
+            dimensionsFresh[names[i]]?.filter((d: number) => selectVals.indexOf(d) > -1);
           }
         }
       }
