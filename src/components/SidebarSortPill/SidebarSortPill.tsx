@@ -51,6 +51,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                   title={cogDesc[d]}
                   placement="right"
                   id={`tooltip_${d}`}
+                  key={`tooltip_${d}`}
                   arrow
                   PopperProps={{
                     modifiers: [

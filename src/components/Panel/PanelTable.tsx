@@ -91,7 +91,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                 {label.name !== label.desc ? (
                   <Tooltip
                     title={label.desc}
-                    placement="bottom"
+                    placement="top-start"
                     id={`tooltip_${panelKey}_${label.name}`}
                     arrow
                     PopperProps={{

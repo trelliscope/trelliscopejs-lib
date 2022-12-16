@@ -40,6 +40,7 @@ const SidebarFilterContainer: React.FC<SidebarFilterContainerProps> = ({
           title={cogInfo[d].desc}
           placement="right"
           id={`hdtooltip_${d}`}
+          key={`hdtooltip_${d}`}
           arrow
           PopperProps={{
             modifiers: [
