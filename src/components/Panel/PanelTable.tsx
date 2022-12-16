@@ -99,7 +99,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                         {
                           name: 'offset',
                           options: {
-                            offset: [0, -10],
+                            offset: [30, -10],
                           },
                         },
                       ],
