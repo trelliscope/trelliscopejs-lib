@@ -20,6 +20,7 @@ const SidebarFilterPill: React.FC<SidebarFilterPillProps> = ({ filter, cogInfo, 
           title={cogInfo[d].desc}
           placement="right"
           id={`tooltip_${d}`}
+          key={`tooltip_${d}`}
           arrow
           PopperProps={{
             modifiers: [
