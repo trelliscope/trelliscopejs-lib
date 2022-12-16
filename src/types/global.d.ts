@@ -10,6 +10,13 @@ declare global {
       | ((data: Config) => void)
       | ((data: Display[]) => void);
   }
+  interface Document {
+    webkitFullscreenElement: Element;
+    webkitExitFullscreen: () => void;
+  }
+  interface Element {
+    webkitRequestFullscreen: () => void;
+  }
 }
 
 window.__panel__ = window.__panel__ || {};
