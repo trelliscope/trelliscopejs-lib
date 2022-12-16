@@ -1,26 +1,23 @@
 import { combineReducers } from 'redux';
-import sidebar from './sidebar';
-import ui from './ui';
-import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog, options } from './app';
-import { selectedDisplay, selectedRelDisps, relDispPositions } from './selectedDisplay';
-import { layout, labels, sort, filter } from './displayState';
-import _config from './_config';
-import _displayList from './_displayList';
-import _displayInfo from './_displayInfo';
-import _cogDataMutable from './_cogDataMutable';
-import _localPanels from './_localPanels';
+import sidebar from '../slices/sidebarSlice';
+import selectedDisplay from '../slices/selectedDisplaySlice';
+import relDispPositions from '../slices/relDispPositionsSlice';
+import selectedRelDisps from '../slices/selectedRelDispsSlice';
+import displayList from '../slices/displayListSlice';
+import ui from '../slices/uiSlice';
+import layout from '../slices/layoutSlice';
+import labels from '../slices/labelsSlice';
+import sort from '../slices/sortSlice';
+import app from '../slices/appSlice';
+import _config from '../slices/configSlice';
+import filter from '../slices/filterSlice';
+import displayInfo from '../slices/displayInfoSlice';
+import cogDataMutable from '../slices/cogDataMutableSlice';
 
 const reducers = combineReducers({
-  appId,
-  dialog,
-  options,
-  dispSelectDialog,
-  dispInfoDialog,
-  singlePageApp,
-  fullscreen,
+  app,
   ui,
   sidebar,
-  errorMsg,
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,
@@ -29,10 +26,9 @@ const reducers = combineReducers({
   sort,
   filter,
   _config,
-  _displayList,
-  _displayInfo,
-  _cogDataMutable,
-  _localPanels,
+  displayList,
+  displayInfo,
+  cogDataMutable,
 });
 
 export default reducers;

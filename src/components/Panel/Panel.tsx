@@ -2,8 +2,10 @@ import React, { useRef, useState, useLayoutEffect } from 'react';
 import getJSONP from 'browser-jsonp';
 import { setPanelCogInput } from '../../inputUtils';
 import PanelTable from './PanelTable';
-import styles from './Panel.module.scss';
 import PanelGraphic from '../PanelGraphic';
+import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import styles from './Panel.module.scss';
 
 interface PanelProps {
   labels: PanelLabel[];
@@ -18,7 +20,7 @@ interface PanelProps {
     [key: string]: DisplayInfoState;
   };
   curDisplayInfo: DisplayInfoState;
-  relDispPositions: RelDispPositions[];
+  relDispPositions: RelDispPositionsState[];
   removeLabel: (label: string, labels: string[]) => void;
 }
 
@@ -37,8 +39,7 @@ const Panel: React.FC<PanelProps> = ({
   removeLabel,
 }) => {
   const [panelData, setPanelData] = useState<{ [key: string]: PanelData }>({});
-  const isSelfContained = panelData !== undefined && cfg.display_base === '__self__';
-  const [loaded, setLoaded] = useState<boolean>(isSelfContained || panelInterface.type === 'image_src');
+  const [loaded, setLoaded] = useState<boolean>(panelInterface.type === 'image_src');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {

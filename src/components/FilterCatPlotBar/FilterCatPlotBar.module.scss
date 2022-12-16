@@ -1,8 +1,8 @@
 .wrapper {
-  background: white;
+  background: var(--white);
 
   &:hover {
-    background: #f6f6f6;
+    background: var(--white-200);
 
     .barLabel {
       visibility: visible;
@@ -11,33 +11,33 @@
 }
 
 .bar {
-  background: #eee;
-  color: #888;
+  background: var(--white-300);
+  color: var(--gray-900);
   position: absolute;
   left: 0;
 
   &:hover {
-    background: rgb(255, 192, 76);
-    color: #000;
+    background: var(--orange-100);
+    color: var(--black);
   }
 
   &Active {
-    background: rgb(255, 170, 10);
-    color: #000;
+    background: var(--orange-200);
+    color: var(--black);
   }
 
   &AllActive {
-    background: rgb(255, 210, 127);
-    color: #000;
+    background: var(--orange);
+    color: var(--black);
   }
 
   &Label {
-    font-size: 10px;
-    color: #444;
+    font-size: var(--text-3xs);
+    color: var(--gray-1400);
     text-align: center;
     cursor: default;
     position: absolute;
-    line-height: 19px;
+    line-height: var(--filterCatPlotBar-label-line-height);
     right: 4px;
     visibility: hidden;
   }
@@ -51,7 +51,7 @@
   &TextInner {
     display: inline-block;
     white-space: nowrap;
-    margin-left: 5px;
+    margin-left: var(--margin-4);
     position: absolute;
     bottom: 0;
   }

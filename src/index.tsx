@@ -1,15 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
-import blue from '@material-ui/core/colors/blue';
-import lightBlue from '@material-ui/core/colors/lightBlue';
-// import red from '@material-ui/core/colors/red';
+import blue from '@mui/material/colors/blue';
+import lightBlue from '@mui/material/colors/lightBlue';
+// import red from '@mui/material/colors/red';
 // const blueA200 = blue['A200'];
 // const lightBlue700 = lightBlue['lightBlue'];
 // const redA200 = red['A200']
@@ -19,10 +19,12 @@ import store from './store';
 import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
-import './assets/fonts/IcoMoon/style.css';
+import './assets/styles/variables.scss';
 import './assets/fonts/OpenSans/style.css';
 
-import { windowResize, setAppDims, setLayout, setAppID, setFullscreen, setSinglePageApp, setOptions } from './actions';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions } from './slices/appSlice';
+import { setLayout } from './slices/layoutSlice';
+import { windowResize, setAppDims } from './slices/uiSlice';
 import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';
 import App from './App';
@@ -39,6 +41,8 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
   } */
 
   const el = document.getElementById(id) as HTMLElement;
+  const container = document.getElementById(id) as HTMLElement;
+  const root = ReactDOMClient.createRoot(container);
 
   addClass(el, 'trelliscope-app');
   addClass(el, 'trelliscope-app-container');
@@ -59,50 +63,6 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
 
   let singlePageApp = false;
   let fullscreen = false;
-
-  if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
-    singlePageApp = true;
-    fullscreen = true;
-    // el.parentNode.nodeName === 'BODY'
-    el.style.width = '100%';
-    el.style.height = '100%';
-    addClass(document.body, 'trelliscope-fullscreen-body');
-    addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-  } else {
-    const bodyEl = document.createElement('div');
-    bodyEl.style.width = '100%';
-    bodyEl.style.height = '100%';
-    bodyEl.style.display = 'none';
-    bodyEl.id = 'trelliscope-fullscreen-div';
-    document.getElementsByTagName('body')[0].appendChild(bodyEl);
-
-    if (noHeight) {
-      const nSiblings =
-        [].slice
-          .call(el?.parentNode?.childNodes)
-          .map((d: { nodeType: number }) => d.nodeType !== 3 && d.nodeType !== 8)
-          .filter(Boolean).length - 1;
-      if (nSiblings === 0) {
-        el.style.height = `${el?.parentNode?.firstElementChild?.clientHeight}px`;
-        el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
-      }
-    }
-
-    // give 'el' a new parent so we know where to move div back to after fullscreen
-    const parent = el.parentNode as ParentNode;
-    const wrapper = document.createElement('div');
-    wrapper.id = `${el.id}-parent`;
-    parent.replaceChild(wrapper, el);
-    // set element as child of wrapper
-    wrapper.appendChild(el);
-
-    // if (el.style.height === undefined) {
-    //   el.style.height = ?
-    // }
-    // if (el.style.width === undefined) {
-    //   el.style.width = ?
-    // }
-  }
 
   // need to store original app dims (constant) if it isn't a SPA
   // this will only be used in that case, but store it always anyway
@@ -137,7 +97,7 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
 
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
-    if (store.getState().fullscreen) {
+    if (store.getState().app.fullscreen) {
       store.dispatch(
         windowResize({
           height: window.innerHeight,
@@ -181,24 +141,22 @@ const trelliscopeApp = async (id: string, config: string, options: { logger?: bo
     },
   });
 
-  ReactDOM.render(
-    <MuiThemeProvider theme={themeV1}>
+  root.render(
+    <ThemeProvider theme={themeV1}>
       <Provider store={store}>
         <App config={config} id={id} singlePageApp={singlePageApp} />
       </Provider>
-    </MuiThemeProvider>,
-    document.getElementById(id),
+    </ThemeProvider>,
   );
 
   if (module.hot) {
     module.hot.accept('./App', () => {
-      ReactDOM.render(
-        <MuiThemeProvider theme={themeV1}>
+      root.render(
+        <ThemeProvider theme={themeV1}>
           <Provider store={store}>
             <App config={config} id={id} singlePageApp={singlePageApp} />
           </Provider>
-        </MuiThemeProvider>,
-        document.getElementById(id),
+        </ThemeProvider>,
       );
     });
   }

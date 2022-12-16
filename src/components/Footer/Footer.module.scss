@@ -3,14 +3,14 @@
     position: absolute;
     box-sizing: border-box;
     left: 0;
-    height: 30px;
-    padding-left: 10px;
+    height: var(--footer-wrapper-height);
+    padding-left: var(--padding-7);
     margin: 0;
-    line-height: 30px;
-    font-size: 15px;
-    font-weight: 300;
-    background: #666666;
-    color: white;
+    line-height: var(--footer-wrapper-line-height);
+    font-size: var(--text-lg);
+    font-weight: var(--font-light);
+    background: var(--gray-1300);
+    color: var(--white);
     display: flex;
     flex-direction: row;
     overflow-x: auto;
@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: row;
     white-space: nowrap;
-    padding-right: 10px;
+    padding-right: var(--padding-7);
   }
 
   &Section {
@@ -32,7 +32,7 @@
     }
 
     &Text {
-      margin-right: 3px;
+      margin-right: var(--margin-2);
     }
   }
 
@@ -42,11 +42,11 @@
   }
 
   &Spacer {
-    width: 12px;
+    width: var(--footer-spacer-width);
   }
 
   &FilterText {
-    margin-left: 5px;
+    margin-left: var(--margin-4);
   }
 
   &ButtonDiv {

@@ -5,11 +5,12 @@
 // if selections are made after regex, regex is cleared
 import React, { useEffect, useState } from 'react';
 import type { SetStateAction } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import FilterCatPlot from '../FilterCatPlot';
 
 import styles from './FilterCat.module.scss';
@@ -37,6 +38,8 @@ const FilterCat: React.FC<FilterCatProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const mutableFilterState = { ...filterState };
+
   const sortOptions = [
     { payload: 'ct,asc', text: 'Order: count ascending' },
     { payload: 'ct,desc', text: 'Order: count descending' },
@@ -45,8 +48,8 @@ const FilterCat: React.FC<FilterCatProps> = ({
   ];
 
   useEffect(() => {
-    setSortOrder(filterState.orderValue ? filterState.orderValue : 'ct,desc');
-  }, [filterState.orderValue]);
+    setSortOrder(mutableFilterState.orderValue ? mutableFilterState.orderValue : 'ct,desc');
+  }, [mutableFilterState.orderValue, filterState]);
 
   const handleMenuClose = () => {
     setMenuOpen(false);
@@ -61,8 +64,8 @@ const FilterCat: React.FC<FilterCatProps> = ({
     let newState = {} as Filter<FilterCat>;
     if (val === '') {
       newState = {
-        name: filterState.name,
-        varType: filterState.varType,
+        name: mutableFilterState.name,
+        varType: mutableFilterState.varType,
         orderValue: sortOrder,
       };
     } else {
@@ -74,9 +77,9 @@ const FilterCat: React.FC<FilterCatProps> = ({
         }
       });
       newState = {
-        name: filterState.name,
+        name: mutableFilterState.name,
         type: 'regex',
-        varType: filterState.varType,
+        varType: mutableFilterState.varType,
         regex: val,
         value: vals,
         orderValue: sortOrder,
@@ -102,7 +105,7 @@ const FilterCat: React.FC<FilterCatProps> = ({
           cellHeight={15}
           dist={dist}
           condDist={condDist}
-          filterState={filterState}
+          filterState={mutableFilterState}
           handleChange={handleChange}
           sortOrder={sortOrder}
         />
@@ -111,22 +114,29 @@ const FilterCat: React.FC<FilterCatProps> = ({
         <TextField
           placeholder="regex"
           style={regexInput}
-          value={filterState.type === 'regex' ? filterState.regex : ''}
+          value={mutableFilterState.type === 'regex' ? mutableFilterState.regex : ''}
           onChange={(e) => handleRegex(e.target.value)}
+          variant="standard"
         />
         <div className={styles.filterCatExtraOptionsInput}>
           {/* this is an issue with the iconButton in materialUi not having the type for an onClick in the props
           // @ts-ignore */}
-          <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleMenuIconClick}>
-            <MoreVertIcon />
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleMenuIconClick}
+            sx={{ width: 25, height: 25 }}
+          >
+            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
           </IconButton>
           <Menu id="long-menu" open={menuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
             {sortOptions.map((d) => (
               <MenuItem
                 key={d.payload}
-                selected={d.payload === filterState.orderValue}
+                selected={d.payload === mutableFilterState.orderValue}
                 onClick={() => {
-                  handleSortChange(Object.assign(filterState, { orderValue: d.payload }));
+                  handleSortChange(Object.assign(mutableFilterState, { orderValue: d.payload }));
                   handleMenuClose();
                 }}
               >

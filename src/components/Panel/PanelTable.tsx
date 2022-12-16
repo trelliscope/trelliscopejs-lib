@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
-import { FormControlLabel, Popover, Radio, RadioGroup, TextField } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import ReactTooltip from 'react-tooltip';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faArrowUpRightFromSquare, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FormControlLabel, Popover, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
+import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
@@ -55,7 +56,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
     },
     labelNameCell: {
       paddingLeft: dims.labelPad / 2 + 2,
-      paddingRIght: dims.labelPad / 2 + 2,
+      paddingRight: dims.labelPad / 2 + 2,
       width: dims.labelWidth,
     },
     labelValueCell: {
@@ -69,7 +70,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
     radioDiv: {
       transform: `scale(${dims.labelHeight / 29})`,
       transformOrigin: 'left top',
-      marginTop: '-4px',
+      marginTop: '-2px',
     },
   };
 
@@ -87,19 +88,35 @@ const PanelTable: React.FC<PanelTableProps> = ({
                 data-tip
                 data-for={`tooltip_${panelKey}_${label.name}`}
               >
-                <span style={inlineStyles.labelSpan}>{label.name}</span>
+                {label.name !== label.desc ? (
+                  <Tooltip
+                    title={label.desc}
+                    placement="top-start"
+                    id={`tooltip_${panelKey}_${label.name}`}
+                    arrow
+                    PopperProps={{
+                      modifiers: [
+                        {
+                          name: 'offset',
+                          options: {
+                            offset: [30, -10],
+                          },
+                        },
+                      ],
+                    }}
+                  >
+                    <span style={inlineStyles.labelSpan}>{label.name}</span>
+                  </Tooltip>
+                ) : (
+                  <span style={inlineStyles.labelSpan}>{label.name}</span>
+                )}
               </div>
-              {label.name !== label.desc && (
-                <ReactTooltip place="right" id={`tooltip_${panelKey}_${label.name}`}>
-                  <span>{label.desc}</span>
-                </ReactTooltip>
-              )}
             </td>
             <td className={styles.labelCell} style={inlineStyles.labelValueCell}>
               {label.type === 'href' && (
                 <div className={styles.labelInner} style={inlineStyles.labelInner}>
                   <a style={inlineStyles.labelSpan} href={label.value as string} rel="noopener noreferrer" target="_blank">
-                    <i className="icon-open" style={inlineStyles.linkIcon} />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
                 </div>
               )}
@@ -114,7 +131,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       window.location.reload();
                     }}
                   >
-                    <i className="icon-open" style={inlineStyles.linkIcon} />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
                 </div>
               )}
@@ -167,7 +184,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
                     ) || ''}
                   </div>
-                  <div>
+                  <div className={styles.editButtonContainer}>
                     <button
                       type="button"
                       className={styles.editButton}
@@ -176,7 +193,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       }}
                       onClick={() => setTextInputOpen(label.name)}
                     >
-                      <EditIcon style={{ fontSize: dims.fontSize }} />
+                      <FontAwesomeIcon icon={faPencil} />
                     </button>
                   </div>
                   <Popover
@@ -187,12 +204,14 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
                       setInputUpdateCount(inputUpdateCount + 1);
                     }}
-                    onEnter={() => {
-                      setTextInputValue(
-                        localStorage.getItem(
-                          `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
-                        ) || '',
-                      );
+                    TransitionProps={{
+                      onEnter: () => {
+                        setTextInputValue(
+                          localStorage.getItem(
+                            `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
+                          ) || '',
+                        );
+                      },
                     }}
                     anchorOrigin={{
                       vertical: 'top',
@@ -236,7 +255,7 @@ const PanelTable: React.FC<PanelTableProps> = ({
                     style={inlineStyles.labelClose}
                     onClick={() => onLabelRemove(label.name, labelArr)}
                   >
-                    <i className="icon-times-circle" />
+                    <FontAwesomeIcon icon={faXmark} />
                   </button>
                 </div>
               )}

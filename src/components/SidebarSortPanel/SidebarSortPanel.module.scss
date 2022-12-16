@@ -1,0 +1,48 @@
+.sidebarSortPanel {
+  &Table {
+    width: var(--sidebarSort-table-width);
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+
+    &Wrap {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    &Row {
+      width: var(--sidebarSort-table-width);
+      height: var(--sidebarSort-table-height);
+      border-bottom: var(border-3);
+    }
+  }
+
+  &Tr {
+    width: var(--sidebarSort-table-width);
+    height: var(--sidebarSort-table-height);
+    border-bottom: var(border-3);
+  }
+
+  &Button {
+    vertical-align: middle;
+    width: var(--sidebarSort-button-width);
+    text-align: center;
+
+    &Close {
+      height: var(--sidebarSort-button-height);
+      width: var(--sidebarSort-button-width);
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+
+  &Labels {
+    font-size: var(--text-sm);
+    height: var(--sidebarSort-labels-height);
+    width: var(--sidebarSort-labels-width);
+    vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

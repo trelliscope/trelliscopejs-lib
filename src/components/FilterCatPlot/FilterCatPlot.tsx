@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useSelector } from 'react-redux';
 import { Grid } from 'react-virtualized';
 import type { GridCellProps } from 'react-virtualized';
 import { filterCardinalitySelector } from '../../selectors/cogData';
-import CatBar from '../FilterCatPlotBar';
-import type { RootState } from '../../store';
+import FilterCatPlotBar from '../FilterCatPlotBar';
 
 interface FilterCatPlotProps {
   height: number;
@@ -16,7 +14,6 @@ interface FilterCatPlotProps {
   filterState: Filter<FilterCat>;
   sortOrder: string;
   handleChange: (state: Filter<FilterCat>) => void;
-  filterCardinality: number;
 }
 
 const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
@@ -28,8 +25,8 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   filterState,
   sortOrder,
   handleChange,
-  filterCardinality,
 }) => {
+  const filterCardinality = useSelector(filterCardinalitySelector);
   const handleSelect = (val: string, active: boolean) => {
     const selectArr = Object.assign([], filterState.value) as string[];
     if (active) {
@@ -92,7 +89,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
     // allActive indicates that none are selected in the filter
     // in which case we want them to show up in color rather than gray
     return (
-      <CatBar
+      <FilterCatPlotBar
         key={`${x.rowIndex}_${barCt}_${sortOrder}`}
         divStyle={x.style}
         // this is needed for the cellRenderer to work and not throw a warning
@@ -102,7 +99,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
         active={active}
         allActive={filterState.value === undefined}
         height={cellHeight}
-        width={(barSize / barMax) * (width - 1) + 1}
+        width={(barSize / barMax) * (width - 1) + 1 || 0}
         onClick={() => handleSelect(barName, active)}
         d={{ ct: barCt, mct: dist.dist[barName], id: barName }}
       />
@@ -115,8 +112,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   const fc = filterCardinality;
 
   return (
-    // FIXME we should be able to fix this once updating react and react-virtualized
-    // this issue is related to versioning of our dependencies
+    // FIXME react-virtualized needs to be updated to react 18
     // https://github.com/bvaughn/react-virtualized/issues/1739
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: 2786
@@ -133,14 +129,4 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const stateSelector = createSelector(filterCardinalitySelector, (filterCardinality) => ({
-  filterCardinality,
-}));
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: TS2345
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-export default connect(mapStateToProps)(FilterCatPlot);
+export default FilterCatPlot;

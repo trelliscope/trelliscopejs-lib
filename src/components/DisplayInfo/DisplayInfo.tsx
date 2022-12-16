@@ -1,14 +1,14 @@
 import React from 'react';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import marked from 'marked';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import classNames from 'classnames';
 import {
   selectedDisplaySelector,
@@ -16,41 +16,37 @@ import {
   fullscreenSelector,
   dispInfoDialogSelector,
 } from '../../selectors';
-import { setDispInfoDialogOpen } from '../../actions';
-import type { RootState } from '../../store';
+import { setDispInfoDialogOpen } from '../../slices/appSlice';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
   singleDisplay: boolean;
-  curDisplayInfo: CurrentDisplayInfo;
-  isOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
-  setThisDialogOpen: (isOpen: boolean) => void;
-  fullscreen: boolean;
-  active: boolean;
 }
 
-const DisplayInfo: React.FC<DisplayInfoProps> = ({
-  curDisplayInfo,
-  singleDisplay,
-  isOpen,
-  setDialogOpen,
-  setThisDialogOpen,
-  fullscreen,
-  active,
-}) => {
+const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen }) => {
+  const dispatch = useDispatch();
+  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const fullscreen = useSelector(fullscreenSelector);
+  const isOpen = useSelector(dispInfoDialogSelector);
+  const active = selectedDisplay.name !== '';
+
+  const handleDispInfoDialogOpen = (dispInfoIsOpen: boolean) => {
+    dispatch(setDispInfoDialogOpen(dispInfoIsOpen));
+  };
   const handleClose = () => {
     setDialogOpen(false);
-    setThisDialogOpen(false);
+    handleDispInfoDialogOpen(false);
   };
   const handleOpen = () => {
     setDialogOpen(true);
-    setThisDialogOpen(true);
+    handleDispInfoDialogOpen(true);
   };
 
   const handleKey = () => {
     setDialogOpen(true);
-    setThisDialogOpen(true);
+    handleDispInfoDialogOpen(true);
   };
 
   const moptions = {
@@ -59,7 +55,8 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
     stripPassoverAttribute: true,
   };
 
-  useHotkeys('i', handleKey, { enabled: fullscreen && active });
+  useHotkeys('i', handleKey, { enabled: fullscreen && active && !isOpen });
+  useHotkeys('i', handleClose, { enabled: fullscreen && active && isOpen });
   useHotkeys('esc', handleClose, { enabled: isOpen });
 
   return (
@@ -72,7 +69,9 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
           singleDisplay ? [styles.displayInfoButton, styles.displayInfoButtonLeft] : styles.displayInfoButton,
         )}
       >
-        <i className={classNames(styles.displayInfoIcon, 'icon-info_outline')} />
+        <div className={styles.displayInfoIcon}>
+          <FontAwesomeIcon icon={faCircleInfo} size="lg" />
+        </div>
       </button>
       <Dialog
         open={isOpen}
@@ -137,27 +136,4 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const styleSelector = createSelector(
-  selectedDisplaySelector,
-  curDisplayInfoSelector,
-  fullscreenSelector,
-  dispInfoDialogSelector,
-  (selectedDisplay, curDisplayInfo, fullscreen, isOpen) => ({
-    curDisplayInfo,
-    fullscreen,
-    active: selectedDisplay.name !== '',
-    isOpen,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => styleSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  setThisDialogOpen: (isOpen: boolean) => {
-    dispatch(setDispInfoDialogOpen(isOpen));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayInfo);
+export default DisplayInfo;

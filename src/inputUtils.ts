@@ -46,7 +46,7 @@ export const setPanelCogInput = (di: DisplayObject, value: string, panelKey: str
   }
 
   if (di.input_type === 'localStorage') {
-    if (localStorage.getItem(lsKey) === value) {
+    if (localStorage.getItem(lsKey) === value && cogId !== 'comments') {
       localStorage.removeItem(lsKey);
     } else {
       localStorage.setItem(lsKey, value);

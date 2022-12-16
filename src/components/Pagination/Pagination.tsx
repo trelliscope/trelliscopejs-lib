@@ -1,64 +1,37 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import type { Action, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import { setLayout } from '../../actions';
-import { nPerPageSelector, pageNumSelector, dialogOpenSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
-import { filterCardinalitySelector } from '../../selectors/cogData';
-import { RootState } from '../../store';
+import IconButton from '@mui/material/IconButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
 import styles from './Pagination.module.scss';
 
 interface PaginationProps {
   n: number;
-  npp: number;
-  totPages: number;
   totPanels: number;
+  npp: number;
   dialogOpen: boolean;
   fullscreen: boolean;
-  handleChange: (arg0: number) => void;
-  cogData: CogData;
+  cogData: CogDataMutable;
+  totPages: number;
+  pageLeft: () => void;
+  pageRight: () => void;
+  pageFirst: () => void;
+  pageLast: () => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   n,
-  npp,
-  totPages,
   totPanels,
+  npp,
   dialogOpen,
   fullscreen,
-  handleChange,
   cogData,
+  totPages,
+  pageLeft,
+  pageRight,
+  pageFirst,
+  pageLast,
 }) => {
-  const pageLeft = () => {
-    let nn = n - 1;
-    if (nn < 1) {
-      nn += 1;
-    }
-    return handleChange(nn);
-  };
-
-  const pageRight = () => {
-    let nn = n + 1;
-    if (nn > totPages) {
-      nn -= 1;
-    }
-    return handleChange(nn);
-  };
-
-  const pageFirst = () => {
-    handleChange(1);
-  };
-
-  const pageLast = () => {
-    handleChange(totPages);
-  };
-
   useHotkeys('right', pageRight, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
   useHotkeys('left', pageLeft, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
 
@@ -83,19 +56,19 @@ const Pagination: React.FC<PaginationProps> = ({
       </span>
     );
   }
-  const txt = (
-    <span>
-      {pRange}
-      <span>{` of ${totPanels}`}</span>
-    </span>
-  );
+
   return (
     <div className={styles.paginationOuter}>
-      <div className={styles.paginationLabel}>{txt}</div>
+      <div className={styles.paginationLabel}>
+        <span>
+          {pRange}
+          <span>{` of ${totPanels}`}</span>
+        </span>
+      </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
-            <FirstPageIcon />
+            <FontAwesomeIcon icon={faBackwardStep} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>First</div>
@@ -103,7 +76,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
-            <ChevronLeftIcon />
+            <FontAwesomeIcon icon={faChevronLeft} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Prev</div>
@@ -111,7 +84,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageRight()}>
-            <ChevronRightIcon />
+            <FontAwesomeIcon icon={faChevronRight} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Next</div>
@@ -119,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
           <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
-            <LastPageIcon />
+            <FontAwesomeIcon icon={faForwardStep} size="sm" />
           </IconButton>
         </div>
         <div className={styles.paginationButtonText}>Last</div>
@@ -128,32 +101,4 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 };
 
-// ------ redux container ------
-
-const stateSelector = createSelector(
-  pageNumSelector,
-  filterCardinalitySelector,
-  nPerPageSelector,
-  dialogOpenSelector,
-  fullscreenSelector,
-  cogDataSelector,
-  (n, card, npp, dialogOpen, fullscreen, cogData) => ({
-    n,
-    totPanels: card,
-    totPages: Math.ceil(card / npp),
-    npp,
-    dialogOpen,
-    fullscreen,
-    cogData,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (n: number) => {
-    dispatch(setLayout({ pageNum: n }));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Pagination);
+export default Pagination;

@@ -1,7 +1,7 @@
 .content {
-  background: #fdfdfd;
+  background: var(--white-100);
   position: absolute;
-  top: 48px;
+  top: var(--content-position-top);
   right: 0;
   box-sizing: border-box;
   padding: 0;

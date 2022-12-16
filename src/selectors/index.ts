@@ -1,32 +1,34 @@
 // cross-component selectors go here
 // otherwise they go in the component files
 import { createSelector } from 'reselect';
+import { DisplayInfoState } from '../slices/displayInfoSlice';
 import type { RootState } from '../store';
 
-export const displayListSelector = (state: RootState) => state._displayList;
-export const displayInfoSelector = (state: RootState) => state._displayInfo;
+export const displayListSelector = (state: RootState) => state.displayList;
+export const displayInfoSelector = (state: RootState) => state.displayInfo;
 export const curDisplayInfoSelector = (state: RootState) => {
-  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
-    return state._displayInfo[state.selectedDisplay.name];
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state.displayInfo[state.selectedDisplay.name]) {
+    return state.displayInfo[state.selectedDisplay.name];
   }
   return {
     isFetching: true,
     isLoaded: false,
     didInvalidate: false,
     info: {},
-  };
+  } as DisplayInfoState;
 };
 export const selectedDisplaySelector = (state: RootState) => state.selectedDisplay;
 export const displayLoadedSelector = (state: RootState) => {
-  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state._displayInfo[state.selectedDisplay.name]) {
-    return state._displayInfo[state.selectedDisplay.name].isLoaded;
+  if (state.selectedDisplay && state.selectedDisplay.name !== '' && state.displayInfo[state.selectedDisplay.name]) {
+    return state.displayInfo[state.selectedDisplay.name].isLoaded;
   }
   return false;
 };
+export const relDispPositionsSelector = (state: RootState) => state.relDispPositions;
+export const selectedRelDispsSelector = (state: RootState) => state.selectedRelDisps;
 
-export const cogInterfaceSelector = (state: RootState) => state._cogDataMutable.iface;
-export const cogDataSelector = (state: RootState) => state._cogDataMutable;
-export const localPanelsSelector = (state: RootState) => state._localPanels;
+export const cogInterfaceSelector = (state: RootState) => state.cogDataMutable.iface;
+export const cogDataSelector = (state: RootState) => state.cogDataMutable;
 
 export const pageNumSelector = (state: RootState) => (state.layout.pageNum ? state.layout.pageNum : -1);
 export const nPerPageSelector = (state: RootState) => state.layout.nrow * state.layout.ncol;
@@ -39,19 +41,36 @@ export const layoutSelector = (state: RootState) => state.layout;
 export const labelsSelector = (state: RootState) => state.labels || [];
 
 export const configSelector = (state: RootState) => state._config.config;
-export const appIdSelector = (state: RootState) => state.appId;
-export const singlePageAppSelector = (state: RootState) => state.singlePageApp;
-export const fullscreenSelector = (state: RootState) => state.fullscreen;
+export const appIdSelector = (state: RootState) => state.app.appId;
+export const singlePageAppSelector = (state: RootState) => state.app.singlePageApp;
+export const fullscreenSelector = (state: RootState) => state.app.fullscreen;
 
-export const dialogOpenSelector = (state: RootState) => state.dialog;
-export const dispSelectDialogSelector = (state: RootState) => state.dispSelectDialog;
-export const dispInfoDialogSelector = (state: RootState) => state.dispInfoDialog;
+export const dialogOpenSelector = (state: RootState) => state.app.dialog;
+export const dispSelectDialogSelector = (state: RootState) => state.app.dispSelectDialog;
+export const dispInfoDialogSelector = (state: RootState) => state.app.dispInfoDialog;
 
-export const selectCallbacks = (state: RootState) => state?.options?.callbacks;
+export const selectCallbacks = (state: RootState) => state?.app.options?.callbacks;
+
+export const errorSelector = (state: RootState) => state.app.errorMsg;
 
 export const aspectSelector = createSelector(curDisplayInfoSelector, (cdi) => {
   if (cdi.isLoaded) {
     return cdi.info.height / cdi.info.width;
   }
   return 0;
+});
+
+export const cogDescSelector = createSelector(curDisplayInfoSelector, (cdi) => {
+  const res: { [key: string]: string; label: string; value: string; index: string } = {
+    label: '',
+    value: '',
+    index: '',
+  };
+  if (cdi?.info?.cogInfo) {
+    const ciKeys = Object.keys(cdi.info.cogInfo);
+    for (let i = 0; i < ciKeys.length; i += 1) {
+      res[ciKeys[i]] = cdi.info.cogInfo[ciKeys[i]].desc;
+    }
+  }
+  return res;
 });

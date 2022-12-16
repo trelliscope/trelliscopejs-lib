@@ -1,5 +1,5 @@
 interface Config {
-  display_base: 'displays' | '__self__';
+  display_base: 'displays';
   data_type: 'json' | 'jsonp';
   cog_server: CogServer;
   split_layout: boolean;
@@ -8,14 +8,6 @@ interface Config {
   disclaimer: boolean;
   config_base?: unknown;
   ga_id?: string;
-}
-
-interface SelfContainedConfig {
-  config: Config;
-  displayList: Display[];
-  displayObj: DisplayObject;
-  panels: PanelInterface[];
-  cogData: CogData[];
 }
 
 interface CogServer {
@@ -58,7 +50,7 @@ interface PanelInterface {
 
 interface DisplaySelect {
   list: Display[];
-  isLoaded: string;
+  isLoaded: boolean;
 }
 
 interface CogInterface {
@@ -82,34 +74,17 @@ interface Display {
   keySig: string;
 }
 
-interface SelectedDisplay {
-  group: string;
-  name: string;
-  desc: string;
-}
-
 // TODO this should probably live as a return type
 // of `displayGroupSelector` once that file is converted to TS
 type DisplayGroup = {
   [key in string]: number[];
 };
 
-interface CurrentDisplayInfo {
-  didInvalidate: boolean;
-  info: DisplayObject;
-  isFetching: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-}
-
-interface DisplayList extends CurrentDisplayInfo {
-  list: DisplayObject[];
-}
-
 interface DisplayObject {
   name: string;
   // ?
   group: Group;
+  views: ViewItem[];
   desc: string;
   mdDesc: string;
   mdTitle: string;
@@ -143,7 +118,7 @@ interface DisplayObject {
     sidebar: number;
     filter: { [key: string]: Filter<FilterCat | FilterRange> };
     fv: string[];
-  },
+  };
   keySig: string;
   cogInterface: CogInterface;
   panelInterface: PanelInterface;
@@ -160,7 +135,6 @@ interface DisplayObject {
 }
 
 interface CogInfo {
-  [key: string]: { name: string; desc: string };
   name: string;
   desc: string;
   type: CogType;
@@ -225,7 +199,7 @@ type FilterItem = {
   val: string;
   from: string;
   to: string;
-}
+};
 
 interface ViewItem {
   name: string;
@@ -253,15 +227,6 @@ interface Sort {
 }
 
 type SortDir = 'asc' | 'desc';
-
-interface DisplayInfoState {
-  isFetching: boolean;
-  didInvalidate: boolean;
-  isLoaded: boolean;
-  lastUpdated: number;
-  info: DisplayObject;
-}
-
 interface HTMLWidget {
   widgets: HTMLWidgetInstance[];
   initialize: (el: HTMLElement, width: number, height: number) => void;
@@ -272,7 +237,11 @@ interface HTMLWidgetIntance {
   find: (selector: string) => HTMLElement;
 }
 
-interface HTMLWidgetData { evals: string[]; x: unknown, jsHooks: unknown[] }
+interface HTMLWidgetData {
+  evals: string[];
+  x: unknown;
+  jsHooks: unknown[];
+}
 
 type PanelData = string | HTMLWidgetData;
 
@@ -291,7 +260,7 @@ interface Dims {
   labelHeight: number;
   labelPad: number;
   labelWidth: number;
-  nLabels: 1;
+  nLabels: number;
   pHeight: number;
   pPad: number;
   pWidth: number;
@@ -307,7 +276,7 @@ interface FilterCatDist {
 }
 
 interface CondDistFilterCat {
-  dist: { key: string; value: number }[];
+  dist: import('../../node_modules/crossfilter2').Grouping<string, number>[];
   idx: number[];
   max: number;
   orderValue: string;
@@ -318,7 +287,7 @@ interface CondDistFilterCat {
 }
 
 interface CondDistFilterNum {
-  dist: { key: number; value: number }[];
+  dist: import('../../node_modules/crossfilter2').Grouping<string, number>[];
   max: number;
   breaks: number[];
   delta: number;
@@ -341,23 +310,52 @@ interface FilterNumStateChange {
   valid: boolean;
 }
 
-interface RelDispPositions {
-  aspect: number;
-  col: number;
-  group: string;
-  height: number;
-  width: number;
-  idx: number;
-  left: number;
-  name: string;
-  row: number;
-  top: number;
+interface AppOptions {
+  logger?: boolean;
+  mockData?: boolean;
+  callbacks?: {
+    [key: string]: () => void;
+  };
 }
-
 interface Window {
-  trelliscopeApp: (id: string, config: string, options: { logger?: boolean; mockData?: boolean }) => void;
+  trelliscopeApp: (id: string, config: string, options: AppOptions) => void;
 }
 
 interface CogData {
   [key: string]: string | number;
+  panelKey: string;
 }
+
+interface CogDataMutable {
+  isFetching: boolean;
+  isLoaded: boolean;
+  didInvalidate: boolean;
+  lastUpdated?: number;
+  crossfilter?: import('../../node_modules/crossfilter2').Crossfilter<CogData>;
+  dimensionRefs?: {
+    [key: string]: import('../../node_modules/crossfilter2').Dimension<CogData, string | number>;
+  };
+  groupRefs?: {
+    [key: string]: import('../../node_modules/crossfilter2').Group<
+      CogData,
+      import('../../node_modules/crossfilter2').NaturallyOrderedValue,
+      number
+    >;
+  };
+  allRef?:
+    | import('../../node_modules/crossfilter2').GroupAll<
+        CogData,
+        import('../../node_modules/crossfilter2').NaturallyOrderedValue
+      >
+    | undefined;
+  iface?: CogInterface;
+}
+
+type SidebarType =
+  | 'Panel Grid Layout'
+  | 'Filter Panels'
+  | 'Sort Panels'
+  | 'Show/Hide Labels'
+  | 'Views'
+  | 'Configuration'
+  | '';

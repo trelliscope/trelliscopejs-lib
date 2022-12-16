@@ -1,5 +1,6 @@
 import React from 'react';
 import { rest } from 'msw';
+import '@testing-library/jest-dom';
 import { render, screen, waitFor, cleanup } from '../test-utils';
 import { createDisplayObj } from './__mockData__/mockFunctions';
 import server from './__mockData__/server';

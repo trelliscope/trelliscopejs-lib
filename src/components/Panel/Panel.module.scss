@@ -1,30 +1,28 @@
 .bounding {
-  transition-property: all;
-  transition-duration: 300ms;
-  transition-timing-function: ease;
+  transition: var(--panel-bounding-transition);
   position: absolute;
   overflow: hidden;
   padding: 0;
   box-sizing: border-box;
-  border: 1px solid #ddd;
+  border: var(--border-4);
 }
 
 .panel {
-  transition: 300ms ease;
+  transition: var(--panel-transition);
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
-  color: #bbb;
+  color: var(--gray-400);
 
   &Content {
-    transition: 300ms ease;
+    transition: var(--panel-transition);
     display: block;
   }
 }
 
 .label {
   &Table {
-    transition: 300ms ease;
+    transition: var(--panel-transition);
     padding: 0;
     table-layout: fixed;
     border-spacing: 0;
@@ -32,11 +30,11 @@
   }
 
   &Row {
-    transition: 300ms ease;
-    background: #f6f6f6;
+    transition: var(--panel-transition);
+    background: var(--white-200);
 
     &:hover {
-      background: rgba(246, 246, 246, 0.4);
+      background: var(--gray-1200);
 
       .labelClose {
         display: block;
@@ -50,8 +48,8 @@
   }
 
   &NameCell {
-    border-right: 1px solid #fff;
-    font-weight: 400;
+    border-right: var(--border-1);
+    font-weight: var(--font-normal);
   }
 
   &Outer {
@@ -60,7 +58,7 @@
   }
 
   &Inner {
-    padding-right: 3px;
+    padding-right: var(--padding-1);
     overflow: hidden;
     white-space: normal;
     vertical-align: middle;
@@ -70,7 +68,7 @@
   }
 
   &Close {
-    transition: 1s;
+    transition: var(--panel-close-transition);
     position: absolute;
     top: 0;
     right: 2px;
@@ -81,6 +79,12 @@
     margin: 0;
     opacity: 0.5;
     display: none;
+
+    svg {
+      margin-top: 1px;
+      width: 12px;
+      height: 12px;
+    }
   }
 
   &P {
@@ -92,6 +96,10 @@
   }
 }
 
+.editButtonContainer {
+  display: flex;
+}
+
 .editButton {
   cursor: pointer;
   border: none;
@@ -101,8 +109,6 @@
   opacity: 0.5;
 }
 
-.formRow {
-  flex-wrap: unset;
+.labelInner .formRow {
+  flex-wrap: nowrap;
 }
-
-

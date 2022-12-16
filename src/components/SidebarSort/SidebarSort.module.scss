@@ -1,107 +1,19 @@
 .sidebarSort {
-  &Table {
-    width: 225px;
-    border-collapse: collapse;
-    border-spacing: 0;
-    table-layout: fixed;
-
-    &Wrap {
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    &Row {
-      width: 225px;
-      height: 48px;
-      border-bottom: 1px solid rgb(224, 224, 224);
-    }
-  }
-
-  &Tr {
-    width: 225px;
-    height: 48px;
-    border-bottom: 1px solid rgb(224, 224, 224);
-  }
-
-  &Button {
-    vertical-align: middle;
-    width: 45px;
-    text-align: center;
-
-    &Close {
-      height: 48px;
-      width: 45px;
-      text-align: center;
-      vertical-align: middle;
-    }
-  }
-
-  &Labels {
-    font-size: 13px;
-    height: 48px;
-    width: 135px;
-    vertical-align: middle;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   &NotUsed {
-    width: 230px;
+    width: var(--sidebarSort-notUsed-width);
     overflow-y: auto;
     box-sizing: border-box;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+    padding-left: var(--padding-7);
+    padding-right: var(--padding-7);
+    padding-bottom: var(--padding-7);
 
     &Header {
-      height: 30px;
+      height: var(--sidebarSort-notUsedHeader-height);
       line-height: 30px;
-      padding-left: 10px;
+      padding-left: var(--padding-7);
       box-sizing: border-box;
-      width: 230px;
-      font-size: 14px;
-    }
-  }
-
-  &Variable {
-    display: inline-block;
-    box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-    border-radius: 10px;
-    border: 0;
-    background: none;
-    padding-top: 2px !important;
-    padding-bottom: 3px !important;
-    padding-left: 7px !important;
-    padding-right: 7px !important;
-    margin: 3px !important;
-    font-size: 12px;
-    color: black;
-    cursor: pointer;
-    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-
-    &:hover {
-      transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-      background: #ebebeb;
-    }
-  }
-
-  &CogGroup {
-    &Header {
-      background: #90caf9;
-      margin-left: -10px;
-      margin-right: -10px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      color: white;
-      font-weight: 400;
-      font-size: 14px;
-    }
-
-    &Text {
-      padding-left: 20px;
+      width: var(--sidebarSort-notUsed-width);
+      font-size: var(--text-base);
     }
   }
 }

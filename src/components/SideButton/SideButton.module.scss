@@ -1,56 +1,57 @@
 .sideButton {
   position: relative;
-  width: 48px;
-  height: 48px;
-  line-height: 48px;
+  width: var(--sideButton-width);
+  height: var(--sideButton-height);
+  line-height: var(--sideButton-line-height);
   text-align: center;
   vertical-align: middle;
-  font-size: 22px;
-  color: #fff;
+  font-size: var(--text-5xl);
+  color: var(--white);
   border: none;
-  border-bottom: 1px solid #c0c0c0;
+  border-bottom: var(--border-7);
   user-select: none;
-  background: #b3b3b3;
-  transition: color 0.2s, background-color 0.2s;
+  background: var(--gray-300);
+  transition: var(--sideButton-transition);
   cursor: pointer;
 
+  &Test {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   &:hover {
-    background: #448aff;
+    background: var(--blue-200);
   }
 
   &__active {
-    background: #fff;
-    color: #448aff;
+    background: var(--white);
+    color: var(--blue-200);
 
     &:hover {
-      background: #448aff;
-      color: #fff;
+      background: var(--blue-200);
+      color: var(--white);
     }
   }
 
   &Icon {
-    line-height: 22px;
-    height: 22px;
-    width: 48px;
-    position: absolute;
-    top: 8px;
-    left: 0;
+    line-height: var(--sideButton-icon-line-height);
+    height: var(--sideButton-icon-height);
+    width: var(--sideButton-width);
   }
 
   &Label {
-    font-size: 11px;
-    line-height: 11px;
-    width: 48px;
-    position: absolute;
-    bottom: 4px;
-    left: 0;
+    font-size: var(--text-2xs);
+    line-height: var(--sideButton-label-line-height);
+    width: var(--sideButton-width);
   }
 
   &__bottom {
     position: absolute;
     bottom: 0;
     left: 0;
-    border-top: 1px solid #c0c0c0;
+    border-top: var(--border-7);
     border-bottom: none;
   }
 }

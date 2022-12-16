@@ -1,0 +1,28 @@
+.sidebarFilterPill {
+  &Variable {
+    display: inline-block;
+    box-shadow: var(--sidebarFilter-variable-box-shadow);
+    border-radius: var(--rounded);
+    padding: var(--padding-px) var(--padding-5) var(--padding-1) !important;
+    border: 0;
+    background: var(--white);
+    margin: var(--margin-2) !important;
+    font-size: var(--text-xs);
+    cursor: pointer;
+    color: var(--black);
+    transition: var(--sidebarFilter-variable-transition);
+
+    &:hover {
+      background: var(--white-500);
+    }
+
+    &Active {
+      background: var(--green);
+      color: var(--white);
+
+      &:hover {
+        background: var(--green);
+      }
+    }
+  }
+}
