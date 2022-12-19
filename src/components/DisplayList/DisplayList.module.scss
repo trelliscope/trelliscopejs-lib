@@ -1,7 +1,6 @@
 .displayList {
   &Container {
     height: var(--displayList-container-height);
-    overflow-y: auto;
   }
 
   &GroupContainer {
@@ -53,5 +52,9 @@
     &Checked {
       color: var(--white) !important;
     }
+  }
+
+  &Container &GroupContainer &GridList {
+    overflow-y: hidden;
   }
 }
