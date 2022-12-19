@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -101,6 +101,12 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
   const setStep = (step: number) => {
     setActiveStep(step);
   };
+
+  useEffect(() => {
+    if (selectedRelDisps.length === 0) {
+      setStep(0);
+    }
+  }, [selectedRelDisps]);
 
   const parentBoundary = {
     position: 'relative',
