@@ -54,10 +54,6 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
   };
   const active = Object.keys(relatedDisplayGroups).length > 0;
 
-  console.log('relDispPositions', relDispPositions);
-  console.log('selectedRelDisps', selectedRelDisps);
-  console.log('selectedDisplay', selectedDisplay);
-
   const handleResize = (
     pos: RelDispPositionsState,
     x: number,
