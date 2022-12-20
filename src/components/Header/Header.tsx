@@ -86,8 +86,8 @@ const Header: React.FC = () => {
           30),
     },
     displayName: {
-      lineHeight: `${selectedDisplay?.desc === '' ? 48 : 26}px`,
-      paddingTop: selectedDisplay?.desc === '' ? 0 : 5,
+      lineHeight: `${selectedDisplay?.description === '' ? 48 : 26}px`,
+      paddingTop: selectedDisplay?.description === '' ? 0 : 5,
     },
   };
 

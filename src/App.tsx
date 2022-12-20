@@ -11,6 +11,7 @@ import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
+import CrossfilterClient from './CrossfilterClient';
 
 import './assets/styles/main.css';
 import './assets/fonts/OpenSans/style.css';
@@ -23,6 +24,8 @@ interface AppProps {
   fullscreen?: boolean;
   appDims: { width: number; height: number };
 }
+
+const crossFilterClient = new CrossfilterClient();
 
 const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscreen, appDims }) => {
   const dispatch = useDispatch();
@@ -43,7 +46,7 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
   }, []);
 
   return (
-    <DataProvider client={{}}>
+    <DataProvider client={crossFilterClient}>
       <Header />
       <Body />
       <Footer />
