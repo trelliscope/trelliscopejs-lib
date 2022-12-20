@@ -375,5 +375,5 @@ interface IConfig {
 }
 
 interface Datum {
-  [key: string | unique symbol]: string | number;
+  [key: string | symbol]: string | number;
 }

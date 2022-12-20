@@ -53,8 +53,6 @@ const Sidebar: React.FC = () => {
   const height = contentHeight - sidebarHeaderHeight;
   const { views } = curDisplayInfo.info;
 
-  console.log(curDisplayInfo);
-
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
     let newLabels = labels;
