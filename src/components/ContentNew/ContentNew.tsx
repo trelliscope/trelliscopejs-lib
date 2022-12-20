@@ -25,8 +25,6 @@ const ContentNew: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const layout = useSelector(selectLayout);
 
-  console.log(data);
-
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,
@@ -38,7 +36,7 @@ const ContentNew: React.FC = () => {
   return (
     <div className={styles.contentWrapper}>
       <div className={styles.content} style={contentStyle}>
-        {metaDataSuccess && displayInfoSuccess && data.length > 0 && (
+        {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((md, i) => (
               <div key={getPanelImageName(displayInfo.key_cols, md)} className={styles.panel}>

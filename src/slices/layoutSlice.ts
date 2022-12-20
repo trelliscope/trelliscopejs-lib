@@ -54,5 +54,6 @@ export const { setLayout } = layoutSlice.actions;
 
 export const selectLayout = (state: RootState) => state.layout;
 export const selectNumPerPage = (state: RootState) => state.layout.nrow * state.layout.ncol;
+export const selectPage = (state: RootState) => state.layout.page;
 
 export default layoutSlice.reducer;
