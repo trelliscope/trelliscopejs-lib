@@ -40,6 +40,9 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const [otherInfo, setOtherInfo] = useState<string>(localStorage.getItem(OTHERINFO) || '');
   const [activeStep, setActiveStep] = useState<number>(0);
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
+  const [validEmail, setValidEmail] = useState(true);
+  const tester =
+    /^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
   const cogData = useSelector(cogDataSelector);
   if (!cogData.isLoaded || cogData.crossfilter === undefined) {
@@ -64,12 +67,21 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
 
   const steps = ['User info', 'Download csv', 'Compose email'];
 
+  const handleValidateEmail = (emailInput: string) => {
+    if (tester.test(emailInput) || emailInput === '') {
+      setValidEmail(true);
+    } else {
+      setValidEmail(false);
+    }
+  };
+
   const handleNameChange = (event: { target: { value: string } }) => {
     setFullName(event.target.value);
     localStorage.setItem(USERNAME, event.target.value);
   };
 
   const handleEmailChange = (event: { target: { value: string } }) => {
+    handleValidateEmail(event.target.value);
     setEmail(event.target.value);
     localStorage.setItem(EMAIL, event.target.value);
   };
@@ -186,6 +198,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
               email={email}
               jobTitle={jobTitle}
               otherInfo={otherInfo}
+              validEmail={validEmail}
               handleNameChange={handleNameChange}
               handleEmailChange={handleEmailChange}
               handleJobTitleChange={handleJobTitleChange}
