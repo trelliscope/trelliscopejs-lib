@@ -213,7 +213,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
             </Button>
             {activeStep <= 1 && (
               <Button
-                disabled={(activeStep === 0 && fullName === '') || (activeStep === 1 && !csvDownloaded)}
+                disabled={
+                  (activeStep === 0 && fullName === '') ||
+                  (activeStep === 0 && !validEmail) ||
+                  (activeStep === 1 && !csvDownloaded)
+                }
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
