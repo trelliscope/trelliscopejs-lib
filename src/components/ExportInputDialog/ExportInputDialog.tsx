@@ -41,7 +41,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const [activeStep, setActiveStep] = useState<number>(0);
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
-  const tester =
+  const emailRegex =
     /^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
   const cogData = useSelector(cogDataSelector);
@@ -68,7 +68,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const steps = ['User info', 'Download csv', 'Compose email'];
 
   const handleValidateEmail = (emailInput: string) => {
-    if (tester.test(emailInput) || emailInput === '') {
+    if (emailRegex.test(emailInput) || emailInput === '') {
       setValidEmail(true);
     } else {
       setValidEmail(false);
