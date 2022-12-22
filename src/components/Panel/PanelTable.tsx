@@ -221,11 +221,20 @@ const PanelTable: React.FC<PanelTableProps> = ({
                       vertical: 'top',
                       horizontal: 'center',
                     }}
+                    disableEscapeKeyDown
+                    onKeyDown={(e) => {
+                      if (e.shiftKey && e.key === 'Enter') {
+                        e.preventDefault();
+                        setTextInputOpen('');
+                        setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
+                        setInputUpdateCount(inputUpdateCount + 1);
+                      }
+                    }}
                   >
                     <div style={{ padding: 7 }}>
                       <TextField
                         id="outlined-multiline-static"
-                        label={`${label.name} ('esc' when complete)`}
+                        label={`${label.name} ('shift+enter' to save)`}
                         onChange={(e) => {
                           setTextInputValue(e.target.value);
                         }}
