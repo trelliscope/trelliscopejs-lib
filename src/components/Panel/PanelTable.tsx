@@ -199,11 +199,6 @@ const PanelTable: React.FC<PanelTableProps> = ({
                   <Popover
                     open={textInputOpen === label.name}
                     anchorEl={tableRef.current}
-                    onClose={() => {
-                      setTextInputOpen('');
-                      setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
-                      setInputUpdateCount(inputUpdateCount + 1);
-                    }}
                     TransitionProps={{
                       onEnter: () => {
                         setTextInputValue(
