@@ -13,12 +13,12 @@ interface DownloadCsvProps {
 const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, downloadCsv }) => (
   <div>
     <DialogContentText id="alert-dialog-description">
-      <p className={styles.downloadCsvDescription}>
+      <span className={styles.downloadCsvDescription}>
         {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
-      </p>
-      <p>
+      </span>
+      <span>
         {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
-      </p>
+      </span>
     </DialogContentText>
     <div className={styles.downloadCsvWrapperCenter}>
       <Button
