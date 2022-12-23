@@ -240,8 +240,8 @@ const Sidebar: React.FC = () => {
       <div className={styles.sidebarHeader}>{active}</div>
       {active === SB_CONFIG && <div className={styles.sidebarEmpty}>Configuration...</div>}
       {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
-      {active === SB_PANEL_LAYOUT && <SidebarLayout />}
-      {active === SB_PANEL_FILTER && (
+      {active === SB_PANEL_LAYOUT && displayLoaded && <SidebarLayout />}
+      {active === SB_PANEL_FILTER && displayLoaded && (
         <SidebarFilter
           filter={filter}
           filterView={filterView}
@@ -255,7 +255,7 @@ const Sidebar: React.FC = () => {
           handleFilterSortChange={handleFilterSortChange}
         />
       )}
-      {active === SB_PANEL_SORT && (
+      {active === SB_PANEL_SORT && displayLoaded && (
         <SidebarSort
           handleSortChange={handleSortChange}
           addSortLabel={addSortLabel}
@@ -268,7 +268,7 @@ const Sidebar: React.FC = () => {
           notUsed={notUsed}
         />
       )}
-      {active === SB_PANEL_LABELS && (
+      {active === SB_PANEL_LABELS && displayLoaded && (
         <SidebarLabels
           sidebarHeaderHeight={sidebarHeaderHeight}
           ch={ch}
@@ -278,7 +278,9 @@ const Sidebar: React.FC = () => {
           handleLabelChange={handleLabelChange}
         />
       )}
-      {active === SB_VIEWS && <SidebarViews handleViewsChange={handleViewsChange} height={height} views={views} />}
+      {active === SB_VIEWS && displayLoaded && (
+        <SidebarViews handleViewsChange={handleViewsChange} height={height} views={views} />
+      )}
     </div>
   );
 };

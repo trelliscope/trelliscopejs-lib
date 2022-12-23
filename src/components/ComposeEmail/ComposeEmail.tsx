@@ -13,14 +13,14 @@ interface ComposeEmailProps {
 const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, sendMail }) => (
   <div>
     <DialogContentText id="alert-dialog-description">
-      <p className={styles.composeEmailDescription}>
+      <span className={styles.composeEmailDescription}>
         {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
-      </p>
-      <p>
+      </span>
+      <span className={styles.composeEmailDescription}>
         <strong>
           Note: You must manually attach the csv file downloaded in the previous step to this email prior to sending.
         </strong>
-      </p>
+      </span>
     </DialogContentText>
     <div className={styles.composeEmailWrapperCenter}>
       <Button

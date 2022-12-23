@@ -21,7 +21,7 @@ export const cogFiltDistSelector = createSelector(
       // for every active filter, calculate the conditional distribution
       const keys = filterView.active;
       for (let i = 0; i < keys.length; i += 1) {
-        if (cdi.info.cogInfo[keys[i]].type === 'factor') {
+        if (cdi.info.cogInfo && cdi.info.cogInfo[keys[i]].type === 'factor') {
           const orderValue = filter[keys[i]] && filter[keys[i]].orderValue ? filter[keys[i]].orderValue : 'ct,desc';
 
           let dist = [] as Grouping<string, number>[];
@@ -74,7 +74,7 @@ export const cogFiltDistSelector = createSelector(
             sumSelected,
             idx: selectedIdx.concat(notSelectedIdx),
           } as CondDistFilterCat;
-        } else if (cdi.info.cogInfo[keys[i]].type === 'numeric') {
+        } else if (cdi.info.cogInfo && cdi.info.cogInfo[keys[i]].type === 'numeric') {
           const dist = cogData?.groupRefs?.[keys[i]]?.all() || [];
 
           let maxVal = 0;

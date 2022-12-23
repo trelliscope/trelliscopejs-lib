@@ -40,6 +40,9 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const [otherInfo, setOtherInfo] = useState<string>(localStorage.getItem(OTHERINFO) || '');
   const [activeStep, setActiveStep] = useState<number>(0);
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
+  const [validEmail, setValidEmail] = useState(true);
+  const emailRegex =
+    /^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
   const cogData = useSelector(cogDataSelector);
   if (!cogData.isLoaded || cogData.crossfilter === undefined) {
@@ -64,14 +67,23 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
 
   const steps = ['User info', 'Download csv', 'Compose email'];
 
+  const handleValidateEmail = (emailInput: string) => {
+    if (emailRegex.test(emailInput) || emailInput === '') {
+      setValidEmail(true);
+      localStorage.setItem(EMAIL, emailInput);
+    } else {
+      setValidEmail(false);
+    }
+  };
+
   const handleNameChange = (event: { target: { value: string } }) => {
     setFullName(event.target.value);
     localStorage.setItem(USERNAME, event.target.value);
   };
 
   const handleEmailChange = (event: { target: { value: string } }) => {
+    handleValidateEmail(event.target.value);
     setEmail(event.target.value);
-    localStorage.setItem(EMAIL, event.target.value);
   };
 
   const handleJobTitleChange = (event: { target: { value: string } }) => {
@@ -152,11 +164,12 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     Object.keys(localStorage).forEach((key) => {
       if (storageItems.includes(key)) {
         localStorage.removeItem(key);
-        setFullName('');
-        setEmail('');
-        setJobTitle('');
-        setOtherInfo('');
       }
+      setFullName('');
+      setEmail('');
+      setJobTitle('');
+      setOtherInfo('');
+      setValidEmail(true);
     });
   };
 
@@ -186,6 +199,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
               email={email}
               jobTitle={jobTitle}
               otherInfo={otherInfo}
+              validEmail={validEmail}
               handleNameChange={handleNameChange}
               handleEmailChange={handleEmailChange}
               handleJobTitleChange={handleJobTitleChange}
@@ -200,7 +214,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
             </Button>
             {activeStep <= 1 && (
               <Button
-                disabled={(activeStep === 0 && fullName === '') || (activeStep === 1 && !csvDownloaded)}
+                disabled={
+                  (activeStep === 0 && fullName === '') ||
+                  (activeStep === 0 && !validEmail) ||
+                  (activeStep === 1 && !csvDownloaded)
+                }
                 variant="contained"
                 color="primary"
                 onClick={handleNext}

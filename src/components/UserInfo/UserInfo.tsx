@@ -8,6 +8,7 @@ interface UserInfoProps {
   email: string;
   jobTitle: string;
   otherInfo: string;
+  validEmail: boolean;
   handleNameChange: (event: {
     target: {
       value: string;
@@ -35,6 +36,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
   email,
   jobTitle,
   otherInfo,
+  validEmail,
   handleNameChange,
   handleEmailChange,
   handleJobTitleChange,
@@ -61,6 +63,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
         fullWidth
         value={email}
         onChange={handleEmailChange}
+        error={!validEmail}
+        helperText={validEmail ? '' : 'Please enter a valid email address'}
       />
       <TextField
         className={styles.userInfoTextField}

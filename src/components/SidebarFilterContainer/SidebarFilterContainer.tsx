@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faRotateLeft, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarFilterContainer.module.scss';
 
@@ -65,7 +65,7 @@ const SidebarFilterContainer: React.FC<SidebarFilterContainerProps> = ({
         className={`${styles.sidebarFilterContainerHeaderIcon} ${styles.sidebarFilterContainerHeaderClose}`}
         onMouseDown={() => handleViewChange(d, 'remove')}
       >
-        <FontAwesomeIcon icon={faXmark} />
+        <FontAwesomeIcon icon={faWindowMinimize} />
       </button>
       <button
         type="button"

@@ -18,7 +18,22 @@ const FullscreenButton: React.FC = () => {
   const originalDims = { width: ww, height: hh };
 
   const mainEl = document.getElementsByClassName('trelliscope-not-spa')[0] as HTMLElement;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
   const toggleFullScreen = () => {
+    if (isSafari) {
+      if (!document.webkitFullscreenElement) {
+        document.body.webkitRequestFullscreen();
+        addClass(mainEl, 'trelliscope-spa');
+        dispatch(setFullscreen(true));
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+        removeClass(mainEl, 'trelliscope-spa');
+        dispatch(setFullscreen(false));
+        dispatch(windowResize(originalDims));
+      }
+      return;
+    }
     if (!document.fullscreenElement) {
       document.body.requestFullscreen();
       addClass(mainEl, 'trelliscope-spa');
@@ -32,7 +47,7 @@ const FullscreenButton: React.FC = () => {
   };
 
   const handleNativeKeyEsc = useCallback(() => {
-    if (!document.fullscreenElement) {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       removeClass(mainEl, 'trelliscope-spa');
       dispatch(setFullscreen(false));
       dispatch(windowResize(originalDims));
@@ -41,8 +56,14 @@ const FullscreenButton: React.FC = () => {
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleNativeKeyEsc);
+    if (isSafari) {
+      document.addEventListener('webkitfullscreenchange', handleNativeKeyEsc);
+    }
     return () => {
       document.removeEventListener('fullscreenchange', handleNativeKeyEsc);
+      if (isSafari) {
+        document.removeEventListener('webkitfullscreenchange', handleNativeKeyEsc);
+      }
     };
   }, [handleNativeKeyEsc]);
 
