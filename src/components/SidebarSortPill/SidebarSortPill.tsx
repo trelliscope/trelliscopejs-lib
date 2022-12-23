@@ -74,8 +74,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                         className={styles.sidebarSortPillVariable}
                         key={`${d}_button`}
                         onClick={() => {
-                          const order = sort.length === 0 ? 1 : sort[sort.length - 1].order + 1;
-                          sort2.push({ name: d, dir: 'asc', order });
+                          sort2.push({ varname: d, dir: 'asc', type: 'sort' });
                           addSortLabel(d);
                           handleSortChange(sort2);
                         }}
