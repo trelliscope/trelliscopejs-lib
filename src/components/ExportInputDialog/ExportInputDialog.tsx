@@ -70,6 +70,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const handleValidateEmail = (emailInput: string) => {
     if (emailRegex.test(emailInput) || emailInput === '') {
       setValidEmail(true);
+      localStorage.setItem(EMAIL, emailInput);
     } else {
       setValidEmail(false);
     }
@@ -83,7 +84,6 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const handleEmailChange = (event: { target: { value: string } }) => {
     handleValidateEmail(event.target.value);
     setEmail(event.target.value);
-    localStorage.setItem(EMAIL, event.target.value);
   };
 
   const handleJobTitleChange = (event: { target: { value: string } }) => {
