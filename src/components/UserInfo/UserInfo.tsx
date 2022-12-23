@@ -64,7 +64,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         value={email}
         onChange={handleEmailChange}
         error={!validEmail}
-        helperText="Please enter a valid email address"
+        helperText={validEmail ? '' : 'Please enter a valid email address'}
       />
       <TextField
         className={styles.userInfoTextField}
