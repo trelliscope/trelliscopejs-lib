@@ -4,12 +4,15 @@ import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 import { selectHashLayout } from '../selectors/hash';
 
-const initialState: ILayoutState = {
+const fallbackState: ILayoutState = {
   nrow: 1,
   ncol: 1,
   arrange: 'rows',
   page: 1,
   type: 'layout',
+};
+
+const initialState: ILayoutState = {
   ...selectHashLayout(),
 };
 
@@ -44,10 +47,10 @@ export const layoutSlice = createSlice({
       // If the hash layout is set, use it instead of the layout from the API
       const hashLayout = selectHashLayout();
       if (hashLayout) {
-        return { ...state, ...layout, ...hashLayout };
+        return { ...fallbackState, ...state, ...layout, ...hashLayout };
       }
 
-      return { ...state, ...layout };
+      return { ...fallbackState, ...state, ...layout };
     });
   },
 });

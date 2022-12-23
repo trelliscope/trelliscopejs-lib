@@ -93,7 +93,7 @@ export const hashFromState = (state: RootState) => {
 
   /* const hash = `display=${display}&${layoutPars}&labels=${labels.join(',')}\
 &sort=${sortStr}&filter=${filterStrs.join(',')}&sidebar=${sb}&fv=${fv}`; */
-  return hashURL.toString();
+  return decodeURIComponent(hashURL.toString());
 };
 
 // Panel Grid Layout
