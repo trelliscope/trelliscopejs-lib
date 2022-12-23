@@ -164,11 +164,12 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     Object.keys(localStorage).forEach((key) => {
       if (storageItems.includes(key)) {
         localStorage.removeItem(key);
-        setFullName('');
-        setEmail('');
-        setJobTitle('');
-        setOtherInfo('');
       }
+      setFullName('');
+      setEmail('');
+      setJobTitle('');
+      setOtherInfo('');
+      setValidEmail(true);
     });
   };
 
