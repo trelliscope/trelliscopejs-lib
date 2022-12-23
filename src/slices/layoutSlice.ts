@@ -2,13 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
+import { selectHashLayout } from '../selectors/hash';
 
 const initialState: ILayoutState = {
   nrow: 1,
   ncol: 1,
   arrange: 'rows',
   page: 1,
-  type: 'layout'
+  type: 'layout',
+  ...selectHashLayout(),
 };
 
 export interface LayoutAction {
@@ -39,6 +41,12 @@ export const layoutSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
       const { layout } = action.payload.state;
+      // If the hash layout is set, use it instead of the layout from the API
+      const hashLayout = selectHashLayout();
+      if (hashLayout) {
+        return { ...state, ...layout, ...hashLayout };
+      }
+
       return { ...state, ...layout };
     });
   },

@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { displayInfoAPI } from './displayInfoAPI';
+import { selectHashSort } from '../selectors/hash';
 
-const initialState: ISortState[] = [];
+const initialState: ISortState[] = selectHashSort() || [];
 
 export const sortSlice = createSlice({
   name: 'sort',
@@ -22,7 +23,15 @@ export const sortSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => action.payload.state.sort);
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
+      // If the hash sort is set, use it instead of the sort from the API
+      const hashSort = selectHashSort();
+      if (hashSort !== undefined) {
+        return hashSort || [];
+      }
+
+      return action.payload.state.sort;
+    });
   },
 });
 

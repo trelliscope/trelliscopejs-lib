@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { snakeCase } from '../utils';
+import snakeCase from 'lodash.snakecase';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
