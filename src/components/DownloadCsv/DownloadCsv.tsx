@@ -14,7 +14,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, downloadCsv }) =
   <div>
     <DialogContentText id="alert-dialog-description">
       <span className={styles.downloadCsvDescription}>
-        {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
+        {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
       </span>
       <span>
         {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
