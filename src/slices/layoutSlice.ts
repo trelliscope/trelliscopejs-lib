@@ -3,21 +3,15 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 
-export interface LayoutState {
-  nrow: number;
-  ncol: number;
-  arrange: 'rows' | 'cols';
-  page: number;
-}
-
-const initialState: LayoutState = {
+const initialState: ILayoutState = {
   nrow: 1,
   ncol: 1,
   arrange: 'rows',
   page: 1,
+  type: 'layout'
 };
 
-interface LayoutAction {
+export interface LayoutAction {
   nrow?: number;
   ncol?: number;
   arrange?: 'rows' | 'cols';
