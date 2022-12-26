@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { layoutSelector, selectedRelDispsSelector } from '../../selectors';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { LayoutAction, setLayout } from '../../slices/layoutSlice';
 import styles from './SidebarLayout.module.scss';
 
 const SidebarLayout: React.FC = () => {
@@ -15,7 +15,7 @@ const SidebarLayout: React.FC = () => {
   const selectedRelDisps = useSelector(selectedRelDispsSelector);
   const hasRelDisps = selectedRelDisps.length > 0;
 
-  const handleChange = (sidebarLayout: LayoutState) => dispatch(setLayout(sidebarLayout));
+  const handleChange = (sidebarLayout: LayoutAction) => dispatch(setLayout(sidebarLayout));
 
   const resetRelDisps = () => {
     dispatch(setSelectedRelDisps([]));
@@ -29,7 +29,7 @@ const SidebarLayout: React.FC = () => {
       nrow: isRow ? num : layout.nrow,
       ncol: !isRow ? num : layout.ncol,
       arrange: layout.arrange,
-      pageNum: layout.pageNum,
+      page: layout.page,
     });
   };
 
@@ -81,13 +81,13 @@ const SidebarLayout: React.FC = () => {
                 handleChange({
                   nrow: layout.nrow,
                   ncol: layout.ncol,
-                  arrange: ar as LayoutState['arrange'],
-                  pageNum: layout.pageNum,
+                  arrange: ar as ILayoutState['arrange'],
+                  page: layout.page,
                 })
               }
             >
               <FormControlLabel
-                value="row"
+                value="rows"
                 control={<Radio />}
                 label={
                   <div className={styles.inputLabelSpan}>
@@ -98,7 +98,7 @@ const SidebarLayout: React.FC = () => {
                 className={styles.inputRadio}
               />
               <FormControlLabel
-                value="column"
+                value="cols"
                 control={<Radio />}
                 label={
                   <span className={styles.inputLabelSpan}>
