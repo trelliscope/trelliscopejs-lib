@@ -49,6 +49,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     // Add sort dimensions
     client.clearSorts();
     if (sorts.length === 0) {
+      // If no sorts then sort by metaIndex which is original order
       client.addSort({ field: metaIndex, order: 'asc' });
     } else {
       // add sorts to client if they don't already exist
