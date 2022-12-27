@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import marked from 'marked';
@@ -10,27 +10,29 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import classNames from 'classnames';
-import {
-  selectedDisplaySelector,
-  curDisplayInfoSelector,
-  fullscreenSelector,
-  dispInfoDialogSelector,
-} from '../../selectors';
+import { fullscreenSelector, dispInfoDialogSelector } from '../../selectors';
 import { setDispInfoDialogOpen } from '../../slices/appSlice';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
   singleDisplay: boolean;
   setDialogOpen: (isOpen: boolean) => void;
+  totPanels: number;
 }
 
-const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen }) => {
+const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen, totPanels }) => {
   const dispatch = useDispatch();
-  const selectedDisplay = useSelector(selectedDisplaySelector);
-  const curDisplayInfo = useSelector(curDisplayInfoSelector);
+  const { data: displayInfo, isLoading } = useDisplayInfo();
   const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispInfoDialogSelector);
-  const active = selectedDisplay.name !== '';
+  const [hasInputs, setHasInputs] = useState(false);
+
+  useEffect(() => {
+    if (displayInfo && displayInfo.inputs) {
+      setHasInputs(true);
+    }
+  }, [displayInfo]);
 
   const handleDispInfoDialogOpen = (dispInfoIsOpen: boolean) => {
     dispatch(setDispInfoDialogOpen(dispInfoIsOpen));
@@ -55,8 +57,8 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen 
     stripPassoverAttribute: true,
   };
 
-  useHotkeys('i', handleKey, { enabled: fullscreen && active && !isOpen });
-  useHotkeys('i', handleClose, { enabled: fullscreen && active && isOpen });
+  useHotkeys('i', handleKey, { enabled: fullscreen && !isOpen });
+  useHotkeys('i', handleClose, { enabled: fullscreen && isOpen });
   useHotkeys('esc', handleClose, { enabled: isOpen });
 
   return (
@@ -82,23 +84,23 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen 
         disableEscapeKeyDown
         maxWidth="md"
       >
-        <DialogTitle id="dialog-info-title">{`${curDisplayInfo.info.mdTitle}`}</DialogTitle>
+        <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
         <DialogContent>
           <div className={styles.displayInfoModalContainer}>
             <div>
               <div style={{ background: '#ededed', padding: 5 }}>
-                <strong>{curDisplayInfo.info.name}</strong>
+                <strong>{displayInfo?.name}</strong>
                 <br />
-                {curDisplayInfo.info.desc && <em>{curDisplayInfo.info.desc}</em>}
+                {displayInfo?.description && <em>{displayInfo?.description}</em>}
               </div>
               <p>
-                {`This visualization contains ${curDisplayInfo.info.n} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "cognostics", that you can use to sort and filter the panels that you want to view.`}
+                {`This visualization contains ${totPanels} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "cognostics", that you can use to sort and filter the panels that you want to view.`}
               </p>
               <p>
                 To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top right
                 corner of the display.
               </p>
-              {curDisplayInfo.info.has_inputs && (
+              {hasInputs && (
                 <p>
                   There are user input variables available in this visualization with which you can provide feedback for any
                   panel. These will show up as either a radio button or free text entry in the labels that show up under each
@@ -106,22 +108,23 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen 
                   in subsequent views of the display.
                 </p>
               )}
-              {curDisplayInfo.info.has_inputs && (
+              {hasInputs && (
                 <p>
                   If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo;
                   button at the bottom left corner of the display and follow the prompts in the dialog box that pops up.
                 </p>
               )}
             </div>
-            {curDisplayInfo.isLoaded && (
+            {!isLoading && (
               <div
-                // we can dangerously set because the HTML is generated from marked()
-                // with pure markdown (sanitize = TRUE so user HTML is not supported)
-                // These ignores are needed because marked is a 3rd party library that is having type issues.
-                // Even after installing the type dependencies, the issue persists.
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore: TS2345
-                dangerouslySetInnerHTML={{ __html: marked(curDisplayInfo.info.mdDesc, moptions) }} // eslint-disable-line react/no-danger
+              // we can dangerously set because the HTML is generated from marked()
+              // with pure markdown (sanitize = TRUE so user HTML is not supported)
+              // These ignores are needed because marked is a 3rd party library that is having type issues.
+              // Even after installing the type dependencies, the issue persists.
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore: TS2345
+              // TODO fix this once data set is updated
+              // dangerouslySetInnerHTML={{ __html: marked(curDisplayInfo.info.mdDesc, moptions) }} // eslint-disable-line react/no-danger
               />
             )}
           </div>

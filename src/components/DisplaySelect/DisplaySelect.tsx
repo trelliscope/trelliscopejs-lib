@@ -30,6 +30,7 @@ import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
+// import { generateDisplayGroups } from '../../utils';
 
 interface DisplaySelectProps {
   setDialogOpen: (isOpen: boolean) => void;
@@ -43,6 +44,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const cfg = useSelector(configSelector);
   const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispSelectDialogSelector);
+  // const [displayGroups, setDisplayGroups] = useState();
 
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
@@ -50,6 +52,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
 
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
+    // setDisplayGroups(generateDisplayGroups(displayList));
   };
 
   const handleClose = () => {
@@ -71,8 +74,8 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     dispatch(setActiveSidebar(''));
     dispatch(setSelectedRelDisps([]));
     dispatch(setLabels([]));
-    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'row' }));
-    dispatch(setLayout({ pageNum: 1 }));
+    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'rows' }));
+    dispatch(setLayout({ page: 1 }));
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
     dispatch(setFilter({}));
     dispatch(setSort([]));
@@ -145,7 +148,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
         <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
         <DialogContent>
           <DisplayList
-            displayItems={displayList}
+            displayItems={displayList as IDisplayListItem[]}
             displayGroups={displayGroups}
             handleClick={handleSelect}
             selectable={false}

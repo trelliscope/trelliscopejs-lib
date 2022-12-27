@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
@@ -15,8 +15,8 @@ import { filterCardinalitySelector } from '../../selectors/cogData';
 import { setLayout } from '../../slices/layoutSlice';
 import getCustomProperties from '../../getCustomProperties';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import styles from './Header.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
+import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
   const dlLength = displayList?.length || 0;
   const selectedDisplay = useSelectedDisplay();
   const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
-  const [singleDisplay, setSingleDisplay] = useState(displayList.isLoaded && displayList.list.length <= 1);
+  const singleDisplay = displayList.length === 1;
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
   const n = useSelector(pageNumSelector);
@@ -38,8 +38,8 @@ const Header: React.FC = () => {
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
 
-  const handleChange = (pageNum: number) => {
-    dispatch(setLayout({ pageNum }));
+  const handleChange = (page: number) => {
+    dispatch(setLayout({ page }));
   };
 
   const pageLeft = () => {
@@ -96,9 +96,8 @@ const Header: React.FC = () => {
   };
 
   let displayName;
-  let displayDesc = '';
+  let displayDesc = '' as string | undefined;
   let iconStyle = { visibility: 'hidden' } as { [key: string]: string | number };
-  let pagination;
   const displayLoaded = selectedDisplay?.name !== '';
   const nGroups = Object.keys(displayGroups).length;
 
@@ -114,21 +113,6 @@ const Header: React.FC = () => {
       iconStyle = { color: '#aaa', fontSize: 12 };
     }
     displayDesc = selectedDisplay?.description;
-    pagination = (
-      <Pagination
-        n={n}
-        totPanels={totPanels}
-        npp={npp}
-        dialogOpen={dialogOpen}
-        fullscreen={fullscreen}
-        cogData={cogData}
-        totPages={totPages}
-        pageLeft={pageLeft}
-        pageRight={pageRight}
-        pageFirst={pageFirst}
-        pageLast={pageLast}
-      />
-    );
   } else if (singleDisplay) {
     displayName = 'loading...';
   } else if (!dialogOpen && displayList?.length > 0) {
@@ -146,7 +130,9 @@ const Header: React.FC = () => {
       {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
         <RelatedDisplays setDialogOpen={handleDialogOpen} />
       )}
-      {selectedDisplay?.name !== '' && <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} />}
+      {selectedDisplay?.name !== '' && (
+        <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={totPanels} />
+      )}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
         <div className={styles.headerNameDescContainer}>
@@ -155,7 +141,21 @@ const Header: React.FC = () => {
           </div>
           <div className={styles.headerDisplayDesc}>{displayDesc}</div>
         </div>
-        <div className={styles.headerPaginationContainer}>{pagination}</div>
+        {displayLoaded && (
+          <Pagination
+            n={n}
+            totPanels={totPanels}
+            npp={npp}
+            dialogOpen={dialogOpen}
+            fullscreen={fullscreen}
+            cogData={cogData}
+            totPages={totPages}
+            pageLeft={pageLeft}
+            pageRight={pageRight}
+            pageFirst={pageFirst}
+            pageLast={pageLast}
+          />
+        )}
       </div>
       <HelpInfo setDialogOpen={handleDialogOpen} />
     </div>
