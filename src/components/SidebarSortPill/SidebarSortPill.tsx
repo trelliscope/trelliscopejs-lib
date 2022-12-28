@@ -30,7 +30,6 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
       height: sidebarHeight - activeHeight - 30,
     },
   };
-  console.log(metaGroups);
 
   const activeSorts = sort.map((d) => d.varname);
 

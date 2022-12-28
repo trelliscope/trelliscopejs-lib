@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import { displayListAPI, useDisplayList } from './displayListAPI';
+import { selectHashDisplay } from '../selectors/hash';
 
 export type SelectedDisplayState = string;
 
@@ -16,8 +17,14 @@ export const selectedDisplaySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchFulfilled, (state, action) => {
+      // If the hash display is set, use it instead of the first display from the API
+      const hashDisplay = selectHashDisplay();
+      if (hashDisplay) {
+        return hashDisplay;
+      }
+
       if (state === '') {
-        state = action.payload[0].name;
+        return action.payload[0].name;
       }
 
       return state;

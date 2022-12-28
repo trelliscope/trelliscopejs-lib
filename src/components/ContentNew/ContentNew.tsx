@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
+import snakeCase from 'lodash.snakecase';
 import { labelsSelector } from '../../selectors';
 import { selectBasePath } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout } from '../../slices/layoutSlice';
 import { useMetaData } from '../../slices/metaDataAPI';
-import { snakeCase } from '../../utils';
 import { DataContext } from '../DataProvider';
 import styles from './ContentNew.module.scss';
 
@@ -18,7 +18,7 @@ function getFileName(string1: string, string2: string) {
 }
 
 const ContentNew: React.FC = () => {
-  const data = useContext(DataContext);
+  const { data } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();

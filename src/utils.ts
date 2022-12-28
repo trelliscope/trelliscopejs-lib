@@ -1,7 +1,3 @@
-export const snakeCase = (name: string) => name.replace(/ /g, '_');
-
-export const nothing = () => {};
-
 // TODO
 // export const generateDisplayGroups = (list: Display[]) => {
 //   const dispGroups = {} as DisplayGroup;

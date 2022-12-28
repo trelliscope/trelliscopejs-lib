@@ -221,6 +221,7 @@ const crossfilterMiddleware: Middleware<RootState> = (store) => (next) => (actio
         for (let i = 0; i < sortDat.length; i += 1) {
           idx[sortDat[i].__index] = i;
         }
+
         next(setDimensionSort(cf.dimension((d: Dimension) => idx[d.__index])));
       }
     }

@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { snakeCase } from '../utils';
+import snakeCase from 'lodash.snakecase';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
@@ -42,8 +42,6 @@ export const displayInfoAPI = createApi({
   }),
 });
 
-console.log(displayInfoAPI);
-
 export const { useGetDisplayInfoQuery } = displayInfoAPI;
 
 export const useDisplayInfo = () => {
@@ -62,6 +60,7 @@ export const useDisplayMetas = () => {
   return displayInfo.data?.metas;
 };
 
+// Return metas grouped by tags
 export const commonTagsKey = '__common__';
 export const useMetaGroups = () => {
   const metas = useDisplayMetas() || [];

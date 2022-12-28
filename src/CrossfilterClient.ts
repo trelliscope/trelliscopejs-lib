@@ -1,6 +1,18 @@
 import crossfilter, { Dimension, Crossfilter } from 'crossfilter2';
+import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
+
+const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b: Datum) => {
+  if (a[field] !== b[field]) {
+    if (order === 'asc') {
+      return a[field] < b[field] ? -1 : 1;
+    }
+    return a[field] > b[field] ? -1 : 1;
+  }
+
+  return 0;
+};
 
 type D = Dimension<Datum, string | number>;
 
@@ -70,11 +82,10 @@ export default class CrossfilterClient extends DataClient {
     super.clearFilters();
   }
 
-  /* removeFilter(filter: DataClientFilter) {
+  removeFilter(filter: string) {
+    this.dimensions.get(filter)?.filterAll();
     super.removeFilter(filter);
-    this.crossfilter.filterAll();
-    this._filters.forEach((f) => this.crossfilter.filter(f.field, f.value));
-  } */
+  }
 
   addSort(sort: DataClientSort) {
     super.addSort(sort);
@@ -114,7 +125,7 @@ export default class CrossfilterClient extends DataClient {
     const allData = this.crossfilter.all();
     const sortKey = this._sorts.map((s) => s.field).join('-');
 
-    if (!this.dimensions.has(sortKey) && allData.length) {
+    if (allData.length) {
       const sortData = allData.map((d) => {
         const elem: SortParam = { [sortKey]: d[metaIndex] };
         this._sorts.forEach((s) => {
@@ -123,24 +134,17 @@ export default class CrossfilterClient extends DataClient {
         return elem;
       });
 
-      const sortedData = sortData.sort((a, b) => {
-        for (let i = 0; i < this._sorts.length; i += 1) {
-          const s = this._sorts[i];
-          if (a[s.field] < b[s.field]) {
-            return s.order === 'asc' ? -1 : 1;
-          }
-          if (a[s.field] > b[s.field]) {
-            return s.order === 'asc' ? 1 : -1;
-          }
-        }
-
-        return 0;
-      });
+      const sortedData = arraySort(
+        sortData,
+        this._sorts.map((s) => compare(s.field, s.order)),
+      );
 
       const idx: SortParam = {};
       sortedData.forEach((d, i) => {
         idx[d[sortKey]] = i;
       });
+
+      if (this.dimensions.has(sortKey)) this.dimensions.get(sortKey)?.dispose();
 
       this.dimensions.set(
         sortKey,
@@ -148,10 +152,6 @@ export default class CrossfilterClient extends DataClient {
       );
     }
 
-    if (this._sorts[0].order === 'asc') {
-      return this.dimensions.get(sortKey)?.bottom(count, offset) as Datum[];
-    }
-
-    return this.dimensions.get(sortKey)?.top(count, offset) as Datum[];
+    return this.dimensions.get(sortKey)?.bottom(count, offset) as Datum[];
   }
 }
