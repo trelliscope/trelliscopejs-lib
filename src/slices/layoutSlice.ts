@@ -12,15 +12,14 @@ const fallbackState: ILayoutState = {
   type: 'layout',
 };
 
-const initialState: ILayoutState = {
-  ...selectHashLayout(),
-};
+const initialState: ILayoutState = selectHashLayout();
 
 export interface LayoutAction {
   nrow?: number;
   ncol?: number;
   arrange?: 'rows' | 'cols';
   page?: number;
+  type: 'layout';
 }
 
 export const layoutSlice = createSlice({

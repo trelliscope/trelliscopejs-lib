@@ -42,8 +42,6 @@ export const displayInfoAPI = createApi({
   }),
 });
 
-console.log(displayInfoAPI);
-
 export const { useGetDisplayInfoQuery } = displayInfoAPI;
 
 export const useDisplayInfo = () => {

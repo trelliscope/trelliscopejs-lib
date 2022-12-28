@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import difference from 'lodash.difference';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
+import { selectHashFilters } from '../selectors/hash';
 
 export interface FilterState {
   state: IFilterState[];
@@ -10,7 +11,7 @@ export interface FilterState {
 }
 
 const initialState: FilterState = {
-  state: [],
+  state: selectHashFilters() || [],
   view: {
     active: [],
     inactive: [],
@@ -58,11 +59,17 @@ export const filterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
-      const { filter } = action.payload.state;
-      if (filter === undefined || filter.length === 0) {
-        state.state = [];
+      const hashFilter = selectHashFilters();
+
+      if (hashFilter !== undefined) {
+        state.state = hashFilter || [];
       } else {
-        state.state = [...state.state, ...filter];
+        const { filter } = action.payload.state;
+        if (filter === undefined || filter.length === 0) {
+          state.state = [];
+        } else {
+          state.state = [...state.state, ...filter];
+        }
       }
 
       const filterables = action.payload.metas.filter((m) => m.filterable).map((m) => m.varname);

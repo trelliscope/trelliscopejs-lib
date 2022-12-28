@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunkMiddleware from 'redux-thunk';
 import callbackMiddleware from './middleware/callbackMiddleware';
-import crossfilterMiddleware from './middleware/crossfilterMiddleware';
+// import crossfilterMiddleware from './middleware/crossfilterMiddleware';
 import { hashMiddleware } from './middleware/hash';
 import { configAPI } from './slices/configAPI';
 import { displayListAPI } from './slices/displayListAPI';
@@ -17,7 +17,7 @@ const store = configureStore({
     displayInfoAPI.middleware,
     metaDataAPI.middleware,
     thunkMiddleware,
-    crossfilterMiddleware,
+    // crossfilterMiddleware,
     callbackMiddleware,
     hashMiddleware,
   ],

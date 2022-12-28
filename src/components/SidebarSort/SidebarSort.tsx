@@ -35,8 +35,6 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
     }
   }
 
-  console.log(metaGroups);
-
   return (
     <div>
       {cogDesc && (
