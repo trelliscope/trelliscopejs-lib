@@ -12,7 +12,7 @@ interface DataProviderProps {
   client: IDataClient;
 }
 
-export const DataContext = React.createContext<Datum[]>([]);
+export const DataContext = React.createContext<{ data: Datum[]; allData: Datum[] }>({ data: [], allData: [] });
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const [data, setData] = React.useState<Datum[]>([]);
@@ -61,7 +61,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     setData(client.getData(numPerPage, page));
   }, [metaData, numPerPage, filters, sorts, displayMetas, client, page]);
 
-  return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+  return <DataContext.Provider value={{ data, allData: client.allData }}>{children}</DataContext.Provider>;
 };
 
 export default DataProvider;

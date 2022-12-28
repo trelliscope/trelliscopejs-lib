@@ -61,15 +61,9 @@ export const hashFromState = (state: RootState) => {
         res = `var:${flt.varname};type:category;regexp:${encodeURIComponent(regexp as string)};val:${values
           .map(encodeURIComponent)
           .join('#')}`;
-      } else if (flt.filtertype === 'numberrange') {
-        const { min, max } = flt as INumberRangeFilterState;
-        res = `var:${flt.varname};type:numberrange;min:${min};max:${max}`;
-      } else if (flt.filtertype === 'daterange') {
-        const { min, max } = flt as IDateRangeFilterState;
-        res = `var:${flt.varname};type:daterange;min:${min};max:${max}`;
-      } else if (flt.filtertype === 'datetimerange') {
-        const { min, max } = flt as IDatetimeRangeFilterState;
-        res = `var:${flt.varname};type:datetimerange;min:${min};max:${max}`;
+      } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
+        const { min, max } = flt as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
+        res = `var:${flt.varname};type:numberrange;min:${min || ''};max:${max || ''}`;
       }
       return res;
     });

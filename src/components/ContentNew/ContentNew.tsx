@@ -18,7 +18,7 @@ function getFileName(string1: string, string2: string) {
 }
 
 const ContentNew: React.FC = () => {
-  const data = useContext(DataContext);
+  const { data } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
