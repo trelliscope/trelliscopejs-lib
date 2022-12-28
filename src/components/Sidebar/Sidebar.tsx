@@ -12,37 +12,29 @@ import {
   filterColSplitSelector,
   sidebarHeightSelector,
 } from '../../selectors/ui';
-import {
-  curDisplayInfoSelector,
-  filterStateSelector,
-  filterViewSelector,
-  labelsSelector,
-  cogDescSelector,
-} from '../../selectors';
+import { filterStateSelector, filterViewSelector, labelsSelector, cogDescSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
-import { cogInfoSelector } from '../../selectors/display';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
-import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 
 const Sidebar: React.FC = () => {
   const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
   const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
   const dispatch = useDispatch();
-  const { isSuccess: displayLoaded } = useDisplayInfo();
+  const { isSuccess: displayLoaded, data: curDisplayInfo } = useDisplayInfo();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
   const filterColSplit = useSelector(filterColSplitSelector);
   const filter = useSelector(filterStateSelector);
   const filterView = useSelector(filterViewSelector);
-  const cogInfo = useSelector(cogInfoSelector);
+  const metas = useDisplayMetas();
   const sidebarHeight = useSelector(sidebarHeightSelector);
-  const curDisplayInfo = useSelector(curDisplayInfoSelector);
   const filtDist = useSelector(cogFiltDistSelector);
   const labels = useSelector(labelsSelector);
   const colSplit = useSelector(filterColSplitSelector);
@@ -51,7 +43,7 @@ const Sidebar: React.FC = () => {
   const ch = useSelector(contentHeightSelector);
 
   const height = contentHeight - sidebarHeaderHeight;
-  const { views } = curDisplayInfo.info;
+  const views = curDisplayInfo?.views;
 
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
@@ -167,13 +159,13 @@ const Sidebar: React.FC = () => {
         const fltState = {
           name: fltItems.var,
           type: fltItems.type,
-          varType: cogInfo[fltItems.var].type,
+          varType: metas[fltItems.var].type,
         } as Filter<FilterCat | FilterRange>;
         if (fltItems.type === 'select') {
           fltState.orderValue = 'ct,desc';
           fltState.value = fltItems.val.split('#').map(decodeURIComponent);
         } else if (fltItems.type === 'regex') {
-          const { levels } = cogInfo[fltItems.var];
+          const { levels } = metas[fltItems.var];
           const vals = [] as string[];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
           levels.forEach((d) => {
@@ -244,7 +236,7 @@ const Sidebar: React.FC = () => {
         <SidebarFilter
           filter={filter}
           filterView={filterView}
-          cogInfo={cogInfo}
+          metas={metas}
           sidebarHeight={sidebarHeight}
           curDisplayInfo={curDisplayInfo}
           filtDist={filtDist}

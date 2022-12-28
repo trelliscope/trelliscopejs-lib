@@ -64,9 +64,9 @@ export const useDisplayMetas = () => {
 
 export const commonTagsKey = '__common__';
 export const useMetaGroups = () => {
-  const metas = useDisplayMetas();
+  const metas = useDisplayMetas() || [];
 
-  return metas?.reduce<{ [index: string | symbol]: string[] }>(
+  return metas.reduce<{ [index: string | symbol]: string[] }>(
     (acc, meta) => {
       const tags = meta.tags || [];
       if (tags.length === 0) {
