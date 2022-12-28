@@ -232,7 +232,7 @@ interface IGraphMeta extends IMeta {
 /* inputs                                                 */
 /* ------------------------------------------------------ */
 
-type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
+type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number' | 'localStorage';
 
 interface IInput {
   name: string;
@@ -350,6 +350,8 @@ interface IDisplay {
   state: IDisplayState;
   views: IView[];
   panel_type: PanelType;
+  input_csv_vars: string[];
+  input_email: string;
 }
 
 /* ------------------------------------------------------ */

@@ -6,7 +6,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import styles from './ComposeEmail.module.scss';
 
 interface ComposeEmailProps {
-  displayInfo: DisplayObject;
+  displayInfo: IDisplay;
   sendMail: () => void;
 }
 

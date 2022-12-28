@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import { cogDataSelector } from '../../selectors';
 import UserInfo from '../UserInfo';
 import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
 import styles from './ExportInputDialog.module.scss';
+import { DataContext } from '../DataProvider';
 
 interface ExportInputDialogProps {
   open: boolean;
   handleClose: () => void;
-  displayInfo: DisplayObject;
+  displayInfo: IDisplay;
+  hasInputs: boolean;
+  hasLocalStorage: boolean;
 }
 
 interface Data {
@@ -33,7 +33,14 @@ const OTHERINFO = '__trelliscope_otherinfo';
 
 const storageItems = [USERNAME, EMAIL, JOBTITLE, OTHERINFO];
 
-const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose, displayInfo }) => {
+const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
+  open,
+  handleClose,
+  displayInfo,
+  hasInputs,
+  hasLocalStorage,
+}) => {
+  const { allData } = useContext(DataContext);
   const [fullName, setFullName] = useState<string>(localStorage.getItem(USERNAME) || '');
   const [email, setEmail] = useState<string>(localStorage.getItem(EMAIL) || '');
   const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem(JOBTITLE) || '');
@@ -44,11 +51,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
   const emailRegex =
     /^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
-  const cogData = useSelector(cogDataSelector);
-  if (!cogData.isLoaded || cogData.crossfilter === undefined) {
-    return null;
-  }
-  if (!(displayInfo.has_inputs && displayInfo.input_type === 'localStorage')) {
+  if (!(hasInputs && hasLocalStorage)) {
     return null;
   }
 
@@ -58,7 +61,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     Email: ${email}%0D%0A%0D%0A\
     Job Title: ${encodeURIComponent(jobTitle)}%0D%0A%0D%0A\
     Other contact info: ${encodeURIComponent(otherInfo)}%0D%0A%0D%0A\
-    Display: ${displayInfo.group} -> ${displayInfo.name}%0D%0A%0D%0A\
+    Display: ${displayInfo.tags} -> ${displayInfo.name}%0D%0A%0D%0A\
     (attach downloaded csv file here before sending)`;
     const mail = document.createElement('a');
     mail.href = `mailto:${displayInfo.input_email}?subject=${subject}&body=${body}`;
@@ -104,7 +107,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const ccols = displayInfo.input_csv_vars || [];
+  const ccols = displayInfo?.input_csv_vars || [];
   const data = {} as Data;
   const cols = [] as string[];
   Object.keys(localStorage).forEach((key) => {
@@ -123,8 +126,8 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
 
   const header = ['panelKey'];
   // array of panel keys so we can search to get columns we need if ccols defined
-  const cd = cogData.crossfilter.all();
-  const pk = cd.map((dd: CogData) => dd.panelKey);
+  const cd = allData;
+  const pk = cd.map((dd) => dd.panelKey);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
     const rcdat = [];
@@ -208,7 +211,10 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
           )}
           {activeStep === 1 && <DownloadCsv displayInfo={displayInfo} downloadCsv={downloadCsv} />}
           {activeStep === 2 && <ComposeEmail displayInfo={displayInfo} sendMail={sendMail} />}
-          <div className={styles.exportInputDialogWrapperRight}>
+        </DialogContent>
+        <div className={styles.exportInputDialogControlsContainer}>
+          <Button onClick={clearInputs}>Clear inputs</Button>
+          <div>
             <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
               Back
             </Button>
@@ -228,9 +234,6 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
               </Button>
             )}
           </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={clearInputs}>Clear all inputs</Button>
           <Button
             onClick={() => {
               setActiveStep(0);
@@ -241,7 +244,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ open, handleClose
           >
             Close
           </Button>
-        </DialogActions>
+        </div>
       </Dialog>
     </div>
   );

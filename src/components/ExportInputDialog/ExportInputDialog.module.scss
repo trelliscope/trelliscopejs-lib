@@ -3,10 +3,6 @@
     margin-bottom: var(--margin-9) !important;
   }
 
-  &Button {
-    margin: var(--margin-6) !important;
-  }
-
   &Description {
     margin-top: 0;
   }
@@ -15,12 +11,9 @@
     margin: var(--margin-10) 0;
   }
 
-  &Wrapper {
-    &Right {
-      text-align: right;
-    }
-    &Center {
-      text-align: center;
-    }
+  &ControlsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px;
   }
 }

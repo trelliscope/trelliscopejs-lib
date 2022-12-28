@@ -6,7 +6,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import styles from './DownloadCsv.module.scss';
 
 interface DownloadCsvProps {
-  displayInfo: DisplayObject;
+  displayInfo: IDisplay;
   downloadCsv: () => void;
 }
 
