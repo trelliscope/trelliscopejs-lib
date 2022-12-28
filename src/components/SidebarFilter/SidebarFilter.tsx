@@ -2,33 +2,33 @@ import React from 'react';
 import intersection from 'lodash.intersection';
 import FilterCat from '../FilterCat';
 import FilterNum from '../FilterNum';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import SidebarFilterNotUsed from '../SidebarFilterNotUsed';
 import SidebarFilterContainer from '../SidebarFilterContainer';
 import styles from './SidebarFilter.module.scss';
+import { useMetaGroups } from '../../slices/displayInfoAPI';
 
 interface SidebarFilterProps {
   filter: {
-    [key: string]: Filter<FilterCat | FilterRange>;
+    [key: string]: IFilterState;
   };
   filterView: FilterView;
-  cogInfo: { [key: string]: CogInfo };
+  metas: IMeta[];
   sidebarHeight: number;
-  curDisplayInfo: DisplayInfoState;
+  curDisplayInfo: IDisplay;
   filtDist: { [key: string]: CondDistFilterCat | CondDistFilterNum };
   colSplit: {
     cutoff: number | null;
     heights: [number, number];
   };
   handleViewChange: (x: string, which: 'add' | 'remove') => void;
-  handleFilterChange: (x: Filter<FilterCat | FilterRange> | string) => void;
-  handleFilterSortChange: (x: Filter<FilterCat>) => void;
+  handleFilterChange: (x: ICategoryFilterState | INumberRangeFilterState) => void;
+  handleFilterSortChange: (x: ICategoryFilterState | INumberRangeFilterState) => void;
 }
 
 const SidebarFilter: React.FC<SidebarFilterProps> = ({
   filter,
   filterView,
-  cogInfo,
+  metas,
   sidebarHeight,
   curDisplayInfo,
   filtDist,
@@ -53,8 +53,8 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
       height: sidebarHeight,
     },
   };
-  const displId = curDisplayInfo.info.name;
-  const { cogGroups } = curDisplayInfo.info;
+  const displId = curDisplayInfo.name;
+  const metaGroups = useMetaGroups();
   let col1filters = [];
   let col2filters: string[] = [];
   if (colSplit.cutoff === null) {
@@ -67,13 +67,14 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
 
   const colContent = colFilters.map((curFilters) =>
     curFilters.map((d: string) => {
+      const meta = metas.find((m) => m.varname === d) as IFactorMeta;
       if (filtDist[d]) {
-        let filterState = filter[d] as Filter<FilterCat | FilterRange>;
+        let filterState = filter[d] as IFilterState;
         let headerExtra = '';
-        const filterActive = filterState && filterState.value !== undefined;
+        const filterActive = filterState && filterState.varname !== undefined;
 
         let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
-        if (cogInfo[d].type === 'factor' || cogInfo[d].type === 'time' || cogInfo[d].type === 'date') {
+        if (meta?.type === 'factor' || meta?.type === 'datetime' || meta?.type === 'date') {
           if (!filterState) {
             filterState = {
               name: d,
@@ -84,21 +85,21 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
             };
           }
 
-          const nlvl = cogInfo[d].levels ? cogInfo[d].levels.length : 1000;
+          const nlvl = meta?.levels ? meta?.levels.length : 1000;
 
           itemContent = (
             <FilterCat
-              filterState={filterState as Filter<FilterCat>}
+              filterState={filterState as ICategoryFilterState}
               height={Math.min(catHeight, nlvl * 15)}
-              dist={curDisplayInfo.info.cogDistns[d]}
+              dist={curDisplayInfo.metas[d]}
               condDist={filtDist[d] as CondDistFilterCat}
-              levels={curDisplayInfo.info.cogInfo[d].levels}
+              levels={curDisplayInfo.metas[d].levels}
               handleChange={handleFilterChange}
               handleSortChange={handleFilterSortChange}
             />
           );
           headerExtra = `${(filtDist[d] as CondDistFilterCat).totSelected} of ${filtDist[d].dist.length}`;
-        } else if (cogInfo[d].type === 'numeric') {
+        } else if (meta.type === 'number') {
           if (!filterState) {
             filterState = {
               name: d,
@@ -112,8 +113,8 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
           itemContent = (
             <FilterNum
               name={d}
-              filterState={filterState as Filter<FilterRange>}
-              dist={curDisplayInfo.info.cogDistns[d]}
+              filterState={filterState as INumberRangeFilterState}
+              dist={curDisplayInfo.metas[d]}
               condDist={filtDist[d] as CondDistFilterNum}
               handleChange={handleFilterChange}
             />
@@ -121,7 +122,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
         }
         return (
           <SidebarFilterContainer
-            cogInfo={cogInfo}
+            metas={metas}
             handleViewChange={handleViewChange}
             handleFilterChange={handleFilterChange}
             filterActive={filterActive}
@@ -139,7 +140,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
   );
 
   const extraIdx = colSplit.cutoff === null ? 0 : 1;
-  const cogNames = Object.keys(cogInfo);
+  const cogNames = metas.map((m) => m.varname);
   const inames = intersection(cogNames, filterView.inactive);
   if ((inlineStyles?.notUsedContainer?.height || 0) < 170 && extraIdx === 1) {
     colContent[extraIdx].push(
@@ -160,10 +161,10 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
     colContent[extraIdx].push(
       <SidebarFilterNotUsed
         filter={filter}
-        cogInfo={cogInfo}
+        metas={metas}
         handleViewChange={handleViewChange}
         inlineStyles={inlineStyles}
-        cogGroups={cogGroups}
+        metaGroups={metaGroups}
         inames={inames}
         displId={displId}
         key={displId}

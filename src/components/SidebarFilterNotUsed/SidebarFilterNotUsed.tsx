@@ -4,8 +4,8 @@ import styles from './SidebarFilterNotUsed.module.scss';
 import SidebarFilterPill from '../SidebarFilterPill';
 
 interface SidebarFilterNotUsedProps {
-  filter: { [key: string]: Filter<FilterCat | FilterRange> };
-  cogInfo: { [key: string]: CogInfo };
+  filter: { [key: string]: IFilterState };
+  metas: IMeta[];
   handleViewChange: (x: string, which: 'add' | 'remove') => void;
   inlineStyles: {
     col1: {
@@ -22,37 +22,37 @@ interface SidebarFilterNotUsedProps {
       height: number;
     };
   };
-  cogGroups: { [key: string]: string[] };
+  metaGroups: { [key: string | symbol]: string[] };
   inames: string[];
   displId: string;
 }
 
 const SidebarFilterNotUsed: React.FC<SidebarFilterNotUsedProps> = ({
   filter,
-  cogInfo,
+  metas,
   handleViewChange,
   inlineStyles,
-  cogGroups,
+  metaGroups,
   inames,
   displId,
 }) => (
   <div key="notUsed" className={styles.sidebarFilterNotUsed} style={inlineStyles.notUsedContainer}>
-    {Object.keys(cogGroups).map((grp) => {
-      const curItems = intersection(inames, cogGroups[grp]);
+    {Object.keys(metaGroups).map((grp) => {
+      const curItems = intersection(inames, metaGroups[grp]);
       if (curItems.length === 0) {
         return null;
       }
       return (
         <React.Fragment key={grp}>
-          {!['condVar', 'common', 'panelKey'].includes(grp) && (
+          {!['condVar', '__common__', 'panelKey'].includes(grp) && (
             <div className={styles.sidebarFilterNotUsedCogGroupHeader}>
               <span className={styles.sidebarFilterNotUsedCogGroupText}>{`${grp} (${curItems.length})`}</span>
             </div>
           )}
-          {[...cogGroups[grp]].sort().map((d) => (
+          {[...metaGroups[grp]].sort().map((d) => (
             <SidebarFilterPill
-              filter={filter}
-              cogInfo={cogInfo}
+              filter={filter[d] as ICategoryFilterState}
+              metas={metas}
               handleViewChange={handleViewChange}
               inames={inames}
               displId={displId}

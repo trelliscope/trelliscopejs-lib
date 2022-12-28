@@ -11,9 +11,9 @@ interface FilterCatPlotProps {
   cellHeight: number;
   dist: FilterCatDist;
   condDist: CondDistFilterCat;
-  filterState: Filter<FilterCat>;
+  filterState: ICategoryFilterState;
   sortOrder: string;
-  handleChange: (state: Filter<FilterCat>) => void;
+  handleChange: (state: ICategoryFilterState) => void;
 }
 
 const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
@@ -28,7 +28,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
 }) => {
   const filterCardinality = useSelector(filterCardinalitySelector);
   const handleSelect = (val: string, active: boolean) => {
-    const selectArr = Object.assign([], filterState.value) as string[];
+    const selectArr = Object.assign([], filterState.values) as string[];
     if (active) {
       // remove "val" from the array
       const vIndex = selectArr.indexOf(val);
@@ -39,7 +39,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
       selectArr.push(val);
     }
 
-    let newState = {} as Filter<FilterCat>;
+    let newState = {} as ICategoryFilterState;
     if (selectArr.length === 0) {
       newState = {
         name: filterState.name,
@@ -97,7 +97,7 @@ const FilterCatPlot: React.FC<FilterCatPlotProps> = ({
         // @ts-ignore: 2322
         style={null}
         active={active}
-        allActive={filterState.value === undefined}
+        allActive={filterState.values === undefined}
         height={cellHeight}
         width={(barSize / barMax) * (width - 1) + 1 || 0}
         onClick={() => handleSelect(barName, active)}

@@ -16,13 +16,13 @@ import FilterCatPlot from '../FilterCatPlot';
 import styles from './FilterCat.module.scss';
 
 interface FilterCatProps {
-  filterState: Filter<FilterCat>;
+  filterState: ICategoryFilterState;
   dist: FilterCatDist;
   condDist: CondDistFilterCat;
   levels: string[];
   height: number;
-  handleChange: (state: Filter<FilterCat>) => void;
-  handleSortChange: (state: Filter<FilterCat>) => void;
+  handleChange: (state: ICategoryFilterState) => void;
+  handleSortChange: (state: ICategoryFilterState) => void;
 }
 
 const FilterCat: React.FC<FilterCatProps> = ({
@@ -61,7 +61,7 @@ const FilterCat: React.FC<FilterCatProps> = ({
   };
 
   const handleRegex = (val: string) => {
-    let newState = {} as Filter<FilterCat>;
+    let newState = {} as ICategoryFilterState;
     if (val === '') {
       newState = {
         name: mutableFilterState.name,
