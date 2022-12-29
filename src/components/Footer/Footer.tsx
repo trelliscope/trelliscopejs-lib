@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
@@ -25,6 +25,20 @@ const Footer: React.FC = () => {
   const nFilt = useSelector(filterCardinalitySelector);
   const keys = Object.keys(filter.state);
   const [headerHeight, footerHeight] = getCustomProperties(['--header-height', '--footer-height']) as number[];
+  const [hasInputs, setHasInputs] = useState(false);
+  const [hasLocalStorage, setHasLocalStorage] = useState(false);
+
+  displayInfo?.inputs.forEach((input) => {
+    if (input.type === 'localStorage') {
+      setHasLocalStorage(true);
+    }
+  });
+
+  useEffect(() => {
+    if (displayInfo && displayInfo.inputs) {
+      setHasInputs(true);
+    }
+  }, [displayInfo]);
 
   const style = {
     width: windowWidth - (singlePage ? 0 : footerHeight),
@@ -151,14 +165,20 @@ const Footer: React.FC = () => {
           </div>
         )}
       </div>
-      {cdi.info.has_inputs && cdi.info.input_type === 'localStorage' && (
+      {hasInputs && hasLocalStorage && (
         <div className={styles.footerButtonDiv}>
           <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
             Export Inputs
           </Button>
         </div>
       )}
-      <ExportInputDialog open={dialogOpen} handleClose={handleClose} displayInfo={cdi.info} />
+      <ExportInputDialog
+        open={dialogOpen}
+        handleClose={handleClose}
+        displayInfo={displayInfo as IDisplay}
+        hasInputs={hasInputs}
+        hasLocalStorage={hasLocalStorage}
+      />
     </div>
   );
 };
