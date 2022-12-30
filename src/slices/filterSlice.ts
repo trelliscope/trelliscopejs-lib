@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import difference from 'lodash.difference';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
-import { selectHashFilters } from '../selectors/hash';
+import { selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
   state: IFilterState[];
@@ -13,7 +13,7 @@ export interface FilterState {
 const initialState: FilterState = {
   state: selectHashFilters() || [],
   view: {
-    active: [],
+    active: selectHashFilterView() || [],
     inactive: [],
   },
 };
@@ -60,6 +60,7 @@ export const filterSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
       const hashFilter = selectHashFilters();
+      const hashFilterView = selectHashFilterView();
 
       if (hashFilter !== undefined) {
         state.state = hashFilter || [];
@@ -76,6 +77,11 @@ export const filterSlice = createSlice({
       const active = state.state.map((f) => f.varname);
       state.view.active = active;
       state.view.inactive = difference(filterables, active);
+
+      if (hashFilterView.length > 0) {
+        state.view.active = hashFilterView;
+        state.view.inactive = difference(filterables, hashFilterView);
+      }
     });
   },
 });
@@ -83,5 +89,7 @@ export const filterSlice = createSlice({
 export const { setFilter, setFilterView } = filterSlice.actions;
 
 export const selectFilterState = (state: RootState) => state.filter.state;
+
+export const selectFilterView = (state: RootState) => state.filter.view;
 
 export default filterSlice.reducer;

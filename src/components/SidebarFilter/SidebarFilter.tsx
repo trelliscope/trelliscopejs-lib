@@ -1,18 +1,19 @@
 import React from 'react';
 import intersection from 'lodash.intersection';
+import { useSelector } from 'react-redux';
 import FilterCat from '../FilterCat';
 import FilterNum from '../FilterNum';
 import SidebarFilterNotUsed from '../SidebarFilterNotUsed';
 import SidebarFilterContainer from '../SidebarFilterContainer';
 import styles from './SidebarFilter.module.scss';
-import { useMetaGroups } from '../../slices/displayInfoAPI';
+import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
+import { filterViewSelector } from '../../selectors';
+import { selectFilterState } from '../../slices/filterSlice';
 
 interface SidebarFilterProps {
   filter: {
     [key: string]: IFilterState;
   };
-  filterView: FilterView;
-  metas: IMeta[];
   sidebarHeight: number;
   curDisplayInfo: IDisplay;
   filtDist: { [key: string]: CondDistFilterCat | CondDistFilterNum };
@@ -27,8 +28,6 @@ interface SidebarFilterProps {
 
 const SidebarFilter: React.FC<SidebarFilterProps> = ({
   filter,
-  filterView,
-  metas,
   sidebarHeight,
   curDisplayInfo,
   filtDist,
@@ -37,6 +36,10 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
   handleFilterChange,
   handleFilterSortChange,
 }) => {
+  const metas = useDisplayMetas();
+  const metaGroups = useMetaGroups();
+  const filterView = useSelector(filterViewSelector);
+  const filters = useSelector(selectFilterState);
   const catHeight = 125;
   const inlineStyles = {
     col1: {
@@ -54,7 +57,6 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
     },
   };
   const displId = curDisplayInfo.name;
-  const metaGroups = useMetaGroups();
   let col1filters = [];
   let col2filters: string[] = [];
   if (colSplit.cutoff === null) {
@@ -69,7 +71,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
     curFilters.map((d: string) => {
       const meta = metas.find((m) => m.varname === d) as IFactorMeta;
       if (filtDist[d]) {
-        let filterState = filter[d] as IFilterState;
+        let filterState = filters[d] as IFilterState;
         let headerExtra = '';
         const filterActive = filterState && filterState.varname !== undefined;
 

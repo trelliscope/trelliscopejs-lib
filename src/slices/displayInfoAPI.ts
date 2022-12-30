@@ -57,7 +57,7 @@ export const useDisplayInfo = () => {
 
 export const useDisplayMetas = () => {
   const displayInfo = useDisplayInfo();
-  return displayInfo.data?.metas;
+  return displayInfo.data?.metas || [];
 };
 
 // Return metas grouped by tags

@@ -76,7 +76,7 @@ const Sidebar: React.FC = () => {
       obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
       dispatch(setFilter(obj));
     }
-    dispatch(setLayout({ pageNum: 1 }));
+    dispatch(setLayout({ page: 1 }));
   };
 
   const handleFilterSortChange = (x: Filter<FilterCat>) => {
@@ -87,7 +87,7 @@ const Sidebar: React.FC = () => {
 
   const handleSortChange = (sortSpec: Sort[] | number) => {
     dispatch(setSort(sortSpec));
-    dispatch(setLayout({ pageNum: 1 }));
+    dispatch(setLayout({ page: 1 }));
   };
 
   const addSortLabel = (name: string) => {

@@ -94,6 +94,11 @@ export const selectHashFilters = () => {
   });
 };
 
+export const selectHashFilterView = () => {
+  const hash = selectHash();
+  return hash.fv.split(',');
+};
+
 export const selectHashSidebar = () => {
   const hash = selectHash();
   return { active: (SB_LOOKUP[Number(hash.sidebar)] || '') as SidebarType };
