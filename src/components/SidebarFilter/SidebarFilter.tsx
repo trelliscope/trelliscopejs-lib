@@ -9,6 +9,7 @@ import styles from './SidebarFilter.module.scss';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { filterViewSelector } from '../../selectors';
 import { selectFilterState } from '../../slices/filterSlice';
+import useMetaInfo from '../../selectors/useMetaInfo';
 
 interface SidebarFilterProps {
   filter: {
@@ -70,73 +71,73 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
   const colContent = colFilters.map((curFilters) =>
     curFilters.map((d: string) => {
       const meta = metas.find((m) => m.varname === d) as IFactorMeta;
-      if (filtDist[d]) {
-        let filterState = filters[d] as IFilterState;
-        let headerExtra = '';
-        const filterActive = filterState && filterState.varname !== undefined;
+      /* if (filtDist[d]) { */
+      /* let filterState = filters[d] as IFilterState;
+      let headerExtra = '';
+      const filterActive = filterState && filterState.varname !== undefined; */
 
-        let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
-        if (meta?.type === 'factor' || meta?.type === 'datetime' || meta?.type === 'date') {
-          if (!filterState) {
-            filterState = {
-              name: d,
-              orderValue: 'ct,desc',
-              type: 'select',
-              varType: 'factor',
-              value: [],
-            };
-          }
+      let itemContent = <div key={`${d}_${displId}`}>{d}</div>;
+      if (meta?.type === 'factor' || meta?.type === 'datetime' || meta?.type === 'date') {
+        /* if (!filterState) {
+          filterState = {
+            name: d,
+            orderValue: 'ct,desc',
+            type: 'select',
+            varType: 'factor',
+            value: [],
+          };
+        } */
 
-          const nlvl = meta?.levels ? meta?.levels.length : 1000;
+        const nlvl = meta?.levels ? meta?.levels.length : 1000;
 
-          itemContent = (
-            <FilterCat
-              filterState={filterState as ICategoryFilterState}
-              height={Math.min(catHeight, nlvl * 15)}
-              dist={curDisplayInfo.metas[d]}
-              condDist={filtDist[d] as CondDistFilterCat}
-              levels={curDisplayInfo.metas[d].levels}
-              handleChange={handleFilterChange}
-              handleSortChange={handleFilterSortChange}
-            />
-          );
-          headerExtra = `${(filtDist[d] as CondDistFilterCat).totSelected} of ${filtDist[d].dist.length}`;
-        } else if (meta.type === 'number') {
-          if (!filterState) {
-            filterState = {
-              name: d,
-              orderValue: 'ct,desc',
-              type: 'range',
-              varType: 'numeric',
-              valid: false,
-            };
-          }
+        itemContent = (
+          <FilterCat
+            // filterState={filterState as ICategoryFilterState}
+            height={Math.min(catHeight, nlvl * 15)}
+            dist={curDisplayInfo.metas[d]}
+            condDist={filtDist[d] as CondDistFilterCat}
+            levels={curDisplayInfo.metas[d].levels}
+            handleChange={handleFilterChange}
+            handleSortChange={handleFilterSortChange}
+          />
+        );
+        // headerExtra = `${(filtDist[d] as CondDistFilterCat).totSelected} of ${filtDist[d].dist.length}`;
+      } else if (meta?.type === 'number') {
+        /* if (!filterState) {
+          filterState = {
+            name: d,
+            orderValue: 'ct,desc',
+            type: 'range',
+            varType: 'numeric',
+            valid: false,
+          };
+        } */
 
-          itemContent = (
-            <FilterNum
-              name={d}
-              filterState={filterState as INumberRangeFilterState}
-              dist={curDisplayInfo.metas[d]}
-              condDist={filtDist[d] as CondDistFilterNum}
-              handleChange={handleFilterChange}
-            />
-          );
-        }
-        return (
-          <SidebarFilterContainer
-            metas={metas}
-            handleViewChange={handleViewChange}
-            handleFilterChange={handleFilterChange}
-            filterActive={filterActive}
-            headerExtra={headerExtra}
-            displId={displId}
-            filterState={filterState}
-            itemContent={itemContent}
-            d={d}
-            key={`${d}_${displId}`}
+        itemContent = (
+          <FilterNum
+            name={d}
+            // filterState={filterState as INumberRangeFilterState}
+            dist={curDisplayInfo.metas[d]}
+            condDist={filtDist[d] as CondDistFilterNum}
+            handleChange={handleFilterChange}
           />
         );
       }
+      return (
+        <SidebarFilterContainer
+          metas={metas}
+          handleViewChange={handleViewChange}
+          handleFilterChange={handleFilterChange}
+          // filterActive={filterActive}
+          // headerExtra={headerExtra}
+          displId={displId}
+          // filterState={filterState}
+          itemContent={itemContent}
+          d={d}
+          key={`${d}_${displId}`}
+        />
+      );
+      // }
       return '';
     }),
   );

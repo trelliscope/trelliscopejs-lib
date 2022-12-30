@@ -22,6 +22,7 @@ import { selectSort, setSort } from '../../slices/sortSlice';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
+import SidebarFilterNew from '../SidebarFilterNew';
 
 const Sidebar: React.FC = () => {
   const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
@@ -232,8 +233,8 @@ const Sidebar: React.FC = () => {
       {active === SB_CONFIG && <div className={styles.sidebarEmpty}>Configuration...</div>}
       {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
       {active === SB_PANEL_LAYOUT && displayLoaded && <SidebarLayout />}
-      {active === SB_PANEL_FILTER && displayLoaded && (
-        <SidebarFilter
+      {active === SB_PANEL_FILTER && displayLoaded && <SidebarFilterNew />}
+      {/* <SidebarFilter
           filter={filter}
           filterView={filterView}
           metas={metas as IMeta[]}
@@ -244,8 +245,7 @@ const Sidebar: React.FC = () => {
           handleViewChange={handleViewChange}
           handleFilterChange={handleFilterChange}
           handleFilterSortChange={handleFilterSortChange}
-        />
-      )}
+        /> */}
       {active === SB_PANEL_SORT && displayLoaded && (
         <SidebarSort
           handleSortChange={handleSortChange}

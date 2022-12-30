@@ -100,7 +100,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
   }
 
   // calculate step value for numeric input
-  const { breaks } = dist.dist.raw;
+  // const { breaks } = dist.dist.raw;
   const hspan = (breaks[1] - breaks[0]) * breaks.length;
   const step = (10 ** Math.round(Math.log10(hspan / 100) - 0.4)) as number;
 
