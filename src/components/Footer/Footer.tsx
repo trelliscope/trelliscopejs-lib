@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
-import { filterCardinalitySelector } from '../../selectors/cogData';
 import { filterSelector, singlePageAppSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
@@ -10,23 +9,25 @@ import getCustomProperties from '../../getCustomProperties';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { setFilter, setFilterView } from '../../slices/filterSlice';
-import styles from './Footer.module.scss';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import { DataContext } from '../DataProvider';
+import styles from './Footer.module.scss';
 
 const Footer: React.FC = () => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
+  const { allData, filteredData } = useContext(DataContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const sort = useSelector(selectSort);
   const filter = useSelector(filterSelector);
   const windowWidth = useSelector(windowWidthSelector);
   const contentHeight = useSelector(contentHeightSelector);
   const singlePage = useSelector(singlePageAppSelector);
-  const nFilt = useSelector(filterCardinalitySelector);
-  const keys = Object.keys(filter.state);
   const [headerHeight, footerHeight] = getCustomProperties(['--header-height', '--footer-height']) as number[];
   const [hasInputs, setHasInputs] = useState(false);
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
+  const { length: allDataLength } = allData;
+  const { length: filteredDataLength } = filteredData;
 
   displayInfo?.inputs.forEach((input) => {
     if (input.type === 'localStorage') {
@@ -44,13 +45,6 @@ const Footer: React.FC = () => {
     width: windowWidth - (singlePage ? 0 : footerHeight),
     top: contentHeight + headerHeight,
   };
-  const cdi = {
-    info: {
-      cogInfo: {
-        jeff: 'jeff',
-      },
-    },
-  };
 
   const sortRes = [];
   for (let i = 0; i < sort.length; i += 1) {
@@ -67,23 +61,26 @@ const Footer: React.FC = () => {
   }
 
   const filterRes = [];
-  for (let i = 0; i < keys.length; i += 1) {
-    const curState = filter.state[keys[i]];
-    if (curState.value !== undefined) {
-      let text = '';
-      if (curState.varType === 'numeric') {
-        const { from, to } = curState.value as FilterRange;
-        if (from === undefined && to !== undefined) {
-          text = `< ${to}`;
-        } else if (from !== undefined && to === undefined) {
-          text = `> ${from}`;
-        } else if (from !== undefined && to !== undefined) {
-          text = `${from} -- ${to}`;
+  for (let i = 0; i < filter.state.length; i += 1) {
+    const curState = filter.state[i];
+    const { varname } = curState;
+    let text = '';
+    if (curState.filtertype === 'numberrange') {
+      const { min, max } = curState as INumberRangeFilterState;
+      if (min !== undefined) {
+        if (min === undefined && max !== undefined) {
+          text = `< ${max}`;
+        } else if (min !== undefined && max === undefined) {
+          text = `> ${min}`;
+        } else if (min !== undefined && max !== undefined) {
+          text = `${min} -- ${max}`;
         }
-      } else if (curState.varType === 'factor') {
-        const charLimit = 15;
-        const value = curState.value as FilterCat;
-        const mutableValue = [...value];
+      }
+    } else if (curState.filtertype === 'category') {
+      const charLimit = 15;
+      const { values } = curState as ICategoryFilterState;
+      if (values !== undefined) {
+        const mutableValue = [...values];
         const n = mutableValue.length;
         let textLength = 0;
         let idx = 0;
@@ -96,12 +93,11 @@ const Footer: React.FC = () => {
           text = mutableValue.sort().join(', ');
         } else {
           // just show "k of n"
-          const tot = cdi.info.cogInfo[curState.name].levels.length;
-          text = `${mutableValue.length} of ${tot}`;
+          text = `${mutableValue.length} of ${allDataLength}`;
         }
       }
-      filterRes.push({ name: keys[i], text });
     }
+    filterRes.push({ name: varname, text });
   }
 
   const handleClickOpen = () => {
@@ -115,11 +111,21 @@ const Footer: React.FC = () => {
   const handleStateClose = (x: { type: string; index: number; label: string }) => {
     if (x.type === 'sort') {
       dispatch(setSort(x.index));
-      dispatch(setLayout({ page: 1 }));
+      dispatch(
+        setLayout({
+          page: 1,
+          type: 'layout',
+        }),
+      );
     } else if (x.type === 'filter') {
       dispatch(setFilterView({ name: x.label, which: 'remove' }));
       dispatch(setFilter(x.label));
-      dispatch(setLayout({ page: 1 }));
+      dispatch(
+        setLayout({
+          page: 1,
+          type: 'layout',
+        }),
+      );
     }
   };
 
@@ -161,7 +167,7 @@ const Footer: React.FC = () => {
                 />
               ))}
             </div>
-            <div className={styles.footerFilterText}>{`(${nFilt} of ${cdi.info.n} panels)`}</div>
+            <div className={styles.footerFilterText}>{`(${filteredDataLength} of ${allDataLength} panels)`}</div>
           </div>
         )}
       </div>
