@@ -10,17 +10,16 @@ import { fetchDisplay } from '../../actions';
 import { setLayout } from '../../slices/layoutSlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
+import { useDisplayGroups } from '../../slices/displayListAPI';
 import styles from './DisplayList.module.scss';
-import { IDisplayListItem } from '../../types/configs';
 
 interface DisplayListProps {
   selectable: boolean;
   displayItems: IDisplayListItem[];
-  displayGroups: DisplayGroup;
-  handleClick: (name: string, group: string, desc: string) => void;
+  handleClick: (name: string) => void;
 }
 
-const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, displayGroups, handleClick }) => {
+const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, handleClick }) => {
   const dispatch = useDispatch();
   const selectedDisplay = useSelector(selectedDisplaySelector);
   const selectedRelDisps = useSelector(selectedRelDispsSelector);
@@ -28,11 +27,12 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
   const appId = useSelector(appIdSelector);
   const contentHeight = useSelector(contentHeightSelector);
   const contentWidth = useSelector(contentWidthSelector);
+  const displayGroups = useDisplayGroups();
   const groupKeys = Object.keys(displayGroups);
 
-  const getRelDispPositions = (relDisps: number[], displayInfo: Display[]) => {
-    const dnames = displayInfo.map((d: Display) => d.name);
-    const idx = dnames.indexOf(selectedDisplay.name);
+  const getRelDispPositions = (relDisps: number[], displayInfo: IDisplay[]) => {
+    const dnames = displayInfo.map((d: IDisplay) => d.name);
+    const idx = dnames.indexOf(selectedDisplay);
     const disps = [idx, ...relDisps];
     const n = disps.length;
     const contentAspect = contentHeight / contentWidth;
@@ -112,7 +112,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
     return relDispPositions;
   };
 
-  const handleCheckbox = (i: number) => {
+  const handleCheckbox = (i: string) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
     const newRelDisps = Object.assign([], selectedRelDisps);
     if (checked) {
@@ -129,7 +129,13 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
 
     const relDispPositions = getRelDispPositions(newRelDisps, displayItems);
 
-    dispatch(setLayout({ nrow: 1, ncol: 1 })); // related displays only works in 1/1 mode
+    dispatch(
+      setLayout({
+        nrow: 1,
+        ncol: 1,
+        type: 'layout',
+      }),
+    ); // related displays only works in 1/1 mode
     dispatch(setSelectedRelDisps(newRelDisps));
     dispatch(setRelDispPositions(relDispPositions));
   };
@@ -146,52 +152,55 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, dis
                 </ListSubheader>
               </ImageListItem>
             ) : null}
-            {displayGroups[groupName].map((i: number) => (
-              <ImageListItem
-                key={i}
-                className={styles.displayListGridTile}
-                onClick={() => {
-                  if (selectable) {
-                    handleCheckbox(i);
-                  } else {
-                    handleClick(displayItems[i].name);
-                  }
-                }}
-              >
-                <img
-                  src={`${cfg.cog_server.info.base}/displays/${displayItems[i].name}/thumb.png`}
-                  alt={displayItems[i].name}
+            {displayGroups[groupName].map((i: string) => {
+              const displayItem = displayItems.find((l) => l.name === i);
+              return (
+                <ImageListItem
+                  key={i}
+                  className={styles.displayListGridTile}
+                  onClick={() => {
+                    if (selectable) {
+                      handleCheckbox(i);
+                    } else {
+                      handleClick(displayItem?.name || '');
+                    }
+                  }}
+                >
+                  {/* TODO: find a way to render a thumbnail based off of the first panel */}
+                  {/* <img
+                  src={`${cfg.cog_server.info.base}/displays/${displayItem.name}/thumb.png`}
+                  alt={displayItem.name}
                   className={styles.displayListImg}
                   key={`img${i}`}
-                />
-
-                {selectable && (
-                  <Checkbox
-                    className={styles.displayListCheckbox}
-                    checked={selectedRelDisps.indexOf(i) > -1}
-                    onChange={() => {
-                      handleCheckbox(i);
-                    }}
-                    value={`checked${i}`}
-                  />
-                )}
-                <ImageListItemBar
-                  className={styles.displayListGridTileBar}
-                  title={<div className={styles.displayListGridTitle}>{displayItems[i].name.replace(/_/g, ' ')}</div>}
-                  subtitle={
-                    <span style={{ fontSize: 13 }}>
-                      {displayItems[i].description}
-                      <br />
-                      <span className={styles.displayListGridSubtitle}>
-                        {/* {displayItems[i].n} */}
-                        &nbsp;panels,
-                        {/* {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)} */}
+                /> */}
+                  {selectable && (
+                    <Checkbox
+                      className={styles.displayListCheckbox}
+                      checked={selectedRelDisps.indexOf(i) > -1}
+                      onChange={() => {
+                        handleCheckbox(i);
+                      }}
+                      value={`checked${i}`}
+                    />
+                  )}
+                  <ImageListItemBar
+                    className={styles.displayListGridTileBar}
+                    title={<div className={styles.displayListGridTitle}>{displayItem?.name.replace(/_/g, ' ')}</div>}
+                    subtitle={
+                      <span style={{ fontSize: 13 }}>
+                        {displayItem?.description}
+                        <br />
+                        <span className={styles.displayListGridSubtitle}>
+                          {/* {displayItems[i].n} */}
+                          &nbsp;panels,
+                          {/* {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)} */}
+                        </span>
                       </span>
-                    </span>
-                  }
-                />
-              </ImageListItem>
-            ))}
+                    }
+                  />
+                </ImageListItem>
+              );
+            })}
           </ImageList>
         </div>
       ))}

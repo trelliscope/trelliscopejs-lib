@@ -47,3 +47,26 @@ export const useDisplayList = () => {
   const dataType = useDataType();
   return useGetDisplayListQuery({ url: basePath, id: appId, dataType }, { skip: !dataType || !basePath });
 };
+
+export const commonTagsKey = '__common__';
+export const useDisplayGroups = () => {
+  const { data: displays = [] } = useDisplayList();
+
+  return displays.reduce<{ [index: string | symbol]: string[] }>(
+    (acc, display) => {
+      const tags = display.tags || [];
+      if (tags.length === 0) {
+        acc[commonTagsKey].push(display.name);
+        return acc;
+      }
+      tags.forEach((tag) => {
+        if (!acc[tag]) {
+          acc[tag] = [];
+        }
+        acc[tag].push(display.name);
+      });
+      return acc;
+    },
+    { [commonTagsKey]: [] },
+  );
+};
