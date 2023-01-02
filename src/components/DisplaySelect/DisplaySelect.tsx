@@ -10,27 +10,18 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
-import { fetchDisplay } from '../../actions';
 import { setDispSelectDialogOpen } from '../../slices/appSlice';
 import { FilterState, setFilter, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
-import { displayGroupsSelector } from '../../selectors/display';
-import {
-  appIdSelector,
-  configSelector,
-  fullscreenSelector,
-  selectedDisplaySelector,
-  dispSelectDialogSelector,
-} from '../../selectors';
+import { fullscreenSelector, selectedDisplaySelector, dispSelectDialogSelector } from '../../selectors';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
-// import { generateDisplayGroups } from '../../utils';
 
 interface DisplaySelectProps {
   setDialogOpen: (isOpen: boolean) => void;
@@ -39,12 +30,8 @@ interface DisplaySelectProps {
 const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const dispatch = useDispatch();
   const selectedDisplay = useSelector(selectedDisplaySelector);
-  const displayGroups = useSelector(displayGroupsSelector);
-  const appId = useSelector(appIdSelector);
-  const cfg = useSelector(configSelector);
   const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispSelectDialogSelector);
-  // const [displayGroups, setDisplayGroups] = useState();
 
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
@@ -52,7 +39,6 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
 
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
-    // setDisplayGroups(generateDisplayGroups(displayList));
   };
 
   const handleClose = () => {
@@ -67,21 +53,31 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     }
   };
 
-  const handleClick = (name: string, group: string, desc: string) => {
+  const handleClick = (name: string) => {
     // need to clear out state for new display...
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
     dispatch(setSelectedRelDisps([]));
     dispatch(setLabels([]));
-    dispatch(setLayout({ nrow: 1, ncol: 1, arrange: 'rows' }));
-    dispatch(setLayout({ page: 1 }));
+    dispatch(
+      setLayout({
+        nrow: 1,
+        ncol: 1,
+        arrange: 'rows',
+        type: 'layout',
+      }),
+    );
+    dispatch(
+      setLayout({
+        type: 'layout',
+      }),
+    );
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
-    dispatch(setFilter({}));
+    dispatch(setFilter(undefined));
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
-    dispatch(setSelectedDisplay({ name, group, desc }));
-    dispatch(fetchDisplay(name, group, cfg, appId, ''));
+    dispatch(setSelectedDisplay(name));
   };
 
   const handleKey = () => {
@@ -93,8 +89,8 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
   useHotkeys('esc', handleClose, { enabled: isOpen });
 
-  const handleSelect = (name: string, group: string, desc: string) => {
-    handleClick(name, group, desc);
+  const handleSelect = (name: string) => {
+    handleClick(name);
     setDialogOpen(false);
     handleDispDialogOpen(false);
   };
@@ -147,12 +143,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
       >
         <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
         <DialogContent>
-          <DisplayList
-            displayItems={displayList as IDisplayListItem[]}
-            displayGroups={displayGroups}
-            handleClick={handleSelect}
-            selectable={false}
-          />
+          <DisplayList displayItems={displayList as IDisplayListItem[]} handleClick={handleSelect} selectable={false} />
         </DialogContent>
         <DialogActions>
           <Button aria-label="display select close" color="secondary" onClick={handleClose}>
