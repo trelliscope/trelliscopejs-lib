@@ -14,6 +14,7 @@ export interface IDataClient {
   _data: Datum[];
   _filters: DataClientFilter[];
   _sorts: DataClientSort[];
+  filteredData: Datum[];
   allData: Datum[];
   addData(data: Datum[]): void;
   addFilter(filter: DataClientFilter): void;
@@ -137,6 +138,10 @@ export default class DataClient implements IDataClient {
 
   get allData() {
     return this._data;
+  }
+
+  get filteredData() {
+    return this.filterData();
   }
 
   getData(count = Infinity, page = 1) {

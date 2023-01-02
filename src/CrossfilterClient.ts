@@ -98,6 +98,10 @@ export default class CrossfilterClient extends DataClient {
     }
   }
 
+  get filteredData() {
+    return this.crossfilter.allFiltered();
+  }
+
   getData(count = Infinity, page = 1) {
     const offset = (page - 1) * count;
 
