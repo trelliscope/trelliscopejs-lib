@@ -96,7 +96,8 @@ export const selectHashFilters = () => {
 
 export const selectHashFilterView = () => {
   const hash = selectHash();
-  return hash?.fv?.split(',');
+  const fvString = hash?.fv;
+  return fvString ? fvString.split(',') : [];
 };
 
 export const selectHashSidebar = () => {

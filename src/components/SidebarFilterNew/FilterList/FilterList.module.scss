@@ -1,0 +1,33 @@
+.filterList {
+  padding: 0 var(--padding-7);
+
+  &Heading {
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    margin: var(--margin-3) var(--neg-margin-7) var(--margin-3) var(--neg-margin-7);
+    padding: var(--padding-3) 0 var(--padding-3) var(--padding-7);
+    background: var(--white);
+  }
+
+  &Items {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--margin-6);
+  }
+
+  &Group {
+    margin-bottom: var(--margin-8);
+
+   &Header {
+    background: var(--blue);
+    margin: var(--margin-7) var(--neg-margin-7) var(--margin-7) var(--neg-margin-7);
+    padding: var(--padding-3) 0 var(--padding-3) var(--padding-7);
+    color: var(--white);
+    font-weight: var(--font-normal);
+    font-size: var(--text-base);
+   } 
+  }
+}

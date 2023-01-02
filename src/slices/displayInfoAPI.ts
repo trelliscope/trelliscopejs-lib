@@ -60,6 +60,11 @@ export const useDisplayMetas = () => {
   return displayInfo.data?.metas || [];
 };
 
+export const useMetaByVarname = (varname: string) => {
+  const metas = useDisplayMetas();
+  return metas.find((meta) => meta.varname === varname);
+};
+
 // Return metas grouped by tags
 export const commonTagsKey = '__common__';
 export const useMetaGroups = () => {
