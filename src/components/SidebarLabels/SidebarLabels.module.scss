@@ -2,14 +2,16 @@
   overflow-y: auto;
   overflow-x: hidden;
 
+  ul {
+    padding-top: 0px;
+  }
+
   &RowDesc {
     color: var(--gray-900);
     font-style: italic;
   }
 
   &List {
-    padding: 0;
-
     &Checkbox {
       height: var(--sidebarLabels-listCheckbox-size);
       width: var(--sidebarLabels-listCheckbox-size);
