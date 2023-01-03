@@ -1,0 +1,19 @@
+.catHistogram {
+  &BarWrapper {
+    &:hover {
+      background: var(--white-200);
+    }
+
+    &__active {
+      .catHistogramBar {
+        background: var(--orange-100);
+      }
+    }
+  }
+
+  &Bar {
+    &:hover {
+      background: var(--orange-100);
+    }
+  }
+}

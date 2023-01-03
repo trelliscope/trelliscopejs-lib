@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP } from '../../../constants';
+import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
 import useMetaInfo from '../../../selectors/useMetaInfo';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
 import { selectFilterByVarname, setFilter, setFilterView } from '../../../slices/filterSlice';
@@ -23,29 +23,33 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const dispatch = useDispatch();
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
 
-  const handleMinimize = () => {
+  const handleReset = () => {
     dispatch(setFilter(filterName));
   };
 
-  const handleReset = () => {
+  const handleMinimize = () => {
     dispatch(setFilterView({ name: filterName, which: 'remove' }));
   };
-
-  console.log(meta, metaInfo);
 
   return (
     <div className={classNames(styles.filterInput, { [styles.filterInput__active]: filter })}>
       <div className={styles.filterInputHeader}>
         <div className={styles.filterInputHeaderName}>{filterName}</div>
         <div className={styles.filterInputHeaderControls}>
-          <div className={styles.filterInputCount}>1 of 5</div>
-          <button
-            type="button"
-            onClick={handleReset}
-            className={classNames(styles.filterInputHeaderBtn, styles.filterInputReset)}
-          >
-            <FontAwesomeIcon icon={faRotateLeft} />
-          </button>
+          {meta?.type === META_TYPE_FACTOR && (
+            <div className={styles.filterInputCount}>
+              {(filter as ICategoryFilterState)?.values.length || 0} of {(meta as IFactorMeta)?.levels?.length}
+            </div>
+          )}
+          {filter && (
+            <button
+              type="button"
+              onClick={handleReset}
+              className={classNames(styles.filterInputHeaderBtn, styles.filterInputReset)}
+            >
+              <FontAwesomeIcon icon={faRotateLeft} />
+            </button>
+          )}
           <button
             type="button"
             onClick={handleMinimize}
@@ -55,7 +59,9 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
           </button>
         </div>
       </div>
-      {filterType === FILTER_TYPE_CATEGORY && <FilterCat meta={meta} />}
+      {filterType === FILTER_TYPE_CATEGORY && (
+        <FilterCat meta={meta as IFactorMeta} filter={filter as ICategoryFilterState} />
+      )}
       {filterType === FILTER_TYPE_NUMBERRANGE && <FilterNum />}
     </div>
   );

@@ -29,6 +29,8 @@ export default class CrossfilterClient extends DataClient {
     super(data);
     this.crossfilter = crossfilter<Datum>(data);
     this.dimensions = new Map<string | symbol, D>();
+
+    this.groupBy = this.groupBy.bind(this);
   }
 
   addData(data: Datum[]) {
@@ -96,6 +98,15 @@ export default class CrossfilterClient extends DataClient {
         this.crossfilter.dimension((d) => d[sort.field]),
       );
     }
+  }
+
+  groupBy(field: string | symbol) {
+    if (this.dimensions.has(field)) {
+      console.log(field, this.dimensions.get(field)?.group().all());
+
+      return this.dimensions.get(field)?.group().all() || {};
+    }
+    return [];
   }
 
   get filteredData() {
