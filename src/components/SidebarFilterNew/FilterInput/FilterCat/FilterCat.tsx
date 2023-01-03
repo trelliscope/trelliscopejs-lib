@@ -9,9 +9,10 @@ interface FilterCatProps {
 
 const FilterCat: React.FC<FilterCatProps> = ({ meta }) => {
   const info = useMetaInfo(meta.varname, meta.type);
+
   console.log(info);
 
-  return <div className={styles.filterCat}>FilterCat</div>;
+  return <div className={styles.filterCat}></div>;
 };
 
 export default FilterCat;

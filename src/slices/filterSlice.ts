@@ -91,7 +91,7 @@ export const { setFilter, setFilterView } = filterSlice.actions;
 
 export const selectFilterState = (state: RootState) => state.filter.state;
 
-export const selectFilterByVarname = (state: RootState, varname: string) =>
+export const selectFilterByVarname = (varname: string) => (state: RootState) =>
   state.filter.state.find((f) => f.varname === varname);
 
 export const selectFilterView = (state: RootState) => state.filter.view;

@@ -12,7 +12,7 @@ const SidebarFilterNew: React.FC<SidebarFilterNewProps> = () => {
   return (
     <div className={styles.sidebarFilterNew}>
       {activeFilters.map((filter) => (
-        <FilterInput key={filter} filter={filter} />
+        <FilterInput key={filter} filterName={filter} />
       ))}
       <FilterList />
     </div>
