@@ -236,7 +236,7 @@ const Sidebar: React.FC = () => {
         <SidebarFilter
           filter={filter}
           filterView={filterView}
-          metas={metas}
+          metas={metas as IMeta[]}
           sidebarHeight={sidebarHeight}
           curDisplayInfo={curDisplayInfo}
           filtDist={filtDist}
@@ -264,8 +264,7 @@ const Sidebar: React.FC = () => {
           sidebarHeaderHeight={sidebarHeaderHeight}
           ch={ch}
           labels={labels}
-          curDisplayInfo={curDisplayInfo}
-          cogInfo={cogInfo}
+          metas={metas as IMeta[]}
           handleLabelChange={handleLabelChange}
         />
       )}

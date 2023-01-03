@@ -1,40 +1,33 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
 import SidebarLabelPill from '../SidebarLabelPill';
 import styles from './SidebarLabels.module.scss';
+import { useMetaGroupsSorted } from '../../slices/displayInfoAPI';
 
 interface SidebarLabelsProps {
   sidebarHeaderHeight: number;
   ch: number;
   labels: string[];
-  curDisplayInfo: DisplayInfoState;
-  cogInfo: {
-    [key: string]: CogInfo;
-  };
+  metas: IMeta[];
   handleLabelChange: (value: string) => void;
 }
 
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({
-  sidebarHeaderHeight,
-  ch,
-  labels,
-  curDisplayInfo,
-  cogInfo,
-  handleLabelChange,
-}) => {
+const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, labels, metas, handleLabelChange }) => {
+  const labelObj = useMetaGroupsSorted();
   const height = ch - sidebarHeaderHeight;
-  const { cogGroups } = curDisplayInfo.info;
-  const ciKeys = Object.keys(cogInfo);
+  const labelDescriptionMap = new Map();
+  metas.forEach((meta) => {
+    labelDescriptionMap.set(meta.varname, meta.label);
+  });
 
   return (
     <>
-      {ciKeys.length > 0 && (
+      {labelDescriptionMap.size > 0 && (
         <div className={styles.sidebarLabels} style={{ height }}>
           <List className={styles.sidebarLabelsList}>
-            {Object.keys(cogGroups).map((grp) => {
-              const curItems = cogGroups[grp];
+            {Object.keys(labelObj).map((grp) => {
+              const curItems = labelObj[grp];
               if (curItems.length === 0) {
                 return null;
               }
@@ -45,13 +38,13 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({
                       <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
                     </ListSubheader>
                   )}
-                  {[...cogGroups[grp]].sort().map((d: string) => (
+                  {[...labelObj[grp]].sort().map((label: string) => (
                     <SidebarLabelPill
                       labels={labels}
-                      cogInfo={cogInfo}
-                      d={d}
+                      labelDescriptionMap={labelDescriptionMap}
+                      label={label}
                       handleLabelChange={handleLabelChange}
-                      key={`${d}_${grp}`}
+                      key={`${label}_${grp}`}
                     />
                   ))}
                 </React.Fragment>

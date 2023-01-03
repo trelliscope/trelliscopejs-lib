@@ -83,3 +83,13 @@ export const useMetaGroups = () => {
     { [commonTagsKey]: [] },
   );
 };
+
+export const useMetaGroupsSorted = () => {
+  const metaGroups = useMetaGroups();
+  return Object.keys(metaGroups)
+    .sort()
+    .reduce((obj, key) => {
+      obj[key] = metaGroups[key];
+      return obj;
+    }, {} as { [key: string]: string[] });
+};
