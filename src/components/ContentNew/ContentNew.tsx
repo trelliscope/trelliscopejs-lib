@@ -45,7 +45,7 @@ const ContentNew: React.FC = () => {
                     src={`/${basePath}/displays/${snakeCase(displayInfo.name)}/panels/${getFileName(
                       md[displayInfo.key_cols[1]],
                       md[displayInfo.key_cols[0]],
-                    )}.svg`}
+                    )}.${displayInfo.panel_format}`}
                     alt="display"
                   />
                 </div>

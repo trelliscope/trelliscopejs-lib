@@ -350,6 +350,7 @@ interface IDisplay {
   state: IDisplayState;
   views: IView[];
   panel_type: PanelType;
+  panel_format: string;
   input_csv_vars: string[];
   input_email: string;
 }
