@@ -8,7 +8,6 @@ import { selectLayout } from '../../slices/layoutSlice';
 import { useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import styles from './ContentNew.module.scss';
-import { display } from '@mui/system';
 
 function getFileName(string1: string, string2: string) {
   let newString1 = string1;
