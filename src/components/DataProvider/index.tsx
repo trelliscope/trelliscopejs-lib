@@ -41,7 +41,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
       if (filter.filtertype === 'category') {
         client.addFilter({
           field: filter.varname,
-          value: (filter as ICategoryFilterState).values[0],
+          value: (filter as ICategoryFilterState).values,
           operation: 'eq',
         });
       } else if (filter.filtertype === 'numberrange') {

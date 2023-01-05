@@ -7,7 +7,7 @@ import { displayInfoAPI, useDisplayMetas } from './displayInfoAPI';
 import { selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
-  state: IFilterState[];
+  state: ICategoryFilterState[] | INumberRangeFilterState[];
   view: FilterView;
 }
 
@@ -30,6 +30,46 @@ export const filterSlice = createSlice({
         state.state = [];
       } else {
         state.state = [...state.state, ...action.payload];
+      }
+    },
+    addFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+      const { state: filterState } = state;
+      const { varname } = action.payload;
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        filterState[idx] = action.payload;
+      } else {
+        filterState.push(action.payload);
+      }
+    },
+    updateFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+      const { state: filterState } = state;
+      const { varname } = action.payload;
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        filterState[idx] = action.payload;
+      }
+    },
+    removeFilter: (state, action: PayloadAction<string>) => {
+      const { state: filterState } = state;
+      const idx = filterState.findIndex((f) => f.varname === action.payload);
+      if (idx > -1) {
+        filterState.splice(idx, 1);
+      }
+    },
+    updateFilterValues: (state, action: PayloadAction<{ varname: string; value: string }>) => {
+      const filterState = state.state;
+      const { varname, value } = action.payload;
+
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        const filter = filterState[idx] as ICategoryFilterState;
+        const { values: filterValues } = filter;
+        if (filterValues.includes(value)) {
+          filter.values = difference(filterValues, [value]);
+        } else {
+          filter.values = [...filterValues, value];
+        }
       }
     },
     setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
@@ -87,7 +127,7 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setFilter, setFilterView } = filterSlice.actions;
+export const { setFilter, setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter } = filterSlice.actions;
 
 export const selectFilterState = (state: RootState) => state.filter.state;
 

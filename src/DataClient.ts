@@ -1,6 +1,6 @@
 export interface DataClientFilter {
   field: string;
-  value: string | number;
+  value: string | number | string[] | number[];
   operation: 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'regex';
 }
 
@@ -135,8 +135,9 @@ export default class DataClient implements IDataClient {
     return sortedData;
   }
 
-  groupBy(field: string) {
+  groupBy(field: string | symbol) {
     // TODO: implement groupBy
+    console.log('groupBy', field);
     return [];
   }
 
