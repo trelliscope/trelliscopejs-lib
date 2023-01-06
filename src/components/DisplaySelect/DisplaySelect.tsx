@@ -20,9 +20,9 @@ import { fullscreenSelector, selectedDisplaySelector, dispSelectDialogSelector }
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import styles from './DisplaySelect.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import styles from './DisplaySelect.module.scss';
 
 interface DisplaySelectProps {
   setDialogOpen: (isOpen: boolean) => void;
