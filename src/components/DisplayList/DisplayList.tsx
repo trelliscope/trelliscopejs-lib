@@ -11,6 +11,7 @@ import { setLayout } from '../../slices/layoutSlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayGroups } from '../../slices/displayListAPI';
+import { selectBasePath } from '../../slices/appSlice';
 import styles from './DisplayList.module.scss';
 
 interface DisplayListProps {
@@ -27,6 +28,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
   const appId = useSelector(appIdSelector);
   const contentHeight = useSelector(contentHeightSelector);
   const contentWidth = useSelector(contentWidthSelector);
+  const basePath = useSelector(selectBasePath);
   const displayGroups = useDisplayGroups();
   const groupKeys = Object.keys(displayGroups);
 
@@ -166,13 +168,12 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
                     }
                   }}
                 >
-                  {/* TODO: find a way to render a thumbnail based off of the first panel */}
-                  {/* <img
-                  src={`${cfg.cog_server.info.base}/displays/${displayItem.name}/thumb.png`}
-                  alt={displayItem.name}
-                  className={styles.displayListImg}
-                  key={`img${i}`}
-                /> */}
+                  <img
+                    src={`/${basePath}/${displayItem?.thumbnail_url}`}
+                    alt={displayItem?.name}
+                    className={styles.displayListImg}
+                    key={`img${i}`}
+                  />
                   {selectable && (
                     <Checkbox
                       className={styles.displayListCheckbox}

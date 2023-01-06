@@ -363,6 +363,7 @@ interface IDisplayListItem {
   name: string;
   description: string;
   tags: string[];
+  thumbnail_url: string;
 }
 
 /* ------------------------------------------------------ */
