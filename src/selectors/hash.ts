@@ -88,7 +88,7 @@ export const selectHashFilters = () => {
 
     return {
       ...filter,
-      regexp: JSON.parse(decodeURIComponent(hashProps.regexp)),
+      regexp: decodeURIComponent(hashProps.regexp),
       values: hashProps.val.split('#').map(decodeURIComponent),
     } as ICategoryFilterState;
   });

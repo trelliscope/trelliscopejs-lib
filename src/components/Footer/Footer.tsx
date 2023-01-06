@@ -8,7 +8,7 @@ import ExportInputDialog from '../ExportInputDialog';
 import getCustomProperties from '../../getCustomProperties';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { setLayout } from '../../slices/layoutSlice';
-import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { removeFilter, setFilterView } from '../../slices/filterSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
 import styles from './Footer.module.scss';
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
       );
     } else if (x.type === 'filter') {
       dispatch(setFilterView({ name: x.label, which: 'remove' }));
-      dispatch(setFilter(x.label));
+      dispatch(removeFilter(x.label));
       dispatch(
         setLayout({
           page: 1,

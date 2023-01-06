@@ -4,27 +4,25 @@ import classNames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
-import useMetaInfo from '../../../selectors/useMetaInfo';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
-import { selectFilterByVarname, setFilter, setFilterView } from '../../../slices/filterSlice';
+import { removeFilter, selectFilterByVarname, setFilterView } from '../../../slices/filterSlice';
 import FilterCat from './FilterCat';
+import FilterNum from './FilterNum';
 
 import styles from './FilterInput.module.scss';
-import FilterNum from './FilterNum';
 
 interface FilterInputsProps {
   filterName: string;
 }
 
 const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
+  const dispatch = useDispatch();
   const meta = useMetaByVarname(filterName);
   const filter = useSelector(selectFilterByVarname(filterName));
-  const metaInfo = useMetaInfo(filterName, meta?.type);
-  const dispatch = useDispatch();
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
 
   const handleReset = () => {
-    dispatch(setFilter(filterName));
+    dispatch(removeFilter(filterName));
   };
 
   const handleMinimize = () => {

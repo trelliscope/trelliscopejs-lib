@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
 import SidebarSort from '../SidebarSort';
-import SidebarFilter from '../SidebarFilter';
 import SidebarViews from '../SidebarViews';
 import {
   contentHeightSelector,
@@ -15,14 +14,14 @@ import {
 import { filterStateSelector, filterViewSelector, labelsSelector, cogDescSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
-import { setFilter, setFilterView } from '../../slices/filterSlice';
+import { addFilter, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
-import SidebarFilterNew from '../SidebarFilterNew';
+import SidebarFilter from '../SidebarFilter';
 
 const Sidebar: React.FC = () => {
   const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
@@ -57,7 +56,7 @@ const Sidebar: React.FC = () => {
     dispatch(setLabels(newLabels));
   };
 
-  const handleViewChange = (x: string, which: 'add' | 'remove') => {
+  /* const handleViewChange = (x: string, which: 'add' | 'remove') => {
     // if a filter is being added to the view, add a panel label for the variable
     if (which === 'add') {
       if (labels.indexOf(x) < 0) {
@@ -84,7 +83,7 @@ const Sidebar: React.FC = () => {
     const obj: { [key: string]: Filter<FilterCat> } = {};
     obj[x.name] = x;
     dispatch(setFilter(obj));
-  };
+  }; */
 
   const handleSortChange = (sortSpec: Sort[] | number) => {
     dispatch(setSort(sortSpec));
@@ -190,8 +189,8 @@ const Sidebar: React.FC = () => {
       });
     }
     // first need to reset them all
-    dispatch(setFilter({}));
-    dispatch(setFilter(viewsFilter));
+    dispatch(clearFilters());
+    dispatch(addFilter(viewsFilter));
 
     // filterView (just add - if something's already there we won't remove it)
     if (hashItems.fv) {
@@ -233,7 +232,7 @@ const Sidebar: React.FC = () => {
       {active === SB_CONFIG && <div className={styles.sidebarEmpty}>Configuration...</div>}
       {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
       {active === SB_PANEL_LAYOUT && displayLoaded && <SidebarLayout />}
-      {active === SB_PANEL_FILTER && displayLoaded && <SidebarFilterNew />}
+      {active === SB_PANEL_FILTER && displayLoaded && <SidebarFilter />}
       {/* <SidebarFilter
           filter={filter}
           filterView={filterView}

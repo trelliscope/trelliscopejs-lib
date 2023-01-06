@@ -23,15 +23,6 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setFilter: (state, action: PayloadAction<FilterState['state'] | string | undefined>) => {
-      if (typeof action.payload === 'string') {
-        state.state = state.state.filter((f) => f.varname !== action.payload);
-      } else if (action.payload === undefined || Object.keys(action.payload).length === 0) {
-        state.state = [];
-      } else {
-        state.state = [...state.state, ...action.payload];
-      }
-    },
     addFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
       const { state: filterState } = state;
       const { varname } = action.payload;
@@ -71,6 +62,9 @@ export const filterSlice = createSlice({
           filter.values = [...filterValues, value];
         }
       }
+    },
+    clearFilters: (state) => {
+      state.state = [];
     },
     setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
       const { view } = state;
@@ -127,8 +121,10 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setFilter, setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter } = filterSlice.actions;
+export const { setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter, clearFilters } =
+  filterSlice.actions;
 
+// Selectors
 export const selectFilterState = (state: RootState) => state.filter.state;
 
 export const selectFilterByVarname = (varname: string) => (state: RootState) =>

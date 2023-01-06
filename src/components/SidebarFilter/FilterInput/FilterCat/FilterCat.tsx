@@ -55,8 +55,6 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   };
 
-  console.log(filter, dist, groupBy(meta.varname));
-
   return (
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
