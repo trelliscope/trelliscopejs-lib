@@ -40,14 +40,14 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const { data: displayList, isSuccess } = useDisplayList();
   const { data: displayInfo } = useDisplayInfo();
 
-  const stateLayout = displayInfo?.state.layout;
+  const stateLayout = displayInfo?.state?.layout;
 
   useEffect(() => {
     dispatch(setLayout(stateLayout as LayoutAction));
   }, [
-    displayInfo?.state.layout.nrow,
-    displayInfo?.state.layout.ncol,
-    displayInfo?.state.layout.arrange,
+    displayInfo?.state?.layout?.nrow,
+    displayInfo?.state?.layout?.ncol,
+    displayInfo?.state?.layout?.arrange,
     stateLayout,
     dispatch,
   ]);
