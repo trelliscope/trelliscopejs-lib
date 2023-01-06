@@ -14,7 +14,7 @@ import { setDispSelectDialogOpen } from '../../slices/appSlice';
 import { FilterState, setFilter, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { LayoutAction, setLayout } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { fullscreenSelector, selectedDisplaySelector, dispSelectDialogSelector } from '../../selectors';
 import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
@@ -22,6 +22,7 @@ import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import styles from './DisplaySelect.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 interface DisplaySelectProps {
   setDialogOpen: (isOpen: boolean) => void;
@@ -36,6 +37,19 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
   const { data: displayList, isSuccess } = useDisplayList();
+  const { data: displayInfo } = useDisplayInfo();
+
+  const stateLayout = displayInfo?.state.layout;
+
+  useEffect(() => {
+    dispatch(setLayout(stateLayout as LayoutAction));
+  }, [
+    displayInfo?.state.layout.nrow,
+    displayInfo?.state.layout.ncol,
+    displayInfo?.state.layout.arrange,
+    stateLayout,
+    dispatch,
+  ]);
 
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
@@ -60,19 +74,6 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     dispatch(setActiveSidebar(''));
     dispatch(setSelectedRelDisps([]));
     dispatch(setLabels([]));
-    dispatch(
-      setLayout({
-        nrow: 1,
-        ncol: 1,
-        arrange: 'rows',
-        type: 'layout',
-      }),
-    );
-    dispatch(
-      setLayout({
-        type: 'layout',
-      }),
-    );
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
     dispatch(setFilter(undefined));
     dispatch(setSort([]));
