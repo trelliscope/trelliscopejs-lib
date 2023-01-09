@@ -49,21 +49,24 @@ export const useDisplayList = () => {
 };
 
 export const commonTagsKey = '__common__';
-export const useDisplayGroups = () => {
+export const useDisplayGroups = (excluded: string[] = []) => {
   const { data: displays = [] } = useDisplayList();
-
-  return displays.reduce<{ [index: string | symbol]: string[] }>(
-    (acc, display) => {
+  console.log(displays, 'displays');
+  
+  return displays.reduce<{ [index: string | symbol]: number[] }>(
+    (acc, display, index) => {
       const tags = display.tags || [];
-      if (tags.length === 0) {
-        acc[commonTagsKey].push(display.name);
+      if (tags.length === 0 && !excluded.includes(display.name)) {
+        acc[commonTagsKey].push(index);
         return acc;
       }
       tags.forEach((tag) => {
-        if (!acc[tag]) {
-          acc[tag] = [];
+        if (!excluded.includes(display.name)) {
+          if (!acc[tag]) {
+            acc[tag] = [];
+          }
+          acc[tag].push(index);
         }
-        acc[tag].push(display.name);
       });
       return acc;
     },

@@ -42,4 +42,20 @@ export const useSelectedDisplay = () => {
   return displayList?.find((display) => display.name === selectedDisplay);
 };
 
+export const useRelatedDisplaysGroup = () => {
+  const selectedDisplay = useSelectedDisplay();
+  const { data: displayList } = useDisplayList();
+  const keysig = selectedDisplay?.keysig;
+  const group: IDisplayListItem[] = [];
+  const dispID = [selectedDisplay?.description, selectedDisplay?.name].join('/');
+  displayList?.forEach((d: IDisplayListItem) => {
+    const sameKey = d.keysig === keysig;
+    const curID = [d.description, d.name].join('/');
+    if (sameKey && curID !== dispID) {
+      group.push(d);
+    }
+  });
+  return group;
+};
+
 export default selectedDisplaySlice.reducer;

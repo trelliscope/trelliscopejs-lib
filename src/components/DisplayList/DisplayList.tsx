@@ -10,7 +10,7 @@ import { fetchDisplay } from '../../actions';
 import { setLayout } from '../../slices/layoutSlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import { useDisplayGroups } from '../../slices/displayListAPI';
+import { useDisplayGroups, commonTagsKey } from '../../slices/displayListAPI';
 import { selectBasePath } from '../../slices/appSlice';
 import styles from './DisplayList.module.scss';
 
@@ -18,9 +18,10 @@ interface DisplayListProps {
   selectable: boolean;
   displayItems: IDisplayListItem[];
   handleClick: (name: string) => void;
+  excludedDisplays?: string[];
 }
 
-const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, handleClick }) => {
+const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, handleClick, excludedDisplays }) => {
   const dispatch = useDispatch();
   const selectedDisplay = useSelector(selectedDisplaySelector);
   const selectedRelDisps = useSelector(selectedRelDispsSelector);
@@ -29,15 +30,20 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
   const contentHeight = useSelector(contentHeightSelector);
   const contentWidth = useSelector(contentWidthSelector);
   const basePath = useSelector(selectBasePath);
-  const displayGroups = useDisplayGroups();
+  const displayGroups = useDisplayGroups(excludedDisplays);
   const groupKeys = Object.keys(displayGroups);
 
   const getRelDispPositions = (relDisps: number[], displayInfo: IDisplay[]) => {
+    console.log(relDisps, 'relDisps');
+    console.log(displayInfo, 'displayInfo');
+
     const dnames = displayInfo.map((d: IDisplay) => d.name);
     const idx = dnames.indexOf(selectedDisplay);
     const disps = [idx, ...relDisps];
     const n = disps.length;
     const contentAspect = contentHeight / contentWidth;
+
+    console.log(disps, 'disps');
 
     // find all possible ways to grid
     const grids = [];
@@ -73,9 +79,9 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
 
     const curGrid = grids[areaDiff.indexOf(Math.min.apply(null, areaDiff))];
 
-    // // now move the boxes to appropriate position
-    // // make them appropriate size
-    // // and give them appropriate labels (group / name)
+    // now move the boxes to appropriate position
+    // make them appropriate size
+    // and give them appropriate labels (group / name)
     const nRow = curGrid[0];
     const nCol = curGrid[1];
     const gridAspect = (curGrid[1] / curGrid[0]) * contentAspect;
@@ -114,7 +120,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
     return relDispPositions;
   };
 
-  const handleCheckbox = (i: string) => {
+  const handleCheckbox = (i: number) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
     const newRelDisps = Object.assign([], selectedRelDisps);
     if (checked) {
@@ -128,6 +134,8 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
       newRelDisps.push(i);
     }
     newRelDisps.sort();
+
+    console.log(displayItems, 'displayItems');
 
     const relDispPositions = getRelDispPositions(newRelDisps, displayItems);
 
@@ -150,63 +158,64 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
             {groupKeys.length > 1 ? (
               <ImageListItem key="Subheader" cols={3} style={{ height: 'auto' }}>
                 <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
-                  {groupName}
+                  {groupName === commonTagsKey ? '' : groupName}
                 </ListSubheader>
               </ImageListItem>
             ) : null}
-            {displayGroups[groupName].map((i: string) => {
-              const displayItem = displayItems.find((l) => l.name === i);
-              return (
-                <ImageListItem
-                  key={i}
-                  className={styles.displayListGridTile}
-                  onClick={() => {
-                    if (selectable) {
+            {displayGroups[groupName].map((i: number) => (
+              <ImageListItem
+                key={i}
+                className={styles.displayListGridTile}
+                onClick={() => {
+                  if (selectable) {
+                    handleCheckbox(i);
+                  } else {
+                    handleClick(displayItems[i]?.name || '');
+                  }
+                }}
+              >
+                <img
+                  src={`/${basePath}/${displayItem?.thumbnail_url}`}
+                  alt={displayItem?.name}
+                  className={styles.displayListImg}
+                  key={`img${i}`}
+                />
+                {selectable && (
+                  <Checkbox
+                    className={styles.displayListCheckbox}
+                    checked={selectedRelDisps.indexOf(i) > -1}
+                    onChange={() => {
                       handleCheckbox(i);
-                    } else {
-                      handleClick(displayItem?.name || '');
-                    }
-                  }}
-                >
-                  <img
-                    src={`/${basePath}/${displayItem?.thumbnail_url}`}
-                    alt={displayItem?.name}
-                    className={styles.displayListImg}
-                    key={`img${i}`}
+                    }}
+                    value={`checked${i}`}
                   />
-                  {selectable && (
-                    <Checkbox
-                      className={styles.displayListCheckbox}
-                      checked={selectedRelDisps.indexOf(i) > -1}
-                      onChange={() => {
-                        handleCheckbox(i);
-                      }}
-                      value={`checked${i}`}
-                    />
-                  )}
-                  <ImageListItemBar
-                    className={styles.displayListGridTileBar}
-                    title={<div className={styles.displayListGridTitle}>{displayItem?.name.replace(/_/g, ' ')}</div>}
-                    subtitle={
-                      <span style={{ fontSize: 13 }}>
-                        {displayItem?.description}
-                        <br />
-                        <span className={styles.displayListGridSubtitle}>
-                          {/* {displayItems[i].n} */}
+                )}
+                <ImageListItemBar
+                  className={styles.displayListGridTileBar}
+                  title={<div className={styles.displayListGridTitle}>{displayItems[i]?.name.replace(/_/g, ' ')}</div>}
+                  subtitle={
+                    <span style={{ fontSize: 13 }}>
+                      {displayItems[i]?.description}
+                      <br />
+                      {/* <span className={styles.displayListGridSubtitle}>
+                          {displayItems[i].n}
                           &nbsp;panels,
-                          {/* {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)} */}
-                        </span>
-                      </span>
-                    }
-                  />
-                </ImageListItem>
-              );
-            })}
+                          {displayItems[i].updated.substring(0, displayItems[i].updated.length - 3)}
+                        </span> */}
+                    </span>
+                  }
+                />
+              </ImageListItem>
+            ))}
           </ImageList>
         </div>
       ))}
     </div>
   );
+};
+
+DisplayList.defaultProps = {
+  excludedDisplays: [],
 };
 
 export default DisplayList;

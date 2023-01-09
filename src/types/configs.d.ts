@@ -353,6 +353,7 @@ interface IDisplay {
   panel_format: string;
   input_csv_vars: string[];
   input_email: string;
+  keysig?: string;
 }
 
 /* ------------------------------------------------------ */
@@ -364,6 +365,7 @@ interface IDisplayListItem {
   description: string;
   tags: string[];
   thumbnail_url: string;
+  keysig?: string;
 }
 
 /* ------------------------------------------------------ */
