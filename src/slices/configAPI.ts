@@ -68,5 +68,5 @@ export const useConfig = () => {
 
 export const useDataType = () => {
   const { data: config } = useConfig();
-  return config?.data_type;
+  return config?.datatype;
 };

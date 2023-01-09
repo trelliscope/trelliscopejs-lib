@@ -227,7 +227,7 @@ export const fetchDisplay =
         };
 
         // load the cog data
-        if (cfg.data_type === 'jsonp') {
+        if (cfg.datatype === 'jsonp') {
           getJSONP({
             url: `${cfg.display_base}${iface.group}/${iface.name}/cogData.jsonp`,
             callbackName: 'cdCallback',
@@ -252,7 +252,7 @@ export const fetchDisplay =
     };
 
     // get displayObj.json so we can find the cog data, etc.
-    if (cfg.data_type === 'jsonp') {
+    if (cfg.datatype === 'jsonp') {
       getJSONP({
         url: `${cfg.display_base}${group}/${name}/displayObj.jsonp`,
         callbackName: 'ldCallback',
@@ -356,7 +356,7 @@ export const fetchDisplayList =
         }
       };
 
-      if (cfg.data_type === 'jsonp') {
+      if (cfg.datatype === 'jsonp') {
         getJSONP({
           url: `${cfg.display_base}displayList.jsonp`,
           callbackName: dlCallback,

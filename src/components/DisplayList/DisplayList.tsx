@@ -135,8 +135,6 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
     }
     newRelDisps.sort();
 
-    console.log(displayItems, 'displayItems');
-
     const relDispPositions = getRelDispPositions(newRelDisps, displayItems);
 
     dispatch(
@@ -149,6 +147,8 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
     dispatch(setSelectedRelDisps(newRelDisps));
     dispatch(setRelDispPositions(relDispPositions));
   };
+
+  console.log(displayItems, 'displayItems');
 
   return (
     <div className={styles.displayListContainer}>
@@ -175,8 +175,8 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
                 }}
               >
                 <img
-                  src={`/${basePath}/${displayItem?.thumbnail_url}`}
-                  alt={displayItem?.name}
+                  src={`/${basePath}/${displayItems[i]?.thumbnailurl}`}
+                  alt={displayItems[i]?.name}
                   className={styles.displayListImg}
                   key={`img${i}`}
                 />
