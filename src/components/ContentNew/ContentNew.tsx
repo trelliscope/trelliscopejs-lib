@@ -9,13 +9,14 @@ import { useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import styles from './ContentNew.module.scss';
 
-function getFileName(string1: string, string2: string) {
+const getFileName = (string1: string, string2: string) => {
   let newString1 = string1;
-  // replace special characters with underscore
+  let newString2 = string2;
+  // replace special characters and spaces with underscore
   newString1 = newString1.replace(/[^a-zA-Z0-9]/g, '_');
-
-  return `${string2}_${newString1}`;
-}
+  newString2 = newString2.replace(/[^a-zA-Z0-9]/g, '_');
+  return `${newString2}_${newString1}`;
+};
 
 const ContentNew: React.FC = () => {
   const { data } = useContext(DataContext);
@@ -39,16 +40,16 @@ const ContentNew: React.FC = () => {
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((md, i) => (
-              <div key={getPanelImageName(displayInfo.key_cols, md)} className={styles.panel}>
+              <div key={getPanelImageName(displayInfo.key_cols, md as { [key: string]: string })} className={styles.panel}>
                 <div className={styles.panelGraphic}>
                   <img
                     src={
                       displayInfo.panel_format !== null
                         ? `/${basePath}/displays/${snakeCase(displayInfo.name)}/panels/${getFileName(
-                            md[displayInfo.key_cols[1]],
-                            md[displayInfo.key_cols[0]],
+                            md[displayInfo.key_cols[1]] as string,
+                            md[displayInfo.key_cols[0]] as string,
                           )}.${displayInfo?.panel_format}`
-                        : getFileName(md[displayInfo.key_cols[1]], md[displayInfo.key_cols[0]])
+                        : getFileName(md[displayInfo.key_cols[1]] as string, md[displayInfo.key_cols[0]] as string)
                     }
                     alt="display"
                   />
