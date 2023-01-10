@@ -1,8 +1,10 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
+import { forEach } from 'lodash';
 import { useSelector } from 'react-redux';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
+import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 
 const JSONPBaseQuery =
   (): BaseQueryFn<{ url: string; id: string; dataType: string }, unknown, unknown> =>
@@ -48,11 +50,20 @@ export const useDisplayList = () => {
   return useGetDisplayListQuery({ url: basePath, id: appId, dataType }, { skip: !dataType || !basePath });
 };
 
+export const useRelatedDisplayNames = () => {
+  const { data: displayList = [] } = useDisplayList();
+  const selectedRelDisps = useSelector(selectSelectedRelDisps);
+  const relDispNames: string[] = [];
+  selectedRelDisps.forEach((index: number) => {
+    relDispNames.push(displayList[index].name);
+  });
+  return relDispNames;
+};
+
 export const commonTagsKey = '__common__';
 export const useDisplayGroups = (excluded: string[] = []) => {
   const { data: displays = [] } = useDisplayList();
-  console.log(displays, 'displays');
-  
+
   return displays.reduce<{ [index: string | symbol]: number[] }>(
     (acc, display, index) => {
       const tags = display.tags || [];

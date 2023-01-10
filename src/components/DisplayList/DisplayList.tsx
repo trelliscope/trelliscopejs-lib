@@ -12,6 +12,7 @@ import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayGroups, commonTagsKey } from '../../slices/displayListAPI';
 import { selectBasePath } from '../../slices/appSlice';
+import { useRelatedDisplays } from '../../slices/displayInfoAPI';
 import styles from './DisplayList.module.scss';
 
 interface DisplayListProps {
@@ -32,18 +33,16 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
   const basePath = useSelector(selectBasePath);
   const displayGroups = useDisplayGroups(excludedDisplays);
   const groupKeys = Object.keys(displayGroups);
+  const relatedDisplays = useRelatedDisplays();
+
+  console.log(relatedDisplays, 'relatedDispays');
 
   const getRelDispPositions = (relDisps: number[], displayInfo: IDisplay[]) => {
-    console.log(relDisps, 'relDisps');
-    console.log(displayInfo, 'displayInfo');
-
     const dnames = displayInfo.map((d: IDisplay) => d.name);
     const idx = dnames.indexOf(selectedDisplay);
     const disps = [idx, ...relDisps];
     const n = disps.length;
     const contentAspect = contentHeight / contentWidth;
-
-    console.log(disps, 'disps');
 
     // find all possible ways to grid
     const grids = [];
@@ -130,12 +129,12 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
       }
     } else if (newRelDisps.indexOf(i) < 0) {
       // if it is being checked we also need to load the display
-      dispatch(fetchDisplay(displayItems[i].name, displayItems[i].group, cfg, appId, '', false));
       newRelDisps.push(i);
     }
     newRelDisps.sort();
 
-    const relDispPositions = getRelDispPositions(newRelDisps, displayItems);
+    // const relDispPositions = getRelDispPositions(newRelDisps, displayItems);
+    console.log(newRelDisps, 'newRelDisps');
 
     dispatch(
       setLayout({
@@ -145,10 +144,8 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
       }),
     ); // related displays only works in 1/1 mode
     dispatch(setSelectedRelDisps(newRelDisps));
-    dispatch(setRelDispPositions(relDispPositions));
+    // dispatch(setRelDispPositions(relDispPositions));
   };
-
-  console.log(displayItems, 'displayItems');
 
   return (
     <div className={styles.displayListContainer}>
