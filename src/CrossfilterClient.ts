@@ -38,6 +38,11 @@ export default class CrossfilterClient extends DataClient {
     this.crossfilter.add(data);
   }
 
+  clearData() {
+    super.clearData();
+    this.crossfilter.remove();
+  }
+
   addFilter(filter: DataClientFilter) {
     super.addFilter(filter);
     // check if dimension exists and create if not
