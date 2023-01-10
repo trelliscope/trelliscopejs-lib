@@ -48,8 +48,8 @@ const ContentNew: React.FC = () => {
                         ? `/${basePath}/displays/${snakeCase(displayInfo.name)}/panels/${getFileName(
                             md[displayInfo.keycols[1]] as string,
                             md[displayInfo.keycols[0]] as string,
-                          )}.${displayInfo?.panel_format}`
-                        : getFileName(md[displayInfo.keycols[1]] as string, md[displayInfo.key_cols[0]] as string)
+                          )}.${displayInfo?.panelformat}`
+                        : getFileName(md[displayInfo.keycols[1]] as string, md[displayInfo.keycols[0]] as string)
                     }
                     alt="display"
                   />
