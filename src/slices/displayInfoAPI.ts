@@ -6,32 +6,50 @@ import snakeCase from 'lodash.snakecase';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
+import { useRelatedDisplayNames } from './displayListAPI';
+
+const displayRequest = (url: string, displayName: string, dataType: string, callback: string) =>
+  new Promise((resolve) => {
+    const displayPath = snakeCase(displayName);
+
+    window[callback] = (data: IDisplay) => {
+      resolve({ data });
+    };
+
+    if (dataType === 'jsonp') {
+      getJSONP({
+        url: `${url}/displays/${displayPath}/displayInfo.jsonp`,
+        callbackName: callback,
+        error: (err) => {
+          resolve({ error: err });
+        },
+      });
+    } else {
+      fetch(`${url}/display/${displayPath}/displayInfo.json`)
+        .then((res) => res.json())
+        .then(window[callback]);
+    }
+  });
 
 const JSONPBaseQuery =
   (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string }, unknown, unknown> =>
-  ({ url, id, dataType, displayName }) =>
-    new Promise((resolve) => {
-      const displayInfoCallback = `__loadDisplayInfo__${id}`;
-      const displayPath = snakeCase(displayName);
+  ({ url, id, dataType, displayName }) => {
+    const displayInfoCallback = `__loadDisplayInfo__${id}`;
+    return displayRequest(url, displayName, dataType, displayInfoCallback) as Promise<{ data: IDisplay }>;
+  };
 
-      window[displayInfoCallback] = (data: IDisplay) => {
-        resolve({ data });
-      };
+const JSONPRelatedQuery =
+  // (): BaseQueryFn<{ url: string; id: string; dataType: string; displayNames: string[] }, unknown, unknown> =>
+  async ({ url, id, dataType, displayNames }) => {
+    const relatedDisplayInfoCallback = `__loadDisplayInfo__${id}`;
 
-      if (dataType === 'jsonp') {
-        getJSONP({
-          url: `${url}/displays/${displayPath}/displayInfo.jsonp`,
-          callbackName: displayInfoCallback,
-          error: (err) => {
-            resolve({ error: err });
-          },
-        });
-      } else {
-        fetch(`${url}/display/${displayPath}/displayInfo.json`)
-          .then((res) => res.json())
-          .then(window[displayInfoCallback]);
-      }
-    });
+    const displayNameRequests = displayNames.map(
+      (displayName) => displayRequest(url, displayName, dataType, relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
+    );
+
+    const results = await Promise.all(displayNameRequests);
+    return { data: results };
+  };
 
 export const displayInfoAPI = createApi({
   reducerPath: 'displayInfo',
@@ -40,10 +58,16 @@ export const displayInfoAPI = createApi({
     getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }>({
       query: ({ url, id, dataType, displayName }) => ({ url, id, dataType, displayName }),
     }),
+    getRelatedDisplays: builder.query<
+      IDisplay[],
+      { url: string; id: string; dataType: 'jsonp' | 'json'; displayNames: string[] }
+    >({
+      queryFn: JSONPRelatedQuery,
+    }),
   }),
 });
 
-export const { useGetDisplayInfoQuery } = displayInfoAPI;
+export const { useGetDisplayInfoQuery, useGetRelatedDisplaysQuery } = displayInfoAPI;
 
 export const useDisplayInfo = () => {
   const appId = useSelector(selectAppId);
@@ -53,6 +77,17 @@ export const useDisplayInfo = () => {
   return useGetDisplayInfoQuery(
     { url: basePath, id: appId, dataType, displayName: selectedDisplay?.name || '' },
     { skip: !dataType || !basePath || !selectedDisplay?.name },
+  );
+};
+
+export const useRelatedDisplays = () => {
+  const appId = useSelector(selectAppId);
+  const basePath = useSelector(selectBasePath);
+  const dataType = useDataType();
+  const relatedDisplayNames = useRelatedDisplayNames();
+  return useGetRelatedDisplaysQuery(
+    { url: basePath, id: appId, dataType, displayNames: relatedDisplayNames },
+    { skip: !dataType || !basePath || !relatedDisplayNames.length },
   );
 };
 

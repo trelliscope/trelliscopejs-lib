@@ -232,7 +232,7 @@ interface IGraphMeta extends IMeta {
 /* inputs                                                 */
 /* ------------------------------------------------------ */
 
-type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number' | 'localStorage';
+type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
 
 interface IInput {
   name: string;
@@ -338,21 +338,23 @@ interface IView {
 /* display                                                */
 /* ------------------------------------------------------ */
 
+type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' | 'pjp' | 'png' | 'svg' | 'webp';
+
 type PanelType = 'img' | 'iframe' | 'REST';
 
 interface IDisplay {
   name: string;
   description: string;
   tags: string[];
-  key_cols: string[];
+  keycols: string[];
+  keysig: string;
   metas: IMeta[];
   inputs: IInput[];
   state: IDisplayState;
   views: IView[];
-  panel_type: PanelType;
-  panel_format: string;
-  input_csv_vars: string[];
-  input_email: string;
+  paneltype: PanelType;
+  panelformat?: PanelFormat;
+  thumbnailurl: string;
 }
 
 /* ------------------------------------------------------ */
@@ -363,7 +365,8 @@ interface IDisplayListItem {
   name: string;
   description: string;
   tags: string[];
-  thumbnail_url: string;
+  keysig: string;
+  thumbnailurl: string;
 }
 
 /* ------------------------------------------------------ */
@@ -374,7 +377,7 @@ type AppDataType = 'jsonp' | 'json';
 
 interface IConfig {
   name: string;
-  data_type: AppDataType;
+  datatype: AppDataType;
   id: string;
 }
 

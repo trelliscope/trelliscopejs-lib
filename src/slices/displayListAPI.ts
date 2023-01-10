@@ -1,8 +1,10 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
+import { forEach } from 'lodash';
 import { useSelector } from 'react-redux';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
+import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 
 const JSONPBaseQuery =
   (): BaseQueryFn<{ url: string; id: string; dataType: string }, unknown, unknown> =>
@@ -48,22 +50,34 @@ export const useDisplayList = () => {
   return useGetDisplayListQuery({ url: basePath, id: appId, dataType }, { skip: !dataType || !basePath });
 };
 
+export const useRelatedDisplayNames = () => {
+  const { data: displayList = [] } = useDisplayList();
+  const selectedRelDisps = useSelector(selectSelectedRelDisps);
+  const relDispNames: string[] = [];
+  selectedRelDisps.forEach((index: number) => {
+    relDispNames.push(displayList[index].name);
+  });
+  return relDispNames;
+};
+
 export const commonTagsKey = '__common__';
-export const useDisplayGroups = () => {
+export const useDisplayGroups = (excluded: string[] = []) => {
   const { data: displays = [] } = useDisplayList();
 
-  return displays.reduce<{ [index: string | symbol]: string[] }>(
-    (acc, display) => {
+  return displays.reduce<{ [index: string | symbol]: number[] }>(
+    (acc, display, index) => {
       const tags = display.tags || [];
-      if (tags.length === 0) {
-        acc[commonTagsKey].push(display.name);
+      if (tags.length === 0 && !excluded.includes(display.name)) {
+        acc[commonTagsKey].push(index);
         return acc;
       }
       tags.forEach((tag) => {
-        if (!acc[tag]) {
-          acc[tag] = [];
+        if (!excluded.includes(display.name)) {
+          if (!acc[tag]) {
+            acc[tag] = [];
+          }
+          acc[tag].push(index);
         }
-        acc[tag].push(display.name);
       });
       return acc;
     },

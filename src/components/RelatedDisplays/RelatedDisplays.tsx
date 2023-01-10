@@ -16,13 +16,14 @@ import { Rnd } from 'react-rnd';
 import type { Position } from 'react-rnd';
 import classNames from 'classnames';
 import DisplayList from '../DisplayList';
-import { relatedDisplayGroupsSelector, selectedRelDispsSelector } from '../../selectors/display';
+import { selectedRelDispsSelector } from '../../selectors/display';
 import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
-import { selectedDisplaySelector, displayListSelector, relDispPositionsSelector } from '../../selectors';
+import { relDispPositionsSelector } from '../../selectors';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import getCustomProperties from '../../getCustomProperties';
 import styles from './RelatedDisplays.module.scss';
+import { useDisplayList } from '../../slices/displayListAPI';
 
 const previewHeight = 400;
 
@@ -30,30 +31,29 @@ const fixCSS = (value: string) => parseInt(value.replace('px', ''), 10);
 
 interface RelatedDisplaysProps {
   setDialogOpen: (isOpen: boolean) => void;
+  relatedDisplayGroups: IDisplayListItem[];
+  selectedDisplay: IDisplayListItem;
 }
 
-const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
+const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen, relatedDisplayGroups, selectedDisplay }) => {
   const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [headerHeight] = getCustomProperties(['--header-height']) as number[];
-
+  const { data: displayList } = useDisplayList();
   const dispatch = useDispatch();
-  const displayList = useSelector(displayListSelector);
-  const selectedDisplay = useSelector(selectedDisplaySelector);
-  const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
   const contentHeight = useSelector(contentHeightSelector);
   const contentWidth = useSelector(contentWidthSelector);
   const selectedRelDisps = useSelector(selectedRelDispsSelector);
   const relDispPositions = useSelector(relDispPositionsSelector);
+
   const propStyles = {
     button: {
-      left: headerHeight * (selectedDisplay.name === '' || Object.keys(relatedDisplayGroups).length === 0 ? 0 : 2) - 1,
+      left: headerHeight * (selectedDisplay?.name === '' || relatedDisplayGroups.length === 0 ? 0 : 2) - 1,
       background: selectedRelDisps.length === 0 ? 'none' : 'rgba(69, 138, 249, 0.4)',
       color: selectedRelDisps.length === 0 ? '#9ba3af' : 'white',
     },
   };
   const active = Object.keys(relatedDisplayGroups).length > 0;
-
   const handleResize = (
     pos: RelDispPositionsState,
     x: number,
@@ -118,7 +118,12 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen }) => {
   } as CSSProperties;
 
   const stepContent = [
-    <DisplayList displayItems={displayList} displayGroups={relatedDisplayGroups} handleClick={() => {}} selectable />,
+    <DisplayList
+      displayItems={displayList as IDisplayListItem[]}
+      handleClick={() => {}}
+      selectable
+      excludedDisplays={[selectedDisplay?.name]}
+    />,
     <div style={parentBoundary}>
       {relDispPositions.map((d) => (
         <Rnd

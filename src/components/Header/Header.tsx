@@ -9,12 +9,12 @@ import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
 import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
-import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../../selectors/display';
+import { displayGroupsSelector } from '../../selectors/display';
 import { dialogOpenSelector, pageNumSelector, nPerPageSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { filterCardinalitySelector } from '../../selectors/cogData';
 import { setLayout } from '../../slices/layoutSlice';
 import getCustomProperties from '../../getCustomProperties';
-import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { useRelatedDisplaysGroup, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { useDisplayList } from '../../slices/displayListAPI';
 import styles from './Header.module.scss';
 
@@ -27,7 +27,6 @@ const Header: React.FC = () => {
   const windowWidth = useSelector(windowWidthSelector);
   const dlLength = displayList?.length || 0;
   const selectedDisplay = useSelectedDisplay();
-  const relatedDisplayGroups = useSelector(relatedDisplayGroupsSelector);
   const singleDisplay = displayList.length === 1;
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
@@ -37,9 +36,15 @@ const Header: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
+  const relatedDisplayGroups = useRelatedDisplaysGroup();
 
   const handleChange = (page: number) => {
-    dispatch(setLayout({ page }));
+    dispatch(
+      setLayout({
+        page,
+        type: 'layout',
+      }),
+    );
   };
 
   const pageLeft = () => {
@@ -75,13 +80,13 @@ const Header: React.FC = () => {
         headerHeight *
         ((dlLength <= 1 ? 0 : 1) +
           (selectedDisplay?.name === '' ? 0 : 1) +
-          (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)),
+          (relatedDisplayGroups.length === 0 ? 0 : 1)),
       width:
         windowWidth -
         (headerHeight *
           ((dlLength <= 1 ? 0 : 1) +
             (selectedDisplay?.name === '' ? 0 : 1) +
-            (Object.keys(relatedDisplayGroups).length === 0 ? 0 : 1)) +
+            (relatedDisplayGroups.length === 0 ? 0 : 1)) +
           logoWidth +
           30),
     },
@@ -127,8 +132,8 @@ const Header: React.FC = () => {
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
       {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
-      {relatedDisplayGroups && Object.keys(relatedDisplayGroups).length > 0 && (
-        <RelatedDisplays setDialogOpen={handleDialogOpen} />
+      {relatedDisplayGroups && relatedDisplayGroups.length > 0 && (
+        <RelatedDisplays setDialogOpen={handleDialogOpen} relatedDisplayGroups={relatedDisplayGroups} selectedDisplay={selectedDisplay} />
       )}
       {selectedDisplay?.name !== '' && (
         <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={totPanels} />

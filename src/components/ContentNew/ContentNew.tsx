@@ -7,6 +7,7 @@ import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout } from '../../slices/layoutSlice';
 import { useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
+import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import styles from './ContentNew.module.scss';
 
 const getFileName = (string1: string, string2: string) => {
@@ -25,14 +26,20 @@ const ContentNew: React.FC = () => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const basePath = useSelector(selectBasePath);
   const layout = useSelector(selectLayout);
+  const relatedDisplayNames = useRelatedDisplayNames();
+
+  let names = [displayInfo?.name];
+  if (relatedDisplayNames.length > 0) {
+    names = [displayInfo?.name, ...relatedDisplayNames];
+  }
 
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,
   };
 
-  const getPanelImageName = (key_cols: string[], meta: { [key: string]: string }) =>
-    `${snakeCase(meta[key_cols[0]])}_${snakeCase(meta[key_cols[1]])}`;
+  const getPanelImageName = (keycols: string[], meta: { [key: string]: string }) =>
+    `${snakeCase(meta[keycols[0]])}_${snakeCase(meta[keycols[1]])}`;
 
   return (
     <div className={styles.contentWrapper}>
@@ -40,19 +47,22 @@ const ContentNew: React.FC = () => {
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((md, i) => (
-              <div key={getPanelImageName(displayInfo.key_cols, md as { [key: string]: string })} className={styles.panel}>
+              <div key={getPanelImageName(displayInfo.keycols, md as { [key: string]: string })} className={styles.panel}>
                 <div className={styles.panelGraphic}>
-                  <img
-                    src={
-                      displayInfo.panel_format !== null
-                        ? `/${basePath}/displays/${snakeCase(displayInfo.name)}/panels/${getFileName(
-                            md[displayInfo.key_cols[1]] as string,
-                            md[displayInfo.key_cols[0]] as string,
-                          )}.${displayInfo?.panel_format}`
-                        : getFileName(md[displayInfo.key_cols[1]] as string, md[displayInfo.key_cols[0]] as string)
-                    }
-                    alt="display"
-                  />
+                  {names.map((name) => (
+                    <img
+                      src={
+                        displayInfo.panelformat !== null
+                          ? `/${basePath}/displays/${snakeCase(name)}/panels/${getFileName(
+                              md[displayInfo.keycols[1]] as string,
+                              md[displayInfo.keycols[0]] as string,
+                            )}.${displayInfo?.panelformat}`
+                          : getFileName(md[displayInfo.keycols[1]] as string, md[displayInfo.keycols[0]] as string)
+                      }
+                      alt="display"
+                      key={name}
+                    />
+                  ))}
                 </div>
                 <table className={styles.panelLabels} width="100%">
                   <tbody>

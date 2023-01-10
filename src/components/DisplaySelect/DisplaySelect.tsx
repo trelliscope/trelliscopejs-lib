@@ -34,7 +34,6 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const selectedDisplay = useSelector(selectedDisplaySelector);
   const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispSelectDialogSelector);
-
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
   const { data: displayList, isSuccess } = useDisplayList();
