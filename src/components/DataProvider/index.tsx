@@ -30,6 +30,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
 
   useEffect(() => {
     if (metaData) {
+      client.clearData();
       client.addData(metaData);
     }
   }, [metaData, client]);
