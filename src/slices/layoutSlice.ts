@@ -19,7 +19,7 @@ export interface LayoutAction {
   ncol?: number;
   arrange?: 'rows' | 'cols';
   page?: number;
-  type: 'layout';
+  type?: 'layout';
 }
 
 export const layoutSlice = createSlice({

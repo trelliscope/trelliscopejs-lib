@@ -1,4 +1,4 @@
-import crossfilter, { Dimension, Crossfilter } from 'crossfilter2';
+import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue } from 'crossfilter2';
 import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
@@ -29,6 +29,8 @@ export default class CrossfilterClient extends DataClient {
     super(data);
     this.crossfilter = crossfilter<Datum>(data);
     this.dimensions = new Map<string | symbol, D>();
+
+    this.groupBy = this.groupBy.bind(this);
   }
 
   addData(data: Datum[]) {
@@ -49,7 +51,12 @@ export default class CrossfilterClient extends DataClient {
     // filter the dimension based on the filter operation
     switch (filter.operation) {
       case 'eq':
-        this.dimensions.get(filter.field)?.filterExact(filter.value);
+        if (Array.isArray(filter.value)) {
+          const value = filter.value as NaturallyOrderedValue[];
+          this.dimensions.get(filter.field)?.filter((d) => value.includes(d));
+        } else {
+          this.dimensions.get(filter.field)?.filterExact(filter.value);
+        }
         break;
       case 'neq':
         this.dimensions.get(filter.field)?.filter((d) => d !== filter.value);
@@ -96,6 +103,20 @@ export default class CrossfilterClient extends DataClient {
         this.crossfilter.dimension((d) => d[sort.field]),
       );
     }
+  }
+
+  groupBy(field: string | symbol) {
+    console.log(this.crossfilter.groupAll().value());
+
+    if (this.dimensions.has(field)) {
+      return this.dimensions.get(field)?.group().all() || [];
+    }
+
+    this.dimensions.set(
+      field,
+      this.crossfilter.dimension((d) => d[field]),
+    );
+    return this.dimensions.get(field)?.group().all() || [];
   }
 
   get filteredData() {

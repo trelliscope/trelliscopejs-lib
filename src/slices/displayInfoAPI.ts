@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
@@ -56,8 +57,13 @@ export const useDisplayInfo = () => {
 };
 
 export const useDisplayMetas = () => {
-  const displayInfo = useDisplayInfo();
-  return displayInfo.data?.metas;
+  const { data } = useDisplayInfo();
+  return useMemo(() => data?.metas || [], [data]);
+};
+
+export const useMetaByVarname = (varname: string) => {
+  const metas = useDisplayMetas();
+  return metas.find((meta) => meta.varname === varname);
 };
 
 // Return metas grouped by tags

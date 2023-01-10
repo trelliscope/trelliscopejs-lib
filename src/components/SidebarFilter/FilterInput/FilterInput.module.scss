@@ -1,0 +1,44 @@
+.filterInput {
+  padding: var(--padding-px);
+
+  &Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+
+    &Name {
+      background: var(--gray-700);
+      padding: var(--padding-px) var(--padding-3);
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    &Controls {
+      display: flex;
+      align-items: center;
+    }
+
+    &Btn {
+      background: none;
+      border: none;
+      color: var(--gray-1300);
+      padding: 0 var(--padding-2);
+      cursor: pointer;
+    }
+  }
+
+  &Count {
+    font-size: var(--text-xs);
+    color: var(--gray-1100);
+    margin: 0 var(--margin-6) 0 var(--margin-3);
+  }
+
+  &__active {
+    .filterInputHeader {
+      &Name {
+        background: var(--green);
+      }
+    }
+  }
+}

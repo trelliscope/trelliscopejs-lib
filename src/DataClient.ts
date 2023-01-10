@@ -1,6 +1,6 @@
 export interface DataClientFilter {
   field: string;
-  value: string | number;
+  value: string | number | string[] | number[];
   operation: 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'regex';
 }
 
@@ -23,6 +23,7 @@ export interface IDataClient {
   removeSort(field: string): void;
   clearSorts(): void;
   clearFilters(): void;
+  groupBy(field: string): { [key: string]: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];
 }
@@ -38,6 +39,8 @@ export default class DataClient implements IDataClient {
     this._data = data || [];
     this._filters = [];
     this._sorts = [];
+
+    this.groupBy = this.groupBy.bind(this);
   }
 
   addData(data: Datum[]) {
@@ -130,6 +133,12 @@ export default class DataClient implements IDataClient {
     });
 
     return sortedData;
+  }
+
+  groupBy(field: string | symbol) {
+    // TODO: implement groupBy
+    console.log('groupBy', field);
+    return [];
   }
 
   clearData() {

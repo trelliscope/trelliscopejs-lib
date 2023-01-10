@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import FilterNumPlot from '../FilterNumPlot';
 
 import styles from './FilterNum.module.scss';
+import useMetaInfo from '../../selectors/useMetaInfo';
 
 interface FilterNumProps {
   name: string;
@@ -15,6 +16,7 @@ interface FilterNumProps {
 
 const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist, handleChange }) => {
   const stateValue = filterState.value || {};
+  const { breaks } = useMetaInfo(name, dist.type);
 
   const checkValidNumber = (which: string, lower: number | string = '', upper: number | string = '') => {
     if (which === 'to') {
@@ -98,7 +100,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ name, filterState, dist, condDist
   }
 
   // calculate step value for numeric input
-  const { breaks } = dist.dist.raw;
+  // const { breaks } = dist.dist.raw;
   const hspan = (breaks[1] - breaks[0]) * breaks.length;
   const step = (10 ** Math.round(Math.log10(hspan / 100) - 0.4)) as number;
 

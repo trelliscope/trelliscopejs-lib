@@ -88,10 +88,16 @@ export const selectHashFilters = () => {
 
     return {
       ...filter,
-      regexp: JSON.parse(decodeURIComponent(hashProps.regexp)),
+      regexp: decodeURIComponent(hashProps.regexp),
       values: hashProps.val.split('#').map(decodeURIComponent),
     } as ICategoryFilterState;
   });
+};
+
+export const selectHashFilterView = () => {
+  const hash = selectHash();
+  const fvString = hash?.fv;
+  return fvString ? fvString.split(',') : [];
 };
 
 export const selectHashSidebar = () => {

@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import DisplayList from '../DisplayList';
 import { setDispSelectDialogOpen } from '../../slices/appSlice';
-import { FilterState, setFilter, setFilterView } from '../../slices/filterSlice';
+import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
@@ -76,7 +76,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     dispatch(setSelectedRelDisps([]));
     dispatch(setLabels([]));
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
-    dispatch(setFilter(undefined));
+    dispatch(clearFilters());
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));

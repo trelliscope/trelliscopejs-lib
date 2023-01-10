@@ -1,11 +1,10 @@
 import type { Middleware } from 'redux';
-import snakeCase from 'lodash.snakecase';
 import type { RootState } from '../store';
 import { SB_REV_LOOKUP } from '../constants';
 import { sortSlice } from '../slices/sortSlice';
 import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
-import { filterSlice } from '../slices/filterSlice';
+import { addFilter, filterSlice, removeFilter, updateFilter, updateFilterValues } from '../slices/filterSlice';
 import { selectedDisplaySlice } from '../slices/selectedDisplaySlice';
 import { sidebarSlice } from '../slices/sidebarSlice';
 import { displayListAPI } from '../slices/displayListAPI';
@@ -17,7 +16,7 @@ import { displayInfoAPI } from '../slices/displayInfoAPI';
 const { setSort } = sortSlice.actions;
 const { setLabels } = labelsSlice.actions;
 const { setLayout } = layoutSlice.actions;
-const { setFilter, setFilterView } = filterSlice.actions;
+const { setFilterView } = filterSlice.actions;
 const { setSelectedDisplay } = selectedDisplaySlice.actions;
 const { setActiveSidebar } = sidebarSlice.actions;
 
@@ -106,7 +105,10 @@ export const hashMiddleware: Middleware<RootState> =
       setLayout.type,
       setLabels.type,
       setSort.type,
-      setFilter.type,
+      addFilter.type,
+      updateFilter.type,
+      removeFilter.type,
+      updateFilterValues.type,
       setActiveSidebar.type,
       setFilterView.type,
     ];
