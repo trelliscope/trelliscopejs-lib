@@ -23,7 +23,11 @@ const SidebarLayout: React.FC = () => {
   };
 
   const handleLayoutChange = (value: string, isRow: boolean) => {
-    const num = parseInt(value || '1', 10);
+    let nonZeroValue = value;
+    if (value.charAt(0) === '0') {
+      nonZeroValue = value.slice(1);
+    }
+    const num = parseInt(nonZeroValue || '1', 10);
     if (num > 15 || num < 0) return;
     handleChange({
       nrow: isRow ? num : layout.nrow,
