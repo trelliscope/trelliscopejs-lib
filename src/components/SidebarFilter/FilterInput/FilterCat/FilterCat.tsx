@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY } from '../../../../constants';
@@ -33,6 +33,12 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
       dispatch(addFilter(newFilter));
     }
   };
+
+  useEffect(() => {
+    if (filter?.values.length === 0) {
+      dispatch(removeFilter(filter.varname));
+    }
+  }, [dispatch, filter?.values, filter?.varname]);
 
   const handleRegex = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = event.target;
