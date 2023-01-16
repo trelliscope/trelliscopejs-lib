@@ -45,6 +45,10 @@ export const hashFromState = (state: RootState) => {
 
   // labels
   const { labels } = state;
+  if (labels.length) {
+    hashURL.append('labels', labels.join(','));
+  }
+
   // sort
   if (state.sort.length) {
     const sortStr = state.sort.map((d: ISortState) => `${d.varname};${d.dir}`).join(',');

@@ -36,20 +36,21 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const isOpen = useSelector(dispSelectDialogSelector);
   const [btnScale, setBtnScale] = useState(1);
   const [attnCircle, setAttnCircle] = useState<HTMLElement>();
+  const [selectedDisplayName, setSelectedDisplayName] = useState('');
   const { data: displayList, isSuccess } = useDisplayList();
   const { data: displayInfo } = useDisplayInfo();
 
   const stateLayout = displayInfo?.state?.layout;
+  const stateLabels = displayInfo?.state?.labels?.varnames;
+  const activeDisplayName = displayInfo?.name;
 
+  // This is needed to make sure the default state is applied when switching to a new display
   useEffect(() => {
-    dispatch(setLayout(stateLayout as LayoutAction));
-  }, [
-    displayInfo?.state?.layout?.nrow,
-    displayInfo?.state?.layout?.ncol,
-    displayInfo?.state?.layout?.arrange,
-    stateLayout,
-    dispatch,
-  ]);
+    if (selectedDisplayName === activeDisplayName) {
+      dispatch(setLayout(stateLayout as LayoutAction));
+      dispatch(setLabels(stateLabels as string[]));
+    }
+  }, [stateLabels, stateLayout, dispatch, selectedDisplayName, activeDisplayName]);
 
   const handleDispDialogOpen = (dispIsOpen: boolean) => {
     dispatch(setDispSelectDialogOpen(dispIsOpen));
@@ -73,12 +74,12 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
     dispatch(setSelectedRelDisps([]));
-    dispatch(setLabels([]));
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
     dispatch(clearFilters());
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
+    setSelectedDisplayName(name);
   };
 
   const handleKey = () => {
