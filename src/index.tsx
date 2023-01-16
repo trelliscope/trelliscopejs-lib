@@ -207,12 +207,15 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('097af825', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });
 // trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
 // trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
+// trelliscopeApp('960f51e6', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
 trelliscopeApp('44c922eb', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
+// trelliscopeApp('1060b383', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
+// trelliscopeApp('0d3d4590', '_test/trelliscope-examples3/pokemon/config.jsonp', { logger: true });
+// trelliscopeApp('097af825', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });
 
 // trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
 // trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
