@@ -3,21 +3,21 @@ import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import SidebarLabelPill from '../SidebarLabelPill';
 import styles from './SidebarLabels.module.scss';
-import { useMetaGroupsSorted } from '../../slices/displayInfoAPI';
+import { useDisplayMetasWithInputs, useMetaGroupsWithInputsSorted } from '../../slices/displayInfoAPI';
 
 interface SidebarLabelsProps {
   sidebarHeaderHeight: number;
   ch: number;
   labels: string[];
-  metas: IMeta[];
   handleLabelChange: (value: string) => void;
 }
 
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, labels, metas, handleLabelChange }) => {
-  const labelObj = useMetaGroupsSorted();
+const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, labels, handleLabelChange }) => {
+  const labelObj = useMetaGroupsWithInputsSorted();
+  const metasWithInputs = useDisplayMetasWithInputs();
   const height = ch - sidebarHeaderHeight;
   const labelDescriptionMap = new Map();
-  metas.forEach((meta) => {
+  metasWithInputs.forEach((meta) => {
     labelDescriptionMap.set(meta.varname, meta.label);
   });
 
