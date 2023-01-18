@@ -263,7 +263,6 @@ const Sidebar: React.FC = () => {
           sidebarHeaderHeight={sidebarHeaderHeight}
           ch={ch}
           labels={labels}
-          metas={metas as IMeta[]}
           handleLabelChange={handleLabelChange}
         />
       )}

@@ -305,6 +305,11 @@ interface IFilterState extends IState {
   filtertype: FilterType;
 }
 
+interface ILabelState {
+  varname: string;
+  label: string;
+}
+
 interface ICategoryFilterState extends IFilterState {
   regexp: string | null;
   values: string[];

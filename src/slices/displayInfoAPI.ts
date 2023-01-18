@@ -96,6 +96,15 @@ export const useDisplayMetas = () => {
   return useMemo(() => data?.metas || [], [data]);
 };
 
+export const useDisplayMetasWithInputs = () => {
+  const { data } = useDisplayInfo();
+  const inputInformation = data?.inputs.map((input: IInput) => ({
+    varname: input.name,
+    label: input.label,
+  })) as ILabelState[];
+  return useMemo(() => [...(data?.metas as IMeta[]), ...inputInformation] || [], [data, inputInformation]);
+};
+
 export const useMetaByVarname = (varname: string) => {
   const metas = useDisplayMetas();
   return metas.find((meta) => meta.varname === varname);
@@ -133,4 +142,15 @@ export const useMetaGroupsSorted = () => {
       obj[key] = metaGroups[key];
       return obj;
     }, {} as { [key: string]: string[] });
+};
+
+export const useMetaGroupsWithInputsSorted = () => {
+  const { data } = useDisplayInfo();
+  const metaGroups = useMetaGroupsSorted();
+  const inputInformation = data?.inputs.map((input) => ({
+    varname: input.name,
+    label: input.label,
+  }));
+
+  return { ...metaGroups, input: inputInformation?.map((input) => input.varname) };
 };
