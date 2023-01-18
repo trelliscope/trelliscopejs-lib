@@ -60,7 +60,9 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
       {filterType === FILTER_TYPE_CATEGORY && (
         <FilterCat meta={meta as IFactorMeta} filter={filter as ICategoryFilterState} />
       )}
-      {filterType === FILTER_TYPE_NUMBERRANGE && <FilterNum />}
+      {filterType === FILTER_TYPE_NUMBERRANGE && (
+        <FilterNum meta={meta as INumberMeta} filter={filter as INumberRangeFilterState} />
+      )}
     </div>
   );
 };
