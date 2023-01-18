@@ -53,6 +53,12 @@
   &Dialog {
     z-index: 8000;
     font-weight: var(--font-light);
+
+    &Title {
+      text-align: center;
+      font-size: var(--text-base);
+      font-weight: var(--font-heavy);
+    }
   }
 
   &DialogActionText {
