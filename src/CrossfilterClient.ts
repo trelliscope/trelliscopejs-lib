@@ -1,4 +1,5 @@
 import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue, Grouping } from 'crossfilter2';
+import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue, Grouping } from 'crossfilter2';
 import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
