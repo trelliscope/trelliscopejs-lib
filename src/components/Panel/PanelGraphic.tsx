@@ -6,12 +6,10 @@ interface PanelGraphicProps {
   alt: string;
 }
 
-const PanelGraphic: React.FC<PanelGraphicProps> = ({ src, alt }) => {
-  return (
-    <div className={styles.panelGraphic}>
-      <img src={src} alt="display" alt={alt} />
-    </div>
-  );
-};
+const PanelGraphic: React.FC<PanelGraphicProps> = ({ src, alt }) => (
+  <div className={styles.panelGraphic}>
+    <img src={src} alt={alt} />
+  </div>
+);
 
 export default PanelGraphic;

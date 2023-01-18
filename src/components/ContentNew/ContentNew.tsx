@@ -17,7 +17,7 @@ const getPanelImageName = (keycols: string[], data: Datum) =>
 const panelSrcGetter =
   (panelformat: PanelFormat, keycols: string[], basePath: string) =>
   (data: Datum, name = '') => {
-    if (panelformat !== null) {
+    if (panelformat) {
       return `/${basePath}/displays/${snakeCase(name)}/panels/${getPanelImageName(keycols, data)}.${panelformat}`;
     }
     return getPanelImageName(keycols, data);
@@ -44,7 +44,7 @@ const ContentNew: React.FC = () => {
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,
   };
 
-  const getPanelSrc = panelSrcGetter(displayInfo?.panelformat, displayInfo?.keycols, basePath);
+  const getPanelSrc = panelSrcGetter(displayInfo?.panelformat || 'png', displayInfo?.keycols, basePath);
 
   const activeLabels = labels.map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label)) as IMeta[];
 
