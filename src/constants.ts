@@ -12,6 +12,13 @@ SB_LOOKUP.forEach((d, i) => {
 });
 SB_REV_LOOKUP[''] = -1;
 
+export const INPUT_TYPE_TEXT = 'text' as string;
+export const INPUT_TYPE_NUMBER = 'number' as string;
+export const INPUT_TYPE_RADIO = 'radio' as string;
+export const INPUT_TYPE_CHECKBOX = 'checkbox' as string;
+export const INPUT_TYPE_SELECT = 'select' as string;
+export const INPUT_TYPE_MULTISELECT = 'multiselect' as string;
+
 export const META_TYPE_STRING = 'string' as string;
 export const META_TYPE_NUMBER = 'number' as string;
 export const META_TYPE_FACTOR = 'factor' as string;

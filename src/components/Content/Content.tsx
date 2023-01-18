@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { max } from 'd3-array';
 import { Dispatch } from 'redux';
 import { Swipeable } from 'react-swipeable';
-import Panel from '../Panel';
+import Panel from '../PanelOld';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import {

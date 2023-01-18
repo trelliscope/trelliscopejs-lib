@@ -47,8 +47,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
         });
       } else if (filter.filtertype === 'numberrange') {
         const { min, max } = filter as INumberRangeFilterState;
-        client.addFilter({ field: filter.varname, value: min || 0, operation: 'gte' });
-        client.addFilter({ field: filter.varname, value: max || Infinity, operation: 'lte' });
+        client.addFilter({ field: filter.varname, value: [min || 0, max || Infinity], operation: 'range' });
       }
     });
 

@@ -1,7 +1,7 @@
 export interface DataClientFilter {
   field: string;
-  value: string | number | string[] | number[];
-  operation: 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'regex';
+  value: string | number | string[] | [number, number];
+  operation: 'eq' | 'neq' | 'range' | 'regex';
 }
 
 // interface for sort object
@@ -23,7 +23,6 @@ export interface IDataClient {
   removeSort(field: string): void;
   clearSorts(): void;
   clearFilters(): void;
-  groupBy(field: string): { [key: string]: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];
 }
@@ -39,8 +38,6 @@ export default class DataClient implements IDataClient {
     this._data = data || [];
     this._filters = [];
     this._sorts = [];
-
-    this.groupBy = this.groupBy.bind(this);
   }
 
   addData(data: Datum[]) {
@@ -95,14 +92,8 @@ export default class DataClient implements IDataClient {
             return d[f.field] === f.value;
           case 'neq':
             return d[f.field] !== f.value;
-          case 'lt':
-            return d[f.field] < f.value;
-          case 'lte':
-            return d[f.field] <= f.value;
-          case 'gt':
-            return d[f.field] > f.value;
-          case 'gte':
-            return d[f.field] >= f.value;
+          case 'range':
+            return d[f.field] >= (f.value as [number, number])[0] && d[f.field] <= (f.value as [number, number])[1];
           case 'regex': {
             const regex = new RegExp(f.value as string);
             return regex.test(d[f.field] as string);
@@ -133,12 +124,6 @@ export default class DataClient implements IDataClient {
     });
 
     return sortedData;
-  }
-
-  groupBy(field: string | symbol) {
-    // TODO: implement groupBy
-    console.log('groupBy', field);
-    return [];
   }
 
   clearData() {
