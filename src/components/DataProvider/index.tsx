@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import type { IDataClient } from '../../DataClient';
+import type { Grouping, NaturallyOrderedValue } from 'crossfilter2';
+import type { ICrossFilterClient } from '../../CrossfilterClient';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { selectNumPerPage, selectPage } from '../../slices/layoutSlice';
 import { selectFilterState } from '../../slices/filterSlice';
@@ -9,14 +10,17 @@ import { selectSort } from '../../slices/sortSlice';
 
 interface DataProviderProps {
   children: React.ReactNode;
-  client: IDataClient;
+  client: ICrossFilterClient;
 }
 
 export const DataContext = React.createContext<{
   data: Datum[];
   allData: Datum[];
   filteredData: Datum[];
-  groupBy: (field: string) => { [key: string]: number }[];
+  groupBy(
+    field: string | symbol,
+    groupFunc?: (value: string | number) => NaturallyOrderedValue,
+  ): readonly Grouping<NaturallyOrderedValue, unknown>[];
 }>({ data: [], allData: [], filteredData: [], groupBy: () => [] });
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {

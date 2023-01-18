@@ -1,4 +1,4 @@
-import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue } from 'crossfilter2';
+import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue, Grouping } from 'crossfilter2';
 import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
@@ -20,7 +20,16 @@ interface SortParam {
   [key: string | symbol]: string | number;
 }
 
-export default class CrossfilterClient extends DataClient {
+export interface ICrossFilterClient extends DataClient {
+  crossfilter: Crossfilter<Datum>;
+  dimensions: Map<string | symbol, D>;
+  groupBy(
+    field: string | symbol,
+    groupFunc?: (value: string | number) => NaturallyOrderedValue,
+  ): readonly Grouping<NaturallyOrderedValue, unknown>[];
+}
+
+export default class CrossfilterClient extends DataClient implements ICrossFilterClient {
   crossfilter: Crossfilter<Datum>;
 
   dimensions: Map<string | symbol, D>;
@@ -110,17 +119,25 @@ export default class CrossfilterClient extends DataClient {
     }
   }
 
-  groupBy(field: string | symbol) {
-    console.log(this.crossfilter.groupAll().value());
-
+  groupBy(field: string | symbol, groupByFunction?: (d: number | string) => NaturallyOrderedValue) {
     if (this.dimensions.has(field)) {
-      return this.dimensions.get(field)?.group().all() || [];
+      const dimension = this.dimensions.get(field);
+      if (groupByFunction) {
+        return dimension?.group(groupByFunction).all() || [];
+      }
+
+      return dimension?.group().all() || [];
     }
 
     this.dimensions.set(
       field,
       this.crossfilter.dimension((d) => d[field]),
     );
+
+    if (groupByFunction) {
+      return this.dimensions.get(field)?.group(groupByFunction).all() || [];
+    }
+
     return this.dimensions.get(field)?.group().all() || [];
   }
 
