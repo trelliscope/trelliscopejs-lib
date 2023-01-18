@@ -1,0 +1,20 @@
+.numHistogram {
+  padding: var(--margin-4) 0 0 var(--margin-4);
+}
+
+.brush {
+  &Selection {
+    fill: var(--orange);
+  }
+}
+
+.bar {
+  fill: var(--orange);
+
+  &Background {
+    fill: var(--gray);
+  }
+  &__active {
+    fill: var(--orange-200);
+  }
+}

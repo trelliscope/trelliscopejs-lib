@@ -20,7 +20,7 @@ interface SortParam {
   [key: string | symbol]: string | number;
 }
 
-interface ICrossFilterClient extends DataClient {
+export interface ICrossFilterClient extends DataClient {
   crossfilter: Crossfilter<Datum>;
   dimensions: Map<string | symbol, D>;
   groupBy(
