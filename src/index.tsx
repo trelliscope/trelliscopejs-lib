@@ -18,15 +18,16 @@ import './assets/fonts/OpenSans/style.css';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
-import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
+import CrossfilterClient from './CrossfilterClient';
+import type { IDataClient } from './DataClient';
 
 // import appData from './appData';
 
-const trelliscopeApp = async (
+const trelliscopeApp = (
   id: string,
   config: string,
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
@@ -34,8 +35,11 @@ const trelliscopeApp = async (
   // Sets up msw worker for mocking api calls
   /* if (process.env.NODE_ENV !== 'production' && options.mockData) {
     const worker = await import('./test/__mockData__/worker');
-    worker.default.start();
+    worker.default.start(import { IDataClient } from './DataClient';
+);
   } */
+
+  const crossFilterClient = new CrossfilterClient();
 
   const el = document.getElementById(id) as HTMLElement;
   const container = document.getElementById(id) as HTMLElement;
@@ -152,6 +156,7 @@ const trelliscopeApp = async (
     <ThemeProvider theme={themeV1}>
       <Provider store={store}>
         <App
+          client={crossFilterClient as unknown as IDataClient}
           config={config}
           id={id}
           singlePageApp={singlePageApp}
@@ -169,6 +174,7 @@ const trelliscopeApp = async (
         <ThemeProvider theme={themeV1}>
           <Provider store={store}>
             <App
+              client={crossFilterClient as unknown as IDataClient}
               config={config}
               id={id}
               singlePageApp={singlePageApp}
@@ -192,7 +198,7 @@ const trelliscopeApp = async (
     setLayout: (nrow: number, ncol: number) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
-    currentCogs: () => currentCogDataSelector(store.getState()),
+    currentCogs: () => crossFilterClient.getData(),
   };
 };
 

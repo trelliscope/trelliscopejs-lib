@@ -1,3 +1,7 @@
+// ignore all ts errors in this file
+// FIXME remove this once refactor is done with new architecture
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,22 +9,16 @@ import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
 import SidebarSort from '../SidebarSort';
 import SidebarViews from '../SidebarViews';
-import {
-  contentHeightSelector,
-  sidebarActiveSelector,
-  filterColSplitSelector,
-  sidebarHeightSelector,
-} from '../../selectors/ui';
-import { filterStateSelector, filterViewSelector, labelsSelector, cogDescSelector } from '../../selectors';
+import { contentHeightSelector, sidebarActiveSelector, sidebarHeightSelector } from '../../selectors/ui';
+import { labelsSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
 import { addFilter, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
-import { cogFiltDistSelector } from '../../selectors/cogData';
 import styles from './Sidebar.module.scss';
-import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetas, useDisplayMetasLabels } from '../../slices/displayInfoAPI';
 import SidebarFilter from '../SidebarFilter';
 
 const Sidebar: React.FC = () => {
@@ -30,20 +28,16 @@ const Sidebar: React.FC = () => {
   const { isSuccess: displayLoaded, data: curDisplayInfo } = useDisplayInfo();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
-  const filterColSplit = useSelector(filterColSplitSelector);
-  const filter = useSelector(filterStateSelector);
-  const filterView = useSelector(filterViewSelector);
+  // const filterColSplit = useSelector(filterColSplitSelector);
   const metas = useDisplayMetas();
   const sidebarHeight = useSelector(sidebarHeightSelector);
-  const filtDist = useSelector(cogFiltDistSelector);
   const labels = useSelector(labelsSelector);
-  const colSplit = useSelector(filterColSplitSelector);
   const sort = useSelector(selectSort);
-  const cogDesc = useSelector(cogDescSelector);
+  const metaLabels = useDisplayMetasLabels();
   const ch = useSelector(contentHeightSelector);
 
   const height = contentHeight - sidebarHeaderHeight;
-  const views = curDisplayInfo?.views;
+  const views = curDisplayInfo?.views as IView[];
 
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
@@ -56,36 +50,7 @@ const Sidebar: React.FC = () => {
     dispatch(setLabels(newLabels));
   };
 
-  /* const handleViewChange = (x: string, which: 'add' | 'remove') => {
-    // if a filter is being added to the view, add a panel label for the variable
-    if (which === 'add') {
-      if (labels.indexOf(x) < 0) {
-        const newLabels = Object.assign([], labels);
-        newLabels.push(x);
-        dispatch(setLabels(newLabels));
-      }
-    }
-    dispatch(setFilterView({ name: x, which }));
-  };
-
-  const handleFilterChange = (x: Filter<FilterCat | FilterRange> | string) => {
-    if (typeof x === 'string' || x instanceof String) {
-      dispatch(setFilter(x as string));
-    } else {
-      const obj: { [key: string]: Filter<FilterCat | FilterRange> } = {};
-      obj[x.name] = { ...x } as Filter<FilterCat | FilterRange>;
-      dispatch(setFilter(obj));
-    }
-    dispatch(setLayout({ page: 1 }));
-  };
-
-  const handleFilterSortChange = (x: Filter<FilterCat>) => {
-    const obj: { [key: string]: Filter<FilterCat> } = {};
-    obj[x.name] = x;
-    dispatch(setFilter(obj));
-  }; */
-
-  const handleSortChange = (sortSpec: Sort[] | number) => {
+  const handleSortChange = (sortSpec: ISortState[] | number) => {
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ page: 1 }));
   };
@@ -100,7 +65,7 @@ const Sidebar: React.FC = () => {
   };
 
   const handleViewsChange = (value: string) => {
-    const hashItems = {} as HashItem;
+    const hashItems = {};
     value
       .replace('#', '')
       .split('&')
@@ -121,7 +86,7 @@ const Sidebar: React.FC = () => {
 
     // need to do page number separately because it is recomputed when nrow/ncol are changed
     if (hashItems.pg) {
-      dispatch(setLayout({ pageNum: parseInt(hashItems.pg, 10) }));
+      dispatch(setLayout({ page: parseInt(hashItems.pg, 10) }));
     }
 
     // labels
@@ -131,7 +96,7 @@ const Sidebar: React.FC = () => {
     }
 
     // sort
-    let viewsSort = [] as Sort[];
+    let viewsSort = [] as ISortState[];
     if (hashItems.sort) {
       viewsSort = hashItems.sort.split(',').map((d, i) => {
         const vals = d.split(';');
@@ -149,7 +114,7 @@ const Sidebar: React.FC = () => {
     if (hashItems.filter) {
       const fltrs = hashItems.filter.split(',');
       fltrs.forEach((flt) => {
-        const fltItems = {} as HashItem;
+        const fltItems = {};
         flt.split(';').forEach((d) => {
           const tuple = d.split(':');
           const [key, val] = tuple;
@@ -168,7 +133,7 @@ const Sidebar: React.FC = () => {
           const { levels } = metas[fltItems.var];
           const vals = [] as string[];
           const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
-          levels.forEach((d) => {
+          levels.forEach((d: string) => {
             if (d.match(rval) !== null) {
               vals.push(d);
             }
@@ -205,9 +170,8 @@ const Sidebar: React.FC = () => {
     activeHeight = n * 51 - 25;
   }
 
-  const sort2 = Object.assign([], sort) as Sort[];
-  const notUsed = Object.keys(cogDesc);
-  if (cogDesc) {
+  const notUsed = Object.keys(metaLabels);
+  if (metaLabels) {
     for (let i = 0; i < sort.length; i += 1) {
       const index = notUsed.indexOf(sort[i].name);
       if (index > -1) {
@@ -218,7 +182,8 @@ const Sidebar: React.FC = () => {
 
   const customStyles = {
     sidebarContainer: {
-      width: sidebarWidth * (1 + (active === SB_PANEL_FILTER && filterColSplit && filterColSplit.cutoff !== null ? 1 : 0)),
+      width:
+        sidebarWidth /*  * (1 + (active === SB_PANEL_FILTER && filterColSplit && filterColSplit.cutoff !== null ? 1 : 0)) */,
       height: contentHeight,
     },
   };
@@ -249,13 +214,9 @@ const Sidebar: React.FC = () => {
         <SidebarSort
           handleSortChange={handleSortChange}
           addSortLabel={addSortLabel}
-          sort={sort}
-          curDisplayInfo={curDisplayInfo}
-          cogDesc={cogDesc}
+          cogDesc={metaLabels}
           sidebarHeight={sidebarHeight}
           activeHeight={activeHeight}
-          sort2={sort2}
-          notUsed={notUsed}
         />
       )}
       {active === SB_PANEL_LABELS && displayLoaded && (

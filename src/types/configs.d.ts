@@ -205,23 +205,15 @@ interface ICurrencyMeta extends IMeta {
   code: CurrencyCode;
 }
 
-interface IStringMeta extends IMeta {}
-
 interface IFactorMeta extends IMeta {
   levels: string[];
 }
-
-interface IDateMeta extends IMeta {}
 
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 interface IDatetimeMeta extends IMeta {
   timezone: string;
 }
-
-interface IHrefMeta extends IMeta {}
-
-interface IGeoMeta extends IMeta {}
 
 interface IGraphMeta extends IMeta {
   idvarname: string;
@@ -261,8 +253,6 @@ interface ITextInput extends IInput {
   width: number;
   height: number;
 }
-
-interface INumberInput extends IInput {}
 
 /* ------------------------------------------------------ */
 /* states                                                 */

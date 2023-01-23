@@ -13,7 +13,7 @@ interface SidebarLabelsProps {
 }
 
 const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, labels, handleLabelChange }) => {
-  const labelObj = useMetaGroupsWithInputsSorted();
+  const labelObj = useMetaGroupsWithInputsSorted() as { [key: string]: string[] };
   const metasWithInputs = useDisplayMetasWithInputs();
   const height = ch - sidebarHeaderHeight;
   const labelDescriptionMap = new Map();

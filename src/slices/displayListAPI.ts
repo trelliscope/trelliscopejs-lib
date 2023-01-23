@@ -45,7 +45,7 @@ export const { useGetDisplayListQuery } = displayListAPI;
 export const useDisplayList = () => {
   const appId = useSelector(selectAppId);
   const basePath = useSelector(selectBasePath);
-  const dataType = useDataType();
+  const dataType = useDataType() as AppDataType;
   return useGetDisplayListQuery({ url: basePath, id: appId, dataType }, { skip: !dataType || !basePath });
 };
 

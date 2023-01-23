@@ -35,7 +35,7 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
 
     const maxValue = max(Array.from(groupedData), (d) => d[1]);
 
-    return { dist, domain: [0, maxValue] };
+    return { dist, domain: [0, maxValue] as [number, number] };
   }
 
   return {};

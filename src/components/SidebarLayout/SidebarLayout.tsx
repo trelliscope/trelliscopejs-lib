@@ -3,16 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { layoutSelector, selectedRelDispsSelector } from '../../selectors';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
-import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import { LayoutAction, setLayout } from '../../slices/layoutSlice';
+import { selectSelectedRelDisps, setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
+import { LayoutAction, setLayout, selectLayout } from '../../slices/layoutSlice';
 import styles from './SidebarLayout.module.scss';
 
 const SidebarLayout: React.FC = () => {
   const dispatch = useDispatch();
-  const layout = useSelector(layoutSelector);
-  const selectedRelDisps = useSelector(selectedRelDispsSelector);
+  const layout = useSelector(selectLayout);
+  const selectedRelDisps = useSelector(selectSelectedRelDisps);
   const hasRelDisps = selectedRelDisps.length > 0;
 
   const handleChange = (sidebarLayout: LayoutAction) => dispatch(setLayout(sidebarLayout));

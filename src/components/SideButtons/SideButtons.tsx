@@ -2,7 +2,9 @@ import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDispatch, useSelector } from 'react-redux';
 import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
-import { dialogOpenSelector, fullscreenSelector, curDisplayInfoSelector } from '../../selectors';
+import { fullscreenSelector } from '../../selectors';
+import { selectDialogOpen } from '../../slices/appSlice';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../../constants';
 import SideButton from '../SideButton';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
@@ -48,10 +50,10 @@ const SideButtons: React.FC = () => {
   const [headerHeight] = getCustomProperties(['--header-height']) as number[];
   const ch = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
-  const dialogOpen = useSelector(dialogOpenSelector);
+  const dialogOpen = useSelector(selectDialogOpen);
   const fullscreen = useSelector(fullscreenSelector);
-  const cdi = useSelector(curDisplayInfoSelector);
-  const hasViews = (cdi.info && cdi.info.views && cdi.info.views.length > 0) || false;
+  const cdi = useDisplayInfo();
+  const hasViews = (cdi.currentData && cdi.currentData.views && cdi.currentData.views.length > 0) || false;
 
   const inlineStyles = {
     sideButtonsContainer: {

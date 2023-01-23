@@ -17,10 +17,7 @@ export const DataContext = React.createContext<{
   data: Datum[];
   allData: Datum[];
   filteredData: Datum[];
-  groupBy(
-    field: string | symbol,
-    groupFunc?: (value: string | number) => NaturallyOrderedValue,
-  ): readonly Grouping<NaturallyOrderedValue, unknown>[];
+  groupBy: IDataClient['groupBy'];
 }>({ data: [], allData: [], filteredData: [], groupBy: () => [] });
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
@@ -42,7 +39,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   useEffect(() => {
     // Add filters
     client.clearFilters();
-    filters.forEach((filter: IFilterState) => {
+    filters.forEach((filter) => {
       if (filter.filtertype === 'category') {
         client.addFilter({
           field: filter.varname,

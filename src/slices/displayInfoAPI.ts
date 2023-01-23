@@ -12,7 +12,7 @@ const displayRequest = (url: string, displayName: string, dataType: string, call
   new Promise((resolve) => {
     const displayPath = snakeCase(displayName);
 
-    window[callback] = (data: IDisplay) => {
+    window[callback] = (data: object) => {
       resolve({ data });
     };
 
@@ -38,18 +38,24 @@ const JSONPBaseQuery =
     return displayRequest(url, displayName, dataType, displayInfoCallback) as Promise<{ data: IDisplay }>;
   };
 
-const JSONPRelatedQuery =
-  // (): BaseQueryFn<{ url: string; id: string; dataType: string; displayNames: string[] }, unknown, unknown> =>
-  async ({ url, id, dataType, displayNames }) => {
-    const relatedDisplayInfoCallback = `__loadDisplayInfo__${id}`;
+interface IGetRelatedDisplaysArgs {
+  url: string;
+  id: string;
+  dataType: string;
+  displayNames: string[];
+}
 
-    const displayNameRequests = displayNames.map(
-      (displayName) => displayRequest(url, displayName, dataType, relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
-    );
+const JSONPRelatedQuery = async ({ url, id, dataType, displayNames }: IGetRelatedDisplaysArgs) => {
+  const relatedDisplayInfoCallback = `__loadDisplayInfo__${id}`;
 
-    const results = await Promise.all(displayNameRequests);
-    return { data: results };
-  };
+  const displayNameRequests = displayNames.map(
+    (displayName) => displayRequest(url, displayName, dataType, relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
+  );
+
+  const results = await Promise.all(displayNameRequests);
+
+  return { data: results };
+};
 
 export const displayInfoAPI = createApi({
   reducerPath: 'displayInfo',
@@ -58,10 +64,7 @@ export const displayInfoAPI = createApi({
     getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string }>({
       query: ({ url, id, dataType, displayName }) => ({ url, id, dataType, displayName }),
     }),
-    getRelatedDisplays: builder.query<
-      IDisplay[],
-      { url: string; id: string; dataType: 'jsonp' | 'json'; displayNames: string[] }
-    >({
+    getRelatedDisplays: builder.query<{ data: IDisplay }[], IGetRelatedDisplaysArgs>({
       queryFn: JSONPRelatedQuery,
     }),
   }),
@@ -72,7 +75,7 @@ export const { useGetDisplayInfoQuery, useGetRelatedDisplaysQuery } = displayInf
 export const useDisplayInfo = () => {
   const appId = useSelector(selectAppId);
   const basePath = useSelector(selectBasePath);
-  const dataType = useDataType();
+  const dataType = useDataType() as AppDataType;
   const selectedDisplay = useSelectedDisplay();
   return useGetDisplayInfoQuery(
     { url: basePath, id: appId, dataType, displayName: selectedDisplay?.name || '' },
@@ -83,7 +86,7 @@ export const useDisplayInfo = () => {
 export const useRelatedDisplays = () => {
   const appId = useSelector(selectAppId);
   const basePath = useSelector(selectBasePath);
-  const dataType = useDataType();
+  const dataType = useDataType() as AppDataType;
   const relatedDisplayNames = useRelatedDisplayNames();
   return useGetRelatedDisplaysQuery(
     { url: basePath, id: appId, dataType, displayNames: relatedDisplayNames },
@@ -94,6 +97,17 @@ export const useRelatedDisplays = () => {
 export const useDisplayMetas = () => {
   const { data } = useDisplayInfo();
   return useMemo(() => data?.metas || [], [data]);
+};
+
+export const useDisplayMetasLabels = () => {
+  const { data } = useDisplayInfo();
+  return useMemo(() => {
+    const labels = {} as { [index: string]: string };
+    data?.metas.forEach((meta: IMeta) => {
+      labels[meta.varname] = meta.label;
+    });
+    return labels;
+  }, [data]);
 };
 
 export const useDisplayMetasWithInputs = () => {

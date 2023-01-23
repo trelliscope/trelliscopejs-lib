@@ -76,7 +76,7 @@ export const hashFromState = (state: RootState) => {
   // sidebar
   const { sidebar } = state;
   if (sidebar) {
-    hashURL.append('sidebar', SB_REV_LOOKUP[sidebar.active]);
+    hashURL.append('sidebar', SB_REV_LOOKUP[sidebar.active].toString());
   }
 
   // filterView

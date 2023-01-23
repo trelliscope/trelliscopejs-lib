@@ -38,7 +38,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
         <div className={styles.filterInputHeaderControls}>
           {meta?.type === META_TYPE_FACTOR && (
             <div className={styles.filterInputCount}>
-              {(filter as ICategoryFilterState)?.values.length || 0} of {(meta as IFactorMeta)?.levels?.length}
+              {filter?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
             </div>
           )}
           {filter && (

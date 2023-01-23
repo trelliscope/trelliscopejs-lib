@@ -7,7 +7,7 @@ import { displayInfoAPI, useDisplayMetas } from './displayInfoAPI';
 import { selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
-  state: ICategoryFilterState[] | INumberRangeFilterState[];
+  state: IFilterState[];
   view: FilterView;
 }
 
@@ -23,7 +23,7 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    addFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+    addFilter: (state, action: PayloadAction<IFilterState>) => {
       const { state: filterState } = state;
       const { varname } = action.payload;
       const idx = filterState.findIndex((f) => f.varname === varname);
@@ -56,10 +56,10 @@ export const filterSlice = createSlice({
       if (idx > -1) {
         const filter = filterState[idx] as ICategoryFilterState;
         const { values: filterValues } = filter;
-        if (filterValues.includes(value)) {
+        if (filterValues?.includes(value)) {
           filter.values = difference(filterValues, [value]);
         } else {
-          filter.values = [...filterValues, value];
+          filter.values = [...(filterValues as string[]), value];
         }
       }
     },
@@ -110,8 +110,8 @@ export const filterSlice = createSlice({
 
       const filterables = action.payload.metas.filter((m) => m.filterable).map((m) => m.varname);
       const active = state.state.map((f) => f.varname);
-      state.view.active = active;
-      state.view.inactive = difference(filterables, active);
+      state.view.active = active as string[];
+      state.view.inactive = difference(filterables, active) as string[];
 
       if (hashFilterView.length > 0) {
         state.view.active = hashFilterView;
@@ -128,7 +128,7 @@ export const { setFilterView, addFilter, updateFilterValues, updateFilter, remov
 export const selectFilterState = (state: RootState) => state.filter.state;
 
 export const selectFilterByVarname = (varname: string) => (state: RootState) =>
-  state.filter.state.find((f) => f.varname === varname);
+  (state.filter.state as ICategoryFilterState[]).find((f: ICategoryFilterState) => (f.varname as string) === varname);
 
 export const selectFilterView = (state: RootState) => state.filter.view;
 

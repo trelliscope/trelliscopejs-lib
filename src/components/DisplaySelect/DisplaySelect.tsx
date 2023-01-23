@@ -17,8 +17,8 @@ import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import type { LayoutAction } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
-import { fullscreenSelector, selectedDisplaySelector, dispSelectDialogSelector } from '../../selectors';
-import { setSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { fullscreenSelector, dispSelectDialogSelector } from '../../selectors';
+import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayList } from '../../slices/displayListAPI';
@@ -31,7 +31,7 @@ interface DisplaySelectProps {
 
 const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const dispatch = useDispatch();
-  const selectedDisplay = useSelector(selectedDisplaySelector);
+  const { name: selectedDisplay } = useSelectedDisplay();
   const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispSelectDialogSelector);
   const [btnScale, setBtnScale] = useState(1);

@@ -15,7 +15,7 @@ interface FilterCatProps {
 }
 
 const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
-  const { domain, dist } = useMetaInfo(meta.varname, meta.type);
+  const { domain = [0, 0], dist = {} } = useMetaInfo(meta.varname, meta.type);
   const { groupBy } = useContext(DataContext);
   const dispatch = useDispatch();
 
@@ -35,10 +35,10 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   };
 
   useEffect(() => {
-    if (filter?.values.length === 0) {
+    if (filter && filter.values.length === 0) {
       dispatch(removeFilter(filter.varname));
     }
-  }, [dispatch, filter?.values, filter?.varname]);
+  }, [dispatch, filter]);
 
   const handleRegex = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = event.target;
@@ -68,7 +68,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           data={groupBy(meta.varname)}
           allData={dist}
           domain={domain}
-          actives={filter?.values}
+          actives={filter?.values || []}
           count={meta.levels.length}
           width={220}
           height={75}
