@@ -8,7 +8,7 @@ interface PanelGraphicProps {
 
 const PanelGraphic: React.FC<PanelGraphicProps> = ({ src, alt }) => (
   <div className={styles.panelGraphic}>
-    <img src={src} alt={alt} />
+    <img src={`${process.env.PUBLIC_URL}${src}`} alt={alt} />
   </div>
 );
 

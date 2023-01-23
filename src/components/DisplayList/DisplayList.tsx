@@ -172,7 +172,7 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
                 }}
               >
                 <img
-                  src={`/${basePath}/${displayItems[i]?.thumbnailurl}`}
+                  src={`${process.env.PUBLIC_URL}/${basePath}/${displayItems[i]?.thumbnailurl}`}
                   alt={displayItems[i]?.name}
                   className={styles.displayListImg}
                   key={`img${i}`}
