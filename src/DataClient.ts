@@ -126,6 +126,10 @@ export default class DataClient implements IDataClient {
     return sortedData;
   }
 
+  // TODO: implement groupBy
+  /* groupBy() {
+  } */
+
   clearData() {
     this._data = [];
   }
