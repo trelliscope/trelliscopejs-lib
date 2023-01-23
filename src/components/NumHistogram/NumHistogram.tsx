@@ -67,6 +67,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         {data.map((d) => (
           <NumHistogramBar
             name={name}
+            key={`${name}-${d.key}-${d.value}`}
             width={xScale.bandwidth()}
             height={yScale(d.value)}
             x={xScale(d.key) + 1}
