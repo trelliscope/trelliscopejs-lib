@@ -44,7 +44,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter = undefined }) => {
           data={data}
           name={meta.varname}
           onBrush={handleOnBrush}
-          defaultBrushValues={[filter?.min, filter?.max]}
+          selection={[filter?.min || 0, filter?.max || 0]}
         />
       </div>
       <div className={styles.filterNumInput}>
