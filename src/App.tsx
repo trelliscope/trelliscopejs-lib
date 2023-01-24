@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDisplayList } from './actions';
 import { errorSelector } from './selectors';
-import { setErrorMessage } from './slices/appSlice';
 import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
 import FullscreenButton from './components/FullscreenButton';
 import ErrorSnack from './components/ErrorSnack';
-import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths } from './slices/appSlice';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 import CrossfilterClient from './CrossfilterClient';

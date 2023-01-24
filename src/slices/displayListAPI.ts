@@ -1,6 +1,5 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
-import { forEach } from 'lodash';
 import { useSelector } from 'react-redux';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
