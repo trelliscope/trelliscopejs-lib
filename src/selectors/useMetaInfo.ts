@@ -13,6 +13,9 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     const scale = scaleLinear().domain(xExtents).nice();
     const breaks = scale.ticks(10);
     const delta = breaks[1] - breaks[0];
+    // FIXME once the dataclient groupby is finished we can fix this.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore ts2554
     const data = groupBy(varname, (d: string | number) =>
       Number.isNaN(d) || d === undefined ? false : Math.floor((d as number) / delta) * delta,
     );

@@ -128,7 +128,7 @@ export const { setFilterView, addFilter, updateFilterValues, updateFilter, remov
 export const selectFilterState = (state: RootState) => state.filter.state;
 
 export const selectFilterByVarname = (varname: string) => (state: RootState) =>
-  (state.filter.state as ICategoryFilterState[]).find((f: ICategoryFilterState) => (f.varname as string) === varname);
+  (state.filter.state as IFilterState[]).find((f: IFilterState) => (f.varname as string) === varname);
 
 export const selectFilterView = (state: RootState) => state.filter.view;
 

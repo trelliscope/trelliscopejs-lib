@@ -111,6 +111,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
       );
     }
   }
+  // FIXME once the dataclient groupby is finished we can fix this.
+  // The issue is that in dataclient which we extend we return an empty array that results in a never[] return type
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore ts2304
 
   groupBy(field: string | symbol, groupFunc?: (d: string | number) => NaturallyOrderedValue) {
     if (this.dimensions.has(field)) {

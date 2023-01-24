@@ -1,3 +1,4 @@
+import type { ScaleBand } from 'd3-scale';
 import React from 'react';
 import styles from './NumHistogram.module.scss';
 
@@ -7,7 +8,7 @@ interface NumHistogramAxisProps {
   x: number;
   y: number;
   ticks: number[];
-  scale: (x: number) => number;
+  scale: ScaleBand<string>;
 }
 
 const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale }) => (
@@ -17,7 +18,7 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
       <line y1={4} y2={0} />
     </g>
     {ticks.map((d) => (
-      <g className={styles.axisTick} key={d} transform={`translate(${scale(d)}, 0)`}>
+      <g className={styles.axisTick} key={d} transform={`translate(${scale(d.toString()) || 0}, 0)`}>
         <line y1={4} y2={0} />
         <text y={height}>{d}</text>
       </g>
