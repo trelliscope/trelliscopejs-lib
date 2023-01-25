@@ -6,8 +6,8 @@ import { FILTER_TYPE_NUMBERRANGE } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { addFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
-
 import styles from './FilterNum.module.scss';
+import { format } from '../../../FormattedNumber/FormattedNumber';
 
 interface FilterNumProps {
   meta: INumberMeta;
@@ -114,7 +114,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.min ? filter?.min : ''}
+          value={filter?.min ? format(filter?.min) : ''}
           onChange={(e) => handleInput(e.target.value, 'min')}
           variant="standard"
         />
@@ -127,7 +127,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.max ? filter?.max : ''}
+          value={filter?.max ? format(filter?.max) : ''}
           onChange={(e) => handleInput(e.target.value, 'max')}
           variant="standard"
         />
