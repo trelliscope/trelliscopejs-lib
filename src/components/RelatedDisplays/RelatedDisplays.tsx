@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import type { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -11,23 +10,13 @@ import DialogActions from '@mui/material/DialogActions';
 // import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
-// import { Rnd } from 'react-rnd';
-// import type { Position } from 'react-rnd';
+import { faFolderPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import DisplayList from '../DisplayList';
-import { selectedRelDispsSelector } from '../../selectors/display';
-// import { contentHeightSelector, contentWidthSelector } from '../../selectors/ui';
-// import { relDispPositionsSelector } from '../../selectors';
-// import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
-// import type { RelDispPositionsState } from '../../slices/relDispPositionsSlice';
 import getCustomProperties from '../../getCustomProperties';
-import styles from './RelatedDisplays.module.scss';
 import { useDisplayList } from '../../slices/displayListAPI';
-
-// const previewHeight = 400;
-
-// const fixCSS = (value: string) => parseInt(value.replace('px', ''), 10);
+import { selectSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
+import styles from './RelatedDisplays.module.scss';
 
 interface RelatedDisplaysProps {
   setDialogOpen: (isOpen: boolean) => void;
@@ -40,11 +29,7 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen, relate
   const [activeStep, setActiveStep] = useState(0);
   const [headerHeight] = getCustomProperties(['--header-height']) as number[];
   const { data: displayList } = useDisplayList();
-  // const dispatch = useDispatch();
-  // const contentHeight = useSelector(contentHeightSelector);
-  // const contentWidth = useSelector(contentWidthSelector);
-  const selectedRelDisps = useSelector(selectedRelDispsSelector);
-  // const relDispPositions = useSelector(relDispPositionsSelector);
+  const selectedRelDisps = useSelector(selectSelectedRelDisps);
 
   const propStyles = {
     button: {
@@ -54,30 +39,6 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen, relate
     },
   };
   const active = Object.keys(relatedDisplayGroups).length > 0;
-  // const handleResize = (
-  //   pos: RelDispPositionsState,
-  //   x: number,
-  //   y: number,
-  //   width: number,
-  //   height: number,
-  //   prvwHeight: number,
-  // ) => {
-  //   const names = relDispPositions.map((d) => d.name);
-  //   const idx = names.indexOf(pos.name);
-  //   const newPos = { ...pos };
-  //   newPos.left = x / prvwHeight;
-  //   newPos.top = y / prvwHeight;
-
-  //   if (width) {
-  //     newPos.width = width / prvwHeight;
-  //   }
-  //   if (height) {
-  //     newPos.height = height / prvwHeight;
-  //   }
-  //   const newPositions = { ...relDispPositions };
-  //   newPositions[idx] = newPos;
-  //   dispatch(setRelDispPositions(newPositions));
-  // };
 
   const handleOpen = () => {
     setDialogOpen(true);
@@ -108,15 +69,6 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen, relate
     }
   }, [selectedRelDisps]);
 
-  // const parentBoundary = {
-  //   position: 'relative',
-  //   background: '#efefef',
-  //   width: previewHeight * (contentWidth / contentHeight),
-  //   height: previewHeight,
-  //   marginLeft: 'auto',
-  //   marginRight: 'auto',
-  // } as CSSProperties;
-
   const stepContent = [
     <DisplayList
       displayItems={displayList as IDisplayListItem[]}
@@ -124,34 +76,6 @@ const RelatedDisplays: React.FC<RelatedDisplaysProps> = ({ setDialogOpen, relate
       selectable
       excludedDisplays={[selectedDisplay?.name]}
     />,
-    // <div style={parentBoundary}>
-    //   {relDispPositions.map((d) => (
-    //     <Rnd
-    //       key={d.name}
-    //       className={styles.relatedDisplaysBoxStyle}
-    //       default={{
-    //         width: previewHeight * d.width,
-    //         height: previewHeight * d.height,
-    //         x: previewHeight * d.left,
-    //         y: previewHeight * d.top,
-    //       }}
-    //       bounds="parent"
-    //       lockAspectRatio
-    //       onDragStop={(e, a) => {
-    //         handleResize(d, a.x, a.y, previewHeight * d.width, previewHeight * d.height, previewHeight);
-    //       }}
-    //       onResizeStop={(e, direction, ref: HTMLElement, delta, position: Position) => {
-    //         handleResize(d, position.x, position.y, fixCSS(ref.style.width), fixCSS(ref.style.height), previewHeight);
-    //       }}
-    //     >
-    //       <div className={styles.relatedDisplaysTrHandle} />
-    //       <div className={styles.relatedDisplaysTlHandle} />
-    //       <div className={styles.relatedDisplaysBrHandle} />
-    //       <div className={styles.relatedDisplaysBlHandle} />
-    //       {d.name}
-    //     </Rnd>
-    //   ))}
-    // </div>,
   ];
 
   return (

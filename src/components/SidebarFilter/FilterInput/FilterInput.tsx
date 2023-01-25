@@ -10,7 +10,6 @@ import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 
 import styles from './FilterInput.module.scss';
-import useMetaInfo from '../../../selectors/useMetaInfo';
 
 interface FilterInputsProps {
   filterName: string;
@@ -21,7 +20,6 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const meta = useMetaByVarname(filterName);
   const filter = useSelector(selectFilterByVarname(filterName));
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
-  const metaInfo = useMetaInfo(filterName, meta?.type);
 
   const handleReset = () => {
     dispatch(removeFilter(filterName));
@@ -38,7 +36,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
         <div className={styles.filterInputHeaderControls}>
           {meta?.type === META_TYPE_FACTOR && (
             <div className={styles.filterInputCount}>
-              {(filter as ICategoryFilterState)?.values.length || 0} of {(meta as IFactorMeta)?.levels?.length}
+              {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
             </div>
           )}
           {filter && (

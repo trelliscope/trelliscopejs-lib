@@ -7,7 +7,7 @@ import { useMetaGroups } from '../../slices/displayInfoAPI';
 import styles from './SidebarSort.module.scss';
 
 interface SidebarSortProps {
-  handleSortChange: (sortSpec: Sort[] | number) => void;
+  handleSortChange: (sortSpec: ISortState[] | number) => void;
   addSortLabel: (name: string) => void;
   cogDesc: { [key: string]: string };
   sidebarHeight: number;
@@ -28,7 +28,7 @@ const SidebarSort: React.FC<SidebarSortProps> = ({
   const notUsed = Object.keys(metaGroups);
   if (cogDesc) {
     for (let i = 0; i < sort.length; i += 1) {
-      const index = notUsed.indexOf(sort[i].name);
+      const index = notUsed.indexOf(sort[i].varname);
       if (index > -1) {
         notUsed.splice(index, 1);
       }

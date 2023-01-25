@@ -52,7 +52,7 @@ export const configAPI = createApi({
   reducerPath: 'config',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getConfig: builder.query<Config, { config: string; id: string }>({
+    getConfig: builder.query<IConfig, { config: string; id: string }>({
       query: ({ config, id }) => ({ url: config, id }),
     }),
   }),

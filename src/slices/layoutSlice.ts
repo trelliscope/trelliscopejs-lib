@@ -12,7 +12,7 @@ const fallbackState: ILayoutState = {
   type: 'layout',
 };
 
-const initialState: ILayoutState = selectHashLayout();
+const initialState = selectHashLayout() as ILayoutState;
 
 export interface LayoutAction {
   nrow?: number;
@@ -57,7 +57,8 @@ export const layoutSlice = createSlice({
 export const { setLayout } = layoutSlice.actions;
 
 export const selectLayout = (state: RootState) => state.layout;
-export const selectNumPerPage = (state: RootState) => state.layout.nrow * state.layout.ncol;
+export const selectNumPerPage = (state: RootState) =>
+  state.layout.nrow && state.layout.ncol ? state?.layout.nrow * state.layout.ncol : 0;
 export const selectPage = (state: RootState) => state.layout.page;
 
 export default layoutSlice.reducer;

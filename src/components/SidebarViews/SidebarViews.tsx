@@ -1,3 +1,7 @@
+// ignore all ts errors in this file
+// FIXME remove this once refactor is done with new architecture
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -7,7 +11,7 @@ import styles from './SidebarViews.module.scss';
 interface SidebarViewsProps {
   handleViewsChange: (value: string) => void;
   height: number;
-  views: ViewItem[];
+  views: IView[];
 }
 
 const SidebarViews: React.FC<SidebarViewsProps> = ({ handleViewsChange, height, views }) => (

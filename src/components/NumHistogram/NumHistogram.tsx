@@ -31,7 +31,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   const delta = xDomain[1] - xDomain[0];
   const xExtents = [xDomain[0], xDomain[xDomain.length - 1] + delta];
   const xScale = scaleBand()
-    .domain(xDomain)
+    .domain(xDomain as Iterable<string>)
     .range([0, width - xPad])
     .paddingInner(0.05)
     .paddingOuter(0.05);
@@ -70,7 +70,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
             key={`${name}-${d.key}-${d.value}`}
             width={xScale.bandwidth()}
             height={yScale(d.value)}
-            x={xScale(d.key) + 1}
+            x={(xScale(d.key) || 0) + 1}
             y={height - yScale(d.value) - axisPad - 1}
             active={brushActive || selection[0] !== selection[1]}
           />
@@ -79,7 +79,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       <NumHistogramAxis
         width={width - xPad}
         height={axisPad}
-        x={xScale(xDomain[0])}
+        x={xScale(xDomain[0].toString()) || 0}
         y={height - axisPad}
         ticks={ticks}
         scale={xScale}

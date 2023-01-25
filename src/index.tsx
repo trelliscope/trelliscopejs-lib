@@ -18,15 +18,16 @@ import './assets/fonts/OpenSans/style.css';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
-import { currentCogDataSelector } from './selectors/cogData';
 import reducers from './reducers';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
+import CrossfilterClient from './CrossfilterClient';
+import type { IDataClient } from './DataClient';
 
 // import appData from './appData';
 
-const trelliscopeApp = async (
+const trelliscopeApp = (
   id: string,
   config: string,
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
@@ -34,8 +35,11 @@ const trelliscopeApp = async (
   // Sets up msw worker for mocking api calls
   /* if (process.env.NODE_ENV !== 'production' && options.mockData) {
     const worker = await import('./test/__mockData__/worker');
-    worker.default.start();
+    worker.default.start(import { IDataClient } from './DataClient';
+);
   } */
+
+  const crossFilterClient = new CrossfilterClient();
 
   const el = document.getElementById(id) as HTMLElement;
   const container = document.getElementById(id) as HTMLElement;
@@ -152,6 +156,7 @@ const trelliscopeApp = async (
     <ThemeProvider theme={themeV1}>
       <Provider store={store}>
         <App
+          client={crossFilterClient as unknown as IDataClient}
           config={config}
           id={id}
           singlePageApp={singlePageApp}
@@ -169,6 +174,7 @@ const trelliscopeApp = async (
         <ThemeProvider theme={themeV1}>
           <Provider store={store}>
             <App
+              client={crossFilterClient as unknown as IDataClient}
               config={config}
               id={id}
               singlePageApp={singlePageApp}
@@ -192,7 +198,7 @@ const trelliscopeApp = async (
     setLayout: (nrow: number, ncol: number) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
-    currentCogs: () => currentCogDataSelector(store.getState()),
+    currentCogs: () => crossFilterClient.getData(),
   };
 };
 
@@ -211,8 +217,8 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('960f51e6', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
-trelliscopeApp('44c922eb', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
+trelliscopeApp('960f51e6', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
+// trelliscopeApp('44c922eb', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('1060b383', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('0d3d4590', '_test/trelliscope-examples3/pokemon/config.jsonp', { logger: true });
 // trelliscopeApp('097af825', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });

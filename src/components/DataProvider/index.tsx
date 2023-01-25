@@ -1,26 +1,22 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import type { Grouping, NaturallyOrderedValue } from 'crossfilter2';
-import type { ICrossFilterClient } from '../../CrossfilterClient';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { selectNumPerPage, selectPage } from '../../slices/layoutSlice';
 import { selectFilterState } from '../../slices/filterSlice';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import { selectSort } from '../../slices/sortSlice';
+import type { IDataClient } from '../../DataClient';
 
 interface DataProviderProps {
   children: React.ReactNode;
-  client: ICrossFilterClient;
+  client: IDataClient;
 }
 
 export const DataContext = React.createContext<{
   data: Datum[];
   allData: Datum[];
   filteredData: Datum[];
-  groupBy(
-    field: string | symbol,
-    groupFunc?: (value: string | number) => NaturallyOrderedValue,
-  ): readonly Grouping<NaturallyOrderedValue, unknown>[];
+  groupBy: IDataClient['groupBy'];
 }>({ data: [], allData: [], filteredData: [], groupBy: () => [] });
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
@@ -42,7 +38,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   useEffect(() => {
     // Add filters
     client.clearFilters();
-    filters.forEach((filter: IFilterState) => {
+    filters.forEach((filter) => {
       if (filter.filtertype === 'category') {
         client.addFilter({
           field: filter.varname,

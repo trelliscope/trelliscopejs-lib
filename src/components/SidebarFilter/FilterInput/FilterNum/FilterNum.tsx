@@ -14,7 +14,7 @@ interface FilterNumProps {
   filter: INumberRangeFilterState;
 }
 
-const FilterNum: React.FC<FilterNumProps> = ({ meta, filter = undefined }) => {
+const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
   const dispatch = useDispatch();
 
@@ -63,7 +63,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter = undefined }) => {
 
   const handleInput = (val: string, which: string) => {
     let newState = {} as INumberRangeFilterState;
-    const newVal = val === '' ? undefined : parseFloat(val);
+    const newVal = val === '' ? null : parseFloat(val);
     const lower = which === 'min' ? newVal : filter?.min;
     const upper = which === 'max' ? newVal : filter?.max;
     if (lower === undefined && upper === undefined) {
@@ -71,6 +71,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter = undefined }) => {
         varname: filter.varname,
         filtertype: 'numberrange',
         type: filter.type,
+        min: null,
+        max: null,
       };
     } else {
       newState = {

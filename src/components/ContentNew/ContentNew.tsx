@@ -12,7 +12,7 @@ import Panel, { PanelGraphic } from '../Panel';
 import styles from './ContentNew.module.scss';
 
 const getPanelImageName = (keycols: string[], data: Datum) =>
-  `${snakeCase(data[keycols[0]])}_${snakeCase(data[keycols[1]])}`;
+  `${snakeCase(data[keycols[0]] as string)}_${snakeCase(data[keycols[1]] as string)}`;
 
 const panelSrcGetter =
   (panelformat: PanelFormat, keycols: string[], basePath: string) =>

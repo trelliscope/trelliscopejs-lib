@@ -39,7 +39,7 @@ export const selectSelectedDisplay = (state: RootState) => state.selectedDisplay
 export const useSelectedDisplay = () => {
   const { data: displayList } = useDisplayList();
   const selectedDisplay = useSelector(selectSelectedDisplay);
-  return displayList?.find((display) => display.name === selectedDisplay);
+  return displayList?.find((display) => display.name === selectedDisplay) || ({} as IDisplayListItem);
 };
 
 export const useRelatedDisplaysGroup = () => {

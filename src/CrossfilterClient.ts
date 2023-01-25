@@ -1,6 +1,8 @@
-import crossfilter, { Dimension, Crossfilter, NaturallyOrderedValue, Grouping } from 'crossfilter2';
+import crossfilter from 'crossfilter2';
+import type { Crossfilter, Dimension, Grouping, NaturallyOrderedValue } from 'crossfilter2';
 import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
+import type { IDataClient } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
 
 const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b: Datum) => {
@@ -20,7 +22,7 @@ interface SortParam {
   [key: string | symbol]: string | number;
 }
 
-export interface ICrossFilterClient extends DataClient {
+export interface ICrossFilterClient extends Omit<IDataClient, 'groupBy'> {
   crossfilter: Crossfilter<Datum>;
   dimensions: Map<string | symbol, D>;
   groupBy(
@@ -109,6 +111,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
       );
     }
   }
+  // FIXME once the dataclient groupby is finished we can fix this.
+  // The issue is that in dataclient which we extend we return an empty array that results in a never[] return type
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore ts2304
 
   groupBy(field: string | symbol, groupFunc?: (d: string | number) => NaturallyOrderedValue) {
     if (this.dimensions.has(field)) {

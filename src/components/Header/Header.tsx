@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
@@ -7,23 +7,24 @@ import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
-import { setDialogOpen } from '../../slices/appSlice';
+import { selectDialogOpen, setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
-import { displayGroupsSelector } from '../../selectors/display';
-import { dialogOpenSelector, pageNumSelector, nPerPageSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
-import { filterCardinalitySelector } from '../../selectors/cogData';
+import { pageNumSelector, nPerPageSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { setLayout } from '../../slices/layoutSlice';
 import getCustomProperties from '../../getCustomProperties';
 import { useRelatedDisplaysGroup, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import { useDisplayList } from '../../slices/displayListAPI';
+import { useDisplayGroups, useDisplayList } from '../../slices/displayListAPI';
+import { DataContext } from '../DataProvider';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const { data: displayList = [], isSuccess } = useDisplayList();
+  const displayGroups = useDisplayGroups();
+  const relatedDisplayGroups = useRelatedDisplaysGroup();
+  const { filteredData } = useContext(DataContext);
 
-  const dialogOpen = useSelector(dialogOpenSelector);
-  const displayGroups = useSelector(displayGroupsSelector);
+  const dialogOpen = useSelector(selectDialogOpen);
   const windowWidth = useSelector(windowWidthSelector);
   const dlLength = displayList?.length || 0;
   const selectedDisplay = useSelectedDisplay();
@@ -31,12 +32,11 @@ const Header: React.FC = () => {
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
   const n = useSelector(pageNumSelector);
-  const totPanels = useSelector(filterCardinalitySelector);
+  const totPanels = filteredData.length;
   const npp = useSelector(nPerPageSelector);
   const fullscreen = useSelector(fullscreenSelector);
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
-  const relatedDisplayGroups = useRelatedDisplaysGroup();
 
   const handleChange = (page: number) => {
     dispatch(
@@ -78,15 +78,11 @@ const Header: React.FC = () => {
     headerSubContainer: {
       left:
         headerHeight *
-        ((dlLength <= 1 ? 0 : 1) +
-          (selectedDisplay?.name === '' ? 0 : 1) +
-          (relatedDisplayGroups.length === 0 ? 0 : 1)),
+        ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1) + (relatedDisplayGroups.length === 0 ? 0 : 1)),
       width:
         windowWidth -
         (headerHeight *
-          ((dlLength <= 1 ? 0 : 1) +
-            (selectedDisplay?.name === '' ? 0 : 1) +
-            (relatedDisplayGroups.length === 0 ? 0 : 1)) +
+          ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1) + (relatedDisplayGroups.length === 0 ? 0 : 1)) +
           logoWidth +
           30),
     },
@@ -112,7 +108,7 @@ const Header: React.FC = () => {
         ${selectedDisplay?.name}`;
     } else {
       // Takes file name and replaces underscores with space to make title
-      displayName = selectedDisplay?.name.replace(/_/g, ' ');
+      displayName = (selectedDisplay?.name || '').replace(/_/g, ' ');
     }
     if (!singleDisplay) {
       iconStyle = { color: '#aaa', fontSize: 12 };
@@ -133,7 +129,11 @@ const Header: React.FC = () => {
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
       {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
       {relatedDisplayGroups && relatedDisplayGroups.length > 0 && (
-        <RelatedDisplays setDialogOpen={handleDialogOpen} relatedDisplayGroups={relatedDisplayGroups} selectedDisplay={selectedDisplay} />
+        <RelatedDisplays
+          setDialogOpen={handleDialogOpen}
+          relatedDisplayGroups={relatedDisplayGroups}
+          selectedDisplay={selectedDisplay as IDisplayListItem}
+        />
       )}
       {selectedDisplay?.name !== '' && (
         <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={totPanels} />

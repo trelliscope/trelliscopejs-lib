@@ -23,6 +23,7 @@ export interface IDataClient {
   removeSort(field: string): void;
   clearSorts(): void;
   clearFilters(): void;
+  groupBy: (field: string) => { key: string; value: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];
 }
@@ -126,9 +127,11 @@ export default class DataClient implements IDataClient {
     return sortedData;
   }
 
-  // TODO: implement groupBy
-  /* groupBy() {
-  } */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  groupBy(field: string | symbol) {
+    // TODO: implement groupBy
+    return [];
+  }
 
   clearData() {
     this._data = [];

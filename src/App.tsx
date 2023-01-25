@@ -9,12 +9,13 @@ import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
-import CrossfilterClient from './CrossfilterClient';
+import type { IDataClient } from './DataClient';
 
 import './assets/styles/main.css';
 import './assets/fonts/OpenSans/style.css';
 
 interface AppProps {
+  client: IDataClient;
   config: string;
   id: string;
   singlePageApp?: boolean;
@@ -23,9 +24,7 @@ interface AppProps {
   appDims: { width: number; height: number };
 }
 
-const crossFilterClient = new CrossfilterClient();
-
-const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscreen, appDims }) => {
+const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, fullscreen, appDims }) => {
   const dispatch = useDispatch();
   const errorMsg = useSelector(errorSelector);
   const handleClose = () => {
@@ -40,11 +39,10 @@ const App: React.FC<AppProps> = ({ config, id, singlePageApp, options, fullscree
     dispatch(setSinglePageApp(singlePageApp));
     dispatch(windowResize(appDims));
     dispatch(setAppDims(appDims));
-    // dispatch(fetchDisplayList(config, id, singlePageApp));
-  }, []);
+  }, [appDims, config, dispatch, fullscreen, id, options, singlePageApp]);
 
   return (
-    <DataProvider client={crossFilterClient}>
+    <DataProvider client={client}>
       <Header />
       <Body />
       <Footer />
