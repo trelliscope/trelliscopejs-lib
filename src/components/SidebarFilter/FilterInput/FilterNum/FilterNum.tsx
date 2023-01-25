@@ -6,8 +6,8 @@ import { FILTER_TYPE_NUMBERRANGE } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { addFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
-import styles from './FilterNum.module.scss';
 import { format } from '../../../FormattedNumber/FormattedNumber';
+import styles from './FilterNum.module.scss';
 
 interface FilterNumProps {
   meta: INumberMeta;
