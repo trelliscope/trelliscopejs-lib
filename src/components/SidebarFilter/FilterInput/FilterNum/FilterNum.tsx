@@ -37,8 +37,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
 
   const inputStyle = { textAlign: 'center', paddingBottom: 2 } as CSSProperties;
 
-  const { min, max } = filter;
-  if (max && min && max < min) {
+  if (filter?.max && filter?.min && filter?.max < filter?.min) {
     inputStyle.color = 'red';
   }
 
@@ -115,7 +114,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.min}
+          value={filter?.min ? filter?.min : ''}
           onChange={(e) => handleInput(e.target.value, 'min')}
           variant="standard"
         />
@@ -128,7 +127,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.max}
+          value={filter?.max ? filter?.max : ''}
           onChange={(e) => handleInput(e.target.value, 'max')}
           variant="standard"
         />
