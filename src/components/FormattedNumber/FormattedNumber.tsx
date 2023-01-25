@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 interface FormattedNumberProps {
   value: number;
@@ -6,14 +6,12 @@ interface FormattedNumberProps {
   maximumFractionDigits?: number;
 }
 
-const FormattedNumber: React.FC<FormattedNumberProps> = ({ value, language, maximumFractionDigits }) => {
-  const format = useMemo(
-    () => new Intl.NumberFormat(language, { maximumFractionDigits }).format,
-    [language, maximumFractionDigits],
-  );
+export const format = (value: number, language = 'en-US', maximumFractionDigits = 2) =>
+  new Intl.NumberFormat(language, { maximumFractionDigits }).format(value);
 
-  return <>{format(value)}</>;
-};
+const FormattedNumber: React.FC<FormattedNumberProps> = ({ value, language, maximumFractionDigits }) => (
+  <>{format(value, language, maximumFractionDigits)}</>
+);
 
 FormattedNumber.defaultProps = {
   language: 'en-US',

@@ -15,6 +15,7 @@ import { setLayout } from '../../slices/layoutSlice';
 import { removeFilter, setFilterView } from '../../slices/filterSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
+import { format } from '../FormattedNumber/FormattedNumber';
 import styles from './Footer.module.scss';
 
 const Footer: React.FC = () => {
@@ -73,11 +74,11 @@ const Footer: React.FC = () => {
       const { min, max } = curState as INumberRangeFilterState;
       if (min !== undefined) {
         if (min === undefined && max !== undefined) {
-          text = `< ${max}`;
+          text = `< ${format(max)}`;
         } else if (min !== undefined && max === undefined) {
-          text = `> ${min}`;
+          text = `> ${format(min)}`;
         } else if (min !== undefined && max !== undefined) {
-          text = `${min} -- ${max}`;
+          text = `${format(min)} -- ${format(max)}`;
         }
       }
     } else if (curState.filtertype === 'category') {
