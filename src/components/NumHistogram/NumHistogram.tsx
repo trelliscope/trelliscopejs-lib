@@ -12,7 +12,7 @@ interface NumHistogramProps {
   xDomain: number[];
   data: { key: string; value: number }[];
   name: string;
-  onBrush: ([number1, number2]: number[]) => void;
+  onBrush: ([number1, number2]: number[] | null[]) => void;
   selection: [number, number];
 }
 
@@ -55,9 +55,13 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   };
 
   const handleBrushEnd = ([x, dx]: number[]) => {
-    const x1 = invert(x);
-    const dx1 = invert(dx);
-    onBrush([Math.min(x1, dx1), Math.max(x1, dx1)]);
+    if (x === dx) {
+      onBrush([null, null]);
+    } else {
+      const x1 = invert(x);
+      const dx1 = invert(dx);
+      onBrush([Math.min(x1, dx1), Math.max(x1, dx1)]);
+    }
     setBrushActive(false);
   };
 
