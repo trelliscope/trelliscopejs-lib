@@ -13,31 +13,26 @@ import { contentHeightSelector, sidebarActiveSelector, sidebarHeightSelector } f
 import { labelsSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
-import { addFilter, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import styles from './Sidebar.module.scss';
-import { useDisplayInfo, useDisplayMetas, useDisplayMetasLabels } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetasLabels } from '../../slices/displayInfoAPI';
 import SidebarFilter from '../SidebarFilter';
 
 const Sidebar: React.FC = () => {
   const [sidebarHeaderHeight] = getCustomProperties(['--sidebar-header-height']) as number[];
   const [sidebarWidth] = getCustomProperties(['--sidebar-width']) as number[];
   const dispatch = useDispatch();
-  const { isSuccess: displayLoaded, data: curDisplayInfo } = useDisplayInfo();
+  const { isSuccess: displayLoaded } = useDisplayInfo();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
   // const filterColSplit = useSelector(filterColSplitSelector);
-  const metas = useDisplayMetas();
   const sidebarHeight = useSelector(sidebarHeightSelector);
   const labels = useSelector(labelsSelector);
   const sort = useSelector(selectSort);
   const metaLabels = useDisplayMetasLabels();
   const ch = useSelector(contentHeightSelector);
-
-  const height = contentHeight - sidebarHeaderHeight;
-  const views = curDisplayInfo?.views as IView[];
 
   const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
@@ -61,105 +56,6 @@ const Sidebar: React.FC = () => {
       const newLabels = Object.assign([], labels);
       newLabels.push(name);
       dispatch(setLabels(newLabels));
-    }
-  };
-
-  const handleViewsChange = (value: string) => {
-    const hashItems = {};
-    value
-      .replace('#', '')
-      .split('&')
-      .forEach((d) => {
-        const tuple = d.split('=');
-        const [key, val] = tuple;
-        hashItems[key] = val;
-      });
-
-    if (hashItems.nrow && hashItems.ncol && hashItems.arr) {
-      const layout = {
-        nrow: parseInt(hashItems.nrow, 10),
-        ncol: parseInt(hashItems.ncol, 10),
-        arrange: hashItems.arr,
-      };
-      dispatch(setLayout(layout));
-    }
-
-    // need to do page number separately because it is recomputed when nrow/ncol are changed
-    if (hashItems.pg) {
-      dispatch(setLayout({ page: parseInt(hashItems.pg, 10) }));
-    }
-
-    // labels
-    if (hashItems.labels) {
-      const viewsLabels = hashItems.labels.split(',');
-      dispatch(setLabels(viewsLabels));
-    }
-
-    // sort
-    let viewsSort = [] as ISortState[];
-    if (hashItems.sort) {
-      viewsSort = hashItems.sort.split(',').map((d, i) => {
-        const vals = d.split(';');
-        return {
-          order: i + 1,
-          name: vals[0],
-          dir: vals[1] as SortDir,
-        };
-      });
-    }
-    dispatch(setSort(viewsSort));
-
-    // filter
-    const viewsFilter = {} as { [key: string]: Filter<FilterCat | FilterRange> };
-    if (hashItems.filter) {
-      const fltrs = hashItems.filter.split(',');
-      fltrs.forEach((flt) => {
-        const fltItems = {};
-        flt.split(';').forEach((d) => {
-          const tuple = d.split(':');
-          const [key, val] = tuple;
-          fltItems[key] = val;
-        });
-        // fltItems.var
-        const fltState = {
-          name: fltItems.var,
-          type: fltItems.type,
-          varType: metas[fltItems.var].type,
-        } as Filter<FilterCat | FilterRange>;
-        if (fltItems.type === 'select') {
-          fltState.orderValue = 'ct,desc';
-          fltState.value = fltItems.val.split('#').map(decodeURIComponent);
-        } else if (fltItems.type === 'regex') {
-          const { levels } = metas[fltItems.var];
-          const vals = [] as string[];
-          const rval = new RegExp(decodeURIComponent(fltItems.val), 'i');
-          levels.forEach((d: string) => {
-            if (d.match(rval) !== null) {
-              vals.push(d);
-            }
-          });
-          fltState.regex = fltItems.val;
-          fltState.value = vals;
-          fltState.orderValue = 'ct,desc';
-        } else if (fltItems.type === 'range') {
-          const from = fltItems.from ? parseFloat(fltItems.from) : undefined;
-          const to = fltItems.to ? parseFloat(fltItems.to) : undefined;
-          fltState.value = { from, to };
-          fltState.valid = true;
-          if (from && to && from > to) {
-            fltState.valid = false;
-          }
-        }
-        viewsFilter[fltItems.var] = fltState;
-      });
-    }
-    // first need to reset them all
-    dispatch(clearFilters());
-    dispatch(addFilter(viewsFilter));
-
-    // filterView (just add - if something's already there we won't remove it)
-    if (hashItems.fv) {
-      hashItems.fv.split(',').map((el) => dispatch(setFilterView({ name: el, which: 'add' })));
     }
   };
 
@@ -227,9 +123,7 @@ const Sidebar: React.FC = () => {
           handleLabelChange={handleLabelChange}
         />
       )}
-      {active === SB_VIEWS && displayLoaded && (
-        <SidebarViews handleViewsChange={handleViewsChange} height={height} views={views} />
-      )}
+      {active === SB_VIEWS && displayLoaded && <SidebarViews />}
     </div>
   );
 };
