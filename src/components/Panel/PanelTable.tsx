@@ -1,8 +1,18 @@
 import React from 'react';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { META_TYPE_FACTOR, META_TYPE_HREF, META_TYPE_NUMBER, META_TYPE_STRING } from '../../constants';
+import {
+  INPUT_TYPE_RADIO,
+  INPUT_TYPE_TEXT,
+  META_TYPE_FACTOR,
+  META_TYPE_HREF,
+  META_TYPE_NUMBER,
+  META_TYPE_STRING,
+  PANEL_KEY,
+} from '../../constants';
 import FormattedNumber from '../FormattedNumber';
+import { PanelInputText, PanelInputRadios } from '../PanelInputs';
+import PanelTableLabelCell from './PanelTableLabelCell';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
@@ -16,13 +26,24 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => (
     <tbody>
       {inputs.map((input) => (
         <tr key={input.name} className={styles.panelLabel}>
-          <td className={styles.panelLabelCell}>{input.name}</td>
-          <td className={styles.panelLabelCell}>{input.type === META_TYPE_STRING}</td>
+          <PanelTableLabelCell value={input.name} label={input.label} />
+          <td className={styles.panelLabelCell}>
+            {input.type === INPUT_TYPE_TEXT && (
+              <PanelInputText name={input.name} rows={(input as ITextInput).height} panelKey={data[PANEL_KEY] as string} />
+            )}
+            {input.type === INPUT_TYPE_RADIO && (
+              <PanelInputRadios
+                name={input.name}
+                options={(input as IRadioInput).options}
+                panelKey={data[PANEL_KEY] as string}
+              />
+            )}
+          </td>
         </tr>
       ))}
       {labels.map((label) => (
         <tr key={label.varname} className={styles.panelLabel}>
-          <td className={styles.panelLabelCell}>{label.varname}</td>
+          <PanelTableLabelCell value={label.varname} label={label.label} />
           <td className={styles.panelLabelCell}>
             {label.type === META_TYPE_STRING || (label.type === META_TYPE_FACTOR && data[label.varname])}
             {label.type === META_TYPE_NUMBER && <FormattedNumber value={data[label.varname] as number} />}
