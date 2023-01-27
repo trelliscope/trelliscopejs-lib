@@ -79,7 +79,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       <NumHistogramAxis
         width={width - xPad}
         height={axisPad}
-        x={xScale(xDomain[0].toString()) || 0}
+        x={xScale(xDomain[0] as unknown as string) || 0}
         y={height - axisPad}
         ticks={ticks}
         scale={xScale}

@@ -18,7 +18,7 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
       <line y1={4} y2={0} />
     </g>
     {ticks.map((d) => (
-      <g className={styles.axisTick} key={d} transform={`translate(${scale(d.toString()) || 0}, 0)`}>
+      <g className={styles.axisTick} key={d} transform={`translate(${scale(d as unknown as string) || 0}, 0)`}>
         <line y1={4} y2={0} />
         <text y={height}>{d}</text>
       </g>
