@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { TextField } from '@mui/material';
 import { FILTER_TYPE_NUMBERRANGE } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
-import { addFilter, updateFilter } from '../../../../slices/filterSlice';
+import { addFilter, removeFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
 import { format } from '../../../FormattedNumber/FormattedNumber';
 import styles from './FilterNum.module.scss';
@@ -18,8 +18,10 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
   const dispatch = useDispatch();
 
-  const handleOnBrush = (values: number[]) => {
-    if (filter) {
+  const handleOnBrush = (values: number[] | null[]) => {
+    if (values[0] === null && values[1] === null) {
+      dispatch(removeFilter(filter.varname));
+    } else if (filter) {
       dispatch(updateFilter({ ...filter, min: values[0], max: values[1] }));
     } else {
       const newFilter = {
