@@ -18,17 +18,11 @@ const SidebarViews: React.FC = () => {
   const handleChange = (value: IDisplayState) => {
     const { filter: valueFilter, labels: valueLabels, layout: valueLayout, sort: valueSort } = value;
 
-    if (valueLayout) {
-      dispatch(setLayout(valueLayout as LayoutAction));
-    }
+    if (valueLayout) dispatch(setLayout(valueLayout as LayoutAction));
 
-    if (valueLabels) {
-      dispatch(setLabels(valueLabels.varnames));
-    }
+    if (valueLabels) dispatch(setLabels(valueLabels.varnames));
 
-    if (valueSort) {
-      dispatch(setSort(valueSort));
-    }
+    if (valueSort) dispatch(setSort(valueSort));
 
     if (valueFilter) {
       dispatch(clearFilters());
