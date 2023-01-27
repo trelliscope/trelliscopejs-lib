@@ -1,0 +1,31 @@
+.panelInputText {
+  display: flex;
+
+  &EditButton {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  &Popover {
+    padding: var(--padding-5);
+  }
+}
+
+.panelInputRadioGroup {
+  display: flex;
+  flex-direction: row-reverse !important;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  &Label {
+    font-size: var(--text-sm) !important;
+  }
+
+  &Radio {
+    padding: 0 var(--padding-5) !important;
+  }
+}
