@@ -11,16 +11,13 @@ import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import styles from './ContentNew.module.scss';
 
-const getPanelImageName = (keycols: string[], data: Datum) =>
-  `${snakeCase(data[keycols[0]] as string)}_${snakeCase(data[keycols[1]] as string)}`;
-
 const panelSrcGetter =
-  (panelformat: PanelFormat, keycols: string[], basePath: string) =>
+  (panelformat: PanelFormat, basePath: string) =>
   (data: Datum, name = '') => {
     if (panelformat) {
-      return `/${basePath}/displays/${snakeCase(name)}/panels/${getPanelImageName(keycols, data)}.${panelformat}`;
+      return `/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
     }
-    return getPanelImageName(keycols, data);
+    return data.__PANEL_KEY__;
   };
 
 const ContentNew: React.FC = () => {
@@ -44,7 +41,7 @@ const ContentNew: React.FC = () => {
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,
   };
 
-  const getPanelSrc = panelSrcGetter(displayInfo?.panelformat || 'png', displayInfo?.keycols, basePath);
+  const getPanelSrc = panelSrcGetter(displayInfo?.panelformat || 'png', basePath);
 
   const activeLabels = labels.map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label)) as IMeta[];
 
@@ -56,7 +53,7 @@ const ContentNew: React.FC = () => {
             {data.map((d) => (
               <Panel data={d} labels={activeLabels} inputs={displayInfo.inputs} key={d[metaIndex]}>
                 {names.map((name) => (
-                  <PanelGraphic src={getPanelSrc(d, name)} alt={name} key={`${d[metaIndex]}_${name}`} />
+                  <PanelGraphic src={getPanelSrc(d, name).toString()} alt={name} key={`${d[metaIndex]}_${name}`} />
                 ))}
               </Panel>
             ))}
