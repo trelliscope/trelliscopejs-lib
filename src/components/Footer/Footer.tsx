@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
     if (displayInfo && displayInfo.inputs) {
       setHasInputs(true);
     }
-    if (displayInfo?.inputs?.storageInterface.type === 'localStorage') {
+    if (displayInfo?.inputs?.storageInterface?.type === 'localStorage') {
       setHasLocalStorage(true);
     }
   }, [displayInfo]);
