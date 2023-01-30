@@ -31,11 +31,6 @@ const Footer: React.FC = () => {
   const { length: filteredDataLength } = filteredData;
 
   useEffect(() => {
-    displayInfo?.inputs.forEach((input) => {
-      if (input.type === 'localStorage') {
-        setHasLocalStorage(true);
-      }
-    });
     if (displayInfo && displayInfo.inputs) {
       setHasInputs(true);
     }
