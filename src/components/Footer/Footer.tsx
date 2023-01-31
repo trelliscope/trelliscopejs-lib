@@ -65,15 +65,9 @@ const Footer: React.FC = () => {
     let text = '';
     if (curState.filtertype === 'numberrange') {
       const { min, max } = curState as INumberRangeFilterState;
-      if (min !== undefined) {
-        if (min === undefined && max !== undefined) {
-          text = `< ${format(max)}`;
-        } else if (min !== undefined && max === undefined) {
-          text = `> ${format(min)}`;
-        } else if (min !== undefined && max !== undefined) {
-          text = `${format(min)} -- ${format(max)}`;
-        }
-      }
+      if (!min && max) text = `< ${format(max)}`;
+      if (min && !max) text = `> ${format(min)}`;
+      if (min && max) text = `${format(min)} -- ${format(max)}`;
     } else if (curState.filtertype === 'category') {
       const charLimit = 15;
       const { values } = curState as ICategoryFilterState;
