@@ -1,7 +1,3 @@
-// ignore all ts errors in this file
-// FIXME remove this once refactor is done with new architecture
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import React from 'react';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
@@ -18,10 +14,10 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, downloadCsv }) =
   <div>
     <DialogContentText id="alert-dialog-description">
       <span className={styles.downloadCsvDescription}>
-        {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.input_email}.`}
+        {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.emailAddress}.`}
       </span>
       <span>
-        {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.input_email}.`}
+        {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.inputs?.feedbackInterface.emailAddress}.`}
       </span>
     </DialogContentText>
     <div className={styles.downloadCsvWrapperCenter}>

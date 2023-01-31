@@ -112,7 +112,7 @@ export const useDisplayMetasLabels = () => {
 
 export const useDisplayMetasWithInputs = () => {
   const { data } = useDisplayInfo();
-  const inputInformation = data?.inputs.map((input: IInput) => ({
+  const inputInformation = data?.inputs?.inputs.map((input: IInput) => ({
     varname: input.name,
     label: input.label,
   })) as ILabelState[];
@@ -161,7 +161,7 @@ export const useMetaGroupsSorted = () => {
 export const useMetaGroupsWithInputsSorted = () => {
   const { data } = useDisplayInfo();
   const metaGroups = useMetaGroupsSorted();
-  const inputInformation = data?.inputs.map((input) => ({
+  const inputInformation = data?.inputs?.inputs.map((input) => ({
     varname: input.name,
     label: input.label,
   }));

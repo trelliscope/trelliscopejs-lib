@@ -1,7 +1,3 @@
-// ignore all ts errors in this file
-// FIXME remove this once refactor is done with new architecture
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import React from 'react';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
@@ -19,7 +15,7 @@ const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, sendMail }) =>
     <DialogContentText id="alert-dialog-description">
       <span className={styles.composeEmailDescription}>
         By clicking the &quote;Compose Email&aquote; button below, an email will be drafted and opened in your email client
-        to relay this csv file back to us, at {displayInfo.input_email}.
+        to relay this csv file back to us, at {displayInfo.inputs?.feedbackInterface.emailAddress}.
       </span>
       <span className={styles.composeEmailDescription}>
         <strong>

@@ -1,7 +1,3 @@
-// ignore all ts errors in this file
-// FIXME remove this once refactor is done with new architecture
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
@@ -35,13 +31,11 @@ const Footer: React.FC = () => {
   const { length: filteredDataLength } = filteredData;
 
   useEffect(() => {
-    displayInfo?.inputs.forEach((input) => {
-      if (input.type === 'localStorage') {
-        setHasLocalStorage(true);
-      }
-    });
     if (displayInfo && displayInfo.inputs) {
       setHasInputs(true);
+    }
+    if (displayInfo?.inputs?.storageInterface?.type === 'localStorage') {
+      setHasLocalStorage(true);
     }
   }, [displayInfo]);
 

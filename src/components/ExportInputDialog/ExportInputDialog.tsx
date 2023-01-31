@@ -1,7 +1,3 @@
-// ignore all ts errors in this file
-// FIXME remove this once refactor is done with new architecture
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import React, { useContext, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -68,7 +64,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
     Display: ${displayInfo.tags} -> ${displayInfo.name}%0D%0A%0D%0A\
     (attach downloaded csv file here before sending)`;
     const mail = document.createElement('a');
-    mail.href = `mailto:${displayInfo.input_email}?subject=${subject}&body=${body}`;
+    mail.href = `mailto:${displayInfo.inputs?.feedbackInterface.emailAddress}?subject=${subject}&body=${body}`;
     mail.click();
   };
 
@@ -111,9 +107,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const ccols = displayInfo?.input_csv_vars || [];
+  const ccols = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
   const data = {} as Data;
   const cols = [] as string[];
+  // TODO currently this doesnt work since data is never set to anything.
+  // We should also look at using lodash getOR to safely get values from nested objects
   Object.keys(localStorage).forEach((key) => {
     if (storageItems.includes(key)) {
       const parts = key.split('_:_');
@@ -131,13 +129,17 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
   const header = ['panelKey'];
   // array of panel keys so we can search to get columns we need if ccols defined
   const cd = allData;
-  const pk = cd.map((dd) => dd.panelKey);
+  const pk = cd.map((dd) => dd.__PANEL_KEY__);
   header.push(...['fullname', 'email', 'jobtitle', 'otherinfo', 'timestamp']);
   const rows = Object.keys(data).map((kk, ii) => {
     const rcdat = [];
     if (ccols.length > 0) {
       const idx = pk.indexOf(kk);
-      rcdat.push(ccols.map((cc: string | number) => cd[idx][cc]));
+      // TODO if we use lodash getor, we could simplify this to not have an if statement checking if idx is > -1
+      // The problem is if the we pull an undefined value from cd, it will throw an error
+      if (idx > -1) {
+        rcdat.push(ccols.map((cc: string | number) => cd[idx][cc]));
+      }
     }
     const extra = [];
     if (ii === 0) {
@@ -218,7 +220,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
         </DialogContent>
         <div className={styles.exportInputDialogControlsContainer}>
           <Button onClick={clearInputs}>Clear inputs</Button>
-          <div>
+          <div className={styles.exportInputDialogControlsContainerStepper}>
             <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
               Back
             </Button>

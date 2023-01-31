@@ -51,7 +51,12 @@ const ContentNew: React.FC = () => {
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((d) => (
-              <Panel data={d} labels={activeLabels} inputs={displayInfo.inputs} key={d[metaIndex]}>
+              <Panel
+                data={d}
+                labels={activeLabels}
+                inputs={(displayInfo.inputs?.inputs as IInput[]) || []}
+                key={d[metaIndex]}
+              >
                 {names.map((name) => (
                   <PanelGraphic src={getPanelSrc(d, name).toString()} alt={name} key={`${d[metaIndex]}_${name}`} />
                 ))}
