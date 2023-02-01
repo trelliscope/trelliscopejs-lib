@@ -1,6 +1,6 @@
 export interface DataClientFilter {
   field: string;
-  value: string | number | string[] | [number, number];
+  value: string | number | string[] | [number, number] | [null, null];
   operation: 'eq' | 'neq' | 'range' | 'regex';
 }
 
