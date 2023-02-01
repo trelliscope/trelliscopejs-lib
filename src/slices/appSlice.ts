@@ -58,7 +58,7 @@ export const appSlice = createSlice({
     },
     setPaths: (state, action: PayloadAction<string>) => {
       state.configPath = action.payload;
-      state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/'));
+      state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
   },
 });

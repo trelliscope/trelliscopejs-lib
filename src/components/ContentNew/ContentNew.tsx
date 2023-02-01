@@ -15,7 +15,7 @@ const panelSrcGetter =
   (basePath: string, panelformat?: PanelFormat) =>
   (data: Datum, name = '') => {
     if (panelformat) {
-      return `/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
+      return `${process.env.PUBLIC_URL}/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
     }
     return data.__PANEL_KEY__;
   };
