@@ -113,7 +113,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   return (
     <g className={styles.brush} pointerEvents={state.isDragging ? 'none' : 'all'}>
       <clipPath id={`clip-${name}`}>
-        <rect width={brushWidth} height={height} x={brushX} y={y} />
+        <rect width={brushWidth > 0 ? brushWidth : 0} height={height} x={brushX} y={y} />
       </clipPath>
       <rect
         className={styles.brushOverlay}
@@ -128,14 +128,14 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
       />
       <rect
         className={styles.brushSelection}
-        width={brushWidth}
+        width={brushWidth > 0 ? brushWidth : 0}
         height={height}
         x={brushX}
         y={y}
         pointerEvents={!state.isDragging ? 'all' : 'none'}
         onMouseDown={handleMoveMouseDown}
       />
-      {activeX > -1 && activeDx > -1 && (
+      {activeX > -1 && activeDx > -1 && brushWidth > 0 && (
         <g className={styles.brushHandles}>
           <rect
             className={styles.brushHandle}
