@@ -12,7 +12,7 @@ import Panel, { PanelGraphic } from '../Panel';
 import styles from './ContentNew.module.scss';
 
 const panelSrcGetter =
-  (panelformat: PanelFormat, basePath: string) =>
+  (basePath: string, panelformat?: PanelFormat) =>
   (data: Datum, name = '') => {
     if (panelformat) {
       return `/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
@@ -41,7 +41,7 @@ const ContentNew: React.FC = () => {
     gridTemplateRows: `repeat(${layout?.nrow}, 1fr)`,
   };
 
-  const getPanelSrc = panelSrcGetter(displayInfo?.panelformat || 'png', basePath);
+  const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
 
   const activeLabels = labels.map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label)) as IMeta[];
 
