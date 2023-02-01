@@ -67,25 +67,25 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
     const newVal = val === '' ? null : parseFloat(val);
     const lower = which === 'min' ? newVal : filter?.min;
     const upper = which === 'max' ? newVal : filter?.max;
-    if (lower === undefined && upper === undefined) {
+    if (filter) {
       newState = {
         varname: filter.varname,
         filtertype: 'numberrange',
         type: filter.type,
-        min: null,
-        max: null,
+        min: lower === undefined && upper === undefined ? null : lower,
+        max: lower === undefined && upper === undefined ? null : upper,
       };
+      dispatch(updateFilter(newState));
     } else {
       newState = {
-        varname: filter.varname,
+        varname: meta.varname,
         filtertype: 'numberrange',
-        type: filter.type,
+        type: 'filter',
         min: lower,
         max: upper,
       };
+      dispatch(addFilter(newState));
     }
-
-    dispatch(updateFilter(newState));
   };
 
   // calculate step value for numeric input
