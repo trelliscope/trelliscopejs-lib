@@ -28,7 +28,7 @@ const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, 
           <List className={styles.sidebarLabelsList}>
             {Object.keys(labelObj).map((grp) => {
               const curItems = labelObj[grp];
-              if (curItems.length === 0) {
+              if (curItems?.length === 0 || !curItems) {
                 return null;
               }
               return (
