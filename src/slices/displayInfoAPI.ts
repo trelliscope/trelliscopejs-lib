@@ -116,7 +116,7 @@ export const useDisplayMetasWithInputs = () => {
     varname: input.name,
     label: input.label,
   })) as ILabelState[];
-  return useMemo(() => [...(data?.metas as IMeta[]), ...inputInformation] || [], [data, inputInformation]);
+  return useMemo(() => [...(data?.metas as IMeta[]), ...(inputInformation || [])] || [], [data, inputInformation]);
 };
 
 export const useMetaByVarname = (varname: string) => {
