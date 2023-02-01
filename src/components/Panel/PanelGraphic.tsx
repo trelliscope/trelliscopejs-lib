@@ -7,15 +7,11 @@ interface PanelGraphicProps {
   alt: string;
 }
 
-const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt }) => {
-  console.log(type, src, alt);
-
-  return (
-    <div className={styles.panelGraphic}>
-      {type === 'iframe' && <iframe width="100%" height="100%" scrolling="no" src={src} title={alt} />}
-      {type === 'img' && <img src={src} alt={alt} />}
-    </div>
-  );
-};
+const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt }) => (
+  <div className={styles.panelGraphic}>
+    {type === 'iframe' && <iframe width="100%" height="100%" scrolling="no" src={src} title={alt} />}
+    {type === 'img' && <img src={src} alt={alt} />}
+  </div>
+);
 
 export default PanelGraphic;
