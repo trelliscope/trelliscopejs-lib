@@ -24,7 +24,7 @@ interface PanelTableProps {
 const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => (
   <table className={styles.panelLabels} width="100%">
     <tbody>
-      {inputs.map((input) => (
+      {inputs?.map((input) => (
         <tr key={input.name} className={styles.panelLabel}>
           <PanelTableLabelCell value={input.name} label={input.label} />
           <td className={styles.panelLabelCell}>
