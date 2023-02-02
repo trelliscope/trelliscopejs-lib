@@ -46,7 +46,6 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     if (value) {
       const regexp = new RegExp(value, 'i');
       const filteredValues = meta.levels.filter((level) => level.match(regexp));
-
       const newFilter = {
         type: 'filter',
         varname: meta.varname,
@@ -55,7 +54,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
         values: filteredValues,
       } as ICategoryFilterState;
 
-      dispatch(updateFilter(newFilter));
+      dispatch(filter ? updateFilter(newFilter) : addFilter(newFilter));
     } else if (filter) {
       dispatch(removeFilter(filter.varname));
     }
