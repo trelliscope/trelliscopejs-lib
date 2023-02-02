@@ -90,7 +90,10 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       />
       <NumHistogramBrush
         name={name}
-        selection={[selection[0] === 0 ? 0 : valueScale(selection[0]), selection[1] === 0 ? 0 : valueScale(selection[1])]}
+        selection={[
+          selection[0] === 0 ? 0 : valueScale(selection[0]),
+          selection[1] === 0 ? (selection[0] === 0 ? 0 : width - xPad) : valueScale(selection[1]),
+        ]}
         width={width - xPad}
         height={height - axisPad}
         x={0.5}
