@@ -43,7 +43,11 @@ const ContentNew: React.FC = () => {
 
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
 
-  const activeLabels = labels.map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label)) as IMeta[];
+  const activeLabels = labels
+    .map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label))
+    .filter(Boolean) as IMeta[];
+
+  const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
   return (
     <div className={styles.contentWrapper}>
@@ -51,12 +55,7 @@ const ContentNew: React.FC = () => {
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((d) => (
-              <Panel
-                data={d}
-                labels={activeLabels}
-                inputs={(displayInfo.inputs?.inputs as IInput[]) || []}
-                key={d[metaIndex]}
-              >
+              <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
                 {names.map((name) => (
                   <PanelGraphic src={getPanelSrc(d, name).toString()} alt={name} key={`${d[metaIndex]}_${name}`} />
                 ))}
