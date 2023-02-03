@@ -45,7 +45,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => (
         <tr key={label.varname} className={styles.panelLabel}>
           <PanelTableLabelCell value={label.varname} label={label.label} />
           <td className={styles.panelLabelCell}>
-            {label.type === META_TYPE_STRING || (label.type === META_TYPE_FACTOR && data[label.varname])}
+            {(label.type === META_TYPE_STRING || label.type === META_TYPE_FACTOR) && data[label.varname]}
             {label.type === META_TYPE_NUMBER && <FormattedNumber value={data[label.varname] as number} />}
             {label.type === META_TYPE_HREF && (
               <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
