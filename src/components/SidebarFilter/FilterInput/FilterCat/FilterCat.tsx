@@ -45,7 +45,12 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
 
     if (value) {
       const regexp = new RegExp(value, 'i');
-      const filteredValues = meta.levels.filter((level) => level.match(regexp));
+      const filteredValues = meta.levels
+        ? meta.levels.filter((level) => level.match(regexp))
+        : groupBy(meta.varname)
+            .filter((level) => level.key.match(regexp))
+            .map((level) => level.key);
+
       const newFilter = {
         type: 'filter',
         varname: meta.varname,
@@ -68,7 +73,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
-          count={meta.levels.length}
+          count={meta.levels?.length || groupBy(meta.varname).length}
           width={220}
           height={75}
           barHeight={15}
