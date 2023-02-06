@@ -35,7 +35,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   };
 
   useEffect(() => {
-    if (filter && filter.values.length === 0) {
+    if (filter && filter.values.length === 0 && filter.regexp === null) {
       dispatch(removeFilter(filter.varname));
     }
   }, [dispatch, filter]);
