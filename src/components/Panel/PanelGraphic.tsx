@@ -2,13 +2,15 @@ import React from 'react';
 import styles from './Panel.module.scss';
 
 interface PanelGraphicProps {
+  type: PanelType;
   src: string;
   alt: string;
 }
 
-const PanelGraphic: React.FC<PanelGraphicProps> = ({ src, alt }) => (
+const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt }) => (
   <div className={styles.panelGraphic}>
-    <img src={src} alt={alt} />
+    {type === 'iframe' && <iframe width="100%" height="100%" scrolling="no" src={src} title={alt} />}
+    {type === 'img' && <img src={src} alt={alt} />}
   </div>
 );
 
