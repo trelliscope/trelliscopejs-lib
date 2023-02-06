@@ -29,8 +29,6 @@ const ContentNew: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const relatedDisplayNames = useRelatedDisplayNames();
 
-  console.log(displayInfo);
-
   if (!metaDataSuccess || !displayInfoSuccess) return null;
 
   let names = [displayInfo?.name];
