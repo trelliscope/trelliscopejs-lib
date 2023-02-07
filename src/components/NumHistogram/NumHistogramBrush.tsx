@@ -125,6 +125,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
         onMouseDown={handleMouseDown}
         onMouseMove={state.isDragging ? handleMouseMove : undefined}
         onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       />
       <rect
         className={styles.brushSelection}
