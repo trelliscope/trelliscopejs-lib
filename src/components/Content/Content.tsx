@@ -9,7 +9,7 @@ import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
-import styles from './ContentNew.module.scss';
+import styles from './Content.module.scss';
 
 const panelSrcGetter =
   (basePath: string, panelformat?: PanelFormat) =>
