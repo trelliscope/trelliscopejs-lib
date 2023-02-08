@@ -9,10 +9,10 @@ interface SidebarSortPanelProps {
   sort: ISortState[];
   sort2: ISortState[];
   activeHeight: number;
-  cogDesc: { [key: string]: string };
+  metaLabels: { [key: string]: string };
 }
 
-const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, sort, sort2, activeHeight, cogDesc }) => {
+const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, sort, sort2, activeHeight, metaLabels }) => {
   const customStyles = {
     tableWrap: {
       maxHeight: activeHeight,
@@ -43,7 +43,7 @@ const SidebarSortPanel: React.FC<SidebarSortPanelProps> = ({ handleSortChange, s
                 <td className={styles.sidebarSortPanelLabels}>
                   {d.varname}
                   <br />
-                  <span style={{ color: '#888', fontStyle: 'italic' }}>{cogDesc[d.varname]}</span>
+                  <span style={{ color: '#888', fontStyle: 'italic' }}>{metaLabels[d.varname]}</span>
                 </td>
                 <td className={styles.sidebarSortPanelButtonClose}>
                   <IconButton onClick={() => handleSortChange(i)}>

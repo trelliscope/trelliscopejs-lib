@@ -9,13 +9,12 @@ import SidebarLabels from '../SidebarLabels';
 import SidebarLayout from '../SidebarLayout';
 import SidebarSort from '../SidebarSort';
 import SidebarViews from '../SidebarViews';
-import { contentHeightSelector, sidebarActiveSelector, sidebarHeightSelector } from '../../selectors/ui';
+import { contentHeightSelector, sidebarActiveSelector } from '../../selectors/ui';
 import { labelsSelector } from '../../selectors';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
 import getCustomProperties from '../../getCustomProperties';
 import { setLabels } from '../../slices/labelsSlice';
-import { setLayout } from '../../slices/layoutSlice';
-import { selectSort, setSort } from '../../slices/sortSlice';
+import { selectSort } from '../../slices/sortSlice';
 import styles from './Sidebar.module.scss';
 import { useDisplayInfo, useDisplayMetasLabels } from '../../slices/displayInfoAPI';
 import SidebarFilter from '../SidebarFilter';
@@ -27,8 +26,6 @@ const Sidebar: React.FC = () => {
   const { isSuccess: displayLoaded } = useDisplayInfo();
   const contentHeight = useSelector(contentHeightSelector);
   const active = useSelector(sidebarActiveSelector);
-  // const filterColSplit = useSelector(filterColSplitSelector);
-  const sidebarHeight = useSelector(sidebarHeightSelector);
   const labels = useSelector(labelsSelector);
   const sort = useSelector(selectSort);
   const metaLabels = useDisplayMetasLabels();
@@ -45,27 +42,6 @@ const Sidebar: React.FC = () => {
     dispatch(setLabels(newLabels));
   };
 
-  const handleSortChange = (sortSpec: ISortState[] | number) => {
-    dispatch(setSort(sortSpec));
-    dispatch(setLayout({ page: 1 }));
-  };
-
-  const addSortLabel = (name: string) => {
-    // if a sort variable is being added, add a panel label for the variable
-    if (labels.indexOf(name) < 0) {
-      const newLabels = Object.assign([], labels);
-      newLabels.push(name);
-      dispatch(setLabels(newLabels));
-    }
-  };
-
-  const activeIsTaller = sort.length * 51 > sidebarHeight - 2 * 51;
-  let activeHeight = 51 * sort.length;
-  if (activeIsTaller) {
-    const n = Math.ceil((sidebarHeight * 0.6) / 51);
-    activeHeight = n * 51 - 25;
-  }
-
   const notUsed = Object.keys(metaLabels);
   if (metaLabels) {
     for (let i = 0; i < sort.length; i += 1) {
@@ -78,8 +54,7 @@ const Sidebar: React.FC = () => {
 
   const customStyles = {
     sidebarContainer: {
-      width:
-        sidebarWidth /*  * (1 + (active === SB_PANEL_FILTER && filterColSplit && filterColSplit.cutoff !== null ? 1 : 0)) */,
+      width: sidebarWidth,
       height: contentHeight,
     },
   };
@@ -94,27 +69,7 @@ const Sidebar: React.FC = () => {
       {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
       {active === SB_PANEL_LAYOUT && displayLoaded && <SidebarLayout />}
       {active === SB_PANEL_FILTER && displayLoaded && <SidebarFilter />}
-      {/* <SidebarFilter
-          filter={filter}
-          filterView={filterView}
-          metas={metas as IMeta[]}
-          sidebarHeight={sidebarHeight}
-          curDisplayInfo={curDisplayInfo}
-          filtDist={filtDist}
-          colSplit={colSplit}
-          handleViewChange={handleViewChange}
-          handleFilterChange={handleFilterChange}
-          handleFilterSortChange={handleFilterSortChange}
-        /> */}
-      {active === SB_PANEL_SORT && displayLoaded && (
-        <SidebarSort
-          handleSortChange={handleSortChange}
-          addSortLabel={addSortLabel}
-          cogDesc={metaLabels}
-          sidebarHeight={sidebarHeight}
-          activeHeight={activeHeight}
-        />
-      )}
+      {active === SB_PANEL_SORT && displayLoaded && <SidebarSort />}
       {active === SB_PANEL_LABELS && displayLoaded && (
         <SidebarLabels
           sidebarHeaderHeight={sidebarHeaderHeight}
