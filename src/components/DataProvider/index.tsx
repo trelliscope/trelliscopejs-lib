@@ -44,6 +44,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
           field: filter.varname,
           value: (filter as ICategoryFilterState).values,
           operation: 'eq',
+          dataType: 'string',
         });
       } else if (filter.filtertype === 'numberrange') {
         const { min, max } = filter as INumberRangeFilterState;
@@ -51,6 +52,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
           field: filter.varname,
           value: max && min && max < min ? [null, null] : [min || 0, max || Infinity],
           operation: 'range',
+          dataType: 'number',
         });
       }
     });
