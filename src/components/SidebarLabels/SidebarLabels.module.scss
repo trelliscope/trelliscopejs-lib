@@ -1,4 +1,5 @@
 .sidebarLabels {
+  height: calc(100vh - (var(--header-height) * 1px) - (var(--header-height) * 1px) - 7px);
   overflow-y: auto;
   overflow-x: hidden;
 

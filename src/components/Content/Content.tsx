@@ -20,7 +20,7 @@ const panelSrcGetter =
     return data.__PANEL_KEY__;
   };
 
-const ContentNew: React.FC = () => {
+const Content: React.FC = () => {
   const { data } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
@@ -73,4 +73,4 @@ const ContentNew: React.FC = () => {
   );
 };
 
-export default ContentNew;
+export default Content;

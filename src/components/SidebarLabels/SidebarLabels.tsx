@@ -1,30 +1,38 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
+import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabelPill from '../SidebarLabelPill';
-import styles from './SidebarLabels.module.scss';
 import { useDisplayMetasWithInputs, useMetaGroupsWithInputsSorted } from '../../slices/displayInfoAPI';
+import { labelsSelector } from '../../selectors';
+import styles from './SidebarLabels.module.scss';
+import { setLabels } from '../../slices/labelsSlice';
 
-interface SidebarLabelsProps {
-  sidebarHeaderHeight: number;
-  ch: number;
-  labels: string[];
-  handleLabelChange: (value: string) => void;
-}
-
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({ sidebarHeaderHeight, ch, labels, handleLabelChange }) => {
+const SidebarLabels: React.FC = () => {
+  const dispatch = useDispatch();
+  const labels = useSelector(labelsSelector);
   const labelObj = useMetaGroupsWithInputsSorted() as { [key: string]: string[] };
   const metasWithInputs = useDisplayMetasWithInputs();
-  const height = ch - sidebarHeaderHeight;
   const labelDescriptionMap = new Map();
   metasWithInputs.forEach((meta) => {
     labelDescriptionMap.set(meta.varname, meta.label);
   });
 
+  const handleLabelChange = (value: string) => {
+    const idx = labels.indexOf(value);
+    let newLabels = labels;
+    if (idx === -1) {
+      newLabels = [...labels, value];
+    } else {
+      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
+    }
+    dispatch(setLabels(newLabels));
+  };
+
   return (
     <>
       {labelDescriptionMap.size > 0 && (
-        <div className={styles.sidebarLabels} style={{ height }}>
+        <div className={styles.sidebarLabels}>
           <List className={styles.sidebarLabelsList}>
             {Object.keys(labelObj).map((grp) => {
               const curItems = labelObj[grp];
