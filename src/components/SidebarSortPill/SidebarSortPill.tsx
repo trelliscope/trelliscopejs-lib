@@ -3,7 +3,6 @@ import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarSortPill.module.scss';
 
 interface SidebarSortPillProps {
-  notUsed: string[];
   metaGroups: { [key: string | symbol]: string[] };
   sidebarHeight: number;
   activeHeight: number;
@@ -11,11 +10,10 @@ interface SidebarSortPillProps {
   handleSortChange: (sortSpec: ISortState[] | number) => void;
   sort: ISortState[];
   sort2: ISortState[];
-  cogDesc: { [key: string]: string };
+  metaLabels: { [key: string]: string };
 }
 
 const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
-  notUsed,
   metaGroups,
   sidebarHeight,
   activeHeight,
@@ -23,7 +21,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
   handleSortChange,
   sort,
   sort2,
-  cogDesc,
+  metaLabels,
 }) => {
   const customStyles = {
     notUsed: {
@@ -50,7 +48,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
               )}
               {curItems.sort().map((d: string) => (
                 <Tooltip
-                  title={cogDesc[d]}
+                  title={metaLabels[d]}
                   placement="right"
                   id={`tooltip_${d}`}
                   key={`tooltip_${d}`}
