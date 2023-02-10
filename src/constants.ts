@@ -42,3 +42,6 @@ export const META_FILTER_TYPE_MAP = {
 };
 
 export const PANEL_KEY = '__PANEL_KEY__' as string;
+
+// Symbol to use as a key for common tags to avoid collisions with user-defined tags
+export const COMMON_TAGS_KEY = Symbol('__common__') as symbol;

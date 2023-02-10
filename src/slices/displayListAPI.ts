@@ -1,6 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
+import { COMMON_TAGS_KEY } from '../constants';
 import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { selectSelectedRelDisps } from './selectedRelDispsSlice';
@@ -59,27 +60,23 @@ export const useRelatedDisplayNames = () => {
   return relDispNames;
 };
 
-export const commonTagsKey = '__common__';
 export const useDisplayGroups = (excluded: string[] = []) => {
   const { data: displays = [] } = useDisplayList();
 
-  return displays.reduce<{ [index: string | symbol]: number[] }>(
-    (acc, display, index) => {
-      const tags = display.tags || [];
-      if (tags.length === 0 && !excluded.includes(display.name)) {
-        acc[commonTagsKey].push(index);
-        return acc;
-      }
-      tags.forEach((tag) => {
-        if (!excluded.includes(display.name)) {
-          if (!acc[tag]) {
-            acc[tag] = [];
-          }
-          acc[tag].push(index);
-        }
-      });
+  return displays.reduce((acc, display, index) => {
+    const tags = display.tags || [];
+    if (tags.length === 0 && !excluded.includes(display.name)) {
+      acc.get(COMMON_TAGS_KEY)?.push(index);
       return acc;
-    },
-    { [commonTagsKey]: [] },
-  );
+    }
+    tags.forEach((tag) => {
+      if (!excluded.includes(display.name)) {
+        if (!acc.has(tag)) {
+          acc.set(tag, []);
+        }
+        acc.get(tag)?.push(index);
+      }
+    });
+    return acc;
+  }, new Map<string | symbol, number[]>([[COMMON_TAGS_KEY, []]]));
 };

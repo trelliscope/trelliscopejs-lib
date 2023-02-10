@@ -1,12 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { commonTagsKey, setFilterView, useInactiveFilterGroups } from '../../../slices/filterSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { COMMON_TAGS_KEY } from '../../../constants';
+import { useMetaGroups } from '../../../slices/displayInfoAPI';
+import { selectInactiveFilterView, setFilterView } from '../../../slices/filterSlice';
 import Pill from '../../Pill';
 
 import styles from './FilterList.module.scss';
 
 const FilterList: React.FC = () => {
-  const inactiveFilterGroups = useInactiveFilterGroups();
+  const inactiveFilters = useSelector(selectInactiveFilterView);
+  const inactiveFilterGroups = useMetaGroups(inactiveFilters);
+
   const dispatch = useDispatch();
 
   const handleClick = (filter: string) => {
@@ -16,15 +20,17 @@ const FilterList: React.FC = () => {
   return (
     <div className={styles.filterList}>
       <div className={styles.filterListHeading}>Select a variable to filter on:</div>
-      {Object.keys(inactiveFilterGroups).map((key) => (
-        <div className={styles.filterListGroup} key={key}>
-          {key !== commonTagsKey && (
+      {Array.from(inactiveFilterGroups.keys()).map((key) => (
+        <div className={styles.filterListGroup} key={key.toString()}>
+          {key !== COMMON_TAGS_KEY && (
             <div className={styles.filterListGroupHeader}>
-              {key} ({inactiveFilterGroups[key].length})
+              <>
+                {key} ({inactiveFilterGroups?.get(key)?.length})
+              </>
             </div>
           )}
           <ul className={styles.filterListItems}>
-            {inactiveFilterGroups[key].map((filter) => (
+            {inactiveFilterGroups?.get(key)?.map((filter) => (
               <Pill key={filter} onClick={() => handleClick(filter)}>
                 {filter}
               </Pill>

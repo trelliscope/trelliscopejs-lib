@@ -5,7 +5,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Checkbox from '@mui/material/Checkbox';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSelectedRelDisps, setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import { useDisplayGroups, commonTagsKey } from '../../slices/displayListAPI';
+import { useDisplayGroups } from '../../slices/displayListAPI';
 import { selectBasePath } from '../../slices/appSlice';
 import styles from './DisplayList.module.scss';
 
@@ -21,7 +21,8 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
   const selectedRelDisps = useSelector(selectSelectedRelDisps);
   const basePath = useSelector(selectBasePath);
   const displayGroups = useDisplayGroups(excludedDisplays);
-  const groupKeys = Object.keys(displayGroups);
+
+  const groupKeys = Array.from(displayGroups.keys());
 
   const handleCheckbox = (i: number) => {
     const checked = selectedRelDisps.indexOf(i) > -1;
@@ -50,16 +51,16 @@ const DisplayList: React.FC<DisplayListProps> = ({ selectable, displayItems, han
   return (
     <div className={styles.displayListContainer}>
       {groupKeys.map((groupName) => (
-        <div className={styles.displayListGroupContainer} key={groupName}>
+        <div className={styles.displayListGroupContainer} key={groupName.toString()}>
           <ImageList rowHeight={180} cols={3} className={styles.displayListGridList}>
             {groupKeys.length > 1 ? (
               <ImageListItem key="Subheader" cols={3} style={{ height: 'auto' }}>
                 <ListSubheader style={{ fontSize: 20, color: 'black' }} component="div">
-                  {groupName === commonTagsKey ? '' : groupName}
+                  {typeof groupName === 'symbol' ? '' : groupName}
                 </ListSubheader>
               </ImageListItem>
             ) : null}
-            {displayGroups[groupName].map((i: number) => (
+            {displayGroups.get(groupName)?.map((i: number) => (
               <ImageListItem
                 key={i}
                 className={styles.displayListGridTile}

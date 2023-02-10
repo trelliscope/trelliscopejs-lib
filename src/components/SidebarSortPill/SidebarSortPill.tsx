@@ -1,9 +1,10 @@
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarSortPill.module.scss';
+import { COMMON_TAGS_KEY } from '../../constants';
 
 interface SidebarSortPillProps {
-  metaGroups: { [key: string | symbol]: string[] };
+  metaGroups: Map<string | symbol, string[]>;
   sidebarHeight: number;
   activeHeight: number;
   addSortLabel: (name: string) => void;
@@ -34,19 +35,20 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
   return (
     <div className={styles.sidebarSortPill}>
       <div className={styles.sidebarSortPillNotUsed} style={customStyles.notUsed}>
-        {Object.keys(metaGroups).map((grp) => {
-          const curItems = metaGroups[grp].filter((d) => !activeSorts.includes(d));
-          if (curItems.length === 0) {
+        {Array.from(metaGroups.keys()).map((grp) => {
+          const groupString = grp.toString();
+          const curItems = metaGroups?.get(grp)?.filter((d) => !activeSorts.includes(d));
+          if (curItems?.length === 0) {
             return null;
           }
           return (
-            <React.Fragment key={grp}>
-              {!['condVar', '__common__', 'panelKey'].includes(grp) && (
+            <React.Fragment key={groupString}>
+              {grp !== COMMON_TAGS_KEY && (
                 <div className={styles.sidebarSortPillCogGroupHeader}>
-                  <span className={styles.sidebarSortPillCogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  <span className={styles.sidebarSortPillCogGroupText}>{`${groupString} (${curItems?.length})`}</span>
                 </div>
               )}
-              {curItems.sort().map((d: string) => (
+              {curItems?.sort().map((d: string) => (
                 <Tooltip
                   title={metaLabels[d]}
                   placement="right"
