@@ -41,13 +41,6 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
 
-  // // put the display name in storageItems so we can check later if we are only grabbing items from local storage for this display
-  // useEffect(() => {
-  //   if (displayInfo?.name && !storageItems.includes(displayInfo?.name)) {
-  //     storageItems.push(displayInfo?.name);
-  //   }
-  // }, [displayInfo?.name]);
-
   if (!(hasInputs && hasLocalStorage)) {
     return null;
   }
