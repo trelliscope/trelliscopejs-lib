@@ -23,7 +23,7 @@ interface Data {
 const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle }) => {
   const { allData } = useContext(DataContext);
   const includedMetaVars = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
-  const data = {} as Data;
+  const data: Data = {};
   const cols: string[] = [];
 
   // This loop basically goes over the local storage keys and checks if they are from the current display
