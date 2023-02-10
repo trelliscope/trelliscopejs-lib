@@ -16,6 +16,16 @@ const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b:
   return 0;
 };
 
+const getStringVal = (d: Datum, key: string) => (d[key] ? d[key] : 'NA');
+
+const getNumberVal = (d: Datum, key: string) => (Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key]);
+
+const valueGetter = {
+  string: getStringVal,
+  number: getNumberVal,
+  date: getStringVal,
+};
+
 type D = Dimension<Datum, string | number>;
 
 interface SortParam {
@@ -56,11 +66,12 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
   addFilter(filter: DataClientFilter) {
     super.addFilter(filter);
+
     // check if dimension exists and create if not
     if (!this.dimensions.has(filter.field)) {
       this.dimensions.set(
         filter.field,
-        this.crossfilter.dimension((d) => d[filter.field]),
+        this.crossfilter.dimension((d) => valueGetter[filter.dataType](d, filter.field as string)),
       );
     }
 
@@ -116,7 +127,11 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore ts2304
 
-  groupBy(field: string | symbol, groupFunc?: (d: string | number) => NaturallyOrderedValue) {
+  groupBy(
+    field: string | symbol,
+    dataType: 'string' | 'number' | 'date' = 'string',
+    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+  ) {
     if (this.dimensions.has(field)) {
       if (groupFunc) {
         return this.dimensions.get(field)?.group(groupFunc).all() || [];
@@ -126,7 +141,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
     this.dimensions.set(
       field,
-      this.crossfilter.dimension((d) => d[field]),
+      this.crossfilter.dimension((d) => valueGetter[dataType](d, field as string)),
     );
 
     if (groupFunc) {

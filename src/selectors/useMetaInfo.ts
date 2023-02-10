@@ -16,9 +16,10 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     // FIXME once the dataclient groupby is finished we can fix this.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore ts2554
-    const data = groupBy(varname, (d: string | number) =>
-      Number.isNaN(d) || d === undefined ? false : Math.floor((d as number) / delta) * delta,
+    const data = groupBy(varname, 'number', (d: string | number) =>
+      Number.isNaN(Number(d)) || d === undefined ? null : Math.floor((d as number) / delta) * delta,
     );
+
     const yDomain = extent(data, (d) => d.value as number) as [number, number];
 
     return { yDomain, xDomain: breaks, data };

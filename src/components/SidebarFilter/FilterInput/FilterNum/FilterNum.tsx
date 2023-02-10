@@ -20,7 +20,9 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
 
   const handleOnBrush = (values: number[] | null[]) => {
     if (values[0] === null && values[1] === null) {
-      dispatch(removeFilter(filter.varname));
+      if (filter) {
+        dispatch(removeFilter(filter.varname));
+      }
     } else if (filter) {
       dispatch(updateFilter({ ...filter, min: values[0], max: values[1] }));
     } else {
