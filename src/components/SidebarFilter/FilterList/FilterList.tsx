@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../../../constants';
 import { useMetaGroups } from '../../../slices/displayInfoAPI';
@@ -21,22 +21,26 @@ const FilterList: React.FC = () => {
     <div className={styles.filterList}>
       <div className={styles.filterListHeading}>Select a variable to filter on:</div>
       {Array.from(inactiveFilterGroups.keys()).map((key) => (
-        <div className={styles.filterListGroup} key={key.toString()}>
-          {key !== COMMON_TAGS_KEY && (
-            <div className={styles.filterListGroupHeader}>
-              <>
-                {key} ({inactiveFilterGroups?.get(key)?.length})
-              </>
+        <Fragment key={key.toString()}>
+          {(inactiveFilterGroups?.get(key)?.length || 0) > 0 && (
+            <div className={styles.filterListGroup} key={key.toString()}>
+              {key !== COMMON_TAGS_KEY && (
+                <div className={styles.filterListGroupHeader}>
+                  <>
+                    {key} ({inactiveFilterGroups?.get(key)?.length})
+                  </>
+                </div>
+              )}
+              <ul className={styles.filterListItems}>
+                {inactiveFilterGroups?.get(key)?.map((filter) => (
+                  <Pill key={filter} onClick={() => handleClick(filter)}>
+                    {filter}
+                  </Pill>
+                ))}
+              </ul>
             </div>
           )}
-          <ul className={styles.filterListItems}>
-            {inactiveFilterGroups?.get(key)?.map((filter) => (
-              <Pill key={filter} onClick={() => handleClick(filter)}>
-                {filter}
-              </Pill>
-            ))}
-          </ul>
-        </div>
+        </Fragment>
       ))}
     </div>
   );
