@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import snakeCase from 'lodash.snakecase';
+import classNames from 'classnames';
 import { labelsSelector } from '../../selectors';
 import { selectBasePath } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -51,7 +52,10 @@ const Content: React.FC = () => {
 
   return (
     <div className={styles.contentWrapper}>
-      <div className={styles.content} style={contentStyle}>
+      <div
+        className={classNames(styles.content, { [styles.content__columns]: layout.arrange === 'cols' })}
+        style={contentStyle}
+      >
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((d) => (
