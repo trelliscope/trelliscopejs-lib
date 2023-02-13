@@ -7,6 +7,7 @@ import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 import { useRelatedDisplayNames } from './displayListAPI';
+import { COMMON_TAGS_KEY } from '../constants';
 
 const displayRequest = (url: string, displayName: string, dataType: string, callback: string) =>
   new Promise((resolve) => {
@@ -125,46 +126,36 @@ export const useMetaByVarname = (varname: string) => {
 };
 
 // Return metas grouped by tags
-export const commonTagsKey = '__common__';
-export const useMetaGroups = () => {
-  const metas = useDisplayMetas() || [];
+// Must use a Map to preserve order because symbols always come last: https://dev.to/frehner/the-order-of-js-object-keys-458d
+export const useMetaGroups = (omitMetas: string[] = []) => {
+  const metas = useDisplayMetas();
 
-  return metas.reduce<{ [index: string | symbol]: string[] }>(
-    (acc, meta) => {
-      const tags = meta.tags || [];
-      if (tags.length === 0) {
-        acc[commonTagsKey].push(meta.varname);
-        return acc;
-      }
-      tags.forEach((tag) => {
-        if (!acc[tag]) {
-          acc[tag] = [];
-        }
-        acc[tag].push(meta.varname);
-      });
+  return metas.reduce((acc, meta) => {
+    const omit = omitMetas.length > 0 && !omitMetas.includes(meta.varname);
+    const tags = meta.tags || [];
+    if (tags.length === 0 && !omit && meta.filterable) {
+      acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
       return acc;
-    },
-    { [commonTagsKey]: [] },
-  );
+    }
+    tags.forEach((tag) => {
+      if (!acc.has(tag)) {
+        acc.set(tag, []);
+      }
+      if (!omit && meta.filterable) {
+        acc?.get(tag)?.push(meta.varname);
+      }
+    });
+    return acc;
+  }, new Map<string | symbol, string[]>([[COMMON_TAGS_KEY, []]]));
 };
 
-export const useMetaGroupsSorted = () => {
-  const metaGroups = useMetaGroups();
-  return Object.keys(metaGroups)
-    .sort()
-    .reduce((obj, key) => {
-      obj[key] = metaGroups[key];
-      return obj;
-    }, {} as { [key: string]: string[] });
-};
-
-export const useMetaGroupsWithInputsSorted = () => {
+export const useMetaGroupsWithInputs = () => {
   const { data } = useDisplayInfo();
-  const metaGroups = useMetaGroupsSorted();
+  const metaGroups = useMetaGroups();
   const inputInformation = data?.inputs?.inputs.map((input) => ({
     varname: input.name,
     label: input.label,
   }));
 
-  return { ...metaGroups, input: inputInformation?.map((input) => input.varname) };
+  return metaGroups.set('input', inputInformation?.map((input) => input.varname) || []);
 };

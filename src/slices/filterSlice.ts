@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import difference from 'lodash.difference';
-import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
-import { displayInfoAPI, useDisplayMetas } from './displayInfoAPI';
+import { displayInfoAPI } from './displayInfoAPI';
 import { selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
@@ -133,32 +132,5 @@ export const selectFilterByVarname = (varname: string) => (state: RootState) =>
 export const selectFilterView = (state: RootState) => state.filter.view;
 
 export const selectInactiveFilterView = (state: RootState) => state.filter.view.inactive;
-
-// TODO: see if we can share code with the other one
-export const commonTagsKey = '__common__';
-export const useInactiveFilterGroups = () => {
-  const metas = useDisplayMetas();
-  const inactiveFilters = useSelector(selectInactiveFilterView);
-
-  return metas.reduce<{ [index: string | symbol]: string[] }>(
-    (acc, meta) => {
-      const tags = meta.tags || [];
-      if (tags.length === 0 && inactiveFilters.includes(meta.varname) && meta.filterable) {
-        acc[commonTagsKey].push(meta.varname);
-        return acc;
-      }
-      tags.forEach((tag) => {
-        if (!acc[tag]) {
-          acc[tag] = [];
-        }
-        if (inactiveFilters.includes(meta.varname) && meta.filterable) {
-          acc[tag].push(meta.varname);
-        }
-      });
-      return acc;
-    },
-    { [commonTagsKey]: [] },
-  );
-};
 
 export default filterSlice.reducer;

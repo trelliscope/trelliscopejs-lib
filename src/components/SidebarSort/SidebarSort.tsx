@@ -13,7 +13,7 @@ import styles from './SidebarSort.module.scss';
 const SidebarSort: React.FC = () => {
   const sort = useSelector(selectSort);
   const sort2 = Object.assign([], sort) as ISortState[];
-  const metaGroups = useMetaGroups() || {};
+  const metaGroups = useMetaGroups();
   const labels = useSelector(labelsSelector);
   const metaLabels = useDisplayMetasLabels();
   const sidebarHeight = useSelector(sidebarHeightSelector);

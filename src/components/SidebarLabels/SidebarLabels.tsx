@@ -3,15 +3,17 @@ import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabelPill from '../SidebarLabelPill';
-import { useDisplayMetasWithInputs, useMetaGroupsWithInputsSorted } from '../../slices/displayInfoAPI';
+import { useDisplayMetasWithInputs, useMetaGroupsWithInputs } from '../../slices/displayInfoAPI';
 import { labelsSelector } from '../../selectors';
 import styles from './SidebarLabels.module.scss';
 import { setLabels } from '../../slices/labelsSlice';
+import { COMMON_TAGS_KEY } from '../../constants';
 
 const SidebarLabels: React.FC = () => {
   const dispatch = useDispatch();
   const labels = useSelector(labelsSelector);
-  const labelObj = useMetaGroupsWithInputsSorted() as { [key: string]: string[] };
+  const labelObj = useMetaGroupsWithInputs();
+
   const metasWithInputs = useDisplayMetasWithInputs();
   const labelDescriptionMap = new Map();
   metasWithInputs.forEach((meta) => {
@@ -34,27 +36,32 @@ const SidebarLabels: React.FC = () => {
       {labelDescriptionMap.size > 0 && (
         <div className={styles.sidebarLabels}>
           <List className={styles.sidebarLabelsList}>
-            {Object.keys(labelObj).map((grp) => {
-              const curItems = labelObj[grp];
+            {Array.from(labelObj.keys()).map((grp) => {
+              const groupString = grp.toString();
+              const curItems = labelObj.get(grp);
               if (curItems?.length === 0 || !curItems) {
                 return null;
               }
               return (
-                <React.Fragment key={grp}>
-                  {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                <React.Fragment key={groupString}>
+                  {/* Don't include header for non-tagged group */}
+                  {grp !== COMMON_TAGS_KEY && (
                     <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
-                      <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
+                      <span className={styles.sidebarLabelsCogGroupText}>{`${groupString} (${curItems.length})`}</span>
                     </ListSubheader>
                   )}
-                  {[...labelObj[grp]].sort().map((label: string) => (
-                    <SidebarLabelPill
-                      labels={labels}
-                      labelDescriptionMap={labelDescriptionMap}
-                      label={label}
-                      handleLabelChange={handleLabelChange}
-                      key={`${label}_${grp}`}
-                    />
-                  ))}
+                  {labelObj
+                    ?.get(grp)
+                    ?.sort()
+                    .map((label: string) => (
+                      <SidebarLabelPill
+                        labels={labels}
+                        labelDescriptionMap={labelDescriptionMap}
+                        label={label}
+                        handleLabelChange={handleLabelChange}
+                        key={`${label}_${groupString}`}
+                      />
+                    ))}
                 </React.Fragment>
               );
             })}
