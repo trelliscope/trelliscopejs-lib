@@ -19,7 +19,8 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
 
   return (
     <div className={styles.panelInputText} ref={anchorRef}>
-      <div className={styles.panelInputTextButton}>
+      <div className={styles.panelInputTextButtonContainer}>
+        <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
         <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
           <FontAwesomeIcon icon={faPencil} />
         </button>
