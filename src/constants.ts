@@ -41,6 +41,9 @@ export const META_FILTER_TYPE_MAP = {
   [META_TYPE_DATETIME]: FILTER_TYPE_DATETIMERANGE,
 };
 
+export const GRID_ARRANGEMENT_ROWS = 'rows' as string;
+export const GRID_ARRANGEMENT_COLS = 'cols' as string;
+
 export const PANEL_KEY = '__PANEL_KEY__' as string;
 
 // Symbol to use as a key for common tags to avoid collisions with user-defined tags

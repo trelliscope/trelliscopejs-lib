@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import snakeCase from 'lodash.snakecase';
+import classNames from 'classnames';
 import { labelsSelector } from '../../selectors';
 import { selectBasePath } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -9,6 +10,7 @@ import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
+import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import styles from './Content.module.scss';
 
 const panelSrcGetter =
@@ -51,7 +53,10 @@ const Content: React.FC = () => {
 
   return (
     <div className={styles.contentWrapper}>
-      <div className={styles.content} style={contentStyle}>
+      <div
+        className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
+        style={contentStyle}
+      >
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((d) => (

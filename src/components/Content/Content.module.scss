@@ -9,6 +9,10 @@
     height: calc(100% - (var(--header-container-height) * 2));
     overflow: auto;
   }
+
+  &__columns {
+    grid-auto-flow: column;
+  }
 }
 
 .panel {
