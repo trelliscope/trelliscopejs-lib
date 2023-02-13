@@ -232,7 +232,7 @@ interface IInputClientSideStorage {
 
 // how the inputs will be relayed back to the creator of the display
 interface IInputEmailFeedback {
-  emailAddress: string;
+  feedbackEmail: string;
   includeMetaVars: string[];
 }
 
