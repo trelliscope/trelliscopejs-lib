@@ -55,6 +55,8 @@ export const filterSlice = createSlice({
       if (idx > -1) {
         const filter = filterState[idx] as ICategoryFilterState;
         const { values: filterValues } = filter;
+        // If filter values are being directly updated than it's not a regexp filter
+        filter.regexp = null;
         if (filterValues?.includes(value)) {
           filter.values = difference(filterValues, [value]);
         } else {
