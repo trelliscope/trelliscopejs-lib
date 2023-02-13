@@ -78,6 +78,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
       isMoving: true,
       startX: e.nativeEvent.offsetX - activeX,
     });
+    onBrushStart([activeX, activeDx]);
   };
 
   const handleMouseUp = () => {

@@ -55,14 +55,16 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   };
 
   const handleBrushEnd = ([x, dx]: number[]) => {
-    if (x === dx) {
-      onBrush([null, null]);
-    } else {
-      const x1 = invert(x);
-      const dx1 = invert(dx);
-      onBrush([Math.min(x1, dx1), Math.max(x1, dx1)]);
+    if (brushActive) {
+      if (x === dx) {
+        onBrush([null, null]);
+      } else {
+        const x1 = invert(x);
+        const dx1 = invert(dx);
+        onBrush([Math.min(x1, dx1), Math.max(x1, dx1)]);
+      }
+      setBrushActive(false);
     }
-    setBrushActive(false);
   };
 
   return (
