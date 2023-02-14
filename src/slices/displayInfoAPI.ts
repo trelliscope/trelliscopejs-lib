@@ -133,7 +133,7 @@ export const useMetaGroups = (omitMetas: string[] = []) => {
   return metas.reduce((acc, meta) => {
     const omit = omitMetas.length > 0 && !omitMetas.includes(meta.varname);
     const tags = meta.tags || [];
-    if (tags.length === 0 && !omit && meta.filterable) {
+    if (tags.length === 0 && !omit) {
       acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
       return acc;
     }
