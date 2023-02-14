@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
-import { filterSelector, singlePageAppSelector } from '../../selectors';
+import { filterSelector, singlePageAppSelector, fullscreenSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import getCustomProperties from '../../getCustomProperties';
@@ -29,6 +29,7 @@ const Footer: React.FC = () => {
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const { length: allDataLength } = allData;
   const { length: filteredDataLength } = filteredData;
+  const fullScreen = useSelector(fullscreenSelector);
 
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
@@ -164,7 +165,7 @@ const Footer: React.FC = () => {
         )}
       </div>
       {hasInputs && hasLocalStorage && (
-        <div className={styles.footerButtonDiv}>
+        <div className={styles.footerButtonDiv} style={!fullScreen ? { position: 'sticky' } : { position: 'absolute' }}>
           <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
             Export Inputs
           </Button>
