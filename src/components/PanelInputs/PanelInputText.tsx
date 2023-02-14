@@ -1,7 +1,7 @@
 import React from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Popover, TextField } from '@mui/material';
+import { ClickAwayListener, Popover, TextField } from '@mui/material';
 import styles from './PanelInputs.module.scss';
 import { useStoredInputValue } from '../../inputUtils';
 
@@ -16,6 +16,11 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
   const [inputOpen, setInputOpen] = React.useState(false);
   const [textInputValue, setTextInputValue] = React.useState<string | undefined>(undefined);
   const { getStoredValue, setStoredValue } = useStoredInputValue(panelKey, name);
+
+  const handleClickAway = () => {
+    setInputOpen(false);
+    setTextInputValue('');
+  };
 
   return (
     <div className={styles.panelInputText} ref={anchorRef}>
@@ -52,21 +57,23 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
           }
         }}
       >
-        <TextField
-          id="outlined-multiline-static"
-          classes={{ root: styles.panelInputTextField }}
-          label={`${name} ('shift+enter' to save)`}
-          onChange={(e) => {
-            setTextInputValue(e.target.value);
-          }}
-          value={textInputValue}
-          style={{ minWidth: 300 }}
-          size="small"
-          autoFocus
-          multiline
-          rows={rows}
-          variant="outlined"
-        />
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <TextField
+            id="outlined-multiline-static"
+            classes={{ root: styles.panelInputTextField }}
+            label={`${name} ('shift+enter' to save)`}
+            onChange={(e) => {
+              setTextInputValue(e.target.value);
+            }}
+            value={textInputValue}
+            style={{ minWidth: 300 }}
+            size="small"
+            autoFocus
+            multiline
+            rows={rows}
+            variant="outlined"
+          />
+        </ClickAwayListener>
       </Popover>
     </div>
   );
