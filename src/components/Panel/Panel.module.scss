@@ -6,7 +6,7 @@
   &Graphic {
     display: flex;
     padding: var(--padding-4);
-    
+
     img {
       max-width: 100%;
       min-width: 1px;
@@ -38,6 +38,11 @@
         border-right: var(--border-2);
         cursor: default;
       }
+
+      &Content {
+        display: flex;
+        justify-content: space-between;
+      }
     }
 
     &:first-of-type {
@@ -46,6 +51,20 @@
 
     &:last-of-type {
       border-bottom: none;
+    }
+    &Close {
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      opacity: 0.5;
+
+      svg {
+        margin-top: 1px;
+        width: 12px;
+        height: 12px;
+      }
     }
   }
 
