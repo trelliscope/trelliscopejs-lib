@@ -1,6 +1,18 @@
 .panelInputText {
   display: flex;
 
+  &ButtonContainer {
+    display: flex;
+  }
+
+  &Value {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 85px;
+    margin-right: 5px;
+  }
+
   &EditButton {
     cursor: pointer;
     border: none;
