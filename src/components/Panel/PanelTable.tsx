@@ -37,16 +37,25 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
           <tr key={input.name} className={styles.panelLabel}>
             <PanelTableLabelCell value={input.name} label={input.label} />
             <td className={styles.panelLabelCell}>
-              {input.type === INPUT_TYPE_TEXT && (
-                <PanelInputText name={input.name} rows={(input as ITextInput).height} panelKey={data[PANEL_KEY] as string} />
-              )}
-              {input.type === INPUT_TYPE_RADIO && (
-                <PanelInputRadios
-                  name={input.name}
-                  options={(input as IRadioInput).options}
-                  panelKey={data[PANEL_KEY] as string}
-                />
-              )}
+              <div className={styles.panelLabelCellContent}>
+                {input.type === INPUT_TYPE_TEXT && (
+                  <PanelInputText
+                    name={input.name}
+                    rows={(input as ITextInput).height}
+                    panelKey={data[PANEL_KEY] as string}
+                  />
+                )}
+                {input.type === INPUT_TYPE_RADIO && (
+                  <PanelInputRadios
+                    name={input.name}
+                    options={(input as IRadioInput).options}
+                    panelKey={data[PANEL_KEY] as string}
+                  />
+                )}
+                <button type="button" className={styles.panelLabelClose} onClick={() => handleLableRemove(input.label)}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
+              </div>
             </td>
           </tr>
         ))}
