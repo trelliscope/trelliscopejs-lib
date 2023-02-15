@@ -54,7 +54,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
         const newX = offsetX - (offsetX - deltaX);
         const newDx = deltaX + (state.dx - state.x);
 
-        if (newX < 0 || newDx > width) return;
+        if (newX < x || newDx > width) return;
 
         setState({ ...state, x: newX, dx: newDx });
       } else {

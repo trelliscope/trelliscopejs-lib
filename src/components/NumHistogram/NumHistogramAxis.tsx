@@ -19,8 +19,10 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
     </g>
     {ticks.map((d) => (
       <g className={styles.axisTick} key={d} transform={`translate(${scale(d as unknown as string) || 0}, 0)`}>
-        <line y1={4} y2={0} />
-        <text y={height}>{d}</text>
+        <line y1={4} y2={0} x1={x} x2={x} />
+        <text y={height} x={x}>
+          {d}
+        </text>
       </g>
     ))}
     <g className={styles.axisEdgeTick} transform={`translate(${width}, 0)`}>

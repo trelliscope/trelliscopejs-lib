@@ -1,5 +1,5 @@
 .numHistogram {
-  padding: var(--margin-4) 0 0 var(--margin-4);
+  padding: var(--margin-4) 0 0;
 }
 
 .brush {
@@ -26,7 +26,6 @@
 
 .bar {
   fill: var(--orange);
-  shape-rendering: crispEdges;
 
   &Background {
     fill: var(--gray);
