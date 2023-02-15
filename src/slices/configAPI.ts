@@ -1,18 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { selectAppId, selectBasePath, selectConfigPath } from './appSlice';
-
-const getConfigBase = (txt: string, configBase: string) => {
-  let res = txt;
-  if (!/^https?:\/\/|^file:\/\/|^\//.test(txt)) {
-    res = configBase;
-    if (txt !== '') {
-      res += `${txt}/`;
-    }
-  }
-  return res;
-};
+import { selectAppId, selectConfigPath } from '../selectors/app';
 
 const JSONPBaseQuery =
   (): BaseQueryFn<

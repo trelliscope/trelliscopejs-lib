@@ -7,7 +7,7 @@ import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
-import { selectDialogOpen, setDialogOpen } from '../../slices/appSlice';
+import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
 import { pageNumSelector, nPerPageSelector, fullscreenSelector, cogDataSelector } from '../../selectors';
 import { setLayout } from '../../slices/layoutSlice';
@@ -15,6 +15,7 @@ import getCustomProperties from '../../getCustomProperties';
 import { useRelatedDisplaysGroup, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { useDisplayGroups, useDisplayList } from '../../slices/displayListAPI';
 import { DataContext } from '../DataProvider';
+import { selectDialogOpen } from '../../selectors/app';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {

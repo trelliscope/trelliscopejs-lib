@@ -1,6 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { CaseReducer, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import { configAPI } from './configAPI';
+import { displayInfoAPI } from './displayInfoAPI';
+import { metaDataAPI } from './metaDataAPI';
+import { displayListAPI } from './displayListAPI';
 
 export interface AppState {
   appId: string;
@@ -26,6 +29,14 @@ const initialState: AppState = {
   errorMsg: '',
   basePath: '',
   configPath: '',
+};
+
+const apiErrorHandler: CaseReducer = (state, action) => {
+  const url = new URL(action.payload.url);
+  return {
+    ...state,
+    errorMsg: `Couldn't load data at: ${url.origin}${url.pathname}`,
+  };
 };
 
 export const appSlice = createSlice({
@@ -61,6 +72,16 @@ export const appSlice = createSlice({
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, (state, action) => apiErrorHandler(state, action));
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, (state, action) =>
+      apiErrorHandler(state, action),
+    );
+    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, (state, action) => apiErrorHandler(state, action));
+    builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, (state, action) =>
+      apiErrorHandler(state, action),
+    );
+  },
 });
 
 export const {
@@ -74,10 +95,5 @@ export const {
   setErrorMessage,
   setPaths,
 } = appSlice.actions;
-
-export const selectAppId = (state: RootState) => state.app.appId;
-export const selectBasePath = (state: RootState) => state.app.basePath;
-export const selectConfigPath = (state: RootState) => state.app.configPath;
-export const selectDialogOpen = (state: RootState) => state.app.dialog;
 
 export default appSlice.reducer;

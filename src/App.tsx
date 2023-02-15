@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { errorSelector } from './selectors';
 import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
@@ -10,6 +9,7 @@ import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErr
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
+import { selectErrorMessage } from './selectors/app';
 
 import './assets/styles/main.css';
 import './fonts/opensans/style.css';
@@ -26,7 +26,7 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, fullscreen, appDims }) => {
   const dispatch = useDispatch();
-  const errorMsg = useSelector(errorSelector);
+  const errorMsg = useSelector(selectErrorMessage);
   const handleClose = () => {
     dispatch(setErrorMessage(''));
   };

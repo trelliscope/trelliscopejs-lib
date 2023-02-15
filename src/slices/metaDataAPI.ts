@@ -2,9 +2,9 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import snakeCase from 'lodash.snakecase';
-import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
+import { selectAppId, selectBasePath } from '../selectors/app';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
 

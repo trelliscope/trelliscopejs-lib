@@ -2,7 +2,7 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../constants';
-import { selectAppId, selectBasePath } from './appSlice';
+import { selectAppId, selectBasePath } from '../selectors/app';
 import { useDataType } from './configAPI';
 import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 

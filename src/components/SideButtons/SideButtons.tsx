@@ -3,12 +3,12 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useDispatch, useSelector } from 'react-redux';
 import { sidebarActiveSelector, contentHeightSelector } from '../../selectors/ui';
 import { fullscreenSelector } from '../../selectors';
-import { selectDialogOpen } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS } from '../../constants';
 import SideButton from '../SideButton';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import getCustomProperties from '../../getCustomProperties';
+import { selectDialogOpen } from '../../selectors/app';
 import styles from './SideButtons.module.scss';
 
 type Button = {
