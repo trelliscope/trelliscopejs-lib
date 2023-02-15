@@ -61,7 +61,7 @@ export const hashFromState = (state: RootState) => {
       let res = '';
       if (flt.filtertype === 'category') {
         const { values, regexp } = flt as ICategoryFilterState;
-        res = `var:${flt.varname};type:category;regexp:${encodeURIComponent(regexp as string)};val:${values
+        res = `var:${flt.varname};type:category;regexp:${encodeURIComponent((regexp as string) ?? '')};val:${values
           .map(encodeURIComponent)
           .join('#')}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
