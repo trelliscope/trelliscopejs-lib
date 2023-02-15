@@ -14,6 +14,7 @@ import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
 import './assets/styles/variables.scss';
+import './fonts/opensans/style.css';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
