@@ -12,6 +12,7 @@ import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
 
 import './assets/styles/main.css';
+import './fonts/opensans/style.css';
 
 interface AppProps {
   client: IDataClient;
