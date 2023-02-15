@@ -50,8 +50,10 @@
   }
 
   &ButtonDiv {
-    position: absolute;
     right: 0;
     bottom: 0;
+    min-width: 114px;
+    display: inline-flex;
+    justify-content: end;
   }
 }
