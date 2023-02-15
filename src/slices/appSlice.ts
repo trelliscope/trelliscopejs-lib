@@ -72,6 +72,7 @@ export const appSlice = createSlice({
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
   },
+  // Listen for rejected API calls and set the error message
   extraReducers: (builder) => {
     builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, (state, action) => apiErrorHandler(state, action));
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, (state, action) =>
