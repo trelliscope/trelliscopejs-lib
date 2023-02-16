@@ -22,7 +22,7 @@ const HowToUse: React.FC = () => (
       When there are many panels, it is useful to be able to navigate to which panels you want to view and make
       panel-to-panel comparisons by sorting and filtering the panels based on various criteria. Trelliscope provides this
       interactivity through panel metrics called&nbsp;
-      <em>cognostics</em>.
+      <em>metas</em>.
     </div>
     <p>
       There are multiple modes of interaction with panels, indicated by the four buttons on the left sidebar of the
