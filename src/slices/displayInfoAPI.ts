@@ -131,7 +131,7 @@ export const useMetaGroups = (omitMetas: string[] = []) => {
   const metas = useDisplayMetas();
 
   return metas.reduce((acc, meta) => {
-    const omit = omitMetas.length > 0 && !omitMetas.includes(meta.varname);
+    const omit = omitMetas.length > 0 && omitMetas.includes(meta.varname);
     const tags = meta.tags || [];
     if (tags.length === 0 && !omit) {
       acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
@@ -141,7 +141,7 @@ export const useMetaGroups = (omitMetas: string[] = []) => {
       if (!acc.has(tag)) {
         acc.set(tag, []);
       }
-      if (!omit && meta.filterable) {
+      if (!omit) {
         acc?.get(tag)?.push(meta.varname);
       }
     });
