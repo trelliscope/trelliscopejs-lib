@@ -135,4 +135,6 @@ export const selectFilterView = (state: RootState) => state.filter.view;
 
 export const selectInactiveFilterView = (state: RootState) => state.filter.view.inactive;
 
+export const selectActiveFilterView = (state: RootState) => state.filter.view.active;
+
 export default filterSlice.reducer;
