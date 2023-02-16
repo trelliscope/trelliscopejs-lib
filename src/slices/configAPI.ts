@@ -2,6 +2,7 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import { selectAppId, selectConfigPath } from '../selectors/app';
+import { getFileExtentionErrorMessage, getRequestErrorMessage, handleJSONResponse } from '../utils';
 
 const JSONPBaseQuery =
   (): BaseQueryFn<
@@ -27,13 +28,18 @@ const JSONPBaseQuery =
           url,
           callbackName: cfgCallback,
           error: (err) => {
-            resolve({ error: err });
+            resolve({ error: getRequestErrorMessage(err.url) });
           },
         });
-      } else {
+      } else if (fileExt === 'json') {
         fetch(url)
-          .then((res) => res.json())
-          .then(window[cfgCallback]);
+          .then(handleJSONResponse)
+          .then(window[cfgCallback])
+          .catch((err) => {
+            resolve({ error: getRequestErrorMessage(err.message) });
+          });
+      } else {
+        resolve({ error: getFileExtentionErrorMessage(fileExt || '') });
       }
     });
 

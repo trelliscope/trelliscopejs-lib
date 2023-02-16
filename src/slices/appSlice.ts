@@ -31,13 +31,10 @@ const initialState: AppState = {
   configPath: '',
 };
 
-const apiErrorHandler: CaseReducer = (state, action) => {
-  const url = new URL(action.payload.url);
-  return {
-    ...state,
-    errorMsg: `Couldn't load data at: ${url.origin}${url.pathname}`,
-  };
-};
+const apiErrorHandler: CaseReducer = (state, action) => ({
+  ...state,
+  errorMsg: action.payload,
+});
 
 export const appSlice = createSlice({
   name: 'app',
@@ -74,14 +71,10 @@ export const appSlice = createSlice({
   },
   // Listen for rejected API calls and set the error message
   extraReducers: (builder) => {
-    builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, (state, action) => apiErrorHandler(state, action));
-    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, (state, action) =>
-      apiErrorHandler(state, action),
-    );
-    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, (state, action) => apiErrorHandler(state, action));
-    builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, (state, action) =>
-      apiErrorHandler(state, action),
-    );
+    builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, apiErrorHandler);
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, apiErrorHandler);
+    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, apiErrorHandler);
+    builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, apiErrorHandler);
   },
 });
 

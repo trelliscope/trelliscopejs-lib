@@ -8,6 +8,7 @@ import { useSelectedDisplay } from './selectedDisplaySlice';
 import { useRelatedDisplayNames } from './displayListAPI';
 import { COMMON_TAGS_KEY } from '../constants';
 import { selectAppId, selectBasePath } from '../selectors/app';
+import { getRequestErrorMessage, handleJSONResponse } from '../utils';
 
 const displayRequest = (url: string, displayName: string, dataType: string, callback: string) =>
   new Promise((resolve) => {
@@ -22,13 +23,16 @@ const displayRequest = (url: string, displayName: string, dataType: string, call
         url: `${url}/displays/${displayPath}/displayInfo.jsonp`,
         callbackName: callback,
         error: (err) => {
-          resolve({ error: err });
+          resolve({ error: getRequestErrorMessage(err.url) });
         },
       });
     } else {
-      fetch(`${url}/display/${displayPath}/displayInfo.json`)
-        .then((res) => res.json())
-        .then(window[callback]);
+      fetch(`${url}/displays/${displayPath}/displayInfo.json`)
+        .then(handleJSONResponse)
+        .then(window[callback])
+        .catch((err) => {
+          resolve({ error: getRequestErrorMessage(err.message) });
+        });
     }
   });
 

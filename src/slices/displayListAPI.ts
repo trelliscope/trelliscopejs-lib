@@ -3,6 +3,7 @@ import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../constants';
 import { selectAppId, selectBasePath } from '../selectors/app';
+import { getRequestErrorMessage, handleJSONResponse } from '../utils';
 import { useDataType } from './configAPI';
 import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 
@@ -21,13 +22,16 @@ const JSONPBaseQuery =
           url: `${url}/displays/displayList.jsonp`,
           callbackName: displayListCallback,
           error: (err) => {
-            resolve({ error: err });
+            resolve({ error: getRequestErrorMessage(err.url) });
           },
         });
       } else {
-        fetch(`${url}/display/displayList.json`)
-          .then((res) => res.json())
-          .then(window[displayListCallback]);
+        fetch(`${url}/displays/displayList.json`)
+          .then(handleJSONResponse)
+          .then(window[displayListCallback])
+          .catch((err) => {
+            resolve({ error: getRequestErrorMessage(err.message) });
+          });
       }
     });
 
