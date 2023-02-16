@@ -1,15 +1,17 @@
 import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../../../constants';
-import { useMetaGroups } from '../../../slices/displayInfoAPI';
-import { selectInactiveFilterView, setFilterView } from '../../../slices/filterSlice';
+import { useDisplayMetas, useMetaGroups } from '../../../slices/displayInfoAPI';
+import { selectActiveFilterView, setFilterView } from '../../../slices/filterSlice';
 import Pill from '../../Pill';
 
 import styles from './FilterList.module.scss';
 
 const FilterList: React.FC = () => {
-  const inactiveFilters = useSelector(selectInactiveFilterView);
-  const inactiveFilterGroups = useMetaGroups(inactiveFilters);
+  const activeFilters = useSelector(selectActiveFilterView);
+  const displayMetas = useDisplayMetas();
+  const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
+  const inactiveFilterGroups = useMetaGroups([...activeFilters, ...unfilterableMetas] as string[]);
 
   const dispatch = useDispatch();
 

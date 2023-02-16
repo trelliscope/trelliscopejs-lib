@@ -137,7 +137,7 @@ export const useMetaGroups = (omitMetas: string[] = []) => {
       acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
       return acc;
     }
-    tags.forEach((tag) => {
+    tags.forEach((tag: string) => {
       if (!acc.has(tag)) {
         acc.set(tag, []);
       }
