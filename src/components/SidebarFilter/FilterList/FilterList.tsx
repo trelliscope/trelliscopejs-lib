@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../../../constants';
 import { useDisplayMetas, useMetaGroups } from '../../../slices/displayInfoAPI';
-import { selectActiveFilterView, setFilterView } from '../../../slices/filterSlice';
+import { selectFilterState, selectActiveFilterView, setFilterView } from '../../../slices/filterSlice';
 import Pill from '../../Pill';
 
 import styles from './FilterList.module.scss';
@@ -12,6 +12,9 @@ const FilterList: React.FC = () => {
   const displayMetas = useDisplayMetas();
   const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
   const inactiveFilterGroups = useMetaGroups([...activeFilters, ...unfilterableMetas] as string[]);
+  const curFilters = useSelector(selectFilterState);
+
+  const curFiltersArr = curFilters.map((filter: IFilterState) => filter.varname);
 
   const dispatch = useDispatch();
 
@@ -35,7 +38,7 @@ const FilterList: React.FC = () => {
               )}
               <ul className={styles.filterListItems}>
                 {inactiveFilterGroups?.get(key)?.map((filter) => (
-                  <Pill key={filter} onClick={() => handleClick(filter)}>
+                  <Pill key={filter} onClick={() => handleClick(filter)} activeFiltersArray={curFiltersArr}>
                     {filter}
                   </Pill>
                 ))}
