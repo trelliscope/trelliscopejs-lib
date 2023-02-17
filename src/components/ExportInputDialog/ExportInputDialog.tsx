@@ -73,8 +73,10 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
       <Dialog
         open={open}
         onClose={() => {
-          setActiveStep(0);
           handleClose();
+          setTimeout(() => {
+            setActiveStep(0);
+          }, 500);
         }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -146,8 +148,10 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
           </div>
           <Button
             onClick={() => {
-              setActiveStep(0);
               handleClose();
+              setTimeout(() => {
+                setActiveStep(0);
+              }, 500);
             }}
             color="primary"
             autoFocus
