@@ -94,7 +94,7 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen,
                 {displayInfo?.description && <em>{displayInfo?.description}</em>}
               </div>
               <p>
-                {`This visualization contains ${totPanels} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "cognostics", that you can use to sort and filter the panels that you want to view.`}
+                {`This visualization contains ${totPanels} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
               </p>
               <p>
                 To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top right
