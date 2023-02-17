@@ -1,4 +1,8 @@
 .composeEmail {
+  &Container &ContentText {
+    margin: var(--margin-10) 0;
+  }
+
   &Button {
     margin: var(--margin-6) !important;
   }

@@ -1,114 +1,75 @@
-.bounding {
-  transition: var(--panel-bounding-transition);
-  position: absolute;
-  overflow: hidden;
-  padding: 0;
-  box-sizing: border-box;
-  border: var(--border-4);
-}
-
 .panel {
-  transition: var(--panel-transition);
-  box-sizing: border-box;
-  text-align: center;
+  border: var(--border-2);
+  min-width: 0;
   overflow: hidden;
-  color: var(--gray-400);
 
-  &Content {
-    transition: var(--panel-transition);
-    display: block;
-  }
-}
+  &Graphic {
+    display: flex;
+    padding: var(--padding-4);
+    flex-grow: 1;
 
-.label {
-  &Table {
-    transition: var(--panel-transition);
-    padding: 0;
-    table-layout: fixed;
-    border-spacing: 0;
-    box-sizing: border-box;
+    img {
+      max-width: 100%;
+      min-width: 1px;
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  &Row {
-    transition: var(--panel-transition);
+  &Labels {
+    width: 100%;
     background: var(--white-200);
+    list-style-type: none;
+    margin: 0;
+    border-collapse: collapse;
+  }
 
-    &:hover {
-      background: var(--gray-1200);
+  &Label {
+    width: 100%;
+    font-size: var(--text-xs);
+    border-bottom: var(--border-2);
 
-      .labelClose {
-        display: block;
+    &Cell {
+      padding: var(--padding-4);
+      white-space: nowrap;
+
+      &:first-of-type {
+        white-space: nowrap;
+        font-weight: bold;
+        border-right: var(--border-2);
+        cursor: default;
+      }
+
+      &Content {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    &:first-of-type {
+      border-top: var(--border-2);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+    &Close {
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      opacity: 0.5;
+
+      svg {
+        margin-top: 1px;
+        width: 12px;
+        height: 12px;
       }
     }
   }
 
-  &Cell {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  &NameCell {
-    border-right: var(--border-1);
-    font-weight: var(--font-normal);
-  }
-
-  &Outer {
-    position: relative;
-    overflow: hidden;
-  }
-
-  &Inner {
-    padding-right: var(--padding-1);
-    overflow: hidden;
-    white-space: normal;
-    vertical-align: middle;
-    position: relative;
-    cursor: default;
-    display: flex;
-  }
-
-  &Close {
-    transition: var(--panel-close-transition);
-    position: absolute;
-    top: 0;
-    right: 2px;
-    cursor: pointer;
+  iframe {
     border: none;
-    background: none;
-    padding: 0;
-    margin: 0;
-    opacity: 0.5;
-    display: none;
-
-    svg {
-      margin-top: 1px;
-      width: 12px;
-      height: 12px;
-    }
   }
-
-  &P {
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
-
-.editButtonContainer {
-  display: flex;
-}
-
-.editButton {
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  opacity: 0.5;
-}
-
-.labelInner .formRow {
-  flex-wrap: nowrap;
 }

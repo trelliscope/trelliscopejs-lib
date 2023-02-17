@@ -1,12 +1,16 @@
+import { useState } from 'react';
+import { useDisplayInfo } from './slices/displayInfoAPI';
+
 export const getLocalStoragePrefix = (di: DisplayObject) => `${di.group}_:_${di.name}_:`;
 
-export const getLocalStorageKey = (di: DisplayObject, panelKey: string, cogId: string) => `${di.group}_:_${di.name}_:_${panelKey}_:_${cogId}`;
+export const getLocalStorageKey = (tags: string[], displayName: string, panelKey: string, name: string) =>
+  `${tags.join('__')}_:_${displayName}_:_${panelKey}_:_${name}`;
 
 // Stores a user-specified input value
 // Note that this always stores in localStorage
 // It additionaly stores to API if that is specified
 // localStorage is always used to keep track of inputs within the app
-export const setPanelCogInput = (di: DisplayObject, value: string, panelKey: string, cogId: string) => {
+/* export const setPanelCogInput = (di: DisplayObject, value: string, panelKey: string, cogId: string) => {
   const lsKey = getLocalStorageKey(di, panelKey, cogId);
 
   if (di.input_type === 'API') {
@@ -52,9 +56,9 @@ export const setPanelCogInput = (di: DisplayObject, value: string, panelKey: str
       localStorage.setItem(lsKey, value);
     }
   }
-};
+}; */
 
-export const getInputsAPI = (di: DisplayObject) => {
+/* export const getInputsAPI = (di: DisplayObject) => {
   const queryObj = {
     display_id: `${di.group}___${di.name}`,
     display_version: 'v1',
@@ -66,7 +70,7 @@ export const getInputsAPI = (di: DisplayObject) => {
   fetch(`${di.input_api.get}?${qry}`, di.input_api.getRequestOptions)
     .then(async (response) => {
       const isJson = response.headers.get('content-type')?.includes('application/json');
-      const data = isJson && await response.json();
+      const data = isJson && (await response.json());
       if (!response.ok) {
         // get error message from body or default to response status
         const error = (data && data.message) || response.status;
@@ -97,7 +101,7 @@ export const getInputsAPI = (di: DisplayObject) => {
     .catch((error) => {
       console.error('There was an error getting inputs stored in the API.', error);
     });
-};
+}; */
 
 // const requestOptions = {
 //   mode: 'cors',
@@ -111,3 +115,18 @@ export const getInputsAPI = (di: DisplayObject) => {
 //     'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
 //   }
 // };
+
+export const useStoredInputValue = (panelKey: string, name: string) => {
+  const { data: displayInfo } = useDisplayInfo();
+  const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', panelKey, name);
+  const [localValue, setLocalValue] = useState<string | null>(localStorage.getItem(lsKey));
+
+  const getStoredValue = () => localValue || localStorage.getItem(lsKey);
+
+  const setStoredValue = (value: string) => {
+    setLocalValue(value);
+    localStorage.setItem(lsKey, value);
+  };
+
+  return { setStoredValue, getStoredValue };
+};

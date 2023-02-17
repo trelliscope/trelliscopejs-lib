@@ -1,54 +1,56 @@
 import React from 'react';
-import intersection from 'lodash.intersection';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './SidebarSortPill.module.scss';
+import { COMMON_TAGS_KEY } from '../../constants';
 
 interface SidebarSortPillProps {
-  notUsed: string[];
-  cogGroups: { [key: string]: string[] };
+  metaGroups: Map<string | symbol, string[]>;
   sidebarHeight: number;
   activeHeight: number;
   addSortLabel: (name: string) => void;
-  handleSortChange: (sortSpec: Sort[] | number) => void;
-  sort: Sort[];
-  sort2: Sort[];
-  cogDesc: { [key: string]: string };
+  handleSortChange: (sortSpec: ISortState[] | number) => void;
+  sort: ISortState[];
+  sort2: ISortState[];
+  metaLabels: { [key: string]: string };
 }
 
 const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
-  notUsed,
-  cogGroups,
+  metaGroups,
   sidebarHeight,
   activeHeight,
   addSortLabel,
   handleSortChange,
   sort,
   sort2,
-  cogDesc,
+  metaLabels,
 }) => {
   const customStyles = {
     notUsed: {
       height: sidebarHeight - activeHeight - 30,
     },
   };
+
+  const activeSorts = sort.map((d) => d.varname);
+
   return (
     <div className={styles.sidebarSortPill}>
       <div className={styles.sidebarSortPillNotUsed} style={customStyles.notUsed}>
-        {Object.keys(cogGroups).map((grp) => {
-          const curItems = intersection(notUsed, cogGroups[grp]);
-          if (curItems.length === 0) {
+        {Array.from(metaGroups.keys()).map((grp) => {
+          const groupString = grp.toString();
+          const curItems = metaGroups?.get(grp)?.filter((d) => !activeSorts.includes(d));
+          if (curItems?.length === 0) {
             return null;
           }
           return (
-            <React.Fragment key={grp}>
-              {!['condVar', 'common', 'panelKey'].includes(grp) && (
+            <React.Fragment key={groupString}>
+              {grp !== COMMON_TAGS_KEY && (
                 <div className={styles.sidebarSortPillCogGroupHeader}>
-                  <span className={styles.sidebarSortPillCogGroupText}>{`${grp} (${curItems.length})`}</span>
+                  <span className={styles.sidebarSortPillCogGroupText}>{`${groupString} (${curItems?.length})`}</span>
                 </div>
               )}
-              {curItems.sort().map((d: string) => (
+              {curItems?.sort().map((d: string) => (
                 <Tooltip
-                  title={cogDesc[d]}
+                  title={metaLabels[d]}
                   placement="right"
                   id={`tooltip_${d}`}
                   key={`tooltip_${d}`}
@@ -71,8 +73,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                         className={styles.sidebarSortPillVariable}
                         key={`${d}_button`}
                         onClick={() => {
-                          const order = sort.length === 0 ? 1 : sort[sort.length - 1].order + 1;
-                          sort2.push({ name: d, dir: 'asc', order });
+                          sort2.push({ varname: d, dir: 'asc', type: 'sort' });
                           addSortLabel(d);
                           handleSortChange(sort2);
                         }}

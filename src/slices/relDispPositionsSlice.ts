@@ -4,7 +4,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface RelDispPositionsState {
   aspect: number;
   col: number;
-  group: string;
   height: number;
   width: number;
   idx: number;

@@ -1,6 +1,11 @@
 .sidebarLabels {
+  height: calc(100vh - (var(--header-height) * 1px) - (var(--header-height) * 1px) - 7px);
   overflow-y: auto;
   overflow-x: hidden;
+
+  ul {
+    padding-top: 0px;
+  }
 
   &RowDesc {
     color: var(--gray-900);
@@ -8,8 +13,6 @@
   }
 
   &List {
-    padding: 0;
-
     &Checkbox {
       height: var(--sidebarLabels-listCheckbox-size);
       width: var(--sidebarLabels-listCheckbox-size);
