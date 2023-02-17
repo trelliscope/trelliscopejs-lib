@@ -1,0 +1,14 @@
+{
+  "ignoreUnresolved": [],
+  "ignoreUnused": [
+    "msw"
+  ],
+  "ignoreUnimported": [
+    "src/setupTests.js",
+    "src/test-utils.js",
+    "src/test/__mockData__/mockFunctions.js",
+    "src/test/__mockData__/restHandlers.js",
+    "src/test/__mockData__/server.js",
+    "src/test/__mockData__/worker.js"
+  ]
+}

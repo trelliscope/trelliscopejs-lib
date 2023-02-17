@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import marked from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -49,12 +48,6 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen,
   const handleKey = () => {
     setDialogOpen(true);
     handleDispInfoDialogOpen(true);
-  };
-
-  const moptions = {
-    passoverHTML: false,
-    passoverAttribute: 'passover',
-    stripPassoverAttribute: true,
   };
 
   useHotkeys('i', handleKey, { enabled: fullscreen && !isOpen });
