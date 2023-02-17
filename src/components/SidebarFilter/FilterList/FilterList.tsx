@@ -38,7 +38,7 @@ const FilterList: React.FC = () => {
               )}
               <ul className={styles.filterListItems}>
                 {inactiveFilterGroups?.get(key)?.map((filter) => (
-                  <Pill key={filter} onClick={() => handleClick(filter)} activeFiltersArray={curFiltersArr}>
+                  <Pill key={filter} onClick={() => handleClick(filter)} curFiltersArr={curFiltersArr}>
                     {filter}
                   </Pill>
                 ))}
