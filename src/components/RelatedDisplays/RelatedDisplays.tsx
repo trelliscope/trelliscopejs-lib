@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 // import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faFolderPlus /* , faChevronLeft, faChevronRight */ } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import DisplayList from '../DisplayList';
 import getCustomProperties from '../../getCustomProperties';
