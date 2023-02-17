@@ -1,6 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { CaseReducer, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import { configAPI } from './configAPI';
+import { displayInfoAPI } from './displayInfoAPI';
+import { metaDataAPI } from './metaDataAPI';
+import { displayListAPI } from './displayListAPI';
 
 export interface AppState {
   appId: string;
@@ -27,6 +30,11 @@ const initialState: AppState = {
   basePath: '',
   configPath: '',
 };
+
+const apiErrorHandler: CaseReducer = (state, action) => ({
+  ...state,
+  errorMsg: action.payload,
+});
 
 export const appSlice = createSlice({
   name: 'app',
@@ -61,6 +69,13 @@ export const appSlice = createSlice({
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
   },
+  // Listen for rejected API calls and set the error message
+  extraReducers: (builder) => {
+    builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, apiErrorHandler);
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, apiErrorHandler);
+    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, apiErrorHandler);
+    builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, apiErrorHandler);
+  },
 });
 
 export const {
@@ -74,10 +89,5 @@ export const {
   setErrorMessage,
   setPaths,
 } = appSlice.actions;
-
-export const selectAppId = (state: RootState) => state.app.appId;
-export const selectBasePath = (state: RootState) => state.app.basePath;
-export const selectConfigPath = (state: RootState) => state.app.configPath;
-export const selectDialogOpen = (state: RootState) => state.app.dialog;
 
 export default appSlice.reducer;

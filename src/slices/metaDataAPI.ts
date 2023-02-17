@@ -2,9 +2,10 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import snakeCase from 'lodash.snakecase';
-import { selectAppId, selectBasePath } from './appSlice';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
+import { selectAppId, selectBasePath } from '../selectors/app';
+import { getRequestErrorMessage, handleJSONResponse } from '../utils';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
 
@@ -25,13 +26,16 @@ const JSONPBaseQuery =
           url: `${url}/displays/${displayPath}/metaData.jsonp`,
           callbackName: metaDataCallback,
           error: (err) => {
-            resolve({ error: err });
+            resolve({ error: getRequestErrorMessage(err.url) });
           },
         });
       } else {
-        fetch(`${url}/display/${displayPath}/metaData.json`)
-          .then((res) => res.json())
-          .then(window[metaDataCallback]);
+        fetch(`${url}/displays/${displayPath}/metaData.json`)
+          .then(handleJSONResponse)
+          .then(window[metaDataCallback])
+          .catch((err) => {
+            resolve({ error: getRequestErrorMessage(err.message) });
+          });
       }
     });
 

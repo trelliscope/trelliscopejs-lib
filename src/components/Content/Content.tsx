@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import snakeCase from 'lodash.snakecase';
 import classNames from 'classnames';
 import { labelsSelector } from '../../selectors';
-import { selectBasePath } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout } from '../../slices/layoutSlice';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
@@ -11,6 +10,7 @@ import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import { GRID_ARRANGEMENT_COLS } from '../../constants';
+import { selectBasePath } from '../../selectors/app';
 import styles from './Content.module.scss';
 
 const panelSrcGetter =

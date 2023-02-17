@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSelectedRelDisps, setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayGroups } from '../../slices/displayListAPI';
-import { selectBasePath } from '../../slices/appSlice';
+import { selectBasePath } from '../../selectors/app';
 import styles from './DisplayList.module.scss';
 
 interface DisplayListProps {

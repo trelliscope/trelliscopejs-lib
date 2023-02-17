@@ -6,6 +6,7 @@
   &Graphic {
     display: flex;
     padding: var(--padding-4);
+    flex-grow: 1;
 
     img {
       max-width: 100%;
