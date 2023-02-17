@@ -48,7 +48,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
     const { offsetX } = e.nativeEvent;
     if (state.isDragging) {
       if (state.activeHandle === 'x') {
-        setState({ ...state, x: offsetX - 5 });
+        setState({ ...state, x: offsetX });
       } else if (state.isMoving) {
         const deltaX = offsetX - state.startX;
         const newX = offsetX - (offsetX - deltaX);
@@ -58,14 +58,14 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
 
         setState({ ...state, x: newX, dx: newDx });
       } else {
-        setState({ ...state, dx: offsetX - 5 });
+        setState({ ...state, dx: offsetX });
       }
     }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const { offsetX, clientX } = e.nativeEvent;
-    setState({ ...state, x: offsetX - 5, dx: offsetX - 5, isDragging: true, startX: clientX });
+    setState({ ...state, x: offsetX, dx: offsetX, isDragging: true, startX: clientX });
     onBrushStart([offsetX, offsetX]);
   };
 
@@ -95,6 +95,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
       activeHandle: handle,
       startX: e.nativeEvent.offsetX - activeX,
     });
+    onBrushStart([activeX, activeDx]);
   };
 
   // If isDragging or isMoving use the state otherwise use the selection
