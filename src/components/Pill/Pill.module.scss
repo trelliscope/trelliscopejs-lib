@@ -17,5 +17,11 @@
     border: none;
     cursor: pointer;
     font-size: var(--text-xs);
+    border-radius: var(--rounded);
+
+    &__active {
+      background: var(--green);
+      color: var(--white);
+    }
   }
 }
