@@ -1,11 +1,10 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import snakeCase from 'lodash.snakecase';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 import { selectAppId, selectBasePath } from '../selectors/app';
-import { getRequestErrorMessage, handleJSONResponse } from '../utils';
+import { getRequestErrorMessage, handleJSONResponse, snakeCase } from '../utils';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
 
