@@ -130,10 +130,13 @@ export default class DataClient implements IDataClient {
     return sortedData;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   groupBy(field: string | symbol) {
-    // TODO: implement groupBy
-    return [];
+    const counts: { [key: string]: number } = {};
+    this._data.forEach((obj) => {
+      const key = obj[field];
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return Object.keys(counts).map((key) => ({ key, value: counts[key] }));
   }
 
   clearData() {
