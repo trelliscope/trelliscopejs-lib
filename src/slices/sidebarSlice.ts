@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { selectHashSidebar } from '../selectors/hash';
 
 export interface SidebarState {
   active: SidebarType;
 }
 
 const initialState: SidebarState = {
-  active: '',
-}
+  ...selectHashSidebar(),
+};
 
 export const sidebarSlice = createSlice({
   name: 'sidebar',

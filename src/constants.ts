@@ -1,31 +1,3 @@
-export const SET_APP_ID = 'SET_APP_ID' as string;
-export const SET_OPTIONS = 'SET_OPTIONS' as string;
-export const SET_SINGLE_PAGE_APP = 'SET_SINGLE_PAGE_APP' as string;
-export const SET_FULLSCREEN = 'SET_FULLSCREEN' as string;
-export const SET_DIALOG_OPEN = 'SET_DIALOG_OPEN' as string;
-export const SET_APP_DIMS = 'SET_APP_DIMS' as string;
-export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE' as string;
-export const SET_DISPSELECT_DIALOG_OPEN = 'SET_DISPSELECT_DIALOG_OPEN' as string;
-export const SET_DISPINFO_DIALOG_OPEN = 'SET_DISPINFO_DIALOG_OPEN' as string;
-
-export const ACTIVE_SIDEBAR = 'ACTIVE_SIDEBAR' as string;
-export const SET_LAYOUT = 'SET_LAYOUT' as string;
-export const SET_LABELS = 'SET_LABELS' as string;
-export const SET_SORT = 'SET_SORT' as string;
-export const SELECT_DISPLAY = 'SELECT_DISPLAY' as string;
-export const REQUEST_DISPLAY = 'REQUEST_DISPLAY' as string;
-export const RECEIVE_DISPLAY = 'RECEIVE_DISPLAY' as string;
-export const REQUEST_DISPLAY_LIST = 'REQUEST_DISPLAY_LIST' as string;
-export const RECEIVE_DISPLAY_LIST = 'RECEIVE_DISPLAY_LIST' as string;
-export const REQUEST_COGDATA = 'REQUEST_COGDATA' as string;
-export const RECEIVE_COGDATA = 'RECEIVE_COGDATA' as string;
-export const REQUEST_CONFIG = 'REQUEST_CONFIG' as string;
-export const RECEIVE_CONFIG = 'RECEIVE_CONFIG' as string;
-export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS' as string;
-export const SET_SELECTED_RELDISPS = 'SET_SELECTED_RELDISPS' as string;
-export const SET_REL_DISP_POSITIONS = 'SET_REL_DISP_POSITIONS' as string;
-// export const SET_SELECTED_VIEW = 'SET_SELECTED_VIEW' as string;
-
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout' as string;
 export const SB_PANEL_FILTER = 'Filter Panels' as string;
 export const SB_PANEL_SORT = 'Sort Panels' as string;
@@ -34,8 +6,45 @@ export const SB_VIEWS = 'Views' as string;
 export const SB_CONFIG = 'Configuration' as string;
 
 export const SB_LOOKUP = [SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_VIEWS] as SidebarType[];
-export const SB_REV_LOOKUP = {} as {[k: string]: number};
+export const SB_REV_LOOKUP = {} as { [k: string]: number };
 SB_LOOKUP.forEach((d, i) => {
   SB_REV_LOOKUP[d] = i;
 });
 SB_REV_LOOKUP[''] = -1;
+
+export const INPUT_TYPE_TEXT = 'text' as string;
+export const INPUT_TYPE_NUMBER = 'number' as string;
+export const INPUT_TYPE_RADIO = 'radio' as string;
+export const INPUT_TYPE_CHECKBOX = 'checkbox' as string;
+export const INPUT_TYPE_SELECT = 'select' as string;
+export const INPUT_TYPE_MULTISELECT = 'multiselect' as string;
+
+export const META_TYPE_STRING = 'string' as string;
+export const META_TYPE_NUMBER = 'number' as string;
+export const META_TYPE_FACTOR = 'factor' as string;
+export const META_TYPE_DATE = 'date' as string;
+export const META_TYPE_DATETIME = 'datetime' as string;
+export const META_TYPE_HREF = 'href' as string;
+export const META_TYPE_GEO = 'geo' as string;
+export const META_TYPE_GRAPH = 'graph' as string;
+
+export const FILTER_TYPE_CATEGORY = 'category' as string;
+export const FILTER_TYPE_NUMBERRANGE = 'numberrange' as string;
+export const FILTER_TYPE_DATERANGE = 'daterange' as string;
+export const FILTER_TYPE_DATETIMERANGE = 'datetimerange' as string;
+
+export const META_FILTER_TYPE_MAP = {
+  [META_TYPE_STRING]: FILTER_TYPE_CATEGORY,
+  [META_TYPE_NUMBER]: FILTER_TYPE_NUMBERRANGE,
+  [META_TYPE_FACTOR]: FILTER_TYPE_CATEGORY,
+  [META_TYPE_DATE]: FILTER_TYPE_DATERANGE,
+  [META_TYPE_DATETIME]: FILTER_TYPE_DATETIMERANGE,
+};
+
+export const GRID_ARRANGEMENT_ROWS = 'rows' as string;
+export const GRID_ARRANGEMENT_COLS = 'cols' as string;
+
+export const PANEL_KEY = '__PANEL_KEY__' as string;
+
+// Symbol to use as a key for common tags to avoid collisions with user-defined tags
+export const COMMON_TAGS_KEY = Symbol('__common__') as symbol;

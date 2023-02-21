@@ -1,86 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import type { Action, Dispatch } from 'redux';
-import { createSelector } from 'reselect';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListSubheader from '@mui/material/ListSubheader';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import { setLabels } from '../../slices/labelsSlice';
-import { contentHeightSelector } from '../../selectors/ui';
-import { labelsSelector, curDisplayInfoSelector } from '../../selectors';
-import uiConsts from '../../assets/styles/uiConsts';
-import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import SidebarLabelPill from '../SidebarLabelPill';
+import { useDisplayMetasWithInputs, useMetaGroupsWithInputs } from '../../slices/displayInfoAPI';
+import { labelsSelector } from '../../selectors';
 import styles from './SidebarLabels.module.scss';
+import { setLabels } from '../../slices/labelsSlice';
+import { COMMON_TAGS_KEY } from '../../constants';
 
-interface SidebarLabelsProps {
-  height: number;
-  labels: string[];
-  cogInfo: CogInfo;
-  curDisplayInfo: CurrentDisplayInfo;
-  handleChange: (arg1: string, arg2: string[]) => void;
-}
+const SidebarLabels: React.FC = () => {
+  const dispatch = useDispatch();
+  const labels = useSelector(labelsSelector);
+  const labelObj = useMetaGroupsWithInputs();
 
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({ height, labels, cogInfo, curDisplayInfo, handleChange }) => {
-  let content = <div />;
-  const { cogGroups } = curDisplayInfo.info;
-  const ciKeys = Object.keys(cogInfo);
-  if (ciKeys.length > 0) {
-    content = (
-      <div className={styles.sidebarLabels} style={{ height }}>
-        <List className={styles.sidebarLabelsList}>
-          {Object.keys(cogGroups).map((grp) => {
-            const curItems = cogGroups[grp];
-            if (curItems.length === 0) {
-              return null;
-            }
-            return (
-              <React.Fragment key={grp}>
-                {!['condVar', 'common', 'panelKey'].includes(grp) && (
-                  <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
-                    <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
-                  </ListSubheader>
-                )}
-                {cogGroups[grp].sort().map((d: string) => (
-                  <ListItem key={cogInfo[d].name} dense button onClick={() => handleChange(cogInfo[d].name, labels)}>
-                    <Checkbox
-                      checked={labels.indexOf(cogInfo[d].name) !== -1}
-                      className={styles.sidebarLabelsListCheckbox}
-                      tabIndex={-1}
-                      disableRipple
-                    />
-                    <ListItemText
-                      primary={cogInfo[d].name}
-                      secondary={cogInfo[d].desc}
-                      className={styles.sidebarLabelsListItem}
-                    />
-                  </ListItem>
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </List>
-      </div>
-    );
-  }
-  return content;
-};
+  const metasWithInputs = useDisplayMetasWithInputs();
+  const labelDescriptionMap = new Map();
+  metasWithInputs.forEach((meta) => {
+    labelDescriptionMap.set(meta.varname, meta.label);
+  });
 
-// ------ redux container ------
-
-const stateSelector = createSelector(contentHeightSelector, labelsSelector, curDisplayInfoSelector, (ch, labels, cdi) => ({
-  width: uiConsts.sidebar.width,
-  height: ch - uiConsts.sidebar.header.height,
-  labels,
-  cogInfo: cdi.info.cogInfo,
-  curDisplayInfo: cdi,
-}));
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  handleChange: (value: string, labels: string[]) => {
+  const handleLabelChange = (value: string) => {
     const idx = labels.indexOf(value);
     let newLabels = labels;
     if (idx === -1) {
@@ -89,7 +29,47 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
       newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
     }
     dispatch(setLabels(newLabels));
-  },
-});
+  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarLabels);
+  return (
+    <>
+      {labelDescriptionMap.size > 0 && (
+        <div className={styles.sidebarLabels}>
+          <List className={styles.sidebarLabelsList}>
+            {Array.from(labelObj.keys()).map((grp) => {
+              const groupString = grp.toString();
+              const curItems = labelObj.get(grp);
+              if (curItems?.length === 0 || !curItems) {
+                return null;
+              }
+              return (
+                <React.Fragment key={groupString}>
+                  {/* Don't include header for non-tagged group */}
+                  {grp !== COMMON_TAGS_KEY && (
+                    <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
+                      <span className={styles.sidebarLabelsCogGroupText}>{`${groupString} (${curItems.length})`}</span>
+                    </ListSubheader>
+                  )}
+                  {labelObj
+                    ?.get(grp)
+                    ?.sort()
+                    .map((label: string) => (
+                      <SidebarLabelPill
+                        labels={labels}
+                        labelDescriptionMap={labelDescriptionMap}
+                        label={label}
+                        handleLabelChange={handleLabelChange}
+                        key={`${label}_${groupString}`}
+                      />
+                    ))}
+                </React.Fragment>
+              );
+            })}
+          </List>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default SidebarLabels;

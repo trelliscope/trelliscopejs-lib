@@ -1,0 +1,21 @@
+.downloadCsv {
+  &Container &ContentText {
+    margin: var(--margin-10) 0;
+  }
+
+  &Button {
+    margin: var(--margin-6) !important;
+  }
+
+  &Description {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: var(--margin-10);
+  }
+
+  &Wrapper {
+    &Center {
+      text-align: center;
+    }
+  }
+}

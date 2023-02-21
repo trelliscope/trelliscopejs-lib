@@ -1,7 +1,6 @@
 .displayList {
   &Container {
-    height: 400px;
-    overflow-y: auto;
+    height: var(--displayList-container-height);
   }
 
   &GroupContainer {
@@ -12,8 +11,8 @@
 
   &Grid {
     &List {
-      width: 700px;
-      margin-bottom: 24px;
+      width: var(--displayList-grid-list-width);
+      margin-bottom: var(--margin-12);
     }
 
     &Tile {
@@ -21,14 +20,14 @@
     }
 
     &Title {
-      font-weight: 400;
-      color: #ff5252;
-      font-size: 15px;
+      font-weight: var(--font-normal);
+      color: var(--red-100);
+      font-size: var(--text-lg);
     }
 
     &SubTitle {
       font-style: italic;
-      font-size: 11px;
+      font-size: var(--text-2xs);
     }
   }
   &Img {
@@ -40,18 +39,22 @@
   }
 
   &TitleBar {
-    background: rgba(0, 0, 0, 0.8) !important;
+    background: var(--black-100) !important;
   }
 
   &Checkbox {
     position: absolute !important;
     left: 0;
     top: 0;
-    background: rgba(69, 138, 249, 0.9) !important;
-    color: white !important;
+    background: var(--blue-100) !important;
+    color: var(--white) !important;
 
     &Checked {
-      color: white !important;
+      color: var(--white) !important;
     }
+  }
+
+  &Container &GroupContainer &GridList {
+    overflow-y: hidden;
   }
 }

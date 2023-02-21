@@ -1,31 +1,38 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical, faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { createSelector } from 'reselect';
-import type { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { layoutSelector } from '../../selectors';
-import type { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
-import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { selectSelectedRelDisps, setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
+import { LayoutAction, setLayout, selectLayout } from '../../slices/layoutSlice';
 import styles from './SidebarLayout.module.scss';
 
-interface SidebarLayoutProps {
-  layout: LayoutState;
-  hasRelDisps: boolean;
-  handleChange: (layout: LayoutState) => void;
-  resetRelDisps: () => void;
-}
+const SidebarLayout: React.FC = () => {
+  const dispatch = useDispatch();
+  const layout = useSelector(selectLayout);
+  const selectedRelDisps = useSelector(selectSelectedRelDisps);
+  const hasRelDisps = selectedRelDisps.length > 0;
 
-const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, handleChange, resetRelDisps }) => {
+  const handleChange = (sidebarLayout: LayoutAction) => dispatch(setLayout(sidebarLayout));
+
+  const resetRelDisps = () => {
+    dispatch(setSelectedRelDisps([]));
+    dispatch(setRelDispPositions([]));
+  };
+
   const handleLayoutChange = (value: string, isRow: boolean) => {
-    const num = parseInt(value, 10);
+    let nonZeroValue = value;
+    if (value.charAt(0) === '0') {
+      nonZeroValue = value.slice(1);
+    }
+    const num = parseInt(nonZeroValue || '1', 10);
     if (num > 15 || num < 0) return;
     handleChange({
       nrow: isRow ? num : layout.nrow,
       ncol: !isRow ? num : layout.ncol,
       arrange: layout.arrange,
-      pageNum: layout.pageNum,
+      page: layout.page,
     });
   };
 
@@ -77,29 +84,29 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, hand
                 handleChange({
                   nrow: layout.nrow,
                   ncol: layout.ncol,
-                  arrange: ar as LayoutState['arrange'],
-                  pageNum: layout.pageNum,
+                  arrange: ar as ILayoutState['arrange'],
+                  page: layout.page,
                 })
               }
             >
               <FormControlLabel
-                value="row"
+                value="rows"
                 control={<Radio />}
                 label={
-                  <span className={styles.inputLabelSpan}>
-                    By row
-                    <i className={`icon-byrow ${styles.inputIcon}`} />
-                  </span>
+                  <div className={styles.inputLabelSpan}>
+                    By Row
+                    <FontAwesomeIcon icon={faGripHorizontal} />
+                  </div>
                 }
                 className={styles.inputRadio}
               />
               <FormControlLabel
-                value="column"
+                value="cols"
                 control={<Radio />}
                 label={
                   <span className={styles.inputLabelSpan}>
                     By column
-                    <i className={`icon-bycol ${styles.inputIcon}`} />
+                    <FontAwesomeIcon icon={faGripVertical} />
                   </span>
                 }
                 className={styles.inputRadio}
@@ -113,19 +120,4 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ layout, hasRelDisps, hand
   );
 };
 
-const selectedRelDispsSelector = (state: RootState) => state.selectedRelDisps;
-
-const stateSelector = createSelector(layoutSelector, selectedRelDispsSelector, (layout, selectedRelDisps) => ({
-  layout,
-  hasRelDisps: selectedRelDisps.length > 0,
-}));
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  handleChange: (layout: LayoutState) => dispatch(setLayout(layout)),
-  resetRelDisps: () => {
-    dispatch(setSelectedRelDisps([]));
-    dispatch(setRelDispPositions([]));
-  },
-});
-
-export default connect(stateSelector, mapDispatchToProps)(SidebarLayout);
+export default SidebarLayout;

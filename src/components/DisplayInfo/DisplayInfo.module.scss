@@ -1,37 +1,37 @@
 .displayInfo {
   &Button {
     position: absolute;
-    left: 48px;
+    left: var(--displayInfo-button-position-left);
     box-sizing: border-box;
     top: -1px;
     display: inline-block;
-    height: 48px;
-    width: 47px;
-    font-size: 18px;
-    padding-top: 0px;
-    color: #9ba3af;
+    height: var(--displayInfo-button-size);
+    width: var(--displayInfo-button-size);
+    font-size: var(--text-3xl);
+    padding-top: 0;
+    color: var(--gray-600);
     background: none;
     text-align: center;
-    border-right: 1px solid #eaedf0;
-    border-bottom: 1px solid #eaedf0;
+    border-right: var(--border-2);
+    border-bottom: var(--border-2);
     border-top: none;
     border-left: none;
 
     &:hover {
-      transition: background 250ms;
-      background: #eee;
+      transition: var(--displayInfo-button-hover-transition);
+      background: var(--white-300);
       cursor: pointer;
     }
   }
 
   &Icon {
-    padding-left: 2px;
-    line-height: 48px;
+    display: flex;
+    justify-content: center;
   }
 
   &ModalContainer {
     overflow-y: auto;
-    max-height: 520px;
+    max-height: var(--dispayInfo-container-max-height);
   }
 
   &ButtonLeft {

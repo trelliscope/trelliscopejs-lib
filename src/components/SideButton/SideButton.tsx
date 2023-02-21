@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTags, faFilter, faSort, faEye, faGrip } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import { SB_CONFIG } from '../../constants';
 import styles from './SideButton.module.scss';
@@ -8,11 +10,10 @@ interface SideButtonProps {
   active?: boolean;
   title: string;
   label: string;
-  icon: string;
   onClick: () => void;
 }
 
-const SideButton: React.FC<SideButtonProps> = ({ className, active, icon, title, label, onClick }) => (
+const SideButton: React.FC<SideButtonProps> = ({ className, active, title, label, onClick }) => (
   <button
     type="button"
     className={classNames(styles.sideButton, className, {
@@ -22,10 +23,16 @@ const SideButton: React.FC<SideButtonProps> = ({ className, active, icon, title,
     })}
     onClick={onClick}
   >
-    <div className={styles.sideButtonIcon}>
-      <i className={icon} />
+    <div className={styles.sideButtonTest}>
+      <div className={styles.sideButtonIcon}>
+        {label === 'Grid' && <FontAwesomeIcon icon={faGrip} />}
+        {label === 'Labels' && <FontAwesomeIcon icon={faTags} />}
+        {label === 'Filter' && <FontAwesomeIcon icon={faFilter} />}
+        {label === 'Sort' && <FontAwesomeIcon icon={faSort} />}
+        {label === 'Views' && <FontAwesomeIcon icon={faEye} />}
+      </div>
+      <div className={styles.sideButtonLabel}>{label}</div>
     </div>
-    <div className={styles.sideButtonLabel}>{label}</div>
   </button>
 );
 

@@ -1,0 +1,9 @@
+.filterCat {
+  &Regex {
+    width: 190px;
+    margin-top: var(--neg-margin-6);
+    font-size: var(--text-xl);
+    transform: scale(0.85);
+    transform-origin: 0 0;
+  }
+}

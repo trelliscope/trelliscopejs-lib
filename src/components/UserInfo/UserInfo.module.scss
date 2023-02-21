@@ -1,0 +1,9 @@
+.userInfo {
+  &Container &ContentText {
+    margin: var(--margin-10) 0;
+  }
+
+  &TextField {
+    margin-bottom: var(--margin-9) !important;
+  }
+}

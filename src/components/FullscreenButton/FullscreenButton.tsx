@@ -1,123 +1,83 @@
-import React from 'react';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import type { Action, Dispatch } from 'redux';
-import { useHotkeys } from 'react-hotkeys-hook';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMaximize, faMinimize } from '@fortawesome/free-solid-svg-icons';
 import { addClass, removeClass } from '../../classManipulation';
-import { dialogOpenSelector, fullscreenSelector, appIdSelector, singlePageAppSelector } from '../../selectors';
-import { origWidthSelector, origHeightSelector } from '../../selectors/ui';
-import { setFullscreen } from '../../actions';
+import { fullscreenSelector, singlePageAppSelector } from '../../selectors';
+import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
-import type { RootState } from '../../store';
+import { origHeightSelector, origWidthSelector } from '../../selectors/ui';
 import styles from './FullscreenButton.module.scss';
 
-interface NewDims {
-  width: number;
-  height: number;
-}
-interface FullscreenButtonProps {
-  dialog: boolean;
-  fullscreen: boolean;
-  appId: string;
-  singlePageApp: boolean;
-  ww: number;
-  hh: number;
-  toggleFullscreen: (fullscreen: boolean, appId: string, appDims: NewDims, yOffset: number) => void;
-}
+const FullscreenButton: React.FC = () => {
+  const dispatch = useDispatch();
+  const fullscreen = useSelector(fullscreenSelector);
+  const singlePageApp = useSelector(singlePageAppSelector);
+  const ww = useSelector(origWidthSelector);
+  const hh = useSelector(origHeightSelector);
+  const originalDims = useMemo(() => ({ width: ww, height: hh }), [ww, hh]);
 
-const FullscreenButton: React.FC<FullscreenButtonProps> = ({
-  dialog,
-  fullscreen,
-  appId,
-  singlePageApp,
-  ww,
-  hh,
-  toggleFullscreen,
-}) => {
-  let yOffset = window.pageYOffset;
+  const mainEl = document.getElementsByClassName('trelliscope-not-spa')[0] as HTMLElement;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-  useHotkeys('esc', () => toggleFullscreen(false, appId, { width: ww, height: hh }, yOffset), {
-    enabled: fullscreen && !singlePageApp && !dialog,
-  });
+  const toggleFullScreen = () => {
+    if (isSafari) {
+      if (!document.webkitFullscreenElement) {
+        document.body.webkitRequestFullscreen();
+        addClass(mainEl, 'trelliscope-spa');
+        dispatch(setFullscreen(true));
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+        removeClass(mainEl, 'trelliscope-spa');
+        dispatch(setFullscreen(false));
+        dispatch(windowResize(originalDims));
+      }
+      return;
+    }
+    if (!document.fullscreenElement) {
+      document.body.requestFullscreen();
+      addClass(mainEl, 'trelliscope-spa');
+      dispatch(setFullscreen(true));
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      removeClass(mainEl, 'trelliscope-spa');
+      dispatch(setFullscreen(false));
+      dispatch(windowResize(originalDims));
+    }
+  };
+
+  const handleNativeKeyEsc = useCallback(() => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      removeClass(mainEl, 'trelliscope-spa');
+      dispatch(setFullscreen(false));
+      dispatch(windowResize(originalDims));
+    }
+  }, [dispatch, mainEl, originalDims]);
+
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', handleNativeKeyEsc);
+    if (isSafari) {
+      document.addEventListener('webkitfullscreenchange', handleNativeKeyEsc);
+    }
+    return () => {
+      document.removeEventListener('fullscreenchange', handleNativeKeyEsc);
+      if (isSafari) {
+        document.removeEventListener('webkitfullscreenchange', handleNativeKeyEsc);
+      }
+    };
+  }, [handleNativeKeyEsc, isSafari]);
 
   if (singlePageApp) {
     return null;
   }
 
   return (
-    <button
-      type="button"
-      className={styles.fullscreenButton}
-      onClick={() => {
-        if (!fullscreen) {
-          // toggling to fullscreen
-          yOffset = window.pageYOffset;
-        }
-        toggleFullscreen(!fullscreen, appId, { width: ww, height: hh }, yOffset);
-      }}
-    >
-      <i className={classNames(styles.fullscreenButtonIcon, fullscreen ? 'icon-minimize' : 'icon-maximize')} />
+    <button type="button" className={styles.fullscreenButton} onClick={toggleFullScreen}>
+      <div className={styles.fullscreenButtonIcon}>
+        {!fullscreen ? <FontAwesomeIcon icon={faMaximize} size="lg" /> : <FontAwesomeIcon icon={faMinimize} size="lg" />}
+      </div>
     </button>
   );
 };
 
-// ------ redux container ------
-
-const stateSelector = createSelector(
-  dialogOpenSelector,
-  fullscreenSelector,
-  appIdSelector,
-  singlePageAppSelector,
-  origWidthSelector,
-  origHeightSelector,
-  (dialog, fullscreen, appId, singlePageApp, ww, hh) => ({
-    dialog,
-    fullscreen,
-    appId,
-    singlePageApp,
-    ww,
-    hh,
-  }),
-);
-
-const mapStateToProps = (state: RootState) => stateSelector(state);
-
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  toggleFullscreen: (fullscreen: boolean, appId: string, appDims: { width: number; height: number }, yOffset: number) => {
-    const el = document.getElementById(appId) as HTMLElement;
-    const newDims = { width: 0, height: 0 } as NewDims;
-    if (fullscreen) {
-      addClass(document.body, 'trelliscope-fullscreen-body');
-      addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-      addClass(el, 'trelliscope-fullscreen-el');
-      newDims.width = window.innerWidth;
-      newDims.height = window.innerHeight;
-      // move the div to the outside of the document to make sure it's on top
-      const bodyEl = document.getElementById('trelliscope-fullscreen-div') as HTMLElement;
-      bodyEl.style.display = 'block';
-      bodyEl.appendChild(el);
-    } else {
-      removeClass(document.body, 'trelliscope-fullscreen-body');
-      removeClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-      removeClass(el, 'trelliscope-fullscreen-el');
-      newDims.width = appDims.width;
-      newDims.height = appDims.height;
-      // move the div back to its parent element
-      const parentId = document.getElementById(`${el.id}-parent`) as HTMLElement;
-      if (parentId) {
-        parentId.appendChild(el);
-      }
-      const fullscreenDiv = document.getElementById('trelliscope-fullscreen-div') as HTMLElement;
-      if (fullscreenDiv) {
-        fullscreenDiv.style.display = 'none';
-      }
-      // restore to y offset we were at before going fullscreen
-      window.scrollTo(window.pageXOffset, yOffset);
-    }
-    dispatch(setFullscreen(fullscreen));
-    dispatch(windowResize(newDims));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FullscreenButton);
+export default FullscreenButton;

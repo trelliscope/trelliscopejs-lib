@@ -23,4 +23,6 @@ export const selectedRelDispsSlice = createSlice({
 
 export const { setSelectedRelDisps } = selectedRelDispsSlice.actions;
 
+export const selectSelectedRelDisps = (state: { selectedRelDisps: number[] }) => state.selectedRelDisps;
+
 export default selectedRelDispsSlice.reducer;

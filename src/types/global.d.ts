@@ -6,9 +6,16 @@ declare global {
     HTMLWidgets: HTMLWidget;
     [key: string]:
       | ((data: DisplayObject) => void)
-      | ((data: CogData[]) => void)
+      | ((data: Datum[]) => void)
       | ((data: Config) => void)
       | ((data: Display[]) => void);
+  }
+  interface Document {
+    webkitFullscreenElement: Element;
+    webkitExitFullscreen: () => void;
+  }
+  interface Element {
+    webkitRequestFullscreen: () => void;
   }
 }
 

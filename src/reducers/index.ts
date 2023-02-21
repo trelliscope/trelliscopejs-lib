@@ -3,30 +3,23 @@ import sidebar from '../slices/sidebarSlice';
 import selectedDisplay from '../slices/selectedDisplaySlice';
 import relDispPositions from '../slices/relDispPositionsSlice';
 import selectedRelDisps from '../slices/selectedRelDispsSlice';
-import displayList from '../slices/displayListSlice';
 import ui from '../slices/uiSlice';
 import layout from '../slices/layoutSlice';
 import labels from '../slices/labelsSlice';
 import sort from '../slices/sortSlice';
-import { appId, dialog, singlePageApp, fullscreen, errorMsg, dispSelectDialog, dispInfoDialog, options } from './app';
+import app from '../slices/appSlice';
 import _config from '../slices/configSlice';
 import filter from '../slices/filterSlice';
-import _displayInfo from './_displayInfo';
-import _cogDataMutable from './_cogDataMutable';
-import _localPanels from './_localPanels';
-
+import cogDataMutable from '../slices/cogDataMutableSlice';
+import { configAPI } from '../slices/configAPI';
+import { displayListAPI } from '../slices/displayListAPI';
+import { metaDataAPI } from '../slices/metaDataAPI';
+import { displayInfoAPI } from '../slices/displayInfoAPI';
 
 const reducers = combineReducers({
-  appId,
-  dialog,
-  options,
-  dispSelectDialog,
-  dispInfoDialog,
-  singlePageApp,
-  fullscreen,
+  app,
   ui,
   sidebar,
-  errorMsg,
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,
@@ -35,10 +28,11 @@ const reducers = combineReducers({
   sort,
   filter,
   _config,
-  displayList,
-  _displayInfo,
-  _cogDataMutable,
-  _localPanels,
+  cogDataMutable,
+  [configAPI.reducerPath]: configAPI.reducer,
+  [displayListAPI.reducerPath]: displayListAPI.reducer,
+  [metaDataAPI.reducerPath]: metaDataAPI.reducer,
+  [displayInfoAPI.reducerPath]: displayInfoAPI.reducer,
 });
 
 export default reducers;
