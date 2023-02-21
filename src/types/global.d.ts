@@ -5,10 +5,10 @@ declare global {
     __panel__: { [key: string]: (json2: PanelData) => void };
     HTMLWidgets: HTMLWidget;
     [key: string]:
-      | ((data: DisplayObject) => void)
+      | ((data: IDisplay) => void)
       | ((data: Datum[]) => void)
-      | ((data: Config) => void)
-      | ((data: Display[]) => void);
+      | ((data: IConfig) => void)
+      | ((data: IDisplay[]) => void);
   }
   interface Document {
     webkitFullscreenElement: Element;

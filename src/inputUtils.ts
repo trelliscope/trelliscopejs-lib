@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDisplayInfo } from './slices/displayInfoAPI';
 
-export const getLocalStoragePrefix = (di: DisplayObject) => `${di.group}_:_${di.name}_:`;
+// export const getLocalStoragePrefix = (di: DisplayObject) => `${di.group}_:_${di.name}_:`;
 
 export const getLocalStorageKey = (tags: string[], displayName: string, panelKey: string, name: string) =>
   `${tags.join('__')}_:_${displayName}_:_${panelKey}_:_${name}`;

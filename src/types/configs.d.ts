@@ -201,7 +201,7 @@ interface INumberMeta extends IMeta {
   locale: boolean;
 }
 
-interface ICurrencyMeta extends IMeta {
+interface ICurrencyMeta extends IMeta { // not used
   code: CurrencyCode;
 }
 
@@ -211,11 +211,11 @@ interface IFactorMeta extends IMeta {
 
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
-interface IDatetimeMeta extends IMeta {
+interface IDatetimeMeta extends IMeta { // not used
   timezone: string;
 }
 
-interface IGraphMeta extends IMeta {
+interface IGraphMeta extends IMeta { // not used
   idvarname: string;
   direction: GraphDirection;
 }
@@ -255,7 +255,7 @@ interface IRadioInput extends IInput {
   options: string[];
 }
 
-interface ICheckboxInput extends IInput {
+interface ICheckboxInput extends IInput { // not used
   options: string[];
 }
 
