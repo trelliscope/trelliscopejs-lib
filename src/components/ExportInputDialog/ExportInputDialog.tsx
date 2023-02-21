@@ -9,6 +9,7 @@ import StepLabel from '@mui/material/StepLabel';
 import UserInfo from '../UserInfo';
 import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
+import ConfirmationModal from '../ConfirmationModal';
 import styles from './ExportInputDialog.module.scss';
 
 interface ExportInputDialogProps {
@@ -40,6 +41,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
   const [activeStep, setActiveStep] = useState<number>(0);
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   if (!(hasInputs && hasLocalStorage)) {
     return null;
@@ -66,6 +68,15 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
       setOtherInfo('');
       setValidEmail(true);
     });
+  };
+
+  const handleConfirm = () => {
+    setConfirmationModalOpen(false);
+    clearInputs();
+  };
+
+  const handleCancel = () => {
+    setConfirmationModalOpen(false);
   };
 
   return (
@@ -125,7 +136,13 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
           )}
         </DialogContent>
         <div className={styles.exportInputDialogControlsContainer}>
-          <Button onClick={clearInputs}>Clear inputs</Button>
+          <Button onClick={() => setConfirmationModalOpen(true)}>Clear inputs</Button>
+          <ConfirmationModal
+            isOpen={confirmationModalOpen}
+            handleCancel={handleCancel}
+            handleConfirm={handleConfirm}
+            dialogText="This will delete all local storage input items on all panels."
+          />
           <div className={styles.exportInputDialogControlsContainerStepper}>
             <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
               Back
