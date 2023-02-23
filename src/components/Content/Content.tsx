@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import snakeCase from 'lodash.snakecase';
 import classNames from 'classnames';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -11,6 +10,7 @@ import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import { selectBasePath } from '../../selectors/app';
+import { snakeCase } from '../../utils';
 import styles from './Content.module.scss';
 
 const panelSrcGetter =

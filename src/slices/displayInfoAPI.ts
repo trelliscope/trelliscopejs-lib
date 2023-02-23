@@ -2,13 +2,12 @@ import { useMemo } from 'react';
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import snakeCase from 'lodash.snakecase';
 import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 import { useRelatedDisplayNames } from './displayListAPI';
 import { COMMON_TAGS_KEY } from '../constants';
 import { selectAppId, selectBasePath } from '../selectors/app';
-import { getRequestErrorMessage, handleJSONResponse } from '../utils';
+import { getRequestErrorMessage, handleJSONResponse, snakeCase } from '../utils';
 
 const displayRequest = (url: string, displayName: string, dataType: string, callback: string) =>
   new Promise((resolve) => {
