@@ -66,6 +66,7 @@ const Content: React.FC = () => {
                     type={displayInfo?.paneltype}
                     src={getPanelSrc(d, name).toString()}
                     alt={name}
+                    aspectRatio={displayInfo?.panelaspect}
                     key={`${d[metaIndex]}_${name}`}
                   />
                 ))}
