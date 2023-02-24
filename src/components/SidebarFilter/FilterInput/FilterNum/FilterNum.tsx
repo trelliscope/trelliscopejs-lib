@@ -12,13 +12,15 @@ import styles from './FilterNum.module.scss';
 interface FilterNumProps {
   meta: INumberMeta;
   filter: INumberRangeFilterState;
+  isLogScale: boolean;
 }
 
-const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
+const FilterNum: React.FC<FilterNumProps> = ({ meta, filter, isLogScale }) => {
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
   const dispatch = useDispatch();
 
   const handleOnBrush = (values: number[] | null[]) => {
+    console.log('handleOnBrush', values);
     if (values[0] === null && values[1] === null) {
       if (filter) {
         dispatch(removeFilter(filter.varname));
@@ -93,6 +95,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   // calculate step value for numeric input
   const hspan = (xDomain[1] - xDomain[0]) * xDomain.length;
   const step = (10 ** Math.round(Math.log10(hspan / 100) - 0.4)) as number;
+  console.log(filter?.max, format(filter?.max));
 
   return (
     <div className={styles.filterNum}>
@@ -106,6 +109,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           name={meta.varname}
           onBrush={handleOnBrush}
           selection={[filter?.min || 0, filter?.max || 0]}
+          isLogScale={isLogScale}
         />
       </div>
       <div className={styles.filterNumInputContainer}>
@@ -131,7 +135,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.max ? format(filter?.max) : ''}
+          value={filter?.max ? filter?.max : ''}
           onChange={(e) => handleInput(e.target.value, 'max')}
           variant="standard"
         />

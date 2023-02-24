@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand, scaleLinear, scaleLog } from 'd3-scale';
 import styles from './NumHistogram.module.scss';
 import NumHistogramBrush from './NumHistogramBrush';
 import NumHistogramAxis from './NumHistogramAxis';
@@ -14,6 +14,7 @@ interface NumHistogramProps {
   name: string;
   onBrush: ([number1, number2]: number[] | null[]) => void;
   selection: [number, number];
+  isLogScale: boolean;
 }
 
 const NumHistogram: React.FC<NumHistogramProps> = ({
@@ -25,6 +26,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   name,
   onBrush,
   selection,
+  isLogScale,
 }) => {
   const axisPad = 16;
   const xPad = 5;
@@ -37,9 +39,9 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
     .paddingInner(0.1);
   const yScale = scaleLinear()
     .domain(yDomain)
-    .range([0, height - axisPad]);
-  const ticksScale = scaleLinear().domain(xDomain).range([0, innerWidth]);
-  const ticks = ticksScale.ticks(5);
+    .range([2, height - axisPad]);
+  // const ticksScale = scaleLinear().domain(xDomain).range([0, innerWidth]);
+  // const ticks = ticksScale.ticks(5);
   const valueScale = scaleLinear().domain(xExtents).range([0, innerWidth]);
 
   const { invert } = valueScale;
@@ -83,7 +85,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         height={axisPad}
         x={(xScale(xDomain[0] as unknown as string) || 0) + xPad}
         y={height - axisPad}
-        ticks={ticks}
+        ticks={xDomain}
         scale={xScale}
       />
       <NumHistogramBrush

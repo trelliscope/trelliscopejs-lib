@@ -17,6 +17,11 @@
     &Controls {
       display: flex;
       align-items: center;
+
+      &LogScaleCheckboxContainer {
+        display: flex;
+        align-items: center;
+      }
     }
 
     &Btn {
