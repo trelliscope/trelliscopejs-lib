@@ -5,6 +5,7 @@ import { useDataType } from './configAPI';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 import { selectAppId, selectBasePath } from '../selectors/app';
 import { getRequestErrorMessage, handleJSONResponse, snakeCase } from '../utils';
+import { PANEL_KEY } from '../constants';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
 
@@ -63,4 +64,9 @@ export const useMetaData = () => {
     { url: basePath, id: appId, dataType, displayName: selectedDisplay?.name || '' },
     { skip: !dataType || !basePath || !selectedDisplay?.name },
   );
+};
+
+export const useMetaDataByPanelKey = (panelKey: string | number) => {
+  const metaData = useMetaData();
+  return metaData.data?.find((datum) => datum[PANEL_KEY] === panelKey);
 };

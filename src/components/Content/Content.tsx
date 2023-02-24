@@ -1,20 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import useResizeObserver from 'use-resize-observer';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
-import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
+import { metaIndex, useMetaData, useMetaDataByPanelKey } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import { GRID_ARRANGEMENT_COLS } from '../../constants';
-import { selectBasePath } from '../../selectors/app';
 import { panelSrcGetter } from '../../utils';
+import { selectBasePath, selectPanelDialog } from '../../selectors/app';
 import getCustomProperties from '../../getCustomProperties';
 import DataTable from '../DataTable';
+import PanelDialog from '../PanelDialog';
 import styles from './Content.module.scss';
+import { setPanelDialog } from '../../slices/appSlice';
 
 const Content: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -114,6 +116,21 @@ const Content: React.FC = () => {
     contentWidth,
   ]);
 
+  const panelDialog = useSelector(selectPanelDialog);
+  const panelDialogData = useMetaDataByPanelKey(panelDialog.panel);
+
+  const handlePanelClick = useCallback(
+    (PANEL_KEY: string | number) => {
+      dispatch(
+        setPanelDialog({
+          open: true,
+          panel: PANEL_KEY,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
   if (!metaDataSuccess || !displayInfoSuccess) return null;
 
   let names = [displayInfo?.name];
@@ -135,7 +152,7 @@ const Content: React.FC = () => {
   const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
   return (
-    <>
+    <div className={styles.contentWrapper}>
       {isGrid ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div
@@ -146,7 +163,13 @@ const Content: React.FC = () => {
             {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
               <>
                 {data.map((d) => (
-                  <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
+                  <Panel
+                    onClick={handlePanelClick}
+                    data={d}
+                    labels={activeLabels}
+                    inputs={activeInputs as IInput[]}
+                    key={d[metaIndex]}
+                  >
                     {names.map((name) => (
                       <PanelGraphic
                         type={displayInfo?.paneltype}
@@ -170,7 +193,21 @@ const Content: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+      <PanelDialog
+        open={panelDialog.open}
+        panelKey={panelDialog.panel}
+        onClose={() => dispatch(setPanelDialog({ open: false }))}
+      >
+        {names.map((name) => (
+          <PanelGraphic
+            type={displayInfo?.paneltype}
+            src={getPanelSrc(panelDialogData || {}, name).toString()}
+            alt={name}
+            key={`${panelDialog.panel}_${name}`}
+          />
+        ))}
+      </PanelDialog>
+    </div>
   );
 };
 

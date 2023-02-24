@@ -1,0 +1,26 @@
+.panelDialog {
+  &Inner {
+    max-width: calc(100% - var(--padding-12)) !important;
+    //max-height: calc(100% - 60px) !important;
+  }
+
+  &Graphic {
+    padding: var(--padding-10);
+
+    img {
+      height: auto;
+      width: clamp(320px, 100vw, 800px);
+      max-width: 100%;
+    }
+
+    iframe {
+      border: none;
+      pointer-events: none;
+    }
+  }
+
+  &TableWrapper {
+    border-top: var(--border-2);
+    border-bottom: var(--border-2);
+  }
+}

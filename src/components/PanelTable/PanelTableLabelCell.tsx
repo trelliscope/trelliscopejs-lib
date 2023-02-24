@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material';
 import React from 'react';
-import styles from './Panel.module.scss';
+import styles from './PanelTable.module.scss';
 
 interface PanelTableLabelCellProps {
   value: string | number | null;
@@ -8,7 +8,7 @@ interface PanelTableLabelCellProps {
 }
 
 const PanelTableLabelCell: React.FC<PanelTableLabelCellProps> = ({ value, label }) => (
-  <td className={styles.panelLabelCell}>
+  <td className={styles.panelTableCell}>
     {label ? (
       <Tooltip title={label} placement="left" arrow>
         <span>{value}</span>
