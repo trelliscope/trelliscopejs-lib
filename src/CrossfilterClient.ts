@@ -37,6 +37,7 @@ export interface ICrossFilterClient extends Omit<IDataClient, 'groupBy'> {
   dimensions: Map<string | symbol, D>;
   groupBy(
     field: string | symbol,
+    dataType?: 'string' | 'number' | 'date',
     groupFunc?: (value: string | number) => NaturallyOrderedValue,
   ): readonly Grouping<NaturallyOrderedValue, unknown>[];
 }
@@ -122,8 +123,8 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
       );
     }
   }
-  // FIXME once the dataclient groupby is finished we can fix this.
-  // The issue is that in dataclient which we extend we return an empty array that results in a never[] return type
+  // type mismatch between the type coming from crossfilter and the type coming from the parent class dataclient
+  // which is designed to be used with other data clients besides crossfilter
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore ts2304
 
