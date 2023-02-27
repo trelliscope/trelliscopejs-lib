@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
@@ -38,14 +38,6 @@ const Header: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
-
-  useEffect(() => {
-    const pFrom = npp * (n - 1) + 1;
-    const pTo = Math.min(npp * n, totPanels);
-    if (pFrom > pTo) {
-      dispatch(setLayout({ page: 1, type: 'layout' }));
-    }
-  }, [dispatch, n, npp, totPanels]);
 
   const handleChange = (page: number) => {
     dispatch(
