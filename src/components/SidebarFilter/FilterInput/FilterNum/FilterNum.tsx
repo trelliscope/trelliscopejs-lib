@@ -91,7 +91,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         max: upper,
       };
       dispatch(addFilter(newState));
-      dispatch(setLayout({ page: 1 }));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   };
 
