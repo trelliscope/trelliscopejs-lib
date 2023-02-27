@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
+import { setLayout } from '../../../../slices/layoutSlice';
 import CatHistogram from '../../../CatHistogram';
 import { DataContext } from '../../../DataProvider';
 
@@ -22,6 +23,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const handleBarClick = (value: string) => {
     if (filter) {
       dispatch(updateFilterValues({ varname: filter.varname, value }));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     } else {
       const newFilter = {
         type: 'filter',
@@ -31,12 +33,14 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
         values: [value],
       } as ICategoryFilterState;
       dispatch(addFilter(newFilter));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   };
 
   useEffect(() => {
     if (filter && filter.values.length === 0 && filter.regexp === null) {
       dispatch(removeFilter(filter.varname));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   }, [dispatch, filter]);
 
@@ -60,8 +64,10 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
       } as ICategoryFilterState;
 
       dispatch(filter ? updateFilter(newFilter) : addFilter(newFilter));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     } else if (filter) {
       dispatch(removeFilter(filter.varname));
+      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   };
 
