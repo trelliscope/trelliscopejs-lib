@@ -33,7 +33,6 @@ export const FILTER_TYPE_CATEGORY = 'category' as string;
 export const FILTER_TYPE_NUMBERRANGE = 'numberrange' as string;
 export const FILTER_TYPE_DATERANGE = 'daterange' as string;
 export const FILTER_TYPE_DATETIMERANGE = 'datetimerange' as string;
-export const FILTER_TYPE_CURRENCY = 'currency' as string;
 
 export const META_FILTER_TYPE_MAP = {
   [META_TYPE_STRING]: FILTER_TYPE_CATEGORY,
