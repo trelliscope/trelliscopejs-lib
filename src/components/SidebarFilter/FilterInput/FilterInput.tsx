@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
+import {
+  FILTER_TYPE_CATEGORY,
+  FILTER_TYPE_CURRENCY,
+  FILTER_TYPE_NUMBERRANGE,
+  META_FILTER_TYPE_MAP,
+  META_TYPE_FACTOR,
+} from '../../../constants';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
 import { removeFilter, selectFilterByVarname, setFilterView } from '../../../slices/filterSlice';
 import FilterCat from './FilterCat';

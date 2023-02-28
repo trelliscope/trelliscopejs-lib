@@ -7,6 +7,7 @@ import {
   INPUT_TYPE_TEXT,
   META_TYPE_DATE,
   META_TYPE_DATETIME,
+  META_TYPE_CURRENCY,
   META_TYPE_FACTOR,
   META_TYPE_HREF,
   META_TYPE_NUMBER,
@@ -74,6 +75,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                   data[label.varname]}
                 {label.type === META_TYPE_DATETIME && data[label.varname].toString().replace('T', ' ')}
                 {label.type === META_TYPE_NUMBER && <FormattedNumber value={data[label.varname] as number} />}
+                {label.type === META_TYPE_CURRENCY && <FormattedNumber value={data[label.varname] as number} isCurrency />}
                 {label.type === META_TYPE_HREF && (
                   <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
