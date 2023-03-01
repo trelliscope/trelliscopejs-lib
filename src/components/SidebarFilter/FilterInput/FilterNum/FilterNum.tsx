@@ -7,7 +7,6 @@ import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { addFilter, removeFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
 import { format } from '../../../FormattedNumber/FormattedNumber';
-import { setLayout } from '../../../../slices/layoutSlice';
 import styles from './FilterNum.module.scss';
 
 interface FilterNumProps {

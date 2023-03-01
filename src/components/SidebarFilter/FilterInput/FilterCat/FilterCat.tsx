@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
-import { setLayout } from '../../../../slices/layoutSlice';
 import CatHistogram from '../../../CatHistogram';
 import { DataContext } from '../../../DataProvider';
 

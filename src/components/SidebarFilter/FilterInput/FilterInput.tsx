@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
 import { removeFilter, selectFilterByVarname, setFilterView } from '../../../slices/filterSlice';
-import { setLayout } from '../../../slices/layoutSlice';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 
