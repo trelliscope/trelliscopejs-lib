@@ -25,8 +25,12 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
   const dispatch = useDispatch();
+
   const handleLableRemove = (label: string) => {
-    const newLabels = labels.map((labelItem) => labelItem.varname).filter((labelItem) => labelItem !== label);
+    const labelsAndInputs = [...labels, ...inputs];
+    const newLabels = labelsAndInputs
+      .map((labelItem) => ('varname' in labelItem ? labelItem.varname : labelItem.name))
+      .filter((labelItem) => labelItem !== label);
     dispatch(setLabels(newLabels));
   };
 
@@ -52,7 +56,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     panelKey={data[PANEL_KEY] as string}
                   />
                 )}
-                <button type="button" className={styles.panelLabelClose} onClick={() => handleLableRemove(input.label)}>
+                <button type="button" className={styles.panelLabelClose} onClick={() => handleLableRemove(input.name)}>
                   <FontAwesomeIcon icon={faXmark} />
                 </button>
               </div>
