@@ -2,25 +2,41 @@ import React from 'react';
 
 interface FormattedNumberProps {
   value: number;
-  language?: string;
   maximumFractionDigits?: number;
   isCurrency?: boolean;
+  currencyCode?: string;
+  isSuffix?: boolean;
 }
 
-export const format = (value: number, language = 'en-US', maximumFractionDigits = 2) =>
-  new Intl.NumberFormat(language, { maximumFractionDigits }).format(value);
+export const format = (
+  value: number,
+  maximumFractionDigits = 2,
+  isCurrency = false,
+  isSuffix = false,
+  currencyCode = 'USD',
+) => {
+  const currency = { style: 'currency', currency: currencyCode };
+  const suffix = { notation: 'compact' };
+  const maxDigits = { maximumFractionDigits };
 
-const FormattedNumber: React.FC<FormattedNumberProps> = ({ value, language, maximumFractionDigits, isCurrency }) => (
-  <>
-    {isCurrency && '$'}
-    {format(value, language, maximumFractionDigits)}
-  </>
-);
+  const options = isCurrency ? currency : isSuffix ? suffix : maxDigits;
+
+  return new Intl.NumberFormat(undefined, options as { [key: string]: string }).format(value);
+};
+
+const FormattedNumber: React.FC<FormattedNumberProps> = ({
+  value,
+  maximumFractionDigits,
+  isCurrency,
+  isSuffix,
+  currencyCode,
+}) => <>{format(value, maximumFractionDigits, isCurrency, isSuffix, currencyCode)}</>;
 
 FormattedNumber.defaultProps = {
-  language: 'en-US',
   maximumFractionDigits: 2,
   isCurrency: false,
+  isSuffix: false,
+  currencyCode: 'USD',
 };
 
 export default FormattedNumber;
