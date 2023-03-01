@@ -24,7 +24,6 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
 
   const handleReset = () => {
     dispatch(removeFilter(filterName));
-    dispatch(setLayout({ page: 1, type: 'layout' }));
   };
 
   const handleMinimize = () => {

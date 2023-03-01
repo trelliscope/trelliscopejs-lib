@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 import { selectHashLayout } from '../selectors/hash';
+import { addFilter, removeFilter, updateFilter, updateFilterValues } from './filterSlice';
 
 const fallbackState: ILayoutState = {
   nrow: 1,
@@ -41,6 +42,10 @@ export const layoutSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addMatcher(
+      (action) => [removeFilter.type, updateFilterValues.type, updateFilter.type, addFilter.type].includes(action.type),
+      (state) => ({ ...state, page: 1, type: 'layout' }),
+    );
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
       const { layout } = action.payload.state;
       // If the hash layout is set, use it instead of the layout from the API

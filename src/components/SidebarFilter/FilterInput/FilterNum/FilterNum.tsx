@@ -23,11 +23,9 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
     if (values[0] === null && values[1] === null) {
       if (filter) {
         dispatch(removeFilter(filter.varname));
-        dispatch(setLayout({ page: 1, type: 'layout' }));
       }
     } else if (filter) {
       dispatch(updateFilter({ ...filter, min: values[0], max: values[1] }));
-      dispatch(setLayout({ page: 1, type: 'layout' }));
     } else {
       const newFilter = {
         type: 'filter',
@@ -37,7 +35,6 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         max: values[1],
       } as INumberRangeFilterState;
       dispatch(addFilter(newFilter));
-      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   };
 
@@ -91,7 +88,6 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         max: upper,
       };
       dispatch(addFilter(newState));
-      dispatch(setLayout({ page: 1, type: 'layout' }));
     }
   };
 
