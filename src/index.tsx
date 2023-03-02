@@ -2,6 +2,7 @@ import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '@fontsource/open-sans/300.css';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
@@ -14,7 +15,7 @@ import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
 import './assets/styles/variables.scss';
-import './fonts/opensans/style.css';
+// import './fonts/opensans/style.css';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
@@ -217,7 +218,7 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('81d68b4e', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
+trelliscopeApp('81d68b4e', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('44c922eb', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('1060b383', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('0d3d4590', '_test/trelliscope-examples3/pokemon/config.jsonp', { logger: true });
