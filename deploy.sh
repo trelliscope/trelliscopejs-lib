@@ -1,4 +1,4 @@
-sed -i .bak 's/\/static/../g' build/static/css/*
+sed -i .bak 's/..\/..\/static/..media/g' build/static/css/*
 
 PACKAGE_VERSION=$(cat package.json \
   | grep version \
@@ -6,28 +6,24 @@ PACKAGE_VERSION=$(cat package.json \
   | awk -F: '{ print $2 }' \
   | sed 's/[",]//g')
 
-rm -rf ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/js
-rm -rf ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/css
-rm -rf ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/media
-mkdir ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/js
-mkdir ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/css
-mkdir ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/media
-cp build/static/js/*.js ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/js/
-cp build/static/css/*.css ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/css/
-cp build/static/media/* ../trelliscopejs/inst/htmlwidgets/lib/trelliscopejs_widget/media/
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media
+mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js
+mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css
+mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media
+cp build/static/js/*.js ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js/
+cp build/static/css/*.css ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css/
+cp build/static/media/* ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media/
 
 JS=`find build/static/js -name '*.js' -exec basename {} \; | sed 's/^/     js\//' | sed 's/$/,/'`
 CSS=`find build/static/css -name '*.css' -exec basename {} \; | sed 's/^/     css\//' | sed 's/$/,/'`
 
-cat <<EOF >../trelliscopejs/inst/htmlwidgets/trelliscopejs_widget.yaml
+cat <<EOF >../trelliscope/inst/htmlwidgets/trelliscope_widget.yaml
 dependencies:
- - name: trelliscopejs_widget
-   version: $PACKAGE_VERSION
-   src: htmlwidgets/lib/trelliscopejs_widget
-   script: [
-$JS
-   ]
-   stylesheet: [
-$CSS     
-   ]
+  - name: trelliscope_widget
+    version: $PACKAGE_VERSION
+    src: htmlwidgets/lib/trelliscope_widget
+    script: [ $JS ]
+    stylesheet: [ $CSS ]
 EOF
