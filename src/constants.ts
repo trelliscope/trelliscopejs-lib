@@ -27,6 +27,7 @@ export const META_TYPE_DATETIME = 'datetime' as string;
 export const META_TYPE_HREF = 'href' as string;
 export const META_TYPE_GEO = 'geo' as string;
 export const META_TYPE_GRAPH = 'graph' as string;
+export const META_TYPE_CURRENCY = 'currency' as string;
 
 export const FILTER_TYPE_CATEGORY = 'category' as string;
 export const FILTER_TYPE_NUMBERRANGE = 'numberrange' as string;
@@ -36,6 +37,7 @@ export const FILTER_TYPE_DATETIMERANGE = 'datetimerange' as string;
 export const META_FILTER_TYPE_MAP = {
   [META_TYPE_STRING]: FILTER_TYPE_CATEGORY,
   [META_TYPE_NUMBER]: FILTER_TYPE_NUMBERRANGE,
+  [META_TYPE_CURRENCY]: FILTER_TYPE_NUMBERRANGE,
   [META_TYPE_FACTOR]: FILTER_TYPE_CATEGORY,
   [META_TYPE_DATE]: FILTER_TYPE_DATERANGE,
   [META_TYPE_DATETIME]: FILTER_TYPE_DATETIMERANGE,

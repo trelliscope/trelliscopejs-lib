@@ -2,7 +2,7 @@
 /* meta                                                   */
 /* ------------------------------------------------------ */
 
-type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph';
+type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency';
 type GraphDirection = 'none' | 'from' | 'to';
 type CurrencyCode =
   | 'AED'
@@ -194,6 +194,7 @@ interface IMeta {
   tags: string[];
   filterable: boolean;
   sortable: boolean;
+  code?: string;
 }
 
 interface INumberMeta extends IMeta {
