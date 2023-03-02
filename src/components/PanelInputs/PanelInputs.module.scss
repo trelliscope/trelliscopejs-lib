@@ -28,10 +28,13 @@
 }
 
 .panelInputRadioGroup {
-  display: flex;
-  flex-direction: row-reverse !important;
-  justify-content: flex-end;
-  align-items: flex-end;
+  &[role='radiogroup'] {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
 
   &Label {
     font-size: var(--text-sm) !important;
