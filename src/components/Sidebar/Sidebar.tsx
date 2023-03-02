@@ -11,26 +11,13 @@ import SidebarSort from '../SidebarSort';
 import SidebarViews from '../SidebarViews';
 import { sidebarActiveSelector } from '../../selectors/ui';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
-import { selectSort } from '../../slices/sortSlice';
 import styles from './Sidebar.module.scss';
-import { useDisplayInfo, useDisplayMetasLabels } from '../../slices/displayInfoAPI';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import SidebarFilter from '../SidebarFilter';
 
 const Sidebar: React.FC = () => {
   const { isSuccess: displayLoaded } = useDisplayInfo();
   const active = useSelector(sidebarActiveSelector);
-  const sort = useSelector(selectSort);
-  const metaLabels = useDisplayMetasLabels();
-
-  const notUsed = Object.keys(metaLabels);
-  if (metaLabels) {
-    for (let i = 0; i < sort.length; i += 1) {
-      const index = notUsed.indexOf(sort[i].name);
-      if (index > -1) {
-        notUsed.splice(index, 1);
-      }
-    }
-  }
 
   return (
     <div className={classNames(active === '' ? [styles.sidebarHidden, styles.sidebarContainer] : styles.sidebarContainer)}>
