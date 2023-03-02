@@ -8,9 +8,6 @@ export const relDispPositionsSelector = (state: RootState) => state.relDispPosit
 
 export const cogDataSelector = (state: RootState) => state.cogDataMutable;
 
-export const pageNumSelector = (state: RootState) => (state.layout.page ? state.layout.page : -1);
-export const nPerPageSelector = (state: RootState) => state.layout.nrow * state.layout.ncol;
-
 export const filterSelector = (state: RootState) => state.filter;
 export const filterViewSelector = (state: RootState) => state.filter.view;
 export const labelsSelector = (state: RootState) => state.labels || [];
@@ -23,5 +20,3 @@ export const dispSelectDialogSelector = (state: RootState) => state.app.dispSele
 export const dispInfoDialogSelector = (state: RootState) => state.app.dispInfoDialog;
 
 export const selectCallbacks = (state: RootState) => state?.app.options?.callbacks;
-
-export const errorSelector = (state: RootState) => state.app.errorMsg;
