@@ -11,8 +11,7 @@ import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
 import { selectErrorMessage } from './selectors/app';
 
-// import './assets/styles/main.css';
-// import './fonts/opensans/style.css';
+import './assets/styles/main.css';
 
 interface AppProps {
   client: IDataClient;

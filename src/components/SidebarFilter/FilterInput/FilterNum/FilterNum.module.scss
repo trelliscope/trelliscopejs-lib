@@ -15,14 +15,21 @@
     vertical-align: center;
   }
 
-  &RangeInputText {
+  &RangeInputLabel {
     font-size: var(--text-sm);
-    padding-right: var(--padding-7);
+    padding-right: var(--padding-3);
     display: inline-block;
   }
 
+  &RangeInputText {
+    width: 75px;
+    margin-top: -5px;
+    font-size: 16px;
+    transform: scale(0.85);
+    transform-origin: 0 0;
+  }
+
   &RangeInputTextDash {
-    padding-left: var(--padding-4);
     transform: scale(2, 1); // to deal with some browsers not being able to handle endash
   }
 }
