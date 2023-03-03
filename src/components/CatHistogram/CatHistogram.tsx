@@ -5,7 +5,7 @@ import styles from './CatHistogram.module.scss';
 import CatHistogramBar from './CatHistogramBar';
 
 interface CatHistogramProps {
-  data: { key: string; value: number }[];
+  data: { key: string | number; value: number }[];
   allData: { [key: string]: number };
   domain: [number, number];
   count: number;
@@ -32,8 +32,8 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
 
   // move active bars to the top
   data.sort((a, b) => {
-    if (actives.includes(a.key) && !actives.includes(b.key)) return -1;
-    if (!actives.includes(a.key) && actives.includes(b.key)) return 1;
+    if (actives.includes(a.key as string) && !actives.includes(b.key as string)) return -1;
+    if (!actives.includes(a.key as string) && actives.includes(b.key as string)) return 1;
     return 0;
   });
 
@@ -43,11 +43,11 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
         {({ index, style }) => (
           <CatHistogramBar
             style={style}
-            active={actives.includes(data[index].key)}
+            active={actives.includes(data[index].key as string)}
             onClick={onClick}
             width={scale(data[index].value || 1)}
             height={barHeight - 1}
-            label={data[index].key}
+            label={data[index].key as string}
             value={
               data[index].value === allData[data[index].key]
                 ? data[index].value

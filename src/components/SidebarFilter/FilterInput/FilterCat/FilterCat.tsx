@@ -48,7 +48,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
       const filteredValues = meta.levels
         ? meta.levels.filter((level) => level.match(regexp))
         : groupBy(meta.varname)
-            .filter((level) => level.key.match(regexp))
+            .filter((level) => (level.key as string).match(regexp))
             .map((level) => level.key);
 
       const newFilter = {
