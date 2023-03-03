@@ -5,6 +5,8 @@
   grid-gap: var(--padding-6);
 
   &Wrapper {
+    position: absolute;
+    display: inline-block;
     margin: var(--header-container-height) 0 0 var(--header-container-height);
     height: calc(100% - (var(--header-container-height) * 2));
     overflow: auto;
@@ -23,7 +25,7 @@
   &Graphic {
     display: flex;
     padding: var(--padding-4);
-    
+
     img {
       max-width: 100%;
       min-width: 1px;
