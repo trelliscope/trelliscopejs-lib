@@ -94,7 +94,7 @@ const SidebarLayout: React.FC = () => {
                 control={<Radio />}
                 label={
                   <div className={styles.inputLabelSpan}>
-                    By Row
+                    By Row&nbsp;
                     <FontAwesomeIcon icon={faGripHorizontal} />
                   </div>
                 }
@@ -105,7 +105,7 @@ const SidebarLayout: React.FC = () => {
                 control={<Radio />}
                 label={
                   <span className={styles.inputLabelSpan}>
-                    By column
+                    By column&nbsp;
                     <FontAwesomeIcon icon={faGripVertical} />
                   </span>
                 }
@@ -113,7 +113,6 @@ const SidebarLayout: React.FC = () => {
               />
             </RadioGroup>
           </div>
-          <Divider />
         </>
       )}
     </>

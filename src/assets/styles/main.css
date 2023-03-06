@@ -46,17 +46,17 @@ body {
 .trelliscope-app h4,
 .trelliscope-app h5,
 .trelliscope-app h6 {
-  font-weight: 400;
+  font-weight: 500;
   color: black;
 }
 
 .trelliscope-app strong {
   color: black;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .trelliscope-app th {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .trelliscope-app h1 {
