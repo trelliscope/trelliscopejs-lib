@@ -1,4 +1,4 @@
-sed -i .bak 's/..\/..\/static/..media/g' build/static/css/*
+sed -i .bak 's/..\/..\/static/../g' build/static/css/*
 
 PACKAGE_VERSION=$(cat package.json \
   | grep version \
