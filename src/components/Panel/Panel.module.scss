@@ -32,6 +32,9 @@
     &Cell {
       padding: var(--padding-4);
       white-space: nowrap;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      height: 18px;
 
       &:first-of-type {
         white-space: nowrap;
