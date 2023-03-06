@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { displayInfoAPI } from './displayInfoAPI';
-import { selectHashLabels } from '../selectors/hash';
+import { selectHash, selectHashLabels } from '../selectors/hash';
 
 const initialState: string[] = selectHashLabels();
 
@@ -13,12 +13,14 @@ export const labelsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
-      // If the hash labels are set, use them instead of the labels from the API
+      const hash = selectHash();
       const hashLabels = selectHashLabels();
+      if (Object.keys(hash).length > 2 && hashLabels.length === 0) {
+        return [];
+      }
       if (hashLabels.length) {
         return hashLabels;
       }
-
       const { labels } = action.payload.state;
       return labels.varnames;
     });
