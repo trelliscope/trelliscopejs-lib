@@ -26,7 +26,10 @@ export interface IDataClient {
   removeSort(field: string): void;
   clearSorts(): void;
   clearFilters(): void;
-  groupBy: (field: string, groupFunc?: (d: string | number) => NaturallyOrderedValue) => { key: string; value: number }[];
+  groupBy: (
+    field: string,
+    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+  ) => { key: string | number; value: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];
 }

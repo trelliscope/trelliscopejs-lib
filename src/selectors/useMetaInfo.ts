@@ -12,12 +12,11 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     const xExtents = extent(allData, (d) => d[varname] as number) as [number, number];
     const scale = scaleLinear().domain(xExtents).nice();
     const breaks = scale.ticks(10);
-    const delta = breaks[1] - breaks[0];
     // FIXME once the dataclient groupby is finished we can fix this.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore ts2554
-    const data = groupBy(varname, 'number', (d: string | number) =>
-      Number.isNaN(Number(d)) || d === undefined ? null : Math.floor((d as number) / delta) * delta,
+    const data = groupBy(varname, 'number', (d: number) =>
+      Number.isNaN(Number(d)) || d === undefined ? null : breaks.find((b, i) => d < breaks[i + 1]),
     );
 
     const yDomain = extent(data, (d) => d.value as number) as [number, number];

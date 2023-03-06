@@ -1,4 +1,4 @@
-import type { ScaleBand } from 'd3-scale';
+import type { ScaleLinear } from 'd3-scale';
 import React from 'react';
 import FormattedNumber from '../FormattedNumber';
 import styles from './NumHistogram.module.scss';
@@ -9,7 +9,7 @@ interface NumHistogramAxisProps {
   x: number;
   y: number;
   ticks: number[];
-  scale: ScaleBand<string>;
+  scale: ScaleLinear<number, number>;
 }
 
 const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale }) => (
@@ -19,7 +19,7 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
       <line y1={4} y2={0} />
     </g>
     {ticks.map((d) => (
-      <g className={styles.axisTick} key={d} transform={`translate(${scale(d as unknown as string) || 0}, 0)`}>
+      <g className={styles.axisTick} key={d} transform={`translate(${scale(d) || 0}, 0)`}>
         <line y1={4} y2={0} x1={x} x2={x} />
         <text y={height} x={x}>
           <FormattedNumber value={d} isSuffix />
