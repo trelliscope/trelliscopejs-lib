@@ -12,7 +12,6 @@ import type { IDataClient } from './DataClient';
 import { selectErrorMessage } from './selectors/app';
 
 import './assets/styles/main.css';
-import './fonts/opensans/style.css';
 
 interface AppProps {
   client: IDataClient;

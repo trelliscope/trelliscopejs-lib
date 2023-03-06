@@ -45,14 +45,6 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
     inputStyle.color = 'red';
   }
 
-  const rangeInput = {
-    width: 75,
-    marginTop: -5,
-    fontSize: 16,
-    transform: 'scale(0.85)',
-    transformOrigin: '0 0',
-  };
-
   // const checkValidNumber = (which: string, lower: number | string = '', upper: number | string = '') => {
   //   if (which === 'to') {
   //     if (lower && parseFloat(lower.toString()) > parseFloat(upper.toString())) {
@@ -109,10 +101,10 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         />
       </div>
       <div className={styles.filterNumInputContainer}>
-        <div className={styles.filterNumRangeInputText}>Range:</div>
+        <div className={styles.filterNumRangeInputLabel}>Range:</div>
         <TextField
           name="minText"
-          style={rangeInput}
+          className={styles.filterNumRangeInputText}
           inputProps={{
             style: inputStyle,
             step,
@@ -122,10 +114,10 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           onChange={(e) => handleInput(e.target.value, 'min')}
           variant="standard"
         />
-        <div className={`${styles.filterNumRangeInputText} ${styles.filterNumRangeInputTextDash}`}>-</div>
+        <div className={`${styles.filterNumRangeInputLabel} ${styles.filterNumRangeInputTextDash}`}>-</div>
         <TextField
           name="maxText"
-          style={rangeInput}
+          className={styles.filterNumRangeInputText}
           inputProps={{
             style: inputStyle,
             step,

@@ -2,6 +2,7 @@ import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '@fontsource/poppins/300.css';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
@@ -14,7 +15,6 @@ import { addClass } from './classManipulation';
 
 import './assets/styles/main.css';
 import './assets/styles/variables.scss';
-import './fonts/opensans/style.css';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
@@ -53,7 +53,7 @@ const trelliscopeApp = (
   if (el.style.overflow !== 'hidden') {
     el.style.overflow = 'hidden';
   }
-  el.style['font-family' as unknown as number] = '"Open Sans", sans-serif';
+  el.style['font-family' as unknown as number] = '"Poppins", sans-serif';
   el.style['font-weight' as unknown as number] = '300';
   el.style['-webkit-tap-highlight-color' as unknown as number] = 'rgba(0,0,0,0)';
 
@@ -145,7 +145,7 @@ const trelliscopeApp = (
       // accent1Color: redA200
     },
     typography: {
-      fontFamily: '"Open Sans", sans-serif',
+      fontFamily: '"Poppins", sans-serif',
       fontWeightLight: 200,
       fontWeightRegular: 300,
       fontWeightMedium: 400,
