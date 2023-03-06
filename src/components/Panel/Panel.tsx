@@ -11,7 +11,7 @@ interface PanelProps {
 
 const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children }) => (
   <div className={styles.panel}>
-    <div className={styles.panelGraphic}>{children}</div>
+    {children}
     <PanelTable data={data} labels={labels} inputs={inputs} />
   </div>
 );

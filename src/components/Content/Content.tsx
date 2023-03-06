@@ -64,6 +64,7 @@ const Content: React.FC = () => {
                 {names.map((name) => (
                   <PanelGraphic
                     type={displayInfo?.paneltype}
+                    ncol={layout.ncol}
                     src={getPanelSrc(d, name).toString()}
                     alt={name}
                     aspectRatio={displayInfo?.panelaspect}
