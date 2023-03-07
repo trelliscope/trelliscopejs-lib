@@ -195,6 +195,7 @@ interface IMeta {
   filterable: boolean;
   sortable: boolean;
   code?: string;
+  log: boolean;
   levels?: string[];
   digits: number;
   filterSortOrder: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';

@@ -10,9 +10,10 @@ interface NumHistogramAxisProps {
   y: number;
   ticks: number[];
   scale: ScaleLinear<number, number>;
+  log: boolean;
 }
 
-const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale }) => (
+const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale, log }) => (
   <g className={styles.axis} transform={`translate(0, ${y})`}>
     <line className={styles.axisXLine} x1={x} y="0" x2={width} />
     <g className={styles.axisEdgeTick} transform={`translate(${x}, 0)`}>
@@ -21,9 +22,18 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
     {ticks.map((d) => (
       <g className={styles.axisTick} key={d} transform={`translate(${scale(d) || 0}, 0)`}>
         <line y1={4} y2={0} x1={x} x2={x} />
-        <text y={height} x={x}>
-          <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
-        </text>
+        {log ? (
+          <text y={height} x={x} className={styles.axisTickSuper} transform="translate(3,0)">
+            10
+            <tspan baselineShift="super">
+              <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
+            </tspan>
+          </text>
+        ) : (
+          <text y={height} x={x}>
+            <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
+          </text>
+        )}
       </g>
     ))}
     <g className={styles.axisEdgeTick} transform={`translate(${width}, 0)`}>
