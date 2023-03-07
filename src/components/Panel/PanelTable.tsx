@@ -29,8 +29,6 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
   const dispatch = useDispatch();
-  const metas = useDisplayMetas();
-  console.log('labels:::', labels);
 
   const handleLableRemove = (label: string) => {
     const labelsAndInputs = [...labels, ...inputs];
