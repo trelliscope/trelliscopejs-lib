@@ -110,7 +110,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.min ? filter?.min.toFixed(2) : ''}
+          value={filter?.min ? format(filter?.min, 2, false, false, undefined, true) : ''}
           onChange={(e) => handleInput(e.target.value, 'min')}
           variant="standard"
         />
@@ -123,7 +123,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.max ? filter?.max.toFixed(2) : ''}
+          value={filter?.max ? format(filter?.max, 2, false, false, undefined, true) : ''}
           onChange={(e) => handleInput(e.target.value, 'max')}
           variant="standard"
         />
