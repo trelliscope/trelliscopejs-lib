@@ -18,6 +18,7 @@ import FormattedNumber from '../FormattedNumber';
 import { PanelInputText, PanelInputRadios } from '../PanelInputs';
 import PanelTableLabelCell from './PanelTableLabelCell';
 import { setLabels } from '../../slices/labelsSlice';
+import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
@@ -28,6 +29,8 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
   const dispatch = useDispatch();
+  const metas = useDisplayMetas();
+  console.log('labels:::', labels);
 
   const handleLableRemove = (label: string) => {
     const labelsAndInputs = [...labels, ...inputs];
@@ -79,6 +82,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     value={data[label.varname] as number}
                     isCurrency={label.type === META_TYPE_CURRENCY}
                     currencyCode={label.code}
+                    maximumFractionDigits={label.digits}
                   />
                 )}
                 {label.type === META_TYPE_HREF && (
