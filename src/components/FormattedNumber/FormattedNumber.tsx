@@ -2,7 +2,7 @@ import React from 'react';
 
 interface FormattedNumberProps {
   value: number;
-  maximumFractionDigits: 2;
+  maximumFractionDigits: number;
   isCurrency?: boolean;
   currencyCode?: string;
   isSuffix?: boolean;

@@ -195,6 +195,7 @@ interface IMeta {
   filterable: boolean;
   sortable: boolean;
   code?: string;
+  digits: number;
 }
 
 interface INumberMeta extends IMeta {
