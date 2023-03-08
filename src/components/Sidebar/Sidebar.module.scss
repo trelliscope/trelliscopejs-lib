@@ -1,7 +1,8 @@
 .sidebar {
   &Container {
+    display: inline-block;
     transition: var(--sidebar-transition);
-    position: absolute;
+    position: relative;
     left: var(--sidebar-container-position);
     top: var(--sidebar-container-position);
     height: 100%;
@@ -16,7 +17,10 @@
 
   &Hidden {
     transition: var(--sidebar-transition);
-    left: -182px;
+    transform: translateX(-182px);
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
   }
 
   &Header {
