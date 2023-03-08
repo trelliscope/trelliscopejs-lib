@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import difference from 'lodash.difference';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
-import { selectHashFilters, selectHashFilterView } from '../selectors/hash';
+import { selectHash, selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
   state: IFilterState[];
@@ -97,6 +97,11 @@ export const filterSlice = createSlice({
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
       const hashFilter = selectHashFilters();
       const hashFilterView = selectHashFilterView();
+      const hash = selectHash();
+
+      if (Object.keys(hash).length > 2 && hashFilter === undefined && hashFilterView.length === 0) {
+        return;
+      }
 
       if (hashFilter !== undefined) {
         state.state = hashFilter || [];
