@@ -2,7 +2,7 @@ import React from 'react';
 
 interface FormattedNumberProps {
   value: number;
-  maximumFractionDigits?: number;
+  maximumFractionDigits: 2;
   isCurrency?: boolean;
   currencyCode?: string;
   isSuffix?: boolean;
@@ -11,7 +11,7 @@ interface FormattedNumberProps {
 
 export const format = (
   value: number,
-  maximumFractionDigits = 2,
+  maximumFractionDigits: number,
   isCurrency = false,
   isSuffix = false,
   currencyCode = 'USD',
@@ -20,9 +20,28 @@ export const format = (
   const currency = { style: 'currency', currency: currencyCode };
   const suffix = { notation: 'compact' };
   const maxDigits = { maximumFractionDigits };
-  const noGrouping = { maximumFractionDigits, useGrouping: false };
+  const noGrouping = { useGrouping: false };
 
-  const options = isCurrency ? currency : isSuffix ? suffix : removeGrouping ? noGrouping : maxDigits;
+  const options = {};
+
+  if (isCurrency) {
+    Object.assign(options, currency);
+  }
+
+  if (isSuffix) {
+    Object.assign(options, suffix);
+  }
+
+  if (removeGrouping) {
+    Object.assign(options, noGrouping);
+  }
+
+  if (maximumFractionDigits !== -1) {
+    Object.assign(options, maxDigits);
+  } else {
+    // Display all decimal places
+    Object.assign(options, { minimumFractionDigits: value.toString().split('.')[1].length });
+  }
 
   return new Intl.NumberFormat(undefined, options as { [key: string]: string }).format(value);
 };
@@ -37,7 +56,6 @@ const FormattedNumber: React.FC<FormattedNumberProps> = ({
 }) => <>{format(value, maximumFractionDigits, isCurrency, isSuffix, currencyCode, removeGrouping)}</>;
 
 FormattedNumber.defaultProps = {
-  maximumFractionDigits: 2,
   isCurrency: false,
   isSuffix: false,
   currencyCode: 'USD',

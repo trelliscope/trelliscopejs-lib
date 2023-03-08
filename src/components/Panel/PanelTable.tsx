@@ -79,6 +79,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     value={data[label.varname] as number}
                     isCurrency={label.type === META_TYPE_CURRENCY}
                     currencyCode={label.code}
+                    maximumFractionDigits={label.digits}
                   />
                 )}
                 {label.type === META_TYPE_HREF && (
