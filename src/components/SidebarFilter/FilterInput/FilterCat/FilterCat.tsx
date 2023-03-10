@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import type { SetStateAction } from 'react';
-import { TextField, IconButton, Menu, MenuItem } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
 import CatHistogram from '../../../CatHistogram';
 import { DataContext } from '../../../DataProvider';
+import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
+import Ellipsis from '../../../Ellipsis/Ellipsis';
 
 import styles from './FilterCat.module.scss';
-import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
 
 interface FilterCatProps {
   meta: IFactorMeta;
@@ -25,8 +23,6 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const { filterSortOrder } = curDisplayMeta as IMeta;
   const { groupBy } = useContext(DataContext);
   const dispatch = useDispatch();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
   const defaultSort = filterSortOrder || 'ct,desc';
   const [curSort, setCurSort] = useState(defaultSort);
 
@@ -42,34 +38,12 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     });
   };
 
-  const [sortedData, setSortedData] = useState(() => {
-    if (meta) {
-      return defaultSort ? sortChartData(defaultSort, groupBy(meta.varname)) : groupBy(meta.varname);
-    }
-    return [];
-  });
-
   const sortOptions = [
     { payload: 'ct,asc', text: 'Order: count ascending' },
     { payload: 'ct,desc', text: 'Order: count descending' },
     { payload: 'id,asc', text: 'Order: label ascending' },
     { payload: 'id,desc', text: 'Order: label descending' },
   ];
-
-  const handleSortChange = (sortOrder: string) => {
-    setCurSort((sortOrder as IMeta['filterSortOrder']) || defaultSort);
-    const sorted = sortChartData(sortOrder, groupBy(meta.varname));
-    setSortedData(sorted);
-  };
-
-  const handleMenuClose = () => {
-    setMenuOpen(false);
-  };
-
-  const handleMenuIconClick = (event: { currentTarget: SetStateAction<null> }) => {
-    setMenuOpen(!menuOpen);
-    setAnchorEl(menuOpen ? null : event.currentTarget);
-  };
 
   const handleBarClick = (value: string) => {
     if (filter) {
@@ -121,7 +95,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
         <CatHistogram
-          data={sortedData.length > 0 ? sortedData : sortChartData(defaultSort, groupBy(meta.varname))}
+          data={sortChartData(curSort, groupBy(meta.varname))}
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
@@ -142,33 +116,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
             variant="standard"
           />
         </div>
-        <div>
-          {/* this is an issue with the iconButton in materialUi not having the type for an onClick in the props
-          // @ts-ignore */}
-          <IconButton
-            aria-label="more"
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            onClick={handleMenuIconClick}
-            sx={{ width: 25, height: 25 }}
-          >
-            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
-          </IconButton>
-          <Menu id="long-menu" open={menuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
-            {sortOptions.map((d) => (
-              <MenuItem
-                key={d.payload}
-                selected={d.payload === curSort}
-                onClick={() => {
-                  handleSortChange(d.payload);
-                  handleMenuClose();
-                }}
-              >
-                {d.text}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
+        <Ellipsis options={sortOptions} curItem={curSort} setCurItem={setCurSort} />
       </div>
     </div>
   );
