@@ -99,7 +99,7 @@ export const filterSlice = createSlice({
       const hashFilterView = selectHashFilterView();
       const hash = selectHash();
 
-      if (Object.keys(hash).length > 2 && hashFilter === undefined && hashFilterView.length === 0) {
+      if (Object.keys(hash).length > 2 && hashFilter === undefined) {
         return;
       }
 
