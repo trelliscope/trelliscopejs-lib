@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY } from '../../../../constants';
@@ -6,6 +6,8 @@ import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
 import CatHistogram from '../../../CatHistogram';
 import { DataContext } from '../../../DataProvider';
+import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
+import Ellipsis from '../../../Ellipsis/Ellipsis';
 
 import styles from './FilterCat.module.scss';
 
@@ -16,8 +18,32 @@ interface FilterCatProps {
 
 const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const { domain = [0, 0], dist = {} } = useMetaInfo(meta.varname, meta.type);
+  const displayMetas = useDisplayMetas();
+  const curDisplayMeta = displayMetas.find((d) => d.varname === meta.varname);
+  const { filterSortOrder } = curDisplayMeta as IMeta;
   const { groupBy } = useContext(DataContext);
   const dispatch = useDispatch();
+  const defaultSort = filterSortOrder || 'ct,desc';
+  const [curSort, setCurSort] = useState(defaultSort);
+
+  const sortChartData = (sortOrder: string, data: { key: string | number; value: number }[]) => {
+    const [sortKey, sortDir] = sortOrder.split(',');
+    return data.sort((a, b) => {
+      if (sortKey === 'ct') {
+        return sortDir === 'asc' ? a.value - b.value : b.value - a.value;
+      }
+      return sortDir === 'asc'
+        ? (a.key as string).localeCompare(b.key as string)
+        : (b.key as string).localeCompare(a.key as string);
+    });
+  };
+
+  const sortOptions = [
+    { payload: 'ct,asc', text: 'Order: count ascending' },
+    { payload: 'ct,desc', text: 'Order: count descending' },
+    { payload: 'id,asc', text: 'Order: label ascending' },
+    { payload: 'id,desc', text: 'Order: label descending' },
+  ];
 
   const handleBarClick = (value: string) => {
     if (filter) {
@@ -69,7 +95,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
         <CatHistogram
-          data={groupBy(meta.varname)}
+          data={sortChartData(curSort, groupBy(meta.varname))}
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
@@ -80,14 +106,17 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           onClick={handleBarClick}
         />
       </div>
-      <div className={styles.filterCatInput}>
-        <TextField
-          placeholder="regex"
-          classes={{ root: styles.filterCatRegex }}
-          value={filter?.regexp || ''}
-          onChange={handleRegex}
-          variant="standard"
-        />
+      <div className={styles.filterCatInputContainer}>
+        <div>
+          <TextField
+            placeholder="regex"
+            classes={{ root: styles.filterCatRegex }}
+            value={filter?.regexp || ''}
+            onChange={handleRegex}
+            variant="standard"
+          />
+        </div>
+        <Ellipsis options={sortOptions} curItem={curSort} setCurItem={setCurSort} />
       </div>
     </div>
   );

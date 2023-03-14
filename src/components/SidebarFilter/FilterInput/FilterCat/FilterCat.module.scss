@@ -1,4 +1,9 @@
 .filterCat {
+  &InputContainer {
+    display: flex;
+    align-items: center;
+  }
+
   &Regex {
     width: 190px;
     margin-top: var(--neg-margin-6);

@@ -116,7 +116,7 @@ interface DisplayObject {
     layout: LayoutState;
     sort: Sort[];
     sidebar: number;
-    filter: { [key: string]: Filter<FilterCat | FilterRange> };
+    filter: { [key: string]: Filter<FilterRange> };
     fv: string[];
   };
   keySig: string;
@@ -180,8 +180,6 @@ declare type Filter<V> = {
   valid?: boolean;
   value?: V;
 };
-
-type FilterCat = string[];
 
 type FilterRange = {
   from?: number;

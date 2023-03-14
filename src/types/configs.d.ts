@@ -196,6 +196,7 @@ interface IMeta {
   sortable: boolean;
   code?: string;
   digits: number;
+  filterSortOrder: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';
 }
 
 interface INumberMeta extends IMeta {
