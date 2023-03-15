@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { windowWidthSelector, contentHeightSelector } from '../../selectors/ui';
-import { filterSelector, singlePageAppSelector, fullscreenSelector } from '../../selectors';
+import { filterSelector, singlePageAppSelector } from '../../selectors';
 import FooterChip from '../FooterChip';
 import ExportInputDialog from '../ExportInputDialog';
 import getCustomProperties from '../../getCustomProperties';
@@ -29,7 +29,6 @@ const Footer: React.FC = () => {
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const { length: allDataLength } = allData;
   const { length: filteredDataLength } = filteredData;
-  const fullScreen = useSelector(fullscreenSelector);
 
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
@@ -123,49 +122,51 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <div className={styles.footerWrapper} style={style}>
-      <div className={styles.footerInner}>
-        {sortRes.length > 0 && (
-          <div className={styles.footerSectionWrapper}>
-            <div className={styles.footerSectionText}>Sorting on:</div>
-            <div className={styles.footerChipWrapper}>
-              {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-                <FooterChip
-                  key={`${el.varname}_sortchip`}
-                  label={el.varname}
-                  icon={el.icon}
-                  text=""
-                  index={i}
-                  type="sort"
-                  handleClose={handleStateClose}
-                />
-              ))}
+    <>
+      <div className={styles.footerWrapper} style={style}>
+        <div className={styles.footerInner}>
+          {sortRes.length > 0 && (
+            <div className={styles.footerSectionWrapper}>
+              <div className={styles.footerSectionText}>Sorting on:</div>
+              <div className={styles.footerChipWrapper}>
+                {sortRes.map((el: { varname: string; icon: string }, i: number) => (
+                  <FooterChip
+                    key={`${el.varname}_sortchip`}
+                    label={el.varname}
+                    icon={el.icon}
+                    text=""
+                    index={i}
+                    type="sort"
+                    handleClose={handleStateClose}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {filterRes.length > 0 && sortRes.length > 0 && <div className={styles.footerSpacer} />}
-        {filterRes.length > 0 && (
-          <div className={styles.footerSectionWrapper}>
-            <div className={styles.footerSectionText}>Filtering on:</div>
-            <div className={styles.footerChipWrapper}>
-              {filterRes.map((el: { name: string; text: string }, i: number) => (
-                <FooterChip
-                  key={`${el.name}_filterchip`}
-                  label={el.name}
-                  icon=""
-                  text={el.text}
-                  index={i}
-                  type="filter"
-                  handleClose={handleStateClose}
-                />
-              ))}
+          )}
+          {filterRes.length > 0 && sortRes.length > 0 && <div className={styles.footerSpacer} />}
+          {filterRes.length > 0 && (
+            <div className={styles.footerSectionWrapper}>
+              <div className={styles.footerSectionText}>Filtering on:</div>
+              <div className={styles.footerChipWrapper}>
+                {filterRes.map((el: { name: string; text: string }, i: number) => (
+                  <FooterChip
+                    key={`${el.name}_filterchip`}
+                    label={el.name}
+                    icon=""
+                    text={el.text}
+                    index={i}
+                    type="filter"
+                    handleClose={handleStateClose}
+                  />
+                ))}
+              </div>
+              <div className={styles.footerFilterText}>{`(${filteredDataLength} of ${allDataLength} panels)`}</div>
             </div>
-            <div className={styles.footerFilterText}>{`(${filteredDataLength} of ${allDataLength} panels)`}</div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {hasInputs && hasLocalStorage && (
-        <div className={styles.footerButtonDiv} style={!fullScreen ? { position: 'sticky' } : { position: 'absolute' }}>
+        <div className={styles.footerButtonDiv}>
           <Button size="small" variant="contained" color="primary" onClick={handleClickOpen}>
             Export Inputs
           </Button>
@@ -178,7 +179,7 @@ const Footer: React.FC = () => {
         hasInputs={hasInputs}
         hasLocalStorage={hasLocalStorage}
       />
-    </div>
+    </>
   );
 };
 
