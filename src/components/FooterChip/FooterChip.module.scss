@@ -17,6 +17,8 @@
   }
 
   &Label {
+    display: flex;
+    align-items: center;
     color: var(--white);
     font-size: var(--text-xs);
     font-weight: var(--font-normal);
