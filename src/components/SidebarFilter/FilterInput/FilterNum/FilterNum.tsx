@@ -6,6 +6,7 @@ import { FILTER_TYPE_NUMBERRANGE } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { addFilter, removeFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
+import { format } from '../../../FormattedNumber/FormattedNumber';
 import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
 import styles from './FilterNum.module.scss';
 
