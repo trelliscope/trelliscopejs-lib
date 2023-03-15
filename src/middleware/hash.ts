@@ -23,16 +23,10 @@ const { setActiveSidebar } = sidebarSlice.actions;
 // this updates the window hash whenever the state changes
 export const hashFromState = (state: RootState) => {
   const hashURL = new URLSearchParams();
-  // display
-  const display = state.selectedDisplay;
 
   // layout
   const { layout } = state;
-  const layoutPars = `nrow=${layout.nrow}&ncol=${layout.ncol}&arr=${layout.arrange}&pg=${layout.page}`;
 
-  if (layout.nrow) {
-    hashURL.append('nrow', layout.nrow.toString());
-  }
   if (layout.ncol) {
     hashURL.append('ncol', layout.ncol.toString());
   }

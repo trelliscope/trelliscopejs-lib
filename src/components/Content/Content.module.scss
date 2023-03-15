@@ -1,14 +1,16 @@
 .content {
-  padding: var(--padding-6);
+  padding: var(--panelGridGap);
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: var(--padding-6);
+  grid-gap: var(--panelGridGap);
+  width: 100%;
 
   &Wrapper {
-    position: absolute;
-    display: inline-block;
-    margin: var(--header-container-height) 0 0 var(--header-container-height);
-    height: calc(100% - (var(--header-container-height) * 2));
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    height: calc(100vh - (var(--header-container-height) + var(--footer-wrapper-height)));
     overflow: auto;
   }
 
