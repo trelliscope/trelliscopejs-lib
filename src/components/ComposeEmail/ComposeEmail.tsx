@@ -32,8 +32,8 @@ const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, fullName, emai
     <div className={styles.composeEmailContainer}>
       <DialogContentText id="alert-dialog-description" className={styles.composeEmailContentText}>
         <span className={styles.composeEmailDescription}>
-          By clicking the &quote;Compose Email&aquote; button below, an email will be drafted and opened in your email client
-          to relay this csv file back to us, at {displayInfo.inputs?.feedbackInterface.feedbackEmail}.
+          {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client
+          to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
         </span>
         <span className={styles.composeEmailDescription}>
           <strong>
