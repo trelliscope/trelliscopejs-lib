@@ -31,11 +31,10 @@
     border-bottom: var(--border-2);
 
     &Cell {
-      padding: var(--padding-4);
+      padding: 0 var(--padding-4);
       white-space: nowrap;
-      padding-top: 3px;
-      padding-bottom: 3px;
-      height: 18px;
+      height: var(--panelLabel-height);
+      line-height: var(--panelLabel-height);
 
       &:first-of-type {
         white-space: nowrap;

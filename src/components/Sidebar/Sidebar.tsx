@@ -11,9 +11,9 @@ import SidebarSort from '../SidebarSort';
 import SidebarViews from '../SidebarViews';
 import { sidebarActiveSelector } from '../../selectors/ui';
 import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
-import styles from './Sidebar.module.scss';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import SidebarFilter from '../SidebarFilter';
+import styles from './Sidebar.module.scss';
 
 const Sidebar: React.FC = () => {
   const { isSuccess: displayLoaded } = useDisplayInfo();

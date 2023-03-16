@@ -50,19 +50,6 @@ const SidebarLayout: React.FC = () => {
       ) : (
         <>
           <div className={styles.row}>
-            <div className={styles.label}>Rows:</div>
-            <div className={styles.nInput}>
-              <input
-                value={layout.nrow}
-                min={1}
-                max={15}
-                type="number"
-                onChange={(e) => handleLayoutChange(e.target.value, true)}
-              />
-            </div>
-          </div>
-          <Divider />
-          <div className={styles.row}>
             <div className={styles.label}>Columns:</div>
             <div className={styles.nInput}>
               <input
@@ -74,7 +61,7 @@ const SidebarLayout: React.FC = () => {
               />
             </div>
           </div>
-          <Divider />
+          {/*  <Divider />
           <div className={styles.row}>Arrangement:</div>
           <div className={styles.row}>
             <RadioGroup
@@ -112,7 +99,7 @@ const SidebarLayout: React.FC = () => {
                 className={styles.inputRadio}
               />
             </RadioGroup>
-          </div>
+          </div> */}
         </>
       )}
     </>
