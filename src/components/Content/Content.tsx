@@ -13,6 +13,7 @@ import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import { selectBasePath } from '../../selectors/app';
 import { snakeCase } from '../../utils';
 import getCustomProperties from '../../getCustomProperties';
+import DataTable from '../DataTable';
 import styles from './Content.module.scss';
 
 const panelSrcGetter =
@@ -102,32 +103,35 @@ const Content: React.FC = () => {
   const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
   return (
-    <div className={styles.contentWrapper} ref={wrapperRef}>
-      <div
-        className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
-        style={contentStyle}
-        ref={contentRef}
-      >
-        {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
-          <>
-            {data.map((d) => (
-              <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
-                {names.map((name) => (
-                  <PanelGraphic
-                    type={displayInfo?.paneltype}
-                    ncol={layout.ncol}
-                    src={getPanelSrc(d, name).toString()}
-                    alt={name}
-                    aspectRatio={displayInfo?.panelaspect}
-                    key={`${d[metaIndex]}_${name}`}
-                  />
-                ))}
-              </Panel>
-            ))}
-          </>
-        )}
-      </div>
-    </div>
+    <>
+      {/* <div className={styles.contentWrapper} ref={wrapperRef}>
+        <div
+          className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
+          style={contentStyle}
+          ref={contentRef}
+        >
+          {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
+            <>
+              {data.map((d) => (
+                <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
+                  {names.map((name) => (
+                    <PanelGraphic
+                      type={displayInfo?.paneltype}
+                      ncol={layout.ncol}
+                      src={getPanelSrc(d, name).toString()}
+                      alt={name}
+                      aspectRatio={displayInfo?.panelaspect}
+                      key={`${d[metaIndex]}_${name}`}
+                    />
+                  ))}
+                </Panel>
+              ))}
+            </>
+          )}
+        </div>
+      </div> */}
+      <DataTable data={data} />
+    </>
   );
 };
 
