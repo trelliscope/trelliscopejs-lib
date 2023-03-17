@@ -16,4 +16,4 @@ export const handleJSONResponse = (res: Response) => {
 // replaces all camelCase with snake_case
 // replaces all spaces with snake_case
 // converts to lowercase
-export const snakeCase = (str: string) => str.replace(/([^a-zA-Z0-9_])/g, '_').toLowerCase();
+export const snakeCase = (str: string) => str.replace(/([^a-zA-Z0-9_])/g, '_');
