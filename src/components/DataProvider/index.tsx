@@ -28,12 +28,37 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const filters = useSelector(selectFilterState);
   const sorts = useSelector(selectSort);
 
+  const addMissingKeys = (dataArr: Datum[], metas: IMeta[]) =>
+    dataArr.map((d) => {
+      const res = { ...d };
+      metas.forEach((k) => {
+        if (res[k.varname] === undefined) {
+          if (k.type === 'string' || k.type === 'href' || k.type === 'factor') {
+            res[k.varname] = '[missing]';
+          }
+          if (
+            k.type === 'number' ||
+            k.type === 'date' ||
+            k.type === 'datetime' ||
+            k.type === 'currency' ||
+            k.type === 'geo' ||
+            k.type === 'graph'
+          ) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            res[k.varname] = null;
+          }
+        }
+      });
+      return res;
+    });
+
   useEffect(() => {
     if (metaData) {
       client.clearData();
-      client.addData(metaData);
+      client.addData(addMissingKeys(metaData, displayMetas));
     }
-  }, [metaData, client]);
+  }, [metaData, client, displayMetas]);
 
   useEffect(() => {
     // Add filters

@@ -21,6 +21,7 @@ export const format = (
   const suffix = { notation: 'compact' };
   const maxDigits = { maximumFractionDigits };
   const noGrouping = { useGrouping: false };
+  if (value === null) return '[missing]';
 
   const options = {};
 
