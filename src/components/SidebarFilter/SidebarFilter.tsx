@@ -8,7 +8,7 @@ import styles from './SidebarFilter.module.scss';
 const SidebarFilter: React.FC = () => {
   const { active: activeFilters } = useSelector(filterViewSelector);
   return (
-    <div className={styles.sidebarFilterNew}>
+    <div className={styles.sidebarFilter}>
       {activeFilters.map((filter) => (
         <FilterInput key={filter} filterName={filter} />
       ))}
