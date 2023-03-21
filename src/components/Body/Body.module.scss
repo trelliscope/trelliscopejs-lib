@@ -2,5 +2,5 @@
   border-right: var(--border-4);
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 48px min-content auto;
+  grid-template-columns: 48px min-content minmax(0, 1fr);
 }
