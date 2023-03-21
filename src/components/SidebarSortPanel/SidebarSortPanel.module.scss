@@ -13,14 +13,14 @@
     &Row {
       width: var(--sidebarSort-table-width);
       height: var(--sidebarSort-table-height);
-      border-bottom: var(border-3);
+      border-bottom: var(--border-3);
     }
   }
 
   &Tr {
     width: var(--sidebarSort-table-width);
     height: var(--sidebarSort-table-height);
-    border-bottom: var(border-3);
+    border-bottom: var(--border-3);
   }
 
   &Button {
