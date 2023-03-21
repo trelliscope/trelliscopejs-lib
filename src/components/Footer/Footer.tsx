@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
           text = mutableValue.sort().join(', ');
         } else {
           // just show "k of n"
-          text = `${mutableValue.length} of ${allDataLength}`;
+          text = `${format(mutableValue.length, 0)} of ${format(allDataLength, 0)}`;
         }
       }
     }
@@ -160,7 +160,10 @@ const Footer: React.FC = () => {
                   />
                 ))}
               </div>
-              <div className={styles.footerFilterText}>{`(${filteredDataLength} of ${allDataLength} panels)`}</div>
+              <div className={styles.footerFilterText}>{`(${format(filteredDataLength, 0)} of ${format(
+                allDataLength,
+                0,
+              )} panels)`}</div>
             </div>
           )}
         </div>
