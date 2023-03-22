@@ -42,15 +42,7 @@ const SidebarSort: React.FC = () => {
     }
   };
 
-  const notUsed = Object.keys(metaGroups);
-  if (metaLabels) {
-    for (let i = 0; i < sort.length; i += 1) {
-      const index = notUsed.indexOf(sort[i].varname);
-      if (index > -1) {
-        notUsed.splice(index, 1);
-      }
-    }
-  }
+  const totalSortLength = Array.from(metaGroups.values()).flat().length;
 
   return (
     <div>
@@ -64,7 +56,7 @@ const SidebarSort: React.FC = () => {
             metaLabels={metaLabels}
           />
           <div className={styles.sidebarSortNotUsedHeader}>
-            {sort.length === 0 ? 'Select a variable to sort on:' : notUsed.length === 0 ? '' : 'More variables:'}
+            {sort.length === 0 ? 'Select a variable to sort on:' : sort.length === totalSortLength ? '' : 'More variables:'}
           </div>
           <SidebarSortPill
             metaGroups={metaGroups}
