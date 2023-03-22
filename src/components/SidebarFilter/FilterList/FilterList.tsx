@@ -14,6 +14,8 @@ const FilterList: React.FC = () => {
   const inactiveFilterGroups = useMetaGroups([...activeFilters, ...unfilterableMetas] as string[]);
   const curFilters = useSelector(selectFilterState);
 
+  const allEmpty = Array.from(inactiveFilterGroups.values()).every((subArr) => subArr.length === 0);
+
   const curFiltersArr = curFilters.map((filter: IFilterState) => filter.varname);
 
   const dispatch = useDispatch();
@@ -24,7 +26,7 @@ const FilterList: React.FC = () => {
 
   return (
     <div className={styles.filterList}>
-      <div className={styles.filterListHeading}>Select a variable to filter on:</div>
+      {!allEmpty && <div className={styles.filterListHeading}>Select a variable to filter on:</div>}
       {Array.from(inactiveFilterGroups.keys()).map((key) => (
         <Fragment key={key.toString()}>
           {(inactiveFilterGroups?.get(key)?.length || 0) > 0 && (
