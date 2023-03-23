@@ -2,7 +2,7 @@ import { extent, max, rollup } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { useContext } from 'react';
 import { DataContext } from '../components/DataProvider';
-import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP } from '../constants';
+import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, MISSING_TEXT } from '../constants';
 
 const useMetaInfo = (varname: string, metaType?: MetaType) => {
   const { allData = [], groupBy } = useContext(DataContext);
@@ -33,7 +33,7 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     );
 
     groupedData.forEach((v, k) => {
-      dist[k] = v;
+      dist[k === undefined ? MISSING_TEXT : k] = v;
     });
 
     const maxValue = max(Array.from(groupedData), (d) => d[1]);

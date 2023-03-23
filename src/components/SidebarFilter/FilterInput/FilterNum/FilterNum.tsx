@@ -32,6 +32,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         filtertype: FILTER_TYPE_NUMBERRANGE,
         min: values[0],
         max: values[1],
+        metatype: 'number',
       } as INumberRangeFilterState;
       dispatch(addFilter(newFilter));
     }
@@ -68,6 +69,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         type: filter.type,
         min: lower === undefined && upper === undefined ? null : lower,
         max: lower === undefined && upper === undefined ? null : upper,
+        metatype: 'number',
       };
       dispatch(updateFilter(newState));
     } else {
@@ -77,6 +79,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         type: 'filter',
         min: lower,
         max: upper,
+        metatype: 'number',
       };
       dispatch(addFilter(newState));
     }

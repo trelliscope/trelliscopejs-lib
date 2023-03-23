@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { FILTER_TYPE_CATEGORY } from '../../../../constants';
+import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
 import CatHistogram from '../../../CatHistogram';
@@ -10,6 +10,7 @@ import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
 import Ellipsis from '../../../Ellipsis/Ellipsis';
 
 import styles from './FilterCat.module.scss';
+import { getFactorFromLabel, getLabelFromFactor } from '../../../../utils';
 
 interface FilterCatProps {
   meta: IFactorMeta;
@@ -18,6 +19,7 @@ interface FilterCatProps {
 
 const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const { domain = [0, 0], dist = {} } = useMetaInfo(meta.varname, meta.type);
+  const cleanMeta = meta.levels?.map((m) => (m === null ? MISSING_TEXT : m));
   const displayMetas = useDisplayMetas();
   const curDisplayMeta = displayMetas.find((d) => d.varname === meta.varname);
   const { filterSortOrder } = curDisplayMeta as IMeta;
@@ -31,6 +33,11 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     return data.sort((a, b) => {
       if (sortKey === 'ct') {
         return sortDir === 'asc' ? a.value - b.value : b.value - a.value;
+      }
+      if (meta.type === META_TYPE_FACTOR) {
+        const label = getLabelFromFactor(a.key as number, cleanMeta);
+        const label2 = getLabelFromFactor(b.key as number, cleanMeta);
+        return sortDir === 'asc' ? label.localeCompare(label2) : label2.localeCompare(label);
       }
       return sortDir === 'asc'
         ? (a.key as string).localeCompare(b.key as string)
@@ -55,6 +62,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
         filtertype: FILTER_TYPE_CATEGORY,
         regexp: null,
         values: [value],
+        metatype: meta.type,
       } as ICategoryFilterState;
       dispatch(addFilter(newFilter));
     }
@@ -71,11 +79,16 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
 
     if (value) {
       const regexp = new RegExp(value, 'i');
-      const filteredValues = meta.levels
-        ? meta.levels.filter((level) => level.match(regexp))
+      const regexValues = cleanMeta
+        ? cleanMeta.filter((level) => level.match(regexp))
         : groupBy(meta.varname)
             .filter((level) => (level.key as string).match(regexp))
             .map((level) => level.key);
+
+      let filteredValues = regexValues;
+      if (meta.type === META_TYPE_FACTOR) {
+        filteredValues = getFactorFromLabel(regexValues as string[], cleanMeta) as number[];
+      }
 
       const newFilter = {
         type: 'filter',
@@ -83,6 +96,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
         filtertype: FILTER_TYPE_CATEGORY,
         regexp: value,
         values: filteredValues,
+        metatype: meta.type,
       } as ICategoryFilterState;
 
       dispatch(filter ? updateFilter(newFilter) : addFilter(newFilter));
@@ -99,11 +113,13 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
-          count={meta.levels?.length || groupBy(meta.varname).length}
+          count={cleanMeta?.length || groupBy(meta.varname).length}
           width={220}
           height={75}
           barHeight={15}
           onClick={handleBarClick}
+          metaLevels={cleanMeta}
+          metaType={meta.type}
         />
       </div>
       <div className={styles.filterCatInputContainer}>

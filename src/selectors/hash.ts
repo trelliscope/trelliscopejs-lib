@@ -1,7 +1,7 @@
 // URL hash selectors
 //
 
-import { SB_LOOKUP } from '../constants';
+import { SB_LOOKUP, META_TYPE_FACTOR } from '../constants';
 
 // get url hash
 export const selectHash = () => {
@@ -60,8 +60,8 @@ export const selectHashSorts = () => {
   const hash = selectHash();
   if (!hash.sort) return hash.sort;
   return hash.sort.split(',').map((d: string) => {
-    const [varname, dir] = d.split(';');
-    return { varname, dir };
+    const [varname, dir, metatype] = d.split(';');
+    return { varname, dir, metatype };
   });
 };
 
@@ -76,7 +76,12 @@ export const selectHashFilters = () => {
       hashProps[key] = value;
     });
 
-    const filter = { varname: hashProps.var, filtertype: hashProps.type, type: 'filter' } as IFilterState;
+    const filter = {
+      varname: hashProps.var,
+      filtertype: hashProps.type,
+      type: 'filter',
+      metatype: hashProps.metatype,
+    } as IFilterState;
 
     if (['numberrange', 'daterange', 'datetimerange'].includes(hashProps.type)) {
       return {
@@ -89,7 +94,10 @@ export const selectHashFilters = () => {
     return {
       ...filter,
       regexp: decodeURIComponent(hashProps.regexp),
-      values: hashProps.val.split('#').map(decodeURIComponent),
+      values:
+        hashProps.metatype === META_TYPE_FACTOR
+          ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))
+          : hashProps.val.split('#').map(decodeURIComponent),
     } as ICategoryFilterState;
   });
 };

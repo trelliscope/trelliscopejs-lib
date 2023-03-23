@@ -5,7 +5,8 @@ import { selectNumPerPage, selectPage } from '../../slices/layoutSlice';
 import { selectFilterState } from '../../slices/filterSlice';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import { selectSort } from '../../slices/sortSlice';
-import type { IDataClient } from '../../DataClient';
+import type { DataType, IDataClient } from '../../DataClient';
+import { TYPE_MAP } from '../../constants';
 
 interface DataProviderProps {
   children: React.ReactNode;
@@ -44,7 +45,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
           field: filter.varname,
           value: (filter as ICategoryFilterState).values,
           operation: 'eq',
-          dataType: 'string',
+          dataType: TYPE_MAP[filter.metatype] as DataType,
         });
       } else if (filter.filtertype === 'numberrange') {
         const { min, max } = filter as INumberRangeFilterState;
@@ -52,7 +53,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
           field: filter.varname,
           value: max && min && max < min ? [null, null] : [min || 0, max || Infinity],
           operation: 'range',
-          dataType: 'number',
+          dataType: TYPE_MAP[filter.metatype] as DataType,
         });
       }
     });
@@ -61,11 +62,15 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     client.clearSorts();
     if (sorts.length === 0) {
       // If no sorts then sort by metaIndex which is original order
-      client.addSort({ field: metaIndex, order: 'asc' });
+      client.addSort({ field: metaIndex, order: 'asc', dataType: 'number' });
     } else {
       // add sorts to client if they don't already exist
       sorts.forEach((sort: ISortState) => {
-        client.addSort({ field: sort.varname, order: sort.dir });
+        client.addSort({
+          field: sort.varname,
+          order: sort.dir,
+          dataType: TYPE_MAP[sort.metatype] as DataType,
+        });
       });
     }
 

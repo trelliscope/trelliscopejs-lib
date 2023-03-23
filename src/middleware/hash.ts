@@ -45,7 +45,7 @@ export const hashFromState = (state: RootState) => {
 
   // sort
   if (state.sort.length) {
-    const sortStr = state.sort.map((d: ISortState) => `${d.varname};${d.dir}`).join(',');
+    const sortStr = state.sort.map((d: ISortState) => `${d.varname};${d.dir};${d.metatype}`).join(',');
     hashURL.append('sort', sortStr);
   }
   // filter
@@ -55,12 +55,12 @@ export const hashFromState = (state: RootState) => {
       let res = '';
       if (flt.filtertype === 'category') {
         const { values, regexp } = flt as ICategoryFilterState;
-        res = `var:${flt.varname};type:category;regexp:${encodeURIComponent((regexp as string) ?? '')};val:${values
-          .map(encodeURIComponent)
-          .join('#')}`;
+        res = `var:${flt.varname};type:category;regexp:${encodeURIComponent((regexp as string) ?? '')};metatype:${
+          flt.metatype
+        };val:${values.map(encodeURIComponent).join('#')}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
         const { min, max } = flt as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
-        res = `var:${flt.varname};type:numberrange;min:${min || ''};max:${max || ''}`;
+        res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min || ''};max:${max || ''}`;
       }
       return res;
     });
