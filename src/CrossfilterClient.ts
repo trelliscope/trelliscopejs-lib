@@ -8,6 +8,14 @@ import { MISSING_TEXT } from './constants';
 
 const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b: Datum) => {
   if (a[field] !== b[field]) {
+    if (a[field] === undefined) {
+      return 1;
+    }
+
+    if (b[field] === undefined) {
+      return -1;
+    }
+
     if (order === 'asc') {
       return a[field] < b[field] ? -1 : 1;
     }
@@ -17,14 +25,18 @@ const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b:
   return 0;
 };
 
-const getStringVal = (d: Datum, key: string) => (d[key] ? d[key] : MISSING_TEXT);
+const getStringVal = (d: Datum, key: string, dir?: string) => {
+  if (dir && d[key] === undefined) {
+    return dir === 'asc' ? '\uffff' : '';
+  }
+  return d[key] ? d[key] : MISSING_TEXT;
+};
 
 const getNumberVal = (d: Datum, key: string, dir?: string) => {
-  console.log('key:::', key);
-  // if (dir) {
-  //   const sign = dir === 'asc' ? 1 : 0;
-  //   return Number.isNaN(Number(d[key])) || d[key] === undefined ? sign * -Infinity : d[key];
-  // }
+  if (dir) {
+    const sign = dir === 'asc' ? -1 : 1;
+    return Number.isNaN(Number(d[key])) || d[key] === undefined ? sign * -Infinity : d[key];
+  }
   return Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key];
 };
 
@@ -134,12 +146,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   addSort(sort: DataClientSort) {
     super.addSort(sort);
     // check if dimension exists and create if not
-    if (!this.dimensions.has(sort.field)) {
-      this.dimensions.set(
-        sort.field,
-        this.crossfilter.dimension((d) => valueGetter[sort.dataType](d, sort.field as string, sort.order as string)),
-      );
-    }
+    this.dimensions.set(
+      sort.field,
+      this.crossfilter.dimension((d) => valueGetter[sort.dataType](d, sort.field as string, sort.order as string)),
+    );
   }
   // type mismatch between the type coming from crossfilter and the type coming from the parent class dataclient
   // which is designed to be used with other data clients besides crossfilter
