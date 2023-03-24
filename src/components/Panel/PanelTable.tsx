@@ -77,7 +77,10 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
           </tr>
         ))}
         {labels.map((label) => (
-          <tr key={label.varname} className={styles.panelLabel}>
+          <tr
+            key={label.varname}
+            className={!data[label.varname] ? `${styles.panelLabel} ${styles.panelLabelMissing}` : styles.panelLabel}
+          >
             <PanelTableLabelCell value={label.varname} label={label.label} />
             <td className={styles.panelLabelCell}>
               <div className={styles.panelLabelCellContent}>
@@ -94,7 +97,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     maximumFractionDigits={label.digits}
                   />
                 )}
-                {label.type === META_TYPE_HREF && (
+                {label.type === META_TYPE_HREF && data[label.varname] && (
                   <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>

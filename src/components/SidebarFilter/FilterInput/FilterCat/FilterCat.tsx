@@ -78,7 +78,8 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     const { value } = event.target;
 
     if (value) {
-      const regexp = new RegExp(value, 'i');
+      // we need to escape characters like [ in the regex
+      const regexp = new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
       const regexValues = cleanMeta
         ? cleanMeta.filter((level) => level.match(regexp))
         : groupBy(meta.varname)

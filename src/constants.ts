@@ -63,4 +63,4 @@ export const TYPE_MAP = {
   [META_TYPE_FACTOR]: 'number',
 };
 
-export const MISSING_TEXT = 'NA' as string;
+export const MISSING_TEXT = '[missing]' as string;

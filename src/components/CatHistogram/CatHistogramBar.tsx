@@ -27,7 +27,10 @@ const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
   metaLevels,
 }) => {
   const handleClick = () => {
-    onClick(label);
+    if (label === MISSING_TEXT) {
+      return onClick(-Infinity as unknown as string);
+    }
+    return onClick(label);
   };
 
   return (

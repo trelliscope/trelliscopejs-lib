@@ -135,16 +135,6 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     super.removeFilter(filter);
   }
 
-  // we need to fix the regex sorting
-  // we need to fix the ellipsis sorting
-  // fix the sorting sidebar
-  // we need to fix the count on the na values TALK TO JEFF ABOUT MY IMPLEMENTATION
-  // we need to fix the labels to show for country etc
-  // need to fix the labels for NaN for numbers
-  // need to fix if you click a bar and refresh it doesnt save because the numbers come in as strings instead of numbers
-  // TODO we need to add the sorting to the end for nulls this can be done with the factory and modifying it to have a dir
-  // TODO we need to fix the export input to have the correct values
-
   addSort(sort: DataClientSort) {
     super.addSort(sort);
     // check if dimension exists and create if not
