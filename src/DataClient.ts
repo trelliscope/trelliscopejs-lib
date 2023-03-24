@@ -30,6 +30,7 @@ export interface IDataClient {
   clearFilters(): void;
   groupBy: (
     field: string,
+    dataType: 'string' | 'number' | 'date',
     groupFunc?: (d: string | number) => NaturallyOrderedValue,
   ) => { key: string | number; value: number }[];
   clearData(): void;

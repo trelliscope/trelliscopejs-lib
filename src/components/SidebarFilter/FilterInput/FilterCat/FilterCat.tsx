@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR } from '../../../../constants';
+import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR, TYPE_MAP } from '../../../../constants';
 import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { updateFilterValues, addFilter, updateFilter, removeFilter } from '../../../../slices/filterSlice';
 import CatHistogram from '../../../CatHistogram';
@@ -82,7 +82,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
       const regexp = new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
       const regexValues = cleanMeta
         ? cleanMeta.filter((level) => level.match(regexp))
-        : groupBy(meta.varname)
+        : groupBy(meta.varname, TYPE_MAP[meta.type])
             .filter((level) => (level.key as string).match(regexp))
             .map((level) => level.key);
 
@@ -106,15 +106,19 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   };
 
+  console.log(groupBy(meta.varname, 'number'));
+
+  console.log(sortChartData(curSort, groupBy(meta.varname, TYPE_MAP[meta.type])));
+
   return (
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
         <CatHistogram
-          data={sortChartData(curSort, groupBy(meta.varname))}
+          data={sortChartData(curSort, groupBy(meta.varname, TYPE_MAP[meta.type]))}
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
-          count={cleanMeta?.length || groupBy(meta.varname).length}
+          count={cleanMeta?.length || groupBy(meta.varname, TYPE_MAP[meta.type]).length}
           width={220}
           height={75}
           barHeight={15}
