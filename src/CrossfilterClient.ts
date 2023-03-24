@@ -25,12 +25,14 @@ const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b:
   return 0;
 };
 
-const getStringVal = (d: Datum, key: string, dir?: string) => {
+const getSortKey = (field: string | symbol) => (typeof field === 'symbol' ? field : `sort_${field}`);
+
+function getStringVal(d: Datum, key: string, dir?: string) {
   if (dir && d[key] === undefined) {
     return dir === 'asc' ? '\uffff' : '';
   }
   return d[key] ? d[key] : MISSING_TEXT;
-};
+}
 
 const getNumberVal = (d: Datum, key: string, dir?: string) => {
   if (dir) {
@@ -147,7 +149,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     super.addSort(sort);
     // check if dimension exists and create if not
     this.dimensions.set(
-      sort.field,
+      getSortKey(sort.field),
       this.crossfilter.dimension((d) => valueGetter[sort.dataType](d, sort.field as string, sort.order as string)),
     );
   }
@@ -192,10 +194,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
       if (lastSort) {
         if (lastSort.order === 'asc') {
-          return this.dimensions.get(lastSort.field)?.bottom(count, offset) as Datum[];
+          return this.dimensions.get(getSortKey(lastSort.field))?.bottom(count, offset) as Datum[];
         }
 
-        return this.dimensions.get(lastSort.field)?.top(count, offset) as Datum[];
+        return this.dimensions.get(getSortKey(lastSort.field))?.top(count, offset) as Datum[];
       }
 
       return this.crossfilter.allFiltered().slice(offset, offset + count) as Datum[];
