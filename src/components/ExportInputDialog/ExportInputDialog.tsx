@@ -67,6 +67,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
       setJobTitle('');
       setOtherInfo('');
       setValidEmail(true);
+      setActiveStep(0);
     });
   };
 
