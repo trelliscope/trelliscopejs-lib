@@ -31,9 +31,9 @@ export const layoutSlice = createSlice({
       // if the layout change was to nrow / ncol
       // then we need to recompute page
       const obj = { ...action.payload };
-      if (obj.nrow && obj.ncol) {
+      if (obj.nrow || obj.ncol) {
         const prevPanelIndex = state.nrow * state.ncol * (state.page - 1) + 1;
-        obj.page = Math.ceil(prevPanelIndex / (obj.nrow * obj.ncol));
+        obj.page = Math.ceil(prevPanelIndex / (obj.nrow || state.nrow * state.ncol));
         if (Number.isNaN(obj.page)) {
           obj.page = 1;
         }
