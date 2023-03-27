@@ -106,10 +106,6 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   };
 
-  console.log(groupBy(meta.varname, 'number'));
-
-  console.log(sortChartData(curSort, groupBy(meta.varname, TYPE_MAP[meta.type])));
-
   return (
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
