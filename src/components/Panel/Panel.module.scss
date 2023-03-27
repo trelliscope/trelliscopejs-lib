@@ -30,6 +30,10 @@
     font-size: var(--text-xs);
     border-bottom: var(--border-2);
 
+    &Missing {
+      color: var(--gray-600);
+    }
+
     &Cell {
       padding: 0 var(--padding-4);
       white-space: nowrap;

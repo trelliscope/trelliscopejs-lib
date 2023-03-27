@@ -13,11 +13,14 @@ import {
   META_TYPE_NUMBER,
   META_TYPE_STRING,
   PANEL_KEY,
+  MISSING_TEXT,
 } from '../../constants';
 import FormattedNumber from '../FormattedNumber';
 import { PanelInputText, PanelInputRadios } from '../PanelInputs';
 import PanelTableLabelCell from './PanelTableLabelCell';
 import { setLabels } from '../../slices/labelsSlice';
+import { getLabelFromFactor } from '../../utils';
+import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
@@ -28,6 +31,13 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
   const dispatch = useDispatch();
+
+  const displayMetas = useDisplayMetas();
+
+  const getMetaLevels = (varname: string) => {
+    const foundMeta = displayMetas.find((meta) => meta.varname === varname);
+    return foundMeta?.levels;
+  };
 
   const handleLableRemove = (label: string) => {
     const labelsAndInputs = [...labels, ...inputs];
@@ -67,14 +77,19 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
           </tr>
         ))}
         {labels.map((label) => (
-          <tr key={label.varname} className={styles.panelLabel}>
+          <tr
+            key={label.varname}
+            className={!data[label.varname] ? `${styles.panelLabel} ${styles.panelLabelMissing}` : styles.panelLabel}
+          >
             <PanelTableLabelCell value={label.varname} label={label.label} />
             <td className={styles.panelLabelCell}>
               <div className={styles.panelLabelCellContent}>
-                {(label.type === META_TYPE_STRING || label.type === META_TYPE_FACTOR || label.type === META_TYPE_DATE) &&
-                  data[label.varname]}
-                {label.type === META_TYPE_DATETIME && data[label.varname].toString().replace('T', ' ')}
-                {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && (
+                {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
+                {label.type === META_TYPE_FACTOR &&
+                  getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
+                {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE) && data[label.varname]}
+                {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
+                {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
                   <FormattedNumber
                     value={data[label.varname] as number}
                     isCurrency={label.type === META_TYPE_CURRENCY}
@@ -82,7 +97,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     maximumFractionDigits={label.digits}
                   />
                 )}
-                {label.type === META_TYPE_HREF && (
+                {label.type === META_TYPE_HREF && data[label.varname] && (
                   <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>

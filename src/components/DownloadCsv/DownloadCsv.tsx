@@ -4,7 +4,10 @@ import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { DataContext } from '../DataProvider';
+import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './DownloadCsv.module.scss';
+import { META_TYPE_FACTOR, MISSING_TEXT } from '../../constants';
+import { getLabelFromFactor } from '../../utils';
 
 interface DownloadCsvProps {
   displayInfo: IDisplay;
@@ -22,6 +25,7 @@ interface Data {
 
 const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle }) => {
   const { allData } = useContext(DataContext);
+  const displayMetas = useDisplayMetas();
   const includedMetaVars = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
   const data: Data = {};
   const cols: string[] = [];
@@ -65,7 +69,15 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
       const idx = allData.map((panelData) => panelData.__PANEL_KEY__).indexOf(panelKey);
       if (idx > -1) {
         const panelWithInput = allData[idx];
-        includedMetaVars.forEach((metaVar) => rowColumnData.push(panelWithInput[metaVar]));
+        includedMetaVars.forEach((metaVar) => {
+          // if the meta var is a factor, we need to get the label from the factor util otherwise our csv will have numbers when it needs labels
+          const dispMetaFound = displayMetas.find((meta) => meta.varname === metaVar);
+          if (dispMetaFound?.type === META_TYPE_FACTOR) {
+            const factorLabel = getLabelFromFactor(panelWithInput[metaVar] as number, dispMetaFound.levels as string[]);
+            return rowColumnData.push(factorLabel === MISSING_TEXT ? '' : factorLabel);
+          }
+          return rowColumnData.push(panelWithInput[metaVar]);
+        });
       }
     }
 

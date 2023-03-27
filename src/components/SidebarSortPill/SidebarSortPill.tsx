@@ -12,6 +12,7 @@ interface SidebarSortPillProps {
   sort: ISortState[];
   sort2: ISortState[];
   metaLabels: { [key: string]: string };
+  displayMetas: IMeta[];
 }
 
 const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
@@ -23,6 +24,7 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
   sort,
   sort2,
   metaLabels,
+  displayMetas,
 }) => {
   const customStyles = {
     notUsed: {
@@ -73,7 +75,8 @@ const SidebarSortPill: React.FC<SidebarSortPillProps> = ({
                         className={styles.sidebarSortPillVariable}
                         key={`${d}_button`}
                         onClick={() => {
-                          sort2.push({ varname: d, dir: 'asc', type: 'sort' });
+                          const metaType = displayMetas.find((meta) => meta.varname === d)?.type;
+                          sort2.push({ varname: d, dir: 'asc', type: 'sort', metatype: metaType || 'string' });
                           addSortLabel(d);
                           handleSortChange(sort2);
                         }}

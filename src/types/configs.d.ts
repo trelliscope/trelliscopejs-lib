@@ -195,6 +195,7 @@ interface IMeta {
   filterable: boolean;
   sortable: boolean;
   code?: string;
+  levels?: string[];
   digits: number;
   filterSortOrder: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';
 }
@@ -309,11 +310,13 @@ interface ILabelState extends IState {
 interface ISortState extends IState {
   varname: string;
   dir: SortDirType;
+  metatype: MetaType;
 }
 
 interface IFilterState extends IState {
   varname: string;
   filtertype: FilterType;
+  metatype: MetaType;
 }
 
 interface ILabelState {

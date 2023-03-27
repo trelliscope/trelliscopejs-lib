@@ -1,16 +1,18 @@
 import type { NaturallyOrderedValue } from 'crossfilter2';
 
+export type DataType = 'string' | 'number' | 'date';
 export interface DataClientFilter {
   field: string;
   value: string | number | string[] | [number, number] | [null, null];
   operation: 'eq' | 'neq' | 'range' | 'regex';
-  dataType: 'string' | 'number' | 'date';
+  dataType: DataType;
 }
 
 // interface for sort object
 export interface DataClientSort {
   field: string | symbol;
   order: 'asc' | 'desc';
+  dataType: DataType;
 }
 
 export interface IDataClient {
@@ -28,6 +30,7 @@ export interface IDataClient {
   clearFilters(): void;
   groupBy: (
     field: string,
+    dataType: 'string' | 'number' | 'date',
     groupFunc?: (d: string | number) => NaturallyOrderedValue,
   ) => { key: string | number; value: number }[];
   clearData(): void;

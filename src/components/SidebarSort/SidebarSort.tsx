@@ -67,6 +67,7 @@ const SidebarSort: React.FC = () => {
             sort={sort}
             sort2={sort2}
             metaLabels={metaLabels}
+            displayMetas={displayMetas}
           />
         </div>
       )}

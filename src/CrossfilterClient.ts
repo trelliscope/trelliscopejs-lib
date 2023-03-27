@@ -4,9 +4,18 @@ import arraySort from 'array-sort';
 import DataClient, { DataClientFilter, DataClientSort } from './DataClient';
 import type { IDataClient } from './DataClient';
 import { metaIndex } from './slices/metaDataAPI';
+import { MISSING_TEXT } from './constants';
 
 const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b: Datum) => {
   if (a[field] !== b[field]) {
+    if (a[field] === undefined) {
+      return 1;
+    }
+
+    if (b[field] === undefined) {
+      return -1;
+    }
+
     if (order === 'asc') {
       return a[field] < b[field] ? -1 : 1;
     }
@@ -16,9 +25,22 @@ const compare = (field: string | symbol, order: 'asc' | 'desc') => (a: Datum, b:
   return 0;
 };
 
-const getStringVal = (d: Datum, key: string) => (d[key] ? d[key] : 'NA');
+const getSortKey = (field: string | symbol) => (typeof field === 'symbol' ? field : `sort_${field}`);
 
-const getNumberVal = (d: Datum, key: string) => (Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key]);
+function getStringVal(d: Datum, key: string, dir?: string) {
+  if (dir && d[key] === undefined) {
+    return dir === 'asc' ? '\uffff' : '';
+  }
+  return d[key] ? d[key] : MISSING_TEXT;
+}
+
+const getNumberVal = (d: Datum, key: string, dir?: string) => {
+  if (dir) {
+    const sign = dir === 'asc' ? -1 : 1;
+    return Number.isNaN(Number(d[key])) || d[key] === undefined ? sign * -Infinity : d[key];
+  }
+  return Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key];
+};
 
 const valueGetter = {
   string: getStringVal,
@@ -116,12 +138,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   addSort(sort: DataClientSort) {
     super.addSort(sort);
     // check if dimension exists and create if not
-    if (!this.dimensions.has(sort.field)) {
-      this.dimensions.set(
-        sort.field,
-        this.crossfilter.dimension((d) => d[sort.field]),
-      );
-    }
+    this.dimensions.set(
+      getSortKey(sort.field),
+      this.crossfilter.dimension((d) => valueGetter[sort.dataType](d, sort.field as string, sort.order as string)),
+    );
   }
   // type mismatch between the type coming from crossfilter and the type coming from the parent class dataclient
   // which is designed to be used with other data clients besides crossfilter
@@ -164,10 +184,10 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
       if (lastSort) {
         if (lastSort.order === 'asc') {
-          return this.dimensions.get(lastSort.field)?.bottom(count, offset) as Datum[];
+          return this.dimensions.get(getSortKey(lastSort.field))?.bottom(count, offset) as Datum[];
         }
 
-        return this.dimensions.get(lastSort.field)?.top(count, offset) as Datum[];
+        return this.dimensions.get(getSortKey(lastSort.field))?.top(count, offset) as Datum[];
       }
 
       return this.crossfilter.allFiltered().slice(offset, offset + count) as Datum[];
