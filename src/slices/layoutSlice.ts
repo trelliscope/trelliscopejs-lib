@@ -36,6 +36,9 @@ export const layoutSlice = createSlice({
         if (obj.nrow) {
           obj.page = Math.ceil(prevPanelIndex / (obj.nrow * state.ncol));
         }
+        if (obj.ncol) {
+          obj.page = Math.ceil(prevPanelIndex / (state.nrow * obj.ncol));
+        }
         if (Number.isNaN(obj.page)) {
           obj.page = 1;
         }
