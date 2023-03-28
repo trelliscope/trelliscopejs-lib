@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   const { data: displayList = [], isSuccess } = useDisplayList();
   const displayGroups = useDisplayGroups();
   const relatedDisplayGroups = useRelatedDisplaysGroup();
-  const { filteredData } = useContext(DataContext);
+  const { allData, filteredData } = useContext(DataContext);
 
   const dialogOpen = useSelector(selectDialogOpen);
   const windowWidth = useSelector(windowWidthSelector);
@@ -33,6 +33,7 @@ const Header: React.FC = () => {
   const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
 
   const n = useSelector(selectPage);
+  const originalTotal = allData.length;
   const totPanels = filteredData.length;
   const npp = useSelector(selectNumPerPage);
   const fullscreen = useSelector(fullscreenSelector);
@@ -137,7 +138,7 @@ const Header: React.FC = () => {
         />
       )}
       {selectedDisplay?.name !== '' && (
-        <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={totPanels} />
+        <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={originalTotal} />
       )}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
