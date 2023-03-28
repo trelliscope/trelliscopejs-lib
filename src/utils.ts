@@ -24,6 +24,9 @@ export const getLabelFromFactor = (factor: number, levels: string[]) => {
   if (!factor || factor === -Infinity) {
     return MISSING_TEXT;
   }
+
+  if (!levels) return MISSING_TEXT;
+
   return levels[factor - 1];
 };
 
