@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
 import styles from './Pagination.module.scss';
+import FormattedNumber from '../FormattedNumber';
 
 interface PaginationProps {
   n: number;
@@ -48,11 +49,11 @@ const Pagination: React.FC<PaginationProps> = ({
   if (pFrom !== pTo) {
     pRange = (
       <span>
-        {pFrom}
+        <FormattedNumber value={pFrom} maximumFractionDigits={0} />
         &nbsp;
         <span className={styles.paginationPageDash}>-</span>
         &nbsp;
-        {pTo}
+        <FormattedNumber value={pTo} maximumFractionDigits={0} />
       </span>
     );
   }
@@ -62,7 +63,9 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.paginationLabel}>
         <span>
           {pRange}
-          <span>{` of ${totPanels}`}</span>
+          <span>
+            {` of `} <FormattedNumber value={totPanels} maximumFractionDigits={0} />
+          </span>
         </span>
       </div>
       <div className={styles.paginationButtonWrap}>

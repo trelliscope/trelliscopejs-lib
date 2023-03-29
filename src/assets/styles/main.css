@@ -5,6 +5,7 @@
 
 body {
   margin: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
 .trelliscope-app-container {
@@ -12,18 +13,14 @@ body {
 }
 
 .trelliscope-app {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
   line-height: normal;
 }
 
 .trelliscope-app button {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
-  /*border: none;*/
-  /*background: none;*/
-  /*padding: 0;*/
-  /*margin: 0;*/
 }
 
 .trelliscope-app td,
@@ -49,17 +46,17 @@ body {
 .trelliscope-app h4,
 .trelliscope-app h5,
 .trelliscope-app h6 {
-  font-weight: 400;
+  font-weight: 500;
   color: black;
 }
 
 .trelliscope-app strong {
   color: black;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .trelliscope-app th {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .trelliscope-app h1 {

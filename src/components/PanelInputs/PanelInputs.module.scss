@@ -1,0 +1,46 @@
+.panelInputText {
+  display: flex;
+
+  &ButtonContainer {
+    display: flex;
+  }
+
+  &Value {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 85px;
+    margin-right: 5px;
+  }
+
+  &EditButton {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  &Popover {
+    padding: var(--padding-5);
+  }
+}
+
+.panelInputRadioGroup {
+  &[role='radiogroup'] {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  &Label {
+    font-size: var(--text-sm) !important;
+  }
+
+  &Radio {
+    padding: 0 var(--padding-5) !important;
+  }
+}

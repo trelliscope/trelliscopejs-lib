@@ -1,59 +1,67 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import SidebarLabelPill from '../SidebarLabelPill';
+import { useDisplayMetasWithInputs, useMetaGroupsWithInputs } from '../../slices/displayInfoAPI';
+import { labelsSelector } from '../../selectors';
 import styles from './SidebarLabels.module.scss';
+import { setLabels } from '../../slices/labelsSlice';
+import { COMMON_TAGS_KEY } from '../../constants';
 
-interface SidebarLabelsProps {
-  sidebarHeaderHeight: number;
-  ch: number;
-  labels: string[];
-  curDisplayInfo: DisplayInfoState;
-  cogInfo: {
-    [key: string]: CogInfo;
+const SidebarLabels: React.FC = () => {
+  const dispatch = useDispatch();
+  const labels = useSelector(labelsSelector);
+  const labelObj = useMetaGroupsWithInputs();
+
+  const metasWithInputs = useDisplayMetasWithInputs();
+  const labelDescriptionMap = new Map();
+  metasWithInputs.forEach((meta) => {
+    labelDescriptionMap.set(meta.varname, meta.label);
+  });
+
+  const handleLabelChange = (value: string) => {
+    const idx = labels.indexOf(value);
+    let newLabels = labels;
+    if (idx === -1) {
+      newLabels = [...labels, value];
+    } else {
+      newLabels = [...labels.slice(0, idx), ...labels.slice(idx + 1)];
+    }
+    dispatch(setLabels(newLabels));
   };
-  handleLabelChange: (value: string) => void;
-}
-
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({
-  sidebarHeaderHeight,
-  ch,
-  labels,
-  curDisplayInfo,
-  cogInfo,
-  handleLabelChange,
-}) => {
-  const height = ch - sidebarHeaderHeight;
-  const { cogGroups } = curDisplayInfo.info;
-  const ciKeys = Object.keys(cogInfo);
 
   return (
     <>
-      {ciKeys.length > 0 && (
-        <div className={styles.sidebarLabels} style={{ height }}>
+      {labelDescriptionMap.size > 0 && (
+        <div className={styles.sidebarLabels}>
           <List className={styles.sidebarLabelsList}>
-            {Object.keys(cogGroups).map((grp) => {
-              const curItems = cogGroups[grp];
-              if (curItems.length === 0) {
+            {Array.from(labelObj.keys()).map((grp) => {
+              const groupString = grp.toString();
+              const curItems = labelObj.get(grp);
+              if (curItems?.length === 0 || !curItems) {
                 return null;
               }
               return (
-                <React.Fragment key={grp}>
-                  {!['condVar', 'common', 'panelKey'].includes(grp) && (
+                <React.Fragment key={groupString}>
+                  {/* Don't include header for non-tagged group */}
+                  {grp !== COMMON_TAGS_KEY && (
                     <ListSubheader className={styles.sidebarLabelsCogGroupHeader}>
-                      <span className={styles.sidebarLabelsCogGroupText}>{`${grp} (${curItems.length})`}</span>
+                      <span className={styles.sidebarLabelsCogGroupText}>{`${groupString} (${curItems.length})`}</span>
                     </ListSubheader>
                   )}
-                  {[...cogGroups[grp]].sort().map((d: string) => (
-                    <SidebarLabelPill
-                      labels={labels}
-                      cogInfo={cogInfo}
-                      d={d}
-                      handleLabelChange={handleLabelChange}
-                      key={`${d}_${grp}`}
-                    />
-                  ))}
+                  {labelObj
+                    ?.get(grp)
+                    ?.sort()
+                    .map((label: string) => (
+                      <SidebarLabelPill
+                        labels={labels}
+                        labelDescriptionMap={labelDescriptionMap}
+                        label={label}
+                        handleLabelChange={handleLabelChange}
+                        key={`${label}_${groupString}`}
+                      />
+                    ))}
                 </React.Fragment>
               );
             })}

@@ -1,0 +1,64 @@
+.numHistogram {
+  padding: var(--margin-4) 0 0;
+}
+
+.brush {
+  fill: none;
+
+  &Overlay {
+    pointer-events: all;
+  }
+
+  &Selection {
+    fill: var(--orange);
+    cursor: move;
+    fill-opacity: 0.125;
+    stroke: rgb(255, 170, 10);
+    shape-rendering: crispEdges;
+    stroke-opacity: 0.2;
+  }
+
+  &Handle {
+    width: 6px;
+    cursor: ew-resize;
+  }
+}
+
+.bar {
+  fill: var(--orange);
+
+  &Background {
+    fill: var(--gray);
+  }
+  &__active {
+    fill: var(--orange-200);
+  }
+}
+
+.axis {
+  font-size: 10px;
+  opacity: 0.4;
+  shape-rendering: crispEdges;
+
+  &XLine {
+    stroke: var(--black);
+    stroke-width: 1px;
+  }
+
+  &EdgeTick {
+    line {
+      stroke: var(--black);
+      stroke-width: 1px;
+    }
+  }
+
+  &Tick {
+    line {
+      stroke: var(--black);
+      stroke-width: 1px;
+    }
+    text {
+      text-anchor: middle;
+    }
+  }
+}

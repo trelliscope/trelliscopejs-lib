@@ -6,28 +6,24 @@ import styles from './SidebarLabelPill.module.scss';
 
 interface SidebarLabelsProps {
   labels: string[];
-  cogInfo: {
-    [key: string]: CogInfo;
-  };
-  d: string;
+  labelDescriptionMap: Map<string, string>;
+  label: string;
   handleLabelChange: (value: string) => void;
 }
 
-const SidebarLabels: React.FC<SidebarLabelsProps> = ({
-  labels,
-  cogInfo,
-  d,
-  handleLabelChange,
-}) => (
-  <ListItem key={cogInfo[d].name} dense button onClick={() => handleLabelChange(cogInfo[d].name)}>
-    <Checkbox
-      checked={labels.indexOf(cogInfo[d].name) !== -1}
-      className={styles.sidebarLabelsListCheckbox}
-      tabIndex={-1}
-      disableRipple
-    />
-    <ListItemText primary={cogInfo[d].name} secondary={cogInfo[d].desc} className={styles.sidebarLabelsListItem} />
-  </ListItem>
-);
+const SidebarLabels: React.FC<SidebarLabelsProps> = ({ labels, labelDescriptionMap, label, handleLabelChange }) => {
+  const description = labelDescriptionMap.get(label);
+  return (
+    <ListItem key={label} dense button onClick={() => handleLabelChange(label)}>
+      <Checkbox
+        checked={labels.indexOf(label) !== -1}
+        className={styles.sidebarLabelsListCheckbox}
+        tabIndex={-1}
+        disableRipple
+      />
+      <ListItemText primary={label} secondary={description} className={styles.sidebarLabelsListItem} />
+    </ListItem>
+  );
+};
 
 export default SidebarLabels;

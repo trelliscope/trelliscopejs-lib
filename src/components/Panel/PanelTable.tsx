@@ -1,268 +1,111 @@
-import React, { useState, useRef } from 'react';
-import classNames from 'classnames';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faArrowUpRightFromSquare, faPencil } from '@fortawesome/free-solid-svg-icons';
-import { FormControlLabel, Popover, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
-import { DisplayInfoState } from '../../slices/displayInfoSlice';
+import {
+  INPUT_TYPE_RADIO,
+  INPUT_TYPE_TEXT,
+  META_TYPE_DATE,
+  META_TYPE_DATETIME,
+  META_TYPE_CURRENCY,
+  META_TYPE_FACTOR,
+  META_TYPE_HREF,
+  META_TYPE_NUMBER,
+  META_TYPE_STRING,
+  PANEL_KEY,
+  MISSING_TEXT,
+} from '../../constants';
+import FormattedNumber from '../FormattedNumber';
+import { PanelInputText, PanelInputRadios } from '../PanelInputs';
+import PanelTableLabelCell from './PanelTableLabelCell';
+import { setLabels } from '../../slices/labelsSlice';
+import { getLabelFromFactor } from '../../utils';
+import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './Panel.module.scss';
 
 interface PanelTableProps {
-  labels: PanelLabel[];
-  curDisplayInfo: DisplayInfoState;
-  panelKey: string;
-  dims: Dims;
-  bWidth: number;
-  labelArr: string[];
-  onLabelRemove: (label: string, labels: string[]) => void;
-  setPanelCogInput: (displayInfo: DisplayObject, value: string, panelKey: string, cogId: string) => void;
+  data: Datum;
+  labels: IMeta[];
+  inputs: IInput[];
 }
 
-const PanelTable: React.FC<PanelTableProps> = ({
-  labels,
-  curDisplayInfo,
-  panelKey,
-  setPanelCogInput,
-  dims,
-  bWidth,
-  labelArr,
-  onLabelRemove,
-}) => {
-  const [textInputOpen, setTextInputOpen] = useState('');
-  const [textInputValue, setTextInputValue] = useState('');
-  const [inputUpdateCount, setInputUpdateCount] = useState(0);
+const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
+  const dispatch = useDispatch();
 
-  const tableRef = useRef<HTMLTableElement>(null);
+  const displayMetas = useDisplayMetas();
 
-  const inlineStyles = {
-    labelTable: {
-      width: bWidth,
-    },
-    labelRow: {
-      width: bWidth,
-      height: dims.labelHeight,
-      lineHeight: `${dims.labelHeight}px`,
-    },
-    labelSpan: {
-      fontSize: dims.fontSize,
-      position: 'absolute',
-      TextDecooration: 'none',
-    } as React.CSSProperties,
-    labelClose: {
-      fontSize: dims.fontSize,
-      lineHeight: `${dims.labelHeight}px`,
-    },
-    labelInner: {
-      height: dims.labelHeight,
-    },
-    labelNameCell: {
-      paddingLeft: dims.labelPad / 2 + 2,
-      paddingRight: dims.labelPad / 2 + 2,
-      width: dims.labelWidth,
-    },
-    labelValueCell: {
-      paddingLeft: dims.labelPad / 2 + 2,
-      paddingRIght: dims.labelPad / 2 + 2,
-    },
-    linkIcon: {
-      textDecoration: 'none',
-      fontSize: dims.fontSize - 2,
-    },
-    radioDiv: {
-      transform: `scale(${dims.labelHeight / 29})`,
-      transformOrigin: 'left top',
-      marginTop: '-2px',
-    },
+  const getMetaLevels = (varname: string) => {
+    const foundMeta = displayMetas.find((meta) => meta.varname === varname);
+    return foundMeta?.levels;
   };
 
-  const specialRenderTypes = ['href', 'href_hash', 'input_radio', 'input_text'];
+  const handleLableRemove = (label: string) => {
+    const labelsAndInputs = [...labels, ...inputs];
+    const newLabels = labelsAndInputs
+      .map((labelItem) => ('varname' in labelItem ? labelItem.varname : labelItem.name))
+      .filter((labelItem) => labelItem !== label);
+    dispatch(setLabels(newLabels));
+  };
 
   return (
-    <table className={styles.labelTable} style={inlineStyles.labelTable} ref={tableRef}>
+    <table className={styles.panelLabels} width="100%">
       <tbody>
-        {labels.map((label) => (
-          <tr key={label.name} className={classNames(styles.labelRow)} style={inlineStyles.labelRow}>
-            <td className={classNames(styles.labelCell, styles.labelNameCell)} style={inlineStyles.labelNameCell}>
-              <div
-                className={styles.labelInner}
-                style={inlineStyles.labelInner}
-                data-tip
-                data-for={`tooltip_${panelKey}_${label.name}`}
-              >
-                {label.name !== label.desc ? (
-                  <Tooltip
-                    title={label.desc}
-                    placement="top-start"
-                    id={`tooltip_${panelKey}_${label.name}`}
-                    arrow
-                    PopperProps={{
-                      modifiers: [
-                        {
-                          name: 'offset',
-                          options: {
-                            offset: [30, -10],
-                          },
-                        },
-                      ],
-                    }}
-                  >
-                    <span style={inlineStyles.labelSpan}>{label.name}</span>
-                  </Tooltip>
-                ) : (
-                  <span style={inlineStyles.labelSpan}>{label.name}</span>
+        {inputs?.map((input) => (
+          <tr key={input.name} className={styles.panelLabel}>
+            <PanelTableLabelCell value={input.name} label={input.label} />
+            <td className={styles.panelLabelCell}>
+              <div className={styles.panelLabelCellContent}>
+                {input.type === INPUT_TYPE_TEXT && (
+                  <PanelInputText
+                    name={input.name}
+                    rows={(input as ITextInput).height}
+                    panelKey={data[PANEL_KEY] as string}
+                  />
                 )}
+                {input.type === INPUT_TYPE_RADIO && (
+                  <PanelInputRadios
+                    name={input.name}
+                    options={(input as IRadioInput).options}
+                    panelKey={data[PANEL_KEY] as string}
+                  />
+                )}
+                <button type="button" className={styles.panelLabelClose} onClick={() => handleLableRemove(input.name)}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
               </div>
             </td>
-            <td className={styles.labelCell} style={inlineStyles.labelValueCell}>
-              {label.type === 'href' && (
-                <div className={styles.labelInner} style={inlineStyles.labelInner}>
-                  <a style={inlineStyles.labelSpan} href={label.value as string} rel="noopener noreferrer" target="_blank">
+          </tr>
+        ))}
+        {labels.map((label) => (
+          <tr
+            key={label.varname}
+            className={!data[label.varname] ? `${styles.panelLabel} ${styles.panelLabelMissing}` : styles.panelLabel}
+          >
+            <PanelTableLabelCell value={label.varname} label={label.label} />
+            <td className={styles.panelLabelCell}>
+              <div className={styles.panelLabelCellContent}>
+                {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
+                {label.type === META_TYPE_FACTOR &&
+                  getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
+                {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE) && data[label.varname]}
+                {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
+                {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
+                  <FormattedNumber
+                    value={data[label.varname] as number}
+                    isCurrency={label.type === META_TYPE_CURRENCY}
+                    currencyCode={label.code}
+                    maximumFractionDigits={label.digits}
+                  />
+                )}
+                {label.type === META_TYPE_HREF && data[label.varname] && (
+                  <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
-                </div>
-              )}
-
-              {label.type === 'href_hash' && (
-                <div className={styles.labelInner} style={inlineStyles.labelInner}>
-                  <a
-                    style={inlineStyles.labelSpan}
-                    href="#open_in_same_window"
-                    onClick={() => {
-                      window.location.href = label.value as string;
-                      window.location.reload();
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-                  </a>
-                </div>
-              )}
-
-              {label.type === 'input_radio' && (
-                <div className={styles.labelInner} style={inlineStyles.labelInner}>
-                  <div style={inlineStyles.radioDiv}>
-                    <RadioGroup
-                      aria-label={label.name}
-                      name={label.name}
-                      classes={{ root: styles.formRow }}
-                      value={
-                        localStorage.getItem(
-                          `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
-                        ) || ''
-                      }
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        if (event.currentTarget?.value) {
-                          setPanelCogInput(curDisplayInfo.info, event.currentTarget?.value, panelKey, label.name);
-                          setInputUpdateCount(inputUpdateCount + 1);
-
-                          try {
-                            (document.activeElement as HTMLElement).blur();
-                          } catch (e) {
-                            // do nothing
-                          }
-                        }
-                      }}
-                      row
-                    >
-                      {curDisplayInfo.info.cogInfo[label.name].options.map((a) => (
-                        <FormControlLabel key={a} value={a} control={<Radio disableRipple size="small" />} label={a} />
-                      ))}
-                    </RadioGroup>
-                  </div>
-                </div>
-              )}
-
-              {label.type === 'input_text' && (
-                <div className={styles.labelInner} style={inlineStyles.labelInner}>
-                  <div
-                    className={styles.labelP}
-                    style={{ fontSize: dims.fontSize }}
-                    onClick={() => setTextInputOpen(label.name)}
-                    role="button"
-                    onKeyDown={() => {}}
-                    tabIndex={-1}
-                  >
-                    {localStorage.getItem(
-                      `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
-                    ) || ''}
-                  </div>
-                  <div className={styles.editButtonContainer}>
-                    <button
-                      type="button"
-                      className={styles.editButton}
-                      style={{
-                        ...inlineStyles.labelClose,
-                      }}
-                      onClick={() => setTextInputOpen(label.name)}
-                    >
-                      <FontAwesomeIcon icon={faPencil} />
-                    </button>
-                  </div>
-                  <Popover
-                    open={textInputOpen === label.name}
-                    anchorEl={tableRef.current}
-                    TransitionProps={{
-                      onEnter: () => {
-                        setTextInputValue(
-                          localStorage.getItem(
-                            `${curDisplayInfo.info.group}_:_${curDisplayInfo.info.name}_:_${panelKey}_:_${label.name}`,
-                          ) || '',
-                        );
-                      },
-                    }}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center',
-                    }}
-                    disableEscapeKeyDown
-                    onKeyDown={(e) => {
-                      if (e.shiftKey && e.key === 'Enter') {
-                        e.preventDefault();
-                        setTextInputOpen('');
-                        setPanelCogInput(curDisplayInfo.info, textInputValue, panelKey, label.name);
-                        setInputUpdateCount(inputUpdateCount + 1);
-                      }
-                    }}
-                  >
-                    <div style={{ padding: 7 }}>
-                      <TextField
-                        id="outlined-multiline-static"
-                        label={`${label.name} ('shift+enter' to save)`}
-                        onChange={(e) => {
-                          setTextInputValue(e.target.value);
-                        }}
-                        value={textInputValue}
-                        style={{ minWidth: 300 }}
-                        size="small"
-                        autoFocus
-                        multiline
-                        rows={curDisplayInfo.info.cogInfo[label.name].height}
-                        variant="outlined"
-                      />
-                    </div>
-                  </Popover>
-                </div>
-              )}
-
-              {!specialRenderTypes.some((specialType) => label?.type?.includes(specialType)) && (
-                <div className={styles.labelOuter}>
-                  <div className={styles.labelInner} style={inlineStyles.labelInner}>
-                    <span className={styles.labelP} style={inlineStyles.labelSpan}>
-                      {label.value}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.labelClose}
-                    style={inlineStyles.labelClose}
-                    onClick={() => onLabelRemove(label.name, labelArr)}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                </div>
-              )}
+                )}
+                <button type="button" className={styles.panelLabelClose} onClick={() => handleLableRemove(label.varname)}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
+              </div>
             </td>
           </tr>
         ))}

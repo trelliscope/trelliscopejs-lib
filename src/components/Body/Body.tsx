@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { windowWidthSelector, windowHeightSelector } from '../../selectors/ui';
 import SideButtons from '../SideButtons';
 import Sidebar from '../Sidebar';
-import Content from '../Content';
 import styles from './Body.module.scss';
+import Content from '../Content';
 
 const Body: React.FC = () => {
   const width = useSelector(windowWidthSelector);

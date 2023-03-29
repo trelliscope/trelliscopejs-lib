@@ -84,7 +84,7 @@ export const createCogData = () =>
 
 export const createConfig = () => ({
   display_base: 'displays',
-  data_type: 'json',
+  datatype: 'json',
   cog_server: {
     type: 'json',
     info: {

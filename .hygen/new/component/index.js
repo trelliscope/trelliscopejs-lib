@@ -15,9 +15,7 @@ module.exports = {
 
     return inquirer.prompt(questions).then((answers) => {
       const { name } = answers;
-      if (name.charAt(0) !== name.charAt(0).toUpperCase()) {
-        throw new Error('Component name must start with a capital letter');
-      }
+      answers.name = name.charAt(0).toUpperCase() + name.slice(1);
       return answers;
     });
   },

@@ -17,8 +17,8 @@ const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type,
     <span className={styles.footerChipLabel}>
       {icon.includes('alpha-asc') && <FontAwesomeIcon icon={faArrowDownAZ} />}
       {icon.includes('alpha-desc') && <FontAwesomeIcon icon={faArrowDownZA} />}
-      {icon.includes('numeric-asc') && <FontAwesomeIcon icon={faArrowDown19} />}
-      {icon.includes('numeric-desc') && <FontAwesomeIcon icon={faArrowDown91} />}
+      {(icon.includes('numeric-asc') || icon.includes('amount-asc')) && <FontAwesomeIcon icon={faArrowDown19} />}
+      {(icon.includes('numeric-desc') || icon.includes('amount-desc')) && <FontAwesomeIcon icon={faArrowDown91} />}
       {label}
       {text !== '' && <span className={styles.footerChipText}>{`(${text})`}</span>}
     </span>

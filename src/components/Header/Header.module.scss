@@ -1,9 +1,6 @@
 .header {
   &Container {
-    position: absolute;
     box-sizing: border-box;
-    top: 0;
-    left: 0;
     height: var(--header-container-height);
     background: var(--white);
     color: var(--black);
@@ -44,6 +41,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
   }
 
   &DisplayDesc {

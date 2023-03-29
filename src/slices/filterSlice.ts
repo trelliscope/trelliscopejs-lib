@@ -1,18 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import omit from 'lodash.omit';
+import difference from 'lodash.difference';
+import type { RootState } from '../store';
+import { displayInfoAPI } from './displayInfoAPI';
+import { selectHash, selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
 export interface FilterState {
-  state: {
-    [key: string]: Filter<FilterCat | FilterRange>;
-  };
+  state: IFilterState[];
   view: FilterView;
 }
 
 const initialState: FilterState = {
-  state: {},
+  state: selectHashFilters() || [],
   view: {
-    active: [],
+    active: selectHashFilterView() || [],
     inactive: [],
   },
 };
@@ -21,16 +22,50 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setFilter: (state, action: PayloadAction<FilterState['state'] | string | undefined>) => {
-      if (typeof action.payload === 'string') {
-        state.state = omit(state.state, action.payload);
-      } else if (action.payload === undefined) {
-        state.state = {};
-      } else if (Object.keys(action.payload).length === 0) {
-        state.state = {};
+    addFilter: (state, action: PayloadAction<IFilterState>) => {
+      const { state: filterState } = state;
+      const { varname } = action.payload;
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        filterState[idx] = action.payload;
       } else {
-        state.state = { ...state.state, ...action.payload };
+        filterState.push(action.payload);
       }
+    },
+    updateFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+      const { state: filterState } = state;
+      const { varname } = action.payload;
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        filterState[idx] = action.payload;
+      }
+    },
+    removeFilter: (state, action: PayloadAction<string>) => {
+      const { state: filterState } = state;
+      const idx = filterState.findIndex((f) => f.varname === action.payload);
+      if (idx > -1) {
+        filterState.splice(idx, 1);
+      }
+    },
+    updateFilterValues: (state, action: PayloadAction<{ varname: string; value: string }>) => {
+      const filterState = state.state;
+      const { varname, value } = action.payload;
+
+      const idx = filterState.findIndex((f) => f.varname === varname);
+      if (idx > -1) {
+        const filter = filterState[idx] as ICategoryFilterState;
+        const { values: filterValues } = filter;
+        // If filter values are being directly updated than it's not a regexp filter
+        filter.regexp = null;
+        if (filterValues?.includes(value)) {
+          filter.values = difference(filterValues, [value]);
+        } else {
+          filter.values = [...(filterValues as string[]), value];
+        }
+      }
+    },
+    clearFilters: (state) => {
+      state.state = [];
     },
     setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
       const { view } = state;
@@ -58,8 +93,53 @@ export const filterSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
+      const hashFilter = selectHashFilters();
+      const hashFilterView = selectHashFilterView();
+      const hash = selectHash();
+
+      if (Object.keys(hash).length > 2 && hashFilter === undefined) {
+        return;
+      }
+
+      if (hashFilter !== undefined) {
+        state.state = hashFilter || [];
+      } else {
+        const { filter } = action.payload.state;
+        if (filter === undefined || filter.length === 0) {
+          state.state = [];
+        } else {
+          state.state = [...state.state, ...filter];
+        }
+      }
+
+      const filterables = action.payload.metas.filter((m) => m.filterable).map((m) => m.varname);
+      const active = state.state.map((f) => f.varname);
+      state.view.active = active as string[];
+      state.view.inactive = difference(filterables, active) as string[];
+
+      if (hashFilterView.length > 0) {
+        state.view.active = hashFilterView;
+        state.view.inactive = difference(filterables, hashFilterView);
+      }
+    });
+  },
 });
 
-export const { setFilter, setFilterView } = filterSlice.actions;
+export const { setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter, clearFilters } =
+  filterSlice.actions;
+
+// Selectors
+export const selectFilterState = (state: RootState) => state.filter.state;
+
+export const selectFilterByVarname = (varname: string) => (state: RootState) =>
+  (state.filter.state as IFilterState[]).find((f: IFilterState) => (f.varname as string) === varname);
+
+export const selectFilterView = (state: RootState) => state.filter.view;
+
+export const selectInactiveFilterView = (state: RootState) => state.filter.view.inactive;
+
+export const selectActiveFilterView = (state: RootState) => state.filter.view.active;
 
 export default filterSlice.reducer;
