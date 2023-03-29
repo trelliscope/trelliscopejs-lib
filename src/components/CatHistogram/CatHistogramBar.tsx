@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { getLabelFromFactor } from '../../utils';
 
 import styles from './CatHistogram.module.scss';
-import { MISSING_TEXT } from '../../constants';
+import { MISSING_TEXT, META_TYPE_FACTOR } from '../../constants';
 
 interface CatHistogramBarProps {
   width: number;
@@ -14,6 +14,7 @@ interface CatHistogramBarProps {
   style: object;
   onClick: (key: string) => void;
   metaLevels: string[];
+  metaType: string;
 }
 
 const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
@@ -25,9 +26,10 @@ const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
   label,
   value,
   metaLevels,
+  metaType,
 }) => {
   const handleClick = () => {
-    if (label === MISSING_TEXT) {
+    if (label === MISSING_TEXT && metaType === META_TYPE_FACTOR) {
       return onClick(-Infinity as unknown as string);
     }
     return onClick(label);

@@ -35,7 +35,7 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
   if (data.length === 0) return null;
   let dataFiltered = [...data];
   if (metaType === META_TYPE_FACTOR) {
-    // replace all keys in data with 'NA' if they are -Infinity
+    // replace all keys in data with missing text if they are -Infinity
     dataFiltered = data.map((d) => {
       if (d.key === -Infinity) {
         return { key: MISSING_TEXT, value: d.value };
@@ -47,6 +47,10 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
 
   // move active bars to the top
   dataFiltered.sort((a, b) => {
+    if (metaType !== META_TYPE_FACTOR) {
+      if (actives.includes(a.key as string) && !actives.includes(b.key as string)) return -1;
+      if (!actives.includes(a.key as string) && actives.includes(b.key as string)) return 1;
+    }
     if (
       actives.includes((a.key === MISSING_TEXT ? -Infinity : a.key) as string) &&
       !actives.includes((b.key === MISSING_TEXT ? -Infinity : b.key) as string)
@@ -66,9 +70,14 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
         {({ index, style }) => (
           <CatHistogramBar
             style={style}
-            active={actives.includes(
-              (dataFiltered[index].key === MISSING_TEXT ? -Infinity : dataFiltered[index].key) as string,
-            )}
+            metaType={metaType}
+            active={
+              metaType === META_TYPE_FACTOR
+                ? actives.includes(
+                    (dataFiltered[index].key === MISSING_TEXT ? -Infinity : dataFiltered[index].key) as string,
+                  )
+                : actives.includes(dataFiltered[index].key as string)
+            }
             onClick={onClick}
             width={scale(dataFiltered[index].value || 1)}
             height={barHeight - 1}
