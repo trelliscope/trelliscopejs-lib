@@ -14,6 +14,7 @@ interface NumHistogramProps {
   name: string;
   onBrush: ([number1, number2]: number[] | null[]) => void;
   selection: [number, number];
+  log: boolean;
 }
 
 const NumHistogram: React.FC<NumHistogramProps> = ({
@@ -25,6 +26,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   name,
   onBrush,
   selection,
+  log,
 }) => {
   const axisPad = 16;
   const xPad = 5;
@@ -85,12 +87,13 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         y={height - axisPad}
         ticks={ticks}
         scale={xScale}
+        log={log}
       />
       <NumHistogramBrush
         name={name}
         selection={[
-          selection[0] === 0 ? 0 : xScale(selection[0]),
-          selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(selection[1]),
+          selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]),
+          selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]),
         ]}
         width={innerWidth}
         height={height - axisPad}

@@ -7,6 +7,7 @@ import useMetaInfo from '../../../../selectors/useMetaInfo';
 import { addFilter, removeFilter, updateFilter } from '../../../../slices/filterSlice';
 import NumHistogram from '../../../NumHistogram';
 import { format } from '../../../FormattedNumber/FormattedNumber';
+import { useDisplayMetas } from '../../../../slices/displayInfoAPI';
 import styles from './FilterNum.module.scss';
 
 interface FilterNumProps {
@@ -16,6 +17,9 @@ interface FilterNumProps {
 
 const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
+  const metas = useDisplayMetas();
+  const metaObj = metas.find((m) => m.varname === meta.varname);
+  const { log } = metaObj as IMeta;
   const dispatch = useDispatch();
 
   const handleOnBrush = (values: number[] | null[]) => {
@@ -24,14 +28,20 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         dispatch(removeFilter(filter.varname));
       }
     } else if (filter) {
-      dispatch(updateFilter({ ...filter, min: values[0], max: values[1] }));
+      dispatch(
+        updateFilter({
+          ...filter,
+          min: log ? 10 ** (values[0] ?? 0) : values[0],
+          max: log ? 10 ** (values[1] ?? 0) : values[1],
+        }),
+      );
     } else {
       const newFilter = {
         type: 'filter',
         varname: meta.varname,
         filtertype: FILTER_TYPE_NUMBERRANGE,
-        min: values[0],
-        max: values[1],
+        min: log ? 10 ** (values[0] ?? 0) : values[0],
+        max: log ? 10 ** (values[1] ?? 0) : values[1],
         metatype: 'number',
       } as INumberRangeFilterState;
       dispatch(addFilter(newFilter));
@@ -101,6 +111,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           name={meta.varname}
           onBrush={handleOnBrush}
           selection={[filter?.min || 0, filter?.max || 0]}
+          log={log}
         />
       </div>
       <div className={styles.filterNumInputContainer}>
