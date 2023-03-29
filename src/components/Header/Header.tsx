@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import DisplayInfo from '../DisplayInfo';
-import RelatedDisplays from '../RelatedDisplays';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
@@ -12,7 +11,7 @@ import { windowWidthSelector } from '../../selectors/ui';
 import { fullscreenSelector, cogDataSelector } from '../../selectors';
 import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import getCustomProperties from '../../getCustomProperties';
-import { useRelatedDisplaysGroup, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { useDisplayGroups, useDisplayList } from '../../slices/displayListAPI';
 import { DataContext } from '../DataProvider';
 import { selectDialogOpen } from '../../selectors/app';
@@ -22,7 +21,6 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const { data: displayList = [], isSuccess } = useDisplayList();
   const displayGroups = useDisplayGroups();
-  const relatedDisplayGroups = useRelatedDisplaysGroup();
   const { allData, filteredData } = useContext(DataContext);
 
   const dialogOpen = useSelector(selectDialogOpen);
@@ -78,15 +76,9 @@ const Header: React.FC = () => {
       width: windowWidth,
     },
     headerSubContainer: {
-      left:
-        headerHeight *
-        ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1) + (relatedDisplayGroups.length === 0 ? 0 : 1)),
+      left: headerHeight * ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1)),
       width:
-        windowWidth -
-        (headerHeight *
-          ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1) + (relatedDisplayGroups.length === 0 ? 0 : 1)) +
-          logoWidth +
-          30),
+        windowWidth - (headerHeight * ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1)) + logoWidth + 30),
     },
     displayName: {
       lineHeight: `${selectedDisplay?.description === '' ? 48 : 21}px`,
@@ -130,13 +122,6 @@ const Header: React.FC = () => {
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
       {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
-      {relatedDisplayGroups && relatedDisplayGroups.length > 0 && (
-        <RelatedDisplays
-          setDialogOpen={handleDialogOpen}
-          relatedDisplayGroups={relatedDisplayGroups}
-          selectedDisplay={selectedDisplay as IDisplayListItem}
-        />
-      )}
       {selectedDisplay?.name !== '' && (
         <DisplayInfo singleDisplay={singleDisplay} setDialogOpen={handleDialogOpen} totPanels={originalTotal} />
       )}
