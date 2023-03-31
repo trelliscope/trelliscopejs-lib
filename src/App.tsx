@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Header from './components/Header';
+import { AppBar, Box, Toolbar } from '@mui/material';
+// import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
 import FullscreenButton from './components/FullscreenButton';
@@ -10,8 +11,11 @@ import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
 import { selectErrorMessage } from './selectors/app';
+import HeaderNew from './components/HeaderNew';
 
 import './assets/styles/main.css';
+import SidebarNew from './components/SidebarNew';
+import ContentNew from './components/ContentNew';
 
 interface AppProps {
   client: IDataClient;
@@ -42,11 +46,16 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
 
   return (
     <DataProvider client={client}>
-      <Header />
-      <Body />
-      <Footer />
-      <FullscreenButton />
-      <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
+      <Box sx={{ display: 'flex' }}>
+        <HeaderNew />
+        <SidebarNew />
+        <ContentNew />
+        {/* <Header />
+        <Body />
+        <Footer />
+        <FullscreenButton />
+        <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} /> */}
+      </Box>
     </DataProvider>
   );
 };
