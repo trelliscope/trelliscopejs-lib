@@ -29,6 +29,7 @@ const SidebarSort: React.FC = () => {
   }
 
   const handleSortChange = (sortSpec: ISortState[] | number) => {
+    console.log('sortSpec', sortSpec);
     dispatch(setSort(sortSpec));
     dispatch(setLayout({ page: 1 }));
   };

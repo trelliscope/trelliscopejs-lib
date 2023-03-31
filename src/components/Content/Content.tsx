@@ -27,6 +27,7 @@ const panelSrcGetter =
 
 const Content: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const [contentWidth, setContentWidth] = useState('100%');
   const { data } = useContext(DataContext);
@@ -39,6 +40,56 @@ const Content: React.FC = () => {
   const [labelHeight, gridGap] = getCustomProperties(['--panelLabel-height', '--panelGridGap']) as number[];
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
+  const {
+    ref: tableWrapperRef,
+    width: tableWrapperRefWidth = 1,
+    height: tableWrapperRefHeight = 1,
+  } = useResizeObserver<HTMLDivElement>();
+
+  const handleTableResize = () => {
+    if (tableContentRef.current) {
+      const tableRows = document.querySelectorAll('.MuiTableRow-root');
+      // const tableToolBar = document.querySelector('.Mui-ToolbarDropZone')?.clientHeight;
+      // console.log('tableToolBar:::', tableToolBar?.clientHeight);
+      const heights: number[] = [];
+      let totalHeight = 0;
+
+      tableRows.forEach((row) => {
+        const rowHeight = row.clientHeight;
+        heights.push(rowHeight);
+        totalHeight += rowHeight;
+      });
+
+      const avgRowHeight = Math.floor(totalHeight / heights.length);
+
+      if (tableContentRef.current?.clientHeight) {
+        // console.log('MATHS::::', Math.floor((tableContentRef.current.clientHeight - 125) / avgRowHeight));
+
+        const rowCount = Math.floor((tableContentRef.current.clientHeight - 120) / avgRowHeight);
+        if (rowCount !== layout.nrow && rowCount > 0) {
+          dispatch(setLayout({ nrow: rowCount, ncol: 1 }));
+        }
+      }
+
+      // console.log('individual heights: ', heights); // array of individual heights
+      // console.log('currentTotalRowHeight: ', totalHeight); // total height of all rows combined
+      // console.log('AvailableTableSpace: ', tableContentRef.current?.clientHeight);
+      // console.log('avgRowHeight: ', avgRowHeight);
+      // console.log('table resizing');
+    }
+  };
+
+  // useEffect(() => {
+  //   handleTableResize();
+  // }, []);
+
+  useEffect(handleTableResize, [
+    tableWrapperRefWidth,
+    displayInfo?.panelaspect,
+    tableWrapperRefHeight,
+    dispatch,
+    layout.nrow,
+  ]);
 
   const handleResize = () => {
     if (contentRef.current) {
@@ -130,7 +181,11 @@ const Content: React.FC = () => {
           )}
         </div>
       </div> */}
-      <DataTable data={data} />
+      <div ref={tableWrapperRef}>
+        <div className={styles.tableContainer} ref={tableContentRef}>
+          <DataTable data={data} />
+        </div>
+      </div>
     </>
   );
 };
