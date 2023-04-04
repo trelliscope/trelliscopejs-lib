@@ -149,16 +149,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
     handleTableResize();
   };
 
-  // remove the first element from the tableRows because it is the header row
-  // get the table column to resize for images again
-  // look into performance issues and the re-renders that happen when opening and closing the sidebar
-  // setup the  on column resize handler to get the new column width and set it to the state
-  // update the table state, basically get the table working again for column resizing
-  // after the table is resizing, we need to call the resize function again to get the new row count
-  // cell formatting on metatype
-  // alignment for cell
-  // remove extra padding on some columns
-
   return (
     <div className={styles.dataTable}>
       {data?.length > 0 && (
@@ -172,7 +162,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
           defaultColumn={{
             size: 50,
           }}
-          muiTableHeadCellProps={{ className: styles.dataTableCellHeader }}
           data={data}
           manualSorting
           enableColumnOrdering
