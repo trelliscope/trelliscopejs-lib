@@ -11,19 +11,10 @@ import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import { selectBasePath } from '../../selectors/app';
-import { snakeCase } from '../../utils';
+import { panelSrcGetter } from '../../utils';
 import getCustomProperties from '../../getCustomProperties';
 import DataTable from '../DataTable';
 import styles from './Content.module.scss';
-
-const panelSrcGetter =
-  (basePath: string, panelformat?: PanelFormat) =>
-  (data: Datum, name = '') => {
-    if (panelformat) {
-      return `${process.env.PUBLIC_URL}/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
-    }
-    return data.__PANEL_KEY__;
-  };
 
 const Content: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -38,6 +29,7 @@ const Content: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const relatedDisplayNames = useRelatedDisplayNames();
   const [labelHeight, gridGap] = getCustomProperties(['--panelLabel-height', '--panelGridGap']) as number[];
+  const isGrid = false;
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
   const {
@@ -49,8 +41,6 @@ const Content: React.FC = () => {
   const handleTableResize = () => {
     if (tableContentRef.current) {
       const tableRows = document.querySelectorAll('.MuiTableRow-root');
-      // const tableToolBar = document.querySelector('.Mui-ToolbarDropZone')?.clientHeight;
-      // console.log('tableToolBar:::', tableToolBar?.clientHeight);
       const heights: number[] = [];
       let totalHeight = 0;
 
@@ -60,35 +50,26 @@ const Content: React.FC = () => {
         totalHeight += rowHeight;
       });
 
-      const avgRowHeight = Math.floor(totalHeight / heights.length);
+      // we need to remove the first array element because it is the header height
+      // and it skews the average on larger rows with images
+      heights.shift();
 
+      const avgRowHeight = heights.length > 1 ? Math.floor(totalHeight / heights.length) : heights[0];
       if (tableContentRef.current?.clientHeight) {
-        // console.log('MATHS::::', Math.floor((tableContentRef.current.clientHeight - 125) / avgRowHeight));
-
-        const rowCount = Math.floor((tableContentRef.current.clientHeight - 120) / avgRowHeight);
+        const rowCount = Math.floor((tableContentRef.current.clientHeight - 70) / avgRowHeight);
         if (rowCount !== layout.nrow && rowCount > 0) {
           dispatch(setLayout({ nrow: rowCount, ncol: 1 }));
         }
       }
-
-      // console.log('individual heights: ', heights); // array of individual heights
-      // console.log('currentTotalRowHeight: ', totalHeight); // total height of all rows combined
-      // console.log('AvailableTableSpace: ', tableContentRef.current?.clientHeight);
-      // console.log('avgRowHeight: ', avgRowHeight);
-      // console.log('table resizing');
     }
   };
 
-  // useEffect(() => {
-  //   handleTableResize();
-  // }, []);
-
   useEffect(handleTableResize, [
-    tableWrapperRefWidth,
     displayInfo?.panelaspect,
     tableWrapperRefHeight,
+    tableWrapperRefWidth,
     dispatch,
-    layout.nrow,
+    layout?.nrow,
   ]);
 
   const handleResize = () => {
@@ -155,37 +136,40 @@ const Content: React.FC = () => {
 
   return (
     <>
-      {/* <div className={styles.contentWrapper} ref={wrapperRef}>
-        <div
-          className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
-          style={contentStyle}
-          ref={contentRef}
-        >
-          {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
-            <>
-              {data.map((d) => (
-                <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
-                  {names.map((name) => (
-                    <PanelGraphic
-                      type={displayInfo?.paneltype}
-                      ncol={layout.ncol}
-                      src={getPanelSrc(d, name).toString()}
-                      alt={name}
-                      aspectRatio={displayInfo?.panelaspect}
-                      key={`${d[metaIndex]}_${name}`}
-                    />
-                  ))}
-                </Panel>
-              ))}
-            </>
-          )}
+      {isGrid ? (
+        <div className={styles.contentWrapper} ref={wrapperRef}>
+          <div
+            className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
+            style={contentStyle}
+            ref={contentRef}
+          >
+            {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
+              <>
+                {data.map((d) => (
+                  <Panel data={d} labels={activeLabels} inputs={activeInputs as IInput[]} key={d[metaIndex]}>
+                    {names.map((name) => (
+                      <PanelGraphic
+                        type={displayInfo?.paneltype}
+                        ncol={layout.ncol}
+                        src={getPanelSrc(d, name).toString()}
+                        alt={name}
+                        aspectRatio={displayInfo?.panelaspect}
+                        key={`${d[metaIndex]}_${name}`}
+                      />
+                    ))}
+                  </Panel>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-      </div> */}
-      <div ref={tableWrapperRef}>
-        <div className={styles.tableContainer} ref={tableContentRef}>
-          <DataTable data={data} />
+      ) : (
+        <div ref={tableWrapperRef}>
+          <div className={styles.tableContainer} ref={tableContentRef}>
+            <DataTable data={data} layout={layout} handleTableResize={handleTableResize} />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

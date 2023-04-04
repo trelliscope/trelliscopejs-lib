@@ -1,7 +1,9 @@
 .dataTable {
-  // width: 100%;
-  // margin: 0px auto;
-  // height: 100%;
-  // height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
-  // overflow: auto;
+  &CellHeader {
+    margin: 0;
+  }
+  &CellNumber {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
