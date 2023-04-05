@@ -34,6 +34,10 @@ export const hashFromState = (state: RootState) => {
     hashURL.append('pg', layout.page.toString());
   }
 
+  if (layout.viewtype) {
+    hashURL.append('viewtype', layout.viewtype);
+  }
+
   // labels
   const { labels } = state;
   if (labels.length) {

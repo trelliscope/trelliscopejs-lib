@@ -10,7 +10,7 @@
     width: 100%;
     align-items: flex-start;
     justify-content: center;
-    height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
+    height: 100%;
     overflow: auto;
   }
 }
@@ -67,5 +67,5 @@
 }
 
 .tableContainer {
-  height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
+  height: 100%;
 }

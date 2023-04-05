@@ -2,6 +2,7 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
+import LayoutSelector from '../LayoutSelector/LayoutSelector';
 import styles from './HeaderNew.module.scss';
 
 interface HeaderNewProps {
@@ -18,10 +19,13 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
       <Toolbar>
         <div className={styles.headerNew}>
-          {displayList.length > 1 && <div>hi</div>}
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {selectedDisplay?.description}
-          </Typography>
+          <div>
+            {displayList.length > 1 && <div>hi</div>}
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+              {selectedDisplay?.description}
+            </Typography>
+          </div>
+          <LayoutSelector />
         </div>
       </Toolbar>
     </AppBar>

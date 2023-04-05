@@ -10,6 +10,7 @@ const fallbackState: ILayoutState = {
   ncol: 1,
   page: 1,
   type: 'layout',
+  viewtype: 'grid',
 };
 
 const initialState = selectHashLayout() as ILayoutState;
@@ -19,6 +20,7 @@ export interface LayoutAction {
   ncol?: number;
   page?: number;
   type?: 'layout';
+  viewtype?: viewtype;
 }
 
 export const layoutSlice = createSlice({

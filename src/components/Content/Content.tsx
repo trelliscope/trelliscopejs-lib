@@ -22,6 +22,7 @@ const Content: React.FC = () => {
   const dispatch = useDispatch();
   const [contentWidth, setContentWidth] = useState('100%');
   const { data } = useContext(DataContext);
+  console.log('data', data);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
@@ -29,7 +30,6 @@ const Content: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const relatedDisplayNames = useRelatedDisplayNames();
   const [labelHeight, gridGap] = getCustomProperties(['--panelLabel-height', '--panelGridGap']) as number[];
-  const isGrid = false;
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
   const {
@@ -56,7 +56,7 @@ const Content: React.FC = () => {
 
       const avgRowHeight = heights.length > 1 ? Math.floor(totalHeight / heights.length) : heights[0];
       if (tableContentRef.current?.clientHeight) {
-        const rowCount = Math.floor((tableContentRef.current.clientHeight - 70) / avgRowHeight);
+        const rowCount = Math.floor((tableContentRef.current.clientHeight - 95) / avgRowHeight);
         if (rowCount !== layout.nrow && rowCount > 0) {
           dispatch(setLayout({ nrow: rowCount, ncol: 1 }));
         }
@@ -70,6 +70,7 @@ const Content: React.FC = () => {
     tableWrapperRefWidth,
     dispatch,
     layout?.nrow,
+    layout?.viewtype,
   ]);
 
   const handleResize = () => {
@@ -104,6 +105,7 @@ const Content: React.FC = () => {
   useEffect(handleResize, [
     width,
     layout.ncol,
+    layout.viewtype,
     labels.length,
     layout,
     displayInfo?.panelaspect,
@@ -151,7 +153,7 @@ const Content: React.FC = () => {
 
   return (
     <div className={styles.contentWrapper}>
-      {isGrid ? (
+      {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div className={styles.content} style={contentStyle} ref={contentRef}>
             {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
@@ -180,7 +182,7 @@ const Content: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div ref={tableWrapperRef}>
+        <div className={styles.tableContainer} ref={tableWrapperRef}>
           <div className={styles.tableContainer} ref={tableContentRef}>
             <DataTable data={data} layout={layout} handleTableResize={handleTableResize} />
           </div>
