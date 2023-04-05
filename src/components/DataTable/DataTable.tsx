@@ -50,7 +50,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
       Cell: ({ cell }: any) => {
         const value = cell.row.original[meta.varname];
         if (meta.type !== META_TYPE_FACTOR && !value) {
-          return <span>{MISSING_TEXT}</span>;
+          return <span className={meta.type === META_TYPE_NUMBER ? styles.dataTableCellNumber : ''}>{MISSING_TEXT}</span>;
         }
         if (meta.type === META_TYPE_FACTOR) {
           const label = getLabelFromFactor(value, meta?.levels as string[]);
@@ -154,6 +154,11 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
       {data?.length > 0 && (
         <MaterialReactTable
           columns={columns}
+          initialState={{
+            columnPinning: {
+              left: ['Snapshot'],
+            },
+          }}
           state={{
             sorting: sort.map((s) => ({ id: s.varname, desc: s.dir === 'desc' })),
             columnSizing: columnSize,
