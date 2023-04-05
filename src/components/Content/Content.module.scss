@@ -69,3 +69,7 @@
     }
   }
 }
+
+.tableContainer {
+  height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
+}

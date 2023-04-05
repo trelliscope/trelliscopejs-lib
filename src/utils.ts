@@ -38,3 +38,12 @@ export const getFactorFromLabel = (values: string[], levels: string[]) =>
       return index !== -1 ? index + 1 : undefined;
     })
     .filter((label) => label !== undefined);
+
+export const panelSrcGetter =
+  (basePath: string, panelformat?: PanelFormat) =>
+  (data: Datum, name = '') => {
+    if (panelformat) {
+      return `${process.env.PUBLIC_URL}/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
+    }
+    return data.__PANEL_KEY__;
+  };
