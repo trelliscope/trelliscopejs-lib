@@ -22,7 +22,6 @@ const Content: React.FC = () => {
   const dispatch = useDispatch();
   const [contentWidth, setContentWidth] = useState('100%');
   const { data } = useContext(DataContext);
-  console.log('data', data);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();

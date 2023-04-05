@@ -10,8 +10,6 @@ import styles from './LayoutSelector.module.scss';
 const LayoutSelector: React.FC = () => {
   const dispatch = useDispatch();
   const layout = useSelector(selectLayout);
-  console.log('im here');
-  // TODO add layout to state for grid or table
   const [viewLayout, setViewLayout] = useState(layout?.viewtype || '');
 
   useEffect(() => {
