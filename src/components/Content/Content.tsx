@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import useResizeObserver from 'use-resize-observer';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -9,7 +8,6 @@ import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
-import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import { selectBasePath } from '../../selectors/app';
 import { snakeCase } from '../../utils';
 import getCustomProperties from '../../getCustomProperties';
@@ -103,11 +101,7 @@ const Content: React.FC = () => {
 
   return (
     <div className={styles.contentWrapper} ref={wrapperRef}>
-      <div
-        className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
-        style={contentStyle}
-        ref={contentRef}
-      >
+      <div className={styles.content} style={contentStyle} ref={contentRef}>
         {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
           <>
             {data.map((d) => (

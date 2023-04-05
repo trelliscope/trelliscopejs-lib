@@ -282,7 +282,6 @@ export const createDisplayObj = (options) => ({
     layout: {
       nrow: 3,
       ncol: 6,
-      arrange: 'row',
     },
     labels: ['country'],
     sort: [

@@ -8,7 +8,6 @@ import { addFilter, removeFilter, updateFilter, updateFilterValues } from './fil
 const fallbackState: ILayoutState = {
   nrow: 1,
   ncol: 1,
-  arrange: 'rows',
   page: 1,
   type: 'layout',
 };
@@ -18,7 +17,6 @@ const initialState = selectHashLayout() as ILayoutState;
 export interface LayoutAction {
   nrow?: number;
   ncol?: number;
-  arrange?: 'rows' | 'cols';
   page?: number;
   type?: 'layout';
 }
