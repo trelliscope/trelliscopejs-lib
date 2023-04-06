@@ -21,11 +21,11 @@ import {
 
 interface DataTableProps {
   data: Datum[];
-  layout: ILayoutState;
   handleTableResize: () => void;
+  onClick: (PANEL_KEY: string | number) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTableResize }) => {
+const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, onClick }) => {
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
   const tableInstanceRef = useRef(null);
@@ -90,6 +90,14 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      muiTableBodyCellProps: ({ cell }: any) => ({
+        onClick: () => {
+          onClick(cell.row.original.__PANEL_KEY__);
+        },
+      }),
+      // conflicts within table library, some of the types dont seem to be exported in the same way
+      // that the actual table component consumes them as a prop.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => (
         <PanelGraphic
           type={displayInfo?.paneltype as PanelType}
@@ -109,6 +117,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
     displayInfo?.paneltype,
     displayMetas,
     getPanelSrc,
+    onClick,
     unSortableMetas,
   ]);
 

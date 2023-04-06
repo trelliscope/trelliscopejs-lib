@@ -27,7 +27,7 @@ const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children, onClick }
 
   return (
     <div className={styles.panel}>
-      <div role="presentation" className={styles.panelGraphicWrapper} onClick={handleClick}>
+      <div role="presentation" className={styles.panelGraphic} onClick={handleClick}>
         {children}
       </div>
       <PanelTable data={data} labels={labels} inputs={inputs} compact onLabelRemove={handleRemoveLabel} />

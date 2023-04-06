@@ -72,6 +72,14 @@ const Content: React.FC = () => {
     layout?.viewtype,
   ]);
 
+  // this is needed if a display change happens or if the layout changes
+  // we need to always make sure the ncol is 1 if the viewtype is table
+  useEffect(() => {
+    if (layout.viewtype === 'table') {
+      dispatch(setLayout({ ncol: 1 }));
+    }
+  }, [dispatch, layout.viewtype, displayInfo]);
+
   const handleResize = () => {
     if (contentRef.current) {
       const { ncol } = layout;
@@ -151,7 +159,7 @@ const Content: React.FC = () => {
   const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
   return (
-    <div className={styles.contentWrapper}>
+    <>
       {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div className={styles.content} style={contentStyle} ref={contentRef}>
@@ -183,7 +191,7 @@ const Content: React.FC = () => {
       ) : (
         <div className={styles.tableContainer} ref={tableWrapperRef}>
           <div className={styles.tableContainer} ref={tableContentRef}>
-            <DataTable data={data} layout={layout} handleTableResize={handleTableResize} />
+            <DataTable data={data} handleTableResize={handleTableResize} onClick={handlePanelClick} />
           </div>
         </div>
       )}
@@ -195,13 +203,13 @@ const Content: React.FC = () => {
         {names.map((name) => (
           <PanelGraphic
             type={displayInfo?.paneltype}
-            src={getPanelSrc(panelDialogData || {}, name).toString()}
+            src={getPanelSrc(panelDialogData || {}, name)?.toString()}
             alt={name}
             key={`${panelDialog.panel}_${name}`}
           />
         ))}
       </PanelDialog>
-    </div>
+    </>
   );
 };
 
