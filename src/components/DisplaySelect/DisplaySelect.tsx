@@ -73,6 +73,7 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
+    dispatch(setLayout({ page: 1 }));
     setSelectedDisplayName(name);
   };
 
