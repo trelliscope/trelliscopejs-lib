@@ -5,6 +5,10 @@ import { displayInfoAPI } from './displayInfoAPI';
 import { metaDataAPI } from './metaDataAPI';
 import { displayListAPI } from './displayListAPI';
 
+export interface PanelDialog {
+  open: boolean;
+  panel: string | number;
+}
 export interface AppState {
   appId: string;
   options: AppOptions;
@@ -16,6 +20,7 @@ export interface AppState {
   errorMsg: string;
   basePath: string;
   configPath: string;
+  panelDialog: PanelDialog;
 }
 
 const initialState: AppState = {
@@ -29,6 +34,10 @@ const initialState: AppState = {
   errorMsg: '',
   basePath: '',
   configPath: '',
+  panelDialog: {
+    open: false,
+    panel: '',
+  },
 };
 
 const apiErrorHandler: CaseReducer = (state, action) => ({
@@ -68,6 +77,9 @@ export const appSlice = createSlice({
       state.configPath = action.payload;
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
+    setPanelDialog: (state, action: PayloadAction<{ panel?: string | number; open: boolean }>) => {
+      state.panelDialog = { ...state.panelDialog, ...action.payload };
+    },
   },
   // Listen for rejected API calls and set the error message
   extraReducers: (builder) => {
@@ -88,6 +100,7 @@ export const {
   setFullscreen,
   setErrorMessage,
   setPaths,
+  setPanelDialog,
 } = appSlice.actions;
 
 export default appSlice.reducer;

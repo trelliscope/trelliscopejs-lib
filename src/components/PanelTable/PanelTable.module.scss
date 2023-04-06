@@ -1,0 +1,59 @@
+.panelTable {
+  width: 100%;
+  background: var(--white-200);
+  list-style-type: none;
+  margin: 0;
+  border-collapse: collapse;
+
+  &__compact {
+    .panelTableCell {
+      padding: var(--padding-4);
+    }
+  }
+
+  &Row {
+    width: 100%;
+    font-size: var(--text-xs);
+    border-bottom: var(--border-2);
+
+    &__input {
+      background: var(--white-100);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &Cell {
+    padding: var(--padding-8);
+    white-space: nowrap;
+
+    &:first-of-type {
+      white-space: nowrap;
+      font-weight: bold;
+      border-right: var(--border-2);
+      cursor: default;
+    }
+
+    &Content {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &Close {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+
+    svg {
+      margin-top: 1px;
+      width: 12px;
+      height: 12px;
+    }
+  }
+}

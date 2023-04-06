@@ -5,14 +5,13 @@ interface PanelGraphicProps {
   type: PanelType;
   src: string;
   alt: string;
-  ncol: number;
   aspectRatio?: number;
 }
 
-const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, ncol, aspectRatio }) => (
+const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio }) => (
   <div className={styles.panelGraphic} style={{ aspectRatio }}>
     {type === 'iframe' && (
-      <iframe key={`${ncol}_${window.innerWidth}`} width="100%" height="100%" scrolling="no" src={src} title={alt} />
+      <iframe key={`${src}_${window.innerWidth}`} width="100%" height="100%" scrolling="no" src={src} title={alt} />
     )}
     {type === 'img' && <img src={src} alt={alt} />}
   </div>
