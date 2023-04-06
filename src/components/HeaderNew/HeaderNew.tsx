@@ -22,8 +22,6 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
     dispatch(setDialogOpen(isOpen));
   };
 
-  console.log('displayList', displayList, selectedDisplay);
-
   return (
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
       <Toolbar>
