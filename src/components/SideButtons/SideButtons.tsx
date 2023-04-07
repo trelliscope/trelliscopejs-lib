@@ -104,7 +104,7 @@ const SideButtons: React.FC = () => {
             key={button.label}
             label={button.label}
             title={button.title}
-            active={active === button.title}
+            active={active}
             onClick={() => handleSetActive(button.title)}
           />
         );
