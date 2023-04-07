@@ -13,10 +13,6 @@
     height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
     overflow: auto;
   }
-
-  &__columns {
-    grid-auto-flow: column;
-  }
 }
 
 .panel {

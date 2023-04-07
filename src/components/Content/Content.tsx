@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import useResizeObserver from 'use-resize-observer';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -9,7 +8,6 @@ import { metaIndex, useMetaData, useMetaDataByPanelKey } from '../../slices/meta
 import { DataContext } from '../DataProvider';
 import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
-import { GRID_ARRANGEMENT_COLS } from '../../constants';
 import { panelSrcGetter } from '../../utils';
 import { selectBasePath, selectPanelDialog } from '../../selectors/app';
 import getCustomProperties from '../../getCustomProperties';
@@ -155,11 +153,7 @@ const Content: React.FC = () => {
     <div className={styles.contentWrapper}>
       {isGrid ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
-          <div
-            className={classNames(styles.content, { [styles.content__columns]: layout.arrange === GRID_ARRANGEMENT_COLS })}
-            style={contentStyle}
-            ref={contentRef}
-          >
+          <div className={styles.content} style={contentStyle} ref={contentRef}>
             {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
               <>
                 {data.map((d) => (
@@ -173,7 +167,6 @@ const Content: React.FC = () => {
                     {names.map((name) => (
                       <PanelGraphic
                         type={displayInfo?.paneltype}
-                        ncol={layout.ncol}
                         src={getPanelSrc(d, name).toString()}
                         alt={name}
                         aspectRatio={displayInfo?.panelaspect}
