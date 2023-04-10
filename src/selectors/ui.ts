@@ -15,7 +15,7 @@ export const windowWidthSelector = (state: RootState) => state.ui.windowWidth;
 export const windowHeightSelector = (state: RootState) => state.ui.windowHeight;
 export const origWidthSelector = (state: RootState) => state.ui.origWidth;
 export const origHeightSelector = (state: RootState) => state.ui.origHeight;
-export const sidebarActiveSelector = (state: RootState) => state.ui.sidbarActive;
+export const sidebarActiveSelector = (state: RootState) => state.ui.sidebarActive;
 
 export const sidebarHeightSelector = createSelector(
   windowHeightSelector,
