@@ -1,7 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
-import { Button, Divider, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { selectSelectedRelDisps, setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
@@ -31,7 +29,6 @@ const SidebarLayout: React.FC = () => {
     handleChange({
       nrow: isRow ? num : layout.nrow,
       ncol: !isRow ? num : layout.ncol,
-      arrange: layout.arrange,
       page: layout.page,
     });
   };
@@ -61,45 +58,6 @@ const SidebarLayout: React.FC = () => {
               />
             </div>
           </div>
-          {/*  <Divider />
-          <div className={styles.row}>Arrangement:</div>
-          <div className={styles.row}>
-            <RadioGroup
-              name="arrangement"
-              value={layout.arrange}
-              onChange={(e, ar) =>
-                handleChange({
-                  nrow: layout.nrow,
-                  ncol: layout.ncol,
-                  arrange: ar as ILayoutState['arrange'],
-                  page: layout.page,
-                })
-              }
-            >
-              <FormControlLabel
-                value="rows"
-                control={<Radio />}
-                label={
-                  <div className={styles.inputLabelSpan}>
-                    By Row&nbsp;
-                    <FontAwesomeIcon icon={faGripHorizontal} />
-                  </div>
-                }
-                className={styles.inputRadio}
-              />
-              <FormControlLabel
-                value="cols"
-                control={<Radio />}
-                label={
-                  <span className={styles.inputLabelSpan}>
-                    By column&nbsp;
-                    <FontAwesomeIcon icon={faGripVertical} />
-                  </span>
-                }
-                className={styles.inputRadio}
-              />
-            </RadioGroup>
-          </div> */}
         </>
       )}
     </>

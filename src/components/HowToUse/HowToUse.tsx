@@ -43,7 +43,7 @@ const HowToUse: React.FC = () => (
         &nbsp;
         <strong>Grid: </strong>
         In the &quot;Grid&quot; sidebar, you can specify the layout of the grid of panels you wish to display, specifying the
-        number of rows and columns of the grid, as well as whether to arrange panels in order by row or by column.
+        number of columns of the grid.
       </div>
     </div>
     <div className={styles.howToUseContentContainer}>

@@ -282,7 +282,6 @@ interface CondDistFilterNum {
 interface LayoutState {
   nrow: number;
   ncol: number;
-  arrange?: 'rows' | 'cols';
   pageNum: number;
 }
 

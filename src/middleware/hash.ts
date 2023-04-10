@@ -30,9 +30,6 @@ export const hashFromState = (state: RootState) => {
   if (layout.ncol) {
     hashURL.append('ncol', layout.ncol.toString());
   }
-  if (layout.arrange) {
-    hashURL.append('arr', layout.arrange);
-  }
   if (layout.page) {
     hashURL.append('pg', layout.page.toString());
   }

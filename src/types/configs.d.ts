@@ -282,7 +282,6 @@ interface ITextInput extends IInput {
 /* ------------------------------------------------------ */
 
 type StateType = 'layout' | 'labels' | 'sort' | 'filter';
-type LayoutArrangeType = 'rows' | 'cols';
 type SortDirType = 'asc' | 'desc';
 type FilterType = 'category' | 'numberrange' | 'daterange' | 'datetimerange';
 
@@ -300,7 +299,6 @@ interface IState {
 interface ILayoutState extends IState {
   nrow: number;
   ncol: number;
-  arrange: LayoutArrangeType;
   page: number;
 }
 

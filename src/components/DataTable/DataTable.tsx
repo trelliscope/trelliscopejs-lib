@@ -94,7 +94,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
         <PanelGraphic
           type={displayInfo?.paneltype as PanelType}
           src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
-          ncol={layout.ncol}
           alt={cell.row.original.__PANEL_KEY__}
           aspectRatio={displayInfo?.panelaspect}
           key={`${cell.row.index}_${displayInfo?.name}`}
@@ -110,7 +109,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
     displayInfo?.paneltype,
     displayMetas,
     getPanelSrc,
-    layout.ncol,
     unSortableMetas,
   ]);
 
