@@ -173,6 +173,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           }}
           defaultColumn={{
             size: 50,
+            minSize: 1,
           }}
           data={data}
           manualSorting

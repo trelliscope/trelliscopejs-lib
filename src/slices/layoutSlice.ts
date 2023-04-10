@@ -30,19 +30,46 @@ export const layoutSlice = createSlice({
     setLayout: (state, action: PayloadAction<LayoutAction>) => {
       // if the layout change was to nrow / ncol
       // then we need to recompute page
+      // console.log('itemsPerPage', itemsPerPage);
+      // console.log('prevPanelIndex', prevPanelIndex);
+      // TODO fix refresh and hash
+      // TODO fix resizing on table
+      // the view change occurs before we know how many rows there will be, but the view needs to know how many rows there will be to calculate the page number that the index will be on.
+
       const obj = { ...action.payload };
-      if (obj.nrow || obj.ncol) {
-        const prevPanelIndex = state.nrow * state.ncol * (state.page - 1) + 1;
-        if (obj.nrow) {
-          obj.page = Math.ceil(prevPanelIndex / (obj.nrow * state.ncol));
-        }
-        if (obj.ncol) {
-          obj.page = Math.ceil(prevPanelIndex / (state.nrow * obj.ncol));
-        }
-        if (Number.isNaN(obj.page)) {
-          obj.page = 1;
-        }
+      const newState = { ...state, ...obj };
+      if (state.viewtype !== newState.viewtype) {
+        const prevColCount = state.viewtype === 'table' ? state.ncol : 1;
+        const colCount = newState.viewtype === 'grid' ? newState.ncol : 1;
+        console.log('prevNRow::', state.nrow, 'prevColCount::', prevColCount, 'page::', state.page);
+        const prevPanelIndex = state.nrow * prevColCount * (state.page - 1) + 1;
+        console.log('prevPanelIndex::', prevPanelIndex);
+        const itemsPerPage = colCount * newState.nrow;
+        console.log('itemsPerPage::', itemsPerPage, 'newState.nrow::', newState.nrow, 'colCount::', colCount);
+        console.log('newPage::::', Math.ceil((prevPanelIndex + 1) / itemsPerPage));
+        obj.page = Math.ceil((prevPanelIndex + 1) / itemsPerPage);
+        // if (Number.isNaN(obj.page)) {
+        //   obj.page = 1;
+        // }
       }
+      // setLayout: (state, action: PayloadAction<LayoutAction>) => {
+      //   // if the layout change was to nrow / ncol
+      //   // then we need to recompute page
+      //   const obj = { ...action.payload };
+      //   if (obj.nrow || obj.ncol) {
+      //     const prevPanelIndex = state.nrow * state.ncol * (state.page - 1) + 1;
+      //     if (obj.nrow) {
+      //       obj.page = Math.ceil(prevPanelIndex / (obj.nrow * state.ncol));
+      //     }
+      //     if (obj.ncol) {
+      //       obj.page = Math.ceil(prevPanelIndex / (state.nrow * obj.ncol));
+      //     }
+      //     if (Number.isNaN(obj.page)) {
+      //       obj.page = 1;
+      //     }
+      //   }
+      //   return { ...state, ...obj };
+      // },
       return { ...state, ...obj };
     },
   },
@@ -55,6 +82,7 @@ export const layoutSlice = createSlice({
       const { layout } = action.payload.state;
       // If the hash layout is set, use it instead of the layout from the API
       const hashLayout = selectHashLayout();
+
       if (hashLayout) {
         return { ...fallbackState, ...state, ...layout, ...hashLayout };
       }
@@ -67,8 +95,15 @@ export const layoutSlice = createSlice({
 export const { setLayout } = layoutSlice.actions;
 
 export const selectLayout = (state: RootState) => state.layout;
-export const selectNumPerPage = (state: RootState) =>
-  state.layout.nrow && state.layout.ncol ? state?.layout.nrow * state.layout.ncol : 0;
+export const selectNumPerPage = (state: RootState) => {
+  if (state.layout.viewtype === 'table') {
+    return state?.layout.nrow;
+  }
+  if (state.layout.nrow && state.layout.ncol) {
+    return state.layout.nrow * state.layout.ncol;
+  }
+  return 0;
+};
 export const selectPage = (state: RootState) => state.layout.page;
 
 export default layoutSlice.reducer;

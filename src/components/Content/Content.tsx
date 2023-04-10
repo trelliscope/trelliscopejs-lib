@@ -57,7 +57,7 @@ const Content: React.FC = () => {
       if (tableContentRef.current?.clientHeight) {
         const rowCount = Math.floor((tableContentRef.current.clientHeight - 95) / avgRowHeight);
         if (rowCount !== layout.nrow && rowCount > 0) {
-          dispatch(setLayout({ nrow: rowCount, ncol: 1 }));
+          dispatch(setLayout({ nrow: rowCount }));
         }
       }
     }
@@ -71,14 +71,6 @@ const Content: React.FC = () => {
     layout?.nrow,
     layout?.viewtype,
   ]);
-
-  // this is needed if a display change happens or if the layout changes
-  // we need to always make sure the ncol is 1 if the viewtype is table
-  useEffect(() => {
-    if (layout.viewtype === 'table') {
-      dispatch(setLayout({ ncol: 1 }));
-    }
-  }, [dispatch, layout.viewtype, displayInfo]);
 
   const handleResize = () => {
     if (contentRef.current) {
