@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +32,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({});
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
@@ -153,8 +154,19 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const handleColumnSizingChange = (sizingFunction: any) => {
     const newSizingObj = { ...columnSize, ...sizingFunction() };
     setColumnSize(newSizingObj);
-    handleTableResize();
   };
+
+  // conflicts within table library, some of the types dont seem to be exported in the same way
+  // that the actual table component consumes them as a prop.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleTableVisibilityChange = (visibilityFunction: any) => {
+    const newVisibilityObj = { ...columnVisibility, ...visibilityFunction() };
+    setColumnVisibility(newVisibilityObj);
+  };
+
+  useEffect(() => {
+    handleTableResize();
+  }, [columnSize, columnVisibility, handleTableResize]);
 
   return (
     <div className={styles.dataTable}>
@@ -170,11 +182,13 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             sorting: sort.map((s) => ({ id: s.varname, desc: s.dir === 'desc' })),
             columnSizing: columnSize,
             density: 'compact',
+            columnVisibility,
           }}
           defaultColumn={{
             size: 50,
             minSize: 1,
           }}
+          columnResizeMode="onEnd"
           data={data}
           manualSorting
           enableColumnOrdering
@@ -185,6 +199,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           enableColumnActions={false}
           onColumnSizingChange={handleColumnSizingChange}
           onSortingChange={handleSortingChange}
+          onColumnVisibilityChange={handleTableVisibilityChange}
           enableBottomToolbar={false}
           enableFullScreenToggle={false}
           enablePagination={false}

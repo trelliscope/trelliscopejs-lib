@@ -37,7 +37,7 @@ export const format = (
   }
 
   if (maximumFractionDigits !== -1) {
-    Object.assign(options, maxDigits);
+    Object.assign(options, { minimumFractionDigits: maxDigits.maximumFractionDigits, ...maxDigits });
   } else {
     // Display all decimal places
     Object.assign(options, { minimumFractionDigits: value.toString().split('.')[1].length });
