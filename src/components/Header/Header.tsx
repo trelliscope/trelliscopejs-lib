@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           </div>
           <div className={styles.headerDisplayDesc}>{displayDesc}</div>
         </div>
-        {displayLoaded && (
+        {/* {displayLoaded && (
           <Pagination
             n={n}
             totPanels={totPanels}
@@ -147,7 +147,7 @@ const Header: React.FC = () => {
             pageFirst={pageFirst}
             pageLast={pageLast}
           />
-        )}
+        )} */}
       </div>
       <HelpInfo setDialogOpen={handleDialogOpen} />
     </div>

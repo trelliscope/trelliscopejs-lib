@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
@@ -21,17 +21,18 @@ import {
 
 interface DataTableProps {
   data: Datum[];
-  layout: ILayoutState;
   handleTableResize: () => void;
+  onClick: (PANEL_KEY: string | number) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTableResize }) => {
+const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, onClick }) => {
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
   const tableInstanceRef = useRef(null);
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({});
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
@@ -90,6 +91,14 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      muiTableBodyCellProps: ({ cell }: any) => ({
+        onClick: () => {
+          onClick(cell.row.original.__PANEL_KEY__);
+        },
+      }),
+      // conflicts within table library, some of the types dont seem to be exported in the same way
+      // that the actual table component consumes them as a prop.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => (
         <PanelGraphic
           type={displayInfo?.paneltype as PanelType}
@@ -109,6 +118,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
     displayInfo?.paneltype,
     displayMetas,
     getPanelSrc,
+    onClick,
     unSortableMetas,
   ]);
 
@@ -144,8 +154,19 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
   const handleColumnSizingChange = (sizingFunction: any) => {
     const newSizingObj = { ...columnSize, ...sizingFunction() };
     setColumnSize(newSizingObj);
-    handleTableResize();
   };
+
+  // conflicts within table library, some of the types dont seem to be exported in the same way
+  // that the actual table component consumes them as a prop.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleTableVisibilityChange = (visibilityFunction: any) => {
+    const newVisibilityObj = { ...columnVisibility, ...visibilityFunction() };
+    setColumnVisibility(newVisibilityObj);
+  };
+
+  useEffect(() => {
+    handleTableResize();
+  }, [columnSize, columnVisibility, handleTableResize]);
 
   return (
     <div className={styles.dataTable}>
@@ -161,10 +182,13 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
             sorting: sort.map((s) => ({ id: s.varname, desc: s.dir === 'desc' })),
             columnSizing: columnSize,
             density: 'compact',
+            columnVisibility,
           }}
           defaultColumn={{
             size: 50,
+            minSize: 1,
           }}
+          columnResizeMode="onEnd"
           data={data}
           manualSorting
           enableColumnOrdering
@@ -175,6 +199,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, layout, handleTa
           enableColumnActions={false}
           onColumnSizingChange={handleColumnSizingChange}
           onSortingChange={handleSortingChange}
+          onColumnVisibilityChange={handleTableVisibilityChange}
           enableBottomToolbar={false}
           enableFullScreenToggle={false}
           enablePagination={false}

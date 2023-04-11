@@ -4,20 +4,19 @@
   overflow: hidden;
 
   &Graphic {
-    height: 100%;
-    width: 100%;
-  }
-
-  &GraphicWrapper {
     display: flex;
     padding: var(--padding-4);
     flex-grow: 1;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    border-bottom: var(--border-2);
 
     &:hover {
       transform: scale(1.01);
+    }
+
+    :global(.MuiDialog-container) & {
+      transform: none;
+      cursor: default;
     }
 
     img {

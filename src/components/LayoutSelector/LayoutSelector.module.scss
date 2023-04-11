@@ -1,0 +1,8 @@
+.layoutSelector {
+  display: flex;
+  align-items: center;
+
+  &Text {
+    margin-right: var(--padding-6);
+  }
+}

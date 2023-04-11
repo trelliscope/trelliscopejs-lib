@@ -1,38 +1,60 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
+import { cogDataSelector, fullscreenSelector } from '../../selectors';
+import { selectDialogOpen } from '../../selectors/app';
+import { DataContext } from '../DataProvider';
+import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import styles from './Pagination.module.scss';
 import FormattedNumber from '../FormattedNumber';
 
-interface PaginationProps {
-  n: number;
-  totPanels: number;
-  npp: number;
-  dialogOpen: boolean;
-  fullscreen: boolean;
-  cogData: CogDataMutable;
-  totPages: number;
-  pageLeft: () => void;
-  pageRight: () => void;
-  pageFirst: () => void;
-  pageLast: () => void;
-}
+const Pagination: React.FC = () => {
+  const dispatch = useDispatch();
+  const { filteredData } = useContext(DataContext);
+  const dialogOpen = useSelector(selectDialogOpen);
+  const n = useSelector(selectPage);
+  const totPanels = filteredData.length;
+  const npp = useSelector(selectNumPerPage);
+  const fullscreen = useSelector(fullscreenSelector);
+  const cogData = useSelector(cogDataSelector);
+  const totPages = Math.ceil(totPanels / npp);
 
-const Pagination: React.FC<PaginationProps> = ({
-  n,
-  totPanels,
-  npp,
-  dialogOpen,
-  fullscreen,
-  cogData,
-  totPages,
-  pageLeft,
-  pageRight,
-  pageFirst,
-  pageLast,
-}) => {
+  const handleChange = (page: number) => {
+    dispatch(
+      setLayout({
+        page,
+        type: 'layout',
+      }),
+    );
+  };
+
+  const pageLeft = () => {
+    let nn = n - 1;
+    if (nn < 1) {
+      nn += 1;
+    }
+    return handleChange(nn);
+  };
+
+  const pageRight = () => {
+    let nn = n + 1;
+    if (nn > totPages) {
+      nn -= 1;
+    }
+    return handleChange(nn);
+  };
+
+  const pageFirst = () => {
+    handleChange(1);
+  };
+
+  const pageLast = () => {
+    handleChange(totPages);
+  };
+
   useHotkeys('right', pageRight, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
   useHotkeys('left', pageLeft, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
 

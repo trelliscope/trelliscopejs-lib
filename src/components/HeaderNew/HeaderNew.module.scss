@@ -1,1 +1,11 @@
-.headerNew {}
+.headerNew {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+
+  &DisplayInfo {
+    display: flex;
+    align-items: center;
+  }
+}

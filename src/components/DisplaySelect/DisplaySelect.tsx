@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import type { MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import DisplayList from '../DisplayList';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { setDispSelectDialogOpen } from '../../slices/appSlice';
 import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
@@ -17,7 +11,7 @@ import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import type { LayoutAction } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
-import { fullscreenSelector, dispSelectDialogSelector } from '../../selectors';
+import { dispSelectDialogSelector } from '../../selectors';
 import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
@@ -32,10 +26,8 @@ interface DisplaySelectProps {
 const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const dispatch = useDispatch();
   const { name: selectedDisplay } = useSelectedDisplay();
-  const fullscreen = useSelector(fullscreenSelector);
   const isOpen = useSelector(dispSelectDialogSelector);
-  const [btnScale, setBtnScale] = useState(1);
-  const [attnCircle, setAttnCircle] = useState<HTMLElement>();
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [selectedDisplayName, setSelectedDisplayName] = useState('');
   const { data: displayList, isSuccess } = useDisplayList();
   const { data: displayInfo } = useDisplayInfo();
@@ -59,9 +51,11 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
   const handleClose = () => {
     setDialogOpen(false);
     handleDispDialogOpen(false);
+    setAnchorEl(null);
   };
 
-  const handleOpen = () => {
+  const handleOpen = (event: MouseEvent) => {
+    setAnchorEl(event.currentTarget);
     if (displayList && isSuccess) {
       setDialogOpen(true);
       handleDispDialogOpen(true);
@@ -79,80 +73,68 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
+    dispatch(setLayout({ page: 1 }));
     setSelectedDisplayName(name);
   };
-
-  const handleKey = () => {
-    setDialogOpen(true);
-    handleDispDialogOpen(true);
-  };
-
-  useHotkeys('o', handleKey, { enabled: fullscreen && !isOpen });
-  useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
-  useHotkeys('esc', handleClose, { enabled: isOpen });
 
   const handleSelect = (name: string) => {
     handleClick(name);
     setDialogOpen(false);
     handleDispDialogOpen(false);
   };
+  // TODO do we still want hotkeys here?
 
-  useEffect(() => {
-    const attnInterval = setInterval(() => {
-      const elem = attnCircle as HTMLDivElement | undefined;
-      if (selectedDisplay !== '') {
-        clearInterval(attnInterval);
-      }
-      if (elem) {
-        elem.style.transform = `scale(${btnScale})`;
-        setBtnScale(btnScale === 1 ? 0.85 : 1);
-      }
-    }, 750);
-  }, []);
+  // const handleKey = (event) => {
+  //   setDialogOpen(true);
+  //   handleDispDialogOpen(true);
+  // };
+
+  // useHotkeys('o', handleKey, { enabled: fullscreen && !isOpen });
+  // useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
+  // useHotkeys('esc', handleClose, { enabled: isOpen });
 
   return (
     <div>
-      <button
-        type="button"
-        aria-label="display select open"
+      <IconButton
+        id="display-select-button"
+        aria-controls={isOpen ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={isOpen ? 'true' : undefined}
         onClick={handleOpen}
-        className={classNames({ [styles.displaySelectButton]: true, [styles.displaySelectButtonInactive]: !isSuccess })}
+        size="large"
       >
-        {(selectedDisplay === '' || !isOpen) && (
-          <div className={styles.displaySelectAttnOuter}>
-            <div className={styles.displaySelectAttnInner}>
-              <div
-                ref={(d: HTMLDivElement) => {
-                  setAttnCircle(d);
-                }}
-                className={styles.displaySelectAttnEmpty}
-              />
-            </div>
-          </div>
-        )}
-        <div className={styles.displaySelectFolderIcon}>
-          <FontAwesomeIcon icon={faFolder} />
-        </div>
-      </button>
-      <Dialog
+        <FontAwesomeIcon className={styles.displaySelectIcon} icon={faChevronDown} size="xs" />
+      </IconButton>
+      <Menu
+        id="display-select-menu"
+        anchorEl={anchorEl}
         open={isOpen}
-        className="trelliscope-app"
-        aria-labelledby="dialog-dispselect-title"
         onClose={handleClose}
-        disableEscapeKeyDown
-        maxWidth="md"
-        fullWidth
+        MenuListProps={{
+          'aria-labelledby': 'display-select-button',
+        }}
       >
-        <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
-        <DialogContent>
-          <DisplayList displayItems={displayList as IDisplayListItem[]} handleClick={handleSelect} selectable={false} />
-        </DialogContent>
-        <DialogActions>
-          <Button aria-label="display select close" color="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <div
+          style={{
+            fontWeight: 600,
+            paddingLeft: 15,
+            paddingRight: 15,
+            paddingBottom: 5,
+          }}
+        >
+          Select a different display
+        </div>
+        {displayList
+          ?.filter((display) => display.name !== selectedDisplay)
+          .map((d) => (
+            <MenuItem key={d.name} onClick={() => handleSelect(d.name)}>
+              <div>
+                <div>{d.name}</div>
+                <div style={{ fontStyle: 'italic', fontSize: 14 }}>{d.description}</div>
+              </div>
+            </MenuItem>
+          ))}
+      </Menu>
     </div>
   );
 };
