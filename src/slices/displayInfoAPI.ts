@@ -117,10 +117,11 @@ export const useDisplayMetasLabels = () => {
 export const useDisplayMetasWithInputs = () => {
   const { data } = useDisplayInfo();
   const inputInformation = data?.inputs?.inputs.map((input: IInput) => ({
-    varname: input.name,
     label: input.label,
+    tags: ['input'],
+    varname: input.name,
   })) as ILabelState[];
-  return useMemo(() => [...(data?.metas as IMeta[]), ...(inputInformation || [])] || [], [data, inputInformation]);
+  return useMemo(() => [...((data?.metas as IMeta[]) || []), ...(inputInformation || [])] || [], [data, inputInformation]);
 };
 
 export const useMetaByVarname = (varname: string) => {

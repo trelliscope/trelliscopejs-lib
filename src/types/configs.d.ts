@@ -307,6 +307,7 @@ interface ILayoutState extends IState {
 
 interface ILabelState extends IState {
   varnames: string[];
+  tags: string[];
 }
 
 interface ISortState extends IState {
