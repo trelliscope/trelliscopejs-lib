@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import type { SyntheticEvent } from 'react';
 import classNames from 'classnames';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,35 +24,40 @@ const ContentHeader: React.FC = () => {
   const dispatch = useDispatch();
   const metaGroupsWithInputs = useMetaGroupsWithInputs();
   const metasWithInputs = useDisplayMetasWithInputs();
-  const displayMetas = useDisplayMetas();
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
   const sidebarOpen = useSelector(sidebarActiveSelector);
   const labels = useSelector(labelsSelector);
-  const labelFormatted = labels.map((label) => {
-    const labelObj = {
-      varname: label,
-    };
-    return labelObj;
-  });
+  const labelFormatted = useMemo(
+    () =>
+      labels.map((label) => {
+        const labelObj = {
+          varname: label,
+        };
+        return labelObj;
+      }),
+    [labels],
+  );
   const [selectedLabelVariables, setSelectedLabelVariables] = useState(labelFormatted || []);
   const [variableLabelSelectorIsOpen, setVariableLabelSelectorIsOpen] = useState(false);
   const [anchorLabelEl, setAnchorLabelEl] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    setSelectedLabelVariables(labelFormatted);
+  }, [labelFormatted]);
 
   const handleVariableLabelSelectorClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorLabelEl(anchorLabelEl ? null : event.currentTarget);
     setVariableLabelSelectorIsOpen(!variableLabelSelectorIsOpen);
   };
 
-  const handleLabelChange = (e, value) => {
+  const handleLabelChange = (e: SyntheticEvent, value: ILabelState[]) => {
     setSelectedLabelVariables(value);
     dispatch(setLabels(value.map((label: ILabelState) => label.varname)));
   };
 
   // TODO add sorting
   // TODO we need to filter out the metaGroups and data if its notsortable or non filterable that should happen in the parent component
-  // TODO clean up the styles
-  // TODO clean up ts errors and linting errors
 
   return (
     <div className={styles.contentHeader}>
@@ -72,33 +78,41 @@ const ContentHeader: React.FC = () => {
               Explore
             </Button>
           </div>
-          {layout?.viewtype !== 'table' && (
-            <div className={styles.contentHeaderControlsItem}>
-              <ColumnSelector />
-            </div>
-          )}
-          <div className={styles.contentHeaderControlsItem}>
-            <Button
-              sx={{
-                color: '#000000',
-                textTransform: 'unset',
-                fontSize: '15px',
-              }}
-              type="button"
-              onClick={handleVariableLabelSelectorClick}
-              endIcon={<FontAwesomeIcon icon={variableLabelSelectorIsOpen ? faChevronUp : faChevronDown} />}
-            >
-              Labels
-            </Button>
-            <VariableSelector
-              isOpen={variableLabelSelectorIsOpen}
-              selectedVariables={selectedLabelVariables}
-              metaGroups={metaGroupsWithInputs}
-              anchorEl={anchorLabelEl}
-              displayMetas={metasWithInputs}
-              handleChange={handleLabelChange}
-            />
           </div>
+          {layout?.viewtype !== 'table' && (
+            <>
+              <div className={styles.contentHeaderControlsItem}>
+                <ColumnSelector />
+              </div>
+              <div className={styles.contentHeaderControlsItem}>
+                <Button
+                  sx={{
+                    color: '#000000',
+                    textTransform: 'unset',
+                    fontSize: '15px',
+                  }}
+                  type="button"
+                  onClick={handleVariableLabelSelectorClick}
+                  endIcon={<FontAwesomeIcon icon={variableLabelSelectorIsOpen ? faChevronUp : faChevronDown} />}
+                >
+                  Labels
+                </Button>
+                <VariableSelector
+                  isOpen={variableLabelSelectorIsOpen}
+                  selectedVariables={selectedLabelVariables}
+                  metaGroups={metaGroupsWithInputs}
+                  anchorEl={anchorLabelEl}
+                  displayMetas={metasWithInputs as unknown as { [key: string]: string }[]}
+                  handleChange={
+                    handleLabelChange as unknown as (
+                      event: React.SyntheticEvent<Element, Event>,
+                      value: { [key: string]: string }[],
+                    ) => void
+                  }
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
       </div>

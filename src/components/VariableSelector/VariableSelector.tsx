@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import {
   Autocomplete,
@@ -12,16 +14,16 @@ import {
   TextField,
   Checkbox,
 } from '@mui/material';
-import { useDisplayMetas } from '../../slices/displayInfoAPI';
+import type { SelectChangeEvent } from '@mui/material';
 import styles from './VariableSelector.module.scss';
 
 interface VariableSelectorProps {
   isOpen: boolean;
-  selectedVariables: any;
-  metaGroups: any;
-  anchorEl: any;
-  displayMetas: any;
-  handleChange: any;
+  selectedVariables: { [key: string]: string }[];
+  metaGroups: Map<string | symbol, string[]>;
+  anchorEl: null | HTMLElement;
+  displayMetas: { [key: string]: string }[];
+  handleChange: (event: React.SyntheticEvent<Element, Event>, value: { [key: string]: string }[]) => void;
 }
 
 const VariableSelector: React.FC<VariableSelectorProps> = ({
@@ -33,67 +35,10 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   handleChange,
 }) => {
   const [tagGroup, setTagGroup] = useState('__ALL__');
-  // console.log('META::::', displayMetas);
-  console.log('selectedVariables in the component:::', selectedVariables);
 
-  const handleTagChange = (event) => {
-    // console.log('event.target.value:::', event);
+  const handleTagChange = (event: SelectChangeEvent<string>) => {
     setTagGroup(event.target.value);
   };
-
-  // console.log('displayMetas:::', displayMetas);
-
-  const VSPaper = (props) => (
-    <Paper {...props}>
-      <Box
-        sx={{
-          minWidth: 150,
-          pl: 2,
-          pr: 2,
-          pt: 1,
-          pb: 1,
-          backgroundColor: '#42a5f5',
-        }}
-      >
-        <FormControl variant="standard" size="small" fullWidth>
-          <InputLabel sx={{ color: '#FFFFFF' }} id="demo-simple-select-label">
-            Variable Type
-          </InputLabel>
-          <Select
-            sx={{ color: '#FFFFFF' }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={tagGroup}
-            label="Variable Type"
-            onChange={handleTagChange}
-          >
-            <MenuItem value="__ALL__">All</MenuItem>
-            {Array.from(metaGroups.keys())
-              .filter((d) => typeof d === 'string')
-              .map((d) => (
-                <MenuItem key={d} value={d}>
-                  {d}
-                </MenuItem>
-              ))}
-            {/* {Object.keys(tagGroups).map((d) => (
-              <MenuItem key={d} value={d}>
-                {d}
-              </MenuItem>
-            ))} */}
-          </Select>
-        </FormControl>
-      </Box>
-      {props.children}
-    </Paper>
-  );
-
-  const VSPopper = (props) => (
-    <Popper
-      {...props}
-      // style={{ paddingLeft: 100, width: 500 }}
-      // placement="bottom-start"
-    />
-  );
 
   return (
     <div className={styles.variableSelector}>
@@ -109,16 +54,53 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   id="variable-select"
                   options={displayMetas}
                   disableCloseOnSelect
-                  PopperComponent={VSPopper}
-                  PaperComponent={VSPaper}
+                  PopperComponent={(props) => <Popper {...props} />}
+                  PaperComponent={(props) => (
+                    <Paper {...props}>
+                      <Box
+                        sx={{
+                          minWidth: 150,
+                          pl: 2,
+                          pr: 2,
+                          pt: 1,
+                          pb: 1,
+                          backgroundColor: '#42a5f5',
+                        }}
+                      >
+                        <FormControl variant="standard" size="small" fullWidth>
+                          <InputLabel sx={{ color: '#FFFFFF' }} id="demo-simple-select-label">
+                            Variable Type
+                          </InputLabel>
+                          <Select
+                            sx={{ color: '#FFFFFF' }}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={tagGroup}
+                            label="Variable Type"
+                            onChange={handleTagChange}
+                          >
+                            <MenuItem value="__ALL__">All</MenuItem>
+                            {Array.from(metaGroups.keys())
+                              .filter((d) => typeof d === 'string')
+                              .map((d) => (
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore this is a material and type issue
+                                <MenuItem key={d} value={d}>
+                                  {d}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      {props.children}
+                    </Paper>
+                  )}
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
-                  // size="small"
                   getOptionLabel={(option) => option.varname}
                   renderOption={(props, option, { selected }) => {
-                    // console.log('option:::', option);
                     const hasLabel = option.label && option.label !== option.varname;
                     const showOption = tagGroup === '__ALL__' || option?.tags?.includes(tagGroup);
-                    const optionVal = displayMetas.filter((d) => d.varname === option.varname)[0];
+                    const optionVal = displayMetas.filter((d: { [key: string]: string }) => d.varname === option.varname)[0];
                     return (
                       <li {...props} style={{ display: showOption ? 'inherit' : 'none' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -137,9 +119,6 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   renderInput={(params) => (
                     <TextField autoFocus {...params} label="Search or select a variable" placeholder="" />
                   )}
-                  // renderTags={(params) => {
-                  //   console.log(params);
-                  // }}
                   fullWidth
                 />
               </Box>
