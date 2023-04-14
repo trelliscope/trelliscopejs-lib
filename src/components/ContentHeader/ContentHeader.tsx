@@ -78,7 +78,6 @@ const ContentHeader: React.FC = () => {
               Explore
             </Button>
           </div>
-          </div>
           {layout?.viewtype !== 'table' && (
             <>
               <div className={styles.contentHeaderControlsItem}>
