@@ -10,11 +10,22 @@ interface FooterChipProps {
   index: number;
   type: string;
   handleClose: (x: { label: string; index: number; type: string }) => void;
+  handleClick: () => void;
 }
 
-const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleClose }) => (
+const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleClose, handleClick }) => (
   <div className={styles.footerChipWrapper}>
-    <span className={styles.footerChipLabel}>
+    <span
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleClick();
+        }
+      }}
+      className={styles.footerChipLabel}
+    >
       {icon.includes('alpha-asc') && <FontAwesomeIcon icon={faArrowDownAZ} />}
       {icon.includes('alpha-desc') && <FontAwesomeIcon icon={faArrowDownZA} />}
       {(icon.includes('numeric-asc') || icon.includes('amount-asc')) && <FontAwesomeIcon icon={faArrowDown19} />}

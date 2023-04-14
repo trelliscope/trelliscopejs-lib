@@ -128,38 +128,12 @@ const Footer: React.FC = () => {
           {sortRes.length > 0 && (
             <div className={styles.footerSectionWrapper}>
               <div className={styles.footerSectionText}>Sorting on:</div>
-              <div className={styles.footerChipWrapper}>
-                {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-                  <FooterChip
-                    key={`${el.varname}_sortchip`}
-                    label={el.varname}
-                    icon={el.icon}
-                    text=""
-                    index={i}
-                    type="sort"
-                    handleClose={handleStateClose}
-                  />
-                ))}
-              </div>
             </div>
           )}
           {filterRes.length > 0 && sortRes.length > 0 && <div className={styles.footerSpacer} />}
           {filterRes.length > 0 && (
             <div className={styles.footerSectionWrapper}>
               <div className={styles.footerSectionText}>Filtering on:</div>
-              <div className={styles.footerChipWrapper}>
-                {filterRes.map((el: { name: string; text: string }, i: number) => (
-                  <FooterChip
-                    key={`${el.name}_filterchip`}
-                    label={el.name}
-                    icon=""
-                    text={el.text}
-                    index={i}
-                    type="filter"
-                    handleClose={handleStateClose}
-                  />
-                ))}
-              </div>
               <div className={styles.footerFilterText}>{`(${format(filteredDataLength, 0)} of ${format(
                 allDataLength,
                 0,
