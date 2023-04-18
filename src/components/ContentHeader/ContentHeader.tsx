@@ -2,16 +2,16 @@ import React from 'react';
 import classNames from 'classnames';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import CloseIcon from '@mui/icons-material/Close';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { sidebarActiveSelector } from '../../selectors/ui';
 import { setSidebarActive } from '../../slices/uiSlice';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import Pagination from '../Pagination';
 import ColumnSelector from '../ColumnSelector/ColumnSelector';
 import { selectLayout } from '../../slices/layoutSlice';
-import Sort from '../Sort/Sort';
-import Labels from '../Labels/Labels';
+import Sort from '../Sort';
+import Labels from '../Labels';
 import styles from './ContentHeader.module.scss';
 
 const ContentHeader: React.FC = () => {
@@ -35,7 +35,7 @@ const ContentHeader: React.FC = () => {
                 fontSize: '15px',
                 borderRadius: 0,
               }}
-              startIcon={sidebarOpen ? <CloseIcon /> : <KeyboardArrowLeftIcon />}
+              startIcon={sidebarOpen ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faChevronLeft} />}
             >
               Explore
             </Button>

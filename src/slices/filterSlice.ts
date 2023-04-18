@@ -67,7 +67,10 @@ export const filterSlice = createSlice({
     clearFilters: (state) => {
       state.state = [];
     },
-    setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
+    setFilterView: (
+      state,
+      action: PayloadAction<{ which?: 'remove' | 'add' | 'set' | 'removeActive'; name: string | FilterView }>,
+    ) => {
       const { view } = state;
       const { which, name } = action.payload;
       if (which === 'remove') {
@@ -79,6 +82,9 @@ export const filterSlice = createSlice({
         if (idxI < 0) {
           view.inactive.push(name as string);
         }
+      } else if (which === 'removeActive') {
+        view.inactive = [...view.inactive, ...view.active];
+        view.active = [];
       } else if (which === 'add') {
         const idxA = view.inactive.indexOf(name as string);
         if (idxA > -1) {

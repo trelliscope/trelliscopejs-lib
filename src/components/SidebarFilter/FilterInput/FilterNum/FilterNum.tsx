@@ -103,8 +103,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
     <div className={styles.filterNum}>
       <div className={styles.filterNumChart}>
         <NumHistogram
-          width={220}
-          height={100}
+          width={399}
+          height={175}
           yDomain={yDomain}
           xDomain={xDomain}
           data={data}

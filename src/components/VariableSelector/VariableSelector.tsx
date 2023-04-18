@@ -45,7 +45,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
       <Popper open={isOpen} anchorEl={anchorEl} placement="bottom-end" transition>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={0}>
-            <div style={{ width: 350, background: '#FFFFFF' }}>
+            <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
               <Box sx={{ p: 1, display: 'flex', flexDirection: 'row' }}>
                 <Autocomplete
                   multiple
@@ -54,7 +54,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   id="variable-select"
                   options={displayMetas}
                   disableCloseOnSelect
-                  PopperComponent={(props) => <Popper {...props} />}
+                  PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} />}
                   PaperComponent={(props) => (
                     <Paper {...props}>
                       <Box
@@ -65,6 +65,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                           pt: 1,
                           pb: 1,
                           backgroundColor: '#42a5f5',
+                          zIndex: 2001,
                         }}
                       >
                         <FormControl variant="standard" size="small" fullWidth>

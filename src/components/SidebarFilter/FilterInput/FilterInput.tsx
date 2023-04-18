@@ -1,5 +1,6 @@
-import { faRotateLeft, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotateLeft, faXmark, faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
+import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
 import classNames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +11,11 @@ import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 
 import styles from './FilterInput.module.scss';
+import { labelsSelector } from '../../../selectors';
+import { setLabels } from '../../../slices/labelsSlice';
+import { selectSort, setSort } from '../../../slices/sortSlice';
+import FooterChip from '../../FooterChip/FooterChip';
+import { setLayout } from '../../../slices/layoutSlice';
 
 interface FilterInputsProps {
   filterName: string;
@@ -19,6 +25,11 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const dispatch = useDispatch();
   const meta = useMetaByVarname(filterName);
   const filter = useSelector(selectFilterByVarname(filterName));
+  const labels = useSelector(labelsSelector);
+  const sort = useSelector(selectSort);
+  const sort2 = Object.assign([], sort) as ISortState[];
+  const isSorted = sort.find((s) => s.varname === filterName);
+  const labelIsSelected = labels.includes(filterName);
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
 
   const handleReset = () => {
@@ -29,32 +40,74 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
     dispatch(setFilterView({ name: filterName, which: 'remove' }));
   };
 
+  let sortRes = {} as { filterName: string; icon: string };
+  if (isSorted) {
+    const { type } = meta || {};
+    let icon = 'icon-sort-alpha';
+    if (type === 'number' || type === 'factor') {
+      icon = 'icon-sort-numeric';
+    }
+    icon = `${icon}-${isSorted?.dir}`;
+    sortRes = { filterName, icon };
+  }
+
+  const handleLabelChange = (varname: string) => {
+    if (labelIsSelected) {
+      dispatch(setLabels(labels.filter((label: string) => label !== varname)));
+      return;
+    }
+    dispatch(setLabels([...labels, varname]));
+  };
+
+  const handleSortClick = () => {
+    if (isSorted) {
+      const i = sort2.findIndex((s) => s.varname === filterName);
+      const sortObj = { ...sort2[i] };
+      sortObj.dir = sortObj.dir === 'asc' ? 'desc' : 'asc';
+      const newSort = [...sort2];
+      newSort[i] = sortObj;
+      dispatch(setSort(newSort));
+      return;
+    }
+    sort2.push({ varname: filterName, dir: 'asc', type: 'sort', metatype: meta?.type || 'string' });
+    dispatch(setSort(sort2));
+    dispatch(
+      setLayout({
+        page: 1,
+        type: 'layout',
+      }),
+    );
+  };
+
+  const handleSortRemove = () => {
+    const i = sort2.findIndex((s) => s.varname === filterName);
+    const newSort = [...sort2];
+    newSort.splice(i, 1);
+    dispatch(setSort(newSort));
+    dispatch(
+      setLayout({
+        page: 1,
+        type: 'layout',
+      }),
+    );
+  };
+
   return (
-    <div className={classNames(styles.filterInput, { [styles.filterInput__active]: filter })}>
+    <div className={classNames(styles.filterInput)}>
       <div className={styles.filterInputHeader}>
-        <div className={styles.filterInputHeaderName}>{filterName}</div>
+        <div>
+          <div className={styles.filterInputHeaderName}>{filterName}</div>
+          <div className={styles.filterInputHeaderLabel}>{meta?.label}</div>
+        </div>
         <div className={styles.filterInputHeaderControls}>
           {meta?.type === META_TYPE_FACTOR && (
             <div className={styles.filterInputCount}>
               {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
             </div>
           )}
-          {filter && (
-            <button
-              type="button"
-              onClick={handleReset}
-              className={classNames(styles.filterInputHeaderBtn, styles.filterInputReset)}
-            >
-              <FontAwesomeIcon icon={faRotateLeft} />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={handleMinimize}
-            className={classNames(styles.filterInputHeaderBtn, styles.filterInputMinimize)}
-          >
-            <FontAwesomeIcon icon={faWindowMinimize} transform="up-5" />
-          </button>
+          <IconButton aria-label="close" size="small" onClick={handleMinimize}>
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
         </div>
       </div>
       {filterType === FILTER_TYPE_CATEGORY && (
@@ -63,6 +116,51 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
       {filterType === FILTER_TYPE_NUMBERRANGE && (
         <FilterNum meta={meta as INumberMeta} filter={filter as INumberRangeFilterState} />
       )}
+      <div className={styles.filterInputSubMenu}>
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox checked={labelIsSelected} onClick={() => handleLabelChange(meta?.varname as string)} size="small" />
+            }
+            label="Show label"
+          />
+        </div>
+        <div style={{ paddingTop: 8 }}>
+          {!isSorted ? (
+            <Button
+              onClick={handleSortClick}
+              disabled={!meta?.sortable}
+              size="small"
+              variant="text"
+              endIcon={<FontAwesomeIcon icon={faArrowDownShortWide} />}
+            >
+              Sort By
+            </Button>
+          ) : (
+            <FooterChip
+              label={filterName}
+              icon={sortRes.icon}
+              text=""
+              index={0}
+              type={meta?.type || 'string'}
+              handleClose={handleSortRemove}
+              handleClick={handleSortClick}
+            />
+          )}
+        </div>
+        <div style={{ paddingTop: 5 }}>
+          <Button
+            disabled={!filter}
+            size="small"
+            variant="text"
+            onClick={handleReset}
+            endIcon={<FontAwesomeIcon icon={faRotateLeft} />}
+          >
+            Clear Filter
+          </Button>
+        </div>
+      </div>
+      <Divider />
     </div>
   );
 };
