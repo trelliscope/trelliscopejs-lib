@@ -26,13 +26,22 @@
       border-radius: 4px;
       background: var(--white-500);
 
+      Button {
+        max-height: 34px;
+        font-weight: 600;
+      }
+
+      svg {
+        font-size: 15px !important;
+      }
+
       &Toggle {
         border-radius: 0px;
         margin: 0px 12px 0px 0px;
         padding: 0px;
-        Button {
-          max-height: 34px;
-          font-weight: 600;
+
+        svg {
+          font-size: 20px !important;
         }
       }
     }

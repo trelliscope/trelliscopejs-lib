@@ -31,7 +31,7 @@ const ColumnSelector: React.FC = () => {
           pattern: '[0-9]*',
           style: { marginBottom: -4, textAlign: 'center' },
         }}
-        value={layout.ncol}
+        value={layout.ncol || 1}
         onChange={(e) => handleColumnChange(e.target.value)}
       />
     </>
