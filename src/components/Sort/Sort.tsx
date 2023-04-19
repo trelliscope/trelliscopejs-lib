@@ -2,7 +2,7 @@ import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton } from '@mui/material';
+import { ClickAwayListener, IconButton } from '@mui/material';
 import { useDisplayInfo, useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
@@ -90,35 +90,45 @@ const Sort: React.FC = () => {
   };
   return (
     <>
-      <div>Sort</div>
-      {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-        <FooterChip
-          key={`${el.varname}_sortchip`}
-          label={el.varname}
-          icon={el.icon}
-          text=""
-          index={i}
-          type="sort"
-          handleClose={handleStateClose}
-          handleClick={() => handleSortClick(i)}
-        />
-      ))}
-      <IconButton onClick={handleVariableSortSelectorClick} aria-label="add-icon">
-        <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />
-      </IconButton>
-      <VariableSelector
-        isOpen={variableSortSelectorIsOpen}
-        selectedVariables={selectedSortVariables as unknown as { [key: string]: string }[]}
-        metaGroups={metaGroups}
-        anchorEl={anchorSortEl}
-        displayMetas={sortableMetas as unknown as { [key: string]: string }[]}
-        handleChange={
-          handleSortChange as unknown as (
-            event: React.SyntheticEvent<Element, Event>,
-            value: { [key: string]: string }[],
-          ) => void
-        }
-      />
+      <ClickAwayListener
+        mouseEvent="onMouseUp"
+        onClickAway={() => {
+          setVariableSortSelectorIsOpen(false);
+          setAnchorSortEl(null);
+        }}
+      >
+        <div className={styles.sortContainer}>
+          <div>Sort</div>
+          {sortRes.map((el: { varname: string; icon: string }, i: number) => (
+            <FooterChip
+              key={`${el.varname}_sortchip`}
+              label={el.varname}
+              icon={el.icon}
+              text=""
+              index={i}
+              type="sort"
+              handleClose={handleStateClose}
+              handleClick={() => handleSortClick(i)}
+            />
+          ))}
+          <IconButton onClick={handleVariableSortSelectorClick} aria-label="add-icon">
+            <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />
+          </IconButton>
+          <VariableSelector
+            isOpen={variableSortSelectorIsOpen}
+            selectedVariables={selectedSortVariables as unknown as { [key: string]: string }[]}
+            metaGroups={metaGroups}
+            anchorEl={anchorSortEl}
+            displayMetas={sortableMetas as unknown as { [key: string]: string }[]}
+            handleChange={
+              handleSortChange as unknown as (
+                event: React.SyntheticEvent<Element, Event>,
+                value: { [key: string]: string }[],
+              ) => void
+            }
+          />
+        </div>
+      </ClickAwayListener>
     </>
   );
 };
