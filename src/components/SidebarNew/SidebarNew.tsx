@@ -14,7 +14,6 @@ const drawerWidth = 400;
 const SidebarNew: React.FC = () => {
   const sidebarOpen = useSelector(sidebarActiveSelector);
   const { active: activeFilters } = useSelector(filterViewSelector);
-  console.log('activeFilters', activeFilters);
   return (
     <Drawer
       sx={{
