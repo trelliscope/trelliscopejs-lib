@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextField } from '@mui/material';
@@ -18,9 +18,20 @@ interface FilterNumProps {
 const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
   const metas = useDisplayMetas();
+  const [minInput, setMinInput] = useState('');
+  const [maxInput, setMaxInput] = useState('');
   const metaObj = metas.find((m) => m.varname === meta.varname);
   const { log } = metaObj as IMeta;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (filter?.min) {
+      setMinInput(format(filter?.min, 2, false, false, undefined, true));
+    }
+    if (filter?.max) {
+      setMaxInput(format(filter?.max, 2, false, false, undefined, true));
+    }
+  }, [filter?.max, filter?.min]);
 
   const handleOnBrush = (values: number[] | null[]) => {
     if (values[0] === null && values[1] === null) {
@@ -55,17 +66,6 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   if (filter?.max && filter?.min && filter?.max < filter?.min) {
     inputStyle.color = 'red';
   }
-
-  // const checkValidNumber = (which: string, lower: number | string = '', upper: number | string = '') => {
-  //   if (which === 'to') {
-  //     if (lower && parseFloat(lower.toString()) > parseFloat(upper.toString())) {
-  //       return false;
-  //     }
-  //   } else if (upper && parseFloat(upper.toString()) < parseFloat(lower?.toString())) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
 
   const handleInput = (val: string, which: string) => {
     let newState = {} as INumberRangeFilterState;
@@ -124,8 +124,16 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.min ? format(filter?.min, 2, false, false, undefined, true) : ''}
-          onChange={(e) => handleInput(e.target.value, 'min')}
+          value={minInput}
+          onChange={(e) => setMinInput(e.target.value)}
+          onBlur={() => {
+            const min = parseFloat(minInput);
+            if (!Number.isNaN(min)) {
+              const formattedMin = format(min, 2, false, false, undefined, true);
+              handleInput(formattedMin, 'min');
+              setMinInput(formattedMin);
+            }
+          }}
           variant="standard"
         />
         <div className={`${styles.filterNumRangeInputLabel} ${styles.filterNumRangeInputTextDash}`}>-</div>
@@ -137,8 +145,16 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             step,
           }}
           type="number"
-          value={filter?.max ? format(filter?.max, 2, false, false, undefined, true) : ''}
-          onChange={(e) => handleInput(e.target.value, 'max')}
+          value={maxInput}
+          onChange={(e) => setMaxInput(e.target.value)}
+          onBlur={() => {
+            const max = parseFloat(maxInput);
+            if (!Number.isNaN(max)) {
+              const formattedMax = format(max, 2, false, false, undefined, true);
+              handleInput(formattedMax, 'max');
+              setMinInput(formattedMax);
+            }
+          }}
           variant="standard"
         />
       </div>
