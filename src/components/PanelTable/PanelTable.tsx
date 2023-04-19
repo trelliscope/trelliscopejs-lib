@@ -88,7 +88,12 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   />
                 )}
                 {label.type === META_TYPE_HREF && data[label.varname] && (
-                  <a href={data[label.varname] as string} rel="noopener noreferrer" target="_blank">
+                  <a
+                    className={styles.panelTableCellLink}
+                    href={data[label.varname] as string}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </a>
                 )}
