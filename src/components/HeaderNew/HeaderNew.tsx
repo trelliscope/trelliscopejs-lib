@@ -28,9 +28,16 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
             {displayList.length > 1 && <DisplaySelect setDialogOpen={handleDialogOpen} />}
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              {selectedDisplay?.description}
-            </Typography>
+            <div>
+              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                {selectedDisplay?.name}
+              </Typography>
+              {selectedDisplay?.description && (
+                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1 }}>
+                  {selectedDisplay?.description}
+                </Typography>
+              )}
+            </div>
           </div>
           <LayoutSelector />
         </div>
