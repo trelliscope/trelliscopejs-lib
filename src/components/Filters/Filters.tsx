@@ -1,12 +1,12 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '@mui/material';
+import { Button, ClickAwayListener } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
 import styles from './Filters.module.scss';
-import { clearFilters, selectActiveFilterView, setFilterView } from '../../slices/filterSlice';
+import { selectActiveFilterView, setFilterView } from '../../slices/filterSlice';
 import { setLayout } from '../../slices/layoutSlice';
 
 // interface FiltersProps {}
@@ -72,33 +72,41 @@ const Filters: React.FC = () => {
   };
 
   return (
-    <div className={styles.filters}>
-      <Button
-        sx={{
-          color: '#000000',
-          textTransform: 'unset',
-          fontSize: '15px',
-        }}
-        type="button"
-        onClick={handleVariableFilterSelectorClick}
-        endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
-      >
-        Show / Hide Filters
-      </Button>
-      <VariableSelector
-        isOpen={variableFilterSelectorIsOpen}
-        selectedVariables={selectedFilterVariables}
-        metaGroups={metaGroups}
-        anchorEl={anchorFilterEl}
-        displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
-        handleChange={
-          handleFilterChange as unknown as (
-            event: React.SyntheticEvent<Element, Event>,
-            value: { [key: string]: string }[],
-          ) => void
-        }
-      />
-    </div>
+    <ClickAwayListener
+      mouseEvent="onMouseUp"
+      onClickAway={() => {
+        setVariableFilterSelectorIsOpen(false);
+        setAnchorFilterEl(null);
+      }}
+    >
+      <div className={styles.filters}>
+        <Button
+          sx={{
+            color: '#000000',
+            textTransform: 'unset',
+            fontSize: '15px',
+          }}
+          type="button"
+          onClick={handleVariableFilterSelectorClick}
+          endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
+        >
+          Show / Hide Filters
+        </Button>
+        <VariableSelector
+          isOpen={variableFilterSelectorIsOpen}
+          selectedVariables={selectedFilterVariables}
+          metaGroups={metaGroups}
+          anchorEl={anchorFilterEl}
+          displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
+          handleChange={
+            handleFilterChange as unknown as (
+              event: React.SyntheticEvent<Element, Event>,
+              value: { [key: string]: string }[],
+            ) => void
+          }
+        />
+      </div>
+    </ClickAwayListener>
   );
 };
 
