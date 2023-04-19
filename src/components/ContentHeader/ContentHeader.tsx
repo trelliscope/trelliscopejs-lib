@@ -12,6 +12,7 @@ import ColumnSelector from '../ColumnSelector/ColumnSelector';
 import { selectLayout } from '../../slices/layoutSlice';
 import Sort from '../Sort';
 import Labels from '../Labels';
+import { selectActiveFilterView } from '../../slices/filterSlice';
 import styles from './ContentHeader.module.scss';
 
 const ContentHeader: React.FC = () => {
@@ -20,6 +21,7 @@ const ContentHeader: React.FC = () => {
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
   const sidebarOpen = useSelector(sidebarActiveSelector);
+  const activeFilters = useSelector(selectActiveFilterView);
 
   return (
     <div className={styles.contentHeader}>
@@ -34,10 +36,14 @@ const ContentHeader: React.FC = () => {
                 textTransform: 'unset',
                 fontSize: '15px',
                 borderRadius: 0,
+                minWidth: '115px',
               }}
               startIcon={sidebarOpen ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faChevronLeft} />}
             >
-              Explore
+              Filters
+              {activeFilters.length > 0 && (
+                <span className={styles.contentHeaderControlsItemToggleBadge}>{activeFilters.length}</span>
+              )}
             </Button>
           </div>
           <div className={styles.contentHeaderControlsItem}>
