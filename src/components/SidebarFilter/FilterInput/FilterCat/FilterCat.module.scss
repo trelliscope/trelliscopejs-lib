@@ -4,8 +4,12 @@
     align-items: center;
   }
 
+  &Chart {
+    background-color: var(--white-300);
+  }
+
   &Regex {
-    width: 190px;
+    width: 360px;
     margin-top: var(--neg-margin-6);
     font-size: var(--text-xl);
     transform: scale(0.85);

@@ -115,9 +115,9 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           domain={domain}
           actives={filter?.values || []}
           count={cleanMeta?.length || groupBy(meta.varname, TYPE_MAP[meta.type]).length}
-          width={220}
-          height={75}
-          barHeight={15}
+          width={399}
+          height={175}
+          barHeight={25}
           onClick={handleBarClick}
           metaLevels={cleanMeta}
           metaType={meta.type}

@@ -3,7 +3,7 @@
 
   &BarWrapper {
     position: relative;
-    color: var(--gray-900);
+    color: var(--gray-1300);
     font-size: 9px;
     margin-bottom: 1px;
     border: none;
@@ -31,7 +31,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: var(--white-300);
+    background: var(--gray-300);
+    display: flex;
+    align-items: center;
 
     &:hover {
       background: var(--orange-100);

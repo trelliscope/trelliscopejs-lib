@@ -70,3 +70,11 @@ body {
 .trelliscope-app a {
   color: #ff5252;
 }
+
+div[role='tooltip'] {
+  z-index: 2000;
+}
+
+div[role='presentation'] {
+  z-index: 2000;
+}
