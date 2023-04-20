@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,19 +9,17 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import classNames from 'classnames';
 import { fullscreenSelector, dispInfoDialogSelector } from '../../selectors';
 import { setDispInfoDialogOpen } from '../../slices/appSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './DisplayInfo.module.scss';
 
 interface DisplayInfoProps {
-  singleDisplay: boolean;
   setDialogOpen: (isOpen: boolean) => void;
   totPanels: number;
 }
 
-const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen, totPanels }) => {
+const DisplayInfo: React.FC<DisplayInfoProps> = ({ setDialogOpen, totPanels }) => {
   const dispatch = useDispatch();
   const { data: displayInfo, isLoading } = useDisplayInfo();
   const fullscreen = useSelector(fullscreenSelector);
@@ -56,18 +55,11 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen,
 
   return (
     <div>
-      <button
-        type="button"
-        aria-label="display info open"
-        onClick={handleOpen}
-        className={classNames(
-          singleDisplay ? [styles.displayInfoButton, styles.displayInfoButtonLeft] : styles.displayInfoButton,
-        )}
-      >
+      <IconButton onClick={handleOpen}>
         <div className={styles.displayInfoIcon}>
-          <FontAwesomeIcon icon={faCircleInfo} size="lg" />
+          <FontAwesomeIcon icon={faCircleInfo} size="sm" />
         </div>
-      </button>
+      </IconButton>
       <Dialog
         open={isOpen}
         className="trelliscope-app"
@@ -103,8 +95,8 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen,
               )}
               {hasInputs && (
                 <p>
-                  If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo;
-                  button at the bottom left corner of the display and follow the prompts in the dialog box that pops up.
+                  If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo; icon
+                  at the top right of the display and follow the prompts in the dialog box that pops up.
                 </p>
               )}
             </div>
