@@ -46,11 +46,13 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
             </Typography>
           </div>
           <div className={styles.headerNewRight}>
-            <ExportInputDialog
-              displayInfo={displayInfo as IDisplay}
-              hasInputs={hasInputs}
-              hasLocalStorage={hasLocalStorage}
-            />
+            {hasInputs && hasLocalStorage && (
+              <ExportInputDialog
+                displayInfo={displayInfo as IDisplay}
+                hasInputs={hasInputs}
+                hasLocalStorage={hasLocalStorage}
+              />
+            )}
             <LayoutSelector />
           </div>
         </div>
