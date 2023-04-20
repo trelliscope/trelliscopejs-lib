@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Step, StepLabel, Stepper, Tooltip } from '@mui/material';
+import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserInfo from '../UserInfo';
 import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
@@ -13,8 +9,6 @@ import ConfirmationModal from '../ConfirmationModal';
 import styles from './ExportInputDialog.module.scss';
 
 interface ExportInputDialogProps {
-  open: boolean;
-  handleClose: () => void;
   displayInfo: IDisplay;
   hasInputs: boolean;
   hasLocalStorage: boolean;
@@ -27,13 +21,8 @@ const OTHERINFO = '__trelliscope_otherinfo';
 
 const storageItems: [string, string, string, string] = [USERNAME, EMAIL, JOBTITLE, OTHERINFO];
 
-const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
-  open,
-  handleClose,
-  displayInfo,
-  hasInputs,
-  hasLocalStorage,
-}) => {
+const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasInputs, hasLocalStorage }) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [fullName, setFullName] = useState<string>(localStorage.getItem(USERNAME) || '');
   const [email, setEmail] = useState<string>(localStorage.getItem(EMAIL) || '');
   const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem(JOBTITLE) || '');
@@ -80,10 +69,23 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
     setConfirmationModalOpen(false);
   };
 
+  const handleOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <div>
+      <Tooltip title="Export Inputs">
+        <IconButton aria-label="close" size="small" onClick={handleOpen} sx={{ marginRight: '20px' }}>
+          <FontAwesomeIcon icon={faFileArrowDown} size="xl" />
+        </IconButton>
+      </Tooltip>
       <Dialog
-        open={open}
+        open={dialogOpen}
         onClose={() => {
           handleClose();
           setTimeout(() => {
