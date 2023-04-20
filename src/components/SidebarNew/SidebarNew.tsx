@@ -23,6 +23,7 @@ const SidebarNew: React.FC = () => {
           paddingTop: '63px',
           width: drawerWidth,
           boxSizing: 'border-box',
+          overflowX: 'hidden',
         },
       }}
       open={sidebarOpen}
