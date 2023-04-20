@@ -11,6 +11,7 @@ import ExportInputDialog from '../ExportInputDialog';
 import { DataContext } from '../DataProvider';
 import DisplayInfo from '../DisplayInfo';
 import styles from './HeaderNew.module.scss';
+import HelpInfo from '../HelpInfo';
 
 interface HeaderNewProps {
   something?: string;
@@ -58,6 +59,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
               />
             )}
             <LayoutSelector />
+            <HelpInfo setDialogOpen={handleDialogOpen} />
           </div>
         </div>
       </Toolbar>
