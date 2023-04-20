@@ -4,13 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Button from '@mui/material/Button';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
@@ -47,12 +41,9 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
 
   return (
     <div>
-      <button type="button" onClick={handleOpen} className={styles.helpInfo}>
-        Trelliscope
-        <div className={styles.helpInfoIcon}>
-          <FontAwesomeIcon icon={faCircleQuestion} />
-        </div>
-      </button>
+      <IconButton onClick={handleOpen}>
+        <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
+      </IconButton>
       <Dialog
         open={open}
         className="trelliscope-app"
