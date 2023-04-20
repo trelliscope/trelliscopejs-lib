@@ -81,7 +81,8 @@ const Content: React.FC = () => {
 
       const panelWidth = (width - (gridGap * ncol) / 2) / ncol;
 
-      const tableHeight = labelHeight * labelCount + (gridGap + gridGap / 2);
+      const baseHeight = labelHeight * labelCount + (gridGap + gridGap / 2);
+      const tableHeight = labelCount > 1 ? baseHeight + 20 : baseHeight;
 
       const panelHeight = panelWidth / aspectRatio + tableHeight;
 
