@@ -149,13 +149,13 @@ const Footer: React.FC = () => {
           </Button>
         </div>
       )}
-      <ExportInputDialog
+      {/* <ExportInputDialog
         open={dialogOpen}
         handleClose={handleClose}
         displayInfo={displayInfo as IDisplay}
         hasInputs={hasInputs}
         hasLocalStorage={hasLocalStorage}
-      />
+      /> */}
     </>
   );
 };
