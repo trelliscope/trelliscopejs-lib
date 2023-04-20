@@ -296,13 +296,13 @@ interface IState {
   type: StateType;
 }
 
-type viewtype = 'table' | 'grid';
+type ViewType = 'table' | 'grid';
 
 interface ILayoutState extends IState {
   nrow: number;
   ncol: number;
   page: number;
-  viewtype: viewtype;
+  viewtype: ViewType;
 }
 
 interface ILabelState extends IState {

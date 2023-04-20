@@ -29,7 +29,7 @@ interface HashLayout {
   nrow?: number;
   ncol?: number;
   page?: number;
-  viewtype?: viewtype;
+  viewtype?: ViewType;
 }
 // select layout from url hash
 export const selectHashLayout = (): HashLayout => {
@@ -42,7 +42,7 @@ export const selectHashLayout = (): HashLayout => {
 
   if (!Number.isNaN(nrow)) returnObj.nrow = nrow;
   if (!Number.isNaN(ncol)) returnObj.ncol = ncol;
-  if (hash.viewtype) returnObj.viewtype = hash.viewtype as viewtype;
+  if (hash.viewtype) returnObj.viewtype = hash.viewtype as ViewType;
   if (!Number.isNaN(page)) returnObj.page = page;
 
   return returnObj;

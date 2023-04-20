@@ -1,0 +1,19 @@
+.share {
+  &Content {
+    display: flex;
+    align-items: center;
+    width: 650px;
+    &Text {
+      margin-right: 10px !important;
+      input {
+        cursor: pointer;
+      }
+    }
+  }
+  &Button {
+    width: 90px;
+    &Icon {
+      margin-right: 10px;
+    }
+  }
+}

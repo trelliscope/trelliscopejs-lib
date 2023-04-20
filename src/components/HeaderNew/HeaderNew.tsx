@@ -12,6 +12,7 @@ import { DataContext } from '../DataProvider';
 import DisplayInfo from '../DisplayInfo';
 import styles from './HeaderNew.module.scss';
 import HelpInfo from '../HelpInfo';
+import Share from '../Share';
 
 interface HeaderNewProps {
   something?: string;
@@ -51,6 +52,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
             </Typography>
           </div>
           <div className={styles.headerNewRight}>
+            <Share />
             {hasInputs && hasLocalStorage && (
               <ExportInputDialog
                 displayInfo={displayInfo as IDisplay}

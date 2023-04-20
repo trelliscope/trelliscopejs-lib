@@ -17,8 +17,8 @@ const LayoutSelector: React.FC = () => {
   }, [layout.viewtype]);
 
   const handleLayoutChange = (e: SelectChangeEvent<string>) => {
-    setViewLayout(e.target.value as viewtype);
-    dispatch(setLayout({ viewtype: e.target.value as viewtype }));
+    setViewLayout(e.target.value as ViewType);
+    dispatch(setLayout({ viewtype: e.target.value as ViewType }));
   };
 
   return (
