@@ -33,6 +33,7 @@
   &SubMenu {
     display: flex;
     justify-content: space-between;
+    padding: var(--padding-px) var(--padding-3);
   }
 
   &Count {
