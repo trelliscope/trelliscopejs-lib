@@ -184,7 +184,7 @@ const Content: React.FC = () => {
       ) : (
         <div className={styles.tableContainer} ref={tableWrapperRef}>
           <div className={styles.tableContainer} ref={tableContentRef}>
-            <DataTable data={data} handleTableResize={handleTableResize} onClick={handlePanelClick} />
+            <DataTable data={data} handleTableResize={handleTableResize} handleClick={handlePanelClick} />
           </div>
         </div>
       )}

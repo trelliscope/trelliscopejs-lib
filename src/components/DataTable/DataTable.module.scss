@@ -3,4 +3,10 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  &PanelGraphicExpand {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
