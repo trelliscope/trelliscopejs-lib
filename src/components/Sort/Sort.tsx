@@ -109,6 +109,7 @@ const Sort: React.FC = () => {
               type="sort"
               handleClose={handleStateClose}
               handleClick={() => handleSortClick(i)}
+              enforceMaxWidth={false}
             />
           ))}
           <IconButton onClick={handleVariableSortSelectorClick} aria-label="add-icon">

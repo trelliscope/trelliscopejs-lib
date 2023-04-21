@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { faArrowDown91, faArrowDown19, faArrowDownZA, faArrowDownAZ } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styles from './FooterChip.module.scss';
@@ -11,10 +12,20 @@ interface FooterChipProps {
   type: string;
   handleClose: (x: { label: string; index: number; type: string }) => void;
   handleClick: () => void;
+  enforceMaxWidth: boolean;
 }
 
-const FooterChip: React.FC<FooterChipProps> = ({ label, icon, text, index, type, handleClose, handleClick }) => (
-  <div className={styles.footerChipWrapper}>
+const FooterChip: React.FC<FooterChipProps> = ({
+  label,
+  icon,
+  text,
+  index,
+  type,
+  handleClose,
+  handleClick,
+  enforceMaxWidth,
+}) => (
+  <div className={classNames(styles.footerChipWrapper, { [styles.footerChipWrapperContained]: enforceMaxWidth })}>
     <span
       role="button"
       tabIndex={0}

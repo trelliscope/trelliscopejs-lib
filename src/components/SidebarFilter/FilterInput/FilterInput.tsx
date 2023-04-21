@@ -145,6 +145,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
               type={meta?.type || 'string'}
               handleClose={handleSortRemove}
               handleClick={handleSortClick}
+              enforceMaxWidth
             />
           )}
         </div>

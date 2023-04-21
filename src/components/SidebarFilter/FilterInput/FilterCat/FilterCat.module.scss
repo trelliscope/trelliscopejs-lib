@@ -2,6 +2,7 @@
   &InputContainer {
     display: flex;
     align-items: center;
+    padding: var(--padding-px) var(--padding-3);
   }
 
   &Chart {
