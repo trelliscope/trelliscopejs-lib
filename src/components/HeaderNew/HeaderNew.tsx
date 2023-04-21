@@ -47,12 +47,12 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
           <div className={styles.headerNewDisplayInfo}>
             <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={allData?.length} />
             {displayList.length > 1 && <DisplaySelect setDialogOpen={handleDialogOpen} />}
-            <div>
-              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            <div className={styles.headerNewDisplayInfoTitleContainer}>
+              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
                 {selectedDisplay?.name}
               </Typography>
               {selectedDisplay?.description && (
-                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1 }}>
+                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
                   {selectedDisplay?.description}
                 </Typography>
               )}

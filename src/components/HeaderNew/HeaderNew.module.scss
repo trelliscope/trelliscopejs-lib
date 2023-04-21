@@ -12,5 +12,9 @@
   &DisplayInfo {
     display: flex;
     align-items: center;
+
+    &TitleContainer {
+      margin-left: 10px;
+    }
   }
 }
