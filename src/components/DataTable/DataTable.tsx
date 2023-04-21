@@ -48,6 +48,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       header: meta.varname,
       accessorKey: meta.varname,
       enableSorting: !unSortableMetas.includes(meta.varname),
+      size: Math.min(Math.max(meta.maxnchar * 9, 50), 200), // The average char width is 9
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,6 +92,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       header: 'Snapshot',
       accessorKey: 'Snapshot',
       enableSorting: false,
+      size: 100,
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -183,10 +185,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             density: 'compact',
             columnVisibility,
             columnPinning,
-          }}
-          defaultColumn={{
-            size: 50,
-            minSize: 1,
           }}
           onColumnVisibilityChange={(updater) => {
             setColumnVisibility((prev) => (updater instanceof Function ? updater(prev) : updater));
