@@ -125,7 +125,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             label="Show label"
           />
         </div>
-        <div style={{ paddingTop: 8 }}>
+        <div>
           {!isSorted ? (
             <Button
               onClick={handleSortClick}
@@ -149,7 +149,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             />
           )}
         </div>
-        <div style={{ paddingTop: 5 }}>
+        <div>
           <Button
             disabled={!filter}
             size="small"
