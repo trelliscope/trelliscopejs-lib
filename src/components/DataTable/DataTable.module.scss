@@ -1,4 +1,17 @@
 .dataTable {
+  table,
+  td,
+  tr,
+  th,
+  thead,
+  tbody {
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  th {
+    font-weight: 600;
+  }
+
   &CellNumber {
     display: flex;
     justify-content: flex-end;
