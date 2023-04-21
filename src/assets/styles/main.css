@@ -72,9 +72,9 @@ body {
 }
 
 div[role='tooltip'] {
-  z-index: 2000;
+  z-index: 8001;
 }
 
 div[role='presentation'] {
-  z-index: 2000;
+  z-index: 8001;
 }

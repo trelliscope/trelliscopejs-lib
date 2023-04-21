@@ -20,7 +20,7 @@ export interface LayoutAction {
   ncol?: number;
   page?: number;
   type?: 'layout';
-  viewtype?: viewtype;
+  viewtype?: ViewType;
 }
 
 export const layoutSlice = createSlice({
