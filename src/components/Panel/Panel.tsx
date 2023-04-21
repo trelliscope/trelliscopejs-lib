@@ -1,8 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import styles from './Panel.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import { IconButton } from '@mui/material';
 import PanelTable from '../PanelTable/PanelTable';
 import { setLabels } from '../../slices/labelsSlice';
+import styles from './Panel.module.scss';
 
 interface PanelProps {
   data: Datum;
@@ -27,8 +30,13 @@ const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children, onClick }
 
   return (
     <div className={styles.panel}>
-      <div role="presentation" className={styles.panelGraphic} onClick={handleClick}>
+      <div role="presentation" className={styles.panelGraphic}>
         {children}
+        <div className={styles.panelGraphicExpand}>
+          <IconButton size="small" onClick={handleClick}>
+            <FontAwesomeIcon icon={faExpand} />
+          </IconButton>
+        </div>
       </div>
       <PanelTable data={data} labels={labels} inputs={inputs} compact onLabelRemove={handleRemoveLabel} />
     </div>

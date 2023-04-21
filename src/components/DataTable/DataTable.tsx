@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare, faExpand } from '@fortawesome/free-solid-svg-icons';
+import { IconButton } from '@mui/material';
 import MaterialReactTable from 'material-react-table';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
@@ -22,10 +23,10 @@ import {
 interface DataTableProps {
   data: Datum[];
   handleTableResize: () => void;
-  onClick: (PANEL_KEY: string | number) => void;
+  handleClick: (PANEL_KEY: string | number) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, onClick }) => {
+const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, handleClick }) => {
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
   const tableInstanceRef = useRef(null);
@@ -91,22 +92,26 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      muiTableBodyCellProps: ({ cell }: any) => ({
-        onClick: () => {
-          onClick(cell.row.original.__PANEL_KEY__);
-        },
-      }),
-      // conflicts within table library, some of the types dont seem to be exported in the same way
-      // that the actual table component consumes them as a prop.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => (
-        <PanelGraphic
-          type={displayInfo?.paneltype as PanelType}
-          src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
-          alt={cell.row.original.__PANEL_KEY__}
-          aspectRatio={displayInfo?.panelaspect}
-          key={`${cell.row.index}_${displayInfo?.name}`}
-        />
+        <div>
+          <div className={styles.dataTablePanelGraphicExpand}>
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleClick(cell.row.original.__PANEL_KEY__);
+              }}
+            >
+              <FontAwesomeIcon icon={faExpand} />
+            </IconButton>
+          </div>
+          <PanelGraphic
+            type={displayInfo?.paneltype as PanelType}
+            src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
+            alt={cell.row.original.__PANEL_KEY__}
+            aspectRatio={displayInfo?.panelaspect}
+            key={`${cell.row.index}_${displayInfo?.name}`}
+          />
+        </div>
       ),
     };
 
@@ -118,7 +123,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
     displayInfo?.paneltype,
     displayMetas,
     getPanelSrc,
-    onClick,
+    handleClick,
     unSortableMetas,
   ]);
 
