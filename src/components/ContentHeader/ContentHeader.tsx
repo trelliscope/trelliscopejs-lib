@@ -81,7 +81,6 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
             </>
           )}
         </div>
-
         <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
       </div>
     </div>
