@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faChevronLeft, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { MRT_ShowHideColumnsButton } from 'material-react-table';
 import { sidebarActiveSelector } from '../../selectors/ui';
 import { setSidebarActive } from '../../slices/uiSlice';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
@@ -15,7 +16,12 @@ import Labels from '../Labels';
 import { selectFilterState } from '../../slices/filterSlice';
 import styles from './ContentHeader.module.scss';
 
-const ContentHeader: React.FC = () => {
+interface ContentHeaderProps {
+  tableRef: React.RefObject<null>;
+  rerender: never;
+}
+
+const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => {
   const selectedDisplay = useSelectedDisplay();
   const dispatch = useDispatch();
   const layout = useSelector(selectLayout);
@@ -57,6 +63,13 @@ const ContentHeader: React.FC = () => {
           <div className={styles.contentHeaderControlsItem}>
             <Sort />
           </div>
+          {tableRef?.current && rerender && layout?.viewtype === 'table' && (
+            <div className={styles.contentHeaderControlsItem}>
+              <span>Columns</span>
+              {/* eslint-disable-next-line react/jsx-pascal-case */}
+              <MRT_ShowHideColumnsButton table={tableRef?.current} />
+            </div>
+          )}
           {layout?.viewtype !== 'table' && (
             <>
               <div className={styles.contentHeaderControlsItem}>
@@ -68,6 +81,7 @@ const ContentHeader: React.FC = () => {
             </>
           )}
         </div>
+
         <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
       </div>
     </div>

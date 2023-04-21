@@ -4,7 +4,7 @@ import { windowWidthSelector, windowHeightSelector } from '../../selectors/ui';
 import SideButtons from '../SideButtons';
 import Sidebar from '../Sidebar';
 import styles from './Body.module.scss';
-import Content from '../Content';
+// import Content from '../Content';
 
 const Body: React.FC = () => {
   const width = useSelector(windowWidthSelector);
@@ -13,7 +13,7 @@ const Body: React.FC = () => {
     <div className={styles.body} style={{ width, height }}>
       <SideButtons />
       <Sidebar />
-      <Content />
+      {/* <Content /> */}
     </div>
   );
 };

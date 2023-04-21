@@ -16,7 +16,12 @@ import PanelDialog from '../PanelDialog';
 import styles from './Content.module.scss';
 import { setPanelDialog } from '../../slices/appSlice';
 
-const Content: React.FC = () => {
+interface ContentProps {
+  tableRef: React.MutableRefObject<null>;
+  rerender: never;
+}
+
+const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -184,7 +189,13 @@ const Content: React.FC = () => {
       ) : (
         <div className={styles.tableContainer} ref={tableWrapperRef}>
           <div className={styles.tableContainer} ref={tableContentRef}>
-            <DataTable data={data} handleTableResize={handleTableResize} handleClick={handlePanelClick} />
+            <DataTable
+              data={data}
+              handleTableResize={handleTableResize}
+              handleClick={handlePanelClick}
+              tableRef={tableRef}
+              rerender={rerender}
+            />
           </div>
         </div>
       )}
