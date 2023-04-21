@@ -9,10 +9,10 @@
     border: none;
     background: none;
     overflow-x: hidden;
+    width: 99% !important;
 
     &:hover {
       background: var(--white-200);
-      width: 99% !important;
 
       .catHistogramBarValue {
         opacity: 1;
