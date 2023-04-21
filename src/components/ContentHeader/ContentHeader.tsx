@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faChevronLeft, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { sidebarActiveSelector } from '../../selectors/ui';
 import { setSidebarActive } from '../../slices/uiSlice';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
@@ -12,7 +12,7 @@ import ColumnSelector from '../ColumnSelector/ColumnSelector';
 import { selectLayout } from '../../slices/layoutSlice';
 import Sort from '../Sort';
 import Labels from '../Labels';
-import { selectActiveFilterView } from '../../slices/filterSlice';
+import { selectFilterState } from '../../slices/filterSlice';
 import styles from './ContentHeader.module.scss';
 
 const ContentHeader: React.FC = () => {
@@ -21,7 +21,7 @@ const ContentHeader: React.FC = () => {
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
   const sidebarOpen = useSelector(sidebarActiveSelector);
-  const activeFilters = useSelector(selectActiveFilterView);
+  const activeFilters = useSelector(selectFilterState);
 
   return (
     <div className={styles.contentHeader}>
@@ -42,7 +42,15 @@ const ContentHeader: React.FC = () => {
             >
               Filters
               {activeFilters.length > 0 && (
-                <span className={styles.contentHeaderControlsItemToggleBadge}>{activeFilters.length}</span>
+                <span className={styles.contentHeaderControlsItemToggleBadge}>
+                  <FontAwesomeIcon icon={faCircle} />
+                  <span
+                    className={styles.contentHeaderControlsItemToggleBadgeNum}
+                    style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-3px' }}
+                  >
+                    {activeFilters.length}
+                  </span>
+                </span>
               )}
             </Button>
           </div>

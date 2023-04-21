@@ -54,6 +54,21 @@
           top: -4px;
           right: 2px;
           font-size: 14px;
+
+          &Num {
+            position: absolute;
+            z-index: 1002;
+            color: var(--white);
+            top: -1px;
+          }
+
+          svg {
+            color: var(--gray-600);
+            position: absolute;
+            top: 1px;
+            right: -8px;
+            z-index: 1001;
+          }
         }
       }
     }
