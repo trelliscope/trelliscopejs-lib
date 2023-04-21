@@ -194,6 +194,7 @@ interface IMeta {
   tags: string[];
   filterable: boolean;
   sortable: boolean;
+  maxnchar: number;
   code?: string;
   log: boolean;
   levels?: string[];
