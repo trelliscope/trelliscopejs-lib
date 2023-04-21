@@ -4,7 +4,7 @@
   &BarWrapper {
     position: relative;
     color: var(--gray-1300);
-    font-size: 9px;
+    font-size: 14px;
     margin-bottom: 1px;
     border: none;
     background: none;
@@ -12,6 +12,7 @@
 
     &:hover {
       background: var(--white-200);
+      width: 99% !important;
 
       .catHistogramBarValue {
         opacity: 1;
@@ -51,8 +52,9 @@
       position: absolute;
       color: var(--gray-1400);
       right: var(--margin-3);
+      top: 5px;
       line-height: 15px;
-      font-size: var(--text-3xs);
+      font-size: var(--text-base);
       opacity: 0;
     }
   }
