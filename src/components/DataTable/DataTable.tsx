@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare, faExpand } from '@fortawesome/free-solid-svg-icons';
@@ -24,16 +24,18 @@ interface DataTableProps {
   data: Datum[];
   handleTableResize: () => void;
   handleClick: (PANEL_KEY: string | number) => void;
+  tableRef: React.MutableRefObject<null>;
+  rerender: never;
 }
 
-const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, handleClick }) => {
+const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, handleClick, tableRef, rerender }) => {
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
-  const tableInstanceRef = useRef(null);
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({});
+  const [columnPinning, setColumnPinning] = useState({ left: ['Snapshot'] });
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
@@ -161,14 +163,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
     setColumnSize(newSizingObj);
   };
 
-  // conflicts within table library, some of the types dont seem to be exported in the same way
-  // that the actual table component consumes them as a prop.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleTableVisibilityChange = (visibilityFunction: any) => {
-    const newVisibilityObj = { ...columnVisibility, ...visibilityFunction() };
-    setColumnVisibility(newVisibilityObj);
-  };
-
   useEffect(() => {
     handleTableResize();
   }, [columnSize, columnVisibility, handleTableResize]);
@@ -188,10 +182,21 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             columnSizing: columnSize,
             density: 'compact',
             columnVisibility,
+            columnPinning,
           }}
           defaultColumn={{
             size: 50,
             minSize: 1,
+          }}
+          onColumnVisibilityChange={(updater) => {
+            setColumnVisibility((prev) => (updater instanceof Function ? updater(prev) : updater));
+            queueMicrotask(rerender); // hack to rerender after state update
+          }}
+          onColumnPinningChange={(updater) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore this is a hack for getting the column options out of the table
+            setColumnPinning((prev) => (updater instanceof Function ? updater(prev) : updater));
+            queueMicrotask(rerender); // hack to rerender after state update
           }}
           columnResizeMode="onEnd"
           data={data}
@@ -202,9 +207,9 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           enableStickyHeader
           enableColumnResizing
           enableColumnActions={false}
+          enableTopToolbar={false}
           onColumnSizingChange={handleColumnSizingChange}
           onSortingChange={handleSortingChange}
-          onColumnVisibilityChange={handleTableVisibilityChange}
           enableBottomToolbar={false}
           enableFullScreenToggle={false}
           enablePagination={false}
@@ -212,7 +217,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           enableDensityToggle={false}
           enableColumnFilters={false}
           enableGlobalFilter={false}
-          tableInstanceRef={tableInstanceRef}
+          tableInstanceRef={tableRef}
         />
       )}
     </div>
