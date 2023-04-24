@@ -22,11 +22,11 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     // FIXME once the dataclient groupby is finished we can fix this.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore ts2554
-    const data = groupBy(varname, 'number', (d: number) =>
-      Number.isNaN(Number(d)) || d === undefined
-        ? null
-        : breaks.find((b, i) => (log ? Math.log10(d) < breaks[i + 1] : d < breaks[i + 1])),
-    );
+    const data = groupBy(varname, 'number', (d: number) => {
+      if (Number.isNaN(Number(d)) || d === undefined) return null;
+      if (d >= breaks[breaks.length - 1]) return breaks[breaks.length - 1];
+      return breaks.find((b, i) => (log ? Math.log10(d) < breaks[i + 1] : d < breaks[i + 1]));
+    });
 
     const yDomain = extent(data, (d) => d.value as number) as [number, number];
 
