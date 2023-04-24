@@ -4,7 +4,6 @@ import { AppBar, Box, Toolbar } from '@mui/material';
 // import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
-import FullscreenButton from './components/FullscreenButton';
 import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
@@ -53,7 +52,6 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
         {/* <Header />
         <Body />
         <Footer />
-        <FullscreenButton />
         <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} /> */}
       </Box>
     </DataProvider>

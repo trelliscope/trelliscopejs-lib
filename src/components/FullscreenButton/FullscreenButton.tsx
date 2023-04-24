@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMaximize, faMinimize } from '@fortawesome/free-solid-svg-icons';
 import { addClass, removeClass } from '../../classManipulation';
@@ -72,11 +73,9 @@ const FullscreenButton: React.FC = () => {
   }
 
   return (
-    <button type="button" className={styles.fullscreenButton} onClick={toggleFullScreen}>
-      <div className={styles.fullscreenButtonIcon}>
-        {!fullscreen ? <FontAwesomeIcon icon={faMaximize} size="lg" /> : <FontAwesomeIcon icon={faMinimize} size="lg" />}
-      </div>
-    </button>
+    <IconButton onClick={toggleFullScreen}>
+      {!fullscreen ? <FontAwesomeIcon icon={faMaximize} size="sm" /> : <FontAwesomeIcon icon={faMinimize} size="sm" />}
+    </IconButton>
   );
 };
 

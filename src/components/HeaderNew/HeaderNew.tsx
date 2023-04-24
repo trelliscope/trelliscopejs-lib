@@ -6,6 +6,7 @@ import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import LayoutSelector from '../LayoutSelector/LayoutSelector';
 import { setDialogOpen } from '../../slices/appSlice';
 import DisplaySelect from '../DisplaySelect';
+import FullscreenButton from '../FullscreenButton';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import ExportInputDialog from '../ExportInputDialog';
 import { DataContext } from '../DataProvider';
@@ -69,6 +70,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
             )}
             <LayoutSelector />
             <HelpInfo setDialogOpen={handleDialogOpen} />
+            <FullscreenButton />
           </div>
         </div>
       </Toolbar>
