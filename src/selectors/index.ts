@@ -17,6 +17,5 @@ export const singlePageAppSelector = (state: RootState) => state.app.singlePageA
 export const fullscreenSelector = (state: RootState) => state.app.fullscreen;
 
 export const dispSelectDialogSelector = (state: RootState) => state.app.dispSelectDialog;
-export const dispInfoDialogSelector = (state: RootState) => state.app.dispInfoDialog;
 
 export const selectCallbacks = (state: RootState) => state?.app.options?.callbacks;

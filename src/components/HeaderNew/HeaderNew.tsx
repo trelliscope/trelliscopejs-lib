@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
@@ -9,7 +9,6 @@ import DisplaySelect from '../DisplaySelect';
 import FullscreenButton from '../FullscreenButton';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import ExportInputDialog from '../ExportInputDialog';
-import { DataContext } from '../DataProvider';
 import DisplayInfo from '../DisplayInfo';
 import styles from './HeaderNew.module.scss';
 import HelpInfo from '../HelpInfo';
@@ -21,7 +20,6 @@ interface HeaderNewProps {
 
 const HeaderNew: React.FC<HeaderNewProps> = () => {
   const { data: displayList = [] } = useDisplayList();
-  const { allData } = useContext(DataContext);
   const dispatch = useDispatch();
   const [hasInputs, setHasInputs] = useState(false);
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
@@ -46,7 +44,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
       <Toolbar>
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
-            <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={allData?.length} />
+            <DisplayInfo />
             {displayList.length > 1 && <DisplaySelect setDialogOpen={handleDialogOpen} />}
             <div className={styles.headerNewDisplayInfoTitleContainer}>
               <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>

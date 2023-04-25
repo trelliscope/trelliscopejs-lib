@@ -122,7 +122,7 @@ const Header: React.FC = () => {
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
       {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
-      {selectedDisplay?.name !== '' && <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={originalTotal} />}
+      {/* {selectedDisplay?.name !== '' && <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={originalTotal} />} */}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
         <div className={styles.headerNameDescContainer}>
