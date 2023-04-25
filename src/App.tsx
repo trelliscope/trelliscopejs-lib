@@ -45,7 +45,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
 
   return (
     <DataProvider client={client}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', height: 'inherit' }}>
         <HeaderNew />
         <SidebarNew />
         <ContentNew />
