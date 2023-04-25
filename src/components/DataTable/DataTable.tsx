@@ -48,7 +48,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       header: meta.varname,
       accessorKey: meta.varname,
       enableSorting: !unSortableMetas.includes(meta.varname),
-      size: Math.min(Math.max(meta.maxnchar * 9, 50), 200), // The average char width is 9
+      size: Math.min(Math.max(meta.maxnchar * 9, 50), 200) || 50, // The average char width is 9
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
