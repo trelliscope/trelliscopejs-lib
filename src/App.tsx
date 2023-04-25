@@ -49,6 +49,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
         <HeaderNew />
         <SidebarNew />
         <ContentNew />
+        <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
         {/* <Header />
         <Body />
         <Footer />
