@@ -19,11 +19,13 @@ const SidebarNew: React.FC = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
+        height: 'inherit',
         '& .MuiDrawer-paper': {
           paddingTop: '63px',
           width: drawerWidth,
           boxSizing: 'border-box',
           overflowX: 'hidden',
+          height: 'inherit',
         },
       }}
       open={sidebarOpen}

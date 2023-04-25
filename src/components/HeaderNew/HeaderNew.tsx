@@ -42,7 +42,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
   };
 
   return (
-    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
+    <AppBar position="absolute" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
       <Toolbar>
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
