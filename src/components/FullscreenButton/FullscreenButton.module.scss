@@ -1,22 +1,2 @@
 .fullscreenButton {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  background: var(--gray-1000);
-  width: var(--fullscreenButton-size);
-  height: var(--fullscreenButton-size);
-  cursor: pointer;
-  border: none;
-  transition: var(--fullscreenButton-transition);
-
-  &:hover {
-    background: var(--gray-800);
-  }
-
-  &Icon {
-    display: flex;
-    justify-content: center;
-    color: var(--white-600);
-  }
 }
