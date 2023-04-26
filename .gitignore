@@ -25,5 +25,6 @@ yarn-error.log*
 dist
 _ignore
 public/_test/
+public/info.html
 *.code-workspace
 .history
