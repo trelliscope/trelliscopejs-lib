@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { setDispSelectDialogOpen } from '../../slices/appSlice';
 import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import type { LayoutAction } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
-import { dispSelectDialogSelector } from '../../selectors';
 import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
@@ -19,18 +17,14 @@ import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './DisplaySelect.module.scss';
 
-interface DisplaySelectProps {
-  setDialogOpen: (isOpen: boolean) => void;
-}
-
-const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
+const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
   const { name: selectedDisplay } = useSelectedDisplay();
-  const isOpen = useSelector(dispSelectDialogSelector);
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [selectedDisplayName, setSelectedDisplayName] = useState('');
-  const { data: displayList, isSuccess } = useDisplayList();
+  const { data: displayList } = useDisplayList();
   const { data: displayInfo } = useDisplayInfo();
+  const [isOpen, setIsOpen] = useState(false);
 
   const stateLayout = displayInfo?.state?.layout;
   const stateLabels = displayInfo?.state?.labels?.varnames;
@@ -44,22 +38,14 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
     }
   }, [stateLabels, stateLayout, dispatch, selectedDisplayName, activeDisplayName]);
 
-  const handleDispDialogOpen = (dispIsOpen: boolean) => {
-    dispatch(setDispSelectDialogOpen(dispIsOpen));
-  };
-
   const handleClose = () => {
-    setDialogOpen(false);
-    handleDispDialogOpen(false);
+    setIsOpen(false);
     setAnchorEl(null);
   };
 
   const handleOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget);
-    if (displayList && isSuccess) {
-      setDialogOpen(true);
-      handleDispDialogOpen(true);
-    }
+    setIsOpen(true);
   };
 
   const handleClick = (name: string) => {
@@ -79,19 +65,8 @@ const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
 
   const handleSelect = (name: string) => {
     handleClick(name);
-    setDialogOpen(false);
-    handleDispDialogOpen(false);
+    handleClose();
   };
-  // TODO do we still want hotkeys here?
-
-  // const handleKey = (event) => {
-  //   setDialogOpen(true);
-  //   handleDispDialogOpen(true);
-  // };
-
-  // useHotkeys('o', handleKey, { enabled: fullscreen && !isOpen });
-  // useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
-  // useHotkeys('esc', handleClose, { enabled: isOpen });
 
   return (
     <div>
