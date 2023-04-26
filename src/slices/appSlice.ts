@@ -61,9 +61,6 @@ export const appSlice = createSlice({
     setDispSelectDialogOpen: (state, action: PayloadAction<boolean>) => {
       state.dispSelectDialog = action.payload;
     },
-    setDispInfoDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dispInfoDialog = action.payload;
-    },
     setSinglePageApp: (state, action: PayloadAction<boolean | undefined>) => {
       state.singlePageApp = !!action.payload;
     },
@@ -95,7 +92,6 @@ export const {
   setOptions,
   setDialogOpen,
   setDispSelectDialogOpen,
-  setDispInfoDialogOpen,
   setSinglePageApp,
   setFullscreen,
   setErrorMessage,
