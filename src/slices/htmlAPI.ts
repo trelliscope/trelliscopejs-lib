@@ -2,13 +2,9 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import DOMPurify from 'dompurify';
 
 const HTMLBaseQuery =
-  (): BaseQueryFn<
-    {
-      url: string;
-    },
-    string,
-    unknown
-  > =>
+  (): BaseQueryFn<{
+    url: string;
+  }> =>
   async ({ url }) => {
     const response = await fetch(url);
     if (!response.ok) {
