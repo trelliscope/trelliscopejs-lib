@@ -13,8 +13,6 @@ export interface AppState {
   appId: string;
   options: AppOptions;
   dialog: boolean;
-  dispSelectDialog: boolean;
-  dispInfoDialog: boolean;
   singlePageApp: boolean;
   fullscreen: boolean;
   errorMsg: string;
@@ -27,8 +25,6 @@ const initialState: AppState = {
   appId: 'app',
   options: {},
   dialog: false,
-  dispSelectDialog: false,
-  dispInfoDialog: false,
   singlePageApp: true,
   fullscreen: true,
   errorMsg: '',
@@ -54,12 +50,6 @@ export const appSlice = createSlice({
     },
     setOptions: (state, action: PayloadAction<AppOptions | undefined>) => {
       state.options = action.payload || {};
-    },
-    setDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dialog = action.payload;
-    },
-    setDispSelectDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dispSelectDialog = action.payload;
     },
     setSinglePageApp: (state, action: PayloadAction<boolean | undefined>) => {
       state.singlePageApp = !!action.payload;
@@ -87,16 +77,7 @@ export const appSlice = createSlice({
   },
 });
 
-export const {
-  setAppID,
-  setOptions,
-  setDialogOpen,
-  setDispSelectDialogOpen,
-  setSinglePageApp,
-  setFullscreen,
-  setErrorMessage,
-  setPaths,
-  setPanelDialog,
-} = appSlice.actions;
+export const { setAppID, setOptions, setSinglePageApp, setFullscreen, setErrorMessage, setPaths, setPanelDialog } =
+  appSlice.actions;
 
 export default appSlice.reducer;

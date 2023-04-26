@@ -11,23 +11,13 @@ import Shortcuts from '../Shortcuts';
 import Credits from '../Credits';
 import styles from './HelpInfo.module.scss';
 
-interface HelpInfoProps {
-  setDialogOpen: (arg0: boolean) => void;
-}
-
-const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
+const HelpInfo: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const [tabNumber, setTabNumber] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    setDialogOpen(false);
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setDialogOpen(true);
-    setOpen(true);
+  const handleToggle = () => {
+    setOpen(!open);
   };
 
   const handleChange = (event: SyntheticEvent, value: number) => {
@@ -35,13 +25,12 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
     setTabNumber(value);
   };
 
-  useHotkeys('h', handleOpen, { enabled: fullscreen && !open });
-  useHotkeys('h', handleClose, { enabled: fullscreen && open });
-  useHotkeys('esc', handleClose, { enabled: open });
+  useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
+  useHotkeys('esc', () => setOpen(false), { enabled: open });
 
   return (
     <div>
-      <IconButton onClick={handleOpen}>
+      <IconButton onClick={handleToggle}>
         <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
       </IconButton>
       <Dialog
@@ -49,7 +38,7 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
-        onClose={handleClose}
+        onClose={handleToggle}
       >
         <DialogTitle id="dialog-viewer-title">{`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}</DialogTitle>
         <DialogContent>
@@ -63,7 +52,7 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
           {tabNumber === 2 && <Credits />}
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={handleClose}>
+          <Button color="secondary" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

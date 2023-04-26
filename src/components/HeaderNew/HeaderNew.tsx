@@ -1,10 +1,8 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import LayoutSelector from '../LayoutSelector/LayoutSelector';
-import { setDialogOpen } from '../../slices/appSlice';
 import DisplaySelect from '../DisplaySelect';
 import FullscreenButton from '../FullscreenButton';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -20,7 +18,6 @@ interface HeaderNewProps {
 
 const HeaderNew: React.FC<HeaderNewProps> = () => {
   const { data: displayList = [] } = useDisplayList();
-  const dispatch = useDispatch();
   const [hasInputs, setHasInputs] = useState(false);
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const selectedDisplay = useSelectedDisplay();
@@ -35,17 +32,13 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
     }
   }, [displayInfo]);
 
-  const handleDialogOpen = (isOpen: boolean) => {
-    dispatch(setDialogOpen(isOpen));
-  };
-
   return (
     <AppBar position="absolute" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
       <Toolbar>
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
             <DisplayInfo />
-            {displayList.length > 1 && <DisplaySelect setDialogOpen={handleDialogOpen} />}
+            {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerNewDisplayInfoTitleContainer}>
               <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
                 {selectedDisplay?.name}
@@ -67,7 +60,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
               />
             )}
             <LayoutSelector />
-            <HelpInfo setDialogOpen={handleDialogOpen} />
+            <HelpInfo />
             <FullscreenButton />
           </div>
         </div>

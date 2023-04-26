@@ -6,7 +6,6 @@ import DisplayInfo from '../DisplayInfo';
 import DisplaySelect from '../DisplaySelect';
 import Pagination from '../Pagination';
 import HelpInfo from '../HelpInfo';
-import { setDialogOpen } from '../../slices/appSlice';
 import { windowWidthSelector } from '../../selectors/ui';
 import { fullscreenSelector, cogDataSelector } from '../../selectors';
 import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
@@ -86,10 +85,6 @@ const Header: React.FC = () => {
     },
   };
 
-  const handleDialogOpen = (isOpen: boolean) => {
-    dispatch(setDialogOpen(isOpen));
-  };
-
   let displayName;
   let displayDesc = '' as string | undefined;
   let iconStyle = { visibility: 'hidden' } as { [key: string]: string | number };
@@ -121,7 +116,7 @@ const Header: React.FC = () => {
 
   return (
     <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
-      {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />}
+      {/* {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />} */}
       {/* {selectedDisplay?.name !== '' && <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={originalTotal} />} */}
       <i style={iconStyle} className="fa fa-info-circle" />
       <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
@@ -147,7 +142,7 @@ const Header: React.FC = () => {
           />
         )} */}
       </div>
-      <HelpInfo setDialogOpen={handleDialogOpen} />
+      {/* <HelpInfo setDialogOpen={handleDialogOpen} /> */}
     </div>
   );
 };
