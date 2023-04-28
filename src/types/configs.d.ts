@@ -369,6 +369,7 @@ interface IDisplay {
   name: string;
   description: string;
   tags: string[];
+  hasCustomInfo: boolean;
   infoOnLoad: boolean;
   keycols: string[];
   keysig: string;

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { IconButton } from '@mui/material';
+import { Box, CircularProgress, IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import { fullscreenSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
+import { useHtml } from '../../slices/htmlAPI';
 import styles from './DisplayInfo.module.scss';
 
 const DisplayInfo: React.FC = () => {
@@ -20,6 +21,12 @@ const DisplayInfo: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const [hasInputs, setHasInputs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { data: html, isLoading: htmlLoading } = useHtml(
+    '../../info.html',
+    (displayInfo?.hasCustomInfo as boolean) || false,
+  );
+
+  const formattedHtml = { __html: html };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -59,34 +66,48 @@ const DisplayInfo: React.FC = () => {
         <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
         <DialogContent>
           <div className={styles.displayInfoModalContainer}>
-            <div>
-              <div style={{ background: '#ededed', padding: 5 }}>
-                <strong>{displayInfo?.name}</strong>
-                <br />
-                {displayInfo?.description && <em>{displayInfo?.description}</em>}
+            {displayInfo?.hasCustomInfo ? (
+              <>
+                {htmlLoading && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress />
+                  </Box>
+                )}
+                {/* we can set this because we are sanitizing the HTML in the hook */}
+                {/* eslint-disable-next-line react/no-danger */}
+                <div dangerouslySetInnerHTML={formattedHtml as { __html: string }} />
+              </>
+            ) : (
+              <div>
+                <div style={{ background: '#ededed', padding: 5 }}>
+                  <strong>{displayInfo?.name}</strong>
+                  <br />
+                  {displayInfo?.description && <em>{displayInfo?.description}</em>}
+                </div>
+                <p>
+                  {`This visualization contains ${allData?.length} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
+                </p>
+                <p>
+                  To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top
+                  right corner of the display.
+                </p>
+                {hasInputs && (
+                  <p>
+                    There are user input variables available in this visualization with which you can provide feedback for
+                    any panel. These will show up as either a radio button or free text entry in the labels that show up
+                    under each panel. As you enter inputs, these are saved in your local web browser&apos;s storage and will
+                    be remembered in subsequent views of the display.
+                  </p>
+                )}
+                {hasInputs && (
+                  <p>
+                    If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo;
+                    icon at the top right of the display and follow the prompts in the dialog box that pops up.
+                  </p>
+                )}
               </div>
-              <p>
-                {`This visualization contains ${allData?.length} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
-              </p>
-              <p>
-                To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top right
-                corner of the display.
-              </p>
-              {hasInputs && (
-                <p>
-                  There are user input variables available in this visualization with which you can provide feedback for any
-                  panel. These will show up as either a radio button or free text entry in the labels that show up under each
-                  panel. As you enter inputs, these are saved in your local web browser&apos;s storage and will be remembered
-                  in subsequent views of the display.
-                </p>
-              )}
-              {hasInputs && (
-                <p>
-                  If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo; icon
-                  at the top right of the display and follow the prompts in the dialog box that pops up.
-                </p>
-              )}
-            </div>
+            )}
+
             {!isLoading && (
               <div
               // we can dangerously set because the HTML is generated from marked()
