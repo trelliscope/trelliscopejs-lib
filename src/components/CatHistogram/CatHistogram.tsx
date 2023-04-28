@@ -66,7 +66,7 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
 
   return (
     <div className={styles.catHistogram}>
-      <List height={height} width={width} itemSize={barHeight} itemCount={count}>
+      <List height={count < 7 ? count * barHeight : height} width={width} itemSize={barHeight} itemCount={count}>
         {({ index, style }) => (
           <CatHistogramBar
             style={style}
