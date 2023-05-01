@@ -79,7 +79,7 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
                 : actives.includes(dataFiltered[index].key as string)
             }
             onClick={onClick}
-            width={scale(dataFiltered[index].value || 1)}
+            width={scale(dataFiltered[index].value || 0)}
             height={barHeight - 1}
             label={dataFiltered[index].key as string}
             metaLevels={metaLevels}
