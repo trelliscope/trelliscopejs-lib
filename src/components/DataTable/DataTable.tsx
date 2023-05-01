@@ -97,7 +97,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => (
-        <div>
+        <div className={styles.dataTablePanelGraphic}>
           <div className={styles.dataTablePanelGraphicExpand}>
             <IconButton
               size="small"

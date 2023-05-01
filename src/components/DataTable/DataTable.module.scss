@@ -17,9 +17,20 @@
     justify-content: flex-end;
   }
 
-  &PanelGraphicExpand {
-    position: absolute;
-    right: 0;
-    top: 0;
+  &PanelGraphic {
+    &Expand {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  tr {
+    &:hover .dataTablePanelGraphic {
+      &Expand {
+        display: block;
+      }
+    }
   }
 }
