@@ -1,8 +1,8 @@
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateLeft, faXmark, faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
 import classNames from 'classnames';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
@@ -16,6 +16,7 @@ import { setLabels } from '../../../slices/labelsSlice';
 import { selectSort, setSort } from '../../../slices/sortSlice';
 import FooterChip from '../../FooterChip/FooterChip';
 import { setLayout } from '../../../slices/layoutSlice';
+import ConfirmationModal from '../../ConfirmationModal';
 
 interface FilterInputsProps {
   filterName: string;
@@ -31,6 +32,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const isSorted = sort.find((s) => s.varname === filterName);
   const labelIsSelected = labels.includes(filterName);
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const handleReset = () => {
     dispatch(removeFilter(filterName));
@@ -38,6 +40,8 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
 
   const handleMinimize = () => {
     dispatch(setFilterView({ name: filterName, which: 'remove' }));
+    dispatch(removeFilter(filterName));
+    setConfirmationModalOpen(!confirmationModalOpen);
   };
 
   let sortRes = {} as { filterName: string; icon: string };
@@ -105,7 +109,13 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
               {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
             </div>
           )}
-          <IconButton aria-label="close" size="small" onClick={handleMinimize}>
+          <ConfirmationModal
+            isOpen={confirmationModalOpen}
+            handleCancel={() => setConfirmationModalOpen(!confirmationModalOpen)}
+            handleConfirm={handleMinimize}
+            dialogText="This will clear the selected active filter."
+          />
+          <IconButton aria-label="close" size="small" onClick={() => setConfirmationModalOpen(!confirmationModalOpen)}>
             <FontAwesomeIcon icon={faXmark} />
           </IconButton>
         </div>

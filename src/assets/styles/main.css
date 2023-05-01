@@ -78,3 +78,7 @@ div[role='tooltip'] {
 div[role='presentation'] {
   z-index: 8001;
 }
+
+.MuiDialog-root {
+  z-index: 8002 !important;
+}

@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
 import styles from './Filters.module.scss';
-import { selectActiveFilterView, setFilterView } from '../../slices/filterSlice';
+import { clearFilters, removeFilter, selectActiveFilterView, setFilterView } from '../../slices/filterSlice';
 import { setLayout } from '../../slices/layoutSlice';
+import ConfirmationModal from '../ConfirmationModal';
 
 // interface FiltersProps {}
 
@@ -17,6 +18,8 @@ const Filters: React.FC = () => {
   const displayMetas = useDisplayMetas();
   const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
   const filterableMetas = displayMetas.filter((meta) => meta.filterable).map((meta) => meta);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [valueToRemove, setValueToRemove] = useState<{ varname: string }[]>([]);
 
   const metaGroups = useMetaGroups(unfilterableMetas);
 
@@ -43,9 +46,9 @@ const Filters: React.FC = () => {
     setVariableFilterSelectorIsOpen(!variableFilterSelectorIsOpen);
   };
 
-  const handleFilterChange = (e: SyntheticEvent, value: { varname: string }[]) => {
-    const addedItem = value[value.length - 1];
-    if (value.length === 0) {
+  const handleConfirm = () => {
+    if (valueToRemove.length === 0) {
+      setConfirmationModalOpen(!confirmationModalOpen);
       dispatch(setFilterView({ name: '', which: 'removeActive' }));
       dispatch(
         setLayout({
@@ -53,18 +56,34 @@ const Filters: React.FC = () => {
           type: 'layout',
         }),
       );
+      dispatch(clearFilters());
+      setConfirmationModalOpen(!confirmationModalOpen);
+      return;
+    }
+
+    const removedItem = selectedFilterVariables.find((item: { varname: string }) => valueToRemove.indexOf(item) === -1);
+    dispatch(setFilterView({ name: removedItem?.varname as string, which: 'remove' }));
+    dispatch(
+      setLayout({
+        page: 1,
+        type: 'layout',
+      }),
+    );
+    dispatch(removeFilter(removedItem?.varname as string));
+    setConfirmationModalOpen(!confirmationModalOpen);
+  };
+
+  const handleFilterChange = (e: SyntheticEvent, value: { varname: string }[]) => {
+    const addedItem = value[value.length - 1];
+    if (value.length === 0) {
+      setConfirmationModalOpen(!confirmationModalOpen);
+      setValueToRemove(value);
       return;
     }
 
     if (value.length < selectedFilterVariables.length) {
-      const removedItem = selectedFilterVariables.find((item: { varname: string }) => value.indexOf(item) === -1);
-      dispatch(setFilterView({ name: removedItem?.varname as string, which: 'remove' }));
-      dispatch(
-        setLayout({
-          page: 1,
-          type: 'layout',
-        }),
-      );
+      setConfirmationModalOpen(!confirmationModalOpen);
+      setValueToRemove(value);
       return;
     }
     setSelectedFilterVariables(value);
@@ -80,6 +99,16 @@ const Filters: React.FC = () => {
       }}
     >
       <div className={styles.filters}>
+        <ConfirmationModal
+          isOpen={confirmationModalOpen}
+          handleCancel={() => setConfirmationModalOpen(!confirmationModalOpen)}
+          handleConfirm={handleConfirm}
+          dialogText={`${
+            valueToRemove.length === 0
+              ? 'This will clear all of the active filters.'
+              : 'This will clear the selected active filter.'
+          }`}
+        />
         <Button
           sx={{
             color: '#000000',
