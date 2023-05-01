@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
-import { removeFilter, selectFilterByVarname, setFilterView } from '../../../slices/filterSlice';
+import { removeFilter, selectFilterByVarname, selectFilterState, setFilterView } from '../../../slices/filterSlice';
 import FilterCat from './FilterCat';
 import FilterNum from './FilterNum';
 
@@ -26,6 +26,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const dispatch = useDispatch();
   const meta = useMetaByVarname(filterName);
   const filter = useSelector(selectFilterByVarname(filterName));
+  const activeFilters = useSelector(selectFilterState);
   const labels = useSelector(labelsSelector);
   const sort = useSelector(selectSort);
   const sort2 = Object.assign([], sort) as ISortState[];
@@ -36,6 +37,14 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
 
   const handleReset = () => {
     dispatch(removeFilter(filterName));
+  };
+
+  const checkIfFilterIsActive = () => {
+    if (activeFilters.find((f) => f.varname === filterName)) {
+      setConfirmationModalOpen(!confirmationModalOpen);
+      return;
+    }
+    dispatch(setFilterView({ name: filterName, which: 'remove' }));
   };
 
   const handleMinimize = () => {
@@ -115,7 +124,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             handleConfirm={handleMinimize}
             dialogText="This will clear the selected active filter."
           />
-          <IconButton aria-label="close" size="small" onClick={() => setConfirmationModalOpen(!confirmationModalOpen)}>
+          <IconButton aria-label="close" size="small" onClick={checkIfFilterIsActive}>
             <FontAwesomeIcon icon={faXmark} />
           </IconButton>
         </div>
