@@ -6,7 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
 import styles from './Filters.module.scss';
-import { clearFilters, removeFilter, selectActiveFilterView, setFilterView } from '../../slices/filterSlice';
+import {
+  clearFilters,
+  removeFilter,
+  selectActiveFilterView,
+  selectFilterState,
+  setFilterView,
+} from '../../slices/filterSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
 
@@ -14,6 +20,7 @@ import ConfirmationModal from '../ConfirmationModal';
 
 const Filters: React.FC = () => {
   const dispatch = useDispatch();
+  const activeStateFilters = useSelector(selectFilterState);
   const activeFilters = useSelector(selectActiveFilterView);
   const displayMetas = useDisplayMetas();
   const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
@@ -48,7 +55,6 @@ const Filters: React.FC = () => {
 
   const handleConfirm = () => {
     if (valueToRemove.length === 0) {
-      setConfirmationModalOpen(!confirmationModalOpen);
       dispatch(setFilterView({ name: '', which: 'removeActive' }));
       dispatch(
         setLayout({
@@ -75,17 +81,47 @@ const Filters: React.FC = () => {
 
   const handleFilterChange = (e: SyntheticEvent, value: { varname: string }[]) => {
     const addedItem = value[value.length - 1];
+    const removedItem = selectedFilterVariables.find((item: { varname: string }) => value.indexOf(item) === -1);
+
+    if (
+      activeStateFilters.find((filter) => filter.varname === removedItem?.varname) ||
+      (activeStateFilters.length > 0 && value.length === 0)
+    ) {
+      if (value.length === 0) {
+        setConfirmationModalOpen(!confirmationModalOpen);
+        setValueToRemove(value);
+        return;
+      }
+
+      if (value.length < selectedFilterVariables.length) {
+        setConfirmationModalOpen(!confirmationModalOpen);
+        setValueToRemove(value);
+        return;
+      }
+    }
+
     if (value.length === 0) {
-      setConfirmationModalOpen(!confirmationModalOpen);
-      setValueToRemove(value);
+      dispatch(setFilterView({ name: '', which: 'removeActive' }));
+      dispatch(
+        setLayout({
+          page: 1,
+          type: 'layout',
+        }),
+      );
       return;
     }
 
     if (value.length < selectedFilterVariables.length) {
-      setConfirmationModalOpen(!confirmationModalOpen);
-      setValueToRemove(value);
+      dispatch(setFilterView({ name: removedItem?.varname as string, which: 'remove' }));
+      dispatch(
+        setLayout({
+          page: 1,
+          type: 'layout',
+        }),
+      );
       return;
     }
+
     setSelectedFilterVariables(value);
     dispatch(setFilterView({ name: addedItem.varname, which: 'add' }));
   };
