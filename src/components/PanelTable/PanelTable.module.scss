@@ -39,6 +39,14 @@
     &Content {
       display: flex;
       justify-content: space-between;
+
+      &Text {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 95px;
+        margin-right: 5px;
+      }
     }
 
     &Link {
