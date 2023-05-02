@@ -109,7 +109,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       header: 'Snapshot',
       accessorKey: 'Snapshot',
       enableSorting: false,
-      size: 100,
+      size: 110,
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
