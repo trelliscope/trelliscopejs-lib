@@ -2,6 +2,7 @@ import React from 'react';
 import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { Tooltip } from '@mui/material';
 import {
   INPUT_TYPE_RADIO,
   INPUT_TYPE_TEXT,
@@ -74,29 +75,41 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
             <PanelTableLabelCell value={label.varname} label={label.label} />
             <td className={styles.panelTableCell}>
               <div className={styles.panelTableCellContent}>
-                {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
-                {label.type === META_TYPE_FACTOR &&
-                  getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
-                {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE) && data[label.varname]}
-                {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
-                {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
-                  <FormattedNumber
-                    value={data[label.varname] as number}
-                    isCurrency={label.type === META_TYPE_CURRENCY}
-                    currencyCode={label.code}
-                    maximumFractionDigits={label.digits}
-                  />
-                )}
-                {label.type === META_TYPE_HREF && data[label.varname] && (
-                  <a
-                    className={styles.panelTableCellLink}
-                    href={data[label.varname] as string}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-                  </a>
-                )}
+                <Tooltip
+                  title={
+                    label.type === META_TYPE_FACTOR
+                      ? getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])
+                      : data[label.varname]
+                  }
+                  placement="left"
+                  arrow
+                >
+                  <div className={styles.panelTableCellContentText}>
+                    {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
+                    {label.type === META_TYPE_FACTOR &&
+                      getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
+                    {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE) && data[label.varname]}
+                    {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
+                    {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
+                      <FormattedNumber
+                        value={data[label.varname] as number}
+                        isCurrency={label.type === META_TYPE_CURRENCY}
+                        currencyCode={label.code}
+                        maximumFractionDigits={label.digits}
+                      />
+                    )}
+                    {label.type === META_TYPE_HREF && data[label.varname] && (
+                      <a
+                        className={styles.panelTableCellLink}
+                        href={data[label.varname] as string}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                      </a>
+                    )}
+                  </div>
+                </Tooltip>
                 {onLabelRemove && (
                   <button type="button" className={styles.panelTableClose} onClick={() => onLabelRemove(label.varname)}>
                     <FontAwesomeIcon icon={faXmark} />

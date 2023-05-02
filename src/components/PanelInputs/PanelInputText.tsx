@@ -1,7 +1,7 @@
 import React from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ClickAwayListener, Popover, TextField } from '@mui/material';
+import { ClickAwayListener, Popover, TextField, Tooltip } from '@mui/material';
 import styles from './PanelInputs.module.scss';
 import { useStoredInputValue } from '../../inputUtils';
 
@@ -25,7 +25,9 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
   return (
     <div className={styles.panelInputText} ref={anchorRef}>
       <div className={styles.panelInputTextButtonContainer}>
-        <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+        <Tooltip title={getStoredValue()} placement="left" arrow>
+          <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+        </Tooltip>
         <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
           <FontAwesomeIcon icon={faPencil} />
         </button>
