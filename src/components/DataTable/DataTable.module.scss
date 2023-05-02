@@ -18,6 +18,8 @@
   }
 
   &PanelGraphic {
+    display: flex;
+
     &Expand {
       display: none;
       position: absolute;
