@@ -21,19 +21,17 @@ const HowToUse: React.FC = () => (
       <strong>Interactivity: </strong>
       When there are many panels, it is useful to be able to navigate to which panels you want to view and make
       panel-to-panel comparisons by sorting and filtering the panels based on various criteria. Trelliscope provides this
-      interactivity through panel metrics called&nbsp;
-      <em>metas</em>.
+      interactivity through panel meta data.
     </div>
     <p>
-      There are multiple modes of interaction with panels, indicated by the four buttons on the left sidebar of the
-      application: &nbsp;
-      <strong>Grid</strong>
+      There are multiple modes of interaction with panels: &nbsp;
+      <strong>Layout</strong>
       ,&nbsp;
-      <strong>Labels</strong>
+      <strong>Sort</strong>
       ,&nbsp;
       <strong>Filter</strong>
       ,&nbsp;and&nbsp;
-      <strong>Sort</strong>.
+      <strong>Labels</strong>.
     </p>
     <div className={styles.howToUseContentContainer}>
       <div className={styles.howToUseHi}>
@@ -41,23 +39,18 @@ const HowToUse: React.FC = () => (
       </div>
       <div>
         &nbsp;
-        <strong>Grid: </strong>
-        In the &quot;Grid&quot; sidebar, you can specify the layout of the grid of panels you wish to display, specifying the
-        number of columns of the grid.
+        <strong>Layout: </strong>
+        In the app controls header, you can switch between <strong>grid</strong> and <strong>table</strong> layout views. The grid view arranges the panels in a grid, and you can specify how many panels you would like to view simultaneously by increasing the number of columns. Panels will fill the available space of the screen. In table view, you can view all of your data as a table with a thumbnail of the panels as the left-most column of the table. You can drag the column header to resize the thumbnails. In either grid or table view, you can use the pagination controls or left and right keyboard arrows to flip through the panels.
       </div>
     </div>
     <div className={styles.howToUseContentContainer}>
       <div className={styles.howToUseHi}>
-        <FontAwesomeIcon icon={faTags} />
+        <FontAwesomeIcon icon={faSort} />
       </div>
       <div>
         &nbsp;
-        <strong>Labels: </strong>
-        In the &quot;Labels&quot; sidebar, you can specify the panel metrics that you wish to see displayed under each panel
-        visualization in the grid by clicking the checkboxes. This can be useful for additional context along with the
-        visualization being shown. Note that labels can also be removed by directly hovering over the label in the grid view
-        and clicking the &quot;x&quot; button that appears. Labels are also automatically added when you specify a new
-        variable to sort or filter on.
+        <strong>Sort: </strong>
+        You can sort the panels by any number of variables. You can add a sorting variable by clicking the &quot;+&quot; icon in the &quot;sort&quot; section of the app controls header. You can toggle the direction of the sort (ascending or descending) by clicking on an existing sort variable. You can remove a sorting variable by clicking the &quot;x&quot; icon to the right of the sorting variable name. When in table view, you can also click column headers to set or toggle sort order. Note that factor variables are not sorted alphabetically but according to the order of their factor levels.
       </div>
     </div>
     <div className={styles.howToUseContentContainer}>
@@ -67,11 +60,10 @@ const HowToUse: React.FC = () => (
       <div>
         &nbsp;
         <strong>Filter: </strong>
-        The &quot;Filter&quot; sidebar provides various ways to filter the panels being displayed based on the panel metrics.
-        A list of variables is available as buttons. Clicking a button will produce a visual distribution of the variable.
+        The app provides visual controls for that allow you to interactively filter the panels based on meta data variables. You can add variables to filter on by opening the filter sidebar, which can be done by clicking the &quot;Filters&quot; button in the app controls header. You can click &quot;Show/Hide Filters&quot; to select variables that you would like to filter on. A visual distribution of the varible will become available in the sidebar for you to interact with. Note that even if not filtering on a variable, it can be useful to view its distribution in relation to the panels being displayed.
         <p className={styles.howToUseP2}>
           <strong>Categorical filter: </strong>
-          For categorical variables, a bar chart is provided, showing the the possible values of the variable with the size
+          For categorical variables, a bar chart is provided, showing the the possible values of the variable, with the size
           of the bars relating to the count of panels available under the current filtering state of all other variables. A
           bar is active if its color is highlighted. The bar chart shows active bars first followed by inactive bars.
           Clicking on a bar in this chart that is not active will cause only panels with the attribute of the clicked bar to
@@ -111,24 +103,17 @@ const HowToUse: React.FC = () => (
     </div>
     <div className={styles.howToUseContentContainer}>
       <div className={styles.howToUseHi}>
-        <FontAwesomeIcon icon={faSort} />
+        <FontAwesomeIcon icon={faTags} />
       </div>
       <div>
         &nbsp;
-        <strong>Sort: </strong>
-        In the &quot;Sort&quot; sidebar, a list of variables which are currently being sorted by (if any) will be listed at
-        the top, followed by a list of &quot;More variables&quot; that can added to the sorting specification. Panels are
-        ordered primarily according to the topmost sort variable, and any subsuequent sorting variables specify secondary,
-        tertiary, etc. sorting. For an active sortig variable, clicking the blue icon with an arrow pointing up or down will
-        change the order of the sorting.
+        <strong>Labels: </strong>
+        In the &quot;Labels&quot; sidebar, you can specify the panel metrics that you wish to see displayed under each panel
+        visualization in the grid by clicking the checkboxes. This can be useful for additional context along with the
+        visualization being shown. Note that labels can also be removed by directly hovering over the label in the grid view
+        and clicking the &quot;x&quot; button that appears. Labels are also automatically added when you specify a new
+        variable to sort or filter on.
       </div>
-    </div>
-    <div className={styles.howToUseP}>
-      The active filter and sort state are displayed at the bottom of the page in the footer. Clicking the&nbsp;
-      <span className={styles.howToUseInlineIcon}>
-        <FontAwesomeIcon icon={faXmark} size="xs" />
-      </span>
-      &nbsp;button for anything listed in the footer will remove the sorting or filtering on that variable.
     </div>
   </div>
 );

@@ -58,7 +58,10 @@
             position: absolute;
             z-index: 1002;
             color: var(--white);
-            top: -1px;
+            // top: 1px;
+            // right: 1px;
+            font-size: 12px;
+            font-weight: 500;
           }
 
           svg {

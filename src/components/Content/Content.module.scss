@@ -22,7 +22,7 @@
 
   &Graphic {
     display: flex;
-    padding: var(--padding-4);
+    padding: var(--padding-2);
 
     img {
       max-width: 100%;
@@ -46,7 +46,7 @@
     border-bottom: var(--border-2);
 
     &Cell {
-      padding: var(--padding-4);
+      padding: var(--padding-2);
       white-space: nowrap;
 
       &:first-of-type {

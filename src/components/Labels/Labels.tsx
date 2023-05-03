@@ -7,7 +7,7 @@ import { labelsSelector } from '../../selectors';
 import { useMetaGroupsWithInputs, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import { setLabels } from '../../slices/labelsSlice';
 import VariableSelector from '../VariableSelector';
-import styles from './Labels.module.scss';
+// import styles from './Labels.module.scss';
 
 const Labels: React.FC = () => {
   const dispatch = useDispatch();

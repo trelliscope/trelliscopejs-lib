@@ -1,5 +1,21 @@
 .helpInfo {
+  &Icon {
+    margin-top: -9px;
+    opacity: 0.7;
+  }
+
   &Dialog {
+    &Website {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--black);
+      opacity: 0.8;
+
+      a {
+        color: var(--black);
+      }
+    }
+
     &Headline {
       font-size: var(--text-7xl);
       padding-top: var(--padding-10);

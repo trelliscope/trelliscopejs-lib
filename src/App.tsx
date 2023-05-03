@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppBar, Box, Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
 // import Header from './components/Header';
-import Body from './components/Body';
-import Footer from './components/Footer';
+// import Body from './components/Body';
+// import Footer from './components/Footer';
 import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';

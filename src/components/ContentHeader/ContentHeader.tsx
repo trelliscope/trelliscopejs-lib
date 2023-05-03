@@ -10,6 +10,7 @@ import { setSidebarActive } from '../../slices/uiSlice';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import Pagination from '../Pagination';
 import ColumnSelector from '../ColumnSelector/ColumnSelector';
+import LayoutSelector from '../LayoutSelector/LayoutSelector';
 import { selectLayout } from '../../slices/layoutSlice';
 import Sort from '../Sort';
 import Labels from '../Labels';
@@ -52,7 +53,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
                   <FontAwesomeIcon icon={faCircle} />
                   <span
                     className={styles.contentHeaderControlsItemToggleBadgeNum}
-                    style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-3px' }}
+                    style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-1px' }}
                   >
                     {activeFilters.length}
                   </span>
@@ -80,6 +81,9 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
               </div>
             </>
           )}
+          <div className={styles.contentHeaderControlsItem}>
+            <LayoutSelector />
+          </div>
         </div>
         <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
       </div>

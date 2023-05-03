@@ -23,9 +23,11 @@ const Share: React.FC = () => {
 
   return (
     <div className={styles.share}>
-      <IconButton onClick={handleShareModal}>
-        <FontAwesomeIcon icon={faShareNodes} />
-      </IconButton>
+      <Tooltip title="Share">
+        <IconButton onClick={handleShareModal}>
+          <FontAwesomeIcon icon={faShareNodes} />
+        </IconButton>
+      </Tooltip>
       <Dialog
         open={isOpen}
         className="trelliscope-app"
