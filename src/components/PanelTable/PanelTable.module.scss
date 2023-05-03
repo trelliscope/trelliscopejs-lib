@@ -4,6 +4,7 @@
   list-style-type: none;
   margin: 0;
   border-collapse: collapse;
+  table-layout: fixed;
 
   &__compact {
     .panelTableCell {
@@ -31,13 +32,17 @@
 
   &Cell {
     padding: var(--padding-8);
+    text-overflow: ellipsis;
+    overflow: hidden;
     white-space: nowrap;
+    width: 70%;
 
     &:first-of-type {
       white-space: nowrap;
       font-weight: bold;
       border-right: var(--border-2);
       cursor: default;
+      width: 30%;
     }
 
     &Content {
@@ -45,11 +50,10 @@
       justify-content: space-between;
 
       &Text {
+        margin-right: 5px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        max-width: 95px;
-        margin-right: 5px;
       }
     }
 
