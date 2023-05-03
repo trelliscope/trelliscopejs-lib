@@ -72,11 +72,15 @@ body {
 }
 
 div[role='tooltip'] {
-  z-index: 8001;
+  z-index: 8002 !important;
 }
 
 div[role='presentation'] {
   z-index: 8001;
+}
+
+.MuiPopover-root {
+  z-index: 8002 !important;
 }
 
 .MuiDialog-root {

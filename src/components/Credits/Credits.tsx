@@ -33,7 +33,19 @@ const Credits: React.FC = () => (
       &nbsp;&ndash; submit issues and feature requests there.
     </p>
     <p>
-      Many thanks to the Trelliscope <a href="https://github.com/trelliscope/trelliscopejs-lib/graphs/contributors" target="_blank" rel="noopener noreferrer">contributors</a> and <a href="https://github.com/trelliscope/trelliscope#acknowledgements" target="_blank" rel="noopener noreferrer">funders</a>.
+      Many thanks to the Trelliscope{' '}
+      <a
+        href="https://github.com/trelliscope/trelliscopejs-lib/graphs/contributors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        contributors
+      </a>{' '}
+      and{' '}
+      <a href="https://github.com/trelliscope/trelliscope#acknowledgements" target="_blank" rel="noopener noreferrer">
+        founders
+      </a>
+      .
     </p>
   </div>
 );

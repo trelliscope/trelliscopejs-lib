@@ -11,11 +11,7 @@ import styles from './HeaderNew.module.scss';
 import HelpInfo from '../HelpInfo';
 import Share from '../Share';
 
-interface HeaderNewProps {
-  something?: string;
-}
-
-const HeaderNew: React.FC<HeaderNewProps> = () => {
+const HeaderNew: React.FC = () => {
   const { data: displayList = [] } = useDisplayList();
   const [hasInputs, setHasInputs] = useState(false);
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
@@ -32,7 +28,13 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
   }, [displayInfo]);
 
   return (
-    <AppBar className={styles.headerNewAppBar} position="absolute" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default" elevation={0}>
+    <AppBar
+      className={styles.headerNewAppBar}
+      position="absolute"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      color="default"
+      elevation={0}
+    >
       <Toolbar className={styles.headerNewToolbar} disableGutters>
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
@@ -43,7 +45,12 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
                 {selectedDisplay?.name}
               </Typography>
               {selectedDisplay?.description && selectedDisplay?.description !== selectedDisplay?.name && (
-                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25', fontSize: '13px' }}>
+                <Typography
+                  variant="subtitle1"
+                  noWrap
+                  component="div"
+                  sx={{ flexGrow: 1, lineHeight: '1.25', fontSize: '13px' }}
+                >
                   {selectedDisplay?.description}
                 </Typography>
               )}
@@ -64,7 +71,7 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
             )}
             <div className={styles.headerNewTrelliscope}>
               Trelliscope
-            <HelpInfo />
+              <HelpInfo />
             </div>
             <FullscreenButton />
           </div>
