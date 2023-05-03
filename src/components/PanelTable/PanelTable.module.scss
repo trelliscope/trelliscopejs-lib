@@ -23,6 +23,10 @@
     &:last-of-type {
       border-bottom: none;
     }
+
+    &Missing {
+      color: var(--gray-600);
+    }
   }
 
   &Cell {
