@@ -71,7 +71,12 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
           </tr>
         ))}
         {labels.map((label) => (
-          <tr key={label.varname} className={styles.panelTableRow}>
+          <tr
+            key={label.varname}
+            className={
+              !data[label.varname] ? `${styles.panelTableRow} ${styles.panelTableRowMissing}` : styles.panelTableRow
+            }
+          >
             <PanelTableLabelCell value={label.varname} label={label.label} />
             <td className={styles.panelTableCell}>
               <div className={styles.panelTableCellContent}>

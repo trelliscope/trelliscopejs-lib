@@ -35,7 +35,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const { data: displayInfo } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [columnPinning, setColumnPinning] = useState({ left: ['Snapshot'] });
+  const [columnPinning, setColumnPinning] = useState({ left: ['Panel'] });
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
@@ -105,9 +105,9 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
     }));
 
     const imageColumn = {
-      id: 'Snapshot',
-      header: 'Snapshot',
-      accessorKey: 'Snapshot',
+      id: 'Panel',
+      header: 'Panel',
+      accessorKey: 'Panel',
       enableSorting: false,
       size: 110,
       // conflicts within table library, some of the types dont seem to be exported in the same way
@@ -193,7 +193,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           columns={columns}
           initialState={{
             columnPinning: {
-              left: ['Snapshot'],
+              left: ['Panel'],
             },
           }}
           state={{
