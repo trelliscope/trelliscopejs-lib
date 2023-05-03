@@ -24,7 +24,8 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     // @ts-ignore ts2554
     const data = groupBy(varname, 'number', (d: number) => {
       if (Number.isNaN(Number(d)) || d === undefined) return null;
-      if (d >= breaks[breaks.length - 1]) return breaks[breaks.length - 1];
+      if (log && Math.log10(d) >= breaks[breaks.length - 1]) return breaks[breaks.length - 1];
+      if (d >= breaks[breaks.length - 1] && !log) return breaks[breaks.length - 1];
       return breaks.find((b, i) => (log ? Math.log10(d) < breaks[i + 1] : d < breaks[i + 1]));
     });
 
