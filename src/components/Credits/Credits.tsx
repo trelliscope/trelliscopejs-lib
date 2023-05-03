@@ -43,7 +43,7 @@ const Credits: React.FC = () => (
       </a>{' '}
       and{' '}
       <a href="https://github.com/trelliscope/trelliscope#acknowledgements" target="_blank" rel="noopener noreferrer">
-        founders
+        funders
       </a>
       .
     </p>
