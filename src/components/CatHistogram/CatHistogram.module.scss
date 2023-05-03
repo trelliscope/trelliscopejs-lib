@@ -56,6 +56,16 @@
       line-height: 15px;
       font-size: var(--text-base);
       opacity: 0;
+      padding-right: 2px;
+    }
+
+    &Indicator {
+      position: absolute;
+      background: #448aff;
+      width: 3px;
+      height: 24px;
+      top: 0;
+      right: 0;
     }
   }
 }

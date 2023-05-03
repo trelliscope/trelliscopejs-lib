@@ -31,7 +31,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   const axisPad = 16;
   const xPad = 5;
   const innerWidth = width - xPad;
-  const barWidth = innerWidth / xDomain.length - Math.max((innerWidth * 0.12) / xDomain.length, 2);
+  const barWidth = innerWidth / xDomain.length - Math.max((innerWidth * 0.06) / xDomain.length, 2);
   const delta = xDomain[1] - xDomain[0];
   const xExtents = [xDomain[0], xDomain[xDomain.length - 1] + delta];
 
@@ -64,6 +64,8 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       setBrushActive(false);
     }
   };
+  const sel0 = selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]);
+  const sel1 = selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
 
   return (
     <svg width={width} height={height} className={styles.numHistogram}>
@@ -91,16 +93,20 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       />
       <NumHistogramBrush
         name={name}
-        selection={[
-          selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]),
-          selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]),
-        ]}
+        selection={[ sel0, sel1 ]}
         width={innerWidth}
         height={height - axisPad}
         x={xPad / 2}
         y={1}
         onBrushStart={handleBrushStart}
         onBrushEnd={handleBrushEnd}
+      />
+      <rect
+        x={sel0}
+        y={height - axisPad}
+        width={sel1 - sel0}
+        height={3}
+        style={{ fill: '#448aff' }}
       />
     </svg>
   );
