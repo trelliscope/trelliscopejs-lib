@@ -6,6 +6,8 @@
 
   &Graphic {
     padding: var(--padding-2);
+    display: flex;
+    justify-content: center;
     flex-grow: 1;
 
     :global(.MuiDialog-container) & {

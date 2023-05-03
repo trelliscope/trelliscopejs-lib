@@ -1,4 +1,8 @@
 .panelDialog {
+  div[role='dialog'] {
+    max-width: 800px !important;
+  }
+
   &Inner {
     max-width: calc(100% - var(--padding-12)) !important;
     //max-height: calc(100% - 60px) !important;
