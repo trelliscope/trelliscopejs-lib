@@ -92,7 +92,7 @@ const Pagination: React.FC = () => {
       </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
-          <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
+          <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
             <FontAwesomeIcon icon={faBackwardStep} size="sm" />
           </IconButton>
         </div>
@@ -100,7 +100,7 @@ const Pagination: React.FC = () => {
       </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
-          <IconButton disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
+          <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
             <FontAwesomeIcon icon={faChevronLeft} size="sm" />
           </IconButton>
         </div>
@@ -108,7 +108,7 @@ const Pagination: React.FC = () => {
       </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
-          <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageRight()}>
+          <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageRight()}>
             <FontAwesomeIcon icon={faChevronRight} size="sm" />
           </IconButton>
         </div>
@@ -116,7 +116,7 @@ const Pagination: React.FC = () => {
       </div>
       <div className={styles.paginationButtonWrap}>
         <div className={styles.paginationButtonDiv}>
-          <IconButton disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
+          <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
             <FontAwesomeIcon icon={faForwardStep} size="sm" />
           </IconButton>
         </div>

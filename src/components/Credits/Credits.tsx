@@ -8,7 +8,7 @@ const Credits: React.FC = () => (
       <a href="http://ryanhafen.com" target="_blank" rel="noopener noreferrer">
         Ryan Hafen
       </a>
-      , 2019.
+      , 2023.
     </p>
     <p>
       Built with&nbsp;
@@ -17,7 +17,7 @@ const Credits: React.FC = () => (
       </a>
       &nbsp;and several other awesome libraries listed&nbsp;
       <a
-        href="https://github.com/hafen/trelliscopejs-lib/blob/master/package.json"
+        href="https://github.com/trelliscope/trelliscopejs-lib/blob/master/package.json"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -27,15 +27,13 @@ const Credits: React.FC = () => (
     </p>
     <p>
       Source code available on&nbsp;
-      <a href="https://github.com/hafen/trelliscopejs-lib/" target="_blank" rel="noopener noreferrer">
+      <a href="https://github.com/trelliscope/trelliscopejs-lib/" target="_blank" rel="noopener noreferrer">
         github
       </a>
       &nbsp;&ndash; submit issues and feature requests there.
     </p>
     <p>
-      Thanks to Bill Cleveland for ideas upon which this is built, to Saptarshi Guha for creating a multi-panel plot viewer
-      prototype many years ago that inspired initial work, and to Barret Schloerke for the introduction to React and
-      discussions about the interface.
+      Many thanks to the Trelliscope <a href="https://github.com/trelliscope/trelliscopejs-lib/graphs/contributors" target="_blank" rel="noopener noreferrer">contributors</a> and <a href="https://github.com/trelliscope/trelliscope#acknowledgements" target="_blank" rel="noopener noreferrer">funders</a>.
     </p>
   </div>
 );

@@ -2,7 +2,6 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import LayoutSelector from '../LayoutSelector/LayoutSelector';
 import DisplaySelect from '../DisplaySelect';
 import FullscreenButton from '../FullscreenButton';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -33,8 +32,8 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
   }, [displayInfo]);
 
   return (
-    <AppBar position="absolute" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default">
-      <Toolbar>
+    <AppBar className={styles.headerNewAppBar} position="absolute" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} color="default" elevation={0}>
+      <Toolbar className={styles.headerNewToolbar} disableGutters>
         <div className={styles.headerNew}>
           <div className={styles.headerNewDisplayInfo}>
             <DisplayInfo />
@@ -43,24 +42,30 @@ const HeaderNew: React.FC<HeaderNewProps> = () => {
               <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
                 {selectedDisplay?.name}
               </Typography>
-              {selectedDisplay?.description && (
-                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
+              {selectedDisplay?.description && selectedDisplay?.description !== selectedDisplay?.name && (
+                <Typography variant="subtitle1" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25', fontSize: '13px' }}>
                   {selectedDisplay?.description}
                 </Typography>
               )}
             </div>
           </div>
           <div className={styles.headerNewRight}>
-            <Share />
+            <div className={styles.headerNewIconButton}>
+              <Share />
+            </div>
             {hasInputs && hasLocalStorage && (
-              <ExportInputDialog
-                displayInfo={displayInfo as IDisplay}
-                hasInputs={hasInputs}
-                hasLocalStorage={hasLocalStorage}
-              />
+              <div className={styles.headerNewIconButton}>
+                <ExportInputDialog
+                  displayInfo={displayInfo as IDisplay}
+                  hasInputs={hasInputs}
+                  hasLocalStorage={hasLocalStorage}
+                />
+              </div>
             )}
-            <LayoutSelector />
+            <div className={styles.headerNewTrelliscope}>
+              Trelliscope
             <HelpInfo />
+            </div>
             <FullscreenButton />
           </div>
         </div>

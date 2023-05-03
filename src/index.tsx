@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
+import '@fontsource/jost/500.css';
 import '@fontsource/source-code-pro/300.css';
 import '@fontsource/source-code-pro/600.css';
 
@@ -221,7 +222,7 @@ window.trelliscopeApp = trelliscopeApp;
 // trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('389b2253', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
+trelliscopeApp('389b2253', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
 // trelliscopeApp('0c8b1613', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
 // trelliscopeApp('3a3019d9', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
 // trelliscopeApp('c060b1f7', '_test/trelliscope-examples3/mars/config.jsonp', { logger: true });

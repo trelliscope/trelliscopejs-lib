@@ -80,7 +80,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
   return (
     <div>
       <Tooltip title="Export Inputs">
-        <IconButton aria-label="close" onClick={handleOpen} sx={{ marginRight: '20px' }}>
+        <IconButton aria-label="close" onClick={handleOpen}>
           <FontAwesomeIcon icon={faFileArrowDown} />
         </IconButton>
       </Tooltip>

@@ -8,7 +8,7 @@ import { fullscreenSelector, singlePageAppSelector } from '../../selectors';
 import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
 import { origHeightSelector, origWidthSelector } from '../../selectors/ui';
-import styles from './FullscreenButton.module.scss';
+// import styles from './FullscreenButton.module.scss';
 
 const FullscreenButton: React.FC = () => {
   const dispatch = useDispatch();

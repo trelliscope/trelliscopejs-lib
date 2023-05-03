@@ -21,7 +21,7 @@ const SidebarNew: React.FC = () => {
         flexShrink: 0,
         height: 'inherit',
         '& .MuiDrawer-paper': {
-          paddingTop: '63px',
+          paddingTop: '54px',
           width: drawerWidth,
           boxSizing: 'border-box',
           overflowX: 'hidden',

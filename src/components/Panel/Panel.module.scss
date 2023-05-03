@@ -6,7 +6,7 @@
 
   &Graphic {
     display: flex;
-    padding: var(--padding-4);
+    padding: var(--padding-2);
     flex-grow: 1;
 
     :global(.MuiDialog-container) & {
@@ -54,7 +54,7 @@
     }
 
     &Cell {
-      padding: 0 var(--padding-4);
+      padding: 0 var(--padding-2);
       white-space: nowrap;
       height: var(--panelLabel-height);
       line-height: var(--panelLabel-height);

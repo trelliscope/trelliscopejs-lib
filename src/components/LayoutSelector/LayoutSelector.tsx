@@ -26,6 +26,7 @@ const LayoutSelector: React.FC = () => {
       <span className={styles.layoutSelectorText}>Layout</span>
       <FormControl size="small">
         <Select
+          sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
           labelId="layout-label"
           id="layout"
           value={viewLayout}

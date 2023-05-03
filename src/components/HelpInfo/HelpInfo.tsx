@@ -29,8 +29,8 @@ const HelpInfo: React.FC = () => {
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
   return (
-    <div>
-      <IconButton onClick={handleToggle}>
+    <div className={styles.helpInfoIcon}>
+      <IconButton color="inherit" size="small" onClick={handleToggle}>
         <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
       </IconButton>
       <Dialog
@@ -39,8 +39,16 @@ const HelpInfo: React.FC = () => {
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
         onClose={handleToggle}
+        maxWidth="md"
       >
-        <DialogTitle id="dialog-viewer-title">{`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}</DialogTitle>
+        <DialogTitle id="dialog-viewer-title">
+          <div>
+            {`Trelliscope v${process.env.REACT_APP_VERSION}`}
+          </div>
+          <div className={styles.helpInfoDialogWebsite}>
+            Learn more at <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">trelliscope.org</a>
+          </div>
+        </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
             <Tab label="How to Use" />
