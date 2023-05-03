@@ -62,7 +62,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                           minWidth: 150,
                           pl: 2,
                           pr: 2,
-                          pt: 1,
+                          pt: 2,
                           pb: 1,
                           backgroundColor: '#42a5f5',
                           zIndex: 2001,

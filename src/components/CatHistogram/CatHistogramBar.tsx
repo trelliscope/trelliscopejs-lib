@@ -54,6 +54,9 @@ const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
         </div>
       </div>
       <div className={styles.catHistogramBarValue}>{value}</div>
+      {active && (
+        <div className={styles.catHistogramBarIndicator} />
+      )}
     </div>
   );
 };
