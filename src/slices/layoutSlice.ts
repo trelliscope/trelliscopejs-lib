@@ -63,6 +63,10 @@ export const layoutSlice = createSlice({
           obj.page = 1;
         }
       }
+      // for now, if the user changes view, we go back to page 1
+      if (obj.viewtype) {
+        obj.page = 1;
+      }
       return { ...state, ...obj };
     },
   },

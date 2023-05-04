@@ -21,6 +21,27 @@ interface ContentProps {
   rerender: never;
 }
 
+function getDataTableRowCount() {
+  const tableRows = document.querySelectorAll('.MuiTableRow-root');
+  // tableContentRef.current?.clientHeight
+  // we know that app header + subheader is 100
+  const tableHeight = window.innerHeight - 100 - 1;
+
+  let rowCount = 1;
+  if (tableHeight && tableRows.length > 0) {
+    // first row is header but all subsequent rows should have same height
+    const headerHeight = tableRows[0].clientHeight;
+    if (tableRows.length >= 2) {
+      const rowHeight = tableRows[1].clientHeight;
+      rowCount = Math.floor(((tableHeight || 0) - headerHeight) / rowHeight);
+      if (rowCount === 0) {
+        rowCount = 1;
+      }
+    }
+  }
+  return rowCount;
+}
+
 const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const tableContentRef = useRef<HTMLDivElement>(null);
@@ -44,26 +65,9 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const handleTableResize = () => {
     if (tableContentRef.current) {
-      const tableRows = document.querySelectorAll('.MuiTableRow-root');
-      const heights: number[] = [];
-      let totalHeight = 0;
-
-      tableRows.forEach((row) => {
-        const rowHeight = row.clientHeight;
-        heights.push(rowHeight);
-        totalHeight += rowHeight;
-      });
-
-      // we need to remove the first array element because it is the header height
-      // and it skews the average on larger rows with images
-      heights.shift();
-
-      const avgRowHeight = heights.length > 1 ? Math.floor(totalHeight / heights.length) : heights[0];
-      if (tableContentRef.current?.clientHeight) {
-        const rowCount = Math.floor((tableContentRef.current.clientHeight - 95) / avgRowHeight);
-        if (rowCount !== layout.nrow && rowCount > 0) {
-          dispatch(setLayout({ nrow: rowCount }));
-        }
+      const rowCount = getDataTableRowCount();
+      if (rowCount !== layout.nrow) {
+        dispatch(setLayout({ nrow: rowCount }));
       }
     }
   };

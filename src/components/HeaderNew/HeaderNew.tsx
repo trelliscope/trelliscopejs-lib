@@ -31,7 +31,10 @@ const HeaderNew: React.FC = () => {
     <AppBar
       className={styles.headerNewAppBar}
       position="absolute"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ 
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        '&.MuiAppBar-root': { background: '#fefefe' }
+      }}
       color="default"
       elevation={0}
     >
