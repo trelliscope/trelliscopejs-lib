@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
 import { labelsSelector } from '../../selectors';
@@ -46,7 +46,6 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const [contentWidth, setContentWidth] = useState('100%');
   const { data } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
@@ -54,7 +53,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
   const relatedDisplayNames = useRelatedDisplayNames();
-  const [labelHeight, gridGap] = getCustomProperties(['--panelLabel-height', '--panelGridGap']) as number[];
+  const [labelHeight, gridGap, panelPadding] = getCustomProperties(['--panelLabel-height', '--panelGridGap', '--padding-2']) as number[];
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
   const {
@@ -81,48 +80,71 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     layout?.viewtype,
   ]);
 
-  const handleResize = () => {
-    if (contentRef.current) {
+  // const handleResize = (rowCount) => {
+
+  //     debugger; // eslint-disable-line
+
+  //     if (rowCount !== layout.nrow) {
+  //       dispatch(setLayout({ nrow: rowCount }));
+  //     }
+  //   }
+  // };
+
+  const getCalcs = () => {
+    const res = {
+      width: 0,
+      contentWidth: '100%',
+      nrow: 1
+    };
+    if (layout.viewtype === 'grid') {
       const { ncol } = layout;
       const labelCount = labels.length;
 
       const aspectRatio = displayInfo?.panelaspect || 1;
 
-      const panelWidth = (width - (gridGap * ncol) / 2) / ncol;
+      const panelWidth = (width - ((gridGap + 4 * panelPadding) * ncol + gridGap + 2)) / ncol;
 
-      const baseHeight = labelHeight * labelCount + (gridGap + gridGap / 2);
-      const tableHeight = labelCount > 1 ? baseHeight + 20 : baseHeight;
+      const tableHeight = labelHeight * labelCount;
 
-      const panelHeight = panelWidth / aspectRatio + tableHeight;
+      const panelHeight = panelWidth / aspectRatio + 4 * panelPadding + tableHeight + gridGap;
 
+      res.width = panelWidth;
       if (panelHeight > height) {
-        const newWidth = (height - tableHeight - gridGap * 2) * aspectRatio;
-
-        setContentWidth(`${newWidth}px`);
-      } else if (contentWidth !== '100%') {
-        setContentWidth('100%');
+        const newWidth = (height - tableHeight - gridGap * 2 - panelPadding * 4) * aspectRatio;
+        res.width = newWidth;
+        res.contentWidth = `${newWidth}px`;
       }
-
       const rowCount = Math.max(Math.floor(height / panelHeight), 1);
-
-      if (rowCount !== layout.nrow) {
-        dispatch(setLayout({ nrow: rowCount }));
-      }
+      res.nrow = rowCount;
     }
-  };
+    return res;
+  }
 
-  useEffect(handleResize, [
+  const calcs = useMemo(getCalcs, [
     width,
-    layout.ncol,
-    layout.viewtype,
     labels.length,
     layout,
     displayInfo?.panelaspect,
     labelHeight,
+    panelPadding,
     gridGap,
     height,
+  ])
+
+  const setCalcs = () => {
+    if (layout.viewtype === 'grid') {
+      if (calcs.nrow !== layout.nrow) {
+        dispatch(setLayout({ nrow: calcs.nrow }));
+      }
+    }
+  }
+
+  useEffect(setCalcs, [
+    layout.nrow,
+    layout.viewtype,
+    calcs.contentWidth,
+    calcs.nrow,
     dispatch,
-    contentWidth,
   ]);
 
   const panelDialog = useSelector(selectPanelDialog);
@@ -149,7 +171,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
-    width: contentWidth,
+    width: calcs.contentWidth,
   };
 
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
@@ -181,6 +203,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                         src={getPanelSrc(d, name).toString()}
                         alt={name}
                         aspectRatio={displayInfo?.panelaspect}
+                        imageWidth={calcs.width}
                         key={`${d[metaIndex]}_${name}`}
                       />
                     ))}
@@ -214,6 +237,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
             src={getPanelSrc(panelDialogData || {}, name)?.toString()}
             alt={name}
             key={`${panelDialog.panel}_${name}`}
+            imageWidth={-1}
+            aspectRatio={displayInfo?.panelaspect}
           />
         ))}
       </PanelDialog>

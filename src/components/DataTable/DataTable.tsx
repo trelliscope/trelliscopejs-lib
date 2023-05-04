@@ -130,10 +130,11 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
             alt={cell.row.original.__PANEL_KEY__}
             aspectRatio={displayInfo?.panelaspect}
+            imageWidth={-1}
             key={`${cell.row.index}_${displayInfo?.name}`}
           />
         </div>
-      ),
+      )
     };
 
     return [imageColumn, ...columnData];
