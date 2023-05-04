@@ -106,7 +106,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
 
     const imageColumn = {
       id: 'Panel',
-      header: 'Panel',
+      header: 'panel',
       accessorKey: 'Panel',
       enableSorting: false,
       size: 110,
@@ -191,6 +191,9 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       {data?.length > 0 && (
         <MaterialReactTable
           columns={columns}
+          muiTablePaperProps={{
+            elevation: 0
+          }}
           initialState={{
             columnPinning: {
               left: ['Panel'],
