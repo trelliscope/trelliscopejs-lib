@@ -128,5 +128,7 @@ export const useStoredInputValue = (panelKey: string, name: string) => {
     localStorage.setItem(lsKey, value);
   };
 
-  return { setStoredValue, getStoredValue };
+  const clearStoredValue = () => localStorage.removeItem(lsKey);
+
+  return { setStoredValue, getStoredValue, clearStoredValue };
 };
