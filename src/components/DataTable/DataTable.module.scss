@@ -21,11 +21,22 @@
     display: flex;
     margin: -5px;
 
+    // width: var(--col-Panel-size);
+    // height: var(--col-Panel-size);
+
     &Expand {
       display: none;
       position: absolute;
       right: 0;
       top: 0;
+    }
+
+    // transform: scale(0.2);
+    // transform-origin: 0;
+    iframe {
+      // width: 1000px;
+      // height: 625px;
+      border: none;
     }
   }
 
