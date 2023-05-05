@@ -10,7 +10,7 @@ interface PanelInputRadiosProps {
 }
 
 const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey }) => {
-  const { getStoredValue, setStoredValue } = useStoredInputValue(panelKey, name);
+  const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
 
   return (
     <RadioGroup
@@ -19,6 +19,12 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
       value={getStoredValue() || ''}
       onChange={(e) => {
         setStoredValue(e.target.value);
+      }}
+      onClick={() => {
+        if (getStoredValue()) {
+          setStoredValue('');
+          clearStoredValue();
+        }
       }}
     >
       {options.map((option) => (
