@@ -6,7 +6,7 @@ interface PanelGraphicProps {
   src: string;
   alt: string;
   aspectRatio?: number;
-  imageWidth: number | string;
+  imageWidth: number;
 }
 
 const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio, imageWidth }) => (
@@ -14,7 +14,7 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio
     className={styles.panelGraphic}
     style={{
       width: imageWidth,
-      height: `calc(${imageWidth} / ${(aspectRatio || 1)})`,
+      height: imageWidth / (aspectRatio || 1),
       aspectRatio: imageWidth === -1 ? (aspectRatio || 1) : 'unset'
     }}
   >

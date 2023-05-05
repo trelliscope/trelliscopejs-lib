@@ -103,20 +103,24 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const aspectRatio = displayInfo?.panelaspect || 1;
 
       const panelWidth = (width - ((gridGap + 4 * panelPadding) * ncol + gridGap + 2)) / ncol;
+      // const panelWidth = (width - ((gridGap) * ncol + gridGap + 2)) / ncol;
 
       const tableHeight = labelHeight * labelCount;
 
       const panelHeight = panelWidth / aspectRatio + 4 * panelPadding + tableHeight + gridGap;
+      // const panelHeight = panelWidth / aspectRatio + tableHeight + gridGap;
 
       res.width = panelWidth;
       if (panelHeight > height) {
         const newWidth = (height - tableHeight - gridGap * 2 - panelPadding * 4) * aspectRatio;
+        // const newWidth = (height - tableHeight - gridGap * 2) * aspectRatio;
         res.width = newWidth;
         res.contentWidth = `${newWidth}px`;
       }
       const rowCount = Math.max(Math.floor(height / panelHeight), 1);
       res.nrow = rowCount;
     }
+    debugger; // eslint-disable-line
     return res;
   }
 
