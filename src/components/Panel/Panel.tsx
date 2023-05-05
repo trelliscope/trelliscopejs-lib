@@ -25,7 +25,9 @@ const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children, onClick }
 
   const handleRemoveLabel = (label: string) => {
     const newLabels = labels.map((labelItem) => labelItem.varname).filter((labelItem) => labelItem !== label);
-    dispatch(setLabels(newLabels));
+    const newInputs = inputs.map((inputItem) => inputItem.name).filter((inputItem) => inputItem !== label);
+    const newLabelsWithInputs = [...newLabels, ...newInputs];
+    dispatch(setLabels(newLabelsWithInputs));
   };
 
   return (
