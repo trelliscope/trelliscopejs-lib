@@ -53,7 +53,11 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
   const relatedDisplayNames = useRelatedDisplayNames();
-  const [labelHeight, gridGap, panelPadding] = getCustomProperties(['--panelLabel-height', '--panelGridGap', '--padding-2']) as number[];
+  const [labelHeight, gridGap, panelPadding] = getCustomProperties([
+    '--panelLabel-height',
+    '--panelGridGap',
+    '--padding-2',
+  ]) as number[];
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
   const {
@@ -94,7 +98,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     const res = {
       width: 0,
       contentWidth: '100%',
-      nrow: 1
+      nrow: 1,
     };
     if (layout.viewtype === 'grid') {
       const { ncol } = layout;
@@ -120,9 +124,9 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const rowCount = Math.max(Math.floor(height / panelHeight), 1);
       res.nrow = rowCount;
     }
-    debugger; // eslint-disable-line
+    // debugger; // eslint-disable-line
     return res;
-  }
+  };
 
   const calcs = useMemo(getCalcs, [
     width,
@@ -133,7 +137,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     panelPadding,
     gridGap,
     height,
-  ])
+  ]);
 
   const setCalcs = () => {
     if (layout.viewtype === 'grid') {
@@ -141,15 +145,9 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
         dispatch(setLayout({ nrow: calcs.nrow }));
       }
     }
-  }
+  };
 
-  useEffect(setCalcs, [
-    layout.nrow,
-    layout.viewtype,
-    calcs.contentWidth,
-    calcs.nrow,
-    dispatch,
-  ]);
+  useEffect(setCalcs, [layout.nrow, layout.viewtype, calcs.contentWidth, calcs.nrow, dispatch]);
 
   const panelDialog = useSelector(selectPanelDialog);
   const panelDialogData = useMetaDataByPanelKey(panelDialog.panel);

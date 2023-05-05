@@ -16,6 +16,7 @@ import Sort from '../Sort';
 import Labels from '../Labels';
 import { selectFilterState } from '../../slices/filterSlice';
 import styles from './ContentHeader.module.scss';
+import Views from '../Views/Views';
 
 interface ContentHeaderProps {
   tableRef: React.RefObject<null>;
@@ -81,6 +82,9 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
               </div>
             </>
           )}
+          <div className={styles.contentHeaderControlsItem}>
+            <Views />
+          </div>
           <div className={styles.contentHeaderControlsItem}>
             <LayoutSelector />
           </div>
