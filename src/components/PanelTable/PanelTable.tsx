@@ -62,7 +62,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   />
                 )}
                 {onLabelRemove && (
-                  <button type="button" className={styles.panelTableClose} onClick={() => onLabelRemove(input.label)}>
+                  <button type="button" className={styles.panelTableClose} onClick={() => onLabelRemove(input.name)}>
                     <FontAwesomeIcon icon={faXmark} />
                   </button>
                 )}
