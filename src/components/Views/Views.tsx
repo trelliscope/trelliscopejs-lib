@@ -44,8 +44,8 @@ const Views: React.FC = () => {
       <div>
         <Button
           sx={{ textTransform: 'capitalize', color: '#000' }}
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
+          id="views-button"
+          aria-controls={open ? 'views-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
@@ -53,7 +53,7 @@ const Views: React.FC = () => {
         >
           Views
         </Button>
-        <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
+        <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
           {views?.map((value) => (
             <MenuItem key={value.name} onClick={() => handleViewChange(value.state)}>
               {value.name}
