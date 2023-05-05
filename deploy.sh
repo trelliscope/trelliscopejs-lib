@@ -5,6 +5,8 @@ sed -i .bak 's/\.[a-fA-F0-9]\{20\}\.woff/.woff/g' build/static/css/*
 # this may require apt install or brew install 'rename'
 rename -f 's/\.[a-fA-F0-9]{20}\.woff$/.woff/' build/static/media/poppins-*-normal.*.woff
 rename -f 's/\.[a-fA-F0-9]{20}\.woff2$/.woff2/' build/static/media/poppins-*-normal.*.woff2
+rename -f 's/\.[a-fA-F0-9]{20}\.woff$/.woff/' build/static/media/jost-*-normal.*.woff
+rename -f 's/\.[a-fA-F0-9]{20}\.woff2$/.woff2/' build/static/media/jost-*-normal.*.woff2
 
 PACKAGE_VERSION=$(cat package.json \
   | grep version \
