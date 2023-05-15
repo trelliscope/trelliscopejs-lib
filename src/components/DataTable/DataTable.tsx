@@ -33,7 +33,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const basePath = useSelector(selectBasePath);
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
-  const [columnSize, setColumnSize] = useState({});
+  const [columnSize, setColumnSize] = useState({ Panel: 110 });
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnPinning, setColumnPinning] = useState({ left: ['Panel'] });
   const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
@@ -130,7 +130,8 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
             alt={cell.row.original.__PANEL_KEY__}
             aspectRatio={displayInfo?.panelaspect}
-            imageWidth={-1}
+            imageWidth={columnSize?.Panel || 110}
+            inTable
             key={`${cell.row.index}_${displayInfo?.name}`}
           />
         </div>

@@ -7,15 +7,16 @@ interface PanelGraphicProps {
   alt: string;
   aspectRatio?: number;
   imageWidth: number;
+  inTable?: boolean;
 }
 
-const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio, imageWidth }) => (
+const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio, imageWidth, inTable }) => (
   <div
     className={styles.panelGraphic}
     style={{
       width: imageWidth,
       height: imageWidth / (aspectRatio || 1),
-      aspectRatio: imageWidth === -1 ? (aspectRatio || 1) : 'unset'
+      aspectRatio: inTable ? 'unset' : (imageWidth === -1 ? (aspectRatio || 1) : 'unset')
     }}
   >
     {type === 'iframe' && (
@@ -39,6 +40,7 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({ type, src, alt, aspectRatio
 
 PanelGraphic.defaultProps = {
   aspectRatio: undefined,
+  inTable: false,
 };
 
 export default PanelGraphic;
