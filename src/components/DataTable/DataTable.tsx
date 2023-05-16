@@ -10,7 +10,7 @@ import PanelGraphic from '../Panel/PanelGraphic';
 import { selectBasePath } from '../../selectors/app';
 import { getLabelFromFactor, panelSrcGetter } from '../../utils';
 import styles from './DataTable.module.scss';
-import FormattedNumber from '../FormattedNumber/FormattedNumber';
+import FormattedNumber, { format } from '../FormattedNumber/FormattedNumber';
 import {
   META_TYPE_CURRENCY,
   META_TYPE_DATETIME,
@@ -72,25 +72,43 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       Cell: ({ cell }: any) => {
         const value = cell.row.original[meta.varname];
         if (meta.type !== META_TYPE_FACTOR && !value) {
-          return <span className={meta.type === META_TYPE_NUMBER ? styles.dataTableCellNumber : ''}>{MISSING_TEXT}</span>;
+          return (
+            <Tooltip followCursor arrow title={MISSING_TEXT}>
+              <span className={meta.type === META_TYPE_NUMBER ? styles.dataTableCellNumber : ''}>{MISSING_TEXT}</span>
+            </Tooltip>
+          );
         }
         if (meta.type === META_TYPE_FACTOR) {
           const label = getLabelFromFactor(value, meta?.levels as string[]);
-          return <span>{label}</span>;
+          return (
+            <Tooltip followCursor arrow title={label}>
+              <span>{label}</span>
+            </Tooltip>
+          );
         }
         if (meta.type === META_TYPE_DATETIME) {
-          return <span>{value.replace('T', ' ')}</span>;
+          return (
+            <Tooltip followCursor arrow title={value.replace('T', ' ')}>
+              <span>{value.replace('T', ' ')}</span>
+            </Tooltip>
+          );
         }
         if (meta.type === META_TYPE_CURRENCY || meta.type === META_TYPE_NUMBER) {
           return (
-            <span className={styles.dataTableCellNumber}>
-              <FormattedNumber
-                value={value}
-                isCurrency={meta.type === META_TYPE_CURRENCY}
-                currencyCode={meta?.code as string}
-                maximumFractionDigits={meta?.digits as number}
-              />
-            </span>
+            <Tooltip
+              followCursor
+              arrow
+              title={format(value, meta?.digits, meta.type === META_TYPE_CURRENCY, undefined, meta?.code)}
+            >
+              <span className={styles.dataTableCellNumber}>
+                <FormattedNumber
+                  value={value}
+                  isCurrency={meta.type === META_TYPE_CURRENCY}
+                  currencyCode={meta?.code as string}
+                  maximumFractionDigits={meta?.digits as number}
+                />
+              </span>
+            </Tooltip>
           );
         }
         if (meta.type === META_TYPE_HREF) {
@@ -100,7 +118,11 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             </a>
           );
         }
-        return <span>{value}</span>;
+        return (
+          <Tooltip followCursor arrow title={value}>
+            <span>{value}</span>
+          </Tooltip>
+        );
       },
     }));
 
@@ -135,7 +157,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             key={`${cell.row.index}_${displayInfo?.name}`}
           />
         </div>
-      )
+      ),
     };
 
     return [imageColumn, ...columnData];
@@ -194,7 +216,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
         <MaterialReactTable
           columns={columns}
           muiTablePaperProps={{
-            elevation: 0
+            elevation: 0,
           }}
           initialState={{
             columnPinning: {
