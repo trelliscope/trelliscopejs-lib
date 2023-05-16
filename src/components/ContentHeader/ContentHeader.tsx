@@ -15,8 +15,9 @@ import { selectLayout } from '../../slices/layoutSlice';
 import Sort from '../Sort';
 import Labels from '../Labels';
 import { selectFilterState } from '../../slices/filterSlice';
-import styles from './ContentHeader.module.scss';
 import Views from '../Views/Views';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import styles from './ContentHeader.module.scss';
 
 interface ContentHeaderProps {
   tableRef: React.RefObject<null>;
@@ -26,6 +27,7 @@ interface ContentHeaderProps {
 const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => {
   const selectedDisplay = useSelectedDisplay();
   const dispatch = useDispatch();
+  const { data } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
   const sidebarOpen = useSelector(sidebarActiveSelector);
@@ -82,9 +84,11 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
               </div>
             </>
           )}
-          <div className={styles.contentHeaderControlsItem}>
-            <Views />
-          </div>
+          {data?.views && data.views.length > 0 && (
+            <div className={styles.contentHeaderControlsItem}>
+              <Views />
+            </div>
+          )}
           <div className={styles.contentHeaderControlsItem}>
             <LayoutSelector />
           </div>
