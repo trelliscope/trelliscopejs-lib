@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, ClickAwayListener } from '@mui/material';
+import { Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
@@ -25,7 +25,8 @@ const Filters: React.FC = () => {
   const displayMetas = useDisplayMetas();
   const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
   const filterableMetas = displayMetas.filter((meta) => meta.filterable).map((meta) => meta);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [confirmationRemoveModalOpen, setConfirmationRemoveModalOpen] = useState(false);
+  const [confirmationClearModalOpen, setConfirmationClearModalOpen] = useState(false);
   const [valueToRemove, setValueToRemove] = useState<{ varname: string }[]>([]);
 
   const metaGroups = useMetaGroups(unfilterableMetas);
@@ -53,7 +54,12 @@ const Filters: React.FC = () => {
     setVariableFilterSelectorIsOpen(!variableFilterSelectorIsOpen);
   };
 
-  const handleConfirm = () => {
+  const handleClear = () => {
+    dispatch(clearFilters());
+    setConfirmationClearModalOpen(!confirmationClearModalOpen);
+  };
+
+  const handleClearAndRemove = () => {
     if (valueToRemove.length === 0) {
       dispatch(setFilterView({ name: '', which: 'removeActive' }));
       dispatch(
@@ -63,7 +69,7 @@ const Filters: React.FC = () => {
         }),
       );
       dispatch(clearFilters());
-      setConfirmationModalOpen(!confirmationModalOpen);
+      setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen);
       return;
     }
 
@@ -76,7 +82,7 @@ const Filters: React.FC = () => {
       }),
     );
     dispatch(removeFilter(removedItem?.varname as string));
-    setConfirmationModalOpen(!confirmationModalOpen);
+    setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen);
   };
 
   const handleFilterChange = (e: SyntheticEvent, value: { varname: string }[]) => {
@@ -88,13 +94,13 @@ const Filters: React.FC = () => {
       (activeStateFilters.length > 0 && value.length === 0)
     ) {
       if (value.length === 0) {
-        setConfirmationModalOpen(!confirmationModalOpen);
+        setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen);
         setValueToRemove(value);
         return;
       }
 
       if (value.length < selectedFilterVariables.length) {
-        setConfirmationModalOpen(!confirmationModalOpen);
+        setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen);
         setValueToRemove(value);
         return;
       }
@@ -127,51 +133,71 @@ const Filters: React.FC = () => {
   };
 
   return (
-    <ClickAwayListener
-      mouseEvent="onMouseUp"
-      onClickAway={() => {
-        setVariableFilterSelectorIsOpen(false);
-        setAnchorFilterEl(null);
-      }}
-    >
+    <>
       <div className={styles.filters}>
         <ConfirmationModal
-          isOpen={confirmationModalOpen}
-          handleCancel={() => setConfirmationModalOpen(!confirmationModalOpen)}
-          handleConfirm={handleConfirm}
+          isOpen={confirmationRemoveModalOpen}
+          handleCancel={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
+          handleConfirm={handleClearAndRemove}
           dialogText={`${
             valueToRemove.length === 0
-              ? 'This will clear all of the active filters.'
+              ? 'This will clear and remove all of the active filters.'
               : 'This will clear the selected active filter.'
           }`}
         />
-        <Button
-          sx={{
-            color: '#000000',
-            textTransform: 'unset',
-            fontSize: '15px',
-          }}
-          type="button"
-          onClick={handleVariableFilterSelectorClick}
-          endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
-        >
-          Show / Hide Filters
-        </Button>
-        <VariableSelector
-          isOpen={variableFilterSelectorIsOpen}
-          selectedVariables={selectedFilterVariables}
-          metaGroups={metaGroups}
-          anchorEl={anchorFilterEl}
-          displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
-          handleChange={
-            handleFilterChange as unknown as (
-              event: React.SyntheticEvent<Element, Event>,
-              value: { [key: string]: string }[],
-            ) => void
-          }
+        <ConfirmationModal
+          isOpen={confirmationClearModalOpen}
+          handleCancel={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
+          handleConfirm={handleClear}
+          dialogText="This will clear all of the active filters."
         />
+        <ClickAwayListener
+          mouseEvent="onMouseUp"
+          onClickAway={() => {
+            setVariableFilterSelectorIsOpen(false);
+            setAnchorFilterEl(null);
+          }}
+        >
+          <div>
+            <Button
+              sx={{
+                color: '#000000',
+                textTransform: 'unset',
+                fontSize: '15px',
+              }}
+              type="button"
+              onClick={handleVariableFilterSelectorClick}
+              endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
+            >
+              Show / Hide Filters
+            </Button>
+            <VariableSelector
+              isOpen={variableFilterSelectorIsOpen}
+              selectedVariables={selectedFilterVariables}
+              metaGroups={metaGroups}
+              anchorEl={anchorFilterEl}
+              displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
+              handleChange={
+                handleFilterChange as unknown as (
+                  event: React.SyntheticEvent<Element, Event>,
+                  value: { [key: string]: string }[],
+                ) => void
+              }
+            />
+          </div>
+        </ClickAwayListener>
+        <Tooltip arrow title="Clear and Remove all Filters">
+          <IconButton onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}>
+            <FontAwesomeIcon icon={faXmark} size="sm" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip arrow title="Clear all Filters">
+          <IconButton onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}>
+            <FontAwesomeIcon icon={faRotateLeft} size="xs" />
+          </IconButton>
+        </Tooltip>
       </div>
-    </ClickAwayListener>
+    </>
   );
 };
 
