@@ -152,7 +152,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             if (!Number.isNaN(max)) {
               const formattedMax = format(max, 2, false, false, undefined, true);
               handleInput(formattedMax, 'max');
-              setMinInput(formattedMax);
+              setMaxInput(formattedMax);
             }
           }}
           variant="standard"
