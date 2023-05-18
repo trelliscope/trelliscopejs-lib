@@ -44,10 +44,17 @@
     line-height: 54px;
     font-size: 17px;
     padding-left: 22px;
-    padding-right: 8px;
     color: white;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
+
+    &Fullscreen {
+      margin-left: 4px;
+      padding-left: 7px;
+      padding-right: 7px;
+      line-height: 50px;
+      background: #4dabf5;
+    }
   }
 }
