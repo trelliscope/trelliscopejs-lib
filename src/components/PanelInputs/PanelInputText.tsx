@@ -9,13 +9,34 @@ interface PanelInputTextProps {
   name: string;
   rows?: number;
   panelKey: string;
+  isNumeric?: boolean;
+  input: ITextInput | INumberInput;
 }
 
-const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey }) => {
+const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, isNumeric, input }) => {
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = React.useState(false);
   const [textInputValue, setTextInputValue] = React.useState<string | undefined>(undefined);
-  const { getStoredValue, setStoredValue } = useStoredInputValue(panelKey, name);
+  const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const numericValue = isNumeric ? inputValue.replace(/\D/g, '') : inputValue;
+
+    if (isNumeric) {
+      const numericValueAsNumber = parseInt(numericValue, 10);
+      if ('max' in input && input.max && numericValueAsNumber > input.max) {
+        setTextInputValue('');
+        return;
+      }
+      if ('min' in input && input.min && numericValueAsNumber < input.min) {
+        setTextInputValue('');
+        return;
+      }
+    }
+
+    setTextInputValue(numericValue);
+  };
 
   const handleClickAway = () => {
     setInputOpen(false);
@@ -55,6 +76,11 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
             e.preventDefault();
             if (textInputValue) {
               setStoredValue(textInputValue);
+              setInputOpen(false);
+            }
+            if (!textInputValue) {
+              setStoredValue('');
+              clearStoredValue();
             }
             setInputOpen(false);
           }
@@ -64,10 +90,10 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
           <TextField
             id="outlined-multiline-static"
             classes={{ root: styles.panelInputTextField }}
-            label={`${name} ('shift+enter' to save)`}
-            onChange={(e) => {
-              setTextInputValue(e.target.value);
-            }}
+            label={`${name} ('shift+enter' to save) ${isNumeric && 'min' in input && input.min ? `min: ${input.min}` : ''} ${
+              isNumeric && 'max' in input && input.max ? `max: ${input.max}` : ''
+            } `}
+            onChange={handleChange}
             value={textInputValue}
             style={{ minWidth: 300 }}
             size="small"
@@ -84,6 +110,7 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey })
 
 PanelInputText.defaultProps = {
   rows: 1,
+  isNumeric: false,
 };
 
 export default PanelInputText;

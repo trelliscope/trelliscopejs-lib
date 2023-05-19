@@ -1,20 +1,38 @@
 import React, { useRef, useState } from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RadioGroup, FormControlLabel, Radio, ClickAwayListener, Popover, Tooltip } from '@mui/material';
+import {
+  ClickAwayListener,
+  Popover,
+  Tooltip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import { useStoredInputValue } from '../../inputUtils';
 import styles from './PanelInputs.module.scss';
 
-interface PanelInputRadiosProps {
+interface PanelInputSelectProps {
   name: string;
   options: string[];
   panelKey: string;
 }
 
-const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey }) => {
+const PanelInputSelect: React.FC<PanelInputSelectProps> = ({ name, options, panelKey }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    if (event.target.value === 'none') {
+      setStoredValue(event.target.value);
+      clearStoredValue();
+      return;
+    }
+    setStoredValue(event.target.value);
+  };
 
   const handleClickAway = () => {
     setInputOpen(false);
@@ -24,7 +42,7 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
     <div className={styles.panelInputText} ref={anchorRef}>
       <div className={styles.panelInputTextButtonContainer}>
         <Tooltip title={getStoredValue()} placement="left" arrow>
-          <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+          <div className={styles.panelInputTextValue}>{getStoredValue() === 'none' ? '' : getStoredValue()}</div>
         </Tooltip>
         <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
           <FontAwesomeIcon icon={faPencil} />
@@ -44,34 +62,24 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
         }}
         disableEscapeKeyDown
       >
-        <ClickAwayListener onClickAway={handleClickAway}>
-          <RadioGroup
-            name={name}
-            value={getStoredValue() || ''}
-            onChange={(e) => {
-              setStoredValue(e.target.value);
-            }}
-            onClick={() => {
-              if (getStoredValue()) {
-                setStoredValue('');
-                clearStoredValue();
-              }
-            }}
-          >
-            {options.map((option) => (
-              <FormControlLabel
-                classes={{ label: styles.panelInputRadioGroupLabel }}
-                key={option}
-                value={option}
-                control={<Radio classes={{ root: styles.panelInputRadioGroupRadio }} disableRipple size="small" />}
-                label={option}
-              />
-            ))}
-          </RadioGroup>
+        <ClickAwayListener mouseEvent="onMouseUp" onClickAway={handleClickAway}>
+          <FormControl size="medium">
+            <InputLabel>{name}</InputLabel>
+            <Select value={getStoredValue() || 'none'} label={name} onChange={handleChange}>
+              <MenuItem value="none">
+                <em>None</em>
+              </MenuItem>
+              {options.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </ClickAwayListener>
       </Popover>
     </div>
   );
 };
 
-export default PanelInputRadios;
+export default PanelInputSelect;

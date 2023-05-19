@@ -46,7 +46,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
           data[panelKey] = {};
         }
         // strip out all /n and add a space for items in the text input that have a new line
-        data[panelKey][parts[3]] = localStorage.getItem(key)?.replace(/\n/g, ' ') || null;
+        data[panelKey][parts[3]] = localStorage.getItem(key)?.replace(/[\n[\],]/g, ' ') || null;
 
         if (cols.indexOf(parts[3]) < 0) {
           cols.push(parts[3]);

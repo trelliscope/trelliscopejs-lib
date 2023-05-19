@@ -11,7 +11,7 @@ interface ConfirmationModalProps {
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, handleCancel, handleConfirm, dialogText }) => (
   <div className={styles.confirmationModal}>
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} sx={{ zIndex: '8002' }}>
       <DialogTitle>Are you sure?</DialogTitle>
       <DialogContent>
         <DialogContentText>{dialogText}</DialogContentText>

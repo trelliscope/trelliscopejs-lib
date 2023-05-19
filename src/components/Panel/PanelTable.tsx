@@ -62,6 +62,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     name={input.name}
                     rows={(input as ITextInput).height}
                     panelKey={data[PANEL_KEY] as string}
+                    input={input as ITextInput | INumberInput}
                   />
                 )}
                 {input.type === INPUT_TYPE_RADIO && (

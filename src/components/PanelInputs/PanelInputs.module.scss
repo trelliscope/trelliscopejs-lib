@@ -24,24 +24,16 @@
   }
 
   &Popover {
-    padding: var(--padding-5);
+    padding: var(--padding-9);
   }
 }
 
 .panelInputRadioGroup {
-  &[role='radiogroup'] {
-    display: flex;
-    flex-direction: row-reverse;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    align-items: flex-end;
-  }
-
   &Label {
     font-size: var(--text-sm) !important;
   }
 
   &Radio {
-    padding: 0 var(--padding-5) !important;
+    padding: var(--padding-2) var(--padding-5) !important;
   }
 }

@@ -274,8 +274,12 @@ interface IMultiselectInput extends IInput {
 }
 
 interface ITextInput extends IInput {
-  width: number;
   height: number;
+}
+
+interface INumberInput extends IInput {
+  min: number | null;
+  max: number | null;
 }
 
 /* ------------------------------------------------------ */
