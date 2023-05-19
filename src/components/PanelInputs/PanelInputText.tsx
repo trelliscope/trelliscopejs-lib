@@ -22,19 +22,6 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     const numericValue = isNumeric ? inputValue.replace(/\D/g, '') : inputValue;
-
-    if (isNumeric) {
-      const numericValueAsNumber = parseInt(numericValue, 10);
-      if ('max' in input && input.max && numericValueAsNumber > input.max) {
-        setTextInputValue('');
-        return;
-      }
-      if ('min' in input && input.min && numericValueAsNumber < input.min) {
-        setTextInputValue('');
-        return;
-      }
-    }
-
     setTextInputValue(numericValue);
   };
 
@@ -74,15 +61,26 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
         onKeyDown={(e) => {
           if (e.key === 'Enter' && e.shiftKey) {
             e.preventDefault();
-            if (textInputValue) {
-              setStoredValue(textInputValue);
-              setInputOpen(false);
-            }
             if (!textInputValue) {
               setStoredValue('');
               clearStoredValue();
+              setInputOpen(false);
+              return;
+            }
+
+            if (isNumeric) {
+              const numericValueAsNumber = parseInt(textInputValue, 10);
+              if ('max' in input && input.max && numericValueAsNumber > input.max) {
+                setTextInputValue('');
+                return;
+              }
+              if ('min' in input && input.min && numericValueAsNumber < input.min) {
+                setTextInputValue('');
+                return;
+              }
             }
             setInputOpen(false);
+            setStoredValue(textInputValue);
           }
         }}
       >

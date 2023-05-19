@@ -76,7 +76,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
             const factorLabel = getLabelFromFactor(panelWithInput[metaVar] as number, dispMetaFound.levels as string[]);
             return rowColumnData.push(factorLabel === MISSING_TEXT ? '' : factorLabel);
           }
-          return rowColumnData.push(panelWithInput[metaVar]);
+          return rowColumnData.push(panelWithInput[metaVar] === undefined ? '' : panelWithInput[metaVar]);
         });
       }
     }
