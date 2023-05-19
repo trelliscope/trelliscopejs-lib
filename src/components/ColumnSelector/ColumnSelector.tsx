@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField } from '@mui/material';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
-// import styles from './ColumnSelector.module.scss';
+import styles from './ColumnSelector.module.scss';
 
 const ColumnSelector: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,9 @@ const ColumnSelector: React.FC = () => {
 
   return (
     <>
-      <div>Columns:</div>
+      <div>
+      <span className={styles.columnSelectorText}>Columns:</span>
+      </div>
       <TextField
         sx={{ maxWidth: 50, minWidth: 30, pt: 0,
           '& .MuiInput-root::before': {
