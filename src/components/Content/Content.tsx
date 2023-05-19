@@ -60,6 +60,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   ]) as number[];
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
+
   const {
     ref: tableWrapperRef,
     width: tableWrapperRefWidth = 1,
@@ -124,7 +125,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const rowCount = Math.max(Math.floor(height / panelHeight), 1);
       res.nrow = rowCount;
     }
-    // debugger; // eslint-disable-line
+
     return res;
   };
 
@@ -138,7 +139,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     gridGap,
     height,
   ]);
-
+  
   const setCalcs = () => {
     if (layout.viewtype === 'grid') {
       if (calcs.nrow !== layout.nrow) {
