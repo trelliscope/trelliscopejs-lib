@@ -10,7 +10,7 @@
     width: 100%;
     align-items: flex-start;
     justify-content: center;
-    height: 95%;
+    height: calc(100% - 46px); // TODO: replace with variables
     overflow: auto;
   }
 }
