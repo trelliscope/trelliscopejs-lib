@@ -68,11 +68,9 @@ const trelliscopeApp = (
   const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
-  let fullscreen = false;
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
-    fullscreen = true;
     // el.parentNode.nodeName === 'BODY'
     el.style.width = '100%';
     el.style.height = '100%';
@@ -122,7 +120,6 @@ const trelliscopeApp = (
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
-    fullscreen = true;
   }
 
   if (module.hot) {
@@ -167,7 +164,6 @@ const trelliscopeApp = (
           singlePageApp={singlePageApp}
           options={options}
           appDims={appDims}
-          fullscreen={fullscreen}
         />
       </Provider>
     </ThemeProvider>,
@@ -185,7 +181,6 @@ const trelliscopeApp = (
               singlePageApp={singlePageApp}
               options={options}
               appDims={appDims}
-              fullscreen={fullscreen}
             />
           </Provider>
         </ThemeProvider>,

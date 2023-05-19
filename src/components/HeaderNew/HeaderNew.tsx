@@ -75,8 +75,10 @@ const HeaderNew: React.FC = () => {
             <div className={styles.headerNewTrelliscope}>
               Trelliscope
               <HelpInfo />
+              <div className={styles.headerNewTrelliscopeFullscreen}>
+                <FullscreenButton />
+              </div>
             </div>
-            <FullscreenButton />
           </div>
         </div>
       </Toolbar>
