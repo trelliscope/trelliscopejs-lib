@@ -98,7 +98,9 @@ const Sort: React.FC = () => {
         }}
       >
         <div className={styles.sortContainer}>
-          <div>Sort</div>
+          <div>
+            <span className={styles.sortText}>Sort</span>
+          </div>
           {sortRes.map((el: { varname: string; icon: string }, i: number) => (
             <FooterChip
               key={`${el.varname}_sortchip`}
