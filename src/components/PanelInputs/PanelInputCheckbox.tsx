@@ -34,27 +34,22 @@ const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey,
   };
 
   return (
-    <div className={styles.panelInputText} ref={anchorRef}>
+    <div className={styles.panelInputText}>
       <div className={styles.panelInputTextButtonContainer}>
         <Tooltip title={JSON.parse(getStoredValue() || '[]').join(', ')} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{JSON.parse(getStoredValue() || '[]').join(', ')}</div>
         </Tooltip>
         <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
-          <FontAwesomeIcon icon={faPencil} />
+          <span ref={anchorRef}>
+            <FontAwesomeIcon icon={faPencil} />
+          </span>
         </button>
       </div>
       <Popover
         open={inputOpen}
         anchorEl={anchorRef.current}
         classes={{ paper: styles.panelInputTextPopover }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
+        sx={{ left: '20px' }}
         disableEscapeKeyDown
       >
         <ClickAwayListener onClickAway={handleClickAway}>

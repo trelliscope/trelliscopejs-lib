@@ -1,4 +1,6 @@
-// FIXME THIS DOESNT SEEM TO BE USED, Can be deleted?
+// FIXME THIS DOESNT SEEM TO BE USED, Can be deleted? removed ts checking for this file as its not being used.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';

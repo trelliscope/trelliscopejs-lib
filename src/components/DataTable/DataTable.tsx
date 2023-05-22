@@ -5,20 +5,34 @@ import { faArrowUpRightFromSquare, faExpand } from '@fortawesome/free-solid-svg-
 import { IconButton, Tooltip } from '@mui/material';
 import MaterialReactTable from 'material-react-table';
 import { selectSort, setSort } from '../../slices/sortSlice';
-import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import PanelGraphic from '../Panel/PanelGraphic';
 import { selectBasePath } from '../../selectors/app';
 import { getLabelFromFactor, panelSrcGetter } from '../../utils';
 import styles from './DataTable.module.scss';
 import FormattedNumber, { format } from '../FormattedNumber/FormattedNumber';
 import {
+  INPUT_TYPE_CHECKBOX,
+  INPUT_TYPE_MULTISELECT,
+  INPUT_TYPE_NUMBER,
+  INPUT_TYPE_RADIO,
+  INPUT_TYPE_SELECT,
+  INPUT_TYPE_TEXT,
   META_TYPE_CURRENCY,
   META_TYPE_DATETIME,
   META_TYPE_FACTOR,
   META_TYPE_HREF,
   META_TYPE_NUMBER,
   MISSING_TEXT,
+  PANEL_KEY,
 } from '../../constants';
+import {
+  PanelInputText,
+  PanelInputRadios,
+  PanelInputCheckbox,
+  PanelInputSelect,
+  PanelInputMultiSelect,
+} from '../PanelInputs';
 
 interface DataTableProps {
   data: Datum[];
@@ -31,7 +45,7 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResize, handleClick, tableRef, rerender }) => {
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
-  const displayMetas = useDisplayMetas();
+  const displayMetas = useDisplayMetasWithInputs();
   const { data: displayInfo } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({ Panel: 110 });
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -71,6 +85,52 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => {
         const value = cell.row.original[meta.varname];
+        if (meta.tags.includes('input')) {
+          if (meta.type === INPUT_TYPE_TEXT || meta.type === INPUT_TYPE_NUMBER) {
+            return (
+              <PanelInputText
+                name={meta.name}
+                rows={(meta as ITextInput).height}
+                panelKey={cell.row.original[PANEL_KEY] as string}
+                isNumeric={meta.type === INPUT_TYPE_NUMBER}
+                input={meta as ITextInput | INumberInput}
+              />
+            );
+          }
+          if (meta.type === INPUT_TYPE_RADIO)
+            return (
+              <PanelInputRadios
+                name={meta.name}
+                options={(meta as IRadioInput).options}
+                panelKey={cell.row.original[PANEL_KEY] as string}
+              />
+            );
+          if (meta.type === INPUT_TYPE_CHECKBOX)
+            return (
+              <PanelInputCheckbox
+                name={meta.name}
+                panelKey={cell.row.original[PANEL_KEY] as string}
+                options={(meta as ICheckboxInput).options}
+              />
+            );
+          if (meta.type === INPUT_TYPE_SELECT)
+            return (
+              <PanelInputSelect
+                name={meta.name}
+                panelKey={cell.row.original[PANEL_KEY] as string}
+                options={(meta as ICheckboxInput).options}
+              />
+            );
+
+          if (meta.type === INPUT_TYPE_MULTISELECT)
+            return (
+              <PanelInputMultiSelect
+                name={meta.name}
+                panelKey={cell.row.original[PANEL_KEY] as string}
+                options={(meta as ICheckboxInput).options}
+              />
+            );
+        }
         if (meta.type !== META_TYPE_FACTOR && !value) {
           return (
             <Tooltip followCursor arrow title={MISSING_TEXT}>

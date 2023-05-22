@@ -21,14 +21,17 @@ import {
   PANEL_KEY,
 } from '../../constants';
 import FormattedNumber from '../FormattedNumber';
-import { PanelInputText, PanelInputRadios } from '../PanelInputs';
+import {
+  PanelInputText,
+  PanelInputRadios,
+  PanelInputMultiSelect,
+  PanelInputSelect,
+  PanelInputCheckbox,
+} from '../PanelInputs';
 import PanelTableLabelCell from './PanelTableLabelCell';
 import { getLabelFromFactor } from '../../utils';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './PanelTable.module.scss';
-import PanelInputCheckbox from '../PanelInputs/PanelInputsCheckbox';
-import PanelInputSelect from '../PanelInputs/PanelInputSelect';
-import PanelInputMultiSelect from '../PanelInputs/PanelInputMultiSelect';
 
 interface PanelTableProps {
   className?: string;
@@ -41,6 +44,10 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs, compact, onLabelRemove }) => {
   const displayMetas = useDisplayMetas();
+
+  //  are we okay with how the multiselect drop down moves now since its tied to the pencil and the drawer kinda shifts?
+  // for the sorting and the inputs, getting them in is doable, sorting might get a little odd since the inputs currently
+  // have a different state structure and sorting goes into crossfilter. This would probably be its own task that will take some time.
 
   const getMetaLevels = (varname: string) => {
     const foundMeta = displayMetas.find((meta) => meta.varname === varname);
