@@ -188,6 +188,7 @@ type CurrencyCode =
   | 'ZWL';
 
 interface IMeta {
+  name: string;
   varname: string;
   type: MetaType;
   label: string;
@@ -251,10 +252,17 @@ interface IInputs {
 type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
 
 interface IInput {
+  varname: string;
   name: string;
   label: string;
   active: boolean;
   type: InputType;
+  maxnchar: number;
+  sortable: boolean;
+  tags: string[];
+  levels?: string[];
+  digits?: number;
+  code?: string;
 }
 
 interface IRadioInput extends IInput {
@@ -274,8 +282,12 @@ interface IMultiselectInput extends IInput {
 }
 
 interface ITextInput extends IInput {
-  width: number;
   height: number;
+}
+
+interface INumberInput extends IInput {
+  min: number | null;
+  max: number | null;
 }
 
 /* ------------------------------------------------------ */
@@ -326,6 +338,7 @@ interface IFilterState extends IState {
 interface ILabelState {
   varname: string;
   label: string;
+  sortable: boolean;
 }
 
 interface ICategoryFilterState extends IFilterState {

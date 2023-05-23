@@ -1,17 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RadioGroup, FormControlLabel, Radio, ClickAwayListener, Popover, Tooltip } from '@mui/material';
-import { useStoredInputValue } from '../../inputUtils';
+import { Checkbox, ClickAwayListener, FormControlLabel, FormGroup, Popover, TextField, Tooltip } from '@mui/material';
 import styles from './PanelInputs.module.scss';
+import { useStoredInputValue } from '../../inputUtils';
 
-interface PanelInputRadiosProps {
+interface PanelInputCheckboxProps {
   name: string;
-  options: string[];
   panelKey: string;
+  options: string[];
 }
 
-const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey }) => {
+const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey, options }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -20,11 +20,24 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
     setInputOpen(false);
   };
 
+  const handleCheckboxChange = (event: any) => {
+    const stored = JSON.parse(getStoredValue() || '[]');
+    if (event.target.checked) {
+      setStoredValue(JSON.stringify([...stored, event.target.name]));
+      return;
+    }
+    const newArr = stored.filter((item: string) => item !== event.target.name);
+    setStoredValue(JSON.stringify(newArr));
+    if (newArr.length === 0) {
+      clearStoredValue();
+    }
+  };
+
   return (
     <div className={styles.panelInputText}>
       <div className={styles.panelInputTextButtonContainer}>
-        <Tooltip title={getStoredValue()} placement="left" arrow>
-          <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+        <Tooltip title={JSON.parse(getStoredValue() || '[]').join(', ')} placement="left" arrow>
+          <div className={styles.panelInputTextValue}>{JSON.parse(getStoredValue() || '[]').join(', ')}</div>
         </Tooltip>
         <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
           <span ref={anchorRef}>
@@ -40,33 +53,21 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
         disableEscapeKeyDown
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <RadioGroup
-            name={name}
-            value={getStoredValue() || ''}
-            onChange={(e) => {
-              setStoredValue(e.target.value);
-            }}
-            onClick={() => {
-              if (getStoredValue()) {
-                setStoredValue('');
-                clearStoredValue();
-              }
-            }}
-          >
+          <FormGroup>
             {options.map((option) => (
               <FormControlLabel
-                classes={{ label: styles.panelInputRadioGroupLabel }}
                 key={option}
-                value={option}
-                control={<Radio classes={{ root: styles.panelInputRadioGroupRadio }} disableRipple size="small" />}
+                control={<Checkbox checked={JSON.parse(getStoredValue() || '[]').includes(option)} />}
+                name={option}
                 label={option}
+                onChange={handleCheckboxChange}
               />
             ))}
-          </RadioGroup>
+          </FormGroup>
         </ClickAwayListener>
       </Popover>
     </div>
   );
 };
 
-export default PanelInputRadios;
+export default PanelInputCheckbox;

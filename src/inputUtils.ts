@@ -121,10 +121,10 @@ export const useStoredInputValue = (panelKey: string, name: string) => {
   const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', panelKey, name);
   const [localValue, setLocalValue] = useState<string | null>(localStorage.getItem(lsKey));
 
-  const getStoredValue = () => localValue || localStorage.getItem(lsKey);
+  const getStoredValue = () => localStorage.getItem(lsKey);
 
   const setStoredValue = (value: string) => {
-    setLocalValue(value);
+    setLocalValue(value); // we need this as a hack to trigger a reload in the state
     localStorage.setItem(lsKey, value);
   };
 

@@ -1,4 +1,6 @@
-// FIXME THIS DOESNT SEEM TO BE USED, Can be deleted?
+// FIXME THIS DOESNT SEEM TO BE USED, Can be deleted? removed ts checking for this file as its not being used.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -62,6 +64,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ labels, data, inputs }) => {
                     name={input.name}
                     rows={(input as ITextInput).height}
                     panelKey={data[PANEL_KEY] as string}
+                    input={input as ITextInput | INumberInput}
                   />
                 )}
                 {input.type === INPUT_TYPE_RADIO && (

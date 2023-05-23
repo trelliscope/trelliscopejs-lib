@@ -46,7 +46,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
           data[panelKey] = {};
         }
         // strip out all /n and add a space for items in the text input that have a new line
-        data[panelKey][parts[3]] = localStorage.getItem(key)?.replace(/\n/g, ' ') || null;
+        data[panelKey][parts[3]] = localStorage.getItem(key)?.replace(/[\n[\],]/g, ' ') || null;
 
         if (cols.indexOf(parts[3]) < 0) {
           cols.push(parts[3]);
@@ -76,7 +76,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
             const factorLabel = getLabelFromFactor(panelWithInput[metaVar] as number, dispMetaFound.levels as string[]);
             return rowColumnData.push(factorLabel === MISSING_TEXT ? '' : factorLabel);
           }
-          return rowColumnData.push(panelWithInput[metaVar]);
+          return rowColumnData.push(panelWithInput[metaVar] === undefined ? '' : panelWithInput[metaVar]);
         });
       }
     }
