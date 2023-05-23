@@ -119,12 +119,10 @@ export const getLocalStorageKey = (tags: string[], displayName: string, panelKey
 export const useStoredInputValue = (panelKey: string, name: string) => {
   const { data: displayInfo } = useDisplayInfo();
   const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', panelKey, name);
-  const [localValue, setLocalValue] = useState<string | null>(localStorage.getItem(lsKey));
 
-  const getStoredValue = () => localValue || localStorage.getItem(lsKey);
+  const getStoredValue = () => localStorage.getItem(lsKey);
 
   const setStoredValue = (value: string) => {
-    setLocalValue(value);
     localStorage.setItem(lsKey, value);
   };
 

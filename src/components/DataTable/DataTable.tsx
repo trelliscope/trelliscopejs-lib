@@ -222,6 +222,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
 
     return [imageColumn, ...columnData];
   }, [
+    columnSize?.Panel,
     data,
     displayInfo?.name,
     displayInfo?.panelaspect,
