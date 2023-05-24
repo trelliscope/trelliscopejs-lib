@@ -16,6 +16,7 @@ import {
   META_TYPE_FACTOR,
   META_TYPE_HREF,
   META_TYPE_NUMBER,
+  META_TYPE_PANEL,
   META_TYPE_STRING,
   MISSING_TEXT,
   PANEL_KEY,
@@ -130,7 +131,8 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                     {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
                     {label.type === META_TYPE_FACTOR &&
                       getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
-                    {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE) && data[label.varname]}
+                    {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE || label.type === META_TYPE_PANEL) &&
+                      data[label.varname]}
                     {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
                     {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
                       <FormattedNumber

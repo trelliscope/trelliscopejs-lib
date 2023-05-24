@@ -29,6 +29,12 @@
       right: 0;
       top: 0;
     }
+
+    &PickerContainer {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+    }
   }
 
   &:hover &Graphic {

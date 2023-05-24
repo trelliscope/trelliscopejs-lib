@@ -65,8 +65,3 @@ export const useMetaData = () => {
     { skip: !dataType || !basePath || !selectedDisplay?.name },
   );
 };
-
-export const useMetaDataByPanelKey = (panelKey: string | number) => {
-  const metaData = useMetaData();
-  return metaData.data?.find((datum) => datum[PANEL_KEY] === panelKey);
-};

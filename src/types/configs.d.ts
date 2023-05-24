@@ -2,7 +2,7 @@
 /* meta                                                   */
 /* ------------------------------------------------------ */
 
-type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency';
+type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency' | 'panel';
 type GraphDirection = 'none' | 'from' | 'to';
 type CurrencyCode =
   | 'AED'
@@ -376,7 +376,29 @@ interface IView {
 
 type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' | 'pjp' | 'png' | 'svg' | 'webp';
 
-type PanelType = 'img' | 'iframe' | 'REST';
+type PanelType = 'img' | 'iframe';
+
+type PanelSourceType = 'file' | 'REST' | 'localWebSocket';
+
+interface IPanelSource {
+  type: PanelSourceType;
+}
+
+interface IPanelMeta extends IMeta {
+  paneltype: PanelType;
+  // format?: PanelFormat;
+  aspect: number;
+  source: IPanelSource;
+}
+
+// interface IFilePanelSource extends IPanelSource {
+// }
+
+interface IRESTPanelSource extends IPanelSource {
+  url: string;
+  apiKey: string | undefined;
+  headers: string | undefined;
+}
 
 interface IDisplay {
   name: string;
@@ -390,9 +412,10 @@ interface IDisplay {
   inputs?: IInputs;
   state: IDisplayState;
   views: IView[];
-  paneltype: PanelType;
-  panelformat?: PanelFormat;
-  panelaspect: number;
+  // paneltype: PanelType;
+  // panelformat?: PanelFormat;
+  // panelaspect: number;
+  primaryPanel: string;
   thumbnailurl: string;
 }
 

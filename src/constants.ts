@@ -28,6 +28,7 @@ export const META_TYPE_HREF = 'href' as string;
 export const META_TYPE_GEO = 'geo' as string;
 export const META_TYPE_GRAPH = 'graph' as string;
 export const META_TYPE_CURRENCY = 'currency' as string;
+export const META_TYPE_PANEL = 'panel' as string;
 
 export const FILTER_TYPE_CATEGORY = 'category' as string;
 export const FILTER_TYPE_NUMBERRANGE = 'numberrange' as string;

@@ -23,6 +23,7 @@ import {
   META_TYPE_FACTOR,
   META_TYPE_HREF,
   META_TYPE_NUMBER,
+  META_TYPE_PANEL,
   MISSING_TEXT,
   PANEL_KEY,
 } from '../../constants';
@@ -37,7 +38,7 @@ import {
 interface DataTableProps {
   data: Datum[];
   handleTableResize: () => void;
-  handleClick: (PANEL_KEY: string | number) => void;
+  handleClick: (meta: IPanelMeta, source: string) => void;
   tableRef: React.MutableRefObject<null>;
   rerender: never;
 }
@@ -46,11 +47,15 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
   const displayMetas = useDisplayMetasWithInputs();
-  const { data: displayInfo } = useDisplayInfo();
+  const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const [columnSize, setColumnSize] = useState({ Panel: 110 });
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [columnPinning, setColumnPinning] = useState({ left: ['Panel'] });
-  const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
+  const panelMetas = useMemo(
+    () => (displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL) as IPanelMeta[]) || [],
+    [displayInfo?.metas],
+  );
+  const panelMetaLabels = panelMetas.map((meta, index) => `${meta.label} ${index}`);
+  const [columnPinning, setColumnPinning] = useState({ left: [...panelMetaLabels] });
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
 
@@ -186,10 +191,10 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       },
     }));
 
-    const imageColumn = {
-      id: 'Panel',
-      header: 'panel',
-      accessorKey: 'Panel',
+    const imageColumnData = panelMetas.map((meta, index) => ({
+      id: `${meta.varname} ${index}`,
+      header: `${meta.varname}`,
+      accessorKey: `${meta.varname}`,
       enableSorting: false,
       size: 110,
       // conflicts within table library, some of the types dont seem to be exported in the same way
@@ -201,35 +206,42 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             <IconButton
               size="small"
               onClick={() => {
-                handleClick(cell.row.original.__PANEL_KEY__);
+                if (!meta) return;
+                handleClick(meta, cell.row.original[meta.varname] as string);
               }}
             >
               <FontAwesomeIcon icon={faExpand} />
             </IconButton>
           </div>
-          <PanelGraphic
-            type={displayInfo?.paneltype as PanelType}
-            src={getPanelSrc(cell.row.original, displayInfo?.name).toString()}
-            alt={cell.row.original.__PANEL_KEY__}
-            aspectRatio={displayInfo?.panelaspect}
-            imageWidth={columnSize?.Panel || 110}
-            inTable
-            key={`${cell.row.index}_${displayInfo?.name}`}
-          />
+          {displayInfoSuccess && (
+            <PanelGraphic
+              type={meta?.paneltype as PanelType}
+              src={
+                meta?.paneltype === 'iframe'
+                  ? cell.row.original[meta.varname].toString()
+                  : panelSrcGetter(basePath, cell.row.original[meta.varname] as string).toString()
+              }
+              alt={cell.row.original.name as string}
+              aspectRatio={meta?.aspect}
+              imageWidth={columnSize?.Panel || 110}
+              inTable
+              key={`${cell.row.index}_${displayInfo?.name}`}
+            />
+          )}
         </div>
       ),
-    };
+    }));
 
-    return [imageColumn, ...columnData];
+    return [...imageColumnData, ...columnData];
   }, [
+    basePath,
     columnSize?.Panel,
     data,
     displayInfo?.name,
-    displayInfo?.panelaspect,
-    displayInfo?.paneltype,
+    displayInfoSuccess,
     displayMetas,
-    getPanelSrc,
     handleClick,
+    panelMetas,
     unSortableMetas,
   ]);
 
@@ -281,7 +293,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           }}
           initialState={{
             columnPinning: {
-              left: ['Panel'],
+              left: [...panelMetaLabels],
             },
           }}
           state={{

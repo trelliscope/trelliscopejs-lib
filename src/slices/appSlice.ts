@@ -7,7 +7,8 @@ import { displayListAPI } from './displayListAPI';
 
 export interface PanelDialog {
   open: boolean;
-  panel: string | number;
+  panel?: IMeta;
+  source?: string;
 }
 export interface AppState {
   appId: string;
@@ -32,7 +33,8 @@ const initialState: AppState = {
   configPath: '',
   panelDialog: {
     open: false,
-    panel: '',
+    panel: undefined,
+    source: '',
   },
 };
 
@@ -64,7 +66,7 @@ export const appSlice = createSlice({
       state.configPath = action.payload;
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
-    setPanelDialog: (state, action: PayloadAction<{ panel?: string | number; open: boolean }>) => {
+    setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean }>) => {
       state.panelDialog = { ...state.panelDialog, ...action.payload };
     },
   },
