@@ -49,7 +49,16 @@ const Panel: React.FC<PanelProps> = ({
       <div role="presentation" className={styles.panelGraphic}>
         {children}
         <div className={styles.panelGraphicExpand}>
-          <IconButton size="small" onClick={handleClick}>
+          <IconButton
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 0.5);',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.7);',
+              },
+            }}
+            size="small"
+            onClick={handleClick}
+          >
             <FontAwesomeIcon icon={faExpand} />
           </IconButton>
         </div>

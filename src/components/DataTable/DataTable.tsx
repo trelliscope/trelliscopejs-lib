@@ -205,6 +205,12 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           <div className={styles.dataTablePanelGraphicExpand}>
             <IconButton
               size="small"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.5);',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.7);',
+                },
+              }}
               onClick={() => {
                 if (!meta) return;
                 handleClick(meta, cell.row.original[meta.varname] as string);

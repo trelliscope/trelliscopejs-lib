@@ -50,7 +50,6 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
-  console.log('layout', layout);
   const basePath = useSelector(selectBasePath);
   const [curPanel, setCurPanel] = useState(displayInfo?.primaryPanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
@@ -58,6 +57,10 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     '--panelGridGap',
     '--padding-2',
   ]) as number[];
+
+  useEffect(() => {
+    setCurPanel(displayInfo?.primaryPanel);
+  }, [displayInfo?.primaryPanel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -155,23 +158,6 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
     width: calcs.contentWidth,
   };
-
-  // figure out how the panel was getting piped in
-  // change panelSrc getter to not take a format and just pipe in the url
-  // change it to the new format and handle a single panel
-  // change it to the new format and handle an iframe panel
-  // fix panel dialog opener
-  // fix the table
-  // Need to get a drop down arrow with a menu to select the other panel information
-  // change the panel image
-  // add multiple panels to the table
-  // fix the expand button on each panel from being to the top right of the table
-  // pin all to the left
-  // TODO transparent white background on arrow drop down for black backgrounds
-  // TODO primarypanel should live in the initial state / hash / state to dictate on grid view which is the default for the panel
-  //  make sure web socket doesn't break app
-
-  // TODO tell ryan i removed panelaspect from calcs for table and grid i set it to 1 for now.
 
   const handlePanelChange = (value: string) => {
     setCurPanel(value);
