@@ -112,6 +112,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           onBrush={handleOnBrush}
           selection={[filter?.min || 0, filter?.max || 0]}
           log={log}
+          isDate={false}
         />
       </div>
       <div className={styles.filterNumInputContainer}>

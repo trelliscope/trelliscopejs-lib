@@ -74,3 +74,16 @@ body {
 div[role='tooltip'] {
   z-index: 8002 !important;
 }
+
+.react-daterange-picker__clear-button,
+.react-datetimerange-picker__clear-button {
+  display: none !important;
+}
+
+.react-daterange-picker__calendar,
+.react-datetimerange-picker__calendar {
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 8002 !important;
+}

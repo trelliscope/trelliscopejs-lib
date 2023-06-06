@@ -32,7 +32,12 @@ export const filterSlice = createSlice({
         filterState.push(action.payload);
       }
     },
-    updateFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+    updateFilter: (
+      state,
+      action: PayloadAction<
+        ICategoryFilterState | INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState
+      >,
+    ) => {
       const { state: filterState } = state;
       const { varname } = action.payload;
       const idx = filterState.findIndex((f) => f.varname === varname);

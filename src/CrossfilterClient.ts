@@ -42,13 +42,24 @@ const getNumberVal = (d: Datum, key: string, dir?: string) => {
   return Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key];
 };
 
+const getDateVal = (d: Datum, key: string, dir?: string) => {
+  if (dir) {
+    const sign = dir === 'asc' ? -1 : 1;
+    const dateValue = new Date(d[key]).getTime();
+    return Number.isNaN(dateValue) || d[key] === undefined ? sign * -Infinity : dateValue;
+  }
+
+  const dateValue = new Date(d[key]).getTime();
+  return Number.isNaN(dateValue) || d[key] === undefined ? -Infinity : dateValue;
+};
+
 const valueGetter = {
   string: getStringVal,
   number: getNumberVal,
-  date: getStringVal,
+  date: getDateVal,
 };
 
-type D = Dimension<Datum, string | number>;
+type D = Dimension<Datum, string | number | Date>;
 
 interface SortParam {
   [key: string | symbol]: string | number;
@@ -151,7 +162,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   groupBy(
     field: string | symbol,
     dataType: 'string' | 'number' | 'date' = 'string',
-    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+    groupFunc?: (d: string | number | Date) => NaturallyOrderedValue,
   ) {
     if (this.dimensions.has(field)) {
       if (groupFunc) {

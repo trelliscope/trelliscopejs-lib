@@ -47,7 +47,11 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
           operation: 'eq',
           dataType: TYPE_MAP[filter.metatype] as DataType,
         });
-      } else if (filter.filtertype === 'numberrange') {
+      } else if (
+        filter.filtertype === 'numberrange' ||
+        filter.filtertype === 'daterange' ||
+        filter.filtertype === 'datetimerange'
+      ) {
         const { min, max } = filter as INumberRangeFilterState;
         client.addFilter({
           field: filter.varname,
