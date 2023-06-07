@@ -35,8 +35,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
     if ((filter?.max && !filter?.min) || (filter?.max && filter?.min === -Infinity)) {
       setDate([undefined, new Date(filter.max + day)] as Date[]);
     }
-    if (!filter?.min && !filter?.max) {
-      setDate([]);
+    if ((!filter?.min && !filter?.max) || (filter?.min === -Infinity && filter?.max === Infinity)) {
+      setDate([undefined, undefined] as unknown as Date[]);
     }
   }, [day, filter?.max, filter?.min]);
 
@@ -100,7 +100,7 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
         data={data as { key: string | number; value: number }[]}
         name={meta.varname}
         onBrush={handleOnBrush}
-        selection={[filter?.min || 0, filter?.max || 0]}
+        selection={[filter?.min === -Infinity ? 0 : filter?.min || 0, filter?.max === Infinity ? 0 : filter?.max || 0]}
         log={false}
         isDate
       />

@@ -32,7 +32,6 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
 }) => {
   const axisPad = 16;
   const xPad = 5;
-  // const xPad = 25;
   const innerWidth = width - xPad;
   const barWidth = innerWidth / xDomain.length - Math.max((innerWidth * 0.06) / xDomain.length, 2);
   const delta = xDomain[1] - xDomain[0];
@@ -70,6 +69,8 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   const sel0 = selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]);
   const sel1 =
     selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
+
+  console.log('selection', sel0, sel1);
 
   return (
     <svg width={width} height={height} className={styles.numHistogram}>

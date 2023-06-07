@@ -47,29 +47,6 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  //  install the date range component https://projects.wojtekmaj.pl/react-daterange-picker/
-  //  install the date time range component https://projects.wojtekmaj.pl/react-datetimerange-picker/
-
-  //  create a date range component
-  //  component should have a start date and end date picker
-  //  convert to a unix number
-  //  edit the crossfilter to be a number range, we might actually be able to use the number one that exists if we are converting to unix already
-  // TODO component should have a histogram of the data that should update the picker and vice versa // need clarification here
-
-  //  create a datetime range component
-  //  component should have a start date time and end date time picker
-  // TODO component should have a histogram of the data that should update the picker and vice versa // need clarification here
-
-  // to sort values we need to convert to a number epoch unix to sort and display them as their string values
-  // do missing values go to the end like other sorts
-  //  fix the sort icon to be diff than a-z and z-a
-  //  fix ts errors
-  //  clear values need to be able to clear the filter input
-  //  why can i put a max but when i type a min it erases the min
-  //  why are the exact dates missing from the data
-  //  fix the css of the picker, it has the num range z-index issue and it bleeds off the sidebar so you cant see it.
-  //  add refresh saving with the hash
-
   const handleReset = () => {
     dispatch(removeFilter(filterName));
   };
