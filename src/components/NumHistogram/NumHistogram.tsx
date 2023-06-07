@@ -70,8 +70,6 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   const sel1 =
     selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
 
-  console.log('selection', sel0, sel1);
-
   return (
     <svg width={width} height={height} className={styles.numHistogram}>
       <g>
