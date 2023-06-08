@@ -31,7 +31,6 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   onBrushStart,
   onBrushEnd,
 }) => {
-  // console.log('props::::', name, width, height, x, y, selection, onBrushStart, onBrushEnd);
   const initialState: BrushState = {
     x: -1,
     dx: -1,
