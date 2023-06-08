@@ -4,7 +4,17 @@ import { faRotateLeft, faXmark, faArrowDownShortWide } from '@fortawesome/free-s
 import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { FILTER_TYPE_CATEGORY, FILTER_TYPE_NUMBERRANGE, META_FILTER_TYPE_MAP, META_TYPE_FACTOR } from '../../../constants';
+import {
+  FILTER_TYPE_CATEGORY,
+  FILTER_TYPE_DATERANGE,
+  FILTER_TYPE_DATETIMERANGE,
+  FILTER_TYPE_NUMBERRANGE,
+  META_FILTER_TYPE_MAP,
+  META_TYPE_DATE,
+  META_TYPE_DATETIME,
+  META_TYPE_FACTOR,
+  META_TYPE_NUMBER,
+} from '../../../constants';
 import { useMetaByVarname } from '../../../slices/displayInfoAPI';
 import { removeFilter, selectFilterByVarname, selectFilterState, setFilterView } from '../../../slices/filterSlice';
 import FilterCat from './FilterCat';
@@ -17,6 +27,8 @@ import { selectSort, setSort } from '../../../slices/sortSlice';
 import FooterChip from '../../FooterChip/FooterChip';
 import { setLayout } from '../../../slices/layoutSlice';
 import ConfirmationModal from '../../ConfirmationModal';
+import FilterDateRange from '../../FilterDateRange/FilterDateRange';
+import FilterDateTimeRange from '../../FilterDateTimeRange/FilterDateTimeRange';
 
 interface FilterInputsProps {
   filterName: string;
@@ -57,7 +69,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   if (isSorted) {
     const { type } = meta || {};
     let icon = 'icon-sort-alpha';
-    if (type === 'number' || type === 'factor') {
+    if (type === META_TYPE_NUMBER || type === META_TYPE_FACTOR || type === META_TYPE_DATE || type === META_TYPE_DATETIME) {
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${isSorted?.dir}`;
@@ -135,6 +147,13 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
       {filterType === FILTER_TYPE_NUMBERRANGE && (
         <FilterNum meta={meta as INumberMeta} filter={filter as INumberRangeFilterState} />
       )}
+      {filterType === FILTER_TYPE_DATERANGE && (
+        <FilterDateRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
+      )}
+      {filterType === FILTER_TYPE_DATETIMERANGE && (
+        <FilterDateTimeRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
+      )}
+
       <div className={styles.filterInputSubMenu}>
         <div>
           <FormControlLabel

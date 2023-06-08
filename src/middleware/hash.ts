@@ -60,7 +60,7 @@ export const hashFromState = (state: RootState) => {
           flt.metatype
         };val:${values.map(encodeURIComponent).join('#')}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
-        const { min, max } = flt as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
+        const { min, max } = flt as INumberRangeFilterState | IDatetimeRangeFilterState;
         res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min || ''};max:${max || ''}`;
       }
       return res;

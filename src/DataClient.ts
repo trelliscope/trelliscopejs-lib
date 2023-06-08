@@ -1,5 +1,3 @@
-import type { NaturallyOrderedValue } from 'crossfilter2';
-
 export type DataType = 'string' | 'number' | 'date';
 export interface DataClientFilter {
   field: string;
@@ -31,7 +29,7 @@ export interface IDataClient {
   groupBy: (
     field: string,
     dataType: 'string' | 'number' | 'date',
-    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+    groupFunc?: (d: number) => number | null | undefined,
   ) => { key: string | number; value: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];

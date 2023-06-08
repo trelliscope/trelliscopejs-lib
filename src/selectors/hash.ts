@@ -88,7 +88,7 @@ export const selectHashFilters = () => {
         ...filter,
         min: Number(hashProps.min),
         max: Number(hashProps.max),
-      } as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
+      } as INumberRangeFilterState | IDatetimeRangeFilterState;
     }
 
     return {

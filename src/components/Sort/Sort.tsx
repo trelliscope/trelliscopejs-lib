@@ -9,6 +9,7 @@ import { selectSort, setSort } from '../../slices/sortSlice';
 import FooterChip from '../FooterChip';
 import VariableSelector from '../VariableSelector';
 import styles from './Sort.module.scss';
+import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME } from '../../constants';
 
 const Sort: React.FC = () => {
   const { data: displayInfo } = useDisplayInfo();
@@ -28,7 +29,7 @@ const Sort: React.FC = () => {
     const { varname } = sort[i];
     const { type } = displayInfo?.metas.find((m) => m.varname === varname) || {};
     let icon = 'icon-sort-alpha';
-    if (type === 'number' || type === 'factor') {
+    if (type === META_TYPE_NUMBER || type === META_TYPE_FACTOR || type === META_TYPE_DATE || type === META_TYPE_DATETIME) {
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${sort[i].dir}`;

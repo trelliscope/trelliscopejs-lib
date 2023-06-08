@@ -57,12 +57,19 @@
       stroke: var(--black);
       stroke-width: 1px;
     }
-    text {
+    &Text {
       text-anchor: middle;
     }
 
     &Super {
       font-size: 8px;
+      text-anchor: middle;
+    }
+    &DateStart {
+      text-anchor: start;
+    }
+    &DateEnd {
+      text-anchor: end;
     }
   }
 }

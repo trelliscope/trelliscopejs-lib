@@ -15,6 +15,7 @@ interface NumHistogramProps {
   onBrush: ([number1, number2]: number[] | null[]) => void;
   selection: [number, number];
   log: boolean;
+  isDate: boolean;
 }
 
 const NumHistogram: React.FC<NumHistogramProps> = ({
@@ -27,6 +28,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   onBrush,
   selection,
   log,
+  isDate,
 }) => {
   const axisPad = 16;
   const xPad = 5;
@@ -65,7 +67,8 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
     }
   };
   const sel0 = selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]);
-  const sel1 = selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
+  const sel1 =
+    selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
 
   return (
     <svg width={width} height={height} className={styles.numHistogram}>
@@ -90,10 +93,11 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         ticks={ticks}
         scale={xScale}
         log={log}
+        isDate={isDate}
       />
       <NumHistogramBrush
         name={name}
-        selection={[ sel0, sel1 ]}
+        selection={[sel0, sel1]}
         width={innerWidth}
         height={height - axisPad}
         x={xPad / 2}
@@ -101,13 +105,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         onBrushStart={handleBrushStart}
         onBrushEnd={handleBrushEnd}
       />
-      <rect
-        x={sel0}
-        y={height - axisPad}
-        width={sel1 - sel0}
-        height={3}
-        style={{ fill: '#448aff' }}
-      />
+      <rect x={sel0} y={height - axisPad} width={sel1 - sel0} height={3} style={{ fill: '#448aff' }} />
     </svg>
   );
 };
