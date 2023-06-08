@@ -66,9 +66,15 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       setBrushActive(false);
     }
   };
-  const sel0 = selection[0] === 0 ? 0 : xScale(log ? Math.log10(selection[0]) : selection[0]);
+  const sel0 = selection[0] === 0 ? xScale(selection[0]) : xScale(log ? Math.log10(selection[0]) : selection[0]) || 0;
   const sel1 =
-    selection[1] === 0 ? (selection[0] === 0 ? 0 : innerWidth) : xScale(log ? Math.log10(selection[1]) : selection[1]);
+    selection[1] === 0
+      ? selection[0] === 0
+        ? xScale(selection[0])
+        : selection[1] === 0
+        ? xScale(selection[1])
+        : innerWidth
+      : xScale(log ? Math.log10(selection[1]) : selection[1]) || innerWidth;
 
   return (
     <svg width={width} height={height} className={styles.numHistogram}>
@@ -105,7 +111,13 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
         onBrushStart={handleBrushStart}
         onBrushEnd={handleBrushEnd}
       />
-      <rect x={sel0} y={height - axisPad} width={sel1 - sel0} height={3} style={{ fill: '#448aff' }} />
+      <rect
+        x={Number.isNaN(sel0) ? 0 : sel0}
+        y={height - axisPad}
+        width={Number.isNaN(sel1 - sel0) ? 0 : sel1 - sel0}
+        height={3}
+        style={{ fill: '#448aff' }}
+      />
     </svg>
   );
 };

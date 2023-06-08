@@ -31,6 +31,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   onBrushStart,
   onBrushEnd,
 }) => {
+  // console.log('props::::', name, width, height, x, y, selection, onBrushStart, onBrushEnd);
   const initialState: BrushState = {
     x: -1,
     dx: -1,
@@ -101,7 +102,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   // If isDragging or isMoving use the state otherwise use the selection
   const maxX = Math.max(activeX, activeDx);
   const minX = Math.min(activeX, activeDx);
-  const brushX = state.isDragging || state.isMoving ? minX : activeX;
+  const brushX = state.isDragging || state.isMoving ? minX : activeX || 0;
   const brushWidth = state.isDragging || state.isMoving ? maxX - minX : activeDx - activeX;
 
   let overlayCursor = 'crosshair';
