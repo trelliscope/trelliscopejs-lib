@@ -25,13 +25,21 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (filter?.min) {
-      setMinInput(format(filter?.min, 2, false, false, undefined, true));
+    if (filter?.min != null) {
+      setMinInput(format(filter.min, 2, false, false, undefined, true));
     }
-    if (filter?.max) {
-      setMaxInput(format(filter?.max, 2, false, false, undefined, true));
+    if (filter?.max != null) {
+      setMaxInput(format(filter.max, 2, false, false, undefined, true));
     }
-  }, [filter?.max, filter?.min]);
+    if ((filter?.min === null && filter?.max === Infinity) || (filter?.min === -Infinity && filter?.max === null)) {
+      dispatch(removeFilter(meta?.varname));
+    }
+    if ((filter?.min == null && filter?.max == null) || (filter?.min === -Infinity && filter?.max === Infinity)) {
+      setMinInput('');
+      setMaxInput('');
+      dispatch(removeFilter(meta?.varname));
+    }
+  }, [dispatch, filter?.max, filter?.min, meta?.varname]);
 
   const handleOnBrush = (values: number[] | null[]) => {
     if (values[0] === null && values[1] === null) {
@@ -63,13 +71,25 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
 
   const inputStyle = { textAlign: 'center', paddingBottom: 2 } as CSSProperties;
 
-  if (filter?.max && filter?.min && filter?.max < filter?.min) {
+  if (
+    filter?.max !== undefined &&
+    filter?.max !== null &&
+    filter?.min !== undefined &&
+    filter?.min !== null &&
+    filter?.max < filter?.min
+  ) {
     inputStyle.color = 'red';
   }
 
   const handleInput = (val: string, which: string) => {
     let newState = {} as INumberRangeFilterState;
-    const newVal = val === '' ? null : parseFloat(val);
+    let newVal = val === '' ? null : parseFloat(val);
+    if (Number.isNaN(newVal) && which === 'min') {
+      newVal = -Infinity;
+    }
+    if (Number.isNaN(newVal) && which === 'max') {
+      newVal = Infinity;
+    }
     const lower = which === 'min' ? newVal : filter?.min;
     const upper = which === 'max' ? newVal : filter?.max;
     if (filter) {
@@ -77,8 +97,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         varname: filter.varname,
         filtertype: 'numberrange',
         type: filter.type,
-        min: lower === undefined && upper === undefined ? null : lower,
-        max: lower === undefined && upper === undefined ? null : upper,
+        min: lower === undefined && upper === undefined ? null : lower ?? -Infinity,
+        max: lower === undefined && upper === undefined ? null : upper ?? Infinity,
         metatype: 'number',
       };
       dispatch(updateFilter(newState));
@@ -87,8 +107,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         varname: meta.varname,
         filtertype: 'numberrange',
         type: 'filter',
-        min: lower,
-        max: upper,
+        min: lower === undefined && upper === undefined ? null : lower ?? -Infinity,
+        max: lower === undefined && upper === undefined ? null : upper ?? Infinity,
         metatype: 'number',
       };
       dispatch(addFilter(newState));
@@ -129,11 +149,9 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           onChange={(e) => setMinInput(e.target.value)}
           onBlur={() => {
             const min = parseFloat(minInput);
-            if (!Number.isNaN(min)) {
-              const formattedMin = format(min, 2, false, false, undefined, true);
-              handleInput(formattedMin, 'min');
-              setMinInput(formattedMin);
-            }
+            const formattedMin = format(min, 2, false, false, undefined, true);
+            handleInput(formattedMin, 'min');
+            setMinInput(formattedMin);
           }}
           variant="standard"
         />
@@ -150,11 +168,9 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           onChange={(e) => setMaxInput(e.target.value)}
           onBlur={() => {
             const max = parseFloat(maxInput);
-            if (!Number.isNaN(max)) {
-              const formattedMax = format(max, 2, false, false, undefined, true);
-              handleInput(formattedMax, 'max');
-              setMaxInput(formattedMax);
-            }
+            const formattedMax = format(max, 2, false, false, undefined, true);
+            handleInput(formattedMax, 'max');
+            setMaxInput(formattedMax);
           }}
           variant="standard"
         />

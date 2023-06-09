@@ -55,7 +55,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
         const { min, max } = filter as INumberRangeFilterState;
         client.addFilter({
           field: filter.varname,
-          value: max && min && max < min ? [null, null] : [min || 0, max || Infinity],
+          value: max && min && max < min ? [null, null] : [min || 0, max || 0],
           operation: 'range',
           dataType: TYPE_MAP[filter.metatype] as DataType,
         });
