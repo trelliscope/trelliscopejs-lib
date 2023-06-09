@@ -22,24 +22,22 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
 
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
 
-  const day = 86400000; // we need to add a day when setting the date picker and minus one when setting filters, for some reason the date picker is off by a day.
-
   useEffect(() => {
     if (filter?.min && filter?.max && filter?.min !== -Infinity && filter?.max !== Infinity) {
-      setDate([new Date(filter.min + day), new Date(filter.max + day)]);
+      setDate([new Date(filter.min), new Date(filter.max)]);
       return;
     }
     if ((filter?.min && !filter?.max) || (filter?.min && filter?.max === Infinity)) {
-      setDate([new Date(filter.min + day), undefined] as Date[]);
+      setDate([new Date(filter.min), undefined] as Date[]);
     }
     if ((filter?.max && !filter?.min) || (filter?.max && filter?.min === -Infinity)) {
-      setDate([undefined, new Date(filter.max + day)] as Date[]);
+      setDate([undefined, new Date(filter.max)] as Date[]);
     }
     if ((!filter?.min && !filter?.max) || (filter?.min === -Infinity && filter?.max === Infinity)) {
       setDate([undefined, undefined] as unknown as Date[]);
       dispatch(removeFilter(meta?.varname));
     }
-  }, [day, dispatch, filter?.max, filter?.min, meta?.varname]);
+  }, [dispatch, filter?.max, filter?.min, meta?.varname]);
 
   const handleOnBrush = (values: number[] | null[]) => {
     if (values[0] === null && values[1] === null) {
@@ -74,8 +72,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
     if (filter) {
       newState = {
         ...filter,
-        min: value[0] ? value[0]?.getTime() - day : -Infinity,
-        max: value[1] ? value[1]?.getTime() - day : Infinity,
+        min: value[0] ? value[0]?.getTime() : -Infinity,
+        max: value[1] ? value[1]?.getTime() : Infinity,
       };
       dispatch(updateFilter(newState));
     } else {
@@ -83,8 +81,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
         varname: meta.varname,
         filtertype: FILTER_TYPE_DATERANGE as FilterType,
         type: 'filter',
-        min: value[0] ? value[0]?.getTime() - day : -Infinity,
-        max: value[1] ? value[1]?.getTime() - day : Infinity,
+        min: value[0] ? value[0]?.getTime() : -Infinity,
+        max: value[1] ? value[1]?.getTime() : Infinity,
         metatype: 'date',
       };
       dispatch(addFilter(newState));

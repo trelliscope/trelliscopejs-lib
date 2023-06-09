@@ -1,4 +1,4 @@
-export type DataType = 'string' | 'number' | 'date';
+export type DataType = 'string' | 'number' | 'date' | 'datetime';
 export interface DataClientFilter {
   field: string;
   value: string | number | string[] | [number, number] | [null, null];
@@ -28,7 +28,7 @@ export interface IDataClient {
   clearFilters(): void;
   groupBy: (
     field: string,
-    dataType: 'string' | 'number' | 'date',
+    dataType: 'string' | 'number' | 'date' | 'datetime',
     groupFunc?: (d: number) => number | null | undefined,
   ) => { key: string | number; value: number }[];
   clearData(): void;
