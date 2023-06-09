@@ -22,18 +22,16 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
 
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
 
-  const minute = 60000; // we need to add a minute when setting the date picker and minus one when setting filters, for some reason the date picker is off by a day.
-
   useEffect(() => {
     if (filter?.min && filter?.max && filter?.min !== -Infinity && filter?.max !== Infinity) {
-      setDate([new Date(filter.min), new Date(filter.max - minute)]);
+      setDate([new Date(filter.min), new Date(filter.max)]);
       return;
     }
     if ((filter?.min && !filter?.max) || (filter?.min && filter?.max === Infinity)) {
       setDate([new Date(filter.min), undefined] as Date[]);
     }
     if ((filter?.max && !filter?.min) || (filter?.max && filter?.min === -Infinity)) {
-      setDate([undefined, new Date(filter.max - minute)] as Date[]);
+      setDate([undefined, new Date(filter.max)] as Date[]);
     }
     if ((!filter?.min && !filter?.max) || (filter?.min === -Infinity && filter?.max === Infinity)) {
       setDate([undefined, undefined] as unknown as Date[]);
@@ -61,7 +59,7 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
         type: 'filter',
         min: values[0] ? new Date(values[0])?.getTime() : -Infinity,
         max: values[1] ? new Date(values[1])?.getTime() : Infinity,
-        metatype: 'date',
+        metatype: 'datetime',
       } as INumberRangeFilterState;
       dispatch(addFilter(newState));
     }
@@ -75,7 +73,7 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
       newState = {
         ...filter,
         min: value[0] ? value[0]?.getTime() : -Infinity,
-        max: value[1] ? value[1]?.getTime() + minute : Infinity,
+        max: value[1] ? value[1]?.getTime() : Infinity,
       };
       dispatch(updateFilter(newState));
     } else {
@@ -84,8 +82,8 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
         filtertype: 'daterange',
         type: 'filter',
         min: value[0] ? value[0]?.getTime() : -Infinity,
-        max: value[1] ? value[1]?.getTime() + minute : Infinity,
-        metatype: 'date',
+        max: value[1] ? value[1]?.getTime() : Infinity,
+        metatype: 'datetime',
       };
       dispatch(addFilter(newState));
     }

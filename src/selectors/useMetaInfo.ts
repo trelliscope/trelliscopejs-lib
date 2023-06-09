@@ -44,9 +44,10 @@ const useMetaInfo = (varname: string, metaType?: MetaType) => {
     // @ts-ignore ts2554
     const data = groupBy(
       varname,
-      META_FILTER_TYPE_MAP[metaType] === FILTER_TYPE_DATERANGE ||
-        META_FILTER_TYPE_MAP[metaType] === FILTER_TYPE_DATETIMERANGE
+      META_FILTER_TYPE_MAP[metaType] === FILTER_TYPE_DATERANGE
         ? 'date'
+        : META_FILTER_TYPE_MAP[metaType] === FILTER_TYPE_DATETIMERANGE
+        ? 'datetime'
         : 'number',
       (d: number) => {
         if (Number.isNaN(Number(d)) || d === undefined) return null;

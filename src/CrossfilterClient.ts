@@ -57,6 +57,7 @@ const valueGetter = {
   string: getStringVal,
   number: getNumberVal,
   date: getDateVal,
+  datetime: getDateVal,
 };
 
 type D = Dimension<Datum, string | number | Date>;
@@ -108,7 +109,6 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
         this.crossfilter.dimension((d) => valueGetter[filter.dataType](d, filter.field as string)),
       );
     }
-
     // filter the dimension based on the filter operation
     switch (filter.operation) {
       case 'eq':
@@ -123,7 +123,35 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
         this.dimensions.get(filter.field)?.filter((d) => d !== filter.value);
         break;
       case 'range':
-        this.dimensions.get(filter.field)?.filter(filter.value as [number, number]);
+        this.dimensions.get(filter.field)?.filter((d) => {
+          if (filter.dataType === 'date') {
+            // the following typescript ignores are present due to the fix greatly complicating this situation.
+
+            // add a day to the  date to make it inclusive
+            return (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 86400000 >= filter.value[0] &&
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 86400000 <= filter.value[1]
+            );
+          }
+          if (filter.dataType === 'datetime') {
+            // add a minute to the date to make it inclusive
+            return (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 60000 >= filter.value[0] &&
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 60000 <= filter.value[1]
+            );
+          }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return d >= filter.value[0] && d <= filter.value[1];
+        });
         break;
       case 'regex':
         this.dimensions.get(filter.field)?.filter((d) => {
@@ -161,7 +189,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
   groupBy(
     field: string | symbol,
-    dataType: 'string' | 'number' | 'date' = 'string',
+    dataType: 'string' | 'number' | 'date' | 'datetime' = 'string',
     groupFunc?: (d: string | number | Date) => NaturallyOrderedValue,
   ) {
     if (this.dimensions.has(field)) {
