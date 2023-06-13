@@ -382,6 +382,8 @@ type PanelSourceType = 'file' | 'REST' | 'localWebSocket';
 
 interface IPanelSource {
   type: PanelSourceType;
+  isLocal: boolean;
+  port: number;
 }
 
 interface IPanelMeta extends IMeta {
@@ -415,7 +417,7 @@ interface IDisplay {
   // paneltype: PanelType;
   // panelformat?: PanelFormat;
   // panelaspect: number;
-  primaryPanel: string;
+  primarypanel: string;
   thumbnailurl: string;
 }
 

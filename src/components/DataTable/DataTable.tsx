@@ -54,7 +54,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
     () => (displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL) as IPanelMeta[]) || [],
     [displayInfo?.metas],
   );
-  const panelMetaLabels = panelMetas.map((meta, index) => `${meta.label} ${index}`);
+  const panelMetaLabels = panelMetas.map((meta) => meta.varname);
   const [columnPinning, setColumnPinning] = useState({ left: [...panelMetaLabels] });
   const unSortableMetas = displayMetas.filter((meta) => !meta.sortable).map((meta) => meta.varname);
   const sort = useSelector(selectSort);
@@ -191,10 +191,10 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       },
     }));
 
-    const imageColumnData = panelMetas.map((meta, index) => ({
-      id: `${meta.varname} ${index}`,
-      header: `${meta.varname}`,
-      accessorKey: `${meta.varname}`,
+    const imageColumnData = panelMetas.map((meta) => ({
+      id: meta.varname,
+      header: meta.varname,
+      accessorKey: meta.varname,
       enableSorting: false,
       size: 110,
       // conflicts within table library, some of the types dont seem to be exported in the same way
@@ -223,21 +223,24 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
             <PanelGraphic
               type={meta?.paneltype as PanelType}
               src={
-                meta?.paneltype === 'iframe'
+                meta?.source?.isLocal === false
                   ? cell.row.original[meta.varname].toString()
-                  : panelSrcGetter(basePath, cell.row.original[meta.varname] as string).toString()
+                  : panelSrcGetter(basePath, cell.row.original[meta.varname] as string, displayInfo?.name || '').toString()
               }
               alt={cell.row.original.name as string}
               aspectRatio={meta?.aspect}
               imageWidth={columnSize?.Panel || 110}
               inTable
               key={`${cell.row.index}_${displayInfo?.name}`}
+              port={meta?.source?.port}
+              sourceType={meta?.source?.type}
+              name={meta?.varname}
+              sourceClean={cell.row.original[meta.varname]}
             />
           )}
         </div>
       ),
     }));
-
     return [...imageColumnData, ...columnData];
   }, [
     basePath,

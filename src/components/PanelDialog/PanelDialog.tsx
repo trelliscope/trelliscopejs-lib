@@ -19,7 +19,7 @@ interface PanelDialogProps {
 const PanelDialog: React.FC<PanelDialogProps> = ({ open, panel, source, onClose }) => {
   const metaData = useMetaData();
   const basePath = useSelector(selectBasePath);
-  const foundMetaData = metaData?.currentData?.find((meta) => meta[panel?.label] === source);
+  const foundMetaData = metaData?.currentData?.find((meta) => meta[panel?.varname] === source);
   const { data: displayInfo } = useDisplayInfo();
   const labels = useDisplayMetas();
 
@@ -28,11 +28,19 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ open, panel, source, onClose 
       <div className={styles.panelDialogGraphic}>
         <PanelGraphic
           type={panel?.paneltype}
-          src={panel?.paneltype === 'iframe' ? source : panelSrcGetter(basePath, source as string).toString()}
+          src={
+            panel?.source?.isLocal === false
+              ? source
+              : panelSrcGetter(basePath, source as string, displayInfo?.name || '').toString()
+          }
           alt={panel?.label}
           key={`${panel?.source}_${panel?.label}`}
           imageWidth={-1}
           aspectRatio={panel?.aspect}
+          port={panel?.source?.port}
+          sourceType={panel?.source?.type}
+          name={panel?.varname}
+          sourceClean={source}
         />
       </div>
       <div className={styles.panelDialogTableWrapper}>

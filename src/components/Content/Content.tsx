@@ -51,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
-  const [curPanel, setCurPanel] = useState(displayInfo?.primaryPanel);
+  const [curPanel, setCurPanel] = useState(displayInfo?.primarypanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
     '--panelLabel-height',
     '--panelGridGap',
@@ -59,8 +59,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   ]) as number[];
 
   useEffect(() => {
-    setCurPanel(displayInfo?.primaryPanel);
-  }, [displayInfo?.primaryPanel]);
+    setCurPanel(displayInfo?.primarypanel);
+  }, [displayInfo?.primarypanel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -169,9 +169,9 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
-  // const tablePrimaryMeta = displayInfo.metas.find((meta: IMeta) => meta.varname === displayInfo.primaryPanel) as IPanelMeta;
+  // const tablePrimaryMeta = displayInfo.metas.find((meta: IMeta) => meta.varname === displayInfo.primarypanel) as IPanelMeta;
   const primaryMeta = displayInfo.metas.find((meta: IMeta) =>
-    layout.viewtype === 'grid' ? meta.varname === curPanel : meta.varname === displayInfo.primaryPanel,
+    layout.viewtype === 'grid' ? meta.varname === curPanel : meta.varname === displayInfo.primarypanel,
   ) as IPanelMeta;
 
   return (
@@ -195,14 +195,19 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                     <PanelGraphic
                       type={primaryMeta?.paneltype}
                       src={
-                        primaryMeta?.paneltype === 'iframe'
+                        primaryMeta?.source?.isLocal === false
                           ? d[curPanel].toString()
-                          : panelSrcGetter(basePath, d[curPanel] as string).toString()
+                          : panelSrcGetter(basePath, d[curPanel] as string, displayInfo?.name || '').toString()
                       }
                       alt={primaryMeta?.label}
                       aspectRatio={primaryMeta?.aspect}
                       imageWidth={calcs.width}
+                      // primaryMeta={primaryMeta}
                       key={`${d[metaIndex]}_${primaryMeta.label}`}
+                      port={primaryMeta?.source?.port}
+                      sourceType={primaryMeta?.source?.type}
+                      name={primaryMeta?.varname}
+                      sourceClean={d[curPanel] as string}
                     />
                   </Panel>
                 ))}
