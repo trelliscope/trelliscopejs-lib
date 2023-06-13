@@ -5,6 +5,7 @@ import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '@mui/material';
 import PanelTable from '../PanelTable/PanelTable';
 import { setLabels } from '../../slices/labelsSlice';
+import PanelPicker from '../PanelPicker';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -12,20 +13,33 @@ interface PanelProps {
   labels: IMeta[];
   inputs: IInput[];
   children: React.ReactNode;
-  onClick: (PANEL_KEY: string | number) => void;
+  onClick: (meta: IPanelMeta, source: string) => void;
+  primaryMeta: IPanelMeta;
+  handlePanelChange: (value: string) => void;
+  selectedValue: string;
 }
 
-const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children, onClick }) => {
+const Panel: React.FC<PanelProps> = ({
+  data,
+  labels,
+  inputs,
+  children,
+  onClick,
+  primaryMeta,
+  handlePanelChange,
+  selectedValue,
+}) => {
   const dispatch = useDispatch();
+
   const handleClick = () => {
-    if (data.__PANEL_KEY__) {
-      onClick(data.__PANEL_KEY__);
+    if (data[primaryMeta.varname]) {
+      onClick(primaryMeta, data[primaryMeta.varname] as string);
     }
   };
 
   const handleRemoveLabel = (label: string) => {
     const newLabels = labels.map((labelItem) => labelItem.varname).filter((labelItem) => labelItem !== label);
-    const newInputs = inputs? inputs.map((inputItem) => inputItem.name).filter((inputItem) => inputItem !== label) : [];
+    const newInputs = inputs ? inputs.map((inputItem) => inputItem.name).filter((inputItem) => inputItem !== label) : [];
     const newLabelsWithInputs = [...newLabels, ...newInputs];
     dispatch(setLabels(newLabelsWithInputs));
   };
@@ -35,9 +49,21 @@ const Panel: React.FC<PanelProps> = ({ data, labels, inputs, children, onClick }
       <div role="presentation" className={styles.panelGraphic}>
         {children}
         <div className={styles.panelGraphicExpand}>
-          <IconButton size="small" onClick={handleClick}>
+          <IconButton
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 0.5);',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.7);',
+              },
+            }}
+            size="small"
+            onClick={handleClick}
+          >
             <FontAwesomeIcon icon={faExpand} />
           </IconButton>
+        </div>
+        <div className={styles.panelGraphicPickerContainer}>
+          <PanelPicker handlePanelChange={handlePanelChange} selectedValue={selectedValue} />
         </div>
       </div>
       <PanelTable data={data} labels={labels} inputs={inputs} compact onLabelRemove={handleRemoveLabel} />

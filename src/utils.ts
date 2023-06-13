@@ -39,11 +39,14 @@ export const getFactorFromLabel = (values: string[], levels: string[]) =>
     })
     .filter((label) => label !== undefined);
 
-export const panelSrcGetter =
-  (basePath: string, panelformat?: PanelFormat) =>
-  (data: Datum, name = '') => {
-    if (panelformat) {
-      return `${process.env.PUBLIC_URL}/${basePath}/displays/${snakeCase(name)}/panels/${data.__PANEL_KEY__}.${panelformat}`;
-    }
-    return data.__PANEL_KEY__;
-  };
+export const panelSrcGetter = (basePath: string, fileName: string, displayName: string) =>
+  `${process.env.PUBLIC_URL}/${basePath}/displays/${displayName}/${fileName}`;
+
+export const checkImageExists = async (url: string): Promise<boolean> => {
+  try {
+    const response = await fetch(url);
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};

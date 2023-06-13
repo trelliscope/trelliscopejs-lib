@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useContext, useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
-import { metaIndex, useMetaData, useMetaDataByPanelKey } from '../../slices/metaDataAPI';
+import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
-import { useRelatedDisplayNames } from '../../slices/displayListAPI';
 import Panel, { PanelGraphic } from '../Panel';
 import { panelSrcGetter } from '../../utils';
 import { selectBasePath, selectPanelDialog } from '../../selectors/app';
@@ -52,12 +51,16 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
-  const relatedDisplayNames = useRelatedDisplayNames();
+  const [curPanel, setCurPanel] = useState(displayInfo?.primarypanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
     '--panelLabel-height',
     '--panelGridGap',
     '--padding-2',
   ]) as number[];
+
+  useEffect(() => {
+    setCurPanel(displayInfo?.primarypanel);
+  }, [displayInfo?.primarypanel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -76,14 +79,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     }
   };
 
-  useEffect(handleTableResize, [
-    displayInfo?.panelaspect,
-    tableWrapperRefHeight,
-    tableWrapperRefWidth,
-    dispatch,
-    layout?.nrow,
-    layout?.viewtype,
-  ]);
+  useEffect(handleTableResize, [tableWrapperRefHeight, tableWrapperRefWidth, dispatch, layout?.nrow, layout?.viewtype]);
 
   // const handleResize = (rowCount) => {
 
@@ -105,7 +101,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const { ncol } = layout;
       const labelCount = labels.length;
 
-      const aspectRatio = displayInfo?.panelaspect || 1;
+      const aspectRatio = 1;
 
       const panelWidth = (width - ((gridGap + 4 * panelPadding) * ncol + gridGap + 2)) / ncol;
       // const panelWidth = (width - ((gridGap) * ncol + gridGap + 2)) / ncol;
@@ -129,17 +125,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     return res;
   };
 
-  const calcs = useMemo(getCalcs, [
-    width,
-    labels.length,
-    layout,
-    displayInfo?.panelaspect,
-    labelHeight,
-    panelPadding,
-    gridGap,
-    height,
-  ]);
-  
+  const calcs = useMemo(getCalcs, [width, labels.length, layout, labelHeight, panelPadding, gridGap, height]);
+
   const setCalcs = () => {
     if (layout.viewtype === 'grid') {
       if (calcs.nrow !== layout.nrow) {
@@ -151,14 +138,14 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   useEffect(setCalcs, [layout.nrow, layout.viewtype, calcs.contentWidth, calcs.nrow, dispatch]);
 
   const panelDialog = useSelector(selectPanelDialog);
-  const panelDialogData = useMetaDataByPanelKey(panelDialog.panel);
 
   const handlePanelClick = useCallback(
-    (PANEL_KEY: string | number) => {
+    (meta: IPanelMeta, source: string) => {
       dispatch(
         setPanelDialog({
           open: true,
-          panel: PANEL_KEY,
+          panel: meta,
+          source,
         }),
       );
     },
@@ -167,17 +154,14 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   if (!metaDataSuccess || !displayInfoSuccess) return null;
 
-  let names = [displayInfo?.name];
-  if (relatedDisplayNames.length > 0) {
-    names = [displayInfo?.name, ...relatedDisplayNames];
-  }
-
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
     width: calcs.contentWidth,
   };
 
-  const getPanelSrc = panelSrcGetter(basePath, displayInfo?.panelformat);
+  const handlePanelChange = (value: string) => {
+    setCurPanel(value);
+  };
 
   const activeLabels = labels
     .map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label))
@@ -185,12 +169,17 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const activeInputs = displayInfo.inputs?.inputs.filter((input: IInput) => labels.find((label) => label === input.name));
 
+  // const tablePrimaryMeta = displayInfo.metas.find((meta: IMeta) => meta.varname === displayInfo.primarypanel) as IPanelMeta;
+  const primaryMeta = displayInfo.metas.find((meta: IMeta) =>
+    layout.viewtype === 'grid' ? meta.varname === curPanel : meta.varname === displayInfo.primarypanel,
+  ) as IPanelMeta;
+
   return (
     <>
       {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div className={styles.content} style={contentStyle} ref={contentRef}>
-            {metaDataSuccess && displayInfoSuccess && data?.length > 0 && (
+            {metaDataSuccess && displayInfoSuccess && data?.length > 0 && curPanel && (
               <>
                 {data.map((d) => (
                   <Panel
@@ -199,17 +188,27 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                     labels={activeLabels}
                     inputs={activeInputs as IInput[]}
                     key={d[metaIndex]}
+                    primaryMeta={primaryMeta}
+                    handlePanelChange={handlePanelChange}
+                    selectedValue={curPanel}
                   >
-                    {names.map((name) => (
-                      <PanelGraphic
-                        type={displayInfo?.paneltype}
-                        src={getPanelSrc(d, name).toString()}
-                        alt={name}
-                        aspectRatio={displayInfo?.panelaspect}
-                        imageWidth={calcs.width}
-                        key={`${d[metaIndex]}_${name}`}
-                      />
-                    ))}
+                    <PanelGraphic
+                      type={primaryMeta?.paneltype}
+                      src={
+                        primaryMeta?.source?.isLocal === false
+                          ? d[curPanel].toString()
+                          : panelSrcGetter(basePath, d[curPanel] as string, displayInfo?.name || '').toString()
+                      }
+                      alt={primaryMeta?.label}
+                      aspectRatio={primaryMeta?.aspect}
+                      imageWidth={calcs.width}
+                      // primaryMeta={primaryMeta}
+                      key={`${d[metaIndex]}_${primaryMeta.label}`}
+                      port={primaryMeta?.source?.port}
+                      sourceType={primaryMeta?.source?.type}
+                      name={primaryMeta?.varname}
+                      sourceClean={d[curPanel] as string}
+                    />
                   </Panel>
                 ))}
               </>
@@ -231,20 +230,10 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       )}
       <PanelDialog
         open={panelDialog.open}
-        panelKey={panelDialog.panel}
+        panel={panelDialog.panel as IPanelMeta}
+        source={panelDialog.source as string}
         onClose={() => dispatch(setPanelDialog({ open: false }))}
-      >
-        {names.map((name) => (
-          <PanelGraphic
-            type={displayInfo?.paneltype}
-            src={getPanelSrc(panelDialogData || {}, name)?.toString()}
-            alt={name}
-            key={`${panelDialog.panel}_${name}`}
-            imageWidth={-1}
-            aspectRatio={displayInfo?.panelaspect}
-          />
-        ))}
-      </PanelDialog>
+      />
     </>
   );
 };
