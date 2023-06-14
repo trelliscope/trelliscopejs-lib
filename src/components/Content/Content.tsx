@@ -198,7 +198,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                       src={
                         primaryMeta?.source?.isLocal === false
                           ? d[curPanel].toString()
-                          : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name) || '').toString()
+                          : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name || '')).toString()
                       }
                       alt={primaryMeta?.label}
                       aspectRatio={primaryMeta?.aspect}

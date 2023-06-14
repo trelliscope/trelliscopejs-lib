@@ -228,7 +228,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
                   : panelSrcGetter(
                       basePath,
                       cell.row.original[meta.varname] as string,
-                      snakeCase(displayInfo?.name) || '',
+                      snakeCase(displayInfo?.name || ''),
                     ).toString()
               }
               alt={cell.row.original.name as string}
