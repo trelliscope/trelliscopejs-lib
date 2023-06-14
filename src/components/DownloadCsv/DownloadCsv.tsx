@@ -66,19 +66,32 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
     rowColumnData.push(panelKey);
     // if there are meta vars we want to include, we need to get them from the allData object
     if (includedMetaVars.length > 0) {
-      const idx = allData.map((panelData) => panelData.__PANEL_KEY__).indexOf(panelKey);
-      if (idx > -1) {
-        const panelWithInput = allData[idx];
-        includedMetaVars.forEach((metaVar) => {
-          // if the meta var is a factor, we need to get the label from the factor util otherwise our csv will have numbers when it needs labels
-          const dispMetaFound = displayMetas.find((meta) => meta.varname === metaVar);
-          if (dispMetaFound?.type === META_TYPE_FACTOR) {
-            const factorLabel = getLabelFromFactor(panelWithInput[metaVar] as number, dispMetaFound.levels as string[]);
-            return rowColumnData.push(factorLabel === MISSING_TEXT ? '' : factorLabel);
+      // for each includedMetaVar we need to grab it from data and push it to the rowColumnData
+      includedMetaVars.forEach((metaVar) => {
+        const metaFound = displayMetas.find((meta) => meta.varname === metaVar);
+        // we need to loop over all of the data and build up the panelKey that matches the current panelKey so we can grab the right data
+        allData.forEach((panelData) => {
+          const panelCheckArr: string[] = [];
+          displayInfo?.keycols.forEach((keycol) => {
+            const metaFound2 = displayMetas.find((meta) => meta.varname === keycol);
+            if (metaFound2?.type === META_TYPE_FACTOR) {
+              const factorLabel = getLabelFromFactor(panelData[keycol] as number, metaFound2.levels as string[]);
+              panelCheckArr.push(factorLabel);
+              return;
+            }
+            panelCheckArr.push(panelData[keycol] as string);
+          });
+          const panelCheck = panelCheckArr.join('_');
+          if (panelCheck === panelKey) {
+            if (metaFound?.type === META_TYPE_FACTOR) {
+              const factorLabel = getLabelFromFactor(panelData[metaVar] as number, metaFound.levels as string[]);
+              return rowColumnData.push(factorLabel === MISSING_TEXT ? '' : factorLabel);
+            }
+            return rowColumnData.push(panelData[metaVar] === undefined ? '' : panelData[metaVar]);
           }
-          return rowColumnData.push(panelWithInput[metaVar] === undefined ? '' : panelWithInput[metaVar]);
+          return null;
         });
-      }
+      });
     }
 
     // then we add the rest of the input data

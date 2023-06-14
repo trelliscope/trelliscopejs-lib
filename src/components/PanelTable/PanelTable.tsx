@@ -31,7 +31,7 @@ import {
 } from '../PanelInputs';
 import PanelTableLabelCell from './PanelTableLabelCell';
 import { getLabelFromFactor } from '../../utils';
-import { useDisplayMetas } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './PanelTable.module.scss';
 
 interface PanelTableProps {
@@ -45,6 +45,17 @@ interface PanelTableProps {
 
 const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs, compact, onLabelRemove }) => {
   const displayMetas = useDisplayMetas();
+  const { data: displayInfo } = useDisplayInfo();
+
+  const panelKeyArr = displayInfo?.keycols?.map((keycol) => {
+    const foundMeta = displayMetas.find((meta) => meta.varname === keycol);
+    if (foundMeta?.type === META_TYPE_FACTOR) {
+      return getLabelFromFactor(data[keycol] as number, foundMeta?.levels as string[]);
+    }
+    return data[keycol];
+  });
+
+  const panelKey = panelKeyArr?.join('_');
 
   //  are we okay with how the multiselect drop down moves now since its tied to the pencil and the drawer kinda shifts?
   // for the sorting and the inputs, getting them in is doable, sorting might get a little odd since the inputs currently
@@ -66,7 +77,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   <PanelInputText
                     name={input.name}
                     rows={(input as ITextInput).height}
-                    panelKey={data[PANEL_KEY] as string}
+                    panelKey={panelKey as string}
                     isNumeric={input.type === INPUT_TYPE_NUMBER}
                     input={input as ITextInput | INumberInput}
                   />
@@ -75,27 +86,27 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   <PanelInputRadios
                     name={input.name}
                     options={(input as IRadioInput).options}
-                    panelKey={data[PANEL_KEY] as string}
+                    panelKey={panelKey as string}
                   />
                 )}
                 {input.type === INPUT_TYPE_CHECKBOX && (
                   <PanelInputCheckbox
                     name={input.name}
-                    panelKey={data[PANEL_KEY] as string}
+                    panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
                   />
                 )}
                 {input.type === INPUT_TYPE_SELECT && (
                   <PanelInputSelect
                     name={input.name}
-                    panelKey={data[PANEL_KEY] as string}
+                    panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
                   />
                 )}
                 {input.type === INPUT_TYPE_MULTISELECT && (
                   <PanelInputMultiSelect
                     name={input.name}
-                    panelKey={data[PANEL_KEY] as string}
+                    panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
                   />
                 )}
