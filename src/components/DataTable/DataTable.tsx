@@ -25,7 +25,6 @@ import {
   META_TYPE_NUMBER,
   META_TYPE_PANEL,
   MISSING_TEXT,
-  PANEL_KEY,
 } from '../../constants';
 import {
   PanelInputText,
@@ -89,6 +88,16 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: any) => {
+        const panelKeyArr = displayInfo?.keycols?.map((keycol) => {
+          const foundMeta = displayMetas.find((metaItem) => metaItem.varname === keycol);
+          if (foundMeta?.type === META_TYPE_FACTOR) {
+            return getLabelFromFactor(cell.row.original[keycol] as number, foundMeta?.levels as string[]);
+          }
+          return cell.row.original[keycol];
+        });
+
+        const panelKey = panelKeyArr?.join('_');
+
         const value = cell.row.original[meta.varname];
         if (meta.tags.includes('input')) {
           if (meta.type === INPUT_TYPE_TEXT || meta.type === INPUT_TYPE_NUMBER) {
@@ -96,7 +105,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               <PanelInputText
                 name={meta.name}
                 rows={(meta as ITextInput).height}
-                panelKey={cell.row.original[PANEL_KEY] as string}
+                panelKey={panelKey as string}
                 isNumeric={meta.type === INPUT_TYPE_NUMBER}
                 input={meta as ITextInput | INumberInput}
               />
@@ -104,34 +113,26 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           }
           if (meta.type === INPUT_TYPE_RADIO)
             return (
-              <PanelInputRadios
-                name={meta.name}
-                options={(meta as IRadioInput).options}
-                panelKey={cell.row.original[PANEL_KEY] as string}
-              />
+              <PanelInputRadios name={meta.name} options={(meta as IRadioInput).options} panelKey={panelKey as string} />
             );
           if (meta.type === INPUT_TYPE_CHECKBOX)
             return (
               <PanelInputCheckbox
                 name={meta.name}
-                panelKey={cell.row.original[PANEL_KEY] as string}
+                panelKey={panelKey as string}
                 options={(meta as ICheckboxInput).options}
               />
             );
           if (meta.type === INPUT_TYPE_SELECT)
             return (
-              <PanelInputSelect
-                name={meta.name}
-                panelKey={cell.row.original[PANEL_KEY] as string}
-                options={(meta as ICheckboxInput).options}
-              />
+              <PanelInputSelect name={meta.name} panelKey={panelKey as string} options={(meta as ICheckboxInput).options} />
             );
 
           if (meta.type === INPUT_TYPE_MULTISELECT)
             return (
               <PanelInputMultiSelect
                 name={meta.name}
-                panelKey={cell.row.original[PANEL_KEY] as string}
+                panelKey={panelKey as string}
                 options={(meta as ICheckboxInput).options}
               />
             );
@@ -246,6 +247,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
     basePath,
     columnSize?.Panel,
     data,
+    displayInfo?.keycols,
     displayInfo?.name,
     displayInfoSuccess,
     displayMetas,
