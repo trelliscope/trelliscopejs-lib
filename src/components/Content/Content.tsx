@@ -51,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
-  const [curPanel, setCurPanel] = useState(layout.panel || displayInfo?.primarypanel);
+  const [curPanel, setCurPanel] = useState(layout?.panel || displayInfo?.primarypanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
     '--panelLabel-height',
     '--panelGridGap',
