@@ -7,7 +7,7 @@ import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import Panel, { PanelGraphic } from '../Panel';
-import { panelSrcGetter } from '../../utils';
+import { panelSrcGetter, snakeCase } from '../../utils';
 import { selectBasePath, selectPanelDialog } from '../../selectors/app';
 import getCustomProperties from '../../getCustomProperties';
 import DataTable from '../DataTable';
@@ -51,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
-  const [curPanel, setCurPanel] = useState(displayInfo?.primarypanel);
+  const [curPanel, setCurPanel] = useState(layout?.panel || displayInfo?.primarypanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
     '--panelLabel-height',
     '--panelGridGap',
@@ -59,8 +59,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   ]) as number[];
 
   useEffect(() => {
-    setCurPanel(displayInfo?.primarypanel);
-  }, [displayInfo?.primarypanel]);
+    setCurPanel(layout?.panel || displayInfo?.primarypanel);
+  }, [displayInfo?.primarypanel, layout?.panel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -161,6 +161,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const handlePanelChange = (value: string) => {
     setCurPanel(value);
+    dispatch(setLayout({ panel: value }));
   };
 
   const activeLabels = labels
@@ -197,7 +198,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                       src={
                         primaryMeta?.source?.isLocal === false
                           ? d[curPanel].toString()
-                          : panelSrcGetter(basePath, d[curPanel] as string, displayInfo?.name || '').toString()
+                          : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name || '')).toString()
                       }
                       alt={primaryMeta?.label}
                       aspectRatio={primaryMeta?.aspect}

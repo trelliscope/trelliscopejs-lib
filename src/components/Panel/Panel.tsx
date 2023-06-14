@@ -7,6 +7,8 @@ import PanelTable from '../PanelTable/PanelTable';
 import { setLabels } from '../../slices/labelsSlice';
 import PanelPicker from '../PanelPicker';
 import styles from './Panel.module.scss';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import { META_TYPE_PANEL } from '../../constants';
 
 interface PanelProps {
   data: Datum;
@@ -30,6 +32,9 @@ const Panel: React.FC<PanelProps> = ({
   selectedValue,
 }) => {
   const dispatch = useDispatch();
+  const { data: displayInfo } = useDisplayInfo();
+  const panelMetas =
+    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
 
   const handleClick = () => {
     if (data[primaryMeta.varname]) {
@@ -62,9 +67,11 @@ const Panel: React.FC<PanelProps> = ({
             <FontAwesomeIcon icon={faExpand} />
           </IconButton>
         </div>
-        <div className={styles.panelGraphicPickerContainer}>
-          <PanelPicker handlePanelChange={handlePanelChange} selectedValue={selectedValue} />
-        </div>
+        {panelMetas?.length > 1 && (
+          <div className={styles.panelGraphicPickerContainer}>
+            <PanelPicker handlePanelChange={handlePanelChange} selectedValue={selectedValue} />
+          </div>
+        )}
       </div>
       <PanelTable data={data} labels={labels} inputs={inputs} compact onLabelRemove={handleRemoveLabel} />
     </div>

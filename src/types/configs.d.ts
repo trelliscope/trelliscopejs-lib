@@ -316,6 +316,7 @@ interface ILayoutState extends IState {
   ncol: number;
   page: number;
   viewtype: ViewType;
+  panel: string;
 }
 
 interface ILabelState extends IState {

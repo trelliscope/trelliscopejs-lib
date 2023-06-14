@@ -7,7 +7,7 @@ import PanelTable from '../PanelTable/PanelTable';
 import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
 import { selectBasePath } from '../../selectors/app';
-import { panelSrcGetter } from '../../utils';
+import { panelSrcGetter, snakeCase } from '../../utils';
 
 interface PanelDialogProps {
   open: boolean;
@@ -31,7 +31,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ open, panel, source, onClose 
           src={
             panel?.source?.isLocal === false
               ? source
-              : panelSrcGetter(basePath, source as string, displayInfo?.name || '').toString()
+              : panelSrcGetter(basePath, source as string, snakeCase(displayInfo?.name || '')).toString()
           }
           alt={panel?.label}
           key={`${panel?.source}_${panel?.label}`}
