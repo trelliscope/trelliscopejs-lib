@@ -67,7 +67,7 @@ const Panel: React.FC<PanelProps> = ({
             <FontAwesomeIcon icon={faExpand} />
           </IconButton>
         </div>
-        {panelMetas?.length > 0 && (
+        {panelMetas?.length > 1 && (
           <div className={styles.panelGraphicPickerContainer}>
             <PanelPicker handlePanelChange={handlePanelChange} selectedValue={selectedValue} />
           </div>

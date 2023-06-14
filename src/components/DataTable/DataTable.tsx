@@ -8,7 +8,7 @@ import { selectSort, setSort } from '../../slices/sortSlice';
 import { useDisplayInfo, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import PanelGraphic from '../Panel/PanelGraphic';
 import { selectBasePath } from '../../selectors/app';
-import { getLabelFromFactor, panelSrcGetter } from '../../utils';
+import { getLabelFromFactor, panelSrcGetter, snakeCase } from '../../utils';
 import styles from './DataTable.module.scss';
 import FormattedNumber, { format } from '../FormattedNumber/FormattedNumber';
 import {
@@ -225,7 +225,11 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               src={
                 meta?.source?.isLocal === false
                   ? cell.row.original[meta.varname].toString()
-                  : panelSrcGetter(basePath, cell.row.original[meta.varname] as string, displayInfo?.name || '').toString()
+                  : panelSrcGetter(
+                      basePath,
+                      cell.row.original[meta.varname] as string,
+                      snakeCase(displayInfo?.name) || '',
+                    ).toString()
               }
               alt={cell.row.original.name as string}
               aspectRatio={meta?.aspect}

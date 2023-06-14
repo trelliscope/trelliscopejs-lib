@@ -7,7 +7,7 @@ import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
 import Panel, { PanelGraphic } from '../Panel';
-import { panelSrcGetter } from '../../utils';
+import { panelSrcGetter, snakeCase } from '../../utils';
 import { selectBasePath, selectPanelDialog } from '../../selectors/app';
 import getCustomProperties from '../../getCustomProperties';
 import DataTable from '../DataTable';
@@ -198,7 +198,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                       src={
                         primaryMeta?.source?.isLocal === false
                           ? d[curPanel].toString()
-                          : panelSrcGetter(basePath, d[curPanel] as string, displayInfo?.name || '').toString()
+                          : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name) || '').toString()
                       }
                       alt={primaryMeta?.label}
                       aspectRatio={primaryMeta?.aspect}
