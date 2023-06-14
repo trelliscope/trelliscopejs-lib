@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import styles from './Panel.module.scss';
-import { checkImageExists } from '../../utils';
 
 interface PanelGraphicProps {
   type: PanelType;
@@ -34,11 +33,6 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
   useEffect(() => {
     const loadImage = async () => {
       setLoading(true);
-      const imageExists = await checkImageExists(src);
-      if (imageExists) {
-        setLoading(false);
-        return;
-      }
       const socket = new WebSocket(socketUrl);
       socket.onopen = function (e) {
         socket.send(JSON.stringify({ panelName: name, panelURL: sourceClean }));

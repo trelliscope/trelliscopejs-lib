@@ -38,6 +38,10 @@ export const hashFromState = (state: RootState) => {
     hashURL.append('viewtype', layout.viewtype);
   }
 
+  if (layout.panel) {
+    hashURL.append('panel', layout.panel);
+  }
+
   // labels
   const { labels } = state;
   if (labels.length) {

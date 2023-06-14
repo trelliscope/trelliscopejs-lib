@@ -51,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
-  const [curPanel, setCurPanel] = useState(displayInfo?.primarypanel);
+  const [curPanel, setCurPanel] = useState(layout.panel || displayInfo?.primarypanel);
   const [labelHeight, gridGap, panelPadding] = getCustomProperties([
     '--panelLabel-height',
     '--panelGridGap',
@@ -59,8 +59,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   ]) as number[];
 
   useEffect(() => {
-    setCurPanel(displayInfo?.primarypanel);
-  }, [displayInfo?.primarypanel]);
+    setCurPanel(layout?.panel || displayInfo?.primarypanel);
+  }, [displayInfo?.primarypanel, layout?.panel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -161,6 +161,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
   const handlePanelChange = (value: string) => {
     setCurPanel(value);
+    dispatch(setLayout({ panel: value }));
   };
 
   const activeLabels = labels
