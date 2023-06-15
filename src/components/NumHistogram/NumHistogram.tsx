@@ -66,9 +66,17 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       setBrushActive(false);
     }
   };
-  const sel0 = selection[0] === 0 ? xScale(selection[0]) : xScale(log ? Math.log10(selection[0]) : selection[0]) || 0;
+
+  const sel0 =
+    selection[0] === -Infinity && selection[1] === Infinity
+      ? xScale(0)
+      : selection[0] === 0
+      ? xScale(selection[0])
+      : xScale(log ? Math.log10(selection[0]) : selection[0]) || 0;
   const sel1 =
-    selection[1] === 0
+    selection[0] === -Infinity && selection[1] === Infinity
+      ? xScale(0)
+      : selection[1] === 0
       ? selection[0] === 0
         ? xScale(selection[0])
         : selection[1] === 0
@@ -87,7 +95,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
             height={yScale(d.value)}
             x={(xScale(d.key as number) || 0) + xPad}
             y={height - yScale(d.value) - axisPad - 1}
-            active={brushActive || selection[0] !== selection[1]}
+            active={brushActive || sel0 !== sel1}
           />
         ))}
       </g>
@@ -103,7 +111,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
       />
       <NumHistogramBrush
         name={name}
-        selection={[sel0, sel1]}
+        selection={sel0 === -Infinity && sel1 === Infinity ? [0, 0] : [sel0, sel1]}
         width={innerWidth}
         height={height - axisPad}
         x={xPad / 2}

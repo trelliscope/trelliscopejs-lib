@@ -130,7 +130,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           data={data}
           name={meta.varname}
           onBrush={handleOnBrush}
-          selection={[filter?.min || 0, filter?.max || 0]}
+          selection={[filter?.min ?? -Infinity, filter?.max ?? Infinity]}
           log={log}
           isDate={false}
         />
