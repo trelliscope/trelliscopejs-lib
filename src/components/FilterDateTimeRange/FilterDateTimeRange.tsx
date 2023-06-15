@@ -99,7 +99,7 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
         data={data as { key: string | number; value: number }[]}
         name={meta.varname}
         onBrush={handleOnBrush}
-        selection={[filter?.min || 0, filter?.max || 0]}
+        selection={[filter?.min ?? -Infinity, filter?.max ?? Infinity]}
         log={false}
         isDate
       />

@@ -65,7 +65,7 @@ export const hashFromState = (state: RootState) => {
         };val:${values.map(encodeURIComponent).join('#')}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
         const { min, max } = flt as INumberRangeFilterState | IDatetimeRangeFilterState;
-        res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min ?? ''};max:${max ?? ''}`;
+        res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min ?? -Infinity};max:${max ?? Infinity}`;
       }
       return res;
     });
