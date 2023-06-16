@@ -4,7 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
-import { cogDataSelector, fullscreenSelector } from '../../selectors';
+import { cogDataSelector, singlePageAppSelector } from '../../selectors';
 import { selectDialogOpen } from '../../selectors/app';
 import { DataContext } from '../DataProvider';
 import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
@@ -18,7 +18,7 @@ const Pagination: React.FC = () => {
   const n = useSelector(selectPage);
   const totPanels = filteredData.length;
   const npp = useSelector(selectNumPerPage);
-  const fullscreen = useSelector(fullscreenSelector);
+  const singlePageApp = useSelector(singlePageAppSelector);
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
 
@@ -55,8 +55,8 @@ const Pagination: React.FC = () => {
     handleChange(totPages);
   };
 
-  useHotkeys('right', pageRight, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
-  useHotkeys('left', pageLeft, { enabled: fullscreen && !dialogOpen }, [n, totPanels, npp]);
+  useHotkeys('right', pageRight, { enabled: singlePageApp && !dialogOpen }, [n, totPanels, npp]);
+  useHotkeys('left', pageLeft, { enabled: singlePageApp && !dialogOpen }, [n, totPanels, npp]);
 
   if (cogData.isFetching || (cogData.isLoaded && cogData.crossfilter === undefined)) {
     return <div className={styles.paginationProgress}>loading panels...</div>;
