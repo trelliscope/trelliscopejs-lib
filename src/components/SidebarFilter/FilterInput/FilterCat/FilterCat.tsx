@@ -131,6 +131,9 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
             value={filter?.regexp || ''}
             onChange={handleRegex}
             variant="standard"
+            InputProps={{
+              style: { marginLeft: '5px' },
+            }}
           />
         </div>
         <Ellipsis options={sortOptions} curItem={curSort} setCurItem={setCurSort} />

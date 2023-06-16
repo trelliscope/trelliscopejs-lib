@@ -2,7 +2,9 @@
   &InputContainer {
     display: flex;
     align-items: center;
-    padding: var(--padding-px) var(--padding-3);
+    justify-content: space-between;
+    padding-top: var(--padding-3);
+    padding-bottom: var(--padding-3);
   }
 
   &Chart {
