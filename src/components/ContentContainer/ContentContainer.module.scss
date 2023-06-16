@@ -1,0 +1,15 @@
+.contentContainer {
+  margin-top: 54px;
+  overflow: hidden;
+  height: calc(100% - 58px); // TODO: replace with variables
+  padding: 0;
+  width: 100%;
+  // add variable for margin-left
+  margin-left: 0;
+  // add variable for transition
+  transition: margin-left 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+  &__closed {
+    margin-left: -400px;
+  }
+}

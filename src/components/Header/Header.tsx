@@ -1,149 +1,88 @@
-import React, { useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import DisplayInfo from '../DisplayInfo';
-import DisplaySelect from '../DisplaySelect';
-import Pagination from '../Pagination';
-import HelpInfo from '../HelpInfo';
-import { windowWidthSelector } from '../../selectors/ui';
-import { fullscreenSelector, cogDataSelector } from '../../selectors';
-import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
-import getCustomProperties from '../../getCustomProperties';
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
-import { useDisplayGroups, useDisplayList } from '../../slices/displayListAPI';
-import { DataContext } from '../DataProvider';
-import { selectDialogOpen } from '../../selectors/app';
+import DisplaySelect from '../DisplaySelect';
+import FullscreenButton from '../FullscreenButton';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import ExportInputDialog from '../ExportInputDialog';
+import DisplayInfo from '../DisplayInfo';
 import styles from './Header.module.scss';
+import HelpInfo from '../HelpInfo';
+import Share from '../Share';
 
 const Header: React.FC = () => {
-  const dispatch = useDispatch();
-  const { data: displayList = [], isSuccess } = useDisplayList();
-  const displayGroups = useDisplayGroups();
-  const { allData, filteredData } = useContext(DataContext);
-
-  const dialogOpen = useSelector(selectDialogOpen);
-  const windowWidth = useSelector(windowWidthSelector);
-  const dlLength = displayList?.length || 0;
+  const { data: displayList = [] } = useDisplayList();
+  const [hasInputs, setHasInputs] = useState(false);
+  const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const selectedDisplay = useSelectedDisplay();
-  const singleDisplay = displayList.length === 1;
-  const [headerHeight, logoWidth] = getCustomProperties(['--header-height', '--logo-width']) as number[];
+  const { data: displayInfo } = useDisplayInfo();
 
-  const n = useSelector(selectPage);
-  const originalTotal = allData.length;
-  const totPanels = filteredData.length;
-  const npp = useSelector(selectNumPerPage);
-  const fullscreen = useSelector(fullscreenSelector);
-  const cogData = useSelector(cogDataSelector);
-  const totPages = Math.ceil(totPanels / npp);
-
-  const handleChange = (page: number) => {
-    dispatch(
-      setLayout({
-        page,
-        type: 'layout',
-      }),
-    );
-  };
-
-  const pageLeft = () => {
-    let nn = n - 1;
-    if (nn < 1) {
-      nn += 1;
+  useEffect(() => {
+    if (displayInfo && displayInfo.inputs) {
+      setHasInputs(true);
     }
-    return handleChange(nn);
-  };
-
-  const pageRight = () => {
-    let nn = n + 1;
-    if (nn > totPages) {
-      nn -= 1;
+    if (displayInfo?.inputs?.storageInterface?.type === 'localStorage') {
+      setHasLocalStorage(true);
     }
-    return handleChange(nn);
-  };
-
-  const pageFirst = () => {
-    handleChange(1);
-  };
-
-  const pageLast = () => {
-    handleChange(totPages);
-  };
-
-  const stylesComputed = {
-    headerContainer: {
-      width: windowWidth,
-    },
-    headerSubContainer: {
-      left: headerHeight * ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1)),
-      width:
-        windowWidth - (headerHeight * ((dlLength <= 1 ? 0 : 1) + (selectedDisplay?.name === '' ? 0 : 1)) + logoWidth + 30),
-    },
-    displayName: {
-      lineHeight: `${selectedDisplay?.description === '' ? 48 : 21}px`,
-      paddingTop: selectedDisplay?.description === '' ? 0 : 5,
-    },
-  };
-
-  let displayName;
-  let displayDesc = '' as string | undefined;
-  let iconStyle = { visibility: 'hidden' } as { [key: string]: string | number };
-  const displayLoaded = selectedDisplay?.name !== '';
-  const nGroups = Object.keys(displayGroups).length;
-
-  if (displayLoaded) {
-    if (nGroups > 1) {
-      displayName = `/
-        ${selectedDisplay?.name}`;
-    } else {
-      // Takes file name and replaces underscores with space to make title
-      displayName = (selectedDisplay?.name || '').replace(/_/g, ' ');
-    }
-    if (!singleDisplay) {
-      iconStyle = { color: '#aaa', fontSize: 12 };
-    }
-    displayDesc = selectedDisplay?.description;
-  } else if (singleDisplay) {
-    displayName = 'loading...';
-  } else if (!dialogOpen && displayList?.length > 0) {
-    displayName = (
-      <span className={styles.headerNameDescContainerIcon}>
-        <FontAwesomeIcon icon={faArrowLeftLong} />
-        &nbsp;select a display to view...
-      </span>
-    );
-  }
+  }, [displayInfo]);
 
   return (
-    <div className={styles.headerContainer} style={stylesComputed.headerContainer}>
-      {/* {isSuccess && !singleDisplay && <DisplaySelect setDialogOpen={handleDialogOpen} />} */}
-      {/* {selectedDisplay?.name !== '' && <DisplayInfo setDialogOpen={handleDialogOpen} totPanels={originalTotal} />} */}
-      <i style={iconStyle} className="fa fa-info-circle" />
-      <div className={styles.headerSubContainer} style={stylesComputed.headerSubContainer}>
-        <div className={styles.headerNameDescContainer}>
-          <div className={styles.headerDisplayName} style={stylesComputed.displayName}>
-            {displayName}
+    <AppBar
+      className={styles.headerAppBar}
+      position="absolute"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        '&.MuiAppBar-root': { background: '#fefefe' },
+      }}
+      color="default"
+      elevation={0}
+    >
+      <Toolbar className={styles.headerToolbar} disableGutters>
+        <div className={styles.header}>
+          <div className={styles.headerDisplayInfo}>
+            <DisplayInfo />
+            {displayList.length > 1 && <DisplaySelect />}
+            <div className={styles.headerDisplayInfoTitleContainer}>
+              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
+                {selectedDisplay?.name}
+              </Typography>
+              {selectedDisplay?.description && selectedDisplay?.description !== selectedDisplay?.name && (
+                <Typography
+                  variant="subtitle1"
+                  noWrap
+                  component="div"
+                  sx={{ flexGrow: 1, lineHeight: '1.25', fontSize: '13px' }}
+                >
+                  {selectedDisplay?.description}
+                </Typography>
+              )}
+            </div>
           </div>
-          <div className={styles.headerDisplayDesc}>{displayDesc}</div>
+          <div className={styles.headerRight}>
+            <div className={styles.headerIconButton}>
+              <Share />
+            </div>
+            {hasInputs && hasLocalStorage && (
+              <div className={styles.headerIconButton}>
+                <ExportInputDialog
+                  displayInfo={displayInfo as IDisplay}
+                  hasInputs={hasInputs}
+                  hasLocalStorage={hasLocalStorage}
+                />
+              </div>
+            )}
+            <div className={styles.headerTrelliscope}>
+              Trelliscope
+              <HelpInfo />
+              <div className={styles.headerTrelliscopeFullscreen}>
+                <FullscreenButton />
+              </div>
+            </div>
+          </div>
         </div>
-        {/* {displayLoaded && (
-          <Pagination
-            n={n}
-            totPanels={totPanels}
-            npp={npp}
-            dialogOpen={dialogOpen}
-            fullscreen={fullscreen}
-            cogData={cogData}
-            totPages={totPages}
-            pageLeft={pageLeft}
-            pageRight={pageRight}
-            pageFirst={pageFirst}
-            pageLast={pageLast}
-          />
-        )} */}
-      </div>
-      {/* <HelpInfo setDialogOpen={handleDialogOpen} /> */}
-    </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 

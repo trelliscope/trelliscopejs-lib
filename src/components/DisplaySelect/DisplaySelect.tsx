@@ -3,7 +3,7 @@ import type { MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
@@ -12,7 +12,6 @@ import type { LayoutAction } from '../../slices/layoutSlice';
 import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
-import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './DisplaySelect.module.scss';
@@ -53,7 +52,6 @@ const DisplaySelect: React.FC = () => {
     // first close sidebars for safety
     // (there is an issue when the filter sidebar stays open when changing - revisit this)
     dispatch(setActiveSidebar(''));
-    dispatch(setSelectedRelDisps([]));
     dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
     dispatch(clearFilters());
     dispatch(setSort([]));
@@ -78,7 +76,7 @@ const DisplaySelect: React.FC = () => {
         onClick={handleOpen}
         size="large"
       >
-        <FontAwesomeIcon className={styles.displaySelectIcon} icon={faChevronDown} size="xs" />
+        <FontAwesomeIcon className={styles.displaySelectIcon} icon={isOpen ? faChevronUp : faChevronDown} size="xs" />
       </IconButton>
       <Menu
         id="display-select-menu"

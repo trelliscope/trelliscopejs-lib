@@ -6,7 +6,7 @@ import { ClickAwayListener, IconButton } from '@mui/material';
 import { useDisplayInfo, useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
-import FooterChip from '../FooterChip';
+import Chip from '../Chip';
 import VariableSelector from '../VariableSelector';
 import styles from './Sort.module.scss';
 import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME } from '../../constants';
@@ -103,7 +103,7 @@ const Sort: React.FC = () => {
             <span className={styles.sortText}>Sort</span>
           </div>
           {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-            <FooterChip
+            <Chip
               key={`${el.varname}_sortchip`}
               label={el.varname}
               icon={el.icon}
