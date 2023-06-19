@@ -48,6 +48,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
             <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
               <Box sx={{ p: 1, display: 'flex', flexDirection: 'row' }}>
                 <Autocomplete
+                  classes={{ popupIndicatorOpen: styles.variableSelectorPopupIndicatorOpen }}
                   multiple
                   open
                   limitTags={0}

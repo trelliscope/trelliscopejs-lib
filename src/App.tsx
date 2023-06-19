@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box } from '@mui/material';
-// import Header from './components/Header';
-// import Body from './components/Body';
-// import Footer from './components/Footer';
 import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
 import { selectErrorMessage } from './selectors/app';
-import HeaderNew from './components/HeaderNew';
+import Header from './components/Header';
 
 import './assets/styles/main.css';
-import SidebarNew from './components/SidebarNew';
-import ContentNew from './components/ContentNew';
+import Sidebar from './components/Sidebar';
+import ContentContainer from './components/ContentContainer';
 
 interface AppProps {
   client: IDataClient;
@@ -46,14 +43,10 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   return (
     <DataProvider client={client}>
       <Box sx={{ display: 'flex', height: 'inherit' }}>
-        <HeaderNew />
-        <SidebarNew />
-        <ContentNew />
+        <Header />
+        <Sidebar />
+        <ContentContainer />
         <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
-        {/* <Header />
-        <Body />
-        <Footer />
-        <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} /> */}
       </Box>
     </DataProvider>
   );

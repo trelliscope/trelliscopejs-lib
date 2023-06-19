@@ -1,58 +1,60 @@
 .header {
-  &Container {
-    box-sizing: border-box;
-    height: var(--header-container-height);
-    background: var(--white);
-    color: var(--black);
-    border-bottom: var(--border-2);
-    border-top: var(--border-2);
-    border-left: var(--border-2);
-    margin: 0;
-    font-size: var(--text-xl);
-    font-weight: var(--font-light);
-    z-index: 1010;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+
+  &AppBar {
+    background: var(--white-100);
+    height: 54px;
   }
 
-  &SubContainer {
+  &Toolbar {
+    padding-left: 20px;
+    min-height: 54px !important;
+  }
+
+  &Right {
     display: flex;
-    position: absolute;
-    top: 0;
-    height: var(--header-container-height);
+    align-items: center;
   }
 
-  &NameDescContainer {
-    flex: 1 0;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  &IconButton {
+    background: 'red';
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 
-    &Icon {
-      display: flex;
-      align-items: center;
-      margin-left: var(--margin-15);
+  &DisplayInfo {
+    display: flex;
+    align-items: center;
+
+    &TitleContainer {
+      margin-left: 10px;
     }
   }
 
-  &DisplayName {
-    vertical-align: top;
-    padding-left: var(--padding-9);
-    font-size: var(--text-2xl);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-  }
+  &Trelliscope {
+    margin-left: 15px;
+    height: 54px;
+    background: #448aff;
+    font-family: 'Jost';
+    display: flex;
+    flex-direction: row;
+    line-height: 54px;
+    font-size: 17px;
+    padding-left: 22px;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
-  &DisplayDesc {
-    vertical-align: top;
-    font-weight: var(--font-light);
-    padding-left: var(--padding-9);
-    padding-right: var(--padding-6);
-    font-size: var(--text-3xs);
-    font-style: italic;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    &Fullscreen {
+      margin-left: 4px;
+      padding-left: 7px;
+      padding-right: 7px;
+      line-height: 50px;
+      background: #4dabf5;
+    }
   }
 }
