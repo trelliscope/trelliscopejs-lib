@@ -31,7 +31,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   isDate,
 }) => {
   const axisPad = 16;
-  const xPad = 5;
+  const xPad = 20;
   const innerWidth = width - xPad;
   const barWidth = innerWidth / xDomain.length - Math.max((innerWidth * 0.06) / xDomain.length, 2);
   const delta = xDomain[1] - xDomain[0];
