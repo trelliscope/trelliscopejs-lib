@@ -15,10 +15,11 @@ interface PanelProps {
   labels: IMeta[];
   inputs: IInput[];
   children: React.ReactNode;
-  onClick: (meta: IPanelMeta, source: string) => void;
+  onClick: (meta: IPanelMeta, source: string, index: number) => void;
   primaryMeta: IPanelMeta;
   handlePanelChange: (value: string) => void;
   selectedValue: string;
+  index: number;
 }
 
 const Panel: React.FC<PanelProps> = ({
@@ -30,6 +31,7 @@ const Panel: React.FC<PanelProps> = ({
   primaryMeta,
   handlePanelChange,
   selectedValue,
+  index,
 }) => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
@@ -38,7 +40,7 @@ const Panel: React.FC<PanelProps> = ({
 
   const handleClick = () => {
     if (data[primaryMeta.varname]) {
-      onClick(primaryMeta, data[primaryMeta.varname] as string);
+      onClick(primaryMeta, data[primaryMeta.varname] as string, index);
     }
   };
 

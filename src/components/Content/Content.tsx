@@ -45,7 +45,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const { data } = useContext(DataContext);
+  const { data, filteredData } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
@@ -140,12 +140,13 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const panelDialog = useSelector(selectPanelDialog);
 
   const handlePanelClick = useCallback(
-    (meta: IPanelMeta, source: string) => {
+    (meta: IPanelMeta, source: string, index: number) => {
       dispatch(
         setPanelDialog({
           open: true,
           panel: meta,
           source,
+          index,
         }),
       );
     },
@@ -182,7 +183,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
           <div className={styles.content} style={contentStyle} ref={contentRef}>
             {metaDataSuccess && displayInfoSuccess && data?.length > 0 && curPanel && (
               <>
-                {data.map((d) => (
+                {data.map((d, i) => (
                   <Panel
                     onClick={handlePanelClick}
                     data={d}
@@ -192,6 +193,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                     primaryMeta={primaryMeta}
                     handlePanelChange={handlePanelChange}
                     selectedValue={curPanel}
+                    index={i}
                   >
                     <PanelGraphic
                       type={primaryMeta?.paneltype}
@@ -230,9 +232,12 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
         </div>
       )}
       <PanelDialog
+        data={data}
+        filteredData={filteredData}
         open={panelDialog.open}
         panel={panelDialog.panel as IPanelMeta}
         source={panelDialog.source as string}
+        index={panelDialog.index as number}
         onClose={() => dispatch(setPanelDialog({ open: false }))}
       />
     </>

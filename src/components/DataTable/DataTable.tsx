@@ -37,7 +37,7 @@ import {
 interface DataTableProps {
   data: Datum[];
   handleTableResize: () => void;
-  handleClick: (meta: IPanelMeta, source: string) => void;
+  handleClick: (meta: IPanelMeta, source: string, index: number) => void;
   tableRef: React.MutableRefObject<null>;
   rerender: never;
 }
@@ -192,7 +192,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       },
     }));
 
-    const imageColumnData = panelMetas.map((meta) => ({
+    const imageColumnData = panelMetas.map((meta, i) => ({
       id: meta.varname,
       header: meta.varname,
       accessorKey: meta.varname,
@@ -214,7 +214,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               }}
               onClick={() => {
                 if (!meta) return;
-                handleClick(meta, cell.row.original[meta.varname] as string);
+                handleClick(meta, cell.row.original[meta.varname] as string, i);
               }}
             >
               <FontAwesomeIcon icon={faExpand} />

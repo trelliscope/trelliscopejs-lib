@@ -51,7 +51,7 @@ const Labels: React.FC = () => {
           setAnchorLabelEl(null);
         }}
       >
-      <div className={styles.labelsContainer}>
+        <div className={styles.labelsContainer}>
           <Button
             sx={{
               color: '#000000',
@@ -76,6 +76,7 @@ const Labels: React.FC = () => {
                 value: { [key: string]: string }[],
               ) => void
             }
+            hasTags
           />
         </div>
       </ClickAwayListener>

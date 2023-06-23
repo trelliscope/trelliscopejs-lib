@@ -9,6 +9,7 @@ export interface PanelDialog {
   open: boolean;
   panel?: IMeta;
   source?: string;
+  index?: number;
 }
 export interface AppState {
   appId: string;
@@ -66,7 +67,7 @@ export const appSlice = createSlice({
       state.configPath = action.payload;
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
-    setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean }>) => {
+    setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean; index?: number }>) => {
       state.panelDialog = { ...state.panelDialog, ...action.payload };
     },
   },
