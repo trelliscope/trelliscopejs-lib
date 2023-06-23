@@ -20,10 +20,11 @@ import styles from './VariableSelector.module.scss';
 interface VariableSelectorProps {
   isOpen: boolean;
   selectedVariables: { [key: string]: string }[];
-  metaGroups: Map<string | symbol, string[]>;
+  metaGroups: Map<string | symbol, string[]> | null;
   anchorEl: null | HTMLElement;
   displayMetas: { [key: string]: string }[];
   handleChange: (event: React.SyntheticEvent<Element, Event>, value: { [key: string]: string }[]) => void;
+  hasTags: boolean;
 }
 
 const VariableSelector: React.FC<VariableSelectorProps> = ({
@@ -33,6 +34,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   anchorEl,
   displayMetas,
   handleChange,
+  hasTags,
 }) => {
   const [tagGroup, setTagGroup] = useState('__ALL__');
 
@@ -56,47 +58,51 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   options={displayMetas}
                   disableCloseOnSelect
                   PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} />}
-                  PaperComponent={(props) => (
-                    <Paper {...props}>
-                      <Box
-                        sx={{
-                          minWidth: 150,
-                          pl: 2,
-                          pr: 2,
-                          pt: 2,
-                          pb: 1,
-                          backgroundColor: '#42a5f5',
-                          zIndex: 2001,
-                        }}
-                      >
-                        <FormControl variant="standard" size="small" fullWidth>
-                          <InputLabel sx={{ color: '#FFFFFF' }} id="demo-simple-select-label">
-                            Variable Type
-                          </InputLabel>
-                          <Select
-                            sx={{ color: '#FFFFFF' }}
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={tagGroup}
-                            label="Variable Type"
-                            onChange={handleTagChange}
-                          >
-                            <MenuItem value="__ALL__">All</MenuItem>
-                            {Array.from(metaGroups.keys())
-                              .filter((d) => typeof d === 'string')
-                              .map((d) => (
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore this is a material and type issue
-                                <MenuItem key={d} value={d}>
-                                  {d}
-                                </MenuItem>
-                              ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                      {props.children}
-                    </Paper>
-                  )}
+                  PaperComponent={(props) =>
+                    hasTags && metaGroups ? (
+                      <Paper {...props}>
+                        <Box
+                          sx={{
+                            minWidth: 150,
+                            pl: 2,
+                            pr: 2,
+                            pt: 2,
+                            pb: 1,
+                            backgroundColor: '#42a5f5',
+                            zIndex: 2001,
+                          }}
+                        >
+                          <FormControl variant="standard" size="small" fullWidth>
+                            <InputLabel sx={{ color: '#FFFFFF' }} id="demo-simple-select-label">
+                              Variable Type
+                            </InputLabel>
+                            <Select
+                              sx={{ color: '#FFFFFF' }}
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={tagGroup}
+                              label="Variable Type"
+                              onChange={handleTagChange}
+                            >
+                              <MenuItem value="__ALL__">All</MenuItem>
+                              {Array.from(metaGroups.keys())
+                                .filter((d) => typeof d === 'string')
+                                .map((d) => (
+                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  // @ts-ignore this is a material and type issue
+                                  <MenuItem key={d} value={d}>
+                                    {d}
+                                  </MenuItem>
+                                ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
+                        {props.children}
+                      </Paper>
+                    ) : (
+                      <Paper {...props}>{props.children}</Paper>
+                    )
+                  }
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
                   getOptionLabel={(option) => option.varname}
                   renderOption={(props, option, { selected }) => {

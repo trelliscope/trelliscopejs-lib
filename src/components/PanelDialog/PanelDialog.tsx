@@ -1,6 +1,8 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Button, Dialog, DialogActions } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Button, Dialog, DialogActions, Grid, IconButton, ClickAwayListener } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import { useMetaData } from '../../slices/metaDataAPI';
 import PanelTable from '../PanelTable/PanelTable';
@@ -8,51 +10,258 @@ import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
 import { selectBasePath } from '../../selectors/app';
 import { panelSrcGetter, snakeCase } from '../../utils';
+import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
+import { setPanelDialog } from '../../slices/appSlice';
+import { META_TYPE_PANEL } from '../../constants';
+import VariableSelector from '../VariableSelector';
 
 interface PanelDialogProps {
+  data: Datum[];
+  filteredData: Datum[];
   open: boolean;
   panel: IPanelMeta;
   source: string;
   onClose: () => void;
+  index: number;
 }
 
-const PanelDialog: React.FC<PanelDialogProps> = ({ open, panel, source, onClose }) => {
+const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, panel, source, onClose, index }) => {
   const metaData = useMetaData();
+  const displayMetas = useDisplayMetas();
+  const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
+  const dispatch = useDispatch();
+  const n = useSelector(selectPage);
+  const totPanels = filteredData.length;
+  const npp = useSelector(selectNumPerPage);
+  const totPages = Math.ceil(totPanels / npp);
   const basePath = useSelector(selectBasePath);
   const foundMetaData = metaData?.currentData?.find((meta) => meta[panel?.varname] === source);
+  const [curMetaData, setCurMetaData] = useState(foundMetaData);
+  const [curSource, setCurSource] = useState(source);
+  const [curIndex, setCurIndex] = useState(index);
   const { data: displayInfo } = useDisplayInfo();
   const labels = useDisplayMetas();
+  const [selectedVariables, setSelectedVariables] = useState<{ varname: string }[]>([]);
+  const [variableSelectorIsOpen, setVariableSelectorIsOpen] = useState(false);
+  const [anchorSelectorEl, setAnchorSelectorEl] = useState<null | HTMLElement>(null);
+  const [panelSources, setPanelSources] = useState<{ varname: string }[]>([]);
+
+  useEffect(() => {
+    setPanelSources(
+      selectedVariables.map((variable) => ({
+        ...variable,
+        sourcePath: curMetaData?.[variable.varname],
+      })),
+    );
+  }, [curMetaData, panel?.varname, selectedVariables]);
+
+  useEffect(() => {
+    setCurSource(source);
+  }, [source]);
+
+  useEffect(() => {
+    setCurMetaData(foundMetaData);
+    setCurIndex(index);
+  }, [foundMetaData, index]);
+
+  useEffect(() => {
+    if (data) {
+      const foundPanel = data[curIndex];
+      setCurMetaData(foundPanel);
+      setCurSource(foundPanel?.[panel?.varname] as string);
+    }
+  }, [curIndex, data, panel?.varname]);
+
+  const handleClose = () => {
+    setCurIndex(index);
+    onClose();
+  };
+
+  const handleChange = (page: number) => {
+    dispatch(
+      setLayout({
+        page,
+        type: 'layout',
+      }),
+    );
+  };
+
+  const pageLeft = () => {
+    if (n === 1 && curIndex === 0) {
+      return null;
+    }
+
+    const foundPanel = data[curIndex - 1];
+    if (curIndex === 0) {
+      setCurIndex(data.length - 1);
+      setCurMetaData(foundPanel);
+      setCurSource(foundPanel?.[panel?.varname] as string);
+      let nn = n - 1;
+      if (nn < 1) {
+        nn += 1;
+      }
+      return handleChange(nn);
+    }
+    setCurMetaData(foundPanel);
+    setCurIndex(curIndex - 1);
+    setCurSource(foundPanel?.[panel?.varname] as string);
+    dispatch(
+      setPanelDialog({
+        open: true,
+        source: curSource,
+        index: curIndex - 1,
+      }),
+    );
+
+    return null;
+  };
+
+  const pageRight = () => {
+    if (n === totPages && curIndex === data.length - 1) {
+      return null;
+    }
+    const foundPanel = data[curIndex + 1];
+    if (curIndex === data.length - 1) {
+      setCurIndex(0);
+      setCurMetaData(foundPanel);
+      setCurSource(foundPanel?.[panel?.varname] as string);
+      let nn = n + 1;
+      if (nn > totPages) {
+        nn -= 1;
+      }
+      return handleChange(nn);
+    }
+    setCurMetaData(foundPanel);
+    setCurIndex(curIndex + 1);
+    setCurSource(foundPanel?.[panel?.varname] as string);
+    dispatch(
+      setPanelDialog({
+        open: true,
+        source: curSource,
+        index: curIndex + 1,
+      }),
+    );
+    return null;
+  };
+
+  const handleVariableSelectorClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorSelectorEl(anchorSelectorEl ? null : event.currentTarget);
+    setVariableSelectorIsOpen(!variableSelectorIsOpen);
+  };
+
+  const handleSelectorChange = (event: React.SyntheticEvent<Element, Event>, value: { varname: string }[]) => {
+    setSelectedVariables(value);
+  };
 
   return (
-    <Dialog className={styles.panelDialog} classes={{ paper: styles.panelDialogInner }} open={open} onClose={onClose}>
+    <Dialog
+      maxWidth="lg"
+      className={styles.panelDialog}
+      classes={{ paper: styles.panelDialogInner }}
+      open={open}
+      onClose={handleClose}
+    >
+      <ClickAwayListener
+        mouseEvent="onMouseUp"
+        onClickAway={() => {
+          setVariableSelectorIsOpen(false);
+          setAnchorSelectorEl(null);
+        }}
+      >
+        <Box sx={{ position: 'sticky' }}>
+          <Button
+            sx={{
+              color: '#000000',
+              textTransform: 'unset',
+              fontSize: '15px',
+            }}
+            type="button"
+            onClick={handleVariableSelectorClick}
+            endIcon={<FontAwesomeIcon icon={variableSelectorIsOpen ? faChevronUp : faChevronDown} />}
+          >
+            Show Additional Panels
+          </Button>
+          <VariableSelector
+            isOpen={variableSelectorIsOpen}
+            selectedVariables={selectedVariables}
+            metaGroups={null}
+            anchorEl={anchorSelectorEl}
+            displayMetas={panelMetas as unknown as { [key: string]: string }[]}
+            handleChange={
+              handleSelectorChange as unknown as (
+                event: React.SyntheticEvent<Element, Event>,
+                value: { [key: string]: string }[],
+              ) => void
+            }
+            hasTags={false}
+          />
+        </Box>
+      </ClickAwayListener>
       <div className={styles.panelDialogGraphic}>
-        <PanelGraphic
-          type={panel?.paneltype}
-          src={
-            panel?.source?.isLocal === false
-              ? source
-              : panelSrcGetter(basePath, source as string, snakeCase(displayInfo?.name || '')).toString()
-          }
-          alt={panel?.label}
-          key={`${panel?.source}_${panel?.label}`}
-          imageWidth={-1}
-          aspectRatio={panel?.aspect}
-          port={panel?.source?.port}
-          sourceType={panel?.source?.type}
-          name={panel?.varname}
-          sourceClean={source}
-        />
+        <Box sx={{ alignItems: 'center', display: 'flex' }}>
+          <IconButton onClick={pageLeft}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </IconButton>
+        </Box>
+        {curSource && (
+          <Grid container>
+            <Grid item xs={6}>
+              <PanelGraphic
+                type={panel?.paneltype}
+                src={
+                  panel?.source?.isLocal === false
+                    ? curSource
+                    : panelSrcGetter(basePath, curSource, snakeCase(displayInfo?.name || '')).toString()
+                }
+                alt={panel?.label}
+                key={`${panel?.source}_${panel?.label}`}
+                imageWidth={-1}
+                aspectRatio={panel?.aspect}
+                port={panel?.source?.port}
+                sourceType={panel?.source?.type}
+                name={panel?.varname}
+                sourceClean={curSource}
+              />
+            </Grid>
+            {panelSources.map((panelSource) => (
+              <Grid item xs={6} key={panelSource?.varname}>
+                <PanelGraphic
+                  type={panelSource?.paneltype}
+                  src={
+                    panelSource?.source?.isLocal === false
+                      ? panelSource.sourcePath
+                      : panelSrcGetter(basePath, panelSource.sourcePath, snakeCase(displayInfo?.name || '')).toString()
+                  }
+                  alt={panelSource?.label}
+                  key={`${panelSource?.source}_${panelSource?.label}`}
+                  imageWidth={-1}
+                  aspectRatio={panelSource?.aspect}
+                  port={panelSource?.source?.port}
+                  sourceType={panelSource?.source?.type}
+                  name={panelSource?.varname}
+                  sourceClean={panelSource.sourcePath}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+
+        <Box sx={{ alignItems: 'center', display: 'flex' }}>
+          <IconButton onClick={pageRight}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </IconButton>
+        </Box>
       </div>
       <div className={styles.panelDialogTableWrapper}>
         <PanelTable
           className={styles.panelDialogTable}
-          data={foundMetaData || {}}
+          data={curMetaData || {}}
           inputs={displayInfo?.inputs?.inputs || []}
           labels={labels}
         />
       </div>
       <DialogActions>
-        <Button aria-label="display info close" color="secondary" onClick={onClose}>
+        <Button aria-label="display info close" color="secondary" onClick={handleClose}>
           Close
         </Button>
       </DialogActions>

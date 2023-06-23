@@ -130,6 +130,7 @@ const Sort: React.FC = () => {
                 value: { [key: string]: string }[],
               ) => void
             }
+            hasTags
           />
         </div>
       </ClickAwayListener>
