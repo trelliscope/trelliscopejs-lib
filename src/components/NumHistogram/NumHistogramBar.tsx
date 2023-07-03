@@ -13,13 +13,14 @@ interface NumHistogramBarProps {
 
 const NumHistogramBar: React.FC<NumHistogramBarProps> = ({ name, x, y, width, height, active }) => (
   <>
-    <rect className={classNames(styles.bar, styles.barBackground)} x={x} y={y} width={width} height={height} />
+    <rect className={classNames(styles.bar, styles.barBackground)} x={x} y={y} width={width} height={height} stroke="white" />
     <rect
       className={classNames(styles.bar, { [styles.bar__active]: active })}
       x={x}
       y={y}
       width={width}
       height={height}
+      stroke="white"
       clipPath={active ? `url(#clip-${name})` : ''}
     />
   </>

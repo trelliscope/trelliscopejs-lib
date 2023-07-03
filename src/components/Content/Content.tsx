@@ -101,7 +101,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const { ncol } = layout;
       const labelCount = labels.length;
 
-      const aspectRatio = 1;
+      const curPanelMeta = displayInfo?.metas.find((meta: IMeta) => meta.varname === curPanel) as IPanelMeta;
+      const aspectRatio = curPanelMeta?.aspect || 1;
 
       const panelWidth = (width - ((gridGap + 4 * panelPadding) * ncol + gridGap + 2)) / ncol;
       // const panelWidth = (width - ((gridGap) * ncol + gridGap + 2)) / ncol;
@@ -125,7 +126,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     return res;
   };
 
-  const calcs = useMemo(getCalcs, [width, labels.length, layout, labelHeight, panelPadding, gridGap, height]);
+  const calcs = useMemo(getCalcs, [width, labels.length, layout, labelHeight, panelPadding, gridGap, height, displayInfo, curPanel]);
 
   const setCalcs = () => {
     if (layout.viewtype === 'grid') {
