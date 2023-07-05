@@ -201,7 +201,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       // conflicts within table library, some of the types dont seem to be exported in the same way
       // that the actual table component consumes them as a prop.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Cell: ({ cell }: any) => (
+      Cell: ({ cell, row }: any) => (
         <div className={styles.dataTablePanelGraphic}>
           <div className={styles.dataTablePanelGraphicExpand}>
             <IconButton
@@ -214,7 +214,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               }}
               onClick={() => {
                 if (!meta) return;
-                handleClick(meta, cell.row.original[meta.varname] as string, i);
+                handleClick(meta, cell.row.original[meta.varname] as string, row?.index);
               }}
             >
               <FontAwesomeIcon icon={faExpand} />

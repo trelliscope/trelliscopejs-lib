@@ -2,6 +2,7 @@
   &Graphic {
     padding: var(--padding-10);
     display: flex;
+    justify-content: center;
 
     img {
       height: auto;

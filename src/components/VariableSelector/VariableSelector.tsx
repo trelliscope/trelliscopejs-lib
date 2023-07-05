@@ -25,6 +25,7 @@ interface VariableSelectorProps {
   displayMetas: { [key: string]: string }[];
   handleChange: (event: React.SyntheticEvent<Element, Event>, value: { [key: string]: string }[]) => void;
   hasTags: boolean;
+  disablePortal: boolean;
 }
 
 const VariableSelector: React.FC<VariableSelectorProps> = ({
@@ -35,6 +36,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   displayMetas,
   handleChange,
   hasTags,
+  disablePortal,
 }) => {
   const [tagGroup, setTagGroup] = useState('__ALL__');
 
@@ -44,7 +46,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
 
   return (
     <div className={styles.variableSelector}>
-      <Popper open={isOpen} anchorEl={anchorEl} placement="bottom-end" transition>
+      <Popper open={isOpen} anchorEl={anchorEl} placement="bottom-end" transition disablePortal={disablePortal}>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={0}>
             <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
@@ -57,7 +59,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   id="variable-select"
                   options={displayMetas}
                   disableCloseOnSelect
-                  PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} />}
+                  PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} disablePortal={disablePortal} />}
                   PaperComponent={(props) =>
                     hasTags && metaGroups ? (
                       <Paper {...props}>
