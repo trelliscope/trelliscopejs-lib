@@ -77,6 +77,7 @@ const Labels: React.FC = () => {
               ) => void
             }
             hasTags
+            disablePortal={false}
           />
         </div>
       </ClickAwayListener>

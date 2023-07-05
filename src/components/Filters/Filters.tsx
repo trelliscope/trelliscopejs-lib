@@ -184,6 +184,7 @@ const Filters: React.FC = () => {
                 ) => void
               }
               hasTags
+              disablePortal={false}
             />
           </div>
         </ClickAwayListener>

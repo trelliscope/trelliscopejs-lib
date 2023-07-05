@@ -10,7 +10,7 @@ import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
 import { selectBasePath } from '../../selectors/app';
 import { panelSrcGetter, snakeCase } from '../../utils';
-import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
+import { selectLayout, selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import { setPanelDialog } from '../../slices/appSlice';
 import { META_TYPE_PANEL } from '../../constants';
 import VariableSelector from '../VariableSelector';
@@ -25,12 +25,17 @@ interface PanelDialogProps {
   index: number;
 }
 
+interface PanelExtended extends IPanelMeta {
+  sourcePath: string;
+}
+
 const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, panel, source, onClose, index }) => {
   const metaData = useMetaData();
   const displayMetas = useDisplayMetas();
   const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
   const dispatch = useDispatch();
   const n = useSelector(selectPage);
+  const { nrow, ncol } = useSelector(selectLayout);
   const totPanels = filteredData.length;
   const npp = useSelector(selectNumPerPage);
   const totPages = Math.ceil(totPanels / npp);
@@ -44,14 +49,17 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const [selectedVariables, setSelectedVariables] = useState<{ varname: string }[]>([]);
   const [variableSelectorIsOpen, setVariableSelectorIsOpen] = useState(false);
   const [anchorSelectorEl, setAnchorSelectorEl] = useState<null | HTMLElement>(null);
-  const [panelSources, setPanelSources] = useState<{ varname: string }[]>([]);
+  const [panelSources, setPanelSources] = useState<PanelExtended[]>([]);
 
   useEffect(() => {
     setPanelSources(
-      selectedVariables.map((variable) => ({
-        ...variable,
-        sourcePath: curMetaData?.[variable.varname],
-      })),
+      selectedVariables.map(
+        (variable) =>
+          ({
+            ...variable,
+            sourcePath: curMetaData?.[variable.varname] as string,
+          } as PanelExtended),
+      ),
     );
   }, [curMetaData, panel?.varname, selectedVariables]);
 
@@ -74,6 +82,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
 
   const handleClose = () => {
     setCurIndex(index);
+    setSelectedVariables([]);
     onClose();
   };
 
@@ -93,9 +102,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
 
     const foundPanel = data[curIndex - 1];
     if (curIndex === 0) {
-      setCurIndex(data.length - 1);
-      setCurMetaData(foundPanel);
-      setCurSource(foundPanel?.[panel?.varname] as string);
+      setCurIndex(nrow * ncol - 1);
       let nn = n - 1;
       if (nn < 1) {
         nn += 1;
@@ -123,8 +130,6 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     const foundPanel = data[curIndex + 1];
     if (curIndex === data.length - 1) {
       setCurIndex(0);
-      setCurMetaData(foundPanel);
-      setCurSource(foundPanel?.[panel?.varname] as string);
       let nn = n + 1;
       if (nn > totPages) {
         nn -= 1;
@@ -168,7 +173,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           setAnchorSelectorEl(null);
         }}
       >
-        <Box sx={{ position: 'sticky' }}>
+        <Box>
           <Button
             sx={{
               color: '#000000',
@@ -194,18 +199,19 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
               ) => void
             }
             hasTags={false}
+            disablePortal
           />
         </Box>
       </ClickAwayListener>
       <div className={styles.panelDialogGraphic}>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
-          <IconButton onClick={pageLeft}>
+          <IconButton disabled={n === 1 && curIndex === 0} onClick={pageLeft}>
             <FontAwesomeIcon icon={faChevronLeft} />
           </IconButton>
         </Box>
         {curSource && (
-          <Grid container>
-            <Grid item xs={6}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Box sx={{ flex: '1 0 50%' }}>
               <PanelGraphic
                 type={panel?.paneltype}
                 src={
@@ -222,9 +228,9 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
                 name={panel?.varname}
                 sourceClean={curSource}
               />
-            </Grid>
-            {panelSources.map((panelSource) => (
-              <Grid item xs={6} key={panelSource?.varname}>
+            </Box>
+            {panelSources.map((panelSource: PanelExtended) => (
+              <Box sx={{ flex: '0 0 50%' }} key={panelSource?.varname}>
                 <PanelGraphic
                   type={panelSource?.paneltype}
                   src={
@@ -241,13 +247,13 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
                   name={panelSource?.varname}
                   sourceClean={panelSource.sourcePath}
                 />
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         )}
 
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
-          <IconButton onClick={pageRight}>
+          <IconButton disabled={n === totPages && curIndex === data.length - 1} onClick={pageRight}>
             <FontAwesomeIcon icon={faChevronRight} />
           </IconButton>
         </Box>

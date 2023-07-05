@@ -131,6 +131,7 @@ const Sort: React.FC = () => {
               ) => void
             }
             hasTags
+            disablePortal={false}
           />
         </div>
       </ClickAwayListener>
