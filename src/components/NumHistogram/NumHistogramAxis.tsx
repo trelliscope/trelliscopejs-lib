@@ -32,13 +32,7 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
           </text>
         )}
         {isDate && (
-          <text
-            className={
-              i === 0 ? styles.axisTickDateStart : i === ticks.length - 1 ? styles.axisTickDateEnd : styles.axisTickText
-            }
-            y={height}
-            x={x}
-          >
+          <text className={styles.axisTickText} y={height} x={x}>
             {new Date(d).toLocaleDateString()}
           </text>
         )}

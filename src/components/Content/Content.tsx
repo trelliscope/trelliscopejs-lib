@@ -126,7 +126,17 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     return res;
   };
 
-  const calcs = useMemo(getCalcs, [width, labels.length, layout, labelHeight, panelPadding, gridGap, height, displayInfo, curPanel]);
+  const calcs = useMemo(getCalcs, [
+    width,
+    labels.length,
+    layout,
+    labelHeight,
+    panelPadding,
+    gridGap,
+    height,
+    displayInfo,
+    curPanel,
+  ]);
 
   const setCalcs = () => {
     if (layout.viewtype === 'grid') {
