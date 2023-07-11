@@ -35,7 +35,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
   const dispatch = useDispatch();
   const n = useSelector(selectPage);
-  const { nrow, ncol } = useSelector(selectLayout);
+  const { nrow, ncol, viewtype } = useSelector(selectLayout);
   const totPanels = filteredData.length;
   const npp = useSelector(selectNumPerPage);
   const totPages = Math.ceil(totPanels / npp);
@@ -102,7 +102,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
 
     const foundPanel = data[curIndex - 1];
     if (curIndex === 0) {
-      setCurIndex(nrow * ncol - 1);
+      setCurIndex(viewtype === 'table' ? nrow - 1 : nrow * ncol - 1);
       let nn = n - 1;
       if (nn < 1) {
         nn += 1;
