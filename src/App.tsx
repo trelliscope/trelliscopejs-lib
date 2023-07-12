@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 import ErrorSnack from './components/ErrorSnack';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setErrorMessage } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
@@ -42,12 +43,14 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
 
   return (
     <DataProvider client={client}>
-      <Box sx={{ display: 'flex', height: 'inherit' }}>
-        <Header />
-        <Sidebar />
-        <ContentContainer />
-        <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
-      </Box>
+      <SnackbarProvider>
+        <Box sx={{ display: 'flex', height: 'inherit' }}>
+          <Header />
+          <Sidebar />
+          <ContentContainer />
+          <ErrorSnack errorMsg={errorMsg} handleClose={handleClose} />
+        </Box>
+      </SnackbarProvider>
     </DataProvider>
   );
 };

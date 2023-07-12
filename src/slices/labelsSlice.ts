@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 import { selectHash, selectHashLabels } from '../selectors/hash';
 
@@ -28,5 +29,6 @@ export const labelsSlice = createSlice({
 });
 
 export const { setLabels } = labelsSlice.actions;
+export const selectLabels = (state: RootState) => state.labels;
 
 export default labelsSlice.reducer;

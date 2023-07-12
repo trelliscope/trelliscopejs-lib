@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faChevronDown, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import styles from './Views.module.scss';
 import { setLabels } from '../../slices/labelsSlice';
-import { clearFilters, addFilter } from '../../slices/filterSlice';
+import { clearFilters, addFilter, setFilterView } from '../../slices/filterSlice';
 import { setLayout, LayoutAction } from '../../slices/layoutSlice';
 import { setSort } from '../../slices/sortSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import AddViewModal from '../AddViewModal/AddViewModal';
+import { useGetAllViews, getLocalStorageKey } from '../../inputUtils';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
-  const { data } = useDisplayInfo();
-  const views = data?.views as IView[];
+  const { data: displayInfo } = useDisplayInfo();
+  const views = displayInfo?.views as IView[];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openView, setOpenView] = useState(false);
+  const allViews = useGetAllViews(displayInfo?.name as string) as IView[];
+  const [localViews, setLocalViews] = useState(allViews);
+  const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -34,9 +41,28 @@ const Views: React.FC = () => {
 
     if (valueFilter) {
       dispatch(clearFilters());
-      valueFilter.map((filter) => dispatch(addFilter(filter)));
+      valueFilter.forEach((filter) => {
+        dispatch(setFilterView({ name: filter.varname, which: 'add' }));
+        dispatch(addFilter(filter));
+      });
     }
     setAnchorEl(null);
+  };
+
+  const handleDeleteView = (name: string) => {
+    const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', 'trelliscope_views', name);
+    localStorage.removeItem(lsKey);
+    const newLocalViews = localViews.filter((view) => view.name !== name);
+    setLocalViews(newLocalViews);
+    enqueueSnackbar(`View ${name} deleted`, {
+      variant: 'success',
+      anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      autoHideDuration: 3000,
+    });
+  };
+
+  const handleViewToggle = () => {
+    setOpenView(!openView);
   };
 
   return (
@@ -55,10 +81,32 @@ const Views: React.FC = () => {
         </Button>
         <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
           {views?.map((value) => (
-            <MenuItem key={value.name} onClick={() => handleViewChange(value.state)}>
-              {value.name}
-            </MenuItem>
+            <Box key={value.name} sx={{ display: 'flex' }}>
+              <MenuItem onClick={() => handleViewChange(value.state)}>
+                <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
+                  {value.name}
+                </Typography>
+              </MenuItem>
+            </Box>
           ))}
+          {localViews?.map((value) => (
+            <Box key={value.name} sx={{ display: 'flex' }}>
+              <MenuItem onClick={() => handleViewChange(value.state)}>
+                <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
+                  {value.name}
+                </Typography>
+              </MenuItem>
+              <IconButton sx={{ mr: '5px' }} aria-label="close" size="small" onClick={() => handleDeleteView(value.name)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </IconButton>
+            </Box>
+          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
+            <Button variant="contained" color="primary" onClick={handleViewToggle}>
+              Create view based on current state
+            </Button>
+          </Box>
+          <AddViewModal isOpen={openView} handleViewToggle={handleViewToggle} setLocalViews={setLocalViews} />
         </Menu>
       </div>
     </div>

@@ -3,8 +3,8 @@ import { useDisplayInfo } from './slices/displayInfoAPI';
 
 export const getLocalStoragePrefix = (di: DisplayObject) => `${di.group}_:_${di.name}_:`;
 
-export const getLocalStorageKey = (tags: string[], displayName: string, panelKey: string, name: string) =>
-  `${tags.join('__')}_:_${displayName}_:_${panelKey}_:_${name}`;
+export const getLocalStorageKey = (tags: string[], displayName: string, key: string, name: string) =>
+  `${tags.join('__')}_:_${displayName}_:_${key}_:_${name}`;
 
 // Stores a user-specified input value
 // Note that this always stores in localStorage
@@ -116,9 +116,9 @@ export const getLocalStorageKey = (tags: string[], displayName: string, panelKey
 //   }
 // };
 
-export const useStoredInputValue = (panelKey: string, name: string) => {
+export const useStoredInputValue = (key: string, name: string) => {
   const { data: displayInfo } = useDisplayInfo();
-  const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', panelKey, name);
+  const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', key, name);
   const [localValue, setLocalValue] = useState<string | null>(localStorage.getItem(lsKey));
 
   const getStoredValue = () => localStorage.getItem(lsKey);
@@ -131,4 +131,18 @@ export const useStoredInputValue = (panelKey: string, name: string) => {
   const clearStoredValue = () => localStorage.removeItem(lsKey);
 
   return { setStoredValue, getStoredValue, clearStoredValue };
+};
+
+export const useGetAllViews = (displayName: string) => {
+  const viewKeys = Object.keys(localStorage)
+    .map((keyItem) => {
+      const keySplit = keyItem.split('_:_');
+      if (keySplit.length > 1 && keySplit[2] === 'trelliscope_views' && keySplit[1] === displayName) {
+        return keyItem;
+      }
+      return null;
+    })
+    .filter((view) => view !== null) as string[];
+
+  return viewKeys.map((view: string) => JSON.parse(localStorage.getItem(view) as string));
 };
