@@ -13,7 +13,7 @@ import { displayInfoAPI } from '../slices/displayInfoAPI';
 // Example hash
 // /#display=life_expectancy&nrow=5&ncol=3&arr=rows&pg=2&labels=country,year&sort=country;asc,year;desc&filter=var:country;type:select;val:United%20States#Australia#Canada#China#France#Germany#India#Japan#Mexico#Russia#United%20Kingdom#United%20States,var:year;type:range;from:2000;to:2010,var:life_expectancy;type:regex;val:80,var:life_expectancy;type:range;from:80;to:90&sidebar=filter&fv=country,year
 
-const { setSort } = sortSlice.actions;
+const { setSort, setReOrderSorts } = sortSlice.actions;
 const { setLabels } = labelsSlice.actions;
 const { setLayout } = layoutSlice.actions;
 const { setFilterView } = filterSlice.actions;
@@ -108,6 +108,7 @@ export const hashMiddleware: Middleware<RootState> =
       setLayout.type,
       setLabels.type,
       setSort.type,
+      setReOrderSorts.type,
       addFilter.type,
       updateFilter.type,
       removeFilter.type,

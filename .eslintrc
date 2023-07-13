@@ -1,6 +1,13 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": ["airbnb", "airbnb-typescript", "eslint:recommended", "plugin:react-hooks/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "eslint:recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
@@ -25,6 +32,7 @@
   "plugins": ["react-hooks"],
   "rules": {
     "react/prop-types": 0,
+    "react-hooks/exhaustive-deps": 0,
     "no-underscore-dangle": 0,
     "no-nested-ternary": 0,
     "react/forbid-prop-types": 0,
