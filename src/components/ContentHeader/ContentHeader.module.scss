@@ -13,7 +13,6 @@
     height: 46px;
     justify-content: space-between;
     font-weight: 600;
-    overflow: hidden;
 
     &Left {
       display: flex;
@@ -77,7 +76,7 @@
     }
 
     &Pagination {
-      margin-top: 13px;
+      // margin-top: 13px;
       font-weight: 500;
       margin-right: 10px;
     }

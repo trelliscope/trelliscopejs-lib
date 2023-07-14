@@ -1,4 +1,9 @@
 .sort {
+  &DragContainer {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
   &Container {
     display: flex;
     align-items: center;

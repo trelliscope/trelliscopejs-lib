@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, IconButton } from '@mui/material';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, closestCenter } from '@dnd-kit/core';
+import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { useDisplayInfo, useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { setLayout } from '../../slices/layoutSlice';
 import { selectSort, setSort, setReOrderSorts } from '../../slices/sortSlice';
 import Chip from '../Chip';
 import VariableSelector from '../VariableSelector';
 import styles from './Sort.module.scss';
-import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME } from '../../constants';
+import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME, META_TYPE_CURRENCY } from '../../constants';
 
 const Sort: React.FC = () => {
   const { data: displayInfo } = useDisplayInfo();
@@ -31,7 +32,13 @@ const Sort: React.FC = () => {
     const { varname } = sort[i];
     const { type } = displayInfo?.metas.find((m) => m.varname === varname) || {};
     let icon = 'icon-sort-alpha';
-    if (type === META_TYPE_NUMBER || type === META_TYPE_FACTOR || type === META_TYPE_DATE || type === META_TYPE_DATETIME) {
+    if (
+      type === META_TYPE_NUMBER ||
+      type === META_TYPE_FACTOR ||
+      type === META_TYPE_DATE ||
+      type === META_TYPE_DATETIME ||
+      type === META_TYPE_CURRENCY
+    ) {
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${sort[i].dir}`;
@@ -125,25 +132,27 @@ const Sort: React.FC = () => {
           <div>
             <span className={styles.sortText}>Sort</span>
           </div>
-          <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-            <SortableContext items={sortRes.map((el: { varname: string; icon: string }) => ({ id: el.varname }))}>
-              {orderedItemsRef.current.map((el: { varname: string; icon: string }, i: number) => (
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                <Chip
-                  key={`${el.varname}_sortchip`}
-                  label={el.varname}
-                  icon={el.icon}
-                  text=""
-                  index={i}
-                  type="sort"
-                  handleClose={handleStateClose}
-                  handleClick={() => handleSortClick(i)}
-                  enforceMaxWidth={false}
-                  isDraggable
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
+          <div className={styles.sortDragContainer}>
+            <DndContext modifiers={[restrictToHorizontalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+              <SortableContext items={sortRes.map((el: { varname: string; icon: string }) => ({ id: el.varname }))}>
+                {sortRes.map((el: { varname: string; icon: string }, i: number) => (
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  <Chip
+                    key={`${el.varname}_sortchip`}
+                    label={el.varname}
+                    icon={el.icon}
+                    text=""
+                    index={i}
+                    type="sort"
+                    handleClose={handleStateClose}
+                    handleClick={() => handleSortClick(i)}
+                    enforceMaxWidth={false}
+                    isDraggable
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </div>
           <IconButton onClick={handleVariableSortSelectorClick} aria-label="add-icon">
             <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />
           </IconButton>

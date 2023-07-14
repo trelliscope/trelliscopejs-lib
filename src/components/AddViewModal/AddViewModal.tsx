@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, Dialo
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
 import styles from './AddViewModal.module.scss';
-import { useGetAllViews, useStoredInputValue } from '../../inputUtils';
+import { useGetAllLocalViews, useStoredInputValue } from '../../inputUtils';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectFilterState } from '../../slices/filterSlice';
 import { selectSort } from '../../slices/sortSlice';
@@ -18,7 +18,6 @@ interface AddViewModalProps {
 
 const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, setLocalViews }) => {
   const [description, setDescription] = useState('');
-  const { data: displayInfo } = useDisplayInfo();
   const filters = useSelector(selectFilterState);
   const sorts = useSelector(selectSort);
   const labels = useSelector(selectLabels);
@@ -26,7 +25,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
 
   const { setStoredValue } = useStoredInputValue('trelliscope_views', description);
 
-  const views = useGetAllViews(displayInfo?.name as string);
+  const views = useGetAllLocalViews();
 
   const { enqueueSnackbar } = useSnackbar();
 

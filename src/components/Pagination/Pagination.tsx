@@ -90,37 +90,44 @@ const Pagination: React.FC = () => {
           </span>
         </span>
       </div>
-      <div className={styles.paginationButtonWrap}>
-        <div className={styles.paginationButtonDiv}>
-          <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
-            <FontAwesomeIcon icon={faBackwardStep} size="sm" />
-          </IconButton>
+      <div className={styles.paginationButtonContainer}>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
+            <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
+              <FontAwesomeIcon icon={faBackwardStep} size="sm" />
+            </IconButton>
+          </div>
+          <div className={styles.paginationButtonText}>First</div>
         </div>
-        <div className={styles.paginationButtonText}>First</div>
-      </div>
-      <div className={styles.paginationButtonWrap}>
-        <div className={styles.paginationButtonDiv}>
-          <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
-            <FontAwesomeIcon icon={faChevronLeft} size="sm" />
-          </IconButton>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
+            <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
+              <FontAwesomeIcon icon={faChevronLeft} size="sm" />
+            </IconButton>
+          </div>
+          <div className={styles.paginationButtonText}>Prev</div>
         </div>
-        <div className={styles.paginationButtonText}>Prev</div>
-      </div>
-      <div className={styles.paginationButtonWrap}>
-        <div className={styles.paginationButtonDiv}>
-          <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageRight()}>
-            <FontAwesomeIcon icon={faChevronRight} size="sm" />
-          </IconButton>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
+            <IconButton
+              size="small"
+              disabled={n >= totPages}
+              className={styles.paginationButton}
+              onClick={() => pageRight()}
+            >
+              <FontAwesomeIcon icon={faChevronRight} size="sm" />
+            </IconButton>
+          </div>
+          <div className={styles.paginationButtonText}>Next</div>
         </div>
-        <div className={styles.paginationButtonText}>Next</div>
-      </div>
-      <div className={styles.paginationButtonWrap}>
-        <div className={styles.paginationButtonDiv}>
-          <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
-            <FontAwesomeIcon icon={faForwardStep} size="sm" />
-          </IconButton>
+        <div className={styles.paginationButtonWrap}>
+          <div className={styles.paginationButtonDiv}>
+            <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
+              <FontAwesomeIcon icon={faForwardStep} size="sm" />
+            </IconButton>
+          </div>
+          <div className={styles.paginationButtonText}>Last</div>
         </div>
-        <div className={styles.paginationButtonText}>Last</div>
       </div>
     </div>
   );
