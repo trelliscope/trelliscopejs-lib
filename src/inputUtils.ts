@@ -133,11 +133,12 @@ export const useStoredInputValue = (key: string, name: string) => {
   return { setStoredValue, getStoredValue, clearStoredValue };
 };
 
-export const useGetAllViews = (displayName: string) => {
+export const useGetAllLocalViews = () => {
+  const { data: displayInfo } = useDisplayInfo();
   const viewKeys = Object.keys(localStorage)
     .map((keyItem) => {
       const keySplit = keyItem.split('_:_');
-      if (keySplit.length > 1 && keySplit[2] === 'trelliscope_views' && keySplit[1] === displayName) {
+      if (keySplit.length > 1 && keySplit[2] === 'trelliscope_views' && keySplit[1] === displayInfo?.name) {
         return keyItem;
       }
       return null;

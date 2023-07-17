@@ -21,6 +21,7 @@ export const sortSlice = createSlice({
 
       return action.payload;
     },
+    setReOrderSorts: (state, action: PayloadAction<ISortState[]>) => action.payload,
   },
   extraReducers: (builder) => {
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchFulfilled, (state, action) => {
@@ -42,6 +43,6 @@ export const sortSlice = createSlice({
 
 export const selectSort = (state: RootState) => state.sort;
 
-export const { setSort } = sortSlice.actions;
+export const { setSort, setReOrderSorts } = sortSlice.actions;
 
 export default sortSlice.reducer;

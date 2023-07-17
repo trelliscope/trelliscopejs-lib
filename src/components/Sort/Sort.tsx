@@ -1,15 +1,18 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, IconButton } from '@mui/material';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { useDisplayInfo, useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { setLayout } from '../../slices/layoutSlice';
-import { selectSort, setSort } from '../../slices/sortSlice';
+import { selectSort, setSort, setReOrderSorts } from '../../slices/sortSlice';
 import Chip from '../Chip';
 import VariableSelector from '../VariableSelector';
 import styles from './Sort.module.scss';
-import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME } from '../../constants';
+import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME, META_TYPE_CURRENCY } from '../../constants';
 
 const Sort: React.FC = () => {
   const { data: displayInfo } = useDisplayInfo();
@@ -24,17 +27,31 @@ const Sort: React.FC = () => {
   const [variableSortSelectorIsOpen, setVariableSortSelectorIsOpen] = useState(false);
   const [anchorSortEl, setAnchorSortEl] = useState<null | HTMLElement>(null);
 
-  const sortRes = [];
+  const sortRes: { varname: string; icon: string }[] = [];
   for (let i = 0; i < sort.length; i += 1) {
     const { varname } = sort[i];
     const { type } = displayInfo?.metas.find((m) => m.varname === varname) || {};
     let icon = 'icon-sort-alpha';
-    if (type === META_TYPE_NUMBER || type === META_TYPE_FACTOR || type === META_TYPE_DATE || type === META_TYPE_DATETIME) {
+    if (
+      type === META_TYPE_NUMBER ||
+      type === META_TYPE_FACTOR ||
+      type === META_TYPE_DATE ||
+      type === META_TYPE_DATETIME ||
+      type === META_TYPE_CURRENCY
+    ) {
       icon = 'icon-sort-numeric';
     }
     icon = `${icon}-${sort[i].dir}`;
     sortRes.push({ varname, icon });
   }
+
+  const orderedItemsRef = useRef(sortRes);
+
+  useEffect(() => {
+    if (sortRes !== orderedItemsRef.current) {
+      orderedItemsRef.current = sortRes;
+    }
+  }, [sortRes]);
 
   useEffect(() => {
     setSelectedSortVariables(sort);
@@ -80,6 +97,7 @@ const Sort: React.FC = () => {
         type: 'layout',
       }),
     );
+    orderedItemsRef.current = [...orderedItemsRef.current, { varname: addedItem.varname, icon: 'icon-sort-alpha-asc' }];
   };
 
   const handleSortClick = (i: number) => {
@@ -89,6 +107,18 @@ const Sort: React.FC = () => {
     newSort[i] = sortObj;
     dispatch(setSort(newSort));
   };
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    const updatedItems = arrayMove(
+      orderedItemsRef.current,
+      orderedItemsRef.current.findIndex((item) => item.varname === active.id),
+      orderedItemsRef.current.findIndex((item) => item.varname === over.id),
+    );
+    orderedItemsRef.current = updatedItems;
+    const newSort = orderedItemsRef.current.map((item) => sort.find((el) => el.varname === item.varname));
+    dispatch(setReOrderSorts(newSort as ISortState[]));
+  };
+
   return (
     <>
       <ClickAwayListener
@@ -102,19 +132,27 @@ const Sort: React.FC = () => {
           <div>
             <span className={styles.sortText}>Sort</span>
           </div>
-          {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-            <Chip
-              key={`${el.varname}_sortchip`}
-              label={el.varname}
-              icon={el.icon}
-              text=""
-              index={i}
-              type="sort"
-              handleClose={handleStateClose}
-              handleClick={() => handleSortClick(i)}
-              enforceMaxWidth={false}
-            />
-          ))}
+          <div className={styles.sortDragContainer}>
+            <DndContext modifiers={[restrictToHorizontalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+              <SortableContext items={sortRes.map((el: { varname: string; icon: string }) => ({ id: el.varname }))}>
+                {sortRes.map((el: { varname: string; icon: string }, i: number) => (
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  <Chip
+                    key={`${el.varname}_sortchip`}
+                    label={el.varname}
+                    icon={el.icon}
+                    text=""
+                    index={i}
+                    type="sort"
+                    handleClose={handleStateClose}
+                    handleClick={() => handleSortClick(i)}
+                    enforceMaxWidth={false}
+                    isDraggable
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </div>
           <IconButton onClick={handleVariableSortSelectorClick} aria-label="add-icon">
             <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />
           </IconButton>

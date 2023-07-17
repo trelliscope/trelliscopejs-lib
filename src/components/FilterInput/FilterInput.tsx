@@ -24,7 +24,7 @@ import styles from './FilterInput.module.scss';
 import { labelsSelector } from '../../selectors';
 import { setLabels } from '../../slices/labelsSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
-import FooterChip from '../Chip/Chip';
+import Chip from '../Chip/Chip';
 import { setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
 import FilterDateRange from '../FilterDateRange/FilterDateRange';
@@ -175,7 +175,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
               Sort By
             </Button>
           ) : (
-            <FooterChip
+            <Chip
               label={filterName}
               icon={sortRes.icon}
               text=""
@@ -184,6 +184,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
               handleClose={handleSortRemove}
               handleClick={handleSortClick}
               enforceMaxWidth
+              isDraggable={false}
             />
           )}
         </div>

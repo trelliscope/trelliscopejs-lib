@@ -11,7 +11,7 @@ import { setLayout, LayoutAction } from '../../slices/layoutSlice';
 import { setSort } from '../../slices/sortSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import AddViewModal from '../AddViewModal/AddViewModal';
-import { useGetAllViews, getLocalStorageKey } from '../../inputUtils';
+import { useGetAllLocalViews, getLocalStorageKey } from '../../inputUtils';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const Views: React.FC = () => {
   const views = displayInfo?.views as IView[];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openView, setOpenView] = useState(false);
-  const allViews = useGetAllViews(displayInfo?.name as string) as IView[];
+  const allViews = useGetAllLocalViews() as IView[];
   const [localViews, setLocalViews] = useState(allViews);
   const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
@@ -30,8 +30,19 @@ const Views: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleViewChange = (value: IDisplayState) => {
-    const { filter: valueFilter, labels: valueLabels, layout: valueLayout, sort: valueSort } = value;
+  const handleViewChange = (value: IDisplayState, name: string) => {
+    const {
+      filter: valueFilter,
+      labels: valueLabels,
+      layout: valueLayout,
+      sort: valueSort,
+    } = value ||
+    JSON.parse(
+      localStorage.getItem(
+        getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', 'trelliscope_views', name),
+      ) as string,
+    ).state ||
+    {};
 
     if (valueLayout) dispatch(setLayout(valueLayout as LayoutAction));
 
@@ -82,7 +93,7 @@ const Views: React.FC = () => {
         <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
           {views?.map((value) => (
             <Box key={value.name} sx={{ display: 'flex' }}>
-              <MenuItem onClick={() => handleViewChange(value.state)}>
+              <MenuItem onClick={() => handleViewChange(value.state, value.name)}>
                 <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
                   {value.name}
                 </Typography>
@@ -91,7 +102,7 @@ const Views: React.FC = () => {
           ))}
           {localViews?.map((value) => (
             <Box key={value.name} sx={{ display: 'flex' }}>
-              <MenuItem onClick={() => handleViewChange(value.state)}>
+              <MenuItem onClick={() => handleViewChange(value.state, value.name)}>
                 <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
                   {value.name}
                 </Typography>
