@@ -49,7 +49,13 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
       JSON.stringify({
         name: description,
         state: {
-          layout: { viewtype: layout?.viewtype, page: layout?.page, ncol: layout?.ncol, type: layout?.type },
+          layout: {
+            viewtype: layout?.viewtype,
+            page: layout?.page,
+            ncol: layout?.ncol,
+            type: layout?.type,
+            panel: layout?.panel ? layout?.panel : undefined,
+          },
           labels: { varnames: labels, type: 'labels' },
           sort: [...newSort],
           filter: [...newFilter],
