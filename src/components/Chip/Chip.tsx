@@ -36,11 +36,15 @@ const Chip: React.FC<ChipProps> = ({
   enforceMaxWidth,
   isDraggable,
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: label });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: label, resizeObserverConfig: {} });
+  const transformString = CSS.Transform.toString(transform) || '';
+  const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
+
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
   };
+
   return (
     <div
       className={classNames(styles.chipWrapper, { [styles.chipWrapperContained]: enforceMaxWidth })}

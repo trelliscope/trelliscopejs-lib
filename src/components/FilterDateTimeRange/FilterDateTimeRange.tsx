@@ -5,6 +5,7 @@ import { Value } from '@wojtekmaj/react-daterange-picker/dist/cjs/shared/types';
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import '@wojtekmaj/react-datetimerange-picker/dist/DateTimeRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import { Box } from '@mui/material';
 import { updateFilter, addFilter, removeFilter } from '../../slices/filterSlice';
 import NumHistogram from '../NumHistogram/NumHistogram';
 import useMetaInfo from '../../selectors/useMetaInfo';
@@ -19,6 +20,7 @@ interface FilterDateTimeRangeProps {
 const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter }) => {
   const [date, setDate] = useState<Date[]>();
   const dispatch = useDispatch();
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   const { yDomain, xDomain, data } = useMetaInfo(meta.varname, meta.type);
 
@@ -103,7 +105,7 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
         log={false}
         isDate
       />
-      <div className={styles.filterDateTimeRange}>
+      <Box sx={{ fontSize: isSafari ? '12px' : '14px' }} className={styles.filterDateTimeRange}>
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         <DateTimeRangePicker
@@ -112,7 +114,7 @@ const FilterDateTimeRange: React.FC<FilterDateTimeRangeProps> = ({ meta, filter 
           showLeadingZeros
           disableClock
         />
-      </div>
+      </Box>
     </>
   );
 };
