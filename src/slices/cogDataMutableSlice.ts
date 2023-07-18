@@ -2,6 +2,36 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { Crossfilter, Dimension, Group } from 'crossfilter2';
 
+type CogGroup = 'common' | 'condVar' | 'panelKey';
+interface CogInterface {
+  name: string;
+  // ?
+  group: CogGroup;
+  // ?
+  type: string;
+}
+
+interface CogData {
+  [key: string]: string | number;
+  panelKey: string;
+}
+
+interface CogDataMutable {
+  isFetching: boolean;
+  isLoaded: boolean;
+  didInvalidate: boolean;
+  lastUpdated?: number;
+  crossfilter?: import('crossfilter2').Crossfilter<CogData>;
+  dimensionRefs?: {
+    [key: string]: import('crossfilter2').Dimension<CogData, string | number>;
+  };
+  groupRefs?: {
+    [key: string]: import('crossfilter2').Group<CogData, import('crossfilter2').NaturallyOrderedValue, number>;
+  };
+  allRef?: import('crossfilter2').GroupAll<CogData, import('crossfilter2').NaturallyOrderedValue> | undefined;
+  iface?: CogInterface;
+}
+
 const initialState: CogDataMutable = {
   isFetching: false,
   isLoaded: false,

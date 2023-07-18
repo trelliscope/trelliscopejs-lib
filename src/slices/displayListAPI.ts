@@ -13,7 +13,7 @@ const JSONPBaseQuery =
     new Promise((resolve) => {
       const displayListCallback = `__loadDisplayList__${id}`;
 
-      window[displayListCallback] = (data: Config) => {
+      window[displayListCallback] = (data: IConfig) => {
         resolve({ data });
       };
 

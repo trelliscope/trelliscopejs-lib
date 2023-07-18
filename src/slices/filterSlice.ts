@@ -5,6 +5,10 @@ import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 import { selectHash, selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
+interface FilterView {
+  active: string[];
+  inactive: string[];
+}
 export interface FilterState {
   state: IFilterState[];
   view: FilterView;
