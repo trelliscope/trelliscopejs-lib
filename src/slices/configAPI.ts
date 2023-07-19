@@ -19,7 +19,7 @@ const JSONPBaseQuery =
 
       const cfgCallback = `__loadAppConfig__${id}`;
 
-      window[cfgCallback] = (data: Config) => {
+      window[cfgCallback] = (data: IConfig) => {
         resolve({ data });
       };
 

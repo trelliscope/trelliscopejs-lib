@@ -5,7 +5,7 @@ export interface ConfigState {
   isFetching: boolean;
   isLoaded: boolean;
   didInvalidate: boolean;
-  config: Config;
+  config: IConfig;
   lastUpdate?: number;
 }
 
@@ -13,7 +13,7 @@ const initialState: ConfigState = {
   isFetching: false,
   isLoaded: false,
   didInvalidate: false,
-  config: {} as Config,
+  config: {} as IConfig,
 };
 
 export const configState = createSlice({
@@ -25,7 +25,7 @@ export const configState = createSlice({
       state.isLoaded = false;
       state.didInvalidate = false;
     },
-    receiveConfig: (state, action: PayloadAction<Config>) => {
+    receiveConfig: (state, action: PayloadAction<IConfig>) => {
       state.isFetching = false;
       state.isLoaded = false;
       state.didInvalidate = true;
