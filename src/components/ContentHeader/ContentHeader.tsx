@@ -39,6 +39,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
         <div className={styles.contentHeaderControlsLeft}>
           <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
             <Button
+              id="filter-drawer-button"
               onClick={() => dispatch(setSidebarActive(!sidebarOpen))}
               variant={sidebarOpen ? 'contained' : 'text'}
               sx={{
@@ -68,7 +69,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
             <Sort />
           </div>
           {tableRef?.current && rerender && layout?.viewtype === 'table' && (
-            <div className={styles.contentHeaderControlsItem}>
+            <div id="column-control" className={styles.contentHeaderControlsItem}>
               <span>Columns</span>
               {/* eslint-disable-next-line react/jsx-pascal-case */}
               <MRT_ShowHideColumnsButton table={tableRef?.current} />
@@ -76,20 +77,20 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
           )}
           {layout?.viewtype !== 'table' && (
             <>
-              <div className={styles.contentHeaderControlsItem}>
+              <div id="column-control" className={styles.contentHeaderControlsItem}>
                 <ColumnSelector />
               </div>
-              <div className={styles.contentHeaderControlsItem}>
+              <div id="label-control" className={styles.contentHeaderControlsItem}>
                 <Labels />
               </div>
             </>
           )}
-          {data?.views && data.views.length > 0 && (
-            <div className={styles.contentHeaderControlsItem}>
+          {data && (
+            <div id="view-control" className={styles.contentHeaderControlsItem}>
               <Views />
             </div>
           )}
-          <div className={styles.contentHeaderControlsItem}>
+          <div id="layout-control" className={styles.contentHeaderControlsItem}>
             <LayoutSelector />
           </div>
         </div>

@@ -37,6 +37,7 @@
     "react-calendar": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^3.4.7",
+    "react-joyride": "^2.5.5",
     "react-redux": "^8.0.4",
     "react-virtualized": "^9.22.3",
     "react-window": "^1.8.8",

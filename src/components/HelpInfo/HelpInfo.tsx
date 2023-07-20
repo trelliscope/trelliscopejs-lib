@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
@@ -28,9 +40,28 @@ const HelpInfo: React.FC = () => {
   useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
+  const tour = localStorage.getItem('trelliscope_tour');
+  const [tourEnabled, setTourEnabled] = useState(tour === 'skipped');
+
+  useEffect(() => {
+    if (tour === 'skipped') {
+      setTourEnabled(true);
+    }
+  }, [tour]);
+
+  const handleTourEnabled = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    if (value) {
+      localStorage.setItem('trelliscope_tour', 'skipped');
+      setTourEnabled(true);
+    } else {
+      localStorage.removeItem('trelliscope_tour');
+      setTourEnabled(false);
+    }
+  };
+
   return (
     <div className={styles.helpInfoIcon}>
-      <IconButton color="inherit" size="small" onClick={handleToggle}>
+      <IconButton id="help-control" color="inherit" size="small" onClick={handleToggle}>
         <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
       </IconButton>
       <Dialog
@@ -41,13 +72,23 @@ const HelpInfo: React.FC = () => {
         onClose={handleToggle}
         maxWidth="md"
       >
-        <DialogTitle id="dialog-viewer-title">
-          <div>
-            {`Trelliscope v${process.env.REACT_APP_VERSION}`}
-          </div>
-          <div className={styles.helpInfoDialogWebsite}>
-            Learn more at <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">trelliscope.org</a>
-          </div>
+        <DialogTitle
+          id="dialog-viewer-title"
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+        >
+          <Box>
+            <div>{`Trelliscope v${process.env.REACT_APP_VERSION}`}</div>
+            <div className={styles.helpInfoDialogWebsite}>
+              Learn more at{' '}
+              <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
+                trelliscope.org
+              </a>
+            </div>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox checked={tourEnabled} onChange={handleTourEnabled} />
+            <Typography>Tour Skipped / Disabled</Typography>
+          </Box>
         </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>

@@ -21,6 +21,7 @@ const Views: React.FC = () => {
   const [openView, setOpenView] = useState(false);
   const allViews = useGetAllLocalViews() as IView[];
   const [localViews, setLocalViews] = useState(allViews);
+  console.log('localViews', localViews);
   const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
