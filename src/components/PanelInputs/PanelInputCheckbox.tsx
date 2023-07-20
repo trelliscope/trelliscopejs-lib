@@ -20,6 +20,7 @@ const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey,
     setInputOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCheckboxChange = (event: any) => {
     const stored = JSON.parse(getStoredValue() || '[]');
     if (event.target.checked) {

@@ -40,7 +40,7 @@ const Header: React.FC = () => {
     >
       <Toolbar className={styles.headerToolbar} disableGutters>
         <div className={styles.header}>
-          <div className={styles.headerDisplayInfo}>
+          <div id="display-control" className={styles.headerDisplayInfo}>
             <DisplayInfo />
             {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerDisplayInfoTitleContainer}>
@@ -60,11 +60,11 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className={styles.headerRight}>
-            <div className={styles.headerIconButton}>
+            <div id="share-control" className={styles.headerIconButton}>
               <Share />
             </div>
             {hasInputs && hasLocalStorage && (
-              <div className={styles.headerIconButton}>
+              <div id="export-control" className={styles.headerIconButton}>
                 <ExportInputDialog
                   displayInfo={displayInfo as IDisplay}
                   hasInputs={hasInputs}
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
             <div className={styles.headerTrelliscope}>
               Trelliscope
               <HelpInfo />
-              <div className={styles.headerTrelliscopeFullscreen}>
+              <div id="fullscreen-control" className={styles.headerTrelliscopeFullscreen}>
                 <FullscreenButton />
               </div>
             </div>
