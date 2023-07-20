@@ -57,7 +57,6 @@ const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, opt
               onChange={(e, value) => handleChange(value)}
               value={JSON.parse(getStoredValue() || '[]')}
               renderInput={(params) => (
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 <TextField {...params} variant="standard" label={name} placeholder="Select an option" />
               )}
             />

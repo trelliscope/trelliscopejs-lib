@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, IconButton } from '@mui/material';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, closestCenter } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { useDisplayInfo, useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import { setLayout } from '../../slices/layoutSlice';
@@ -107,12 +108,13 @@ const Sort: React.FC = () => {
     newSort[i] = sortObj;
     dispatch(setSort(newSort));
   };
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    if (!active || !over) return;
     const updatedItems = arrayMove(
       orderedItemsRef.current,
-      orderedItemsRef.current.findIndex((item) => item.varname === active.id),
-      orderedItemsRef.current.findIndex((item) => item.varname === over.id),
+      orderedItemsRef.current.findIndex((item) => `${item.varname}_chip` === `${active.id}`),
+      orderedItemsRef.current.findIndex((item) => `${item.varname}_chip` === `${over.id}`),
     );
     orderedItemsRef.current = updatedItems;
     const newSort = orderedItemsRef.current.map((item) => sort.find((el) => el.varname === item.varname));
@@ -134,9 +136,10 @@ const Sort: React.FC = () => {
           </div>
           <div className={styles.sortDragContainer}>
             <DndContext modifiers={[restrictToHorizontalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-              <SortableContext items={sortRes.map((el: { varname: string; icon: string }) => ({ id: el.varname }))}>
+              <SortableContext
+                items={sortRes.map((el: { varname: string; icon: string }) => ({ id: `${el.varname}_chip` }))}
+              >
                 {sortRes.map((el: { varname: string; icon: string }, i: number) => (
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   <Chip
                     key={`${el.varname}_sortchip`}
                     label={el.varname}

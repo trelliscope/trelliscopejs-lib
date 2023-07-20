@@ -73,6 +73,15 @@ export const filterSlice = createSlice({
         }
       }
     },
+    setFiltersandFilterViews: (state, action: PayloadAction<IFilterState[]>) => {
+      state.state = action.payload;
+      const { view } = state;
+      const filterables = action.payload.map((m) => m.varname);
+      state.view = {
+        active: filterables,
+        inactive: difference(view.active.concat(view.inactive), filterables) as string[],
+      };
+    },
     clearFilters: (state) => {
       state.state = [];
     },
@@ -142,8 +151,15 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter, clearFilters } =
-  filterSlice.actions;
+export const {
+  setFilterView,
+  addFilter,
+  updateFilterValues,
+  updateFilter,
+  removeFilter,
+  clearFilters,
+  setFiltersandFilterViews,
+} = filterSlice.actions;
 
 // Selectors
 export const selectFilterState = (state: RootState) => state.filter.state;

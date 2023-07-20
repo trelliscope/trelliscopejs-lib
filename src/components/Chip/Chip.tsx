@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
@@ -36,7 +35,7 @@ const Chip: React.FC<ChipProps> = ({
   enforceMaxWidth,
   isDraggable,
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: label, resizeObserverConfig: {} });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: `${label}_chip` });
   const transformString = CSS.Transform.toString(transform) || '';
   const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
 
@@ -48,8 +47,8 @@ const Chip: React.FC<ChipProps> = ({
   return (
     <div
       className={classNames(styles.chipWrapper, { [styles.chipWrapperContained]: enforceMaxWidth })}
-      ref={setNodeRef}
-      style={style}
+      ref={isDraggable ? setNodeRef : null}
+      style={isDraggable ? style : {}}
       {...attributes}
     >
       <span

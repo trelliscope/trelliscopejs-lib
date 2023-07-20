@@ -6,7 +6,7 @@ import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/materi
 import { useSnackbar } from 'notistack';
 import styles from './Views.module.scss';
 import { setLabels } from '../../slices/labelsSlice';
-import { clearFilters, addFilter, setFilterView } from '../../slices/filterSlice';
+import { setFiltersandFilterViews } from '../../slices/filterSlice';
 import { setLayout, LayoutAction } from '../../slices/layoutSlice';
 import { setSort } from '../../slices/sortSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -51,11 +51,7 @@ const Views: React.FC = () => {
     if (valueSort) dispatch(setSort(valueSort));
 
     if (valueFilter) {
-      dispatch(clearFilters());
-      valueFilter.forEach((filter) => {
-        dispatch(setFilterView({ name: filter.varname, which: 'add' }));
-        dispatch(addFilter(filter));
-      });
+      dispatch(setFiltersandFilterViews(valueFilter));
     }
     setAnchorEl(null);
   };
