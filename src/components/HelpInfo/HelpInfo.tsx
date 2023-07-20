@@ -16,6 +16,7 @@ import {
   Tab,
   Tabs,
   Typography,
+  Tooltip,
 } from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
@@ -85,10 +86,12 @@ const HelpInfo: React.FC = () => {
               </a>
             </div>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Checkbox checked={tourEnabled} onChange={handleTourEnabled} />
-            <Typography>Tour Skipped / Disabled</Typography>
-          </Box>
+          <Tooltip arrow title="When this checkbox is unchecked, the new user tour will launch upon page refresh.">
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Checkbox checked={tourEnabled} onChange={handleTourEnabled} />
+              <Typography>Tour Skipped / Disabled</Typography>
+            </Box>
+          </Tooltip>
         </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
