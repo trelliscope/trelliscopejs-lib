@@ -1,5 +1,6 @@
 .filterInput {
   padding: var(--padding-px);
+  background-color: #fefefe;
 
   &Header {
     display: flex;
@@ -10,6 +11,7 @@
     svg {
       width: 20px;
       font-size: 20px;
+      color: var(--gray-1100);
     }
 
     &Name {
@@ -27,6 +29,10 @@
     &Controls {
       display: flex;
       align-items: center;
+
+      &Icon {
+        cursor: pointer;
+      }
     }
   }
 

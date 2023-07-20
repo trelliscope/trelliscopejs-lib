@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotateLeft, faXmark, faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
+import { faRotateLeft, faXmark, faArrowDownShortWide, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import {
   FILTER_TYPE_CATEGORY,
   FILTER_TYPE_DATERANGE,
@@ -46,6 +48,15 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const labelIsSelected = labels.includes(filterName);
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: `${filterName}_filter` });
+  const transformString = CSS.Transform.toString(transform) || '';
+  const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
+
+  const style = {
+    transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
+    transition,
+  };
 
   const handleReset = () => {
     dispatch(removeFilter(filterName));
@@ -118,7 +129,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   };
 
   return (
-    <div className={classNames(styles.filterInput)}>
+    <div ref={setNodeRef} style={style} {...attributes} className={classNames(styles.filterInput)}>
       <div className={styles.filterInputHeader}>
         <div>
           <div className={styles.filterInputHeaderName}>{filterName}</div>
@@ -136,6 +147,9 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             handleConfirm={handleMinimize}
             dialogText="This will clear the selected active filter."
           />
+          <div className={styles.filterInputHeaderControlsIcon}>
+            <FontAwesomeIcon {...listeners} icon={faGripVertical} />
+          </div>
           <IconButton aria-label="close" size="small" onClick={checkIfFilterIsActive}>
             <FontAwesomeIcon icon={faXmark} />
           </IconButton>

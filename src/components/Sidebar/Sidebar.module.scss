@@ -1,5 +1,14 @@
 .sidebar {
   flex-shrink: 0;
+
+  &DragContainer {
+    overflow: auto;
+  }
+
+  &DragSubContainer {
+    overflow: hidden;
+  }
+
   &NoFilter {
     margin-top: 10px;
     display: flex;

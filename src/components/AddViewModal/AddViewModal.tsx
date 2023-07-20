@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
 import styles from './AddViewModal.module.scss';
 import { useGetAllLocalViews, useStoredInputValue } from '../../inputUtils';
-import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectFilterState } from '../../slices/filterSlice';
 import { selectSort } from '../../slices/sortSlice';
 import { selectLabels } from '../../slices/labelsSlice';
@@ -57,8 +56,8 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             panel: layout?.panel ? layout?.panel : undefined,
           },
           labels: { varnames: labels, type: 'labels' },
-          sort: [...newSort],
-          filter: [...newFilter],
+          sort: newSort,
+          filter: newFilter,
         },
       }),
     );
