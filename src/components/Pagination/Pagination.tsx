@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
 import { cogDataSelector, singlePageAppSelector } from '../../selectors';
-import { selectDialogOpen } from '../../selectors/app';
+import { selectDialogOpen, panelDialogIsOpenSelector } from '../../selectors/app';
 import { DataContext } from '../DataProvider';
 import { selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import styles from './Pagination.module.scss';
@@ -15,6 +15,7 @@ const Pagination: React.FC = () => {
   const dispatch = useDispatch();
   const { filteredData } = useContext(DataContext);
   const dialogOpen = useSelector(selectDialogOpen);
+  const panelDialogOpen = useSelector(panelDialogIsOpenSelector);
   const n = useSelector(selectPage);
   const totPanels = filteredData.length;
   const npp = useSelector(selectNumPerPage);
@@ -55,8 +56,8 @@ const Pagination: React.FC = () => {
     handleChange(totPages);
   };
 
-  useHotkeys('right', pageRight, { enabled: singlePageApp && !dialogOpen }, [n, totPanels, npp]);
-  useHotkeys('left', pageLeft, { enabled: singlePageApp && !dialogOpen }, [n, totPanels, npp]);
+  useHotkeys('right', pageRight, { enabled: singlePageApp && !dialogOpen && !panelDialogOpen }, [n, totPanels, npp]);
+  useHotkeys('left', pageLeft, { enabled: singlePageApp && !dialogOpen && !panelDialogOpen }, [n, totPanels, npp]);
 
   if (cogData.isFetching || (cogData.isLoaded && cogData.crossfilter === undefined)) {
     return <div className={styles.paginationProgress}>loading panels...</div>;

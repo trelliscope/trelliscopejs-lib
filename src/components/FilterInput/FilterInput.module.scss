@@ -1,6 +1,7 @@
 .filterInput {
   padding: var(--padding-px);
   background-color: #fefefe;
+  position: relative;
 
   &Header {
     display: flex;
@@ -31,7 +32,7 @@
       align-items: center;
 
       &Icon {
-        cursor: pointer;
+        cursor: move;
       }
     }
   }

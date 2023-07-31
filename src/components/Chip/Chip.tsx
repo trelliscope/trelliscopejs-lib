@@ -35,13 +35,14 @@ const Chip: React.FC<ChipProps> = ({
   enforceMaxWidth,
   isDraggable,
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: `${label}_chip` });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: `${label}_chip` });
   const transformString = CSS.Transform.toString(transform) || '';
   const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
 
   const style = {
     transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
+    zIndex: isDragging ? 1000 : 0,
   };
 
   return (
