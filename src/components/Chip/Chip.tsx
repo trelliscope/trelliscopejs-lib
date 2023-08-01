@@ -42,7 +42,7 @@ const Chip: React.FC<ChipProps> = ({
   const style = {
     transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
-    zIndex: isDragging ? 1000 : 0,
+    zIndex: isDragging ? 1000 : undefined,
   };
 
   return (
