@@ -48,8 +48,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
       dispatch(
         updateFilter({
           ...filter,
-          min: values[0] ? new Date(values[0])?.getTime() : -Infinity,
-          max: values[1] ? new Date(values[1])?.getTime() : Infinity,
+          min: values[0] ? new Date(values[0])?.getTime() : null,
+          max: values[1] ? new Date(values[1])?.getTime() : null,
         }),
       );
     } else {
@@ -57,8 +57,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
         varname: meta.varname,
         filtertype: FILTER_TYPE_DATERANGE,
         type: 'filter',
-        min: values[0] ? new Date(values[0])?.getTime() : -Infinity,
-        max: values[1] ? new Date(values[1])?.getTime() : Infinity,
+        min: values[0] ? new Date(values[0])?.getTime() : null,
+        max: values[1] ? new Date(values[1])?.getTime() : null,
         metatype: 'date',
       } as INumberRangeFilterState;
       dispatch(addFilter(newState));
@@ -72,8 +72,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
     if (filter) {
       newState = {
         ...filter,
-        min: value[0] ? value[0]?.getTime() : -Infinity,
-        max: value[1] ? value[1]?.getTime() : Infinity,
+        min: value[0] ? value[0]?.getTime() : null,
+        max: value[1] ? value[1]?.getTime() : null,
       };
       dispatch(updateFilter(newState));
     } else {
@@ -81,8 +81,8 @@ const FilterDateRange: React.FC<FilterDateRangeProps> = ({ meta, filter }) => {
         varname: meta.varname,
         filtertype: FILTER_TYPE_DATERANGE as FilterType,
         type: 'filter',
-        min: value[0] ? value[0]?.getTime() : -Infinity,
-        max: value[1] ? value[1]?.getTime() : Infinity,
+        min: value[0] ? value[0]?.getTime() : null,
+        max: value[1] ? value[1]?.getTime() : null,
         metatype: 'date',
       };
       dispatch(addFilter(newState));

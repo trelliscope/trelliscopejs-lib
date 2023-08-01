@@ -25,6 +25,12 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (filter?.min === null) {
+      setMinInput('');
+    }
+    if (filter?.max === null) {
+      setMaxInput('');
+    }
     if (filter?.min != null) {
       setMinInput(format(filter.min, 2, false, false, undefined, true));
     }
@@ -85,10 +91,10 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
     let newState = {} as INumberRangeFilterState;
     let newVal = val === '' ? null : parseFloat(val);
     if (Number.isNaN(newVal) && which === 'min') {
-      newVal = -Infinity;
+      newVal = null;
     }
     if (Number.isNaN(newVal) && which === 'max') {
-      newVal = Infinity;
+      newVal = null;
     }
     const lower = which === 'min' ? newVal : filter?.min;
     const upper = which === 'max' ? newVal : filter?.max;
@@ -97,8 +103,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         varname: filter.varname,
         filtertype: 'numberrange',
         type: filter.type,
-        min: lower === undefined && upper === undefined ? null : lower ?? -Infinity,
-        max: lower === undefined && upper === undefined ? null : upper ?? Infinity,
+        min: lower === undefined && upper === undefined ? null : lower ?? null,
+        max: lower === undefined && upper === undefined ? null : upper ?? null,
         metatype: 'number',
       };
       dispatch(updateFilter(newState));
@@ -107,8 +113,8 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
         varname: meta.varname,
         filtertype: 'numberrange',
         type: 'filter',
-        min: lower === undefined && upper === undefined ? null : lower ?? -Infinity,
-        max: lower === undefined && upper === undefined ? null : upper ?? Infinity,
+        min: lower === undefined && upper === undefined ? null : lower ?? null,
+        max: lower === undefined && upper === undefined ? null : upper ?? null,
         metatype: 'number',
       };
       dispatch(addFilter(newState));

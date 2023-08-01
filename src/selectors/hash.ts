@@ -88,14 +88,14 @@ export const selectHashFilters = () => {
     if (['numberrange', 'daterange', 'datetimerange'].includes(hashProps.type)) {
       return {
         ...filter,
-        min: Number(hashProps.min),
-        max: Number(hashProps.max),
+        min: Number(hashProps.min) === -Infinity ? null : Number(hashProps.min),
+        max: Number(hashProps.max) === Infinity ? null : Number(hashProps.max),
       } as INumberRangeFilterState | IDatetimeRangeFilterState;
     }
 
     return {
       ...filter,
-      regexp: decodeURIComponent(hashProps.regexp),
+      regexp: hashProps.regexp !== '' ? decodeURIComponent(hashProps.regexp) : null,
       values:
         hashProps.metatype === META_TYPE_FACTOR
           ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))

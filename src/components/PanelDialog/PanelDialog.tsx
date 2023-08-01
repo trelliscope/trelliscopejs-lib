@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Dialog, DialogActions, Grid, IconButton, ClickAwayListener } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import { useMetaData } from '../../slices/metaDataAPI';
 import PanelTable from '../PanelTable/PanelTable';
 import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
-import { selectBasePath } from '../../selectors/app';
+import { panelDialogIsOpenSelector, selectBasePath } from '../../selectors/app';
 import { panelSrcGetter, snakeCase } from '../../utils';
 import { selectLayout, selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import { setPanelDialog } from '../../slices/appSlice';
 import { META_TYPE_PANEL } from '../../constants';
 import VariableSelector from '../VariableSelector';
+import { singlePageAppSelector } from '../../selectors';
 
 interface PanelDialogProps {
   data: Datum[];
@@ -50,6 +52,8 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const [variableSelectorIsOpen, setVariableSelectorIsOpen] = useState(false);
   const [anchorSelectorEl, setAnchorSelectorEl] = useState<null | HTMLElement>(null);
   const [panelSources, setPanelSources] = useState<PanelExtended[]>([]);
+  const panelDialogOpen = useSelector(panelDialogIsOpenSelector);
+  const singlePageApp = useSelector(singlePageAppSelector);
 
   useEffect(() => {
     setPanelSources(
@@ -149,6 +153,27 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     return null;
   };
 
+  useHotkeys('right', pageRight as () => void, { enabled: singlePageApp && panelDialogOpen }, [
+    n,
+    totPanels,
+    npp,
+    data,
+    curIndex,
+    totPages,
+    panel,
+    curSource,
+  ]);
+  useHotkeys('left', pageLeft as () => void, { enabled: singlePageApp && panelDialogOpen }, [
+    n,
+    totPanels,
+    npp,
+    data,
+    curIndex,
+    totPages,
+    panel,
+    curSource,
+  ]);
+
   const handleVariableSelectorClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorSelectorEl(anchorSelectorEl ? null : event.currentTarget);
     setVariableSelectorIsOpen(!variableSelectorIsOpen);
@@ -211,7 +236,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         </Box>
         {curSource && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Box sx={{ flex: '1 0 50%' }}>
+            <Box sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}>
               <PanelGraphic
                 type={panel?.paneltype}
                 src={

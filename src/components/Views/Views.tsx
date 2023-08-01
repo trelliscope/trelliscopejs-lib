@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { faChevronUp, faChevronDown, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Button, Divider, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import styles from './Views.module.scss';
-import { setLabels } from '../../slices/labelsSlice';
-import { setFiltersandFilterViews } from '../../slices/filterSlice';
-import { setLayout, LayoutAction } from '../../slices/layoutSlice';
-import { setSort } from '../../slices/sortSlice';
+import isEqual from 'lodash.isequal';
+import { setLabels, selectLabels } from '../../slices/labelsSlice';
+import { setFiltersandFilterViews, selectFilterState } from '../../slices/filterSlice';
+import { setLayout, LayoutAction, selectLayout } from '../../slices/layoutSlice';
+import { setSort, selectSort } from '../../slices/sortSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import AddViewModal from '../AddViewModal/AddViewModal';
 import { useGetAllLocalViews, getLocalStorageKey } from '../../inputUtils';
+import styles from './Views.module.scss';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,69 @@ const Views: React.FC = () => {
   const [localViews, setLocalViews] = useState(allViews);
   const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
+
+  const filters = useSelector(selectFilterState);
+  const sorts = useSelector(selectSort);
+  const labels = useSelector(selectLabels);
+  const layout = useSelector(selectLayout);
+
+  const trimmedLayout = {
+    ncol: layout?.ncol,
+    page: layout?.page,
+    type: layout?.type,
+    viewtype: layout?.viewtype,
+  };
+
+  const trimmedSort = sorts.map((sort) => {
+    const { varname, dir, metatype } = sort;
+    return { varname, dir, metatype };
+  });
+
+  const [activeViews, setActiveViews] = useState<string[]>([]);
+
+  const checkIfActiveView = () => {
+    const combinedUserandDefaultViews = views?.concat(allViews);
+    setActiveViews([]);
+    const activeCombinedItems = combinedUserandDefaultViews?.reduce((acc, view) => {
+      const { filter: valueFilter, labels: valueLabels, layout: valueLayout, sort: valueSort } = view.state || {};
+      const comparableLabels = valueLabels?.varnames;
+      const comparableLayout = {
+        ncol: valueLayout?.ncol,
+        page: valueLayout?.page,
+        type: valueLayout?.type,
+        viewtype: valueLayout?.viewtype,
+      };
+      const comparableSort = valueSort?.map((sort) => {
+        const { varname, dir, metatype } = sort;
+        return { varname, dir, metatype };
+      });
+
+      // to ensure that isEqual functions correctly we need to sort the items. We need to spread the state items to make them mutable.
+      valueFilter.sort((a, b) => a.varname.localeCompare(b.varname));
+      const filtersMutable = [...filters];
+      filtersMutable.sort((a, b) => a.varname.localeCompare(b.varname));
+      comparableLabels.sort();
+      const labelsMutable = [...labels];
+      labelsMutable.sort();
+      comparableSort.sort((a, b) => a.varname.localeCompare(b.varname));
+      trimmedSort.sort((a, b) => a.varname.localeCompare(b.varname));
+
+      if (
+        isEqual(valueFilter, filtersMutable) &&
+        isEqual(comparableLabels, labelsMutable) &&
+        isEqual(comparableLayout, trimmedLayout) &&
+        isEqual(comparableSort, trimmedSort)
+      ) {
+        acc.push(view.name);
+      }
+      return acc;
+    }, [] as string[]);
+    setActiveViews(activeCombinedItems);
+  };
+  useEffect(() => {
+    checkIfActiveView();
+  }, [views, localViews, filters, sorts, labels, layout]);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,6 +117,7 @@ const Views: React.FC = () => {
     if (valueFilter) {
       dispatch(setFiltersandFilterViews(valueFilter));
     }
+
     setAnchorEl(null);
   };
 
@@ -88,25 +153,40 @@ const Views: React.FC = () => {
         </Button>
         <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
           {views?.map((value) => (
-            <Box key={value.name} sx={{ display: 'flex' }}>
-              <MenuItem onClick={() => handleViewChange(value.state, value.name)}>
-                <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
-                  {value.name}
-                </Typography>
-              </MenuItem>
-            </Box>
+            <div key={value.name}>
+              <Box sx={{ display: 'flex' }}>
+                <MenuItem
+                  selected={activeViews.includes(value.name)}
+                  sx={{ width: '100%' }}
+                  autoFocus
+                  onClick={() => handleViewChange(value.state, value.name)}
+                >
+                  <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
+                    {value.name}
+                  </Typography>
+                </MenuItem>
+                <Divider />
+              </Box>
+            </div>
           ))}
-          {localViews?.map((value) => (
-            <Box key={value.name} sx={{ display: 'flex' }}>
-              <MenuItem onClick={() => handleViewChange(value.state, value.name)}>
-                <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
-                  {value.name}
-                </Typography>
-              </MenuItem>
-              <IconButton sx={{ mr: '5px' }} aria-label="close" size="small" onClick={() => handleDeleteView(value.name)}>
-                <FontAwesomeIcon icon={faTrash} />
-              </IconButton>
-            </Box>
+          {allViews?.map((value) => (
+            <div key={value.name}>
+              <Divider />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <MenuItem
+                  selected={activeViews.includes(value.name)}
+                  sx={{ width: '100%' }}
+                  onClick={() => handleViewChange(value.state, value.name)}
+                >
+                  <Typography variant="inherit" sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '400px' }}>
+                    {value.name}
+                  </Typography>
+                </MenuItem>
+                <IconButton sx={{ mr: '5px' }} aria-label="close" size="small" onClick={() => handleDeleteView(value.name)}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </IconButton>
+              </Box>
+            </div>
           ))}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
             <Button variant="contained" color="primary" onClick={handleViewToggle}>

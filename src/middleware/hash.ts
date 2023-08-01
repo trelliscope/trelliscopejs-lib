@@ -4,7 +4,14 @@ import { SB_REV_LOOKUP } from '../constants';
 import { sortSlice } from '../slices/sortSlice';
 import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
-import { addFilter, filterSlice, removeFilter, updateFilter, updateFilterValues } from '../slices/filterSlice';
+import {
+  addFilter,
+  filterSlice,
+  removeFilter,
+  setFiltersandFilterViews,
+  updateFilter,
+  updateFilterValues,
+} from '../slices/filterSlice';
 import { selectedDisplaySlice } from '../slices/selectedDisplaySlice';
 import { sidebarSlice } from '../slices/sidebarSlice';
 import { displayListAPI } from '../slices/displayListAPI';
@@ -115,6 +122,7 @@ export const hashMiddleware: Middleware<RootState> =
       updateFilterValues.type,
       setActiveSidebar.type,
       setFilterView.type,
+      setFiltersandFilterViews.type,
     ];
 
     const apiActions = [

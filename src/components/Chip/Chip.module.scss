@@ -58,6 +58,7 @@
 
   &DragIcon {
     margin-right: 15px;
+    cursor: move;
   }
 
   &CloseIcon {
@@ -75,9 +76,5 @@
       color: var(--black-400);
       fill: var(--white);
     }
-  }
-
-  &IndIcon {
-    padding-right: var(--padding-3);
   }
 }

@@ -49,13 +49,16 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: `${filterName}_filter` });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: `${filterName}_filter`,
+  });
   const transformString = CSS.Transform.toString(transform) || '';
   const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
 
   const style = {
     transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
+    zIndex: isDragging ? 1000 : 0,
   };
 
   const handleReset = () => {
