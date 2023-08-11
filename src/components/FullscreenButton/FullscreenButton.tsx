@@ -84,7 +84,7 @@ const FullscreenButton: React.FC = () => {
 
   return (
     <Tooltip title="Toggle Fullscreen">
-      <IconButton onClick={toggleFullScreen} color="inherit">
+      <IconButton data-testid="fullscreen-button" onClick={toggleFullScreen} color="inherit">
         {!fullscreen ? <FontAwesomeIcon icon={faExpand} size="sm" /> : <FontAwesomeIcon icon={faCompress} size="sm" />}
       </IconButton>
     </Tooltip>

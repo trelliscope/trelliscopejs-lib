@@ -80,7 +80,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
   return (
     <div>
       <Tooltip title="Export Inputs">
-        <IconButton aria-label="close" onClick={handleOpen}>
+        <IconButton data-testid="export-button" aria-label="close" onClick={handleOpen}>
           <FontAwesomeIcon icon={faFileArrowDown} />
         </IconButton>
       </Tooltip>
@@ -94,6 +94,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
         }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-testid="export-input-dialog"
       >
         <DialogTitle id="alert-dialog-title">Export user inputs</DialogTitle>
         <DialogContent dividers>
@@ -139,7 +140,9 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
           )}
         </DialogContent>
         <div className={styles.exportInputDialogControlsContainer}>
-          <Button onClick={() => setConfirmationModalOpen(true)}>Clear inputs</Button>
+          <Button data-testid="export-input-clear" onClick={() => setConfirmationModalOpen(true)}>
+            Clear inputs
+          </Button>
           <ConfirmationModal
             isOpen={confirmationModalOpen}
             handleCancel={handleCancel}
@@ -147,7 +150,12 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
             dialogText="This will delete all local storage input items on all panels."
           />
           <div className={styles.exportInputDialogControlsContainerStepper}>
-            <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
+            <Button
+              data-testid="export-input-back"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className={styles.exportInputDialogButton}
+            >
               Back
             </Button>
             {activeStep <= 1 && (
@@ -161,6 +169,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
                 color="primary"
                 onClick={handleNext}
                 className={styles.exportInputDialogButton}
+                data-testid="export-input-next"
               >
                 Next
               </Button>
@@ -175,6 +184,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
             }}
             color="primary"
             autoFocus
+            data-testid="export-input-close"
           >
             Close
           </Button>

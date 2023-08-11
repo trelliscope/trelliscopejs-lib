@@ -49,7 +49,7 @@ const DisplayInfo: React.FC = () => {
 
   return (
     <div>
-      <IconButton onClick={handleToggle}>
+      <IconButton data-testid="display-info-button" onClick={handleToggle}>
         <div className={styles.displayInfoIcon}>
           <FontAwesomeIcon icon={faCircleInfo} size="sm" />
         </div>
@@ -62,6 +62,7 @@ const DisplayInfo: React.FC = () => {
         onClose={handleToggle}
         disableEscapeKeyDown
         maxWidth="md"
+        data-testid="display-info-modal"
       >
         <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
         <DialogContent>
@@ -123,7 +124,12 @@ const DisplayInfo: React.FC = () => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button aria-label="display info close" color="secondary" onClick={handleToggle}>
+          <Button
+            data-testid="display-info-button-close"
+            aria-label="display info close"
+            color="secondary"
+            onClick={handleToggle}
+          >
             Close
           </Button>
         </DialogActions>

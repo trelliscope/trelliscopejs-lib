@@ -77,6 +77,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           fullWidth
           value={fullName}
           onChange={handleNameChange}
+          inputProps={{ 'data-testid': 'full-name-input' }}
         />
         <TextField
           className={styles.userInfoTextField}
@@ -86,6 +87,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           onChange={handleEmailChange}
           error={!validEmail}
           helperText={validEmail ? '' : 'Please enter a valid email address'}
+          inputProps={{ 'data-testid': 'email-input' }}
         />
         <TextField
           className={styles.userInfoTextField}
@@ -93,6 +95,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           fullWidth
           value={jobTitle}
           onChange={handleJobTitleChange}
+          inputProps={{ 'data-testid': 'job-title-input' }}
         />
         <TextField
           className={styles.userInfoTextField}
@@ -102,6 +105,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           fullWidth
           value={otherInfo}
           onChange={handleOtherInfoChange}
+          inputProps={{ 'data-testid': 'other-info-input' }}
         />
       </div>
     </div>
