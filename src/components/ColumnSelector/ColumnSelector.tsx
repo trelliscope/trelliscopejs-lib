@@ -21,17 +21,21 @@ const ColumnSelector: React.FC = () => {
   return (
     <>
       <div>
-      <span className={styles.columnSelectorText}>Columns:</span>
+        <span className={styles.columnSelectorText}>Columns:</span>
       </div>
       <TextField
-        sx={{ maxWidth: 50, minWidth: 30, pt: 0,
+        sx={{
+          maxWidth: 50,
+          minWidth: 30,
+          pt: 0,
           '& .MuiInput-root::before': {
-            borderColor: 'var(--white-600)'
+            borderColor: 'var(--white-600)',
           },
           '& .MuiInput-root:hover::before': {
-            borderColor: 'var(--white-700)'
-          }
+            borderColor: 'var(--white-700)',
+          },
         }}
+        data-testid="column-selector"
         variant="standard"
         type="number"
         size="small"
@@ -39,6 +43,7 @@ const ColumnSelector: React.FC = () => {
           inputMode: 'numeric',
           pattern: '[0-9]*',
           style: { marginBottom: -4, textAlign: 'center' },
+          'data-testid': 'column-selector-input',
         }}
         value={layout.ncol || 1}
         onChange={(e) => handleColumnChange(e.target.value)}
