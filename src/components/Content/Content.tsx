@@ -191,7 +191,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     <>
       {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
-          <div className={styles.content} style={contentStyle} ref={contentRef}>
+          <div data-testid="panel-content" className={styles.content} style={contentStyle} ref={contentRef}>
             {metaDataSuccess && displayInfoSuccess && data?.length > 0 && curPanel && (
               <>
                 {data.map((d, i) => (
@@ -231,7 +231,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
         </div>
       ) : (
         <div className={styles.tableContainer} ref={tableWrapperRef}>
-          <div className={styles.tableContainer} ref={tableContentRef}>
+          <div data-testid="table-content" className={styles.tableContainer} ref={tableContentRef}>
             <DataTable
               data={data}
               handleTableResize={handleTableResize}
