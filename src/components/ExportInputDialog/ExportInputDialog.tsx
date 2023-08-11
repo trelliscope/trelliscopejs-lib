@@ -48,7 +48,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
 
   const clearInputs = () => {
     Object.keys(localStorage).forEach((key) => {
-      if (key.includes(displayInfo.name) || storageItems.includes(key)) {
+      if ((key.includes(displayInfo.name) || storageItems.includes(key)) && !key.includes('_trelliscope_views_')) {
         localStorage.removeItem(key);
       }
       setFullName('');
