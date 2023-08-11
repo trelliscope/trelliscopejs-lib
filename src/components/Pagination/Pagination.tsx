@@ -84,7 +84,7 @@ const Pagination: React.FC = () => {
   return (
     <div className={styles.paginationOuter}>
       <div className={styles.paginationLabel}>
-        <span>
+        <span data-testid="pagination-numbers">
           {pRange}
           <span>
             {` of `} <FormattedNumber value={totPanels} maximumFractionDigits={0} />
@@ -94,7 +94,13 @@ const Pagination: React.FC = () => {
       <div className={styles.paginationButtonContainer}>
         <div className={styles.paginationButtonWrap}>
           <div className={styles.paginationButtonDiv}>
-            <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageFirst()}>
+            <IconButton
+              data-testid="pagination-first"
+              size="small"
+              disabled={n <= 1}
+              className={styles.paginationButton}
+              onClick={() => pageFirst()}
+            >
               <FontAwesomeIcon icon={faBackwardStep} size="sm" />
             </IconButton>
           </div>
@@ -102,7 +108,13 @@ const Pagination: React.FC = () => {
         </div>
         <div className={styles.paginationButtonWrap}>
           <div className={styles.paginationButtonDiv}>
-            <IconButton size="small" disabled={n <= 1} className={styles.paginationButton} onClick={() => pageLeft()}>
+            <IconButton
+              data-testid="pagination-previous"
+              size="small"
+              disabled={n <= 1}
+              className={styles.paginationButton}
+              onClick={() => pageLeft()}
+            >
               <FontAwesomeIcon icon={faChevronLeft} size="sm" />
             </IconButton>
           </div>
@@ -111,6 +123,7 @@ const Pagination: React.FC = () => {
         <div className={styles.paginationButtonWrap}>
           <div className={styles.paginationButtonDiv}>
             <IconButton
+              data-testid="pagination-next"
               size="small"
               disabled={n >= totPages}
               className={styles.paginationButton}
@@ -123,7 +136,13 @@ const Pagination: React.FC = () => {
         </div>
         <div className={styles.paginationButtonWrap}>
           <div className={styles.paginationButtonDiv}>
-            <IconButton size="small" disabled={n >= totPages} className={styles.paginationButton} onClick={() => pageLast()}>
+            <IconButton
+              data-testid="pagination-last"
+              size="small"
+              disabled={n >= totPages}
+              className={styles.paginationButton}
+              onClick={() => pageLast()}
+            >
               <FontAwesomeIcon icon={faForwardStep} size="sm" />
             </IconButton>
           </div>

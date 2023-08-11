@@ -26,6 +26,7 @@ const LayoutSelector: React.FC = () => {
       <span className={styles.layoutSelectorText}>Layout</span>
       <FormControl size="small">
         <Select
+          data-testid="layout-selector"
           sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
           labelId="layout-label"
           id="layout"
@@ -36,13 +37,13 @@ const LayoutSelector: React.FC = () => {
             value === 'grid' ? <FontAwesomeIcon icon={faTableCellsLarge} /> : <FontAwesomeIcon icon={faTableList} />
           }
         >
-          <MenuItem value="grid">
+          <MenuItem data-testid="grid-select" value="grid">
             <ListItemIcon>
               <FontAwesomeIcon icon={faTableCellsLarge} />
             </ListItemIcon>
             <ListItemText>Grid</ListItemText>
           </MenuItem>
-          <MenuItem value="table">
+          <MenuItem data-testid="table-select" value="table">
             <ListItemIcon>
               <FontAwesomeIcon icon={faTableList} />
             </ListItemIcon>
