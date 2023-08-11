@@ -62,7 +62,7 @@ const HelpInfo: React.FC = () => {
 
   return (
     <div className={styles.helpInfoIcon}>
-      <IconButton id="help-control" color="inherit" size="small" onClick={handleToggle}>
+      <IconButton data-testid="help-button" id="help-control" color="inherit" size="small" onClick={handleToggle}>
         <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
       </IconButton>
       <Dialog
@@ -72,6 +72,7 @@ const HelpInfo: React.FC = () => {
         aria-labelledby="dialog-viewer-title"
         onClose={handleToggle}
         maxWidth="md"
+        data-testid="help-modal"
       >
         <DialogTitle
           id="dialog-viewer-title"
@@ -88,23 +89,23 @@ const HelpInfo: React.FC = () => {
           </Box>
           <Tooltip arrow title="When this checkbox is unchecked, the new user tour will launch upon page refresh.">
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Checkbox checked={tourEnabled} onChange={handleTourEnabled} />
+              <Checkbox data-testid="tour-toggle" checked={tourEnabled} onChange={handleTourEnabled} />
               <Typography>Tour Skipped / Disabled</Typography>
             </Box>
           </Tooltip>
         </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
-            <Tab label="How to Use" />
-            <Tab label="Shortcuts" />
-            <Tab label="Credits" />
+            <Tab data-testid="how-to-tab" label="How to Use" />
+            <Tab data-testid="shortcuts-tab" label="Shortcuts" />
+            <Tab data-testid="credits-tab" label="Credits" />
           </Tabs>
           {tabNumber === 0 && <HowToUse />}
           {tabNumber === 1 && <Shortcuts />}
           {tabNumber === 2 && <Credits />}
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={handleToggle}>
+          <Button data-testid="help-button-close" color="secondary" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

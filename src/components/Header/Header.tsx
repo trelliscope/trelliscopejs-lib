@@ -44,7 +44,13 @@ const Header: React.FC = () => {
             <DisplayInfo />
             {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerDisplayInfoTitleContainer}>
-              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, lineHeight: '1.25' }}>
+              <Typography
+                data-testid="selected-title"
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ flexGrow: 1, lineHeight: '1.25' }}
+              >
                 {selectedDisplay?.name}
               </Typography>
               {selectedDisplay?.description && selectedDisplay?.description !== selectedDisplay?.name && (
@@ -72,7 +78,7 @@ const Header: React.FC = () => {
                 />
               </div>
             )}
-            <div className={styles.headerTrelliscope}>
+            <div data-testid="app-title" className={styles.headerTrelliscope}>
               Trelliscope
               <HelpInfo />
               <div id="fullscreen-control" className={styles.headerTrelliscopeFullscreen}>

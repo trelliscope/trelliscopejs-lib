@@ -28,4 +28,6 @@ public/_test/
 public/info.html
 *.code-workspace
 .history
-playwright-report/
+/test-results/
+/playwright-report/
+/playwright/.cache/

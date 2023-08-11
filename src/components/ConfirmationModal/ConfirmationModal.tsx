@@ -11,16 +11,16 @@ interface ConfirmationModalProps {
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, handleCancel, handleConfirm, dialogText }) => (
   <div className={styles.confirmationModal}>
-    <Dialog open={isOpen} sx={{ zIndex: '8002' }}>
+    <Dialog data-testid="confirmation-modal" open={isOpen} sx={{ zIndex: '8002' }}>
       <DialogTitle>Are you sure?</DialogTitle>
       <DialogContent>
         <DialogContentText>{dialogText}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} color="primary">
+        <Button data-testid="confirmation-modal-cancel" onClick={handleCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleConfirm} color="primary">
+        <Button data-testid="confirmation-modal-confirm" onClick={handleConfirm} color="primary">
           Confirm
         </Button>
       </DialogActions>

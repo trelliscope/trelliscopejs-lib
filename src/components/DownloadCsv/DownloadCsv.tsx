@@ -133,6 +133,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
           className={styles.downloadCsvButton}
           endIcon={<FontAwesomeIcon icon={faDownload} />}
           onClick={downloadCsv}
+          data-testid="download-csv-button"
         >
           Download CSV
         </Button>

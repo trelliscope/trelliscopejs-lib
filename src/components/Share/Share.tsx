@@ -24,7 +24,7 @@ const Share: React.FC = () => {
   return (
     <div className={styles.share}>
       <Tooltip title="Share">
-        <IconButton onClick={handleShareModal}>
+        <IconButton data-testid="share-button" onClick={handleShareModal}>
           <FontAwesomeIcon icon={faShareNodes} />
         </IconButton>
       </Tooltip>
@@ -35,12 +35,14 @@ const Share: React.FC = () => {
         aria-labelledby="dialog-info-title"
         onClose={handleShareModal}
         maxWidth="md"
+        data-testid="share-modal"
       >
         <DialogTitle id="dialog-info-title">Share a link to this display</DialogTitle>
         <DialogContent>
           <div className={styles.shareContent}>
-            <Tooltip title={`${copyText} to clipboard`} followCursor placement="top" arrow>
+            <Tooltip data-testid="share-tooltip" title={`${copyText} to clipboard`} followCursor placement="top" arrow>
               <TextField
+                data-testid="share-url"
                 className={styles.shareContentText}
                 onClick={copyUrlToClipboard}
                 value={url}
@@ -50,14 +52,20 @@ const Share: React.FC = () => {
                 }}
               />
             </Tooltip>
-            <Button className={styles.shareButton} aria-label="share close" color="primary" onClick={copyUrlToClipboard}>
+            <Button
+              data-testid="copy-button"
+              className={styles.shareButton}
+              aria-label="share close"
+              color="primary"
+              onClick={copyUrlToClipboard}
+            >
               <FontAwesomeIcon className={styles.shareButtonIcon} icon={faCopy} />
               {copyText}
             </Button>
           </div>
         </DialogContent>
         <DialogActions>
-          <Button aria-label="share close" color="secondary" onClick={handleShareModal}>
+          <Button data-testid="share-close" aria-label="share close" color="secondary" onClick={handleShareModal}>
             Close
           </Button>
         </DialogActions>
