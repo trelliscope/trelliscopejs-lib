@@ -55,6 +55,20 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
     }
   }, [src, alt, sourceType, port, name, sourceClean, socketUrl]);
 
+  const [imageLoaded, setImageLoaded] = useState(true);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImageLoaded(false);
+  };
+
+  useEffect(() => {
+    setImageLoaded(true);
+  }, [src]);
+
   return (
     <div
       className={styles.panelGraphic}
@@ -79,7 +93,28 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           <CircularProgress />
         </Box>
       ) : (
-        type === 'img' && <img src={src} alt={alt} />
+        type === 'img' && (
+          <>
+            {imageLoaded ? (
+              <img key={`${src}_${name}`} src={src} alt={alt} onLoad={handleImageLoad} onError={handleImageError} />
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#f5f5f5',
+                  color: '#9ba3af',
+                  height: 'auto',
+                  width: 'clamp(320px, 100vw, 800px)',
+                  maxWidth: '100%',
+                }}
+              >
+                No Image
+              </Box>
+            )}
+          </>
+        )
       )}
     </div>
   );
