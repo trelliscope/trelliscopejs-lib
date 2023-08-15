@@ -103,7 +103,6 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  // width: '100%',
                   backgroundColor: '#f5f5f5',
                   color: '#9ba3af',
                   height: 'auto',
