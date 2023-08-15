@@ -46,21 +46,20 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
   const scale = scaleLinear().domain(domain).range([0, width]);
 
   // move active bars to the top
+  const activeKeys = new Set(actives);
+
   dataFiltered.sort((a, b) => {
+    const aKey = a.key === MISSING_TEXT ? '-Infinity' : String(a.key);
+    const bKey = b.key === MISSING_TEXT ? '-Infinity' : String(b.key);
+
     if (metaType !== META_TYPE_FACTOR) {
-      if (actives.includes(a.key as string) && !actives.includes(b.key as string)) return -1;
-      if (!actives.includes(a.key as string) && actives.includes(b.key as string)) return 1;
+      if (activeKeys.has(aKey) && !activeKeys.has(bKey)) return -1;
+      if (!activeKeys.has(aKey) && activeKeys.has(bKey)) return 1;
     }
-    if (
-      actives.includes((a.key === MISSING_TEXT ? -Infinity : a.key) as string) &&
-      !actives.includes((b.key === MISSING_TEXT ? -Infinity : b.key) as string)
-    )
-      return -1;
-    if (
-      !actives.includes((a.key === MISSING_TEXT ? -Infinity : a.key) as string) &&
-      actives.includes((b.key === MISSING_TEXT ? -Infinity : b.key) as string)
-    )
-      return 1;
+
+    if (activeKeys.has(aKey) && !activeKeys.has(bKey)) return -1;
+    if (!activeKeys.has(aKey) && activeKeys.has(bKey)) return 1;
+
     return 0;
   });
 

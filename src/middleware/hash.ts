@@ -1,6 +1,5 @@
 import type { Middleware } from 'redux';
 import type { RootState } from '../store';
-import { SB_REV_LOOKUP } from '../constants';
 import { sortSlice } from '../slices/sortSlice';
 import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
@@ -13,7 +12,6 @@ import {
   updateFilterValues,
 } from '../slices/filterSlice';
 import { selectedDisplaySlice } from '../slices/selectedDisplaySlice';
-import { sidebarSlice } from '../slices/sidebarSlice';
 import { displayListAPI } from '../slices/displayListAPI';
 import { displayInfoAPI } from '../slices/displayInfoAPI';
 
@@ -25,11 +23,15 @@ const { setLabels } = labelsSlice.actions;
 const { setLayout } = layoutSlice.actions;
 const { setFilterView } = filterSlice.actions;
 const { setSelectedDisplay } = selectedDisplaySlice.actions;
-const { setActiveSidebar } = sidebarSlice.actions;
 
 // this updates the window hash whenever the state changes
 export const hashFromState = (state: RootState) => {
   const hashURL = new URLSearchParams();
+
+  const { selectedDisplay } = state;
+  if (selectedDisplay) {
+    hashURL.append('selectedDisplay', encodeURIComponent(selectedDisplay));
+  }
 
   // layout
   const { layout } = state;
@@ -47,6 +49,10 @@ export const hashFromState = (state: RootState) => {
 
   if (layout.panel) {
     hashURL.append('panel', layout.panel);
+  }
+
+  if (layout.sidebarActive !== undefined) {
+    hashURL.append('sidebarActive', layout.sidebarActive.toString() || 'false');
   }
 
   // labels
@@ -77,12 +83,6 @@ export const hashFromState = (state: RootState) => {
       return res;
     });
     hashURL.append('filter', filterStrs.join(','));
-  }
-
-  // sidebar
-  const { sidebar } = state;
-  if (sidebar) {
-    hashURL.append('sidebar', SB_REV_LOOKUP[sidebar.active].toString());
   }
 
   // filterView
@@ -120,7 +120,6 @@ export const hashMiddleware: Middleware<RootState> =
       updateFilter.type,
       removeFilter.type,
       updateFilterValues.type,
-      setActiveSidebar.type,
       setFilterView.type,
       setFiltersandFilterViews.type,
     ];

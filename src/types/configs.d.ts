@@ -317,6 +317,7 @@ interface ILayoutState extends IState {
   page: number;
   viewtype: ViewType;
   panel: string;
+  sidebarActive: boolean;
 }
 
 interface ILabelState extends IState {

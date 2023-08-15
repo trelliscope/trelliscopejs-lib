@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
-import { selectHashLayout } from '../selectors/hash';
+import { selectHashLayout, selectHashSidebar } from '../selectors/hash';
 import { addFilter, removeFilter, updateFilter, updateFilterValues } from './filterSlice';
 
 const fallbackState: ILayoutState = {
@@ -12,6 +12,7 @@ const fallbackState: ILayoutState = {
   type: 'layout',
   viewtype: 'grid',
   panel: '',
+  sidebarActive: selectHashSidebar() || false,
 };
 
 const initialState = selectHashLayout() as ILayoutState;
@@ -23,6 +24,7 @@ export interface LayoutAction {
   type?: 'layout';
   viewtype?: ViewType;
   panel?: string;
+  sidebarActive?: boolean;
 }
 
 export const layoutSlice = createSlice({
@@ -68,6 +70,10 @@ export const layoutSlice = createSlice({
       // for now, if the user changes view, we go back to page 1
       if (obj.viewtype) {
         obj.page = 1;
+      }
+
+      if (obj.sidebarActive) {
+        obj.sidebarActive = !state.sidebarActive;
       }
       return { ...state, ...obj };
     },

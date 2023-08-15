@@ -7,18 +7,18 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { sidebarActiveSelector } from '../../selectors/ui';
 import Filters from '../Filters';
 import { filterViewSelector } from '../../selectors';
 import FilterInput from '../FilterInput';
 import styles from './Sidebar.module.scss';
 import { setFilterView } from '../../slices/filterSlice';
+import { selectLayout } from '../../slices/layoutSlice';
 
 const drawerWidth = 400;
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const sidebarOpen = useSelector(sidebarActiveSelector);
+  const layout = useSelector(selectLayout);
   const { active: activeFilters, inactive: inactiveFilters } = useSelector(filterViewSelector);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
           height: 'inherit',
         },
       }}
-      open={sidebarOpen}
+      open={layout.sidebarActive}
       className={styles.sidebar}
       variant="persistent"
       anchor="left"

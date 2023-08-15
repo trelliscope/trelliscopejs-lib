@@ -5,13 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faChevronLeft, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { MRT_ShowHideColumnsButton } from 'material-react-table';
-import { sidebarActiveSelector } from '../../selectors/ui';
-import { setSidebarActive } from '../../slices/uiSlice';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import Pagination from '../Pagination';
 import ColumnSelector from '../ColumnSelector/ColumnSelector';
 import LayoutSelector from '../LayoutSelector/LayoutSelector';
-import { selectLayout } from '../../slices/layoutSlice';
+import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import Sort from '../Sort';
 import Labels from '../Labels';
 import { selectFilterState } from '../../slices/filterSlice';
@@ -30,7 +28,6 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
   const { data } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
-  const sidebarOpen = useSelector(sidebarActiveSelector);
   const activeFilters = useSelector(selectFilterState);
 
   return (
@@ -40,16 +37,18 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
           <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
             <Button
               id="filter-drawer-button"
-              onClick={() => dispatch(setSidebarActive(!sidebarOpen))}
-              variant={sidebarOpen ? 'contained' : 'text'}
+              onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
+              variant={layout.sidebarActive ? 'contained' : 'text'}
               sx={{
-                color: sidebarOpen ? '#fff' : '#000',
+                color: layout.sidebarActive ? '#fff' : '#000',
                 textTransform: 'unset',
                 fontSize: '15px',
                 borderRadius: 0,
                 minWidth: '115px',
               }}
-              startIcon={sidebarOpen ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faChevronLeft} />}
+              startIcon={
+                layout.sidebarActive ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faChevronLeft} />
+              }
             >
               Filters
               {activeFilters.length > 0 && (

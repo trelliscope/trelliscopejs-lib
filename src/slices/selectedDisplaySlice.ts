@@ -7,7 +7,7 @@ import { selectHashDisplay } from '../selectors/hash';
 
 export type SelectedDisplayState = string;
 
-const initialState: SelectedDisplayState = '';
+const initialState: SelectedDisplayState = selectHashDisplay() || '';
 
 export const selectedDisplaySlice = createSlice({
   name: 'selectedDisplay',

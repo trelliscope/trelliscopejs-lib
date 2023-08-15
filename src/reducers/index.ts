@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import sidebar from '../slices/sidebarSlice';
 import selectedDisplay from '../slices/selectedDisplaySlice';
 import relDispPositions from '../slices/relDispPositionsSlice';
 import selectedRelDisps from '../slices/selectedRelDispsSlice';
@@ -20,7 +19,6 @@ import { htmlAPI } from '../slices/htmlAPI';
 const reducers = combineReducers({
   app,
   ui,
-  sidebar,
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,

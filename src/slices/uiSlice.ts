@@ -6,7 +6,6 @@ export interface UIState {
   windowWidth: number;
   origHeight: number;
   origWidth: number;
-  sidebarActive: boolean;
 }
 
 const initialState: UIState = {
@@ -14,7 +13,6 @@ const initialState: UIState = {
   windowWidth: typeof window === 'object' ? window.innerWidth : 0,
   origHeight: 0,
   origWidth: 0,
-  sidebarActive: false,
 };
 
 export const uiSlice = createSlice({
@@ -29,12 +27,9 @@ export const uiSlice = createSlice({
       state.origHeight = action.payload.height;
       state.origWidth = action.payload.width;
     },
-    setSidebarActive: (state, action: PayloadAction<boolean>) => {
-      state.sidebarActive = action.payload;
-    },
   },
 });
 
-export const { windowResize, setAppDims, setSidebarActive } = uiSlice.actions;
+export const { windowResize, setAppDims } = uiSlice.actions;
 
 export default uiSlice.reducer;
