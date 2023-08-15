@@ -1,7 +1,7 @@
 // URL hash selectors
 //
 
-import { SB_LOOKUP, META_TYPE_FACTOR } from '../constants';
+import { META_TYPE_FACTOR } from '../constants';
 
 // get url hash
 export const selectHash = () => {
@@ -21,7 +21,7 @@ export const selectHash = () => {
 // select display from url hash
 export const selectHashDisplay = () => {
   const hash = selectHash();
-  return hash.display;
+  return hash.selectedDisplay;
 };
 
 interface HashLayout {
@@ -31,6 +31,7 @@ interface HashLayout {
   page?: number;
   viewtype?: ViewType;
   panel?: string;
+  sidebarActive?: boolean;
 }
 // select layout from url hash
 export const selectHashLayout = (): HashLayout => {
@@ -46,6 +47,7 @@ export const selectHashLayout = (): HashLayout => {
   if (hash.viewtype) returnObj.viewtype = hash.viewtype as ViewType;
   if (!Number.isNaN(page)) returnObj.page = page;
   if (hash.panel) returnObj.panel = hash.panel;
+  if (hash.sidebarActive) returnObj.sidebarActive = hash.sidebarActive === 'true';
 
   return returnObj;
 };
@@ -70,11 +72,11 @@ export const selectHashSorts = () => {
 export const selectHashFilters = () => {
   const hash = selectHash();
   if (!hash.filter) return hash.filter;
-  return hash.filter.split(',').map((d: string) => {
+  return hash.filter.split(/,(?=var)/).map((d: string) => {
     const hashProps = {} as { var: string; type: string; [key: string]: string };
 
     d.split(';').forEach((f: string) => {
-      const [key, value] = f.split(':');
+      const [key, value] = f.split(/:(.*)/s);
       hashProps[key] = value;
     });
 
@@ -112,5 +114,5 @@ export const selectHashFilterView = () => {
 
 export const selectHashSidebar = () => {
   const hash = selectHash();
-  return { active: (SB_LOOKUP[Number(hash.sidebar)] || '') as SidebarType };
+  return hash.sidebar === 'true';
 };

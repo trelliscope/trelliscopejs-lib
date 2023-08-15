@@ -137,7 +137,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               />
             );
         }
-        if (meta.type !== META_TYPE_FACTOR && !value) {
+        if (meta.type !== META_TYPE_FACTOR && !value && value !== 0) {
           return (
             <Tooltip followCursor arrow title={MISSING_TEXT}>
               <span className={meta.type === META_TYPE_NUMBER ? styles.dataTableCellNumber : ''}>{MISSING_TEXT}</span>

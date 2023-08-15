@@ -123,7 +123,9 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
           <tr
             key={label.varname}
             className={
-              !data[label.varname] ? `${styles.panelTableRow} ${styles.panelTableRowMissing}` : styles.panelTableRow
+              !data[label.varname] && data[label.varname] !== 0
+                ? `${styles.panelTableRow} ${styles.panelTableRowMissing}`
+                : styles.panelTableRow
             }
           >
             <PanelTableLabelCell value={label.varname} label={label.label} />
@@ -139,7 +141,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   arrow
                 >
                   <div className={styles.panelTableCellContentText}>
-                    {label.type !== META_TYPE_FACTOR && !data[label.varname] && MISSING_TEXT}
+                    {label.type !== META_TYPE_FACTOR && !data[label.varname] && data[label.varname] !== 0 && MISSING_TEXT}
                     {label.type === META_TYPE_FACTOR &&
                       getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
                     {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE || label.type === META_TYPE_PANEL) &&

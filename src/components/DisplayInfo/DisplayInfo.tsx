@@ -14,15 +14,18 @@ import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
 import { useHtml } from '../../slices/htmlAPI';
 import styles from './DisplayInfo.module.scss';
+import { selectBasePath } from '../../selectors/app';
+import { snakeCase } from '../../utils';
 
 const DisplayInfo: React.FC = () => {
   const { allData } = useContext(DataContext);
   const { data: displayInfo, isLoading } = useDisplayInfo();
   const fullscreen = useSelector(fullscreenSelector);
+  const basePath = useSelector(selectBasePath);
   const [hasInputs, setHasInputs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { data: html, isLoading: htmlLoading } = useHtml(
-    '../../info.html',
+    `${basePath}/displays/${snakeCase(displayInfo?.name || '')}/info.html`,
     (displayInfo?.hasCustomInfo as boolean) || false,
   );
 

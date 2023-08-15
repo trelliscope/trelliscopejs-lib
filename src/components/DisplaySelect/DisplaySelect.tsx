@@ -4,12 +4,11 @@ import { useDispatch } from 'react-redux';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
+import { FilterState, addFilter, clearFilters, setFilterView } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
 import type { LayoutAction } from '../../slices/layoutSlice';
-import { setActiveSidebar } from '../../slices/sidebarSlice';
 import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { useDisplayList } from '../../slices/displayListAPI';
@@ -27,6 +26,9 @@ const DisplaySelect: React.FC = () => {
 
   const stateLayout = displayInfo?.state?.layout;
   const stateLabels = displayInfo?.state?.labels?.varnames;
+  const stateSort = displayInfo?.state?.sort;
+  const stateFilters = displayInfo?.state?.filter;
+
   const activeDisplayName = displayInfo?.name;
 
   // This is needed to make sure the default state is applied when switching to a new display
@@ -34,6 +36,11 @@ const DisplaySelect: React.FC = () => {
     if (selectedDisplayName === activeDisplayName) {
       dispatch(setLayout(stateLayout as LayoutAction));
       dispatch(setLabels(stateLabels as string[]));
+      stateFilters?.forEach((filter) => {
+        dispatch(addFilter(filter as IFilterState));
+        dispatch(setFilterView({ name: filter.varname, which: 'add' }));
+      });
+      dispatch(setSort(stateSort as number | ISortState[]));
     }
   }, [stateLabels, stateLayout, dispatch, selectedDisplayName, activeDisplayName]);
 
@@ -49,15 +56,12 @@ const DisplaySelect: React.FC = () => {
 
   const handleClick = (name: string) => {
     // need to clear out state for new display...
-    // first close sidebars for safety
-    // (there is an issue when the filter sidebar stays open when changing - revisit this)
-    dispatch(setActiveSidebar(''));
-    dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
+    dispatch(setFilterView({ name: '', which: 'removeActive' }));
     dispatch(clearFilters());
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
-    dispatch(setLayout({ page: 1 }));
+    dispatch(setLayout({ page: 1, sidebarActive: false, viewtype: 'grid' }));
     setSelectedDisplayName(name);
   };
 
