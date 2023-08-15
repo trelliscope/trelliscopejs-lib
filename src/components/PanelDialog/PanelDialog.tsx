@@ -235,7 +235,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           </IconButton>
         </Box>
         {curSource && (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             <Box sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}>
               <PanelGraphic
                 type={panel?.paneltype}
