@@ -15,6 +15,7 @@ interface DownloadCsvProps {
   fullName: string;
   email: string;
   jobTitle: string;
+  hasEmail: boolean;
 }
 
 interface Data {
@@ -23,7 +24,7 @@ interface Data {
   };
 }
 
-const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle }) => {
+const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle, hasEmail }) => {
   const { allData } = useContext(DataContext);
   const displayMetas = useDisplayMetas();
   const includedMetaVars = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
@@ -118,14 +119,23 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
 
   return (
     <div className={styles.downloadCsvContainer}>
-      <DialogContentText id="alert-dialog-description" className={styles.downloadCsvContentText}>
-        <span className={styles.downloadCsvDescription}>
-          {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
-        </span>
-        <span>
-          {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
-        </span>
-      </DialogContentText>
+      {hasEmail ? (
+        <DialogContentText id="alert-dialog-description" className={styles.downloadCsvContentText}>
+          <span className={styles.downloadCsvDescription}>
+            {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
+          </span>
+          <span>
+            {`To complete the email, use the 'Download csv' button to download the csv and add it as an attachment to the email before sending. As an alternative, you can download the csv file and compose your own email, sending it to us at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
+          </span>
+        </DialogContentText>
+      ) : (
+        <DialogContentText id="alert-dialog-description" className={styles.downloadCsvContentText}>
+          <span className={styles.downloadCsvDescription}>
+            A csv file of the inputs you provided has been created. You can download the csv by clicking the button below.
+          </span>
+        </DialogContentText>
+      )}
+
       <div className={styles.downloadCsvWrapperCenter}>
         <Button
           variant="contained"
