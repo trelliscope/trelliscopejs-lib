@@ -32,6 +32,8 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
   const [validEmail, setValidEmail] = useState(true);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
+  const hasEmail = !!displayInfo?.inputs?.feedbackInterface?.feedbackEmail || false;
+
   if (!(hasInputs && hasLocalStorage)) {
     return null;
   }
@@ -98,44 +100,58 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
       >
         <DialogTitle id="alert-dialog-title">Export user inputs</DialogTitle>
         <DialogContent dividers>
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === 0 && (
-            <UserInfo
-              fullName={fullName}
-              email={email}
-              jobTitle={jobTitle}
-              otherInfo={otherInfo}
-              validEmail={validEmail}
-              setValidEmail={setValidEmail}
-              setFullName={setFullName}
-              setEmail={setEmail}
-              setJobTitle={setJobTitle}
-              setOtherInfo={setOtherInfo}
-              storageItems={storageItems}
-            />
-          )}
-          {activeStep === 1 && (
+          {hasEmail ? (
+            <>
+              <Stepper activeStep={activeStep} alternativeLabel>
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              {activeStep === 0 && (
+                <UserInfo
+                  fullName={fullName}
+                  email={email}
+                  jobTitle={jobTitle}
+                  otherInfo={otherInfo}
+                  validEmail={validEmail}
+                  setValidEmail={setValidEmail}
+                  setFullName={setFullName}
+                  setEmail={setEmail}
+                  setJobTitle={setJobTitle}
+                  setOtherInfo={setOtherInfo}
+                  storageItems={storageItems}
+                />
+              )}
+              {activeStep === 1 && (
+                <DownloadCsv
+                  displayInfo={displayInfo}
+                  setCsvDownloaded={setCsvDownloaded}
+                  fullName={fullName}
+                  email={email}
+                  jobTitle={jobTitle}
+                  hasEmail={hasEmail}
+                />
+              )}
+              {activeStep === 2 && (
+                <ComposeEmail
+                  displayInfo={displayInfo}
+                  fullName={fullName}
+                  email={email}
+                  jobTitle={jobTitle}
+                  otherInfo={otherInfo}
+                />
+              )}
+            </>
+          ) : (
             <DownloadCsv
               displayInfo={displayInfo}
               setCsvDownloaded={setCsvDownloaded}
               fullName={fullName}
               email={email}
               jobTitle={jobTitle}
-            />
-          )}
-          {activeStep === 2 && (
-            <ComposeEmail
-              displayInfo={displayInfo}
-              fullName={fullName}
-              email={email}
-              jobTitle={jobTitle}
-              otherInfo={otherInfo}
+              hasEmail={hasEmail}
             />
           )}
         </DialogContent>
@@ -149,32 +165,35 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
             handleConfirm={handleConfirm}
             dialogText="This will delete all local storage input items on all panels."
           />
-          <div className={styles.exportInputDialogControlsContainerStepper}>
-            <Button
-              data-testid="export-input-back"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              className={styles.exportInputDialogButton}
-            >
-              Back
-            </Button>
-            {activeStep <= 1 && (
+          {hasEmail && (
+            <div className={styles.exportInputDialogControlsContainerStepper}>
               <Button
-                disabled={
-                  (activeStep === 0 && fullName === '') ||
-                  (activeStep === 0 && !validEmail) ||
-                  (activeStep === 1 && !csvDownloaded)
-                }
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
+                data-testid="export-input-back"
+                disabled={activeStep === 0}
+                onClick={handleBack}
                 className={styles.exportInputDialogButton}
-                data-testid="export-input-next"
               >
-                Next
+                Back
               </Button>
-            )}
-          </div>
+              {activeStep <= 1 && (
+                <Button
+                  disabled={
+                    (activeStep === 0 && fullName === '') ||
+                    (activeStep === 0 && !validEmail) ||
+                    (activeStep === 1 && !csvDownloaded)
+                  }
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={styles.exportInputDialogButton}
+                  data-testid="export-input-next"
+                >
+                  Next
+                </Button>
+              )}
+            </div>
+          )}
+
           <Button
             onClick={() => {
               handleClose();
