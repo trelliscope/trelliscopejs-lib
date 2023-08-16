@@ -8,6 +8,7 @@ import { selectFilterState } from '../../slices/filterSlice';
 import { selectSort } from '../../slices/sortSlice';
 import { selectLabels } from '../../slices/labelsSlice';
 import { selectLayout } from '../../slices/layoutSlice';
+import { filterViewSelector } from '../../selectors';
 
 interface AddViewModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface AddViewModalProps {
 const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, setLocalViews }) => {
   const [description, setDescription] = useState('');
   const filters = useSelector(selectFilterState);
+  const filterViews = useSelector(filterViewSelector);
   const sorts = useSelector(selectSort);
   const labels = useSelector(selectLabels);
   const layout = useSelector(selectLayout);
@@ -54,10 +56,12 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             ncol: layout?.ncol,
             type: layout?.type,
             panel: layout?.panel ? layout?.panel : undefined,
+            sidebarActive: layout?.sidebarActive,
           },
           labels: { varnames: labels, type: 'labels' },
           sort: newSort,
           filter: newFilter,
+          filterView: filterViews?.active,
         },
       }),
     );
