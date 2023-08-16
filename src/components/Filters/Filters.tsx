@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
@@ -189,14 +189,24 @@ const Filters: React.FC = () => {
           </div>
         </ClickAwayListener>
         <Tooltip arrow title="Clear and Remove all Filters">
-          <IconButton onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}>
-            <FontAwesomeIcon icon={faXmark} size="sm" />
-          </IconButton>
+          <Box sx={{ display: 'flex' }}>
+            <IconButton
+              disabled={activeFilters.length === 0}
+              onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
+            >
+              <FontAwesomeIcon icon={faXmark} size="sm" />
+            </IconButton>
+          </Box>
         </Tooltip>
         <Tooltip arrow title="Clear all Filters">
-          <IconButton onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}>
-            <FontAwesomeIcon icon={faRotateLeft} size="xs" />
-          </IconButton>
+          <Box sx={{ display: 'flex' }}>
+            <IconButton
+              disabled={activeStateFilters.length === 0}
+              onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
+            >
+              <FontAwesomeIcon icon={faRotateLeft} size="xs" />
+            </IconButton>
+          </Box>
         </Tooltip>
       </div>
     </>
