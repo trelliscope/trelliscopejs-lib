@@ -6,18 +6,20 @@ import { Box, Button, Divider, IconButton, Menu, MenuItem, Typography } from '@m
 import { useSnackbar } from 'notistack';
 import isEqual from 'lodash.isequal';
 import { setLabels, selectLabels } from '../../slices/labelsSlice';
-import { setFiltersandFilterViews, selectFilterState } from '../../slices/filterSlice';
+import { selectFilterState, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
 import { setLayout, LayoutAction, selectLayout } from '../../slices/layoutSlice';
 import { setSort, selectSort } from '../../slices/sortSlice';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import AddViewModal from '../AddViewModal/AddViewModal';
 import { useGetAllLocalViews, getLocalStorageKey } from '../../inputUtils';
 import styles from './Views.module.scss';
+import { filterViewSelector } from '../../selectors';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
-  const views = displayInfo?.views as IView[];
+  const viewsDisplay = displayInfo?.views as IView[];
+  const views = [...viewsDisplay];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openView, setOpenView] = useState(false);
   const allViews = useGetAllLocalViews() as IView[];
@@ -25,17 +27,17 @@ const Views: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
 
+  const stateLayout = displayInfo?.state?.layout;
+  const stateLabels = displayInfo?.state?.labels?.varnames;
+  const stateSort = displayInfo?.state?.sort;
+  const stateFilters = displayInfo?.state?.filter;
+  const stateFilterViews = displayInfo?.state?.filterView;
+
+  const filterViews = useSelector(filterViewSelector);
   const filters = useSelector(selectFilterState);
   const sorts = useSelector(selectSort);
   const labels = useSelector(selectLabels);
   const layout = useSelector(selectLayout);
-
-  const trimmedLayout = {
-    ncol: layout?.ncol,
-    page: layout?.page,
-    type: layout?.type,
-    viewtype: layout?.viewtype,
-  };
 
   const trimmedSort = sorts.map((sort) => {
     const { varname, dir, metatype } = sort;
@@ -44,18 +46,23 @@ const Views: React.FC = () => {
 
   const [activeViews, setActiveViews] = useState<string[]>([]);
 
+  const defaultView = {
+    name: 'Default View',
+    state: {
+      layout: stateLayout,
+      labels: { varnames: stateLabels },
+      sort: stateSort,
+      filter: stateFilters,
+      filterView: stateFilterViews,
+    },
+  };
+
+  views.unshift(defaultView as IView);
   const checkIfActiveView = () => {
     const combinedUserandDefaultViews = views?.concat(allViews);
     setActiveViews([]);
     const activeCombinedItems = combinedUserandDefaultViews?.reduce((acc, view) => {
-      const { filter: valueFilter, labels: valueLabels, layout: valueLayout, sort: valueSort } = view.state || {};
-      const comparableLabels = valueLabels?.varnames;
-      const comparableLayout = {
-        ncol: valueLayout?.ncol,
-        page: valueLayout?.page,
-        type: valueLayout?.type,
-        viewtype: valueLayout?.viewtype,
-      };
+      const { filter: valueFilter, sort: valueSort } = view.state || {};
       const comparableSort = valueSort?.map((sort) => {
         const { varname, dir, metatype } = sort;
         return { varname, dir, metatype };
@@ -65,18 +72,10 @@ const Views: React.FC = () => {
       valueFilter.sort((a, b) => a.varname.localeCompare(b.varname));
       const filtersMutable = [...filters];
       filtersMutable.sort((a, b) => a.varname.localeCompare(b.varname));
-      comparableLabels.sort();
-      const labelsMutable = [...labels];
-      labelsMutable.sort();
       comparableSort.sort((a, b) => a.varname.localeCompare(b.varname));
       trimmedSort.sort((a, b) => a.varname.localeCompare(b.varname));
 
-      if (
-        isEqual(valueFilter, filtersMutable) &&
-        isEqual(comparableLabels, labelsMutable) &&
-        isEqual(comparableLayout, trimmedLayout) &&
-        isEqual(comparableSort, trimmedSort)
-      ) {
+      if (isEqual(valueFilter, filtersMutable) && isEqual(comparableSort, trimmedSort)) {
         acc.push(view.name);
       }
       return acc;
@@ -85,7 +84,7 @@ const Views: React.FC = () => {
   };
   useEffect(() => {
     checkIfActiveView();
-  }, [views, localViews, filters, sorts, labels, layout]);
+  }, [viewsDisplay, localViews, filters, sorts, labels, layout]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -100,6 +99,7 @@ const Views: React.FC = () => {
       labels: valueLabels,
       layout: valueLayout,
       sort: valueSort,
+      filterView: valueFilterView,
     } = value ||
     JSON.parse(
       localStorage.getItem(
@@ -114,8 +114,11 @@ const Views: React.FC = () => {
 
     if (valueSort) dispatch(setSort(valueSort));
 
-    if (valueFilter) {
-      dispatch(setFiltersandFilterViews(valueFilter));
+    if (valueFilter) dispatch(setFiltersandFilterViews(valueFilter));
+
+    if (valueFilterView) {
+      const inactiveFilters = filterViews.inactive.filter((filter) => !valueFilterView.includes(filter));
+      dispatch(setFilterView({ name: { active: valueFilterView, inactive: inactiveFilters }, which: 'set' }));
     }
 
     setAnchorEl(null);
@@ -165,13 +168,12 @@ const Views: React.FC = () => {
                     {value.name}
                   </Typography>
                 </MenuItem>
-                <Divider />
               </Box>
+              <Divider />
             </div>
           ))}
           {allViews?.map((value) => (
             <div key={value.name}>
-              <Divider />
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <MenuItem
                   selected={activeViews.includes(value.name)}
@@ -186,6 +188,7 @@ const Views: React.FC = () => {
                   <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
               </Box>
+              <Divider />
             </div>
           ))}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>

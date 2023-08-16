@@ -14,6 +14,9 @@ import Header from './components/Header';
 import './assets/styles/main.css';
 import Sidebar from './components/Sidebar';
 import ContentContainer from './components/ContentContainer';
+import { useDisplayInfo } from './slices/displayInfoAPI';
+import { setFilterView } from './slices/filterSlice';
+import { filterViewSelector } from './selectors';
 
 interface AppProps {
   client: IDataClient;
@@ -28,6 +31,8 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, fullscreen, appDims }) => {
   const dispatch = useDispatch();
   const errorMsg = useSelector(selectErrorMessage);
+  const filterViews = useSelector(filterViewSelector);
+  const { data: displayInfo } = useDisplayInfo();
   const handleClose = () => {
     dispatch(setErrorMessage(''));
   };
@@ -96,6 +101,13 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
       localStorage.setItem('trelliscope_tour', 'skipped');
     }
   };
+
+  useEffect(() => {
+    const inactiveFilters = filterViews.inactive.filter((filter) => !displayInfo?.state?.filterView?.includes(filter));
+    dispatch(
+      setFilterView({ name: { active: displayInfo?.state?.filterView || [], inactive: inactiveFilters }, which: 'set' }),
+    );
+  }, [displayInfo?.state?.filterView]);
 
   useEffect(() => {
     dispatch(setAppID(id));

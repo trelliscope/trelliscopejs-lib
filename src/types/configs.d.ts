@@ -303,6 +303,7 @@ interface IDisplayState {
   labels: ILabelState;
   sort: ISortState[];
   filter: IFilterState[];
+  filterView: string[];
 }
 
 interface IState {
