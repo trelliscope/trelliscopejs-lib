@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
-import { selectHashLayout, selectHashSidebar } from '../selectors/hash';
+import { selectHashLayout } from '../selectors/hash';
 import { addFilter, removeFilter, updateFilter, updateFilterValues } from './filterSlice';
 
 const fallbackState: ILayoutState = {
@@ -12,7 +12,7 @@ const fallbackState: ILayoutState = {
   type: 'layout',
   viewtype: 'grid',
   panel: '',
-  sidebarActive: selectHashSidebar() || false,
+  sidebarActive: false,
 };
 
 const initialState = selectHashLayout() as ILayoutState;

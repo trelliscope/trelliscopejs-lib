@@ -111,8 +111,3 @@ export const selectHashFilterView = () => {
   const fvString = hash?.fv;
   return fvString ? fvString.split(',') : [];
 };
-
-export const selectHashSidebar = () => {
-  const hash = selectHash();
-  return hash.sidebar === 'true';
-};
