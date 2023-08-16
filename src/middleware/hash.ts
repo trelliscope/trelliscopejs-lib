@@ -5,6 +5,7 @@ import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
 import {
   addFilter,
+  clearFilters,
   filterSlice,
   removeFilter,
   setFiltersandFilterViews,
@@ -116,6 +117,7 @@ export const hashMiddleware: Middleware<RootState> =
       setLabels.type,
       setSort.type,
       setReOrderSorts.type,
+      clearFilters.type,
       addFilter.type,
       updateFilter.type,
       removeFilter.type,

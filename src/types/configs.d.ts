@@ -201,6 +201,7 @@ interface IMeta {
   levels?: string[];
   digits: number;
   filterSortOrder: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';
+  locale: boolean;
 }
 
 interface INumberMeta extends IMeta {

@@ -147,14 +147,18 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                     {(label.type === META_TYPE_STRING || label.type === META_TYPE_DATE || label.type === META_TYPE_PANEL) &&
                       data[label.varname]}
                     {label.type === META_TYPE_DATETIME && data[label.varname]?.toString().replace('T', ' ')}
-                    {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) && data[label.varname] && (
-                      <FormattedNumber
-                        value={data[label.varname] as number}
-                        isCurrency={label.type === META_TYPE_CURRENCY}
-                        currencyCode={label.code}
-                        maximumFractionDigits={label.digits}
-                      />
-                    )}
+                    {(label.type === META_TYPE_NUMBER || label.type === META_TYPE_CURRENCY) &&
+                      data[label.varname] &&
+                      (label.locale ? (
+                        <FormattedNumber
+                          value={data[label.varname] as number}
+                          isCurrency={label.type === META_TYPE_CURRENCY}
+                          currencyCode={label.code}
+                          maximumFractionDigits={label.digits}
+                        />
+                      ) : (
+                        <span>{data[label.varname]}</span>
+                      ))}
                     {label.type === META_TYPE_HREF && data[label.varname] && (
                       <a
                         className={styles.panelTableCellLink}
