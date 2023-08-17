@@ -73,19 +73,19 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
             active={
               metaType === META_TYPE_FACTOR
                 ? actives.includes(
-                    (dataFiltered[index].key === MISSING_TEXT ? -Infinity : dataFiltered[index].key) as string,
+                    (dataFiltered[index]?.key === MISSING_TEXT ? -Infinity : dataFiltered[index]?.key) as string,
                   )
-                : actives.includes(dataFiltered[index].key as string)
+                : actives.includes(dataFiltered[index]?.key as string)
             }
             onClick={onClick}
-            width={scale(dataFiltered[index].value || 0)}
+            width={scale(dataFiltered[index]?.value || 0)}
             height={barHeight - 1}
-            label={dataFiltered[index].key as string}
+            label={dataFiltered[index]?.key as string}
             metaLevels={metaLevels}
             value={
-              dataFiltered[index].value === allData[dataFiltered[index].key]
-                ? dataFiltered[index].value
-                : `${dataFiltered[index].value} / ${allData[dataFiltered[index].key] || 0}`
+              dataFiltered[index]?.value === allData[dataFiltered[index]?.key]
+                ? dataFiltered[index]?.value
+                : `${dataFiltered[index]?.value} / ${allData[dataFiltered[index]?.key] || 0}`
             }
           />
         )}

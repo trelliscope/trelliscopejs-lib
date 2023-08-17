@@ -90,6 +90,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   }
 
   addData(data: Datum[]) {
+    this.crossfilter.remove();
     super.addData(data);
     this.crossfilter.add(data);
   }
@@ -97,6 +98,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   clearData() {
     super.clearData();
     this.crossfilter.remove();
+    this.clearFilters();
   }
 
   addFilter(filter: DataClientFilter) {
