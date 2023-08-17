@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { FilterState, addFilter, clearFilters, setFilterView } from '../../slices/filterSlice';
+import { clearFilters, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
 import { setSort } from '../../slices/sortSlice';
 import { setLabels } from '../../slices/labelsSlice';
 import { setLayout } from '../../slices/layoutSlice';
@@ -28,18 +28,14 @@ const DisplaySelect: React.FC = () => {
   const stateLabels = displayInfo?.state?.labels?.varnames;
   const stateSort = displayInfo?.state?.sort;
   const stateFilters = displayInfo?.state?.filter;
-
   const activeDisplayName = displayInfo?.name;
 
   // This is needed to make sure the default state is applied when switching to a new display
   useEffect(() => {
     if (selectedDisplayName === activeDisplayName) {
-      dispatch(setLayout(stateLayout as LayoutAction));
+      dispatch(setLayout({ ...(stateLayout as LayoutAction), panel: '' }));
       dispatch(setLabels(stateLabels as string[]));
-      stateFilters?.forEach((filter) => {
-        dispatch(addFilter(filter as IFilterState));
-        dispatch(setFilterView({ name: filter.varname, which: 'add' }));
-      });
+      dispatch(setFiltersandFilterViews(stateFilters as IFilterState[]));
       dispatch(setSort(stateSort as number | ISortState[]));
     }
   }, [stateLabels, stateLayout, dispatch, selectedDisplayName, activeDisplayName]);

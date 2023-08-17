@@ -217,7 +217,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                       aspectRatio={primaryMeta?.aspect}
                       imageWidth={calcs.width}
                       // primaryMeta={primaryMeta}
-                      key={`${d[metaIndex]}_${primaryMeta.label}`}
+                      key={`${d[metaIndex]}_${primaryMeta?.label}`}
                       port={primaryMeta?.source?.port}
                       sourceType={primaryMeta?.source?.type}
                       name={primaryMeta?.varname}
