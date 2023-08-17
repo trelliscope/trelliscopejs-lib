@@ -62,7 +62,8 @@ const Views: React.FC = () => {
     const combinedUserandDefaultViews = views?.concat(allViews);
     setActiveViews([]);
     const activeCombinedItems = combinedUserandDefaultViews?.reduce((acc, view) => {
-      const { filter: valueFilter, sort: valueSort } = view.state || {};
+      const { filter: valueFilterUnmutable, sort: valueSort } = view.state || {};
+      const valueFilter = [...valueFilterUnmutable];
       const comparableSort = valueSort?.map((sort) => {
         const { varname, dir, metatype } = sort;
         return { varname, dir, metatype };
