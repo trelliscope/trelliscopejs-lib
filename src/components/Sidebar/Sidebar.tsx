@@ -20,6 +20,7 @@ const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   const layout = useSelector(selectLayout);
   const { active: activeFilters, inactive: inactiveFilters } = useSelector(filterViewSelector);
+  const mutableFilters = [...activeFilters].reverse();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -52,17 +53,17 @@ const Sidebar: React.FC = () => {
       anchor="left"
     >
       <Filters />
-      {activeFilters.length === 0 && (
+      {mutableFilters.length === 0 && (
         <div className={styles.sidebarNoFilter}>
           Select a filter...
           <FontAwesomeIcon className={styles.sidebarBobbingArrow} icon={faArrowUp} />
         </div>
       )}
       <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-        <SortableContext items={activeFilters.map((el: string) => ({ id: `${el}_filter` }))}>
+        <SortableContext items={mutableFilters.map((el: string) => ({ id: `${el}_filter` }))}>
           <div className={styles.sidebarDragContainer}>
             <div className={styles.sidebarDragSubContainer}>
-              {activeFilters.map((filter) => (
+              {mutableFilters.map((filter) => (
                 <FilterInput key={filter} filterName={filter} />
               ))}
             </div>
