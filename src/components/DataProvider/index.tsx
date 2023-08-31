@@ -40,7 +40,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     // Add filters
     client.clearFilters();
     filters.forEach((filter) => {
-      if (filter.filtertype === 'category') {
+      if (filter.filtertype === 'category' && (filter as ICategoryFilterState).values !== undefined) {
         client.addFilter({
           field: filter.varname,
           value: (filter as ICategoryFilterState).values,

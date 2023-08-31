@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR, TYPE_MAP } from '../../constants';
@@ -23,7 +23,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const displayMetas = useDisplayMetas();
   const curDisplayMeta = displayMetas.find((d) => d.varname === meta.varname);
   const { filterSortOrder } = curDisplayMeta as IMeta;
-  const { groupBy } = useContext(DataContext);
+  const { groupBy, data: allData } = useContext(DataContext);
   const dispatch = useDispatch();
   const defaultSort = filterSortOrder || 'ct,desc';
   const [curSort, setCurSort] = useState(defaultSort);
@@ -69,7 +69,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   };
 
   useEffect(() => {
-    if (filter && filter.values.length === 0 && filter.regexp === null) {
+    if (filter && filter.regexp === null && filter.values.length === 0) {
       dispatch(removeFilter(filter.varname));
     }
   }, [dispatch, filter]);
@@ -105,6 +105,20 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
       dispatch(removeFilter(filter.varname));
     }
   };
+
+  // this useEffect is needed for a refresh and the hash to work since we are no longer passing vals in the url
+  const hasData = useRef(false);
+
+  useEffect(() => {
+    if (!hasData.current) {
+      if (allData.length > 0) {
+        hasData.current = true;
+      }
+      if (filter?.regexp !== null && hasData.current) {
+        handleRegex({ target: { value: filter?.regexp } } as React.ChangeEvent<HTMLInputElement>);
+      }
+    }
+  }, [allData]);
 
   return (
     <div className={styles.filterCat}>
