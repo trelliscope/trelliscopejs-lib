@@ -63,7 +63,11 @@ const Pagination: React.FC = () => {
     return <div className={styles.paginationProgress}>loading panels...</div>;
   }
   if (totPanels === 0) {
-    return <div />;
+    return (
+      <div className={styles.paginationOuter}>
+        <div className={styles.paginationLabel}>0 of 0</div>{' '}
+      </div>
+    );
   }
 
   const pFrom = npp * (n - 1) + 1;

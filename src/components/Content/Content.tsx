@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
+import { Box } from '@mui/material';
 import { labelsSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
@@ -186,9 +187,13 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const primaryMeta = displayInfo.metas.find((meta: IMeta) =>
     layout.viewtype === 'grid' ? meta.varname === curPanel : meta.varname === displayInfo.primarypanel,
   ) as IPanelMeta;
-
   return (
     <>
+      {data?.length === 0 && (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          No panels meet the current filter criteria
+        </Box>
+      )}
       {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div data-testid="panel-content" className={styles.content} style={contentStyle} ref={contentRef}>
