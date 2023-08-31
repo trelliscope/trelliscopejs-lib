@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
@@ -13,7 +13,7 @@ import {
   selectFilterState,
   setFilterView,
 } from '../../slices/filterSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
 
 // interface FiltersProps {}
@@ -22,6 +22,7 @@ const Filters: React.FC = () => {
   const dispatch = useDispatch();
   const activeStateFilters = useSelector(selectFilterState);
   const activeFilters = useSelector(selectActiveFilterView);
+  const layout = useSelector(selectLayout);
   const displayMetas = useDisplayMetas();
   const unfilterableMetas = displayMetas.filter((meta) => !meta.filterable).map((meta) => meta.varname);
   const filterableMetas = displayMetas.filter((meta) => meta.filterable).map((meta) => meta);
@@ -44,6 +45,17 @@ const Filters: React.FC = () => {
   const [selectedFilterVariables, setSelectedFilterVariables] = useState(activeFiltersFormatted || []);
   const [variableFilterSelectorIsOpen, setVariableFilterSelectorIsOpen] = useState(false);
   const [anchorFilterEl, setAnchorFilterEl] = useState<null | HTMLElement>(null);
+  const anchorElementForVariableSelector = useRef(null);
+
+  useEffect(() => {
+    if (activeFilters.length === 0 && layout?.sidebarActive) {
+      setVariableFilterSelectorIsOpen(true);
+      setAnchorFilterEl(anchorElementForVariableSelector.current);
+    } else {
+      setVariableFilterSelectorIsOpen(false);
+      setAnchorFilterEl(null);
+    }
+  }, [activeFilters, layout?.sidebarActive]);
 
   useEffect(() => {
     setSelectedFilterVariables(activeFiltersFormatted);
@@ -134,7 +146,7 @@ const Filters: React.FC = () => {
 
   return (
     <>
-      <div className={styles.filters}>
+      <div className={styles.filters} ref={anchorElementForVariableSelector}>
         <ConfirmationModal
           isOpen={confirmationRemoveModalOpen}
           handleCancel={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
