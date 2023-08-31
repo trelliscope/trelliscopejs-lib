@@ -106,15 +106,15 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   };
 
-  // this is needed for a refresh and the hash to work since we are no longer passing vals in the url
-  const hasExecutedRef = useRef(false);
+  // this useEffect is needed for a refresh and the hash to work since we are no longer passing vals in the url
+  const hasData = useRef(false);
 
   useEffect(() => {
-    if (!hasExecutedRef.current) {
+    if (!hasData.current) {
       if (allData.length > 0) {
-        hasExecutedRef.current = true;
+        hasData.current = true;
       }
-      if (filter?.regexp !== null && hasExecutedRef.current) {
+      if (filter?.regexp !== null && hasData.current) {
         handleRegex({ target: { value: filter?.regexp } } as React.ChangeEvent<HTMLInputElement>);
       }
     }
