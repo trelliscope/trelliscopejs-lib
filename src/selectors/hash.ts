@@ -99,9 +99,11 @@ export const selectHashFilters = () => {
       ...filter,
       regexp: hashProps.regexp !== '' ? decodeURIComponent(hashProps.regexp) : null,
       values:
-        hashProps.metatype === META_TYPE_FACTOR
-          ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))
-          : hashProps.val.split('#').map(decodeURIComponent),
+        hashProps.regexp === ''
+          ? hashProps.metatype === META_TYPE_FACTOR
+            ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))
+            : hashProps.val.split('#').map(decodeURIComponent)
+          : undefined,
     } as ICategoryFilterState;
   });
 };

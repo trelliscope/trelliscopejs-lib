@@ -76,7 +76,7 @@ export const hashFromState = (state: RootState) => {
         const { values, regexp } = flt as ICategoryFilterState;
         res = `var:${flt.varname};type:category;regexp:${encodeURIComponent((regexp as string) ?? '')};metatype:${
           flt.metatype
-        };val:${values.map(encodeURIComponent).join('#')}`;
+        }${regexp === null ? `;val:${values.map(encodeURIComponent).join('#')}` : ''}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
         const { min, max } = flt as INumberRangeFilterState | IDatetimeRangeFilterState;
         res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min ?? -Infinity};max:${max ?? Infinity}`;
