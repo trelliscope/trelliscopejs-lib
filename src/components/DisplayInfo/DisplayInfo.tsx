@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Box, CircularProgress, IconButton } from '@mui/material';
+import { Box, Checkbox, CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -38,14 +38,38 @@ const DisplayInfo: React.FC = () => {
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
       setHasInputs(true);
+    } else {
+      setHasInputs(false);
     }
   }, [displayInfo]);
 
+  const showInfoSkipped = localStorage.getItem(`trelliscope_info_${displayInfo?.name}`);
+
+  const [showInfo, setShowInfo] = useState(showInfoSkipped === 'skipped');
+
+  const handleShowInfoChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    if (value) {
+      localStorage.setItem(`trelliscope_info_${displayInfo?.name}`, 'skipped');
+      setShowInfo(true);
+    } else {
+      localStorage.removeItem(`trelliscope_info_${displayInfo?.name}`);
+      setShowInfo(false);
+    }
+  };
+
   useEffect(() => {
-    if (displayInfo?.infoOnLoad) {
+    if (showInfoSkipped === 'skipped') {
+      setShowInfo(true);
+    } else {
+      setShowInfo(false);
+    }
+  }, [showInfoSkipped, displayInfo?.name]);
+
+  useEffect(() => {
+    if (displayInfo?.infoOnLoad && !showInfoSkipped) {
       setIsOpen(true);
     }
-  }, [displayInfo?.infoOnLoad]);
+  }, [displayInfo?.infoOnLoad, displayInfo?.name]);
 
   useHotkeys('i', handleToggle, { enabled: fullscreen }, [isOpen]);
   useHotkeys('esc', () => setIsOpen(false), { enabled: isOpen });
@@ -67,7 +91,17 @@ const DisplayInfo: React.FC = () => {
         maxWidth="md"
         data-testid="display-info-modal"
       >
-        <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
+        <DialogTitle id="dialog-info-title">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box>Information About This Display</Box>
+            <Tooltip arrow title="When this checkbox is unchecked, the new user tour will launch upon page refresh.">
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Checkbox data-testid="tour-toggle" checked={showInfo} onChange={handleShowInfoChange} />
+                <Typography>Do not show on next load</Typography>
+              </Box>
+            </Tooltip>
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <div className={styles.displayInfoModalContainer}>
             {displayInfo?.hasCustomInfo ? (
