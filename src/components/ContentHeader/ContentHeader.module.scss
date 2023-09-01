@@ -44,15 +44,15 @@
         position: sticky;
         z-index: 1001;
 
-        svg {
-          font-size: 20px !important;
-        }
-
         &Badge {
           position: absolute;
           top: -4px;
           right: 2px;
           font-size: 14px;
+
+          svg {
+            font-size: 20px !important;
+          }
 
           &Num {
             position: absolute;
