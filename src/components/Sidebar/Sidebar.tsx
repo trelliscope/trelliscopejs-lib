@@ -45,6 +45,7 @@ const Sidebar: React.FC = () => {
           boxSizing: 'border-box',
           overflowX: 'hidden',
           height: 'inherit',
+          zIndex: 'initial',
         },
       }}
       open={layout.sidebarActive}

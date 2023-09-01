@@ -44,8 +44,14 @@
         position: sticky;
         z-index: 1001;
 
-        svg {
-          font-size: 20px !important;
+        &Icon {
+          position: fixed;
+          color: #000;
+          left: 389px;
+          top: 64px;
+          border: 1px dashed #000;
+          border-radius: 50%;
+          padding: 4px;
         }
 
         &Badge {
@@ -53,6 +59,10 @@
           top: -4px;
           right: 2px;
           font-size: 14px;
+
+          svg {
+            font-size: 20px !important;
+          }
 
           &Num {
             position: absolute;

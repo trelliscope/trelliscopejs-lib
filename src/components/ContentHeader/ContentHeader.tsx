@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faChevronLeft, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faCircle, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { MRT_ShowHideColumnsButton } from 'material-react-table';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import Pagination from '../Pagination';
@@ -38,16 +38,20 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
             <Button
               id="filter-drawer-button"
               onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
-              variant={layout.sidebarActive ? 'contained' : 'text'}
+              variant="text"
               sx={{
-                color: layout.sidebarActive ? '#fff' : '#000',
+                color: '#000',
                 textTransform: 'unset',
                 fontSize: '15px',
                 borderRadius: 0,
-                minWidth: '115px',
+                minWidth: '90px',
               }}
               startIcon={
-                layout.sidebarActive ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faChevronLeft} />
+                layout.sidebarActive ? (
+                  <FontAwesomeIcon size="sm" className={styles.contentHeaderControlsItemToggleIcon} icon={faChevronLeft} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronRight} />
+                )
               }
             >
               Filters
