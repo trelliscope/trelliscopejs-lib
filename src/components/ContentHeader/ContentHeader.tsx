@@ -48,19 +48,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
               }}
               startIcon={
                 layout.sidebarActive ? (
-                  <FontAwesomeIcon
-                    size="sm"
-                    style={{
-                      position: 'fixed',
-                      color: 'black',
-                      left: '389px',
-                      top: '64px',
-                      border: '1px dashed black',
-                      borderRadius: '50%',
-                      padding: '4px',
-                    }}
-                    icon={faChevronLeft}
-                  />
+                  <FontAwesomeIcon size="sm" className={styles.contentHeaderControlsItemToggleIcon} icon={faChevronLeft} />
                 ) : (
                   <FontAwesomeIcon icon={faChevronRight} />
                 )

@@ -44,6 +44,16 @@
         position: sticky;
         z-index: 1001;
 
+        &Icon {
+          position: fixed;
+          color: black;
+          left: 389px;
+          top: 64px;
+          border: 1px dashed black;
+          border-radius: 50%;
+          padding: 4px;
+        }
+
         &Badge {
           position: absolute;
           top: -4px;
