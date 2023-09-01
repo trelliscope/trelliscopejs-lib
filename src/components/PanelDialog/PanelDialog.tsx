@@ -289,6 +289,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           data={curMetaData || {}}
           inputs={displayInfo?.inputs?.inputs || []}
           labels={labels}
+          compact={false}
         />
       </div>
       <DialogActions>
