@@ -66,11 +66,11 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
     return foundMeta?.levels;
   };
   return (
-    <table className={classNames(styles.panelTable, { [styles.panelTable__compact]: compact }, className)} width="100%">
+    <table className={classNames(styles.panelTable, className)} width="100%">
       <tbody>
         {inputs?.map((input) => (
           <tr key={input.name} className={classNames(styles.panelTableRow, styles.panelTableRow__input)}>
-            <PanelTableLabelCell value={input.name} label={input.label} />
+            <PanelTableLabelCell compact={compact} value={input.name} label={input.label} />
             <td className={styles.panelTableCell}>
               <div className={styles.panelTableCellContent}>
                 {(input.type === INPUT_TYPE_TEXT || input.type === INPUT_TYPE_NUMBER) && (
@@ -128,7 +128,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                 : styles.panelTableRow
             }
           >
-            <PanelTableLabelCell value={label.varname} label={label.label} />
+            <PanelTableLabelCell compact={compact} value={label.varname} label={label.label} />
             <td className={styles.panelTableCell}>
               <div className={styles.panelTableCellContent}>
                 <Tooltip
