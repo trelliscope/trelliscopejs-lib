@@ -47,9 +47,12 @@
         &Icon {
           position: fixed;
           color: #000;
-          left: 389px;
+          left: 386px;
           top: 64px;
-          border: 1px dashed #000;
+          width: 18px;
+          height: 18px;
+          background: #bbbbbb;
+          // border: 1px dashed #000;
           border-radius: 50%;
           padding: 4px;
         }
