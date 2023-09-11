@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '@mui/material';
-import PanelTable from '../PanelTable/PanelTable';
+import PanelLabels from '../PanelLabels/PanelLabels';
 import { setLabels } from '../../slices/labelsSlice';
 import PanelPicker from '../PanelPicker';
 import styles from './Panel.module.scss';
@@ -75,7 +75,7 @@ const Panel: React.FC<PanelProps> = ({
           </div>
         )}
       </div>
-      <PanelTable data={data} labels={labels} inputs={inputs} compact onLabelRemove={handleRemoveLabel} />
+      <PanelLabels data={data} labels={labels} inputs={inputs} onLabelRemove={handleRemoveLabel} />
     </div>
   );
 };
