@@ -29,21 +29,18 @@ import {
   PanelInputSelect,
   PanelInputCheckbox,
 } from '../PanelInputs';
-import PanelTableLabelCell from './PanelTableLabelCell';
+import PanelZoomLabelsCell from './PanelZoomLabelsCell';
 import { getLabelFromFactor } from '../../utils';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
-import styles from './PanelTable.module.scss';
+import styles from './PanelZoomLabels.module.scss';
 
-interface PanelTableProps {
-  className?: string;
+interface PanelZoomLabelsProps {
   data: Datum;
   labels: IMeta[];
   inputs: IInput[];
-  onLabelRemove?: (label: string) => void;
-  compact?: boolean;
 }
 
-const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs, compact, onLabelRemove }) => {
+const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs }) => {
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
 
@@ -66,13 +63,13 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
     return foundMeta?.levels;
   };
   return (
-    <table className={classNames(styles.panelTable, className)} width="100%">
+    <table className={styles.panelZoomLabels} width="100%">
       <tbody>
         {inputs?.map((input) => (
-          <tr key={input.name} className={classNames(styles.panelTableRow, styles.panelTableRow__input)}>
-            <PanelTableLabelCell compact={compact} value={input.name} label={input.label} />
-            <td className={styles.panelTableCell}>
-              <div className={styles.panelTableCellContent}>
+          <tr key={input.name} className={classNames(styles.panelZoomLabelsRow, styles.panelZoomLabelsRow__input)}>
+            <PanelZoomLabelsCell value={input.name} label={input.label} />
+            <td className={styles.panelZoomLabelsCell}>
+              <div className={styles.panelZoomLabelsCellContent}>
                 {(input.type === INPUT_TYPE_TEXT || input.type === INPUT_TYPE_NUMBER) && (
                   <PanelInputText
                     name={input.name}
@@ -110,11 +107,6 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                     options={(input as ICheckboxInput).options}
                   />
                 )}
-                {onLabelRemove && (
-                  <button type="button" className={styles.panelTableClose} onClick={() => onLabelRemove(input.name)}>
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                )}
               </div>
             </td>
           </tr>
@@ -124,13 +116,13 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
             key={label.varname}
             className={
               !data[label.varname] && data[label.varname] !== 0
-                ? `${styles.panelTableRow} ${styles.panelTableRowMissing}`
-                : styles.panelTableRow
+                ? `${styles.panelZoomLabelsRow} ${styles.panelZoomLabelsRowMissing}`
+                : styles.panelZoomLabelsRow
             }
           >
-            <PanelTableLabelCell compact={compact} value={label.varname} label={label.label} />
-            <td className={styles.panelTableCell}>
-              <div className={styles.panelTableCellContent}>
+            <PanelZoomLabelsCell value={label.varname} label={label.label} />
+            <td className={styles.panelZoomLabelsCell}>
+              <div className={styles.panelZoomLabelsCellContent}>
                 <Tooltip
                   title={
                     label.type === META_TYPE_FACTOR
@@ -140,7 +132,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                   placement="left"
                   arrow
                 >
-                  <div className={styles.panelTableCellContentText}>
+                  <div className={styles.panelZoomLabelsCellContentText}>
                     {label.type !== META_TYPE_FACTOR && !data[label.varname] && data[label.varname] !== 0 && MISSING_TEXT}
                     {label.type === META_TYPE_FACTOR &&
                       getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
@@ -161,7 +153,7 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                       ))}
                     {label.type === META_TYPE_HREF && data[label.varname] && (
                       <a
-                        className={styles.panelTableCellLink}
+                        className={styles.panelZoomLabelsCellLink}
                         href={data[label.varname] as string}
                         rel="noopener noreferrer"
                         target="_blank"
@@ -171,11 +163,6 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
                     )}
                   </div>
                 </Tooltip>
-                {onLabelRemove && (
-                  <button type="button" className={styles.panelTableClose} onClick={() => onLabelRemove(label.varname)}>
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                )}
               </div>
             </td>
           </tr>
@@ -185,10 +172,4 @@ const PanelTable: React.FC<PanelTableProps> = ({ className, labels, data, inputs
   );
 };
 
-PanelTable.defaultProps = {
-  compact: false,
-  onLabelRemove: undefined,
-  className: '',
-};
-
-export default PanelTable;
+export default PanelZoomLabels;

@@ -6,7 +6,7 @@ import { faChevronLeft, faChevronRight, faChevronUp, faChevronDown } from '@fort
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import { useMetaData } from '../../slices/metaDataAPI';
-import PanelTable from '../PanelTable/PanelTable';
+import PanelZoomLabels from '../PanelZoomLabels/PanelZoomLabels';
 import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
 import { panelDialogIsOpenSelector, selectBasePath } from '../../selectors/app';
@@ -283,14 +283,8 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           </IconButton>
         </Box>
       </div>
-      <div className={styles.panelDialogTableWrapper}>
-        <PanelTable
-          className={styles.panelDialogTable}
-          data={curMetaData || {}}
-          inputs={displayInfo?.inputs?.inputs || []}
-          labels={labels}
-          compact={false}
-        />
+      <div className={styles.panelDialogLabelsWrapper}>
+        <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
       </div>
       <DialogActions>
         <Button aria-label="display info close" color="secondary" onClick={handleClose}>
