@@ -72,9 +72,6 @@ export const layoutSlice = createSlice({
         obj.page = 1;
       }
 
-      if (obj.sidebarActive) {
-        obj.sidebarActive = !state.sidebarActive;
-      }
       return { ...state, ...obj };
     },
   },
