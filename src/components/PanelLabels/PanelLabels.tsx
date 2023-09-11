@@ -38,7 +38,7 @@ interface PanelLabelsProps {
   data: Datum;
   labels: IMeta[];
   inputs: IInput[];
-  onLabelRemove?: (label: string) => void;
+  onLabelRemove: (label: string) => void;
 }
 
 const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabelRemove }) => {
@@ -108,11 +108,9 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     options={(input as ICheckboxInput).options}
                   />
                 )}
-                {onLabelRemove && (
-                  <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(input.name)}>
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                )}
+                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(input.name)}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
               </div>
             </td>
           </tr>
@@ -169,11 +167,9 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     )}
                   </div>
                 </Tooltip>
-                {onLabelRemove && (
-                  <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(label.varname)}>
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                )}
+                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(label.varname)}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
               </div>
             </td>
           </tr>
@@ -181,10 +177,6 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
       </tbody>
     </table>
   );
-};
-
-PanelLabels.defaultProps = {
-  onLabelRemove: undefined,
 };
 
 export default PanelLabels;
