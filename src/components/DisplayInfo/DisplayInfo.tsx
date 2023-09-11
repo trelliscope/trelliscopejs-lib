@@ -94,12 +94,17 @@ const DisplayInfo: React.FC = () => {
         <DialogTitle id="dialog-info-title">
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box>Information About This Display</Box>
-            <Tooltip arrow title="When this checkbox is unchecked, the new user tour will launch upon page refresh.">
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Checkbox data-testid="tour-toggle" checked={showInfo} onChange={handleShowInfoChange} />
-                <Typography>Do not show on next load</Typography>
-              </Box>
-            </Tooltip>
+            {displayInfo?.infoOnLoad && (
+              <Tooltip
+                arrow
+                title="When this checkbox is unchecked, this modal will not appear when viewing this display again."
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Checkbox data-testid="tour-toggle" checked={showInfo} onChange={handleShowInfoChange} />
+                  <Typography>Do not show on next load</Typography>
+                </Box>
+              </Tooltip>
+            )}
           </Box>
         </DialogTitle>
         <DialogContent>
