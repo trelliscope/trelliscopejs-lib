@@ -50,9 +50,11 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
   return (
     <table className={styles.panelZoomLabels} width="100%">
       <tbody>
-        <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
-          Inputs
-        </th>
+        {inputs.length !== 0 && (
+          <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
+            Inputs
+          </th>
+        )}
         {inputs?.map((input) => (
           <tr key={input.name} className={styles.panelZoomLabelsRow}>
             <PanelZoomLabelsCell value={input.name} label={input.label} />
@@ -99,9 +101,11 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
             </td>
           </tr>
         ))}
-        <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
-          Selected Labels
-        </th>
+        {selectedLabels.length !== 0 && (
+          <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
+            Selected Labels
+          </th>
+        )}
         {selectedLabels.map((label) => (
           <tr
             key={label.varname}
@@ -115,9 +119,11 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
             <PanelZoomLabelsCellContent data={data} label={label} />
           </tr>
         ))}
-        <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
-          Additional Labels
-        </th>
+        {nonSelectedLabels.length !== 0 && (
+          <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
+            Additional Labels
+          </th>
+        )}
         {nonSelectedLabels.map((label) => (
           <tr
             key={label.varname}
