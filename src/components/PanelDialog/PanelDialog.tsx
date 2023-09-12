@@ -219,12 +219,13 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
             displayMetas={panelMetas as unknown as { [key: string]: string }[]}
             handleChange={
               handleSelectorChange as unknown as (
-                event: React.SyntheticEvent<Element, Event>,
+                event: React.SyntheticEvent<Element, Event> | null,
                 value: { [key: string]: string }[],
               ) => void
             }
             hasTags={false}
             disablePortal
+            showSelectHideAll={false}
           />
         </Box>
       </ClickAwayListener>

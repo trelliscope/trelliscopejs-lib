@@ -191,12 +191,13 @@ const Filters: React.FC = () => {
               displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
               handleChange={
                 handleFilterChange as unknown as (
-                  event: React.SyntheticEvent<Element, Event>,
+                  event: React.SyntheticEvent<Element, Event> | null,
                   value: { [key: string]: string }[],
                 ) => void
               }
               hasTags
               disablePortal={false}
+              showSelectHideAll={false}
             />
           </div>
         </ClickAwayListener>

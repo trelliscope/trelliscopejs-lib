@@ -72,12 +72,13 @@ const Labels: React.FC = () => {
             displayMetas={metasWithInputs as unknown as { [key: string]: string }[]}
             handleChange={
               handleLabelChange as unknown as (
-                event: React.SyntheticEvent<Element, Event>,
+                event: React.SyntheticEvent<Element, Event> | null,
                 value: { [key: string]: string }[],
               ) => void
             }
             hasTags
             disablePortal={false}
+            showSelectHideAll
           />
         </div>
       </ClickAwayListener>

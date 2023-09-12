@@ -167,12 +167,13 @@ const Sort: React.FC = () => {
             displayMetas={sortableMetas as unknown as { [key: string]: string }[]}
             handleChange={
               handleSortChange as unknown as (
-                event: React.SyntheticEvent<Element, Event>,
+                event: React.SyntheticEvent<Element, Event> | null,
                 value: { [key: string]: string }[],
               ) => void
             }
             hasTags
             disablePortal={false}
+            showSelectHideAll={false}
           />
         </div>
       </ClickAwayListener>

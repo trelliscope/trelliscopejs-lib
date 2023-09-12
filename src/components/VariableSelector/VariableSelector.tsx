@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
@@ -12,6 +12,7 @@ import {
   Select,
   TextField,
   Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import styles from './VariableSelector.module.scss';
@@ -22,9 +23,10 @@ interface VariableSelectorProps {
   metaGroups: Map<string | symbol, string[]> | null;
   anchorEl: null | HTMLElement;
   displayMetas: { [key: string]: string }[];
-  handleChange: (event: React.SyntheticEvent<Element, Event>, value: { [key: string]: string }[]) => void;
+  handleChange: (event: React.SyntheticEvent<Element, Event> | null, value: { [key: string]: string }[]) => void;
   hasTags: boolean;
   disablePortal: boolean;
+  showSelectHideAll: boolean;
 }
 
 const VariableSelector: React.FC<VariableSelectorProps> = ({
@@ -36,11 +38,25 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   handleChange,
   hasTags,
   disablePortal,
+  showSelectHideAll,
 }) => {
   const [tagGroup, setTagGroup] = useState('__ALL__');
 
   const handleTagChange = (event: SelectChangeEvent<string>) => {
     setTagGroup(event.target.value);
+  };
+
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+  useEffect(() => {
+    if (!showSelectHideAll) return;
+    setIsAllSelected(selectedVariables.length === displayMetas.length);
+  }, [selectedVariables, displayMetas]);
+
+  const handleSelectAll = () => {
+    if (isAllSelected) handleChange(null, []);
+    else handleChange(null, displayMetas);
+    setIsAllSelected(!isAllSelected);
   };
 
   return (
@@ -62,6 +78,13 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   PaperComponent={(props) =>
                     hasTags && metaGroups ? (
                       <Paper {...props}>
+                        {showSelectHideAll && (
+                          <FormControlLabel
+                            sx={{ ml: 2 }}
+                            control={<Checkbox checked={isAllSelected} onChange={handleSelectAll} />}
+                            label="Show / Hide All"
+                          />
+                        )}
                         <Box
                           sx={{
                             minWidth: 150,
