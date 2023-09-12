@@ -13,6 +13,7 @@ const fallbackState: ILayoutState = {
   viewtype: 'grid',
   panel: '',
   sidebarActive: false,
+  showLabels: true,
 };
 
 const initialState = selectHashLayout() as ILayoutState;
@@ -25,6 +26,7 @@ export interface LayoutAction {
   viewtype?: ViewType;
   panel?: string;
   sidebarActive?: boolean;
+  showLabels?: boolean;
 }
 
 export const layoutSlice = createSlice({

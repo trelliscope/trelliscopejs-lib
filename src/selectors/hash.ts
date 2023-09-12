@@ -32,6 +32,7 @@ interface HashLayout {
   viewtype?: ViewType;
   panel?: string;
   sidebarActive?: boolean;
+  showLabels?: boolean;
 }
 // select layout from url hash
 export const selectHashLayout = (): HashLayout => {
@@ -48,6 +49,7 @@ export const selectHashLayout = (): HashLayout => {
   if (!Number.isNaN(page)) returnObj.page = page;
   if (hash.panel) returnObj.panel = hash.panel;
   if (hash.sidebarActive) returnObj.sidebarActive = hash.sidebarActive === 'true';
+  if (hash.showLabels) returnObj.showLabels = hash.showLabels === 'true';
 
   return returnObj;
 };

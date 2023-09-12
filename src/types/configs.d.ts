@@ -320,6 +320,7 @@ interface ILayoutState extends IState {
   viewtype: ViewType;
   panel: string;
   sidebarActive: boolean;
+  showLabels: boolean;
 }
 
 interface ILabelState extends IState {

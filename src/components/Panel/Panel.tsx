@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '@mui/material';
@@ -9,6 +9,7 @@ import PanelPicker from '../PanelPicker';
 import styles from './Panel.module.scss';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { META_TYPE_PANEL } from '../../constants';
+import { selectLayout } from '../../slices/layoutSlice';
 
 interface PanelProps {
   data: Datum;
@@ -35,6 +36,8 @@ const Panel: React.FC<PanelProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
+  const layout = useSelector(selectLayout);
+  const showLabels = layout?.showLabels;
   const panelMetas =
     displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
 
@@ -75,7 +78,7 @@ const Panel: React.FC<PanelProps> = ({
           </div>
         )}
       </div>
-      <PanelLabels data={data} labels={labels} inputs={inputs} onLabelRemove={handleRemoveLabel} />
+      {showLabels && <PanelLabels data={data} labels={labels} inputs={inputs} onLabelRemove={handleRemoveLabel} />}
     </div>
   );
 };

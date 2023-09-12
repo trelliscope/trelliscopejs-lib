@@ -56,6 +56,10 @@ export const hashFromState = (state: RootState) => {
     hashURL.append('sidebarActive', layout.sidebarActive.toString() || 'false');
   }
 
+  if (layout.showLabels !== undefined) {
+    hashURL.append('showLabels', layout.showLabels.toString() || 'true');
+  }
+
   // labels
   const { labels } = state;
   if (labels.length) {

@@ -57,6 +57,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             type: layout?.type,
             panel: layout?.panel ? layout?.panel : undefined,
             sidebarActive: layout?.sidebarActive,
+            showLabels: layout?.showLabels,
           },
           labels: { varnames: labels, type: 'labels' },
           sort: newSort,
