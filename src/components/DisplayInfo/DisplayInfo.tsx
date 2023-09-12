@@ -88,7 +88,7 @@ const DisplayInfo: React.FC = () => {
         aria-labelledby="dialog-info-title"
         onClose={handleToggle}
         disableEscapeKeyDown
-        maxWidth="md"
+        maxWidth="lg"
         data-testid="display-info-modal"
       >
         <DialogTitle id="dialog-info-title">
