@@ -31,14 +31,21 @@
     }
 
     &PickerContainer {
+      display: none;
       position: absolute;
       left: 2px;
       top: 0px;
+    }
+    &PickerContainerOpen {
+      display: block;
     }
   }
 
   &:hover &Graphic {
     &Expand {
+      display: block;
+    }
+    &PickerContainer {
       display: block;
     }
   }
