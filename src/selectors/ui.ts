@@ -76,8 +76,5 @@ export const panelLabelSizeSelector = createSelector(numLabelsSelector, numColum
   }
   // size.lineHeight = size.fontSize * 1.5;
   // size.rowHeight = size.lineHeight + size.padding * 2 + 1;
-  if (!sl) {
-    size.rowHeight = 0;
-  }
   return size;
 });

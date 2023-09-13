@@ -60,7 +60,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     '--panelGridGap',
     '--padding-2',
   ]) as number[];
-  const labelHeight = panelLabelSize.rowHeight;
+  const labelHeight = panelLabelSize.rowHeight * (layout.showLabels ? 1 : 0);
 
   useEffect(() => {
     setCurPanel(layout?.panel || displayInfo?.primarypanel);
