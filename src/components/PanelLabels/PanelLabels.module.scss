@@ -8,7 +8,7 @@
 
   &Row {
     width: 100%;
-    font-size: var(--text-xs);
+    // font-size: var(--text-xs);
     border-bottom: var(--border-2);
 
     &__input {
@@ -43,11 +43,12 @@
       justify-content: space-between;
 
       &Text {
-        margin-right: 5px;
+        // margin-right: 5px;
+        // margin-left: 5px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        line-height: 20px;
+        // line-height: 20px;
       }
     }
 
@@ -61,13 +62,14 @@
     border: none;
     background: none;
     padding: 0;
+    // padding-right: 4px;
     margin: 0;
     opacity: 0.5;
 
-    svg {
-      margin-top: 3px;
-      width: 12px;
-      height: 12px;
-    }
+    // svg {
+    //   margin-top: 3px;
+    //   width: 12px;
+    //   height: 12px;
+    // }
   }
 }

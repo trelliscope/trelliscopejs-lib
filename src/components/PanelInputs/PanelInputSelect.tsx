@@ -18,9 +18,10 @@ interface PanelInputSelectProps {
   name: string;
   options: string[];
   panelKey: string;
+  iconFontSize?: number;
 }
 
-const PanelInputSelect: React.FC<PanelInputSelectProps> = ({ name, options, panelKey }) => {
+const PanelInputSelect: React.FC<PanelInputSelectProps> = ({ name, options, panelKey, iconFontSize }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -44,9 +45,9 @@ const PanelInputSelect: React.FC<PanelInputSelectProps> = ({ name, options, pane
         <Tooltip title={getStoredValue()} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{getStoredValue() === 'none' ? '' : getStoredValue()}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
+        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} />
+            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>
@@ -75,6 +76,10 @@ const PanelInputSelect: React.FC<PanelInputSelectProps> = ({ name, options, pane
       </Popover>
     </div>
   );
+};
+
+PanelInputSelect.defaultProps = {
+  iconFontSize: 12,
 };
 
 export default PanelInputSelect;

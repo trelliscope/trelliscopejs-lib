@@ -9,9 +9,10 @@ interface PanelInputMultiSelectProps {
   name: string;
   options: string[];
   panelKey: string;
+  iconFontSize?: number;
 }
 
-const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, options, panelKey }) => {
+const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, options, panelKey, iconFontSize }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -35,9 +36,9 @@ const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, opt
         <Tooltip title={JSON.parse(getStoredValue() || '[]').join(', ')} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{JSON.parse(getStoredValue() || '[]').join(', ')}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
+        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} />
+            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>
@@ -65,6 +66,10 @@ const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, opt
       </Popover>
     </div>
   );
+};
+
+PanelInputMultiSelect.defaultProps = {
+  iconFontSize: 12,
 };
 
 export default PanelInputMultiSelect;

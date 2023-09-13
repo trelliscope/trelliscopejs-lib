@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Checkbox, ClickAwayListener, FormControlLabel, FormGroup, Popover, TextField, Tooltip } from '@mui/material';
+import { Checkbox, ClickAwayListener, FormControlLabel, FormGroup, Popover, Tooltip } from '@mui/material';
 import styles from './PanelInputs.module.scss';
 import { useStoredInputValue } from '../../inputUtils';
 
@@ -9,9 +9,10 @@ interface PanelInputCheckboxProps {
   name: string;
   panelKey: string;
   options: string[];
+  iconFontSize?: number;
 }
 
-const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey, options }) => {
+const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey, options, iconFontSize }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -40,9 +41,9 @@ const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey,
         <Tooltip title={JSON.parse(getStoredValue() || '[]').join(', ')} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{JSON.parse(getStoredValue() || '[]').join(', ')}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
+        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} />
+            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>
@@ -69,6 +70,10 @@ const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey,
       </Popover>
     </div>
   );
+};
+
+PanelInputCheckbox.defaultProps = {
+  iconFontSize: 12,
 };
 
 export default PanelInputCheckbox;
