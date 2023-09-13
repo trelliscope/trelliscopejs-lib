@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
@@ -9,11 +9,12 @@ import styles from './PanelPicker.module.scss';
 interface PanelPickerProps {
   handlePanelChange: (value: string) => void;
   selectedValue: string;
+  anchorEl: null | HTMLElement;
+  setAnchorEl: (value: null | HTMLElement) => void;
 }
 
-const PanelPicker: React.FC<PanelPickerProps> = ({ handlePanelChange, selectedValue }) => {
+const PanelPicker: React.FC<PanelPickerProps> = ({ handlePanelChange, selectedValue, anchorEl, setAnchorEl }) => {
   const { data } = useDisplayInfo();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const panelMetas = data?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '@mui/material';
+import classNames from 'classnames';
 import PanelLabels from '../PanelLabels/PanelLabels';
 import { setLabels } from '../../slices/labelsSlice';
 import PanelPicker from '../PanelPicker';
@@ -36,6 +37,7 @@ const Panel: React.FC<PanelProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const layout = useSelector(selectLayout);
   const showLabels = layout?.showLabels;
   const panelMetas =
@@ -73,8 +75,17 @@ const Panel: React.FC<PanelProps> = ({
           </IconButton>
         </div>
         {panelMetas?.length > 1 && (
-          <div className={styles.panelGraphicPickerContainer}>
-            <PanelPicker handlePanelChange={handlePanelChange} selectedValue={selectedValue} />
+          <div
+            className={classNames(styles.panelGraphicPickerContainer, {
+              [styles.panelGraphicPickerContainerOpen]: anchorEl,
+            })}
+          >
+            <PanelPicker
+              handlePanelChange={handlePanelChange}
+              selectedValue={selectedValue}
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+            />
           </div>
         )}
       </div>
