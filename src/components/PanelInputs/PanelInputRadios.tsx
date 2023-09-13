@@ -9,9 +9,10 @@ interface PanelInputRadiosProps {
   name: string;
   options: string[];
   panelKey: string;
+  iconFontSize?: number;
 }
 
-const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey }) => {
+const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey, iconFontSize }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -26,9 +27,9 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
         <Tooltip title={getStoredValue()} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)}>
+        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} />
+            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>
@@ -67,6 +68,10 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
       </Popover>
     </div>
   );
+};
+
+PanelInputRadios.defaultProps = {
+  iconFontSize: 12,
 };
 
 export default PanelInputRadios;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
 import { Box } from '@mui/material';
 import { labelsSelector } from '../../selectors';
+import { panelLabelSizeSelector } from '../../selectors/ui';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
@@ -48,16 +49,18 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const dispatch = useDispatch();
   const { data, filteredData } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
+  const panelLabelSize = useSelector(panelLabelSizeSelector);
   const { isSuccess: metaDataSuccess } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
   const [curPanel, setCurPanel] = useState(layout?.panel || displayInfo?.primarypanel);
-  const [labelHeight, gridGap, panelPadding] = getCustomProperties([
-    '--panelLabel-height',
+  const [gridGap, panelPadding] = getCustomProperties([
+    // '--panelLabel-height',
     '--panelGridGap',
     '--padding-2',
   ]) as number[];
+  const labelHeight = panelLabelSize.rowHeight;
 
   useEffect(() => {
     setCurPanel(layout?.panel || displayInfo?.primarypanel);

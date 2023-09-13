@@ -1,8 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Tooltip } from '@mui/material';
+import { panelLabelSizeSelector } from '../../selectors/ui';
 import {
   INPUT_TYPE_CHECKBOX,
   INPUT_TYPE_MULTISELECT,
@@ -45,6 +47,8 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
 
+  const panelLabelSize = useSelector(panelLabelSizeSelector);
+
   const panelKeyArr = displayInfo?.keycols?.map((keycol) => {
     const foundMeta = displayMetas.find((meta) => meta.varname === keycol);
     if (foundMeta?.type === META_TYPE_FACTOR) {
@@ -67,10 +71,10 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
     <table className={styles.panelLabels} width="100%">
       <tbody>
         {inputs?.map((input) => (
-          <tr key={input.name} className={classNames(styles.panelLabelsRow, styles.panelLabelsRow__input)}>
-            <PanelLabelsCell value={input.name} label={input.label} />
+          <tr key={input.name} className={classNames(styles.panelLabelsRow, styles.panelLabelsRow__input)} style={{fontSize: panelLabelSize.fontSize, lineHeight: `${panelLabelSize.lineHeight}px`}}>
+            <PanelLabelsCell value={input.name} label={input.label} padding={panelLabelSize.padding} />
             <td className={styles.panelLabelsCell}>
-              <div className={styles.panelLabelsCellContent}>
+              <div className={styles.panelLabelsCellContent} style={{maxHeight: panelLabelSize.lineHeight}}>
                 {(input.type === INPUT_TYPE_TEXT || input.type === INPUT_TYPE_NUMBER) && (
                   <PanelInputText
                     name={input.name}
@@ -78,6 +82,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     panelKey={panelKey as string}
                     isNumeric={input.type === INPUT_TYPE_NUMBER}
                     input={input as ITextInput | INumberInput}
+                    iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
                 {input.type === INPUT_TYPE_RADIO && (
@@ -85,6 +90,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     name={input.name}
                     options={(input as IRadioInput).options}
                     panelKey={panelKey as string}
+                    iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
                 {input.type === INPUT_TYPE_CHECKBOX && (
@@ -92,6 +98,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     name={input.name}
                     panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
+                    iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
                 {input.type === INPUT_TYPE_SELECT && (
@@ -99,6 +106,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     name={input.name}
                     panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
+                    iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
                 {input.type === INPUT_TYPE_MULTISELECT && (
@@ -106,10 +114,11 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     name={input.name}
                     panelKey={panelKey as string}
                     options={(input as ICheckboxInput).options}
+                    iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
-                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(input.name)}>
-                  <FontAwesomeIcon icon={faXmark} />
+                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(input.name)} style={{lineHeight: `${panelLabelSize.lineHeight}px`, paddingRight: panelLabelSize.padding}}>
+                  <FontAwesomeIcon icon={faXmark}  style={{ fontSize: panelLabelSize.fontSize }} />
                 </button>
               </div>
             </td>
@@ -123,10 +132,11 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                 ? `${styles.panelLabelsRow} ${styles.panelLabelsRowMissing}`
                 : styles.panelLabelsRow
             }
+            style={{fontSize: panelLabelSize.fontSize, lineHeight: `${panelLabelSize.lineHeight}px`}}
           >
-            <PanelLabelsCell value={label.varname} label={label.label} />
+            <PanelLabelsCell value={label.varname} label={label.label} padding={panelLabelSize.padding} />
             <td className={styles.panelLabelsCell}>
-              <div className={styles.panelLabelsCellContent}>
+              <div className={styles.panelLabelsCellContent} style={{maxHeight: panelLabelSize.lineHeight}}>
                 <Tooltip
                   title={
                     label.type === META_TYPE_FACTOR
@@ -136,7 +146,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                   placement="left"
                   arrow
                 >
-                  <div className={styles.panelLabelsCellContentText}>
+                  <div className={styles.panelLabelsCellContentText} style={{ lineHeight: `${panelLabelSize.lineHeight}px`, paddingLeft: panelLabelSize.padding }}>
                     {label.type !== META_TYPE_FACTOR && !data[label.varname] && data[label.varname] !== 0 && MISSING_TEXT}
                     {label.type === META_TYPE_FACTOR &&
                       getLabelFromFactor(data[label.varname] as number, getMetaLevels(label.varname) as string[])}
@@ -162,13 +172,13 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ fontSize: panelLabelSize.fontSize }} />
                       </a>
                     )}
                   </div>
                 </Tooltip>
-                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(label.varname)}>
-                  <FontAwesomeIcon icon={faXmark} />
+                <button type="button" className={styles.panelLabelsClose} onClick={() => onLabelRemove(label.varname)} style={{lineHeight: `${panelLabelSize.lineHeight}px`, paddingRight: panelLabelSize.padding}}>
+                  <FontAwesomeIcon icon={faXmark} style={{ fontSize: panelLabelSize.fontSize }} />
                 </button>
               </div>
             </td>

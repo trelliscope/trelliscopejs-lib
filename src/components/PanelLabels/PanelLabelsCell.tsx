@@ -5,10 +5,11 @@ import styles from './PanelLabels.module.scss';
 interface PanelLabelsCellProps {
   value: string | number | null;
   label: string | null;
+  padding: number | null;
 }
 
-const PanelLabelsCell: React.FC<PanelLabelsCellProps> = ({ value, label }) => (
-  <td style={{ padding: '6px' }} className={styles.panelLabelsCell}>
+const PanelLabelsCell: React.FC<PanelLabelsCellProps> = ({ value, label, padding }) => (
+  <td style={{ padding: `${padding}px` }} className={styles.panelLabelsCell}>
     {label ? (
       <Tooltip title={label} placement="left" arrow>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

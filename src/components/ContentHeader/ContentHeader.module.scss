@@ -48,11 +48,11 @@
           position: fixed;
           color: #000;
           left: 386px;
-          top: 64px;
+          top: 63px;
           width: 18px;
           height: 18px;
-          background: #bbbbbb;
-          // border: 1px dashed #000;
+          background: var(--white-500);
+          border: 1px solid #cccccc;
           border-radius: 50%;
           padding: 4px;
         }
