@@ -247,18 +247,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       ),
     }));
     return [...imageColumnData, ...columnData];
-  }, [
-    basePath,
-    columnSize?.Panel,
-    data,
-    displayInfo?.keycols,
-    displayInfo?.name,
-    displayInfoSuccess,
-    displayMetas,
-    handleClick,
-    panelMetas,
-    unSortableMetas,
-  ]);
+  }, [data]);
 
   // conflicts within table library, some of the types dont seem to be exported in the same way
   // that the actual table component consumes them as a prop.
@@ -296,7 +285,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
 
   useEffect(() => {
     handleTableResize();
-  }, [columnSize, columnVisibility, handleTableResize]);
+  }, [columnSize]);
 
   return (
     <div className={styles.dataTable}>
