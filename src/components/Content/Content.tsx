@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { labelsSelector } from '../../selectors';
 import { panelLabelSizeSelector } from '../../selectors/ui';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -16,6 +16,7 @@ import DataTable from '../DataTable';
 import PanelDialog from '../PanelDialog';
 import styles from './Content.module.scss';
 import { setPanelDialog } from '../../slices/appSlice';
+import { META_DATA_STATUS } from '../../constants';
 
 interface ContentProps {
   tableRef: React.MutableRefObject<null>;
@@ -47,10 +48,10 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const { data, filteredData } = useContext(DataContext);
+  const { data, filteredData, allData } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const panelLabelSize = useSelector(panelLabelSizeSelector);
-  const { isSuccess: metaDataSuccess } = useMetaData();
+  const metaDataState = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);
@@ -168,7 +169,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     [dispatch],
   );
 
-  if (!metaDataSuccess || !displayInfoSuccess) return null;
+  if (!displayInfoSuccess) return null;
 
   const contentStyle = {
     gridTemplateColumns: `repeat(${layout?.ncol}, 1fr)`,
@@ -180,6 +181,14 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     dispatch(setLayout({ panel: value }));
   };
 
+  if (metaDataState === META_DATA_STATUS.LOADING || metaDataState === META_DATA_STATUS.IDLE || !allData.length)
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        <CircularProgress size="80px" />
+      </Box>
+    );
+  if (metaDataState === META_DATA_STATUS.ERROR || !displayInfoSuccess) return null;
+
   const activeLabels = labels
     .map((label) => displayInfo.metas.find((meta: IMeta) => meta.varname === label))
     .filter(Boolean) as IMeta[];
@@ -190,9 +199,10 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const primaryMeta = displayInfo.metas.find((meta: IMeta) =>
     layout.viewtype === 'grid' ? meta.varname === curPanel : meta.varname === displayInfo.primarypanel,
   ) as IPanelMeta;
+
   return (
     <>
-      {data?.length === 0 && (
+      {!data?.length && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           No panels meet the current filter criteria
         </Box>
@@ -200,7 +210,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       {layout?.viewtype === 'grid' ? (
         <div className={styles.contentWrapper} ref={wrapperRef}>
           <div data-testid="panel-content" className={styles.content} style={contentStyle} ref={contentRef}>
-            {metaDataSuccess && displayInfoSuccess && data?.length > 0 && curPanel && (
+            {metaDataState === META_DATA_STATUS.READY && displayInfoSuccess && data?.length > 0 && curPanel && (
               <>
                 {data.map((d, i) => (
                   <Panel

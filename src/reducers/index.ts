@@ -12,7 +12,6 @@ import filter from '../slices/filterSlice';
 import cogDataMutable from '../slices/cogDataMutableSlice';
 import { configAPI } from '../slices/configAPI';
 import { displayListAPI } from '../slices/displayListAPI';
-import { metaDataAPI } from '../slices/metaDataAPI';
 import { displayInfoAPI } from '../slices/displayInfoAPI';
 import { htmlAPI } from '../slices/htmlAPI';
 
@@ -30,7 +29,6 @@ const reducers = combineReducers({
   cogDataMutable,
   [configAPI.reducerPath]: configAPI.reducer,
   [displayListAPI.reducerPath]: displayListAPI.reducer,
-  [metaDataAPI.reducerPath]: metaDataAPI.reducer,
   [displayInfoAPI.reducerPath]: displayInfoAPI.reducer,
   [htmlAPI.reducerPath]: htmlAPI.reducer,
 });

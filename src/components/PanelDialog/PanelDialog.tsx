@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
-import { useMetaData } from '../../slices/metaDataAPI';
 import PanelZoomLabels from '../PanelZoomLabels/PanelZoomLabels';
 import styles from './PanelDialog.module.scss';
 import { PanelGraphic } from '../Panel';
@@ -32,7 +31,6 @@ interface PanelExtended extends IPanelMeta {
 }
 
 const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, panel, source, onClose, index }) => {
-  const metaData = useMetaData();
   const displayMetas = useDisplayMetas();
   const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
   const dispatch = useDispatch();
@@ -42,8 +40,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const npp = useSelector(selectNumPerPage);
   const totPages = Math.ceil(totPanels / npp);
   const basePath = useSelector(selectBasePath);
-  const foundMetaData = metaData?.currentData?.find((meta) => meta[panel?.varname] === source);
-  const [curMetaData, setCurMetaData] = useState(foundMetaData);
+  const [curMetaData, setCurMetaData] = useState<Datum>();
   const [curSource, setCurSource] = useState(source);
   const [curIndex, setCurIndex] = useState(index);
   const { data: displayInfo } = useDisplayInfo();
@@ -61,7 +58,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         (variable) =>
           ({
             ...variable,
-            sourcePath: curMetaData?.[variable.varname] as string,
+            sourcePath: curMetaData?.[variable.varname],
           } as PanelExtended),
       ),
     );
@@ -72,9 +69,8 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   }, [source]);
 
   useEffect(() => {
-    setCurMetaData(foundMetaData);
     setCurIndex(index);
-  }, [foundMetaData, index]);
+  }, [index]);
 
   useEffect(() => {
     if (data) {
