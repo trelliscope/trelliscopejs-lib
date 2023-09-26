@@ -2,7 +2,6 @@ import { CaseReducer, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { configAPI } from './configAPI';
 import { displayInfoAPI } from './displayInfoAPI';
-import { metaDataAPI } from './metaDataAPI';
 import { displayListAPI } from './displayListAPI';
 
 export interface PanelDialog {
@@ -75,7 +74,6 @@ export const appSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, apiErrorHandler);
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, apiErrorHandler);
-    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, apiErrorHandler);
     builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, apiErrorHandler);
   },
 });

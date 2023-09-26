@@ -58,3 +58,10 @@ export const TYPE_MAP: { [key: string]: 'number' | 'string' | 'date' | 'datetime
 };
 
 export const MISSING_TEXT = '[missing]' as string;
+
+export const META_DATA_STATUS = {
+  LOADING: 'loading',
+  READY: 'ready',
+  ERROR: 'error',
+  IDLE: 'idle',
+};

@@ -25,6 +25,7 @@ declare global {
       | ((data: Datum[]) => void)
       | ((data: IConfig) => void)
       | ((data: IDisplay[]) => void);
+    metaData: Datum[] | null;
   }
   interface Document {
     webkitFullscreenElement: Element;

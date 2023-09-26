@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR, TYPE_MAP } from '../../constants';
@@ -106,6 +106,11 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   };
 
+  const memoizedGroupByData = useMemo(
+    () => groupBy(meta.varname, TYPE_MAP[meta.type]),
+    [allData, meta?.varname, meta?.type],
+  );
+
   // this useEffect is needed for a refresh and the hash to work since we are no longer passing vals in the url
   const hasData = useRef(false);
 
@@ -124,11 +129,11 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     <div className={styles.filterCat}>
       <div className={styles.filterCatChart}>
         <CatHistogram
-          data={sortChartData(curSort, groupBy(meta.varname, TYPE_MAP[meta.type]))}
+          data={sortChartData(curSort, memoizedGroupByData)}
           allData={dist}
           domain={domain}
           actives={filter?.values || []}
-          count={cleanMeta?.length || groupBy(meta.varname, TYPE_MAP[meta.type]).length}
+          count={cleanMeta?.length || memoizedGroupByData.length}
           width={399}
           height={175}
           barHeight={25}

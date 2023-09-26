@@ -6,7 +6,7 @@ import { selectFilterState } from '../../slices/filterSlice';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import { selectSort } from '../../slices/sortSlice';
 import type { DataType, IDataClient } from '../../DataClient';
-import { TYPE_MAP } from '../../constants';
+import { META_DATA_STATUS, TYPE_MAP } from '../../constants';
 
 interface DataProviderProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export const DataContext = React.createContext<{
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const [data, setData] = React.useState<Datum[]>([]);
-  const { data: metaData } = useMetaData();
+  const { loadingState: metaDataState, metaData } = useMetaData();
   const displayMetas = useDisplayMetas();
   const numPerPage = useSelector(selectNumPerPage);
   const page = useSelector(selectPage);
@@ -30,13 +30,15 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const sorts = useSelector(selectSort);
 
   useEffect(() => {
-    if (metaData) {
+    if (metaDataState === META_DATA_STATUS.READY && metaData) {
       client.clearData();
-      client.addData(metaData);
+      client.addData(metaData as Datum[]);
+      window.metaData = null;
     }
-  }, [metaData, client]);
+  }, [metaDataState, client, metaData]);
 
   useEffect(() => {
+    if (metaDataState !== META_DATA_STATUS.READY) return;
     // Add filters
     client.clearFilters();
     filters.forEach((filter) => {
@@ -79,7 +81,11 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     }
 
     setData(client.getData(numPerPage, page));
-  }, [metaData, numPerPage, filters, sorts, displayMetas, client, page]);
+  }, [metaDataState, numPerPage, filters, sorts, displayMetas, client, metaData]);
+
+  useEffect(() => {
+    setData(client.getData(numPerPage, page));
+  }, [numPerPage, page]);
 
   return (
     <DataContext.Provider
