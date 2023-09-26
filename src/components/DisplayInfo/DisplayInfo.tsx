@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Box, Checkbox, CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Checkbox, IconButton, Tooltip, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,7 +12,6 @@ import Button from '@mui/material/Button';
 import { fullscreenSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
-import { useHtml } from '../../slices/htmlAPI';
 import styles from './DisplayInfo.module.scss';
 import { selectBasePath } from '../../selectors/app';
 import { snakeCase } from '../../utils';
@@ -24,12 +23,6 @@ const DisplayInfo: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const [hasInputs, setHasInputs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { data: html, isLoading: htmlLoading } = useHtml(
-    `${basePath}/displays/${snakeCase(displayInfo?.name || '')}/info.html`,
-    (displayInfo?.hasCustomInfo as boolean) || false,
-  );
-
-  const formattedHtml = { __html: html };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -89,6 +82,7 @@ const DisplayInfo: React.FC = () => {
         onClose={handleToggle}
         disableEscapeKeyDown
         maxWidth="lg"
+        fullWidth
         data-testid="display-info-modal"
       >
         <DialogTitle id="dialog-info-title">
@@ -110,16 +104,13 @@ const DisplayInfo: React.FC = () => {
         <DialogContent>
           <div className={styles.displayInfoModalContainer}>
             {displayInfo?.hasCustomInfo ? (
-              <>
-                {htmlLoading && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <CircularProgress />
-                  </Box>
-                )}
-                {/* we can set this because we are sanitizing the HTML in the hook */}
-                {/* eslint-disable-next-line react/no-danger */}
-                <div dangerouslySetInnerHTML={formattedHtml as { __html: string }} />
-              </>
+              <iframe
+                key="customInfo"
+                width="100%"
+                height="100%"
+                src={`${basePath}/displays/${snakeCase(displayInfo?.name || '')}/info.html`}
+                title="customInfo"
+              />
             ) : (
               <div>
                 <div style={{ background: '#ededed', padding: 5 }}>

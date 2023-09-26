@@ -208,7 +208,8 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
                     data={d}
                     labels={activeLabels}
                     inputs={activeInputs as IInput[]}
-                    key={d[metaIndex]}
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={`${d.id}${i}`}
                     primaryMeta={primaryMeta}
                     handlePanelChange={handlePanelChange}
                     selectedValue={curPanel}
