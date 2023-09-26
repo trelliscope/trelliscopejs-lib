@@ -51,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   const { data, filteredData, allData } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
   const panelLabelSize = useSelector(panelLabelSizeSelector);
-  const metaDataState = useMetaData();
+  const { loadingState: metaDataState } = useMetaData();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
   const layout = useSelector(selectLayout);
   const basePath = useSelector(selectBasePath);

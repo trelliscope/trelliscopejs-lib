@@ -22,7 +22,7 @@ export const DataContext = React.createContext<{
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const [data, setData] = React.useState<Datum[]>([]);
-  const metaDataState = useMetaData();
+  const { loadingState: metaDataState, metaData } = useMetaData();
   const displayMetas = useDisplayMetas();
   const numPerPage = useSelector(selectNumPerPage);
   const page = useSelector(selectPage);
@@ -30,12 +30,12 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const sorts = useSelector(selectSort);
 
   useEffect(() => {
-    if (metaDataState === META_DATA_STATUS.READY && window.metaData) {
+    if (metaDataState === META_DATA_STATUS.READY && metaData) {
       client.clearData();
-      client.addData(window.metaData as unknown as Datum[]);
+      client.addData(metaData as Datum[]);
       window.metaData = null;
     }
-  }, [metaDataState, client]);
+  }, [metaDataState, client, metaData]);
 
   useEffect(() => {
     if (metaDataState !== META_DATA_STATUS.READY) return;
@@ -81,7 +81,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     }
 
     setData(client.getData(numPerPage, page));
-  }, [metaDataState, numPerPage, filters, sorts, displayMetas, client]);
+  }, [metaDataState, numPerPage, filters, sorts, displayMetas, client, metaData]);
 
   useEffect(() => {
     setData(client.getData(numPerPage, page));

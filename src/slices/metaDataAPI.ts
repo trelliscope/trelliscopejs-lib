@@ -17,11 +17,12 @@ export const useMetaData = () => {
 
   const url = `${basePath}/displays/${displayPath}/metaData.${dataType === 'json' ? 'json' : 'js'}`;
 
-  const [state, setState] = useState(url ? META_DATA_STATUS.LOADING : META_DATA_STATUS.IDLE);
+  const [loadingState, setLoadingState] = useState(url ? META_DATA_STATUS.LOADING : META_DATA_STATUS.IDLE);
+  const [metaData, setMetaData] = useState<Datum[] | null>(null);
 
   useEffect(() => {
+    setLoadingState(META_DATA_STATUS.IDLE);
     if (!url || !basePath || !selectedDisplay?.name) {
-      setState(META_DATA_STATUS.IDLE);
       return;
     }
 
@@ -31,10 +32,11 @@ export const useMetaData = () => {
         .then((res) => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          window.metaData = res;
+          // window.metaData = res;
           setState(META_DATA_STATUS.READY);
+          setMetaData(res);
         })
-        .catch((error) => setState(META_DATA_STATUS.ERROR));
+        .catch((error) => setLoadingState(META_DATA_STATUS.ERROR));
 
       return;
     }
@@ -42,7 +44,8 @@ export const useMetaData = () => {
     let script = document.querySelector(`script[src="${url}"]`) as HTMLScriptElement;
 
     const handleScript = (e: Event) => {
-      setState(e.type === 'load' ? META_DATA_STATUS.READY : META_DATA_STATUS.ERROR);
+      setLoadingState(e.type === 'load' ? META_DATA_STATUS.READY : META_DATA_STATUS.ERROR);
+      setMetaData(window.metaData);
     };
 
     if (!script) {
@@ -60,7 +63,10 @@ export const useMetaData = () => {
     return () => {
       script.removeEventListener('load', handleScript);
       script.removeEventListener('error', handleScript);
+      if (document.querySelector(`script[src="${url}"]`)) {
+        document.body.removeChild(script);
+      }
     };
   }, [url]);
-  return state;
+  return { loadingState, metaData };
 };
