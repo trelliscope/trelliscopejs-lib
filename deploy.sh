@@ -16,24 +16,24 @@ PACKAGE_VERSION=$(cat package.json \
   | awk -F: '{ print $2 }' \
   | sed 's/[",]//g')
 
-rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js
-rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css
-rm -rf ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media
-mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js
-mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css
-mkdir ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media
-cp build/static/js/*.js ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/js/
-cp build/static/css/*.css ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/css/
-cp build/static/media/* ../trelliscope/inst/htmlwidgets/lib/trelliscope_widget/media/
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trs/js
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trs/css
+rm -rf ../trelliscope/inst/htmlwidgets/lib/trs/media
+mkdir ../trelliscope/inst/htmlwidgets/lib/trs/js
+mkdir ../trelliscope/inst/htmlwidgets/lib/trs/css
+mkdir ../trelliscope/inst/htmlwidgets/lib/trs/media
+cp build/static/js/*.js ../trelliscope/inst/htmlwidgets/lib/trs/js/
+cp build/static/css/*.css ../trelliscope/inst/htmlwidgets/lib/trs/css/
+cp build/static/media/* ../trelliscope/inst/htmlwidgets/lib/trs/media/
 
 JS=`find build/static/js -name '*.js' -exec basename {} \; | sed 's/^/     js\//' | sed 's/$/,/'`
 CSS=`find build/static/css -name '*.css' -exec basename {} \; | sed 's/^/     css\//' | sed 's/$/,/'`
 
-cat <<EOF >../trelliscope/inst/htmlwidgets/trelliscope_widget.yaml
+cat <<EOF >../trelliscope/inst/htmlwidgets/trs.yaml
 dependencies:
-  - name: trelliscope_widget
+  - name: trs
     version: $PACKAGE_VERSION
-    src: htmlwidgets/lib/trelliscope_widget
+    src: htmlwidgets/lib/trs
     script: [ $JS ]
     stylesheet: [ $CSS ]
 EOF
