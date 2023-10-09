@@ -1,5 +1,9 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHand } from '@fortawesome/free-solid-svg-icons';
+import Tour from 'reactour';
+import { useSelector } from 'react-redux';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import DisplaySelect from '../DisplaySelect';
@@ -10,6 +14,8 @@ import DisplayInfo from '../DisplayInfo';
 import styles from './Header.module.scss';
 import HelpInfo from '../HelpInfo';
 import Share from '../Share';
+import { selectLayout } from '../../slices/layoutSlice';
+import { TOUR_STEPS } from '../../constants';
 
 const Header: React.FC = () => {
   const { data: displayList = [] } = useDisplayList();
@@ -17,6 +23,27 @@ const Header: React.FC = () => {
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const selectedDisplay = useSelectedDisplay();
   const { data: displayInfo } = useDisplayInfo();
+
+  const layout = useSelector(selectLayout);
+
+  const [tourIsOpen, setTourIsOpen] = useState(false);
+
+  const handleTourClose = () => {
+    setTourIsOpen(!tourIsOpen);
+  };
+
+  const [tourSteps, setTourSteps] = useState(TOUR_STEPS);
+
+  useEffect(() => {
+    if (layout?.viewtype === 'table') {
+      const newTourSteps = TOUR_STEPS.filter(
+        (step) => step.selector !== '#panel-control' && step.selector !== '#label-control',
+      );
+      setTourSteps(newTourSteps);
+      return;
+    }
+    setTourSteps(TOUR_STEPS);
+  }, [layout]);
 
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
@@ -39,6 +66,7 @@ const Header: React.FC = () => {
       elevation={0}
     >
       <Toolbar className={styles.headerToolbar} disableGutters>
+        <Tour steps={tourSteps} isOpen={tourIsOpen} onRequestClose={handleTourClose} />
         <div className={styles.header}>
           <div id="display-control" className={styles.headerDisplayInfo}>
             <DisplayInfo />
@@ -66,6 +94,11 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className={styles.headerRight}>
+            <Tooltip title="Launch Help Tour">
+              <IconButton data-testid="tour-button" onClick={handleTourClose}>
+                <FontAwesomeIcon icon={faHand} />
+              </IconButton>
+            </Tooltip>
             <div id="share-control" className={styles.headerIconButton}>
               <Share />
             </div>

@@ -65,3 +65,59 @@ export const META_DATA_STATUS = {
   ERROR: 'error',
   IDLE: 'idle',
 };
+
+export const TOUR_STEPS = [
+  {
+    selector: '#sort-add-icon',
+    content:
+      'You can add a sort here. Clicking the pill will change the sort order. Sorts can be dragged to re-order by using the drag handle. ',
+  },
+  {
+    selector: '#column-control',
+    content: 'You can adjust the amount of columns in the grid. If table view is active, you can hide columns or pin them.',
+  },
+  {
+    selector: '#label-control',
+    content: 'You can add labels here. The label will then appear on the panel.',
+  },
+  {
+    selector: '#view-control',
+    content:
+      'Views are used to change the layout, filters, sorts and labels all at once. You are able to create new views which are saved locally.',
+  },
+  {
+    selector: '#layout-control',
+    content: 'You can change the layout to be a grid or a table. In table view, labels are present as columns.',
+  },
+  {
+    selector: '#display-control',
+    content: 'If there are multiple displays you can change displays here.',
+  },
+  {
+    selector: '#share-control',
+    content: 'You can get a shareable link to the current view here.',
+  },
+  {
+    selector: '#export-control',
+    content: 'You can get an exportable download here of the current inputs in csv format.',
+  },
+  {
+    selector: '#help-control',
+    content:
+      'You can see a general overview of the application here and how to use it. You can also re-enable this tour if needed.',
+  },
+  {
+    selector: '#fullscreen-control',
+    content: 'You can toggle fullscreen mode here.',
+  },
+  {
+    selector: '#filter-drawer-button',
+    content:
+      'This will expand the filter drawer where you can add, remove, and edit filters. Filters are also draggable to re-order. You can also enable the label or sort right from the filter.',
+  },
+  {
+    selector: '#panel-control',
+    content:
+      'If multiple images are present you can change the selected image in the top left of a panel. You can hover over the panel and in the top right you can expand the panel for a closer look.',
+  },
+];
