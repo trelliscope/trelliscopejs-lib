@@ -372,6 +372,7 @@ interface IDatetimeRangeFilterState extends IFilterState {
 
 interface IView {
   name: string;
+  description: string;
   state: IDisplayState;
 }
 

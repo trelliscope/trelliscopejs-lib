@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button, Box } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+  Typography,
+} from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
 import styles from './AddViewModal.module.scss';
@@ -17,14 +29,25 @@ interface AddViewModalProps {
 }
 
 const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, setLocalViews }) => {
-  const [description, setDescription] = useState('');
+  const [viewForm, setViewForm] = useState({
+    name: '',
+    description: '',
+    sort: true,
+    filter: true,
+    labels: true,
+    columns: true,
+    viewtype: true,
+    sidebarActive: true,
+    panel: true,
+    showLabels: true,
+  });
   const filters = useSelector(selectFilterState);
   const filterViews = useSelector(filterViewSelector);
   const sorts = useSelector(selectSort);
   const labels = useSelector(selectLabels);
   const layout = useSelector(selectLayout);
 
-  const { setStoredValue } = useStoredInputValue('trelliscope_views', description);
+  const { setStoredValue } = useStoredInputValue('trelliscope_views', viewForm?.name);
 
   const views = useGetAllLocalViews();
 
@@ -33,11 +56,16 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
   const newSort = sorts.map((sort) => ({ ...sort, type: 'sort' }));
   const newFilter = filters.map((filter) => ({ ...filter, type: 'filter' }));
 
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(event.target.value);
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setViewForm({ ...viewForm, [e.target.id || e.target.name]: e.target.value });
   };
+
+  const handleFormSwitchChange = (id: string, value: boolean) => {
+    setViewForm({ ...viewForm, [id]: value });
+  };
+
   const handleSaveView = () => {
-    const viewExists = views.some((view) => view.name === description);
+    const viewExists = views.some((view) => view.name === viewForm?.name);
     if (viewExists) {
       enqueueSnackbar('Custom view name already exists!', {
         variant: 'error',
@@ -48,25 +76,26 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
     }
     setStoredValue(
       JSON.stringify({
-        name: description,
+        name: viewForm?.name,
+        description: viewForm?.description,
         state: {
           layout: {
-            viewtype: layout?.viewtype,
-            page: layout?.page,
-            ncol: layout?.ncol,
-            type: layout?.type,
-            panel: layout?.panel ? layout?.panel : undefined,
-            sidebarActive: layout?.sidebarActive,
-            showLabels: layout?.showLabels,
+            viewtype: viewForm.viewtype ? layout?.viewtype : undefined,
+            page: viewForm.columns ? layout?.page : undefined,
+            ncol: viewForm.columns ? layout?.ncol : undefined,
+            type: viewForm.viewtype ? layout?.type : undefined,
+            panel: layout?.panel && viewForm.panel ? layout?.panel : undefined,
+            sidebarActive: viewForm.sidebarActive ? layout?.sidebarActive : undefined,
+            showLabels: viewForm.showLabels ? layout?.showLabels : undefined,
           },
-          labels: { varnames: labels, type: 'labels' },
-          sort: newSort,
-          filter: newFilter,
-          filterView: filterViews?.active,
+          labels: viewForm.labels ? { varnames: labels, type: 'labels' } : undefined,
+          sort: viewForm.sort ? newSort : undefined,
+          filter: viewForm.filter ? newFilter : undefined,
+          filterView: viewForm.filter ? filterViews?.active : undefined,
         },
       }),
     );
-    const newViews = [...views, { name: description }];
+    const newViews = [...views, { name: viewForm?.name }];
     setLocalViews(newViews);
     handleViewToggle();
     enqueueSnackbar('View saved!', {
@@ -83,17 +112,77 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
         <DialogContent>
           <DialogContentText>Enter a description and save this view locally.</DialogContentText>
           <TextField
+            id="name"
             autoFocus
             margin="dense"
-            label="Description"
+            label="View Name"
             fullWidth
             onKeyDown={(e) => e.stopPropagation()}
-            onChange={handleDescriptionChange}
+            onChange={handleFormChange}
           />
+          <TextField
+            id="description"
+            autoFocus
+            margin="dense"
+            label="View Description"
+            fullWidth
+            onKeyDown={(e) => e.stopPropagation()}
+            onChange={handleFormChange}
+          />
+          <Typography sx={{ mt: 3 }} variant="h6">
+            Include in view
+          </Typography>
+          <FormGroup sx={{ display: 'flex', flexDirection: 'column' }}>
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('sort', value)} />}
+              label="Sort"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('filter', value)} />}
+              label="Filter"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('labels', value)} />}
+              label="Labels"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('showLabels', value)} />}
+              label="Labels Visible"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('columns', value)} />}
+              label="Panel Columns"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('viewtype', value)} />}
+              label="Grid / Table Layout"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('sidebarActive', value)} />}
+              label="Sidebar Open / Closed"
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked onChange={(e, value) => handleFormSwitchChange('panel', value)} />}
+              label="Selected Panel (if multiple)"
+            />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleViewToggle}>Cancel</Button>
-          <Button onClick={handleSaveView}>Save</Button>
+          <Button
+            disabled={
+              !viewForm.sort &&
+              !viewForm.filter &&
+              !viewForm.labels &&
+              !viewForm.showLabels &&
+              !viewForm.columns &&
+              !viewForm.sidebarActive &&
+              !viewForm.panel
+            }
+            onClick={handleSaveView}
+          >
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
