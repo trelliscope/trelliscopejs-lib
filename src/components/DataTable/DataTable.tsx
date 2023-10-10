@@ -47,7 +47,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   const basePath = useSelector(selectBasePath);
   const displayMetas = useDisplayMetasWithInputs();
   const { data: displayInfo, isSuccess: displayInfoSuccess } = useDisplayInfo();
-  const [columnSize, setColumnSize] = useState({ Panel: 110 });
+  const [columnSize, setColumnSize] = useState<{ [key: string]: number }>({ Panel: 110 });
   const [columnVisibility, setColumnVisibility] = useState({});
   const panelMetas = useMemo(
     () => (displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL) as IPanelMeta[]) || [],
@@ -234,7 +234,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
               }
               alt={cell.row.original.name as string}
               aspectRatio={meta?.aspect}
-              imageWidth={columnSize?.Panel || 110}
+              imageWidth={columnSize[meta?.varname] || 110}
               inTable
               key={`${cell.row.index}_${displayInfo?.name}`}
               port={meta?.source?.port}
@@ -247,7 +247,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       ),
     }));
     return [...imageColumnData, ...columnData];
-  }, [data]);
+  }, [data, columnSize]);
 
   // conflicts within table library, some of the types dont seem to be exported in the same way
   // that the actual table component consumes them as a prop.
