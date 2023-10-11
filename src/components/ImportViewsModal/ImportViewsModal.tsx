@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Box } from '@mui/material';
 
 import { useSnackbar } from 'notistack';
+import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './ImportViewsModal.module.scss';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
@@ -76,14 +78,19 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
   return (
     <div className={styles.importViewsModal}>
       <Dialog open={isOpen} onClose={handleImportToggle}>
-        <DialogTitle>Add a new view</DialogTitle>
+        <DialogTitle>Import Views</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Import views by uploading a json file below. If a view already exists with the same name it will be skipped.
           </DialogContentText>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <label htmlFor="button-file">
-              <Button disabled={isLoading} variant="outlined" component="span">
+              <Button
+                disabled={isLoading}
+                variant="outlined"
+                component="span"
+                startIcon={<FontAwesomeIcon icon={faFileArrowUp} />}
+              >
                 {isLoading ? 'Loading...' : 'Upload'}
               </Button>
               <input accept=".json" style={{ display: 'none' }} id="button-file" type="file" onChange={handleFileInput} />

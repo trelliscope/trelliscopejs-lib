@@ -8,6 +8,9 @@ import {
   faSort,
   faTableColumns,
   faTag,
+  faPlus,
+  faDownload,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
@@ -248,13 +251,31 @@ const Views: React.FC = () => {
             </div>
           ))}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
-            <Button sx={{ width: '200px', mr: 2 }} variant="contained" color="primary" onClick={handleViewToggle}>
+            <Button
+              sx={{ width: '200px', mr: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={handleViewToggle}
+              startIcon={<FontAwesomeIcon icon={faPlus} />}
+            >
               Create view based on current state
             </Button>
-            <Button sx={{ width: '200px', mr: 2 }} variant="contained" color="primary" onClick={handleExportToggle}>
+            <Button
+              sx={{ width: '200px', mr: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={handleExportToggle}
+              startIcon={<FontAwesomeIcon icon={faDownload} />}
+            >
               Export Views
             </Button>
-            <Button sx={{ width: '200px' }} variant="contained" color="primary" onClick={handleImportToggle}>
+            <Button
+              sx={{ width: '200px' }}
+              variant="contained"
+              color="primary"
+              onClick={handleImportToggle}
+              startIcon={<FontAwesomeIcon icon={faUpload} />}
+            >
               Import Views
             </Button>
           </Box>
