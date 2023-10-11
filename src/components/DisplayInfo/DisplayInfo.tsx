@@ -94,7 +94,7 @@ const DisplayInfo: React.FC = () => {
                 title="When this checkbox is unchecked, this modal will not appear when viewing this display again."
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Checkbox data-testid="tour-toggle" checked={showInfo} onChange={handleShowInfoChange} />
+                  <Checkbox checked={showInfo} onChange={handleShowInfoChange} />
                   <Typography>Do not show on next load</Typography>
                 </Box>
               </Tooltip>

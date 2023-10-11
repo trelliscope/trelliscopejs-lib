@@ -80,16 +80,6 @@ test('trelliscope help modal functions', async ({ page }) => {
   await page.getByTestId('how-to-tab').click();
   const howToClassList = await page.getByTestId('how-to-tab').evaluate((el) => el.className);
   await expect(howToClassList).toContain('Mui-selected');
-  await page.getByTestId('tour-toggle').click();
-  const tourToggleLocalStorage = await page.evaluate(() => {
-    return localStorage.getItem('trelliscope_tour');
-  });
-  await expect(tourToggleLocalStorage).toBe('skipped');
-  await page.getByTestId('tour-toggle').click();
-  const tourToggleLocalStorageAfterUnChecked = await page.evaluate(() => {
-    return localStorage.getItem('trelliscope_tour');
-  });
-  await expect(tourToggleLocalStorageAfterUnChecked).toBeNull();
 
   await page.getByTestId('help-button-close').click();
   await expect(page.getByTestId('help-modal')).not.toBeVisible();

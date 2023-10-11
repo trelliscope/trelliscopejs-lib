@@ -111,8 +111,7 @@ export const TOUR_STEPS = [
   },
   {
     target: '#help-control',
-    content:
-      'You can see a general overview of the application here and how to use it. You can also re-enable this tour if needed.',
+    content: 'You can see a general overview of the application here and how to use it.',
     disableBeacon: true,
   },
   {
