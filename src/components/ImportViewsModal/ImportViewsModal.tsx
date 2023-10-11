@@ -61,7 +61,6 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
       };
 
       reader.onerror = (event) => {
-        // Add this to handle errors
         setIsLoading(false);
         enqueueSnackbar('Error reading file', {
           variant: 'error',
