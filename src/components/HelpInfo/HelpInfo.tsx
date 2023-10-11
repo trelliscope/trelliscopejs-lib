@@ -41,25 +41,6 @@ const HelpInfo: React.FC = () => {
   useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
-  const tour = localStorage.getItem('trelliscope_tour');
-  const [tourEnabled, setTourEnabled] = useState(tour === 'skipped');
-
-  useEffect(() => {
-    if (tour === 'skipped') {
-      setTourEnabled(true);
-    }
-  }, [tour]);
-
-  const handleTourEnabled = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
-    if (value) {
-      localStorage.setItem('trelliscope_tour', 'skipped');
-      setTourEnabled(true);
-    } else {
-      localStorage.removeItem('trelliscope_tour');
-      setTourEnabled(false);
-    }
-  };
-
   return (
     <div className={styles.helpInfoIcon}>
       <IconButton data-testid="help-button" id="help-control" color="inherit" size="small" onClick={handleToggle}>
@@ -87,12 +68,6 @@ const HelpInfo: React.FC = () => {
               </a>
             </div>
           </Box>
-          <Tooltip arrow title="When this checkbox is unchecked, the new user tour will launch upon page refresh.">
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Checkbox data-testid="tour-toggle" checked={tourEnabled} onChange={handleTourEnabled} />
-              <Typography>Tour Skipped / Disabled</Typography>
-            </Box>
-          </Tooltip>
         </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
