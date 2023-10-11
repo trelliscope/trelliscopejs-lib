@@ -22,6 +22,8 @@ import AddViewModal from '../AddViewModal/AddViewModal';
 import { useGetAllLocalViews, getLocalStorageKey } from '../../inputUtils';
 import styles from './Views.module.scss';
 import { filterViewSelector } from '../../selectors';
+import ExportViewsModal from '../ExportViewsModal';
+import ImportViewsModal from '../ImportViewsModal';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ const Views: React.FC = () => {
   const views = [...viewsDisplay];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openView, setOpenView] = useState(false);
+  const [openExport, setOpenExport] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
   const allLocalViews = useGetAllLocalViews() as IView[];
   const [localViews, setLocalViews] = useState(allLocalViews);
 
@@ -105,7 +109,7 @@ const Views: React.FC = () => {
   };
   useEffect(() => {
     checkIfActiveView();
-  }, [viewsDisplay, localViews, filters, sorts, labels, layout]);
+  }, [viewsDisplay, localViews, filters, sorts, labels, layout, allLocalViews?.length]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -159,6 +163,14 @@ const Views: React.FC = () => {
 
   const handleViewToggle = () => {
     setOpenView(!openView);
+  };
+
+  const handleExportToggle = () => {
+    setOpenExport(!openExport);
+  };
+
+  const handleImportToggle = () => {
+    setOpenImport(!openImport);
   };
 
   return (
@@ -236,11 +248,19 @@ const Views: React.FC = () => {
             </div>
           ))}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
-            <Button variant="contained" color="primary" onClick={handleViewToggle}>
+            <Button sx={{ width: '200px', mr: 2 }} variant="contained" color="primary" onClick={handleViewToggle}>
               Create view based on current state
+            </Button>
+            <Button sx={{ width: '200px', mr: 2 }} variant="contained" color="primary" onClick={handleExportToggle}>
+              Export Views
+            </Button>
+            <Button sx={{ width: '200px' }} variant="contained" color="primary" onClick={handleImportToggle}>
+              Import Views
             </Button>
           </Box>
           <AddViewModal isOpen={openView} handleViewToggle={handleViewToggle} setLocalViews={setLocalViews} />
+          <ExportViewsModal isOpen={openExport} handleExportToggle={handleExportToggle} />
+          <ImportViewsModal isOpen={openImport} handleImportToggle={handleImportToggle} />
         </Menu>
       </div>
     </div>

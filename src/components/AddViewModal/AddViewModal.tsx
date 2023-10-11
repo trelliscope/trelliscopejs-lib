@@ -67,7 +67,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
   const handleSaveView = () => {
     const viewExists = views.some((view) => view.name === viewForm?.name);
     if (viewExists) {
-      enqueueSnackbar('Custom view name already exists!', {
+      enqueueSnackbar(`Custom view name '${viewForm?.name}' already exists!`, {
         variant: 'error',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
         autoHideDuration: 3000,
@@ -98,7 +98,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
     const newViews = [...views, { name: viewForm?.name }];
     setLocalViews(newViews);
     handleViewToggle();
-    enqueueSnackbar('View saved!', {
+    enqueueSnackbar(`View ${viewForm?.name} saved!`, {
       variant: 'success',
       anchorOrigin: { vertical: 'top', horizontal: 'right' },
       autoHideDuration: 3000,
@@ -116,8 +116,12 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             autoFocus
             margin="dense"
             label="View Name"
+            onKeyDown={(e) => {
+              if (e.key !== 'Escape') {
+                e.stopPropagation();
+              }
+            }}
             fullWidth
-            onKeyDown={(e) => e.stopPropagation()}
             onChange={handleFormChange}
           />
           <TextField
@@ -126,7 +130,11 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             margin="dense"
             label="View Description"
             fullWidth
-            onKeyDown={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key !== 'Escape') {
+                e.stopPropagation();
+              }
+            }}
             onChange={handleFormChange}
           />
           <Typography sx={{ mt: 3 }} variant="h6">

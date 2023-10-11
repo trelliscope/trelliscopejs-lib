@@ -109,9 +109,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
     const csvString = [cols.join(','), ...rows.map((d) => d.join(','))].join('\n');
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const downloadLink = document.createElement('a');
-    downloadLink.download = `${displayInfo.name}_${fullName}_${email}_${jobTitle}_${
-      new Date().toISOString().split('T')[0]
-    }.csv`;
+    downloadLink.download = `${displayInfo.name}_export_inputs_${new Date().toISOString().split('T')[0]}.csv`;
     downloadLink.href = window.URL.createObjectURL(csvFile);
     downloadLink.click();
     setCsvDownloaded(true);
