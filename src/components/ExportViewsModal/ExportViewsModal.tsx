@@ -36,7 +36,7 @@ const ExportViewsModal: React.FC<ExportViewsModalProps> = ({ isOpen, handleExpor
   return (
     <div className={styles.exportViewsModal}>
       <Dialog open={isOpen} onClose={handleExportToggle}>
-        <DialogTitle>Add a new view</DialogTitle>
+        <DialogTitle>Export Views</DialogTitle>
         <DialogContent>
           <DialogContentText>Add a file name and download a json file of your views for this display.</DialogContentText>
           <Box sx={{ mt: 2 }}>
