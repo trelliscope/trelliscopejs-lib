@@ -46,6 +46,8 @@
 
         &Icon {
           position: fixed;
+          cursor: pointer;
+          z-index: 1200;
           color: #000;
           left: 386px;
           top: 63px;

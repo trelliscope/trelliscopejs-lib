@@ -31,75 +31,79 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
   const activeFilters = useSelector(selectFilterState);
 
   return (
-    <div className={styles.contentHeader}>
-      <div className={styles.contentHeaderControls}>
-        <div className={styles.contentHeaderControlsLeft}>
-          <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
-            <Button
-              id="filter-drawer-button"
-              onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
-              variant="text"
-              sx={{
-                color: '#000',
-                textTransform: 'unset',
-                fontSize: '15px',
-                borderRadius: 0,
-                minWidth: '90px',
-              }}
-              startIcon={
-                layout.sidebarActive ? (
-                  <FontAwesomeIcon size="sm" className={styles.contentHeaderControlsItemToggleIcon} icon={faChevronLeft} />
-                ) : (
-                  <FontAwesomeIcon icon={faChevronRight} />
-                )
-              }
-            >
-              Filters
-              {activeFilters.length > 0 && (
-                <span className={styles.contentHeaderControlsItemToggleBadge}>
-                  <FontAwesomeIcon icon={faCircle} />
-                  <span
-                    className={styles.contentHeaderControlsItemToggleBadgeNum}
-                    style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-1px' }}
-                  >
-                    {activeFilters.length}
+    <>
+      {layout.sidebarActive && (
+        <FontAwesomeIcon
+          onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
+          size="sm"
+          className={styles.contentHeaderControlsItemToggleIcon}
+          icon={faChevronLeft}
+        />
+      )}
+      <div className={styles.contentHeader}>
+        <div className={styles.contentHeaderControls}>
+          <div className={styles.contentHeaderControlsLeft}>
+            <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
+              <Button
+                id="filter-drawer-button"
+                onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
+                variant="text"
+                sx={{
+                  color: '#000',
+                  textTransform: 'unset',
+                  fontSize: '15px',
+                  borderRadius: 0,
+                  minWidth: '90px',
+                }}
+                startIcon={!layout.sidebarActive && <FontAwesomeIcon icon={faChevronRight} />}
+              >
+                Filters
+                {activeFilters.length > 0 && (
+                  <span className={styles.contentHeaderControlsItemToggleBadge}>
+                    <FontAwesomeIcon icon={faCircle} />
+                    <span
+                      className={styles.contentHeaderControlsItemToggleBadgeNum}
+                      style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-1px' }}
+                    >
+                      {activeFilters.length}
+                    </span>
                   </span>
-                </span>
-              )}
-            </Button>
-          </div>
-          <div className={styles.contentHeaderControlsItem}>
-            <Sort />
-          </div>
-          {tableRef?.current && rerender && layout?.viewtype === 'table' && (
-            <div id="column-control" className={styles.contentHeaderControlsItem}>
-              <span>Columns</span>
-              {/* eslint-disable-next-line react/jsx-pascal-case */}
-              <MRT_ShowHideColumnsButton table={tableRef?.current} />
+                )}
+              </Button>
             </div>
-          )}
-          {layout?.viewtype !== 'table' && (
-            <>
+            <div className={styles.contentHeaderControlsItem}>
+              <Sort />
+            </div>
+            {tableRef?.current && rerender && layout?.viewtype === 'table' && (
               <div id="column-control" className={styles.contentHeaderControlsItem}>
-                <ColumnSelector />
+                <span>Columns</span>
+                {/* eslint-disable-next-line react/jsx-pascal-case */}
+                <MRT_ShowHideColumnsButton table={tableRef?.current} />
               </div>
-              <div id="label-control" className={styles.contentHeaderControlsItem}>
-                <Labels />
+            )}
+            {layout?.viewtype !== 'table' && (
+              <>
+                <div id="column-control" className={styles.contentHeaderControlsItem}>
+                  <ColumnSelector />
+                </div>
+                <div id="label-control" className={styles.contentHeaderControlsItem}>
+                  <Labels />
+                </div>
+              </>
+            )}
+            {data && (
+              <div id="view-control" className={styles.contentHeaderControlsItem}>
+                <Views />
               </div>
-            </>
-          )}
-          {data && (
-            <div id="view-control" className={styles.contentHeaderControlsItem}>
-              <Views />
+            )}
+            <div id="layout-control" className={styles.contentHeaderControlsItem}>
+              <LayoutSelector />
             </div>
-          )}
-          <div id="layout-control" className={styles.contentHeaderControlsItem}>
-            <LayoutSelector />
           </div>
+          <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
         </div>
-        <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
       </div>
-    </div>
+    </>
   );
 };
 
