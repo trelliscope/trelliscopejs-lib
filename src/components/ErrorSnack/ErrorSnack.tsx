@@ -7,21 +7,21 @@ interface ErrorSnackInterface {
   handleClose: () => void;
 }
 
-const ErrorSnack: React.FC<ErrorSnackInterface> = ({errorMsg, handleClose}) => (
-    <Snackbar
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      open={errorMsg !== ''}
-      onClose={handleClose}
-      message={errorMsg}
-      action={[
-        <Button key="undo" color="secondary" size="small" onClick={handleClose}>
-          Close
-        </Button>,
-      ]}
-    />
-  );
+const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, handleClose }) => (
+  <Snackbar
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    open={errorMsg !== ''}
+    onClose={handleClose}
+    message={errorMsg}
+    action={[
+      <Button key="undo" size="small" onClick={handleClose}>
+        Close
+      </Button>,
+    ]}
+  />
+);
 
 export default ErrorSnack;

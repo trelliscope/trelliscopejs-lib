@@ -449,6 +449,7 @@ interface IConfig {
   name: string;
   datatype: AppDataType;
   id: string;
+  theme: { [key: string]: string };
 }
 
 interface Datum {

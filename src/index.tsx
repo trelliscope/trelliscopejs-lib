@@ -1,7 +1,6 @@
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
@@ -10,9 +9,6 @@ import '@fontsource/source-code-pro/300.css';
 import '@fontsource/source-code-pro/600.css';
 
 import 'react-virtualized/styles.css'; // only needs to be imported once
-
-import blue from '@mui/material/colors/blue';
-import lightBlue from '@mui/material/colors/lightBlue';
 
 import store from './store';
 
@@ -140,50 +136,32 @@ const trelliscopeApp = (
     }
   });
 
-  const themeV1 = createTheme({
-    palette: {
-      primary: { light: blue.A100, main: blue.A200 }, // '#4285f4', // lightBlue500,
-      secondary: { light: lightBlue[200], main: lightBlue[700] },
-      // accent1Color: redA200
-    },
-    typography: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeightLight: 200,
-      fontWeightRegular: 300,
-      fontWeightMedium: 400,
-    },
-  });
-
   root.render(
-    <ThemeProvider theme={themeV1}>
-      <Provider store={store}>
-        <App
-          client={crossFilterClient as unknown as IDataClient}
-          config={config}
-          id={id}
-          singlePageApp={singlePageApp}
-          options={options}
-          appDims={appDims}
-        />
-      </Provider>
-    </ThemeProvider>,
+    <Provider store={store}>
+      <App
+        client={crossFilterClient as unknown as IDataClient}
+        config={config}
+        id={id}
+        singlePageApp={singlePageApp}
+        options={options}
+        appDims={appDims}
+      />
+    </Provider>,
   );
 
   if (module.hot) {
     module.hot.accept('./App', () => {
       root.render(
-        <ThemeProvider theme={themeV1}>
-          <Provider store={store}>
-            <App
-              client={crossFilterClient as unknown as IDataClient}
-              config={config}
-              id={id}
-              singlePageApp={singlePageApp}
-              options={options}
-              appDims={appDims}
-            />
-          </Provider>
-        </ThemeProvider>,
+        <Provider store={store}>
+          <App
+            client={crossFilterClient as unknown as IDataClient}
+            config={config}
+            id={id}
+            singlePageApp={singlePageApp}
+            options={options}
+            appDims={appDims}
+          />
+        </Provider>,
       );
     });
   }

@@ -16,6 +16,7 @@ import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './DisplaySelect.module.scss';
 import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
 import { filterViewSelector } from '../../selectors';
+import { useConfig } from '../../slices/configAPI';
 
 const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const DisplaySelect: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const STORED_NAME = 'trelliscope_display_switch_state';
   const { setStoredValue } = useStoredInputValue(STORED_NAME, '');
+  const { data: configObj } = useConfig();
 
   const filterViews = useSelector(filterViewSelector);
   const filters = useSelector(selectFilterState);
@@ -127,7 +129,12 @@ const DisplaySelect: React.FC = () => {
         onClick={handleOpen}
         size="large"
       >
-        <FontAwesomeIcon className={styles.displaySelectIcon} icon={isOpen ? faChevronUp : faChevronDown} size="xs" />
+        <FontAwesomeIcon
+          color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+          className={styles.displaySelectIcon}
+          icon={isOpen ? faChevronUp : faChevronDown}
+          size="xs"
+        />
       </IconButton>
       <Menu
         id="display-select-menu"

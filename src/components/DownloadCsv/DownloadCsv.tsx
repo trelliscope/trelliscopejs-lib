@@ -8,6 +8,7 @@ import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './DownloadCsv.module.scss';
 import { META_TYPE_FACTOR, MISSING_TEXT } from '../../constants';
 import { getLabelFromFactor } from '../../utils';
+import { useConfig } from '../../slices/configAPI';
 
 interface DownloadCsvProps {
   displayInfo: IDisplay;
@@ -30,6 +31,8 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
   const includedMetaVars = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
   const data: Data = {};
   const cols: string[] = [];
+
+  const { data: configObj } = useConfig();
 
   // This loop basically goes over the local storage keys and checks if they are from the current display
   // If they are we split the key by _:_ and get the panelKey and the column name. We then set the data object to
@@ -137,9 +140,14 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
       <div className={styles.downloadCsvWrapperCenter}>
         <Button
           variant="contained"
-          color="primary"
+          sx={{ color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText }}
           className={styles.downloadCsvButton}
-          endIcon={<FontAwesomeIcon icon={faDownload} />}
+          endIcon={
+            <FontAwesomeIcon
+              color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+              icon={faDownload}
+            />
+          }
           onClick={downloadCsv}
           data-testid="download-csv-button"
         >

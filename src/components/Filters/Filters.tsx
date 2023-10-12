@@ -51,9 +51,6 @@ const Filters: React.FC = () => {
     if (activeFilters.length === 0 && layout?.sidebarActive) {
       setVariableFilterSelectorIsOpen(true);
       setAnchorFilterEl(anchorElementForVariableSelector.current);
-    } else {
-      setVariableFilterSelectorIsOpen(false);
-      setAnchorFilterEl(null);
     }
   }, [activeFilters, layout?.sidebarActive]);
 

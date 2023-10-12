@@ -7,6 +7,7 @@ import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
 import ConfirmationModal from '../ConfirmationModal';
 import styles from './ExportInputDialog.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
 interface ExportInputDialogProps {
   displayInfo: IDisplay;
@@ -31,6 +32,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const { data: configObj } = useConfig();
 
   const hasEmail = !!displayInfo?.inputs?.feedbackInterface?.feedbackEmail || false;
 
@@ -83,7 +85,10 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
     <div>
       <Tooltip title="Export Inputs">
         <IconButton data-testid="export-button" aria-label="close" onClick={handleOpen}>
-          <FontAwesomeIcon icon={faFileArrowDown} />
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faFileArrowDown}
+          />
         </IconButton>
       </Tooltip>
       <Dialog

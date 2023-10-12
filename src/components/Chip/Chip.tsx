@@ -10,7 +10,9 @@ import {
   faGripVertical,
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
+import { Box, useTheme } from '@mui/material';
 import styles from './Chip.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
 interface ChipProps {
   label: string;
@@ -38,18 +40,27 @@ const Chip: React.FC<ChipProps> = ({
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: `${label}_chip` });
   const transformString = CSS.Transform.toString(transform) || '';
   const matchTranslate = transformString.match(/translate3d\((.*?), (.*?), (.*?)\)/);
+  const { data: configObj } = useConfig();
+
+  const theme = useTheme();
 
   const style = {
     transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
     zIndex: isDragging ? 1000 : undefined,
+    background: theme.palette.primary.main,
+    '&:hover': { background: theme.palette.primary.dark },
   };
 
   return (
-    <div
+    <Box
       className={classNames(styles.chipWrapper, { [styles.chipWrapperContained]: enforceMaxWidth })}
       ref={isDraggable ? setNodeRef : null}
-      style={isDraggable ? style : {}}
+      sx={
+        isDraggable
+          ? style
+          : { background: theme.palette.primary.main, '&:hover': { background: theme.palette.primary.dark } }
+      }
       {...attributes}
     >
       <span
@@ -62,17 +73,42 @@ const Chip: React.FC<ChipProps> = ({
           }
         }}
         className={styles.chipLabel}
+        style={{ color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText }}
       >
-        {icon.includes('alpha-asc') && <FontAwesomeIcon icon={faArrowDownAZ} />}
-        {icon.includes('alpha-desc') && <FontAwesomeIcon icon={faArrowDownZA} />}
-        {(icon.includes('numeric-asc') || icon.includes('amount-asc')) && <FontAwesomeIcon icon={faArrowDown19} />}
-        {(icon.includes('numeric-desc') || icon.includes('amount-desc')) && <FontAwesomeIcon icon={faArrowDown91} />}
+        {icon.includes('alpha-asc') && (
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faArrowDownAZ}
+          />
+        )}
+        {icon.includes('alpha-desc') && (
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faArrowDownZA}
+          />
+        )}
+        {(icon.includes('numeric-asc') || icon.includes('amount-asc')) && (
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faArrowDown19}
+          />
+        )}
+        {(icon.includes('numeric-desc') || icon.includes('amount-desc')) && (
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faArrowDown91}
+          />
+        )}
         {label}
         {text !== '' && <span className={styles.chipText}>{`(${text})`}</span>}
       </span>
       {isDraggable && (
         <span className={styles.chipDragIcon}>
-          <FontAwesomeIcon color="#fff" {...listeners} icon={faGripVertical} />
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            {...listeners}
+            icon={faGripVertical}
+          />
         </span>
       )}
       <svg
@@ -89,7 +125,7 @@ const Chip: React.FC<ChipProps> = ({
           }
         />
       </svg>
-    </div>
+    </Box>
   );
 };
 

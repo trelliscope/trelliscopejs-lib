@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip, useTheme, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHand } from '@fortawesome/free-solid-svg-icons';
 import Joyride, { ACTIONS, EVENTS } from 'react-joyride';
@@ -16,10 +16,15 @@ import HelpInfo from '../HelpInfo';
 import Share from '../Share';
 import { selectLayout } from '../../slices/layoutSlice';
 import { TOUR_STEPS } from '../../constants';
+import { useConfig } from '../../slices/configAPI';
 
 const Header: React.FC = () => {
   const { data: displayList = [] } = useDisplayList();
   const [hasInputs, setHasInputs] = useState(false);
+  const theme = useTheme();
+
+  const { data: configObj } = useConfig();
+
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const selectedDisplay = useSelectedDisplay();
   const { data: displayInfo } = useDisplayInfo();
@@ -76,10 +81,10 @@ const Header: React.FC = () => {
       className={styles.headerAppBar}
       position="absolute"
       sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        '&.MuiAppBar-root': { background: '#fefefe' },
+        zIndex: (mtheme) => mtheme.zIndex.drawer + 1,
+        '&.MuiAppBar-root': { background: configObj?.theme?.primary ? theme.palette.primary.main : '#fefefe' },
+        color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
       }}
-      color="default"
       elevation={0}
     >
       <Toolbar className={styles.headerToolbar} disableGutters>
@@ -98,13 +103,14 @@ const Header: React.FC = () => {
           }}
           styles={{
             options: {
-              primaryColor: '#4489FF',
+              primaryColor: theme.palette.primary.main || '#4489FF',
               zIndex: 9000,
             },
           }}
         />
         <div className={styles.header}>
           <div id="display-control" className={styles.headerDisplayInfo}>
+            {configObj?.theme.logo && <img src={configObj?.theme.logo} alt="logo" height="40px" />}
             <DisplayInfo />
             {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerDisplayInfoTitleContainer}>
@@ -132,7 +138,10 @@ const Header: React.FC = () => {
           <div className={styles.headerRight}>
             <Tooltip title="Launch Help Tour">
               <IconButton data-testid="tour-button" onClick={() => setTourIsOpen(true)}>
-                <FontAwesomeIcon icon={faHand} />
+                <FontAwesomeIcon
+                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                  icon={faHand}
+                />
               </IconButton>
             </Tooltip>
             <div id="share-control" className={styles.headerIconButton}>
@@ -147,13 +156,24 @@ const Header: React.FC = () => {
                 />
               </div>
             )}
-            <div data-testid="app-title" className={styles.headerTrelliscope}>
+            <Box
+              sx={{
+                background: theme.palette.primary.main,
+                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+              }}
+              data-testid="app-title"
+              className={styles.headerTrelliscope}
+            >
               Trelliscope
               <HelpInfo />
-              <div id="fullscreen-control" className={styles.headerTrelliscopeFullscreen}>
+              <Box
+                sx={{ background: theme.palette.primary.light }}
+                id="fullscreen-control"
+                className={styles.headerTrelliscopeFullscreen}
+              >
                 <FullscreenButton />
-              </div>
-            </div>
+              </Box>
+            </Box>
           </div>
         </div>
       </Toolbar>

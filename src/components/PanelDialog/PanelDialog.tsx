@@ -283,7 +283,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
       </div>
       <DialogActions>
-        <Button aria-label="display info close" color="secondary" onClick={handleClose}>
+        <Button aria-label="display info close" onClick={handleClose}>
           Close
         </Button>
       </DialogActions>

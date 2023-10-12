@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import styles from './VariableSelector.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
 interface VariableSelectorProps {
   isOpen: boolean;
@@ -38,6 +39,8 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   disablePortal,
 }) => {
   const [tagGroup, setTagGroup] = useState('__ALL__');
+
+  const { data: configObj } = useConfig();
 
   const handleTagChange = (event: SelectChangeEvent<string>) => {
     setTagGroup(event.target.value);
@@ -69,16 +72,27 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                             pr: 2,
                             pt: 2,
                             pb: 1,
-                            backgroundColor: '#42a5f5',
+                            backgroundColor: (theme) => theme.palette.primary.main,
                             zIndex: 2001,
                           }}
                         >
                           <FormControl variant="standard" size="small" fullWidth>
-                            <InputLabel sx={{ color: '#FFFFFF' }} id="demo-simple-select-label">
+                            <InputLabel
+                              sx={{
+                                color: configObj?.theme?.isLightTextOnDark
+                                  ? configObj?.theme?.lightText
+                                  : configObj?.theme?.darkText,
+                              }}
+                              id="demo-simple-select-label"
+                            >
                               Variable Type
                             </InputLabel>
                             <Select
-                              sx={{ color: '#FFFFFF' }}
+                              sx={{
+                                color: configObj?.theme?.isLightTextOnDark
+                                  ? configObj?.theme?.lightText
+                                  : configObj?.theme?.darkText,
+                              }}
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"
                               value={tagGroup}
