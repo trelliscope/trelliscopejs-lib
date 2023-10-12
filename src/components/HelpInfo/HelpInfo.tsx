@@ -23,11 +23,13 @@ import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
 import Credits from '../Credits';
 import styles from './HelpInfo.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
 const HelpInfo: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const [tabNumber, setTabNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const { data: configObj } = useConfig();
 
   const handleToggle = () => {
     setOpen(!open);
@@ -44,7 +46,11 @@ const HelpInfo: React.FC = () => {
   return (
     <div className={styles.helpInfoIcon}>
       <IconButton data-testid="help-button" id="help-control" color="inherit" size="small" onClick={handleToggle}>
-        <FontAwesomeIcon icon={faCircleQuestion} size="sm" />
+        <FontAwesomeIcon
+          color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+          icon={faCircleQuestion}
+          size="sm"
+        />
       </IconButton>
       <Dialog
         open={open}
@@ -80,7 +86,7 @@ const HelpInfo: React.FC = () => {
           {tabNumber === 2 && <Credits />}
         </DialogContent>
         <DialogActions>
-          <Button data-testid="help-button-close" color="secondary" onClick={handleToggle}>
+          <Button data-testid="help-button-close" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

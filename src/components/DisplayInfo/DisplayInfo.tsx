@@ -15,6 +15,7 @@ import { DataContext } from '../DataProvider';
 import styles from './DisplayInfo.module.scss';
 import { selectBasePath } from '../../selectors/app';
 import { snakeCase } from '../../utils';
+import { useConfig } from '../../slices/configAPI';
 
 const DisplayInfo: React.FC = () => {
   const { allData } = useContext(DataContext);
@@ -23,6 +24,7 @@ const DisplayInfo: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const [hasInputs, setHasInputs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { data: configObj } = useConfig();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -71,7 +73,11 @@ const DisplayInfo: React.FC = () => {
     <div>
       <IconButton data-testid="display-info-button" onClick={handleToggle}>
         <div className={styles.displayInfoIcon}>
-          <FontAwesomeIcon icon={faCircleInfo} size="sm" />
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faCircleInfo}
+            size="sm"
+          />
         </div>
       </IconButton>
       <Dialog
@@ -157,12 +163,7 @@ const DisplayInfo: React.FC = () => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button
-            data-testid="display-info-button-close"
-            aria-label="display info close"
-            color="secondary"
-            onClick={handleToggle}
-          >
+          <Button data-testid="display-info-button-close" aria-label="display info close" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

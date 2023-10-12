@@ -3,11 +3,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareNodes, faCopy } from '@fortawesome/free-solid-svg-icons';
 import styles from './Share.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
 const Share: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const url = window.location.href;
   const [copyText, setCopyText] = useState('Copy');
+  const { data: configObj } = useConfig();
 
   const handleShareModal = () => {
     setIsOpen(!isOpen);
@@ -25,7 +27,10 @@ const Share: React.FC = () => {
     <div className={styles.share}>
       <Tooltip title="Share">
         <IconButton data-testid="share-button" onClick={handleShareModal}>
-          <FontAwesomeIcon icon={faShareNodes} />
+          <FontAwesomeIcon
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faShareNodes}
+          />
         </IconButton>
       </Tooltip>
       <Dialog
@@ -65,7 +70,7 @@ const Share: React.FC = () => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button data-testid="share-close" aria-label="share close" color="secondary" onClick={handleShareModal}>
+          <Button data-testid="share-close" aria-label="share close" onClick={handleShareModal}>
             Close
           </Button>
         </DialogActions>

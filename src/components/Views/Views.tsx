@@ -27,6 +27,7 @@ import styles from './Views.module.scss';
 import { filterViewSelector } from '../../selectors';
 import ExportViewsModal from '../ExportViewsModal';
 import ImportViewsModal from '../ImportViewsModal';
+import { useConfig } from '../../slices/configAPI';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const Views: React.FC = () => {
   const [openImport, setOpenImport] = useState(false);
   const allLocalViews = useGetAllLocalViews() as IView[];
   const [localViews, setLocalViews] = useState(allLocalViews);
+  const { data: configObj } = useConfig();
 
   const stateLayout = displayInfo?.state?.layout as ILayoutState;
   const stateLabels = displayInfo?.state?.labels?.varnames;
@@ -252,29 +254,52 @@ const Views: React.FC = () => {
           ))}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
             <Button
-              sx={{ width: '200px', mr: 2 }}
+              sx={{
+                width: '200px',
+                mr: 2,
+                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+              }}
               variant="contained"
-              color="primary"
               onClick={handleViewToggle}
-              startIcon={<FontAwesomeIcon icon={faPlus} />}
+              startIcon={
+                <FontAwesomeIcon
+                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                  icon={faPlus}
+                />
+              }
             >
               Create view based on current state
             </Button>
             <Button
-              sx={{ width: '200px', mr: 2 }}
+              sx={{
+                width: '200px',
+                mr: 2,
+                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+              }}
               variant="contained"
-              color="primary"
               onClick={handleExportToggle}
-              startIcon={<FontAwesomeIcon icon={faDownload} />}
+              startIcon={
+                <FontAwesomeIcon
+                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                  icon={faDownload}
+                />
+              }
             >
               Export Views
             </Button>
             <Button
-              sx={{ width: '200px' }}
+              sx={{
+                width: '200px',
+                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+              }}
               variant="contained"
-              color="primary"
               onClick={handleImportToggle}
-              startIcon={<FontAwesomeIcon icon={faUpload} />}
+              startIcon={
+                <FontAwesomeIcon
+                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                  icon={faUpload}
+                />
+              }
             >
               Import Views
             </Button>

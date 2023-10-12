@@ -8,12 +8,14 @@ import { fullscreenSelector } from '../../selectors';
 import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
 import { origHeightSelector, origWidthSelector } from '../../selectors/ui';
+import { useConfig } from '../../slices/configAPI';
 // import styles from './FullscreenButton.module.scss';
 
 const FullscreenButton: React.FC = () => {
   const dispatch = useDispatch();
   const fullscreen = useSelector(fullscreenSelector);
   // const singlePageApp = useSelector(singlePageAppSelector);
+  const { data: configObj } = useConfig();
   const ww = useSelector(origWidthSelector);
   const hh = useSelector(origHeightSelector);
   const originalDims = useMemo(() => ({ width: ww, height: hh }), [ww, hh]);
@@ -85,7 +87,19 @@ const FullscreenButton: React.FC = () => {
   return (
     <Tooltip title="Toggle Fullscreen">
       <IconButton data-testid="fullscreen-button" onClick={toggleFullScreen} color="inherit">
-        {!fullscreen ? <FontAwesomeIcon icon={faExpand} size="sm" /> : <FontAwesomeIcon icon={faCompress} size="sm" />}
+        {!fullscreen ? (
+          <FontAwesomeIcon
+            color={!configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faExpand}
+            size="sm"
+          />
+        ) : (
+          <FontAwesomeIcon
+            color={!configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            icon={faCompress}
+            size="sm"
+          />
+        )}
       </IconButton>
     </Tooltip>
   );
