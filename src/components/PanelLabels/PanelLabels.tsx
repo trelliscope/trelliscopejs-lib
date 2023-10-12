@@ -59,10 +59,6 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
 
   const panelKey = panelKeyArr?.join('_');
 
-  //  are we okay with how the multiselect drop down moves now since its tied to the pencil and the drawer kinda shifts?
-  // for the sorting and the inputs, getting them in is doable, sorting might get a little odd since the inputs currently
-  // have a different state structure and sorting goes into crossfilter. This would probably be its own task that will take some time.
-
   const getMetaLevels = (varname: string) => {
     const foundMeta = displayMetas.find((meta) => meta.varname === varname);
     return foundMeta?.levels;

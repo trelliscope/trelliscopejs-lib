@@ -20,7 +20,7 @@ import { setLabels, selectLabels } from '../../slices/labelsSlice';
 import { selectFilterState, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
 import { setLayout, LayoutAction, selectLayout } from '../../slices/layoutSlice';
 import { setSort, selectSort } from '../../slices/sortSlice';
-import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import { useDisplayInfo, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import AddViewModal from '../AddViewModal/AddViewModal';
 import { useGetAllLocalViews, getLocalStorageKey } from '../../inputUtils';
 import styles from './Views.module.scss';
@@ -28,6 +28,14 @@ import { filterViewSelector } from '../../selectors';
 import ExportViewsModal from '../ExportViewsModal';
 import ImportViewsModal from '../ImportViewsModal';
 import { useConfig } from '../../slices/configAPI';
+import {
+  FILTER_TYPE_CATEGORY,
+  FILTER_TYPE_DATERANGE,
+  FILTER_TYPE_DATETIMERANGE,
+  FILTER_TYPE_NUMBERRANGE,
+  META_TYPE_FACTOR,
+} from '../../constants';
+import { getLabelFromFactor } from '../../utils';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,6 +49,8 @@ const Views: React.FC = () => {
   const allLocalViews = useGetAllLocalViews() as IView[];
   const [localViews, setLocalViews] = useState(allLocalViews);
   const { data: configObj } = useConfig();
+
+  const displayMetas = useDisplayMetasWithInputs();
 
   const stateLayout = displayInfo?.state?.layout as ILayoutState;
   const stateLabels = displayInfo?.state?.labels?.varnames;
@@ -178,6 +188,70 @@ const Views: React.FC = () => {
     setOpenImport(!openImport);
   };
 
+  const getMetaLevels = (varname: string) => {
+    const foundMeta = displayMetas.find((meta) => meta.varname === varname);
+    return foundMeta?.levels;
+  };
+
+  const generateDescriptionItalics = (view: IView) => {
+    const { state } = view;
+
+    const { filter: localFilter, sort: localSort, layout: localLayout, labels: localLabels } = state || {};
+    if (!localFilter && !localSort && !localLayout && !localLabels) return '';
+    const text = ['Contains '];
+
+    if (localFilter && localFilter?.length !== 0) {
+      localFilter.forEach((filter) => {
+        text.push('Filters for ');
+        if (filter.filtertype === FILTER_TYPE_CATEGORY) {
+          const { varname, values, metatype } = filter as ICategoryFilterState;
+          if (metatype === META_TYPE_FACTOR) {
+            text.push(`category ${varname} with values: `);
+            values.forEach((value) => {
+              const label = getLabelFromFactor(value as unknown as number, getMetaLevels(varname) as string[]);
+              text.push(`${label}, `);
+            });
+          } else {
+            text.push(`category ${varname} with values: ${values}`);
+          }
+        }
+        if (
+          filter.filtertype === FILTER_TYPE_NUMBERRANGE ||
+          filter.filtertype === FILTER_TYPE_DATERANGE ||
+          filter.filtertype === FILTER_TYPE_DATETIMERANGE
+        ) {
+          const { varname, min, max } = filter as INumberRangeFilterState;
+          text.push(`${varname} Range with min: ${min} and max: ${max}`);
+        }
+      });
+    }
+
+    if (localSort && localSort?.length !== 0) {
+      localSort.forEach((sort) => {
+        const { varname, dir } = sort;
+        text.push(` Sorts for ${varname} in ${dir} order`);
+      });
+    }
+
+    if (localLayout && Object.keys(localLayout).length > 0) {
+      text.push(' layout');
+      const { ncol, page, panel, showLabels, sidebarActive, viewtype } = localLayout;
+      if (ncol) text.push(` ${ncol} columns`);
+      if (page) text.push(` on page ${page}`);
+      if (panel) text.push(` ${panel} as selected panel`);
+      if (showLabels) text.push(` with labels visible`);
+      if (sidebarActive) text.push(` with sidebar open`);
+      if (!sidebarActive) text.push(` with sidebar closed`);
+      if (viewtype) text.push(` with viewtype ${viewtype}`);
+    }
+
+    if (localLabels && localLabels?.varnames?.length !== 0) {
+      text.push(` with the following labels ${localLabels?.varnames}`);
+    }
+
+    return text;
+  };
+
   return (
     <div className={styles.views}>
       <div>
@@ -193,65 +267,73 @@ const Views: React.FC = () => {
           Views
         </Button>
         <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ sx: { pt: 0 } }}>
-          {combinedViews?.map((value) => (
-            <div key={value.name}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <MenuItem
-                  selected={activeViews.includes(value.name)}
-                  sx={{ width: '100%', justifyContent: 'space-between' }}
-                  onClick={() => handleViewChange(value.state, value.name)}
-                >
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Tooltip arrow title={value.name}>
-                      <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
-                        {value.name}
-                      </Typography>
-                    </Tooltip>
-                    <Tooltip arrow title={value.description}>
-                      <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
-                        {value.description}
-                      </Typography>
-                    </Tooltip>
-                  </Box>
-                  <Box sx={{ '& > *': { p: 1 }, display: 'flex', alignItems: 'center' }}>
-                    {value?.state?.filter && (
-                      <Tooltip arrow title="View has filters">
-                        <FontAwesomeIcon color="gray" icon={faFilter} />
+          {combinedViews?.map((value) => {
+            const italics = generateDescriptionItalics(value);
+            return (
+              <div key={value.name}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <MenuItem
+                    selected={activeViews.includes(value.name)}
+                    sx={{ width: '100%', justifyContent: 'space-between' }}
+                    onClick={() => handleViewChange(value.state, value.name)}
+                  >
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                      <Tooltip arrow title={value.name}>
+                        <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
+                          {value.name}
+                        </Typography>
                       </Tooltip>
-                    )}
-                    {value?.state?.sort && (
-                      <Tooltip arrow title="View has sorts">
-                        <FontAwesomeIcon color="gray" icon={faSort} />
+                      <Tooltip arrow title={value.description}>
+                        <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
+                          {value.description}
+                        </Typography>
                       </Tooltip>
-                    )}
-                    {value?.state?.layout && (
-                      <Tooltip arrow title="View has layout">
-                        <FontAwesomeIcon color="gray" icon={faTableColumns} />
+                      <Tooltip arrow title={italics}>
+                        <Typography noWrap style={{ maxWidth: '400px', fontStyle: 'italic', fontSize: '12px' }}>
+                          {italics}
+                        </Typography>
                       </Tooltip>
-                    )}
-                    {value?.state?.labels && (
-                      <Tooltip arrow title="View has labels">
-                        <FontAwesomeIcon color="gray" icon={faTag} />
-                      </Tooltip>
-                    )}
-                  </Box>
-                </MenuItem>
-                {value.isLocal && (
-                  <Box sx={{ borderLeft: '1px solid #E0E0E0', display: 'flex', alignItems: 'center' }}>
-                    <IconButton
-                      sx={{ mr: '5px' }}
-                      aria-label="close"
-                      size="small"
-                      onClick={() => handleDeleteView(value.name)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </IconButton>
-                  </Box>
-                )}
-              </Box>
-              <Divider />
-            </div>
-          ))}
+                    </Box>
+                    <Box sx={{ '& > *': { p: 1 }, display: 'flex', alignItems: 'center' }}>
+                      {value?.state?.filter && (
+                        <Tooltip arrow title="View has filters">
+                          <FontAwesomeIcon color="gray" icon={faFilter} />
+                        </Tooltip>
+                      )}
+                      {value?.state?.sort && (
+                        <Tooltip arrow title="View has sorts">
+                          <FontAwesomeIcon color="gray" icon={faSort} />
+                        </Tooltip>
+                      )}
+                      {value?.state?.layout && (
+                        <Tooltip arrow title="View has layout">
+                          <FontAwesomeIcon color="gray" icon={faTableColumns} />
+                        </Tooltip>
+                      )}
+                      {value?.state?.labels && (
+                        <Tooltip arrow title="View has labels">
+                          <FontAwesomeIcon color="gray" icon={faTag} />
+                        </Tooltip>
+                      )}
+                    </Box>
+                  </MenuItem>
+                  {value.isLocal && (
+                    <Box sx={{ borderLeft: '1px solid #E0E0E0', display: 'flex', alignItems: 'center' }}>
+                      <IconButton
+                        sx={{ mr: '5px' }}
+                        aria-label="close"
+                        size="small"
+                        onClick={() => handleDeleteView(value.name)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </IconButton>
+                    </Box>
+                  )}
+                </Box>
+                <Divider />
+              </div>
+            );
+          })}
           <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
             <Button
               sx={{
