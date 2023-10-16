@@ -73,7 +73,9 @@ const Chip: React.FC<ChipProps> = ({
           }
         }}
         className={styles.chipLabel}
-        style={{ color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText }}
+        style={{
+          color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText || '#fff',
+        }}
       >
         {icon.includes('alpha-asc') && (
           <FontAwesomeIcon
@@ -105,7 +107,7 @@ const Chip: React.FC<ChipProps> = ({
       {isDraggable && (
         <span className={styles.chipDragIcon}>
           <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText || '#fff'}
             {...listeners}
             icon={faGripVertical}
           />

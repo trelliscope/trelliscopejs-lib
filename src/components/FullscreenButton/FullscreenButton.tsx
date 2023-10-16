@@ -89,13 +89,13 @@ const FullscreenButton: React.FC = () => {
       <IconButton data-testid="fullscreen-button" onClick={toggleFullScreen} color="inherit">
         {!fullscreen ? (
           <FontAwesomeIcon
-            color={!configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
             icon={faExpand}
             size="sm"
           />
         ) : (
           <FontAwesomeIcon
-            color={!configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
             icon={faCompress}
             size="sm"
           />

@@ -74,7 +74,13 @@ const DisplayInfo: React.FC = () => {
       <IconButton data-testid="display-info-button" onClick={handleToggle}>
         <div className={styles.displayInfoIcon}>
           <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={
+              configObj?.theme?.header
+                ? configObj?.theme?.header?.text
+                : configObj?.theme?.isLightTextOnDark
+                ? configObj?.theme?.lightText
+                : configObj?.theme?.darkText
+            }
             icon={faCircleInfo}
             size="sm"
           />

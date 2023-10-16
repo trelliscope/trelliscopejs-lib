@@ -130,7 +130,13 @@ const DisplaySelect: React.FC = () => {
         size="large"
       >
         <FontAwesomeIcon
-          color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+          color={
+            configObj?.theme?.header
+              ? configObj.theme?.header?.text
+              : configObj?.theme?.isLightTextOnDark
+              ? configObj?.theme?.lightText
+              : configObj?.theme?.darkText
+          }
           className={styles.displaySelectIcon}
           icon={isOpen ? faChevronUp : faChevronDown}
           size="xs"
