@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, ButtonGroup, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
@@ -15,6 +15,7 @@ import {
 } from '../../slices/filterSlice';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
+import { useConfig } from '../../slices/configAPI';
 
 // interface FiltersProps {}
 
@@ -29,6 +30,7 @@ const Filters: React.FC = () => {
   const [confirmationRemoveModalOpen, setConfirmationRemoveModalOpen] = useState(false);
   const [confirmationClearModalOpen, setConfirmationClearModalOpen] = useState(false);
   const [valueToRemove, setValueToRemove] = useState<{ varname: string }[]>([]);
+  const { data: configObj } = useConfig();
 
   const metaGroups = useMetaGroups(unfilterableMetas);
 
@@ -160,63 +162,87 @@ const Filters: React.FC = () => {
           handleConfirm={handleClear}
           dialogText="This will clear all of the active filters."
         />
-        <ClickAwayListener
-          mouseEvent="onMouseUp"
-          onClickAway={() => {
-            setVariableFilterSelectorIsOpen(false);
-            setAnchorFilterEl(null);
-          }}
-        >
-          <div>
+        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '128.5px' } }} variant="outlined">
+          <ClickAwayListener
+            mouseEvent="onMouseUp"
+            onClickAway={() => {
+              setVariableFilterSelectorIsOpen(false);
+              setAnchorFilterEl(null);
+            }}
+          >
+            <Box>
+              <Button
+                sx={{
+                  color: '#000000',
+                  textTransform: 'unset',
+                  fontSize: '15px',
+                  borderRadius: 0,
+                  borderRight: 'none',
+                  '&:hover': {
+                    borderRight: 'none',
+                  },
+                }}
+                type="button"
+                onClick={handleVariableFilterSelectorClick}
+                endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
+              >
+                Show / Hide
+              </Button>
+              <VariableSelector
+                isOpen={variableFilterSelectorIsOpen}
+                selectedVariables={selectedFilterVariables}
+                metaGroups={metaGroups}
+                anchorEl={anchorFilterEl}
+                displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
+                handleChange={
+                  handleFilterChange as unknown as (
+                    event: React.SyntheticEvent<Element, Event>,
+                    value: { [key: string]: string }[],
+                  ) => void
+                }
+                hasTags
+                disablePortal={false}
+              />
+            </Box>
+          </ClickAwayListener>
+          <Tooltip arrow title="Clear and Remove all Filters">
             <Button
               sx={{
                 color: '#000000',
                 textTransform: 'unset',
                 fontSize: '15px',
+                borderRadius: 0,
+                '&:hover': {
+                  borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
+                },
               }}
-              type="button"
-              onClick={handleVariableFilterSelectorClick}
-              endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
-            >
-              Show / Hide Filters
-            </Button>
-            <VariableSelector
-              isOpen={variableFilterSelectorIsOpen}
-              selectedVariables={selectedFilterVariables}
-              metaGroups={metaGroups}
-              anchorEl={anchorFilterEl}
-              displayMetas={filterableMetas as unknown as { [key: string]: string }[]}
-              handleChange={
-                handleFilterChange as unknown as (
-                  event: React.SyntheticEvent<Element, Event>,
-                  value: { [key: string]: string }[],
-                ) => void
-              }
-              hasTags
-              disablePortal={false}
-            />
-          </div>
-        </ClickAwayListener>
-        <Tooltip arrow title="Clear and Remove all Filters">
-          <Box sx={{ display: 'flex' }}>
-            <IconButton
               disabled={activeFilters.length === 0}
               onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
+              endIcon={<FontAwesomeIcon icon={faXmark} size="sm" />}
             >
-              <FontAwesomeIcon icon={faXmark} size="sm" />
-            </IconButton>
-          </Box>
-        </Tooltip>
-        <Tooltip arrow title="Clear all Filters">
-          <Box sx={{ display: 'flex' }}>
-            <IconButton
+              Remove
+            </Button>
+          </Tooltip>
+          <Tooltip arrow title="Clear all Filters">
+            <Button
+              sx={{
+                color: '#000000',
+                textTransform: 'unset',
+                fontSize: '15px',
+                borderRadius: 0,
+                borderRight: 'none',
+                '&:hover': {
+                  borderRight: 'none',
+                },
+              }}
               disabled={activeStateFilters.length === 0}
               onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
+              endIcon={<FontAwesomeIcon icon={faRotateLeft} size="xs" />}
             >
-              <FontAwesomeIcon icon={faRotateLeft} size="xs" />
-            </IconButton>
-          </Box>
-        </Tooltip>
+              Clear
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
       </div>
     </>
   );
