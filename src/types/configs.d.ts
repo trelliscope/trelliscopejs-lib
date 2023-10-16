@@ -449,7 +449,21 @@ interface IConfig {
   name: string;
   datatype: AppDataType;
   id: string;
-  theme: { [key: string]: string };
+  theme: ITheme;
+}
+
+interface ITheme {
+  primary: string;
+  dark: string;
+  light: string;
+  isLightTextOnDark: boolean;
+  darkText: string;
+  lightText: string;
+  logo: string;
+  header: {
+    background: string;
+    text: string;
+  };
 }
 
 interface Datum {

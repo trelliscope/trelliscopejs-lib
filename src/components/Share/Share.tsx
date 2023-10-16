@@ -28,7 +28,13 @@ const Share: React.FC = () => {
       <Tooltip title="Share">
         <IconButton data-testid="share-button" onClick={handleShareModal}>
           <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={
+              configObj?.theme?.header
+                ? configObj.theme?.header?.text
+                : configObj?.theme?.isLightTextOnDark
+                ? configObj?.theme?.lightText
+                : configObj?.theme?.darkText
+            }
             icon={faShareNodes}
           />
         </IconButton>

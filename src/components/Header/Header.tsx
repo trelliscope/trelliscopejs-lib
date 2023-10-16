@@ -82,8 +82,18 @@ const Header: React.FC = () => {
       position="absolute"
       sx={{
         zIndex: (mtheme) => mtheme.zIndex.drawer + 1,
-        '&.MuiAppBar-root': { background: configObj?.theme?.primary ? theme.palette.primary.main : '#fefefe' },
-        color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+        '&.MuiAppBar-root': {
+          background: configObj?.theme?.header
+            ? configObj.theme?.header?.background
+            : configObj?.theme?.primary
+            ? theme.palette.primary.main
+            : '#fefefe',
+        },
+        color: configObj?.theme?.header
+          ? configObj?.theme?.header?.text
+          : configObj?.theme?.isLightTextOnDark
+          ? configObj?.theme?.lightText
+          : configObj?.theme?.darkText,
       }}
       elevation={0}
     >
@@ -110,7 +120,7 @@ const Header: React.FC = () => {
         />
         <div className={styles.header}>
           <div id="display-control" className={styles.headerDisplayInfo}>
-            {configObj?.theme.logo && <img src={configObj?.theme.logo} alt="logo" height="40px" />}
+            {configObj?.theme?.logo && <img src={configObj?.theme?.logo} alt="logo" height="40px" />}
             <DisplayInfo />
             {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerDisplayInfoTitleContainer}>
@@ -139,7 +149,13 @@ const Header: React.FC = () => {
             <Tooltip title="Launch Help Tour">
               <IconButton data-testid="tour-button" onClick={() => setTourIsOpen(true)}>
                 <FontAwesomeIcon
-                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                  color={
+                    configObj?.theme?.header
+                      ? configObj.theme?.header?.text
+                      : configObj?.theme?.isLightTextOnDark
+                      ? configObj?.theme?.lightText
+                      : configObj?.theme?.darkText
+                  }
                   icon={faHand}
                 />
               </IconButton>

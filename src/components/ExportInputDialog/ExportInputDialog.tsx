@@ -86,7 +86,13 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
       <Tooltip title="Export Inputs">
         <IconButton data-testid="export-button" aria-label="close" onClick={handleOpen}>
           <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+            color={
+              configObj?.theme?.header
+                ? configObj.theme?.header?.text
+                : configObj?.theme?.isLightTextOnDark
+                ? configObj?.theme?.lightText
+                : configObj?.theme?.darkText
+            }
             icon={faFileArrowDown}
           />
         </IconButton>
