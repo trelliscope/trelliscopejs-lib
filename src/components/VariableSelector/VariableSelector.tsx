@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
@@ -21,6 +21,8 @@ interface VariableSelectorProps {
   isOpen: boolean;
   selectedVariables: { [key: string]: string }[];
   metaGroups: Map<string | symbol, string[]> | null;
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  setVariableSelectorIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   anchorEl: null | HTMLElement;
   displayMetas: { [key: string]: string }[];
   handleChange: (event: React.SyntheticEvent<Element, Event>, value: { [key: string]: string }[]) => void;
@@ -33,6 +35,8 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   selectedVariables,
   metaGroups,
   anchorEl,
+  setAnchorEl,
+  setVariableSelectorIsOpen,
   displayMetas,
   handleChange,
   hasTags,
@@ -45,6 +49,23 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   const handleTagChange = (event: SelectChangeEvent<string>) => {
     setTagGroup(event.target.value);
   };
+
+  // this will close the variable selector if the user clicks outside of it and into an iframe
+  useEffect(() => {
+    const handleBlur = () => {
+      const iframes = Array.from(document.querySelectorAll('iframe'));
+      if (iframes.includes(document.activeElement as HTMLIFrameElement) && setVariableSelectorIsOpen) {
+        setVariableSelectorIsOpen(false);
+        setAnchorEl(null);
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, []);
 
   return (
     <div className={styles.variableSelector}>

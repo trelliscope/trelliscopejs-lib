@@ -83,6 +83,8 @@ const Labels: React.FC = () => {
           </Button>
           <VariableSelector
             isOpen={variableLabelSelectorIsOpen}
+            setVariableSelectorIsOpen={setVariableLabelSelectorIsOpen}
+            setAnchorEl={setAnchorLabelEl}
             selectedVariables={selectedLabelVariables}
             metaGroups={metaGroupsWithInputs}
             anchorEl={anchorLabelEl}
