@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { clearFilters, selectFilterState, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
@@ -13,10 +13,10 @@ import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDis
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
-import styles from './DisplaySelect.module.scss';
 import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
 import { filterViewSelector } from '../../selectors';
 import { useConfig } from '../../slices/configAPI';
+import styles from './DisplaySelect.module.scss';
 
 const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
@@ -121,27 +121,27 @@ const DisplaySelect: React.FC = () => {
 
   return (
     <div>
-      <IconButton
+      <Button
+        sx={{
+          color: configObj?.theme?.header
+            ? configObj.theme?.header?.text
+            : configObj?.theme?.isLightTextOnDark && configObj?.theme
+            ? configObj?.theme?.lightText
+            : !configObj?.theme?.isLightTextOnDark && configObj?.theme
+            ? configObj?.theme?.darkText
+            : '#757575',
+          textTransform: 'unset',
+        }}
         id="display-select-button"
-        aria-controls={isOpen ? 'basic-menu' : undefined}
         aria-haspopup="true"
+        aria-controls={isOpen ? 'basic-menu' : undefined}
         aria-expanded={isOpen ? 'true' : undefined}
         onClick={handleOpen}
-        size="large"
+        endIcon={<FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} size="xs" />}
       >
-        <FontAwesomeIcon
-          color={
-            configObj?.theme?.header
-              ? configObj.theme?.header?.text
-              : configObj?.theme?.isLightTextOnDark
-              ? configObj?.theme?.lightText
-              : configObj?.theme?.darkText
-          }
-          className={styles.displaySelectIcon}
-          icon={isOpen ? faChevronUp : faChevronDown}
-          size="xs"
-        />
-      </IconButton>
+        View other displays ({displayList?.find((d) => d.name !== selectedDisplay)?.name || ''}
+        {displayList && displayList?.length - 2 > 0 ? ` + ${displayList?.length - 2} more` : ''})
+      </Button>
       <Menu
         id="display-select-menu"
         anchorEl={anchorEl}

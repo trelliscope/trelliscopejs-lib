@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, IconButton, Tooltip, useTheme, Box } from 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHand } from '@fortawesome/free-solid-svg-icons';
 import Joyride, { ACTIONS, EVENTS } from 'react-joyride';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import DisplaySelect from '../DisplaySelect';
@@ -14,9 +14,10 @@ import DisplayInfo from '../DisplayInfo';
 import styles from './Header.module.scss';
 import HelpInfo from '../HelpInfo';
 import Share from '../Share';
-import { selectLayout } from '../../slices/layoutSlice';
-import { TOUR_STEPS } from '../../constants';
+import { selectLayout, setLayout } from '../../slices/layoutSlice';
+import { META_TYPE_PANEL, TOUR_STEPS } from '../../constants';
 import { useConfig } from '../../slices/configAPI';
+import PanelPicker from '../PanelPicker';
 
 const Header: React.FC = () => {
   const { data: displayList = [] } = useDisplayList();
@@ -34,6 +35,11 @@ const Header: React.FC = () => {
   const layout = useSelector(selectLayout);
 
   const [tourIsOpen, setTourIsOpen] = useState(false);
+
+  const panelMetas =
+    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
+
+  const dispatch = useDispatch();
 
   const handleCallBack = (event: {
     status: string;
@@ -56,6 +62,12 @@ const Header: React.FC = () => {
   };
 
   const [tourSteps, setTourSteps] = useState(TOUR_STEPS);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handlePanelChange = (value: string) => {
+    dispatch(setLayout({ panel: value }));
+  };
 
   useEffect(() => {
     setTourIndex(0);
@@ -122,7 +134,6 @@ const Header: React.FC = () => {
           <div id="display-control" className={styles.headerDisplayInfo}>
             {configObj?.theme?.logo && <img src={configObj?.theme?.logo} alt="logo" height="40px" />}
             <DisplayInfo />
-            {displayList.length > 1 && <DisplaySelect />}
             <div className={styles.headerDisplayInfoTitleContainer}>
               <Typography
                 data-testid="selected-title"
@@ -146,6 +157,16 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className={styles.headerRight}>
+            {panelMetas.length > 1 && layout.viewtype !== 'table' && (
+              <PanelPicker
+                handlePanelChange={handlePanelChange}
+                anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+                selectedValue={layout?.panel}
+                useCustomStyles
+              />
+            )}
+            {displayList.length > 1 && <DisplaySelect />}
             <Tooltip title="Launch Help Tour">
               <IconButton data-testid="tour-button" onClick={() => setTourIsOpen(true)}>
                 <FontAwesomeIcon
@@ -160,11 +181,11 @@ const Header: React.FC = () => {
                 />
               </IconButton>
             </Tooltip>
-            <div id="share-control" className={styles.headerIconButton}>
+            <div id="share-control">
               <Share />
             </div>
             {hasInputs && hasLocalStorage && (
-              <div id="export-control" className={styles.headerIconButton}>
+              <div id="export-control">
                 <ExportInputDialog
                   displayInfo={displayInfo as IDisplay}
                   hasInputs={hasInputs}
