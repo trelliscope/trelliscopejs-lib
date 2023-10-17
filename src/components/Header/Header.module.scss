@@ -20,9 +20,7 @@
   }
 
   &IconButton {
-    background: 'red';
-    padding-left: 10px;
-    padding-right: 10px;
+    margin-right: 20px;
   }
 
   &DisplayInfo {
@@ -35,7 +33,6 @@
   }
 
   &Trelliscope {
-    margin-left: 15px;
     height: 54px;
     font-family: 'Jost';
     display: flex;

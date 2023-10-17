@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import PanelLabels from '../PanelLabels/PanelLabels';
 import { setLabels } from '../../slices/labelsSlice';
@@ -61,18 +61,20 @@ const Panel: React.FC<PanelProps> = ({
       <div role="presentation" className={styles.panelGraphic}>
         {children}
         <div className={styles.panelGraphicExpand}>
-          <IconButton
-            sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.5);',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.7);',
-              },
-            }}
-            size="small"
-            onClick={handleClick}
-          >
-            <FontAwesomeIcon icon={faExpand} />
-          </IconButton>
+          <Tooltip arrow title="Open panel dialog">
+            <IconButton
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.5);',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.7);',
+                },
+              }}
+              size="small"
+              onClick={handleClick}
+            >
+              <FontAwesomeIcon icon={faExpand} />
+            </IconButton>
+          </Tooltip>
         </div>
         {panelMetas?.length > 1 && (
           <div
@@ -85,6 +87,7 @@ const Panel: React.FC<PanelProps> = ({
               selectedValue={selectedValue}
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
+              useCustomStyles={false}
             />
           </div>
         )}
