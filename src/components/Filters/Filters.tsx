@@ -162,7 +162,7 @@ const Filters: React.FC = () => {
           handleConfirm={handleClear}
           dialogText="This will clear all of the active filters."
         />
-        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '128.5px' } }} variant="outlined">
+        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '128px' } }} variant="outlined">
           <ClickAwayListener
             mouseEvent="onMouseUp"
             onClickAway={() => {
@@ -190,6 +190,8 @@ const Filters: React.FC = () => {
               </Button>
               <VariableSelector
                 isOpen={variableFilterSelectorIsOpen}
+                setVariableSelectorIsOpen={setVariableFilterSelectorIsOpen}
+                setAnchorEl={setAnchorFilterEl}
                 selectedVariables={selectedFilterVariables}
                 metaGroups={metaGroups}
                 anchorEl={anchorFilterEl}
@@ -206,41 +208,45 @@ const Filters: React.FC = () => {
             </Box>
           </ClickAwayListener>
           <Tooltip arrow title="Clear and Remove all Filters">
-            <Button
-              sx={{
-                color: '#000000',
-                textTransform: 'unset',
-                fontSize: '15px',
-                borderRadius: 0,
-                '&:hover': {
-                  borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
-                },
-              }}
-              disabled={activeFilters.length === 0}
-              onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
-              endIcon={<FontAwesomeIcon icon={faXmark} size="sm" />}
-            >
-              Remove
-            </Button>
+            <span>
+              <Button
+                sx={{
+                  color: '#000000',
+                  textTransform: 'unset',
+                  fontSize: '15px',
+                  borderRadius: 0,
+                  '&:hover': {
+                    borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
+                  },
+                }}
+                disabled={activeFilters.length === 0}
+                onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
+                endIcon={<FontAwesomeIcon icon={faXmark} size="sm" />}
+              >
+                Remove
+              </Button>
+            </span>
           </Tooltip>
           <Tooltip arrow title="Clear all Filters">
-            <Button
-              sx={{
-                color: '#000000',
-                textTransform: 'unset',
-                fontSize: '15px',
-                borderRadius: 0,
-                borderRight: 'none',
-                '&:hover': {
+            <span>
+              <Button
+                sx={{
+                  color: '#000000',
+                  textTransform: 'unset',
+                  fontSize: '15px',
+                  borderRadius: 0,
                   borderRight: 'none',
-                },
-              }}
-              disabled={activeStateFilters.length === 0}
-              onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
-              endIcon={<FontAwesomeIcon icon={faRotateLeft} size="xs" />}
-            >
-              Clear
-            </Button>
+                  '&:hover': {
+                    borderRight: 'none',
+                  },
+                }}
+                disabled={activeStateFilters.length === 0}
+                onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
+                endIcon={<FontAwesomeIcon icon={faRotateLeft} size="xs" />}
+              >
+                Clear
+              </Button>
+            </span>
           </Tooltip>
         </ButtonGroup>
       </div>

@@ -209,6 +209,8 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           </Button>
           <VariableSelector
             isOpen={variableSelectorIsOpen}
+            setVariableSelectorIsOpen={setVariableSelectorIsOpen}
+            setAnchorEl={setAnchorSelectorEl}
             selectedVariables={selectedVariables}
             metaGroups={null}
             anchorEl={anchorSelectorEl}

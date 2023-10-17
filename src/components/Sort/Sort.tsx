@@ -161,6 +161,8 @@ const Sort: React.FC = () => {
           </IconButton>
           <VariableSelector
             isOpen={variableSortSelectorIsOpen}
+            setVariableSelectorIsOpen={setVariableSortSelectorIsOpen}
+            setAnchorEl={setAnchorSortEl}
             selectedVariables={selectedSortVariables as unknown as { [key: string]: string }[]}
             metaGroups={metaGroups}
             anchorEl={anchorSortEl}
