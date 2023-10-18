@@ -36,6 +36,7 @@ import {
   META_TYPE_FACTOR,
 } from '../../constants';
 import { getLabelFromFactor } from '../../utils';
+import ErrorWrapper from '../ErrorWrapper';
 
 const Views: React.FC = () => {
   const dispatch = useDispatch();
@@ -253,145 +254,147 @@ const Views: React.FC = () => {
   };
 
   return (
-    <div className={styles.views}>
-      <div>
-        <Button
-          sx={{ textTransform: 'capitalize', color: '#000' }}
-          id="views-button"
-          aria-controls={open ? 'views-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          endIcon={<FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />}
-        >
-          Views
-        </Button>
-        <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ sx: { pt: 0 } }}>
-          {combinedViews?.map((value) => {
-            const italics = generateDescriptionItalics(value);
-            return (
-              <div key={value.name}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <MenuItem
-                    selected={activeViews.includes(value.name)}
-                    sx={{ width: '100%', justifyContent: 'space-between' }}
-                    onClick={() => handleViewChange(value.state, value.name)}
-                  >
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                      <Tooltip arrow title={value.name}>
-                        <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
-                          {value.name}
-                        </Typography>
-                      </Tooltip>
-                      <Tooltip arrow title={value.description}>
-                        <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
-                          {value.description}
-                        </Typography>
-                      </Tooltip>
-                      <Tooltip arrow title={italics}>
-                        <Typography noWrap style={{ maxWidth: '400px', fontStyle: 'italic', fontSize: '12px' }}>
-                          {italics}
-                        </Typography>
-                      </Tooltip>
-                    </Box>
-                    <Box sx={{ '& > *': { p: 1 }, display: 'flex', alignItems: 'center' }}>
-                      {value?.state?.filter && (
-                        <Tooltip arrow title="View has filters">
-                          <FontAwesomeIcon color="gray" icon={faFilter} />
+    <ErrorWrapper>
+      <div className={styles.views}>
+        <div>
+          <Button
+            sx={{ textTransform: 'capitalize', color: '#000' }}
+            id="views-button"
+            aria-controls={open ? 'views-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            endIcon={<FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />}
+          >
+            Views
+          </Button>
+          <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ sx: { pt: 0 } }}>
+            {combinedViews?.map((value) => {
+              const italics = generateDescriptionItalics(value);
+              return (
+                <div key={value.name}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <MenuItem
+                      selected={activeViews.includes(value.name)}
+                      sx={{ width: '100%', justifyContent: 'space-between' }}
+                      onClick={() => handleViewChange(value.state, value.name)}
+                    >
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Tooltip arrow title={value.name}>
+                          <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
+                            {value.name}
+                          </Typography>
                         </Tooltip>
-                      )}
-                      {value?.state?.sort && (
-                        <Tooltip arrow title="View has sorts">
-                          <FontAwesomeIcon color="gray" icon={faSort} />
+                        <Tooltip arrow title={value.description}>
+                          <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
+                            {value.description}
+                          </Typography>
                         </Tooltip>
-                      )}
-                      {value?.state?.layout && (
-                        <Tooltip arrow title="View has layout">
-                          <FontAwesomeIcon color="gray" icon={faTableColumns} />
+                        <Tooltip arrow title={italics}>
+                          <Typography noWrap style={{ maxWidth: '400px', fontStyle: 'italic', fontSize: '12px' }}>
+                            {italics}
+                          </Typography>
                         </Tooltip>
-                      )}
-                      {value?.state?.labels && (
-                        <Tooltip arrow title="View has labels">
-                          <FontAwesomeIcon color="gray" icon={faTag} />
-                        </Tooltip>
-                      )}
-                    </Box>
-                  </MenuItem>
-                  {value.isLocal && (
-                    <Box sx={{ borderLeft: '1px solid #E0E0E0', display: 'flex', alignItems: 'center' }}>
-                      <IconButton
-                        sx={{ mr: '5px' }}
-                        aria-label="close"
-                        size="small"
-                        onClick={() => handleDeleteView(value.name)}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </IconButton>
-                    </Box>
-                  )}
-                </Box>
-                <Divider />
-              </div>
-            );
-          })}
-          <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
-            <Button
-              sx={{
-                width: '200px',
-                mr: 2,
-                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-              }}
-              variant="contained"
-              onClick={handleViewToggle}
-              startIcon={
-                <FontAwesomeIcon
-                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                  icon={faPlus}
-                />
-              }
-            >
-              Create view based on current state
-            </Button>
-            <Button
-              sx={{
-                width: '200px',
-                mr: 2,
-                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-              }}
-              variant="contained"
-              onClick={handleExportToggle}
-              startIcon={
-                <FontAwesomeIcon
-                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                  icon={faDownload}
-                />
-              }
-            >
-              Export Views
-            </Button>
-            <Button
-              sx={{
-                width: '200px',
-                color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-              }}
-              variant="contained"
-              onClick={handleImportToggle}
-              startIcon={
-                <FontAwesomeIcon
-                  color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                  icon={faUpload}
-                />
-              }
-            >
-              Import Views
-            </Button>
-          </Box>
-          <AddViewModal isOpen={openView} handleViewToggle={handleViewToggle} setLocalViews={setLocalViews} />
-          <ExportViewsModal isOpen={openExport} handleExportToggle={handleExportToggle} />
-          <ImportViewsModal isOpen={openImport} handleImportToggle={handleImportToggle} />
-        </Menu>
+                      </Box>
+                      <Box sx={{ '& > *': { p: 1 }, display: 'flex', alignItems: 'center' }}>
+                        {value?.state?.filter && (
+                          <Tooltip arrow title="View has filters">
+                            <FontAwesomeIcon color="gray" icon={faFilter} />
+                          </Tooltip>
+                        )}
+                        {value?.state?.sort && (
+                          <Tooltip arrow title="View has sorts">
+                            <FontAwesomeIcon color="gray" icon={faSort} />
+                          </Tooltip>
+                        )}
+                        {value?.state?.layout && (
+                          <Tooltip arrow title="View has layout">
+                            <FontAwesomeIcon color="gray" icon={faTableColumns} />
+                          </Tooltip>
+                        )}
+                        {value?.state?.labels && (
+                          <Tooltip arrow title="View has labels">
+                            <FontAwesomeIcon color="gray" icon={faTag} />
+                          </Tooltip>
+                        )}
+                      </Box>
+                    </MenuItem>
+                    {value.isLocal && (
+                      <Box sx={{ borderLeft: '1px solid #E0E0E0', display: 'flex', alignItems: 'center' }}>
+                        <IconButton
+                          sx={{ mr: '5px' }}
+                          aria-label="close"
+                          size="small"
+                          onClick={() => handleDeleteView(value.name)}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </IconButton>
+                      </Box>
+                    )}
+                  </Box>
+                  <Divider />
+                </div>
+              );
+            })}
+            <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
+              <Button
+                sx={{
+                  width: '200px',
+                  mr: 2,
+                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                }}
+                variant="contained"
+                onClick={handleViewToggle}
+                startIcon={
+                  <FontAwesomeIcon
+                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                    icon={faPlus}
+                  />
+                }
+              >
+                Create view based on current state
+              </Button>
+              <Button
+                sx={{
+                  width: '200px',
+                  mr: 2,
+                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                }}
+                variant="contained"
+                onClick={handleExportToggle}
+                startIcon={
+                  <FontAwesomeIcon
+                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                    icon={faDownload}
+                  />
+                }
+              >
+                Export Views
+              </Button>
+              <Button
+                sx={{
+                  width: '200px',
+                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                }}
+                variant="contained"
+                onClick={handleImportToggle}
+                startIcon={
+                  <FontAwesomeIcon
+                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                    icon={faUpload}
+                  />
+                }
+              >
+                Import Views
+              </Button>
+            </Box>
+            <AddViewModal isOpen={openView} handleViewToggle={handleViewToggle} setLocalViews={setLocalViews} />
+            <ExportViewsModal isOpen={openExport} handleExportToggle={handleExportToggle} />
+            <ImportViewsModal isOpen={openImport} handleImportToggle={handleImportToggle} />
+          </Menu>
+        </div>
       </div>
-    </div>
+    </ErrorWrapper>
   );
 };
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TextField } from '@mui/material';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import styles from './ColumnSelector.module.scss';
+import ErrorWrapper from '../ErrorWrapper';
 
 const ColumnSelector: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const ColumnSelector: React.FC = () => {
   };
 
   return (
-    <>
+    <ErrorWrapper>
       <div>
         <span className={styles.columnSelectorText}>Columns:</span>
       </div>
@@ -48,7 +49,7 @@ const ColumnSelector: React.FC = () => {
         value={layout.ncol || 1}
         onChange={(e) => handleColumnChange(e.target.value)}
       />
-    </>
+    </ErrorWrapper>
   );
 };
 

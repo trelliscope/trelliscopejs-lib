@@ -16,6 +16,7 @@ import {
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
 import { useConfig } from '../../slices/configAPI';
+import ErrorWrapper from '../ErrorWrapper';
 
 // interface FiltersProps {}
 
@@ -144,7 +145,7 @@ const Filters: React.FC = () => {
   };
 
   return (
-    <>
+    <ErrorWrapper>
       <div className={styles.filters} ref={anchorElementForVariableSelector}>
         <ConfirmationModal
           isOpen={confirmationRemoveModalOpen}
@@ -250,7 +251,7 @@ const Filters: React.FC = () => {
           </Tooltip>
         </ButtonGroup>
       </div>
-    </>
+    </ErrorWrapper>
   );
 };
 

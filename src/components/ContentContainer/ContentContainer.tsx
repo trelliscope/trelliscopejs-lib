@@ -5,6 +5,7 @@ import Content from '../Content/Content';
 import ContentHeader from '../ContentHeader';
 import styles from './ContentContainer.module.scss';
 import { selectLayout } from '../../slices/layoutSlice';
+import ErrorWrapper from '../ErrorWrapper';
 
 const ContentContainer: React.FC = () => {
   const layout = useSelector(selectLayout);
@@ -14,8 +15,12 @@ const ContentContainer: React.FC = () => {
   const rerender = useReducer(() => ({}), {})[1] as never;
   return (
     <div className={classNames(styles.contentContainer, { [styles.contentContainer__closed]: !layout.sidebarActive })}>
-      <ContentHeader tableRef={tableInstanceRef} rerender={rerender} />
-      <Content tableRef={tableInstanceRef} rerender={rerender} />
+      <ErrorWrapper>
+        <ContentHeader tableRef={tableInstanceRef} rerender={rerender} />
+      </ErrorWrapper>
+      <ErrorWrapper>
+        <Content tableRef={tableInstanceRef} rerender={rerender} />
+      </ErrorWrapper>
     </div>
   );
 };

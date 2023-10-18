@@ -14,6 +14,7 @@ import Chip from '../Chip';
 import VariableSelector from '../VariableSelector';
 import styles from './Sort.module.scss';
 import { META_TYPE_NUMBER, META_TYPE_FACTOR, META_TYPE_DATE, META_TYPE_DATETIME, META_TYPE_CURRENCY } from '../../constants';
+import ErrorWrapper from '../ErrorWrapper';
 
 const Sort: React.FC = () => {
   const { data: displayInfo } = useDisplayInfo();
@@ -122,7 +123,7 @@ const Sort: React.FC = () => {
   };
 
   return (
-    <>
+    <ErrorWrapper>
       <ClickAwayListener
         mouseEvent="onMouseUp"
         onClickAway={() => {
@@ -178,7 +179,7 @@ const Sort: React.FC = () => {
           />
         </div>
       </ClickAwayListener>
-    </>
+    </ErrorWrapper>
   );
 };
 
