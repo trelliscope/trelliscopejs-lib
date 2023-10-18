@@ -96,15 +96,21 @@ const Header: React.FC = () => {
             </div>
             <div className={styles.headerRight}>
               {panelMetas.length > 1 && layout.viewtype !== 'table' && (
-                <PanelPicker
-                  handlePanelChange={handlePanelChange}
-                  anchorEl={anchorEl}
-                  setAnchorEl={setAnchorEl}
-                  selectedValue={layout?.panel}
-                  useCustomStyles
-                />
+                <div>
+                  <PanelPicker
+                    handlePanelChange={handlePanelChange}
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    selectedValue={layout?.panel}
+                    useCustomStyles
+                  />
+                </div>
               )}
-              {displayList.length > 1 && <DisplaySelect />}
+              {displayList.length > 1 && (
+                <div>
+                  <DisplaySelect />
+                </div>
+              )}
               <Tour />
               <div id="share-control">
                 <Share />
