@@ -17,6 +17,9 @@
   &Right {
     display: flex;
     align-items: center;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    text-wrap: nowrap;
   }
 
   &IconButton {
