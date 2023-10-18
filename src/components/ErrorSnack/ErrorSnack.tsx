@@ -3,7 +3,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 import { Box, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard, faPaperPlane, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faClipboard, faPaperPlane, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 interface ErrorSnackInterface {
@@ -64,7 +64,7 @@ const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, errorInfo, handle
         <Button key="email" size="small" onClick={handleSendEmail} startIcon={<FontAwesomeIcon icon={faPaperPlane} />}>
           Email
         </Button>,
-        <Button key="refresh" size="small" onClick={handleRefresh} startIcon={<FontAwesomeIcon icon={faXmark} />}>
+        <Button key="refresh" size="small" onClick={handleRefresh} startIcon={<FontAwesomeIcon icon={faArrowsRotate} />}>
           Refresh
         </Button>,
         <Button key="close" size="small" onClick={handleClose} startIcon={<FontAwesomeIcon icon={faXmark} />}>
