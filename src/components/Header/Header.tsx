@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Tooltip, useTheme, Box } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHand } from '@fortawesome/free-solid-svg-icons';
-import Joyride, { ACTIONS, EVENTS } from 'react-joyride';
+import { AppBar, Toolbar, Typography, useTheme, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
@@ -15,70 +12,29 @@ import styles from './Header.module.scss';
 import HelpInfo from '../HelpInfo';
 import Share from '../Share';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
-import { META_TYPE_PANEL, TOUR_STEPS } from '../../constants';
+import { META_TYPE_PANEL } from '../../constants';
 import { useConfig } from '../../slices/configAPI';
 import PanelPicker from '../PanelPicker';
 import ErrorWrapper from '../ErrorWrapper';
+import Tour from '../Tour';
 
 const Header: React.FC = () => {
   const { data: displayList = [] } = useDisplayList();
   const [hasInputs, setHasInputs] = useState(false);
   const theme = useTheme();
-
   const { data: configObj } = useConfig();
-
   const [hasLocalStorage, setHasLocalStorage] = useState(false);
   const selectedDisplay = useSelectedDisplay();
   const { data: displayInfo } = useDisplayInfo();
-
-  const [tourIndex, setTourIndex] = useState(0);
-
   const layout = useSelector(selectLayout);
-
-  const [tourIsOpen, setTourIsOpen] = useState(false);
-
   const panelMetas =
     displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
-
   const dispatch = useDispatch();
-
-  const handleCallBack = (event: {
-    status: string;
-    action: string;
-    index: number;
-    type: 'step:after' | 'error:target_not_found';
-  }) => {
-    if (event?.status === 'skipped' || event?.status === 'finished' || event?.action === 'close') {
-      setTourIndex(event.index);
-      setTourIsOpen(false);
-      if (event?.status === 'finished') {
-        setTourIndex(0);
-      }
-      return;
-    }
-    if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(event?.type)) {
-      // Update state to advance the tour
-      setTourIndex(tourIndex + (event?.action === ACTIONS.PREV ? -1 : 1));
-    }
-  };
-
-  const [tourSteps, setTourSteps] = useState(TOUR_STEPS);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handlePanelChange = (value: string) => {
     dispatch(setLayout({ panel: value }));
   };
-
-  useEffect(() => {
-    setTourIndex(0);
-    if (layout?.viewtype === 'table') {
-      const newTourSteps = TOUR_STEPS.filter((step) => step.target !== '#panel-control' && step.target !== '#label-control');
-      setTourSteps(newTourSteps);
-      return;
-    }
-    setTourSteps(TOUR_STEPS);
-  }, [layout?.viewtype]);
 
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
@@ -112,28 +68,6 @@ const Header: React.FC = () => {
         elevation={0}
       >
         <Toolbar className={styles.headerToolbar} disableGutters>
-          <ErrorWrapper>
-            <Joyride
-              run={tourIsOpen}
-              steps={tourSteps}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              callback={handleCallBack}
-              stepIndex={tourIndex}
-              continuous
-              showSkipButton
-              disableScrollParentFix
-              locale={{
-                last: 'End Tour',
-              }}
-              styles={{
-                options: {
-                  primaryColor: theme.palette.primary.main || '#4489FF',
-                  zIndex: 9000,
-                },
-              }}
-            />
-          </ErrorWrapper>
           <div className={styles.header}>
             <div id="display-control" className={styles.headerDisplayInfo}>
               {configObj?.theme?.logo && <img src={configObj?.theme?.logo} alt="logo" height="40px" />}
@@ -171,20 +105,7 @@ const Header: React.FC = () => {
                 />
               )}
               {displayList.length > 1 && <DisplaySelect />}
-              <Tooltip title="Launch Help Tour">
-                <IconButton data-testid="tour-button" onClick={() => setTourIsOpen(true)}>
-                  <FontAwesomeIcon
-                    color={
-                      configObj?.theme?.header
-                        ? configObj.theme?.header?.text
-                        : configObj?.theme?.isLightTextOnDark
-                        ? configObj?.theme?.lightText
-                        : configObj?.theme?.darkText
-                    }
-                    icon={faHand}
-                  />
-                </IconButton>
-              </Tooltip>
+              <Tour />
               <div id="share-control">
                 <Share />
               </div>
