@@ -13,6 +13,7 @@ import FilterInput from '../FilterInput';
 import styles from './Sidebar.module.scss';
 import { setFilterView } from '../../slices/filterSlice';
 import { selectLayout } from '../../slices/layoutSlice';
+import ErrorWrapper from '../ErrorWrapper';
 
 const drawerWidth = 400;
 
@@ -34,44 +35,46 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        height: 'inherit',
-        '& .MuiDrawer-paper': {
-          paddingTop: '54px',
+    <ErrorWrapper>
+      <Drawer
+        sx={{
           width: drawerWidth,
-          boxSizing: 'border-box',
-          overflowX: 'hidden',
+          flexShrink: 0,
           height: 'inherit',
-          zIndex: 'initial',
-        },
-      }}
-      open={layout.sidebarActive}
-      className={styles.sidebar}
-      variant="persistent"
-      anchor="left"
-    >
-      <Filters />
-      {mutableFilters.length === 0 && (
-        <div className={styles.sidebarNoFilter}>
-          Select a filter...
-          <FontAwesomeIcon className={styles.sidebarBobbingArrow} icon={faArrowUp} />
-        </div>
-      )}
-      <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-        <SortableContext items={mutableFilters.map((el: string) => ({ id: `${el}_filter` }))}>
-          <div className={styles.sidebarDragContainer}>
-            <div className={styles.sidebarDragSubContainer}>
-              {mutableFilters.map((filter) => (
-                <FilterInput key={filter} filterName={filter} />
-              ))}
-            </div>
+          '& .MuiDrawer-paper': {
+            paddingTop: '54px',
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            overflowX: 'hidden',
+            height: 'inherit',
+            zIndex: 'initial',
+          },
+        }}
+        open={layout.sidebarActive}
+        className={styles.sidebar}
+        variant="persistent"
+        anchor="left"
+      >
+        <Filters />
+        {mutableFilters.length === 0 && (
+          <div className={styles.sidebarNoFilter}>
+            Select a filter...
+            <FontAwesomeIcon className={styles.sidebarBobbingArrow} icon={faArrowUp} />
           </div>
-        </SortableContext>
-      </DndContext>
-    </Drawer>
+        )}
+        <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+          <SortableContext items={mutableFilters.map((el: string) => ({ id: `${el}_filter` }))}>
+            <div className={styles.sidebarDragContainer}>
+              <div className={styles.sidebarDragSubContainer}>
+                {mutableFilters.map((filter) => (
+                  <FilterInput key={filter} filterName={filter} />
+                ))}
+              </div>
+            </div>
+          </SortableContext>
+        </DndContext>
+      </Drawer>
+    </ErrorWrapper>
   );
 };
 

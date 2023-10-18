@@ -17,6 +17,7 @@ import PanelDialog from '../PanelDialog';
 import styles from './Content.module.scss';
 import { setPanelDialog } from '../../slices/appSlice';
 import { META_DATA_STATUS } from '../../constants';
+import ErrorWrapper from '../ErrorWrapper';
 
 interface ContentProps {
   tableRef: React.MutableRefObject<null>;
@@ -201,7 +202,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   ) as IPanelMeta;
 
   return (
-    <>
+    <ErrorWrapper>
       {!data?.length && (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           No panels meet the current filter criteria
@@ -270,7 +271,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
         index={panelDialog.index as number}
         onClose={() => dispatch(setPanelDialog({ open: false }))}
       />
-    </>
+    </ErrorWrapper>
   );
 };
 

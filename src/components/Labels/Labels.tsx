@@ -9,6 +9,7 @@ import { setLabels } from '../../slices/labelsSlice';
 import VariableSelector from '../VariableSelector';
 import styles from './Labels.module.scss';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
+import ErrorWrapper from '../ErrorWrapper';
 
 const Labels: React.FC = () => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const Labels: React.FC = () => {
   };
 
   return (
-    <>
+    <ErrorWrapper>
       <ClickAwayListener
         mouseEvent="onMouseUp"
         onClickAway={() => {
@@ -98,7 +99,7 @@ const Labels: React.FC = () => {
           />
         </div>
       </ClickAwayListener>
-    </>
+    </ErrorWrapper>
   );
 };
 

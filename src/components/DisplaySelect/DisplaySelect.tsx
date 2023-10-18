@@ -17,6 +17,7 @@ import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
 import { filterViewSelector } from '../../selectors';
 import { useConfig } from '../../slices/configAPI';
 import styles from './DisplaySelect.module.scss';
+import ErrorWrapper from '../ErrorWrapper';
 
 const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
@@ -120,7 +121,7 @@ const DisplaySelect: React.FC = () => {
   };
 
   return (
-    <div>
+    <ErrorWrapper>
       <Button
         sx={{
           color: configObj?.theme?.header
@@ -172,7 +173,7 @@ const DisplaySelect: React.FC = () => {
             </MenuItem>
           ))}
       </Menu>
-    </div>
+    </ErrorWrapper>
   );
 };
 

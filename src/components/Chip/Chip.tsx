@@ -1,3 +1,4 @@
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
@@ -9,7 +10,6 @@ import {
   faArrowDownAZ,
   faGripVertical,
 } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
 import { Box, useTheme } from '@mui/material';
 import styles from './Chip.module.scss';
 import { useConfig } from '../../slices/configAPI';

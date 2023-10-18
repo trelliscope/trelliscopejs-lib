@@ -16,6 +16,7 @@ import { selectFilterState } from '../../slices/filterSlice';
 import Views from '../Views/Views';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import styles from './ContentHeader.module.scss';
+import ErrorWrapper from '../ErrorWrapper';
 
 interface ContentHeaderProps {
   tableRef: React.RefObject<null>;
@@ -31,7 +32,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
   const activeFilters = useSelector(selectFilterState);
 
   return (
-    <>
+    <ErrorWrapper>
       {layout.sidebarActive && (
         <FontAwesomeIcon
           onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
@@ -103,7 +104,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
           <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
         </div>
       </div>
-    </>
+    </ErrorWrapper>
   );
 };
 

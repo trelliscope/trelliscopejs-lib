@@ -31,6 +31,7 @@ import { setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
 import FilterDateRange from '../FilterDateRange/FilterDateRange';
 import FilterDateTimeRange from '../FilterDateTimeRange/FilterDateTimeRange';
+import ErrorWrapper from '../ErrorWrapper';
 
 interface FilterInputsProps {
   filterName: string;
@@ -132,93 +133,99 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} className={classNames(styles.filterInput)}>
-      <div className={styles.filterInputHeader}>
-        <div>
-          <div className={styles.filterInputHeaderName}>{filterName}</div>
-          <div className={styles.filterInputHeaderLabel}>{meta?.label}</div>
-        </div>
-        <div className={styles.filterInputHeaderControls}>
-          {meta?.type === META_TYPE_FACTOR && (
-            <div className={styles.filterInputCount}>
-              {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
-            </div>
-          )}
-          <ConfirmationModal
-            isOpen={confirmationModalOpen}
-            handleCancel={() => setConfirmationModalOpen(!confirmationModalOpen)}
-            handleConfirm={handleMinimize}
-            dialogText="This will clear the selected active filter."
-          />
-          <div className={styles.filterInputHeaderControlsIcon}>
-            <FontAwesomeIcon {...listeners} icon={faGripVertical} />
+    <ErrorWrapper>
+      <div ref={setNodeRef} style={style} {...attributes} className={classNames(styles.filterInput)}>
+        <div className={styles.filterInputHeader}>
+          <div>
+            <div className={styles.filterInputHeaderName}>{filterName}</div>
+            <div className={styles.filterInputHeaderLabel}>{meta?.label}</div>
           </div>
-          <IconButton aria-label="close" size="small" onClick={checkIfFilterIsActive}>
-            <FontAwesomeIcon icon={faXmark} />
-          </IconButton>
+          <div className={styles.filterInputHeaderControls}>
+            {meta?.type === META_TYPE_FACTOR && (
+              <div className={styles.filterInputCount}>
+                {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
+              </div>
+            )}
+            <ConfirmationModal
+              isOpen={confirmationModalOpen}
+              handleCancel={() => setConfirmationModalOpen(!confirmationModalOpen)}
+              handleConfirm={handleMinimize}
+              dialogText="This will clear the selected active filter."
+            />
+            <div className={styles.filterInputHeaderControlsIcon}>
+              <FontAwesomeIcon {...listeners} icon={faGripVertical} />
+            </div>
+            <IconButton aria-label="close" size="small" onClick={checkIfFilterIsActive}>
+              <FontAwesomeIcon icon={faXmark} />
+            </IconButton>
+          </div>
         </div>
-      </div>
-      {filterType === FILTER_TYPE_CATEGORY && (
-        <FilterCat meta={meta as IFactorMeta} filter={filter as ICategoryFilterState} />
-      )}
-      {filterType === FILTER_TYPE_NUMBERRANGE && (
-        <FilterNum meta={meta as INumberMeta} filter={filter as INumberRangeFilterState} />
-      )}
-      {filterType === FILTER_TYPE_DATERANGE && (
-        <FilterDateRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
-      )}
-      {filterType === FILTER_TYPE_DATETIMERANGE && (
-        <FilterDateTimeRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
-      )}
+        {filterType === FILTER_TYPE_CATEGORY && (
+          <FilterCat meta={meta as IFactorMeta} filter={filter as ICategoryFilterState} />
+        )}
+        {filterType === FILTER_TYPE_NUMBERRANGE && (
+          <FilterNum meta={meta as INumberMeta} filter={filter as INumberRangeFilterState} />
+        )}
+        {filterType === FILTER_TYPE_DATERANGE && (
+          <FilterDateRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
+        )}
+        {filterType === FILTER_TYPE_DATETIMERANGE && (
+          <FilterDateTimeRange meta={meta as IMeta} filter={filter as INumberRangeFilterState} />
+        )}
 
-      <div className={styles.filterInputSubMenu}>
-        <div>
-          <FormControlLabel
-            control={
-              <Checkbox checked={labelIsSelected} onClick={() => handleLabelChange(meta?.varname as string)} size="small" />
-            }
-            label="Show label"
-          />
-        </div>
-        <div>
-          {!isSorted ? (
+        <div className={styles.filterInputSubMenu}>
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={labelIsSelected}
+                  onClick={() => handleLabelChange(meta?.varname as string)}
+                  size="small"
+                />
+              }
+              label="Show label"
+            />
+          </div>
+          <div>
+            {!isSorted ? (
+              <Button
+                onClick={handleSortClick}
+                disabled={!meta?.sortable}
+                size="small"
+                variant="text"
+                endIcon={<FontAwesomeIcon icon={faArrowDownShortWide} />}
+              >
+                Sort By
+              </Button>
+            ) : (
+              <Chip
+                label={filterName}
+                icon={sortRes.icon}
+                text=""
+                index={0}
+                type={meta?.type || 'string'}
+                handleClose={handleSortRemove}
+                handleClick={handleSortClick}
+                enforceMaxWidth
+                isDraggable={false}
+              />
+            )}
+          </div>
+          <div>
             <Button
-              onClick={handleSortClick}
-              disabled={!meta?.sortable}
+              disabled={!filter}
               size="small"
               variant="text"
-              endIcon={<FontAwesomeIcon icon={faArrowDownShortWide} />}
+              onClick={handleReset}
+              endIcon={<FontAwesomeIcon icon={faRotateLeft} />}
             >
-              Sort By
+              Clear Filter
             </Button>
-          ) : (
-            <Chip
-              label={filterName}
-              icon={sortRes.icon}
-              text=""
-              index={0}
-              type={meta?.type || 'string'}
-              handleClose={handleSortRemove}
-              handleClick={handleSortClick}
-              enforceMaxWidth
-              isDraggable={false}
-            />
-          )}
+          </div>
         </div>
-        <div>
-          <Button
-            disabled={!filter}
-            size="small"
-            variant="text"
-            onClick={handleReset}
-            endIcon={<FontAwesomeIcon icon={faRotateLeft} />}
-          >
-            Clear Filter
-          </Button>
-        </div>
+        <Divider />
       </div>
-      <Divider />
-    </div>
+    </ErrorWrapper>
   );
 };
 
