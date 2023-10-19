@@ -71,7 +71,8 @@ body {
   color: #ff5252;
 }
 
-div[role='tooltip'] {
+div[role='tooltip'],
+div[role='presentation'] {
   z-index: 8002 !important;
 }
 
