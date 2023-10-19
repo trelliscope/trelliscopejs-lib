@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, debounce } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR, TYPE_MAP } from '../../constants';
 import useMetaInfo from '../../selectors/useMetaInfo';
@@ -74,12 +74,12 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   }, [dispatch, filter]);
 
-  const handleRegex = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleRegex = debounce((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = event.target;
 
     if (value) {
       // we need to escape characters like [ in the regex
-      const regexp = new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      const regexp = new RegExp(value.replace(/[[\]\\]/g, '\\$&'), 'i');
       const regexValues = cleanMeta
         ? cleanMeta.filter((level) => level.match(regexp))
         : groupBy(meta.varname, TYPE_MAP[meta.type])
@@ -104,7 +104,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     } else if (filter) {
       dispatch(removeFilter(filter.varname));
     }
-  };
+  }, 500);
 
   const memoizedGroupByData = useMemo(
     () => groupBy(meta.varname, TYPE_MAP[meta.type]),
@@ -147,7 +147,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           <TextField
             placeholder="regex"
             classes={{ root: styles.filterCatRegex }}
-            value={filter?.regexp || ''}
+            defaultValue={filter?.regexp || ''}
             onChange={handleRegex}
             variant="standard"
             InputProps={{

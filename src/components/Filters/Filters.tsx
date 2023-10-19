@@ -163,7 +163,7 @@ const Filters: React.FC = () => {
           handleConfirm={handleClear}
           dialogText="This will clear all of the active filters."
         />
-        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '128px' } }} variant="outlined">
+        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '131px' } }} variant="outlined">
           <ClickAwayListener
             mouseEvent="onMouseUp"
             onClickAway={() => {
@@ -176,7 +176,7 @@ const Filters: React.FC = () => {
                 sx={{
                   color: '#000000',
                   textTransform: 'unset',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   borderRadius: 0,
                   borderRight: 'none',
                   '&:hover': {
@@ -214,7 +214,7 @@ const Filters: React.FC = () => {
                 sx={{
                   color: '#000000',
                   textTransform: 'unset',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   borderRadius: 0,
                   '&:hover': {
                     borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
@@ -224,7 +224,7 @@ const Filters: React.FC = () => {
                 onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
                 endIcon={<FontAwesomeIcon icon={faXmark} size="sm" />}
               >
-                Remove
+                Remove All
               </Button>
             </span>
           </Tooltip>
@@ -234,7 +234,7 @@ const Filters: React.FC = () => {
                 sx={{
                   color: '#000000',
                   textTransform: 'unset',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   borderRadius: 0,
                   borderRight: 'none',
                   '&:hover': {
@@ -245,7 +245,7 @@ const Filters: React.FC = () => {
                 onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
                 endIcon={<FontAwesomeIcon icon={faRotateLeft} size="xs" />}
               >
-                Clear
+                Clear All
               </Button>
             </span>
           </Tooltip>
