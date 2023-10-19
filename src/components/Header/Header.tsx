@@ -78,7 +78,15 @@ const Header: React.FC = () => {
                   variant="h6"
                   noWrap
                   component="div"
-                  sx={{ flexGrow: 1, lineHeight: '1.25' }}
+                  sx={{
+                    flexGrow: 1,
+                    lineHeight: '1.25',
+                    color: configObj?.theme?.header
+                      ? configObj?.theme?.header?.text
+                      : configObj?.theme?.isLightTextOnDark
+                      ? configObj?.theme?.lightText
+                      : configObj?.theme?.darkText || '#757575',
+                  }}
                 >
                   {selectedDisplay?.name}
                 </Typography>
@@ -87,7 +95,16 @@ const Header: React.FC = () => {
                     variant="subtitle1"
                     noWrap
                     component="div"
-                    sx={{ flexGrow: 1, lineHeight: '1.25', fontSize: '13px' }}
+                    sx={{
+                      flexGrow: 1,
+                      lineHeight: '1.25',
+                      fontSize: '13px',
+                      color: configObj?.theme?.header
+                        ? configObj?.theme?.header?.text
+                        : configObj?.theme?.isLightTextOnDark
+                        ? configObj?.theme?.lightText
+                        : configObj?.theme?.darkText || '#757575',
+                    }}
                   >
                     {selectedDisplay?.description}
                   </Typography>
