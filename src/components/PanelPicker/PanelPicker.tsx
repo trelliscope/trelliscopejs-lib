@@ -44,30 +44,30 @@ const PanelPicker: React.FC<PanelPickerProps> = ({
     <ErrorWrapper>
       <div className={styles.panelPicker}>
         <Box>
-          <Tooltip arrow title="Panel Selection">
-            {isInHeader ? (
-              <Button
-                sx={{
-                  backgroundColor: useCustomStyles ? 'transparent' : 'rgba(255, 255, 255, 0.5);',
-                  color:
-                    useCustomStyles && configObj?.theme?.header
-                      ? configObj?.theme?.header?.text
-                      : useCustomStyles && configObj?.theme && configObj?.theme?.isLightTextOnDark
-                      ? configObj?.theme?.lightText
-                      : useCustomStyles && configObj?.theme && !configObj?.theme?.isLightTextOnDark
-                      ? configObj?.theme?.darkText
-                      : '#757575',
-                  '&:hover': {
-                    backgroundColor: useCustomStyles ? 'transparent' : 'rgba(255, 255, 255, 0.7);',
-                  },
-                  textTransform: 'unset',
-                }}
-                onClick={handleClick}
-                endIcon={<FontAwesomeIcon className={styles.displaySelectIcon} icon={open ? faChevronUp : faChevronDown} />}
-              >
-                View {panelMetas ? panelMetas?.length : 0} other panel{panelMetas && panelMetas.length === 1 ? '' : 's'}
-              </Button>
-            ) : (
+          {isInHeader ? (
+            <Button
+              sx={{
+                backgroundColor: useCustomStyles ? 'transparent' : 'rgba(255, 255, 255, 0.5);',
+                color:
+                  useCustomStyles && configObj?.theme?.header
+                    ? configObj?.theme?.header?.text
+                    : useCustomStyles && configObj?.theme && configObj?.theme?.isLightTextOnDark
+                    ? configObj?.theme?.lightText
+                    : useCustomStyles && configObj?.theme && !configObj?.theme?.isLightTextOnDark
+                    ? configObj?.theme?.darkText
+                    : '#757575',
+                '&:hover': {
+                  backgroundColor: useCustomStyles ? 'transparent' : 'rgba(255, 255, 255, 0.7);',
+                },
+                textTransform: 'unset',
+              }}
+              onClick={handleClick}
+              endIcon={<FontAwesomeIcon className={styles.displaySelectIcon} icon={open ? faChevronUp : faChevronDown} />}
+            >
+              View {panelMetas ? panelMetas?.length : 0} other panel{panelMetas && panelMetas.length === 1 ? '' : 's'}
+            </Button>
+          ) : (
+            <Tooltip arrow title="Panel Selection">
               <IconButton
                 sx={{
                   backgroundColor: 'rgba(255, 255, 255, 0.5);',
@@ -80,8 +80,8 @@ const PanelPicker: React.FC<PanelPickerProps> = ({
               >
                 <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
               </IconButton>
-            )}
-          </Tooltip>
+            </Tooltip>
+          )}
           <Menu id="panel-picker" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{}}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', px: 2, py: 1 }}>
               Select a different panel
