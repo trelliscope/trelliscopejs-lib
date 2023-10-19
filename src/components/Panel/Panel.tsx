@@ -41,7 +41,7 @@ const Panel: React.FC<PanelProps> = ({
   const layout = useSelector(selectLayout);
   const showLabels = layout?.showLabels;
   const panelMetas =
-    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
+    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL && meta.varname !== selectedValue) || [];
 
   const handleClick = () => {
     if (data[primaryMeta.varname]) {
@@ -76,7 +76,7 @@ const Panel: React.FC<PanelProps> = ({
             </IconButton>
           </Tooltip>
         </div>
-        {panelMetas?.length > 1 && (
+        {panelMetas?.length && (
           <div
             className={classNames(styles.panelGraphicPickerContainer, {
               [styles.panelGraphicPickerContainerOpen]: anchorEl,
@@ -88,6 +88,8 @@ const Panel: React.FC<PanelProps> = ({
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               useCustomStyles={false}
+              isInHeader={false}
+              panelMetas={panelMetas}
             />
           </div>
         )}

@@ -27,10 +27,15 @@ const Header: React.FC = () => {
   const selectedDisplay = useSelectedDisplay();
   const { data: displayInfo } = useDisplayInfo();
   const layout = useSelector(selectLayout);
+  const [curPanel, setCurPanel] = useState(layout?.panel || displayInfo?.primarypanel);
   const panelMetas =
-    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL).map((meta) => meta.varname) || [];
+    displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL && meta.varname !== curPanel) || [];
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    setCurPanel(layout?.panel || displayInfo?.primarypanel);
+  }, [displayInfo?.primarypanel, layout?.panel]);
 
   const handlePanelChange = (value: string) => {
     dispatch(setLayout({ panel: value }));
@@ -112,16 +117,16 @@ const Header: React.FC = () => {
               </div>
             </div>
             <div className={styles.headerRight}>
-              {panelMetas.length > 1 && layout.viewtype !== 'table' && (
-                <div>
-                  <PanelPicker
-                    handlePanelChange={handlePanelChange}
-                    anchorEl={anchorEl}
-                    setAnchorEl={setAnchorEl}
-                    selectedValue={layout?.panel}
-                    useCustomStyles
-                  />
-                </div>
+              {panelMetas.length && layout.viewtype !== 'table' && (
+                <PanelPicker
+                  handlePanelChange={handlePanelChange}
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  selectedValue={layout?.panel}
+                  useCustomStyles
+                  isInHeader
+                  panelMetas={panelMetas}
+                />
               )}
               {displayList.length > 1 && (
                 <div>
