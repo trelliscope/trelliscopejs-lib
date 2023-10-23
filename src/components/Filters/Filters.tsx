@@ -48,7 +48,6 @@ const Filters: React.FC = () => {
   const [selectedFilterVariables, setSelectedFilterVariables] = useState(activeFiltersFormatted || []);
   const [variableFilterSelectorIsOpen, setVariableFilterSelectorIsOpen] = useState(false);
   const [anchorFilterEl, setAnchorFilterEl] = useState<null | HTMLElement>(null);
-  console.log('anchorFilterEl', anchorFilterEl);
   const anchorElementForVariableSelector = useRef(null);
 
   useEffect(() => {
