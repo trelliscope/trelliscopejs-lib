@@ -4,6 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
+import { Box } from '@mui/material';
 import { cogDataSelector, singlePageAppSelector } from '../../selectors';
 import { selectDialogOpen, panelDialogIsOpenSelector } from '../../selectors/app';
 import { DataContext } from '../DataProvider';
@@ -14,7 +15,7 @@ import ErrorWrapper from '../ErrorWrapper';
 
 const Pagination: React.FC = () => {
   const dispatch = useDispatch();
-  const { filteredData } = useContext(DataContext);
+  const { filteredData, allData } = useContext(DataContext);
   const dialogOpen = useSelector(selectDialogOpen);
   const panelDialogOpen = useSelector(panelDialogIsOpenSelector);
   const n = useSelector(selectPage);
@@ -95,6 +96,12 @@ const Pagination: React.FC = () => {
             <span>
               {` of `} <FormattedNumber value={totPanels} maximumFractionDigits={0} />
             </span>
+            {filteredData?.length !== allData?.length && (
+              <Box sx={{ paddingTop: '5px', width: '100%', textAlign: 'end' }} className={styles.paginationButtonText}>
+                <FormattedNumber value={allData?.length} maximumFractionDigits={0} />
+                &nbsp;total
+              </Box>
+            )}
           </span>
         </div>
         <div className={styles.paginationButtonContainer}>
