@@ -71,7 +71,13 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
         <Tooltip title={getStoredValue()} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
+        <button
+          type="button"
+          tabIndex={-1}
+          className={styles.panelInputTextEditButton}
+          onClick={() => setInputOpen(true)}
+          style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}
+        >
           <span ref={anchorRef}>
             <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>

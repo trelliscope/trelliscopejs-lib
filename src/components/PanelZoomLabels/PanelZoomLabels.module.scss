@@ -54,6 +54,11 @@
         overflow: hidden;
         white-space: nowrap;
         line-height: 20px;
+        // hack to remove default safari tooltip
+        &::after {
+          content: '';
+          display: block;
+        }
       }
     }
 

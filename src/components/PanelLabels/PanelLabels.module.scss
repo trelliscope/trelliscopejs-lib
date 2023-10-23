@@ -43,12 +43,14 @@
       justify-content: space-between;
 
       &Text {
-        // margin-right: 5px;
-        // margin-left: 5px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        // line-height: 20px;
+        // hack to remove default safari tooltip
+        &::after {
+          content: '';
+          display: block;
+        }
       }
     }
 

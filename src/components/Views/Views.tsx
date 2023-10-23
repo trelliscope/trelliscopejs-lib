@@ -290,12 +290,35 @@ const Views: React.FC = () => {
                           {value.name}
                         </Typography>
                         <Tooltip arrow placement="left" title={value.description}>
-                          <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
+                          <Typography
+                            variant="body2"
+                            noWrap
+                            sx={{
+                              maxWidth: '400px',
+                              // this is a hack to remove the default safari tooltip
+                              '&::after': {
+                                content: '""',
+                                display: 'block',
+                              },
+                            }}
+                          >
                             {value.description}
                           </Typography>
                         </Tooltip>
                         <Tooltip arrow placement="left" title={italics}>
-                          <Typography noWrap style={{ maxWidth: '400px', fontStyle: 'italic', fontSize: '12px' }}>
+                          <Typography
+                            noWrap
+                            sx={{
+                              maxWidth: '400px',
+                              fontStyle: 'italic',
+                              fontSize: '12px',
+                              // this is a hack to remove the default safari tooltip
+                              '&::after': {
+                                content: '""',
+                                display: 'block',
+                              },
+                            }}
+                          >
                             {italics}
                           </Typography>
                         </Tooltip>
