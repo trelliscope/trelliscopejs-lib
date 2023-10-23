@@ -11,9 +11,10 @@
   }
 
   &NoFilter {
+    margin-left: 5px;
     margin-top: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   &BobbingArrow {
