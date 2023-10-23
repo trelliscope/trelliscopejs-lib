@@ -280,17 +280,15 @@ const Views: React.FC = () => {
                       onClick={() => handleViewChange(value.state, value.name)}
                     >
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Tooltip arrow title={value.name}>
-                          <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
-                            {value.name}
-                          </Typography>
-                        </Tooltip>
-                        <Tooltip arrow title={value.description}>
+                        <Typography variant="subtitle1" noWrap sx={{ maxWidth: '400px' }}>
+                          {value.name}
+                        </Typography>
+                        <Tooltip arrow placement="left" title={value.description}>
                           <Typography variant="body2" noWrap sx={{ maxWidth: '400px' }}>
                             {value.description}
                           </Typography>
                         </Tooltip>
-                        <Tooltip arrow title={italics}>
+                        <Tooltip arrow placement="left" title={italics}>
                           <Typography noWrap style={{ maxWidth: '400px', fontStyle: 'italic', fontSize: '12px' }}>
                             {italics}
                           </Typography>
