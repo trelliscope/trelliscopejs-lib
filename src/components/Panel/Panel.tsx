@@ -76,7 +76,7 @@ const Panel: React.FC<PanelProps> = ({
             </IconButton>
           </Tooltip>
         </div>
-        {panelMetas?.length && (
+        {panelMetas?.length > 0 && (
           <div
             className={classNames(styles.panelGraphicPickerContainer, {
               [styles.panelGraphicPickerContainerOpen]: anchorEl,

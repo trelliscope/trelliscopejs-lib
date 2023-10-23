@@ -117,7 +117,7 @@ const Header: React.FC = () => {
               </div>
             </div>
             <div className={styles.headerRight}>
-              {panelMetas.length && layout.viewtype !== 'table' && (
+              {panelMetas?.length > 0 && layout.viewtype !== 'table' && (
                 <PanelPicker
                   handlePanelChange={handlePanelChange}
                   anchorEl={anchorEl}
