@@ -13,7 +13,7 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import isEqual from 'lodash.isequal';
 import { setLabels, selectLabels } from '../../slices/labelsSlice';
@@ -268,7 +268,13 @@ const Views: React.FC = () => {
           >
             Views
           </Button>
-          <Menu id="views-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ sx: { pt: 0 } }}>
+          <Menu
+            id="views-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{ sx: { pt: 0, pb: 0 } }}
+          >
             {combinedViews?.map((value) => {
               const italics = generateDescriptionItalics(value);
               return (
@@ -334,57 +340,57 @@ const Views: React.FC = () => {
                 </div>
               );
             })}
-            <Box sx={{ display: 'flex', justifyContent: 'center', m: '10px' }}>
-              <Button
-                sx={{
-                  width: '200px',
-                  mr: 2,
-                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-                }}
-                variant="contained"
-                onClick={handleViewToggle}
-                startIcon={
-                  <FontAwesomeIcon
-                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                    icon={faPlus}
-                  />
-                }
-              >
-                Create view based on current state
-              </Button>
-              <Button
-                sx={{
-                  width: '200px',
-                  mr: 2,
-                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-                }}
-                variant="contained"
-                onClick={handleExportToggle}
-                startIcon={
-                  <FontAwesomeIcon
-                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                    icon={faDownload}
-                  />
-                }
-              >
-                Export Views
-              </Button>
-              <Button
-                sx={{
-                  width: '200px',
-                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-                }}
-                variant="contained"
-                onClick={handleImportToggle}
-                startIcon={
-                  <FontAwesomeIcon
-                    color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-                    icon={faUpload}
-                  />
-                }
-              >
-                Import Views
-              </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { width: '200px' } }} variant="outlined">
+                <Button
+                  sx={{
+                    borderRadius: 0,
+                    color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                  }}
+                  variant="contained"
+                  onClick={handleViewToggle}
+                  startIcon={
+                    <FontAwesomeIcon
+                      color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                      icon={faPlus}
+                    />
+                  }
+                >
+                  Create view based on current state
+                </Button>
+                <Button
+                  sx={{
+                    borderRadius: 0,
+                    color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                  }}
+                  variant="contained"
+                  onClick={handleExportToggle}
+                  startIcon={
+                    <FontAwesomeIcon
+                      color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                      icon={faDownload}
+                    />
+                  }
+                >
+                  Export Views
+                </Button>
+                <Button
+                  sx={{
+                    borderRadius: 0,
+                    color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                  }}
+                  variant="contained"
+                  onClick={handleImportToggle}
+                  startIcon={
+                    <FontAwesomeIcon
+                      color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+                      icon={faUpload}
+                    />
+                  }
+                >
+                  Import Views
+                </Button>
+              </ButtonGroup>
             </Box>
             <AddViewModal isOpen={openView} handleViewToggle={handleViewToggle} setLocalViews={setLocalViews} />
             <ExportViewsModal isOpen={openExport} handleExportToggle={handleExportToggle} />
