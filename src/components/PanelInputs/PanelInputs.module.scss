@@ -12,6 +12,12 @@
     overflow: hidden;
     white-space: nowrap;
     margin-right: 5px;
+
+    // hack to remove default safari tooltip
+    &::after {
+      content: '';
+      display: block;
+    }
   }
 
   &EditButton {
