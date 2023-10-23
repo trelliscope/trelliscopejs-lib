@@ -48,6 +48,7 @@ const Filters: React.FC = () => {
   const [selectedFilterVariables, setSelectedFilterVariables] = useState(activeFiltersFormatted || []);
   const [variableFilterSelectorIsOpen, setVariableFilterSelectorIsOpen] = useState(false);
   const [anchorFilterEl, setAnchorFilterEl] = useState<null | HTMLElement>(null);
+  console.log('anchorFilterEl', anchorFilterEl);
   const anchorElementForVariableSelector = useRef(null);
 
   useEffect(() => {
@@ -146,7 +147,7 @@ const Filters: React.FC = () => {
 
   return (
     <ErrorWrapper>
-      <div className={styles.filters} ref={anchorElementForVariableSelector}>
+      <div className={styles.filters}>
         <ConfirmationModal
           isOpen={confirmationRemoveModalOpen}
           handleCancel={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
@@ -173,6 +174,7 @@ const Filters: React.FC = () => {
           >
             <Box>
               <Button
+                ref={anchorElementForVariableSelector}
                 sx={{
                   color: '#000000',
                   textTransform: 'unset',
