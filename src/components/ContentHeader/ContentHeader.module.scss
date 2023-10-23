@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--white-600);
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 
   &Controls {
