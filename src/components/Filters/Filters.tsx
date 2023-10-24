@@ -51,10 +51,19 @@ const Filters: React.FC = () => {
   const anchorElementForVariableSelector = useRef(null);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     if (activeFilters.length === 0 && layout?.sidebarActive) {
-      setVariableFilterSelectorIsOpen(true);
-      setAnchorFilterEl(anchorElementForVariableSelector.current);
+      timeoutId = setTimeout(() => {
+        setVariableFilterSelectorIsOpen(true);
+        setAnchorFilterEl(anchorElementForVariableSelector.current);
+      }, 500);
     }
+
+    // Cleanup function
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [activeFilters, layout?.sidebarActive]);
 
   useEffect(() => {
