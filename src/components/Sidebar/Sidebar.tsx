@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Drawer } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +22,8 @@ const Sidebar: React.FC = () => {
   const layout = useSelector(selectLayout);
   const { active: activeFilters, inactive: inactiveFilters } = useSelector(filterViewSelector);
   const mutableFilters = [...activeFilters].reverse();
+
+  const [showFilterHelpText, setShowFilterHelpText] = useState(false);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -55,8 +57,8 @@ const Sidebar: React.FC = () => {
         variant="persistent"
         anchor="left"
       >
-        <Filters />
-        {mutableFilters.length === 0 && (
+        <Filters setShowFilterHelpText={setShowFilterHelpText} />
+        {mutableFilters.length === 0 && showFilterHelpText && (
           <div className={styles.sidebarNoFilter}>
             Select a filter...
             <FontAwesomeIcon className={styles.sidebarBobbingArrow} icon={faArrowUp} />

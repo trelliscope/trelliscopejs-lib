@@ -18,9 +18,11 @@ import ConfirmationModal from '../ConfirmationModal';
 import { useConfig } from '../../slices/configAPI';
 import ErrorWrapper from '../ErrorWrapper';
 
-// interface FiltersProps {}
+interface FiltersProps {
+  setShowFilterHelpText: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Filters: React.FC = () => {
+const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
   const dispatch = useDispatch();
   const activeStateFilters = useSelector(selectFilterState);
   const activeFilters = useSelector(selectActiveFilterView);
@@ -51,20 +53,14 @@ const Filters: React.FC = () => {
   const anchorElementForVariableSelector = useRef(null);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    if (activeFilters.length === 0 && layout?.sidebarActive) {
-      timeoutId = setTimeout(() => {
-        setVariableFilterSelectorIsOpen(true);
-        setAnchorFilterEl(anchorElementForVariableSelector.current);
-      }, 500);
-    }
-
-    // Cleanup function
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    const needSelectorOpen = activeFilters?.length === 0 && layout?.sidebarActive;
+    setVariableFilterSelectorIsOpen(needSelectorOpen);
+    setAnchorFilterEl(needSelectorOpen ? anchorElementForVariableSelector.current : null);
   }, [activeFilters, layout?.sidebarActive]);
+
+  useEffect(() => {
+    setShowFilterHelpText(!variableFilterSelectorIsOpen);
+  }, [variableFilterSelectorIsOpen]);
 
   useEffect(() => {
     setSelectedFilterVariables(activeFiltersFormatted);
@@ -155,7 +151,7 @@ const Filters: React.FC = () => {
 
   return (
     <ErrorWrapper>
-      <div className={styles.filters}>
+      <div className={styles.filters} ref={anchorElementForVariableSelector}>
         <ConfirmationModal
           isOpen={confirmationRemoveModalOpen}
           handleCancel={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
@@ -182,7 +178,6 @@ const Filters: React.FC = () => {
           >
             <Box>
               <Button
-                ref={anchorElementForVariableSelector}
                 sx={{
                   color: '#000000',
                   textTransform: 'unset',
