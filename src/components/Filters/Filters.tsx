@@ -55,18 +55,18 @@ const Filters: React.FC = () => {
     // opening prior to the check for active filters
 
     console.log('activeFilters::::', activeFilters, layout?.sidebarActive);
-    // const timeoutId = setTimeout(() => {
-    if (activeFilters.length === 0 && layout?.sidebarActive) {
-      console.log('inside the if::::', activeFilters, layout?.sidebarActive);
-      setVariableFilterSelectorIsOpen(true);
-      setAnchorFilterEl(anchorElementForVariableSelector.current);
-    }
-    // }, 500);
+    const timeoutId = setTimeout(() => {
+      if (activeFilters.length === 0 && layout?.sidebarActive) {
+        console.log('inside the if::::', activeFilters, layout?.sidebarActive);
+        setVariableFilterSelectorIsOpen(true);
+        setAnchorFilterEl(anchorElementForVariableSelector.current);
+      }
+    }, 500);
 
     // Cleanup function
-    // return () => {
-    //   clearTimeout(timeoutId);
-    // };
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [activeFilters, layout?.sidebarActive]);
 
   useEffect(() => {
