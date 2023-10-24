@@ -90,15 +90,15 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
     },
   });
 
-  useEffect(() => {
-    const urlHash = selectHashFilterView();
-    if (urlHash.length === 0) {
-      const inactiveFilters = filterViews.inactive.filter((filter) => !displayInfo?.state?.filterView?.includes(filter));
-      dispatch(
-        setFilterView({ name: { active: displayInfo?.state?.filterView || [], inactive: inactiveFilters }, which: 'set' }),
-      );
-    }
-  }, [displayInfo?.state?.filterView]);
+  // useEffect(() => {
+  //   const urlHash = selectHashFilterView();
+  //   if (urlHash.length === 0) {
+  //     const inactiveFilters = filterViews.inactive.filter((filter) => !displayInfo?.state?.filterView?.includes(filter));
+  //     dispatch(
+  //       setFilterView({ name: { active: displayInfo?.state?.filterView || [], inactive: inactiveFilters }, which: 'set' }),
+  //     );
+  //   }
+  // }, [displayInfo?.state?.filterView]);
 
   useEffect(() => {
     dispatch(setAppID(id));

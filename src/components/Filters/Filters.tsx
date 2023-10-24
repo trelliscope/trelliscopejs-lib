@@ -51,19 +51,22 @@ const Filters: React.FC = () => {
   const anchorElementForVariableSelector = useRef(null);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    // a timeout is needed to fix a bug in safari with the variable selector
+    // opening prior to the check for active filters
 
+    console.log('activeFilters::::', activeFilters, layout?.sidebarActive);
+    // const timeoutId = setTimeout(() => {
     if (activeFilters.length === 0 && layout?.sidebarActive) {
-      timeoutId = setTimeout(() => {
-        setVariableFilterSelectorIsOpen(true);
-        setAnchorFilterEl(anchorElementForVariableSelector.current);
-      }, 500);
+      console.log('inside the if::::', activeFilters, layout?.sidebarActive);
+      setVariableFilterSelectorIsOpen(true);
+      setAnchorFilterEl(anchorElementForVariableSelector.current);
     }
+    // }, 500);
 
     // Cleanup function
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    // return () => {
+    //   clearTimeout(timeoutId);
+    // };
   }, [activeFilters, layout?.sidebarActive]);
 
   useEffect(() => {
@@ -107,6 +110,7 @@ const Filters: React.FC = () => {
   };
 
   const handleFilterChange = (e: SyntheticEvent, value: { varname: string }[]) => {
+    console.log('handleFilterChange:::::', value, selectedFilterVariables);
     const addedItem = value[value.length - 1];
     const removedItem = selectedFilterVariables.find((item: { varname: string }) => value.indexOf(item) === -1);
 
