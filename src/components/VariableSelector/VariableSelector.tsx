@@ -12,6 +12,7 @@ import {
   Select,
   TextField,
   Checkbox,
+  createFilterOptions,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import styles from './VariableSelector.module.scss';
@@ -42,6 +43,11 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   hasTags,
   disablePortal,
 }) => {
+  const filterOptions = createFilterOptions({
+    matchFrom: 'any',
+    stringify: (option: { [key: string]: string }) => option.label + option.varname,
+  });
+
   const [tagGroup, setTagGroup] = useState('__ALL__');
 
   const { data: configObj } = useConfig();
@@ -69,7 +75,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
 
   return (
     <div className={styles.variableSelector}>
-      <Popper open={isOpen} anchorEl={anchorEl} placement="bottom-end" transition disablePortal={disablePortal}>
+      <Popper open={isOpen || false} anchorEl={anchorEl} placement="bottom-end" transition disablePortal={disablePortal}>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={0}>
             <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
@@ -81,6 +87,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   limitTags={0}
                   id="variable-select"
                   options={displayMetas}
+                  filterOptions={filterOptions}
                   disableCloseOnSelect
                   PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} disablePortal={disablePortal} />}
                   PaperComponent={(props) =>
@@ -102,7 +109,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                               sx={{
                                 color: configObj?.theme?.isLightTextOnDark
                                   ? configObj?.theme?.lightText
-                                  : configObj?.theme?.darkText,
+                                  : configObj?.theme?.darkText || '#FFFFFF',
                               }}
                               id="demo-simple-select-label"
                             >
@@ -112,7 +119,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                               sx={{
                                 color: configObj?.theme?.isLightTextOnDark
                                   ? configObj?.theme?.lightText
-                                  : configObj?.theme?.darkText,
+                                  : configObj?.theme?.darkText || '#FFFFFF',
                               }}
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"

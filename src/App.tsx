@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -12,10 +12,6 @@ import type { IDataClient } from './DataClient';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import ContentContainer from './components/ContentContainer';
-import { useDisplayInfo } from './slices/displayInfoAPI';
-import { setFilterView } from './slices/filterSlice';
-import { filterViewSelector } from './selectors';
-import { selectHashFilterView } from './selectors/hash';
 import { useConfig } from './slices/configAPI';
 import ErrorWrapper from './components/ErrorWrapper';
 
@@ -69,9 +65,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   }, []);
 
   const dispatch = useDispatch();
-  const filterViews = useSelector(filterViewSelector);
   const { data: configObj } = useConfig();
-  const { data: displayInfo } = useDisplayInfo();
 
   const themeV1 = createTheme({
     palette: {
@@ -89,16 +83,6 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
       fontWeightMedium: 400,
     },
   });
-
-  useEffect(() => {
-    const urlHash = selectHashFilterView();
-    if (urlHash.length === 0) {
-      const inactiveFilters = filterViews.inactive.filter((filter) => !displayInfo?.state?.filterView?.includes(filter));
-      dispatch(
-        setFilterView({ name: { active: displayInfo?.state?.filterView || [], inactive: inactiveFilters }, which: 'set' }),
-      );
-    }
-  }, [displayInfo?.state?.filterView]);
 
   useEffect(() => {
     dispatch(setAppID(id));

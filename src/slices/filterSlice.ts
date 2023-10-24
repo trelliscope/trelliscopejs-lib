@@ -146,6 +146,13 @@ export const filterSlice = createSlice({
       if (hashFilterView.length > 0) {
         state.view.active = hashFilterView;
         state.view.inactive = difference(filterables, hashFilterView);
+      } else {
+        const { filterView } = action.payload.state;
+        if (filterView === undefined || filterView.length === 0) {
+          state.view.active = [];
+        } else {
+          state.view.active = filterView;
+        }
       }
     });
   },
