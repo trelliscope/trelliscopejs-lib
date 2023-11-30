@@ -132,10 +132,6 @@ const DisplaySelect: React.FC = () => {
             ? configObj?.theme?.darkText
             : '#757575',
           textTransform: 'unset',
-          // overflow: 'hidden',
-          // textOverflow: 'ellipsis',
-          // whiteSpace: 'nowrap',
-          // maxWidth: '200px', // Adjust this value to suit your needs
         }}
         id="display-select-button"
         aria-haspopup="true"
@@ -149,7 +145,7 @@ const DisplaySelect: React.FC = () => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
-            maxWidth: '300px', // Adjust this value to suit your needs
+            maxWidth: '300px',
           }}
         >
           View other displays ({displayList?.find((d) => d.name !== selectedDisplay)?.name || ''}
