@@ -155,7 +155,9 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                     return (
                       <li {...props} style={{ display: showOption ? 'inherit' : 'none' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
-                          <Checkbox style={{ marginRight: 8 }} checked={selected} />
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Checkbox disableTouchRipple style={{ marginRight: 8 }} checked={selected} />
+                          </Box>
                           <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ lineHeight: hasLabel ? '20px' : '36px' }}>{optionVal?.varname}</div>
                             {hasLabel && <div style={{ fontSize: 13, color: '#555555' }}>{optionVal?.label}</div>}
