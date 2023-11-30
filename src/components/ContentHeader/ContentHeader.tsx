@@ -31,7 +31,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
   const displayLoaded = selectedDisplay?.name !== '';
   const activeFilters = useSelector(selectFilterState);
 
-  const leftPosition = layout?.sidebarActive ? '386px' : '-30';
+  const leftPosition = layout?.sidebarActive ? '386px' : '-30px';
 
   return (
     <ErrorWrapper>
