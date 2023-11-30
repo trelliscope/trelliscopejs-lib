@@ -31,16 +31,17 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
   const displayLoaded = selectedDisplay?.name !== '';
   const activeFilters = useSelector(selectFilterState);
 
+  const leftPosition = layout?.sidebarActive ? '386px' : '-30px';
+
   return (
     <ErrorWrapper>
-      {layout.sidebarActive && (
-        <FontAwesomeIcon
-          onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
-          size="sm"
-          className={styles.contentHeaderControlsItemToggleIcon}
-          icon={faChevronLeft}
-        />
-      )}
+      <FontAwesomeIcon
+        style={{ left: leftPosition }}
+        onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
+        size="sm"
+        className={styles.contentHeaderControlsItemToggleIcon}
+        icon={faChevronLeft}
+      />
       <div className={styles.contentHeader}>
         <div className={styles.contentHeaderControls}>
           <div className={styles.contentHeaderControlsLeft}>
