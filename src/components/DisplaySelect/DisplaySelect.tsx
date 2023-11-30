@@ -140,7 +140,16 @@ const DisplaySelect: React.FC = () => {
         onClick={handleOpen}
         endIcon={<FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} size="xs" />}
       >
-        View other displays ({displayList?.find((d) => d.name !== selectedDisplay)?.name || ''}
+        <span
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '300px',
+          }}
+        >
+          View other displays ({displayList?.find((d) => d.name !== selectedDisplay)?.name || ''}
+        </span>
         {displayList && displayList?.length - 2 > 0 ? ` + ${displayList?.length - 2} more` : ''})
       </Button>
       <Menu
