@@ -292,6 +292,9 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       {data?.length > 0 && (
         <MaterialReactTable
           columns={columns}
+          muiTablePaperProps={{
+            elevation: 0,
+          }}
           muiTableContainerProps={{
             style: {
               overflowX: 'auto',
