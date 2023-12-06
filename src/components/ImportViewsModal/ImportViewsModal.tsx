@@ -77,7 +77,7 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
 
   return (
     <div className={styles.importViewsModal}>
-      <Dialog open={isOpen} onClose={handleImportToggle}>
+      <Dialog data-testid="import-views-modal" open={isOpen} onClose={handleImportToggle}>
         <DialogTitle>Import Views</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -98,7 +98,9 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleImportToggle}>Cancel</Button>
+          <Button data-testid="views-import-cancel" onClick={handleImportToggle}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

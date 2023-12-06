@@ -107,12 +107,13 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
 
   return (
     <div className={styles.addViewModal}>
-      <Dialog fullWidth open={isOpen} onClose={handleViewToggle}>
+      <Dialog data-testid="views-modal" fullWidth open={isOpen} onClose={handleViewToggle}>
         <DialogTitle>Add a new view</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter a description and save this view locally.</DialogContentText>
           <TextField
             id="name"
+            data-testid="view-name-input"
             autoFocus
             margin="dense"
             label="View Name"
@@ -126,6 +127,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
           />
           <TextField
             id="description"
+            data-testid="view-description-input"
             autoFocus
             margin="dense"
             label="View Description"
@@ -178,6 +180,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
         <DialogActions>
           <Button onClick={handleViewToggle}>Cancel</Button>
           <Button
+            data-testid="view-save-button"
             disabled={
               !viewForm.sort &&
               !viewForm.filter &&
