@@ -295,6 +295,12 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
           muiTablePaperProps={{
             elevation: 0,
           }}
+          muiTableContainerProps={{
+            style: {
+              overflowX: 'auto',
+              overscrollBehaviorX: 'none',
+            },
+          }}
           initialState={{
             columnPinning: {
               left: [...panelMetaLabels],
