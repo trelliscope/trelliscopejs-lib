@@ -260,6 +260,7 @@ const Views: React.FC = () => {
           <Button
             sx={{ textTransform: 'capitalize', color: '#000' }}
             id="views-button"
+            data-testid="views-button"
             aria-controls={open ? 'views-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -270,6 +271,7 @@ const Views: React.FC = () => {
           </Button>
           <Menu
             id="views-menu"
+            data-testid="views-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
@@ -352,6 +354,7 @@ const Views: React.FC = () => {
                           sx={{ mr: '5px' }}
                           aria-label="close"
                           size="small"
+                          data-testid="delete-view-button"
                           onClick={() => handleDeleteView(value.name)}
                         >
                           <FontAwesomeIcon icon={faTrash} />
@@ -372,6 +375,7 @@ const Views: React.FC = () => {
                   }}
                   variant="contained"
                   onClick={handleViewToggle}
+                  data-testid="add-view-button"
                   startIcon={
                     <FontAwesomeIcon
                       color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
@@ -387,6 +391,7 @@ const Views: React.FC = () => {
                     color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
                   }}
                   variant="contained"
+                  data-testid="export-views-button"
                   onClick={handleExportToggle}
                   startIcon={
                     <FontAwesomeIcon
@@ -402,6 +407,7 @@ const Views: React.FC = () => {
                     borderRadius: 0,
                     color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
                   }}
+                  data-testid="import-views-button"
                   variant="contained"
                   onClick={handleImportToggle}
                   startIcon={

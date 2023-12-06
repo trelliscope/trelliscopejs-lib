@@ -35,13 +35,14 @@ const ExportViewsModal: React.FC<ExportViewsModalProps> = ({ isOpen, handleExpor
   };
   return (
     <div className={styles.exportViewsModal}>
-      <Dialog open={isOpen} onClose={handleExportToggle}>
+      <Dialog data-testid="export-views-modal" open={isOpen} onClose={handleExportToggle}>
         <DialogTitle>Export Views</DialogTitle>
         <DialogContent>
           <DialogContentText>Add a file name and download a json file of your views for this display.</DialogContentText>
           <Box sx={{ mt: 2 }}>
             <TextField
               id="name"
+              data-testid="export-name-input"
               required
               autoFocus
               margin="dense"
@@ -60,7 +61,7 @@ const ExportViewsModal: React.FC<ExportViewsModalProps> = ({ isOpen, handleExpor
         </DialogContent>
         <DialogActions>
           <Button onClick={handleExportToggle}>Cancel</Button>
-          <Button disabled={!exportName} onClick={handleExport}>
+          <Button data-testid="export-download-button" disabled={!exportName} onClick={handleExport}>
             Export
           </Button>
         </DialogActions>
