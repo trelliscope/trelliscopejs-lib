@@ -1,18 +1,8 @@
 ---
-to: "<%= unitTest ? `src/components/${name}/${name}.test.js` : null %>"
+to: "<%= test ? `tests/${name}.spec.ts` : null %>"
 ---
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import <%= name %> from './<%= name %>';
+import { test, expect } from '@playwright/test';
 
-describe(`<%= name %> component`, () => {
-
-  it('should render', () => {
-    render(
-        <<%= name %>/>
-    );
-
-    expect(screen.getByText('<%= name %>')).toBeInTheDocument();
-  });
+test.beforeEach(async ({ page }) => {
+  await page.goto('http://localhost:3000/');
 });
