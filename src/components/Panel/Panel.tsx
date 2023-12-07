@@ -69,6 +69,7 @@ const Panel: React.FC<PanelProps> = ({
                   backgroundColor: 'rgba(255, 255, 255, 0.7);',
                 },
               }}
+              data-testid="panel-expand-button"
               size="small"
               onClick={handleClick}
             >

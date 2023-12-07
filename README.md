@@ -66,3 +66,15 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### `npx playwright test`
+
+Runs all playwright tests
+
+### `npx playwright test --ui`
+
+Runs all playwright tests in UI mode for debugging
+
+### `npx playwright test header.spec.ts`
+
+Runs a single playwright test
