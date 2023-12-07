@@ -71,11 +71,6 @@ body {
   color: #ff5252;
 }
 
-div[role='tooltip'],
-div[role='presentation'] {
-  z-index: 8002 !important;
-}
-
 .react-daterange-picker__clear-button,
 .react-datetimerange-picker__clear-button {
   display: none !important;
