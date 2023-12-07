@@ -186,6 +186,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
       classes={{ paper: styles.panelDialogInner }}
       open={open}
       onClose={handleClose}
+      data-testid="panel-dialog"
     >
       <ClickAwayListener
         mouseEvent="onMouseUp"
@@ -202,6 +203,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
               fontSize: '15px',
             }}
             type="button"
+            data-testid="variable-selector-button"
             onClick={handleVariableSelectorClick}
             endIcon={<FontAwesomeIcon icon={variableSelectorIsOpen ? faChevronUp : faChevronDown} />}
           >
@@ -228,7 +230,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
       </ClickAwayListener>
       <div className={styles.panelDialogGraphic}>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
-          <IconButton disabled={n === 1 && curIndex === 0} onClick={pageLeft}>
+          <IconButton data-testid="paginate-left" disabled={n === 1 && curIndex === 0} onClick={pageLeft}>
             <FontAwesomeIcon icon={faChevronLeft} />
           </IconButton>
         </Box>
@@ -276,7 +278,11 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         )}
 
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
-          <IconButton disabled={n === totPages && curIndex === data.length - 1} onClick={pageRight}>
+          <IconButton
+            data-testid="paginate-right"
+            disabled={n === totPages && curIndex === data.length - 1}
+            onClick={pageRight}
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </IconButton>
         </Box>

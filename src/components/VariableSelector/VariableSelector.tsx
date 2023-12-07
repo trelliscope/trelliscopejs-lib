@@ -75,7 +75,14 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
 
   return (
     <div className={styles.variableSelector}>
-      <Popper open={isOpen || false} anchorEl={anchorEl} placement="bottom-end" transition disablePortal={disablePortal}>
+      <Popper
+        data-testid="variable-picker"
+        open={isOpen || false}
+        anchorEl={anchorEl}
+        placement="bottom-end"
+        transition
+        disablePortal={disablePortal}
+      >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={0}>
             <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
