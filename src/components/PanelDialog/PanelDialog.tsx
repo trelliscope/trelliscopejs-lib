@@ -236,7 +236,10 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         </Box>
         {curSource && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}>
+            <Box
+              sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}
+              data-testid="panel-dialog-image"
+            >
               <PanelGraphic
                 type={panel?.paneltype}
                 src={
@@ -291,7 +294,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
       </div>
       <DialogActions>
-        <Button aria-label="display info close" onClick={handleClose}>
+        <Button data-testid="panel-dialog-close" aria-label="display info close" onClick={handleClose}>
           Close
         </Button>
       </DialogActions>

@@ -2,25 +2,30 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3000/');
+  await expect(page.getByTestId('column-selector')).toBeVisible();
+  await page.getByTestId('column-selector-input').fill('1');
+  await expect(page.getByTestId('panel-hover')).toBeVisible();
+  await page.getByTestId('panel-hover').hover();
+  await page.getByTestId('panel-expand-button').click();
 });
 
-// FIXME there seems to be a race condition here, the test struggles to click the panel picker, if you just do a .click() on
-// testId it fails because there is 4 but other selectors dont seem to ever find the render,
-// when debugging it appears that the dom hasnt loaded the panels
+test('panel dialog modal open and closes', async ({ page }) => {
+  await expect(page.getByTestId('panel-dialog')).toBeVisible();
+  await page.getByTestId('panel-dialog-close').click();
+  await expect(page.getByTestId('panel-dialog')).not.toBeVisible();
+});
 
-// test('panel dialog modal open and closes', async ({ page }) => {
-//   const buttons = await page.getByRole('button', { name: 'Open panel dialog' });
-//   //   await page.waitForTimeout(20000);
-//   await buttons.first().click();
+test('panel dialog modal can paginate and panel picker is present and clickable', async ({ page }) => {
+  await page.getByTestId('paginate-right').click();
+  await page.getByTestId('paginate-left').click();
+  await page.getByTestId('paginate-right').click();
+  await page.getByTestId('variable-selector-button').click();
+  await expect(page.getByTestId('variable-picker')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('pagination-numbers')).toHaveText('2 of  16,860');
+});
 
-//   // the rest of your test...
-// });
-
-// test('panel dialog modal can paginate and panel picker is present and clickable', async ({ page }) => {
-//   await page.getByTestId('panel-expand-button').click();
-//   await expect(page.getByTestId('panel-dialog')).toBeVisible();
-//   await page.getByTestId('paginate-right').click();
-//   await page.getByTestId('paginate-left').click();
-//   await page.getByTestId('variable-selector-button').click();
-//   await expect(page.getByTestId('variable-picker')).toBeVisible();
-// });
+test('panel dialog image and tables are present', async ({ page }) => {
+  await expect(page.getByTestId('panel-dialog-image')).toBeVisible();
+  await expect(page.getByTestId('panel-dialog-table')).toBeVisible();
+});

@@ -57,7 +57,7 @@ const Panel: React.FC<PanelProps> = ({
   };
 
   return (
-    <div id="panel-control" className={styles.panel}>
+    <div data-testid="panel-hover" id="panel-control" className={styles.panel}>
       <div role="presentation" className={styles.panelGraphic}>
         {children}
         <div className={styles.panelGraphicExpand}>

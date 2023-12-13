@@ -48,7 +48,7 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
   const panelKey = panelKeyArr?.join('_');
 
   return (
-    <table className={styles.panelZoomLabels} width="100%">
+    <table data-testid="panel-dialog-table" className={styles.panelZoomLabels} width="100%">
       <tbody>
         {inputs.length !== 0 && (
           <tr>
