@@ -77,7 +77,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
               <Sort />
             </div>
             {tableRef?.current && rerender && layout?.viewtype === 'table' && (
-              <div id="column-control" className={styles.contentHeaderControlsItem}>
+              <div data-testid="columns-table" id="column-control" className={styles.contentHeaderControlsItem}>
                 <span>Columns</span>
                 {/* eslint-disable-next-line react/jsx-pascal-case */}
                 <MRT_ShowHideColumnsButton table={tableRef?.current} />
