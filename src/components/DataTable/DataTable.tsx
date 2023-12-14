@@ -288,7 +288,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
   }, [columnSize]);
 
   return (
-    <div className={styles.dataTable}>
+    <div className={styles.dataTable} data-testid="data-table">
       {data?.length > 0 && (
         <MaterialReactTable
           columns={columns}
