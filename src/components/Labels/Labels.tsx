@@ -76,6 +76,7 @@ const Labels: React.FC = () => {
               textTransform: 'unset',
               fontSize: '15px',
             }}
+            data-testid="labels-button"
             type="button"
             onClick={handleVariableLabelSelectorClick}
             endIcon={<FontAwesomeIcon icon={variableLabelSelectorIsOpen ? faChevronUp : faChevronDown} />}
