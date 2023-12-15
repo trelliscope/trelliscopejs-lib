@@ -179,7 +179,6 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  // data-testid="label-checkbox"
                   checked={labelIsSelected}
                   onClick={() => handleLabelChange(meta?.varname as string)}
                   size="small"
