@@ -32,6 +32,7 @@ const Ellipsis: React.FC<EllipsisProps> = ({ options, curItem, setCurItem }) => 
       {/* this is an issue with the iconButton in materialUi not having the type for an onClick in the props
           // @ts-ignore */}
       <IconButton
+        data-testid="ellipsis-button"
         aria-label="more"
         aria-controls="long-menu"
         aria-haspopup="true"

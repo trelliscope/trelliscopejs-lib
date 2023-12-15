@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateLeft, faXmark, faArrowDownShortWide, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
@@ -178,9 +179,11 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             <FormControlLabel
               control={
                 <Checkbox
+                  // data-testid="label-checkbox"
                   checked={labelIsSelected}
                   onClick={() => handleLabelChange(meta?.varname as string)}
                   size="small"
+                  inputProps={{ 'data-testid': 'label-checkbox' } as InputHTMLAttributes<HTMLInputElement>}
                 />
               }
               label="Show label"
@@ -213,6 +216,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
           </div>
           <div>
             <Button
+              data-testid="clear-filter-button"
               disabled={!filter}
               size="small"
               variant="text"

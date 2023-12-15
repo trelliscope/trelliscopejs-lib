@@ -189,6 +189,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                   },
                 }}
                 type="button"
+                data-testid="filter-show-hide-button"
                 onClick={handleVariableFilterSelectorClick}
                 endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
               >
@@ -225,6 +226,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                     borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
                   },
                 }}
+                data-testid="filter-remove-all-button"
                 disabled={activeFilters.length === 0}
                 onClick={() => setConfirmationRemoveModalOpen(!confirmationRemoveModalOpen)}
                 endIcon={<FontAwesomeIcon icon={faXmark} size="sm" />}
@@ -246,6 +248,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                     borderRight: 'none',
                   },
                 }}
+                data-testid="filter-clear-all-button"
                 disabled={activeStateFilters.length === 0}
                 onClick={() => setConfirmationClearModalOpen(!confirmationClearModalOpen)}
                 endIcon={<FontAwesomeIcon icon={faRotateLeft} size="xs" />}

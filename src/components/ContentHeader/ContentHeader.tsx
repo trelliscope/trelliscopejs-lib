@@ -48,6 +48,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
             <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
               <Button
                 id="filter-drawer-button"
+                data-testid="filter-drawer-button"
                 onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
                 variant="text"
                 sx={{
@@ -57,7 +58,9 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
                   borderRadius: 0,
                   minWidth: '90px',
                 }}
-                startIcon={!layout.sidebarActive && <FontAwesomeIcon icon={faChevronRight} />}
+                startIcon={
+                  !layout.sidebarActive && <FontAwesomeIcon data-testid="filter-drawer-button-icon" icon={faChevronRight} />
+                }
               >
                 Filters
                 {activeFilters.length > 0 && (
