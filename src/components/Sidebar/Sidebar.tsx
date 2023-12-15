@@ -52,6 +52,7 @@ const Sidebar: React.FC = () => {
             zIndex: 'initial',
           },
         }}
+        data-testid="filter-drawer"
         open={layout.sidebarActive}
         className={styles.sidebar}
         variant="persistent"
