@@ -157,7 +157,12 @@ const Sort: React.FC = () => {
               </SortableContext>
             </DndContext>
           </div>
-          <IconButton id="sort-add-icon" onClick={handleVariableSortSelectorClick} aria-label="add-icon">
+          <IconButton
+            data-testid="sort-add-button"
+            id="sort-add-icon"
+            onClick={handleVariableSortSelectorClick}
+            aria-label="add-icon"
+          >
             <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />
           </IconButton>
           <VariableSelector
