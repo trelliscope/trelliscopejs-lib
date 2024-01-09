@@ -25,6 +25,7 @@ interface Data {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle, hasEmail }) => {
   const { allData } = useContext(DataContext);
   const displayMetas = useDisplayMetas();

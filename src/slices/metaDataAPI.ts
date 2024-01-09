@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelectedDisplay } from './selectedDisplaySlice';
 import { selectBasePath } from '../selectors/app';
 import { snakeCase } from '../utils';
-import { useDataType } from './configAPI';
+// import { useDataType } from './configAPI';
 import { META_DATA_STATUS } from '../constants';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
@@ -11,11 +11,11 @@ export const metaIndex: unique symbol = Symbol('metaIndex');
 export const useMetaData = () => {
   const basePath = useSelector(selectBasePath);
   const selectedDisplay = useSelectedDisplay();
-  const dataType = useDataType();
+  // const dataType = useDataType();
 
   const displayPath = snakeCase(selectedDisplay?.name || '');
 
-  const url = `${basePath}/displays/${displayPath}/metaData.${dataType === 'json' ? 'json' : 'js'}`;
+  const url = `${basePath}/displays/${displayPath}/metaData.js`;
 
   const [loadingState, setLoadingState] = useState(url ? META_DATA_STATUS.LOADING : META_DATA_STATUS.IDLE);
   const [metaData, setMetaData] = useState<Datum[] | null>(null);
@@ -26,20 +26,20 @@ export const useMetaData = () => {
       return;
     }
 
-    if (dataType === 'json' && !window.metaData) {
-      fetch(url)
-        .then((res) => res.json())
-        .then((res) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          // window.metaData = res;
-          setState(META_DATA_STATUS.READY);
-          setMetaData(res);
-        })
-        .catch((error) => setLoadingState(META_DATA_STATUS.ERROR));
+    // if (dataType === 'json' && !window.metaData) {
+    //   fetch(url)
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //       // @ts-ignore
+    //       // window.metaData = res;
+    //       setState(META_DATA_STATUS.READY);
+    //       setMetaData(res);
+    //     })
+    //     .catch((error) => setLoadingState(META_DATA_STATUS.ERROR));
 
-      return;
-    }
+    //   return;
+    // }
 
     let script = document.querySelector(`script[src="${url}"]`) as HTMLScriptElement;
 

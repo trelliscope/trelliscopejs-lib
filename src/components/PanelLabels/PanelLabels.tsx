@@ -21,7 +21,7 @@ import {
   META_TYPE_PANEL,
   META_TYPE_STRING,
   MISSING_TEXT,
-  PANEL_KEY,
+  // PANEL_KEY,
 } from '../../constants';
 import FormattedNumber from '../FormattedNumber';
 import {

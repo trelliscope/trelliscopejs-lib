@@ -16,7 +16,7 @@ import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
 import { filterViewSelector } from '../../selectors';
 import { useConfig } from '../../slices/configAPI';
-import styles from './DisplaySelect.module.scss';
+// import styles from './DisplaySelect.module.scss';
 import ErrorWrapper from '../ErrorWrapper';
 
 const DisplaySelect: React.FC = () => {

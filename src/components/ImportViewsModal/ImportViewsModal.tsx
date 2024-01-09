@@ -62,6 +62,7 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
         });
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       reader.onerror = (event) => {
         setIsLoading(false);
         enqueueSnackbar('Error reading file', {

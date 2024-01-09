@@ -20,7 +20,7 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
     <g className={styles.axisEdgeTick} transform={`translate(${x}, 0)`}>
       <line y1={4} y2={0} />
     </g>
-    {ticks.map((d, i) => (
+    {ticks.map((d) => (
       <g className={styles.axisTick} key={d} transform={`translate(${scale(d) || 0}, 0)`}>
         <line y1={4} y2={0} x1={x} x2={x} />
         {log && (

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorSnack from '../ErrorSnack';
-import styles from './ErrorWrapper.module.scss';
+// import styles from './ErrorWrapper.module.scss';
 import { selectErrorMessage } from '../../selectors/app';
 import { setErrorMessage } from '../../slices/appSlice';
 
