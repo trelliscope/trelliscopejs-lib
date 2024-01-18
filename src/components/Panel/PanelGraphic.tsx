@@ -34,14 +34,15 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
     const loadImage = async () => {
       setLoading(true);
       const socket = new WebSocket(socketUrl);
-      socket.onopen = function (e) {
+      socket.onopen = () => {
         socket.send(JSON.stringify({ panelName: name, panelURL: sourceClean }));
       };
-      socket.onmessage = function (event) {
+      socket.onmessage = (event) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = JSON.parse(event.data);
         socket.close();
       };
-      socket.onclose = function (event) {
+      socket.onclose = () => {
         setLoading(false);
       };
       // eslint-disable-next-line consistent-return

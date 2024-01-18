@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,6 @@ import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import {
   Box,
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,8 +14,6 @@ import {
   IconButton,
   Tab,
   Tabs,
-  Typography,
-  Tooltip,
 } from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';

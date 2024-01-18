@@ -55,6 +55,7 @@ const panelLabelSize = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const panelLabelSizeSelector = createSelector(numLabelsSelector, numColumnsSelector, showLabelsSelector, (nl, nc, sl) => {
   let size = {} as PanelLabelSizeProps;
   if (nl <= 6) {

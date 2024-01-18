@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, ButtonGroup, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, ButtonGroup, ClickAwayListener, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';

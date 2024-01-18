@@ -119,6 +119,7 @@ export const getLocalStorageKey = (tags: string[], displayName: string, key: str
 export const useStoredInputValue = (key: string, name: string) => {
   const { data: displayInfo } = useDisplayInfo();
   const lsKey = getLocalStorageKey(displayInfo?.tags || [], displayInfo?.name || '', key, name);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localValue, setLocalValue] = useState<string | null>(localStorage.getItem(lsKey));
 
   const getStoredValue = () => localStorage.getItem(lsKey);

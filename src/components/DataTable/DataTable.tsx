@@ -192,7 +192,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
       },
     }));
 
-    const imageColumnData = panelMetas.map((meta, i) => ({
+    const imageColumnData = panelMetas.map((meta) => ({
       id: meta.varname,
       header: meta.varname,
       accessorKey: meta.varname,
