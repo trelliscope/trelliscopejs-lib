@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Tooltip } from '@mui/material';
-import MaterialReactTable from 'material-react-table';
+import { MaterialReactTable } from 'material-react-table';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { useDisplayInfo, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import PanelGraphic from '../Panel/PanelGraphic';

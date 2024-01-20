@@ -36,7 +36,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   });
 
   useEffect(() => {
-    // eslint-disable-next-line consistent-return
+    // eslint-disable-next-line consistent-return, @typescript-eslint/no-unused-vars
     window.onerror = (message, source, lineno, colno, error) => {
       if (source?.includes('.jsonp') || source?.includes('.json') || source?.includes('metaData.js')) {
         setError({

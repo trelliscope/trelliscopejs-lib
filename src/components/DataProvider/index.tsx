@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { selectNumPerPage, selectPage } from '../../slices/layoutSlice';
@@ -87,9 +87,15 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     setData(client.getData(numPerPage, page));
   }, [numPerPage, page]);
 
+  const dataContextValue = useMemo(() => ({
+    data, allData: client.allData,
+    filteredData: client.filteredData,
+    groupBy: client.groupBy
+  }), [data, client.allData, client.filteredData, client.groupBy]);
+
   return (
     <DataContext.Provider
-      value={{ data, allData: client.allData, filteredData: client.filteredData, groupBy: client.groupBy }}
+      value={dataContextValue}
     >
       {children}
     </DataContext.Provider>

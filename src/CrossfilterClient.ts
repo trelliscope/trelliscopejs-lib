@@ -217,10 +217,12 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     return this.crossfilter.allFiltered();
   }
 
+  // TODO: why is this being called multiple times with the same data?
+  // This could impact performance...
   getData(count = Infinity, page = 1) {
     const offset = (page - 1) * count;
 
-    if (this._sorts.length < 2) {
+    if (this._sorts.length <= 1) {
       const lastSort = this._sorts[this._sorts.length - 1];
 
       if (lastSort) {
@@ -245,6 +247,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     const sortKey = this._sorts.map((s) => s.field).join('-');
 
     if (allData.length) {
+      // console.log('SORTING')
       const sortData = allData.map((d) => {
         const elem: SortParam = { [sortKey]: d[metaIndex] };
         this._sorts.forEach((s) => {

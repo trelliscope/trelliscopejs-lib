@@ -40,4 +40,4 @@ export const getFactorFromLabel = (values: string[], levels: string[]) =>
     .filter((label) => label !== undefined);
 
 export const panelSrcGetter = (basePath: string, fileName: string, displayName: string) =>
-  `${process.env.PUBLIC_URL}/${basePath}/displays/${displayName}/${fileName}`;
+  `${basePath}/displays/${displayName}/${fileName}`;

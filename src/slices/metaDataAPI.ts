@@ -45,6 +45,9 @@ export const useMetaData = () => {
 
     const handleScript = (e: Event) => {
       setLoadingState(e.type === 'load' ? META_DATA_STATUS.READY : META_DATA_STATUS.ERROR);
+      window.metaData?.forEach((datum, i) => {
+        datum[metaIndex] = i;
+      });
       setMetaData(window.metaData);
     };
 

@@ -1,13 +1,20 @@
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
+// latin-only reduces bundle size by 0.5MB but users's might have data with non-latin characters
+// import '@fontsource/poppins/latin-300.css';
+// import '@fontsource/poppins/latin-500.css';
+// import '@fontsource/poppins/latin-600.css';
+// import '@fontsource/jost/latin-500.css';
+// import '@fontsource/source-code-pro/latin-300.css';
+// import '@fontsource/source-code-pro/latin-600.css';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
-import '@fontsource/jost/500.css';
+import '@fontsource/jost/latin-500.css';
 import '@fontsource/source-code-pro/300.css';
 import '@fontsource/source-code-pro/600.css';
-
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 import store from './store';
@@ -19,10 +26,9 @@ import './assets/styles/variables.scss';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
-import reducers from './reducers';
+// import reducers from './reducers';
 import App from './App';
 
-import * as serviceWorker from './serviceWorker';
 import CrossfilterClient from './CrossfilterClient';
 import type { IDataClient } from './DataClient';
 
@@ -34,12 +40,11 @@ const trelliscopeApp = (
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
 ) => {
   // Sets up msw worker for mocking api calls
-  /* if (process.env.NODE_ENV !== 'production' && options.mockData) {
+  /* if (import.meta.env.MODE !== 'production' && options.mockData) {
     const worker = await import('./test/__mockData__/worker');
     worker.default.start(import { IDataClient } from './DataClient';
 );
   } */
-
   const crossFilterClient = new CrossfilterClient();
 
   const el = document.getElementById(id) as HTMLElement;
@@ -118,12 +123,6 @@ const trelliscopeApp = (
     singlePageApp = true;
   }
 
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      store.replaceReducer(reducers);
-    });
-  }
-
   // resize handler only when in fullscreen mode (which is always for SPA)
   window.addEventListener('resize', () => {
     if (store.getState().app.fullscreen) {
@@ -149,23 +148,6 @@ const trelliscopeApp = (
     </Provider>,
   );
 
-  if (module.hot) {
-    module.hot.accept('./App', () => {
-      root.render(
-        <Provider store={store}>
-          <App
-            client={crossFilterClient as unknown as IDataClient}
-            config={config}
-            id={id}
-            singlePageApp={singlePageApp}
-            options={options}
-            appDims={appDims}
-          />
-        </Provider>,
-      );
-    });
-  }
-
   return {
     resize: (width: number, height: number) => {
       el.style.height = `${height}px`;
@@ -182,49 +164,19 @@ const trelliscopeApp = (
 
 window.trelliscopeApp = trelliscopeApp;
 
-// trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
-// trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
-// trelliscopeApp('02a6e2cc', '_test/univar/config.jsonp', { logger: true });
-// trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
-// trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
-// trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
-// trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
-// trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
-// trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
-// trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('389b2253', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('7bb04a1e', '_test/trelliscope-examples3/iris/config.jsonp', { logger: true });
-// trelliscopeApp('f4245da9', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });
-// trelliscopeApp('d1303638', '_test/trelliscope-examples3/mars/config.jsonp', { logger: true });
-// trelliscopeApp('4cde1d81', '_test/trelliscope-examples3/lego/config.jsonp', { logger: true });
-trelliscopeApp('0404e8a0', '_test/nojsonp/config.json', { logger: true });
-// trelliscopeApp('713614ec', 'examples/docs/mars/config.jsonp', { logger: true });
-// trelliscopeApp('594e0d0e', '_test/trelliscope-examples3/gapminder_crossfilter/config.jsonp', { logger: true });
-// trelliscopeApp('0c8b1613', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
-// trelliscopeApp('3a3019d9', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
-// trelliscopeApp('c060b1f7', '_test/trelliscope-examples3/mars/config.jsonp', { logger: true });
-// trelliscopeApp('b2296d6a', '_test/trelliscope-examples3/pokemon/config.jsonp', { logger: true });
-// trelliscopeApp('097af825', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });
-// trelliscopeApp('86af5747', '_test/trelliscope-examples3/mpg/config.jsonp', { logger: true });
+if (import.meta.env.MODE === 'development') {
+  const example = window.__DEV_EXAMPLE__ as unknown as
+    { id: string; name: string; datatype: string };
 
-// trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
-// trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
-// trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
-// trelliscopeApp('8653174a', '_test/adversarial/config.jsonp', { logger: true });
-// trelliscopeApp('mydisplay', '_test/who2/config.jsonp', { logger: true });
-
-// trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
-// trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
-// trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
-// trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
-// trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp', { logger: true });
-
-// https://toddmotto.com/react-create-class-versus-component/
-// http://stackoverflow.com/questions/35073669/window-resize-react-redux
-// hover scroll: http://jsfiddle.net/r36cuuvr/
-// https://github.com/StevenIseki/react-search
-
-serviceWorker.register();
+  // append div to body for testing with id gapminder
+  const div = document.createElement('div');
+  div.id = example.id;
+  // div.style.width = '1000px';
+  // div.style.height = '600px';
+  // div.style.border = '1px solid red';
+  // div.className = 'trelliscope-not-spa';
+  div.className = 'trelliscope-spa';
+  document.body.appendChild(div);
+  trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
+  { logger: true });
+}

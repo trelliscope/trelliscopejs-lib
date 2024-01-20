@@ -63,7 +63,7 @@ const HelpInfo: React.FC = () => {
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
           <Box>
-            <div>{`Trelliscope v${process.env.REACT_APP_VERSION}`}</div>
+            <div>{`Trelliscope v${window.__VERSION__}`}</div>
             <div className={styles.helpInfoDialogWebsite}>
               Learn more at{' '}
               <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
