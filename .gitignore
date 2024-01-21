@@ -17,6 +17,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+_examples/*
+!_examples/gapminder_testing/*
 
 npm-debug.log*
 yarn-debug.log*
@@ -30,4 +32,8 @@ public/info.html
 .history
 /test-results/
 /playwright-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/blob-report/
 /playwright/.cache/

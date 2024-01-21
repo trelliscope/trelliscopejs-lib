@@ -1,0 +1,9 @@
+__loadDisplayList__15fe2f4c([
+  {
+    "name": "Life expectancy",
+    "description": "Life expectancy over time by country",
+    "tags": [],
+    "thumbnailurl": "panels/lexp_time/Afghanistan_Asia.svg",
+    "order": 0
+  }
+])

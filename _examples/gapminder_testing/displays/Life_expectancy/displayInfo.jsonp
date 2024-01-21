@@ -1,0 +1,258 @@
+__loadDisplayInfo__15fe2f4c({
+  "name": "Life expectancy",
+  "description": "Life expectancy over time by country",
+  "tags": [],
+  "keycols": ["country"],
+  "metas": [
+    {
+      "maxnchar": 24,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["info"],
+      "label": "country",
+      "type": "string",
+      "varname": "country"
+    },
+    {
+      "levels": ["Africa", "Americas", "Asia", "Europe", "Oceania"],
+      "maxnchar": 8,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["info"],
+      "label": "continent",
+      "type": "factor",
+      "varname": "continent"
+    },
+    {
+      "maxnchar": 2,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["info"],
+      "label": "iso_alpha2",
+      "type": "string",
+      "varname": "iso_alpha2"
+    },
+    {
+      "log": false,
+      "locale": true,
+      "digits": 2,
+      "maxnchar": 5,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["stats"],
+      "label": "Mean life expectancy",
+      "type": "number",
+      "varname": "mean_lexp"
+    },
+    {
+      "digits": 2,
+      "log": true,
+      "code": "USD",
+      "maxnchar": 8,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["stats"],
+      "label": "Mean GDP per capita",
+      "type": "currency",
+      "varname": "mean_gdp"
+    },
+    {
+      "log": true,
+      "locale": true,
+      "digits": 2,
+      "maxnchar": 9,
+      "sortable": true,
+      "filterable": true,
+      "tags": ["stats"],
+      "label": "Max % year-to-year change in life expectancy",
+      "type": "number",
+      "varname": "max_lexp_pct_chg"
+    },
+    {
+      "maxnchar": 10,
+      "sortable": true,
+      "filterable": true,
+      "tags": [],
+      "label": "Date of max % year-to-year change in life expectancy",
+      "type": "date",
+      "varname": "dt_lexp_max_pct_chg"
+    },
+    {
+      "timezone": "UTC",
+      "maxnchar": 10,
+      "sortable": true,
+      "filterable": true,
+      "tags": [],
+      "label": "Date-time of max % year-to-year change in life expectancy",
+      "type": "datetime",
+      "varname": "dttm_lexp_max_pct_chg"
+    },
+    {
+      "maxnchar": 2,
+      "sortable": false,
+      "filterable": false,
+      "tags": [],
+      "label": "Link to country Wikipedia entry",
+      "type": "href",
+      "varname": "wiki_link"
+    },
+    {
+      "source": {
+        "isLocal": true,
+        "type": "file"
+      },
+      "aspect": 1.5,
+      "paneltype": "img",
+      "maxnchar": 0,
+      "sortable": false,
+      "filterable": false,
+      "tags": [],
+      "label": "Plot of life expectancy over time (svg)",
+      "type": "panel",
+      "varname": "lexp_time"
+    },
+    {
+      "source": {
+        "isLocal": true,
+        "type": "file"
+      },
+      "aspect": 0.5,
+      "paneltype": "iframe",
+      "maxnchar": 0,
+      "sortable": false,
+      "filterable": false,
+      "tags": [],
+      "label": "Dummy 'plot' to test html panels",
+      "type": "panel",
+      "varname": "html_panel"
+    },
+    {
+      "source": {
+        "isLocal": false,
+        "type": "file"
+      },
+      "aspect": 1.50146627565982,
+      "paneltype": "img",
+      "maxnchar": 0,
+      "sortable": false,
+      "filterable": false,
+      "tags": [],
+      "label": "Country flag",
+      "type": "panel",
+      "varname": "flag"
+    }
+  ],
+  "state": {
+    "layout": {
+      "viewtype": "grid",
+      "sidebarActive": true,
+      "page": 1,
+      "ncol": 3,
+      "type": "layout"
+    },
+    "labels": {
+      "varnames": ["country", "continent", "wiki_link"],
+      "type": "labels"
+    },
+    "sort": [
+      {
+        "type": "sort",
+        "varname": "continent",
+        "dir": "asc",
+        "metatype": "factor"
+      },
+      {
+        "type": "sort",
+        "varname": "mean_lexp",
+        "dir": "desc",
+        "metatype": "number"
+      }
+    ],
+    "filter": [
+      {
+        "type": "filter",
+        "varname": "continent",
+        "filtertype": "category",
+        "metatype": "factor",
+        "regexp": null,
+        "values": [1]
+      },
+      {
+        "type": "filter",
+        "varname": "mean_lexp",
+        "filtertype": "numberrange",
+        "metatype": "number",
+        "min": null,
+        "max": 50
+      }
+    ],
+    "filterView": ["continent", "mean_lexp"]
+  },
+  "views": [
+    {
+      "name": "Countries with high life expectancy (mean >= 60)",
+      "state": {
+        "layout": {
+          "viewtype": "grid",
+          "sidebarActive": false,
+          "page": 1,
+          "ncol": 3,
+          "type": "layout"
+        },
+        "labels": {
+          "varnames": ["country"],
+          "type": "labels"
+        },
+        "sort": [
+          {
+            "type": "sort",
+            "varname": "mean_gdp",
+            "dir": "desc",
+            "metatype": "currency"
+          }
+        ],
+        "filter": [
+          {
+            "type": "filter",
+            "varname": "mean_lexp",
+            "filtertype": "numberrange",
+            "metatype": "number",
+            "min": 60,
+            "max": null
+          }
+        ],
+        "filterView": []
+      }
+    }
+  ],
+  "inputs": {
+    "inputs": [
+      {
+        "height": 6,
+        "type": "text",
+        "active": true,
+        "label": "Comments about this panel",
+        "name": "comments"
+      },
+      {
+        "options": ["no", "yes"],
+        "type": "radio",
+        "active": true,
+        "label": "Data looks correct?",
+        "name": "looks_correct"
+      }
+    ],
+    "storageInterface": {
+      "type": "localStorage"
+    },
+    "feedbackInterface": {
+      "feedbackEmail": null,
+      "includeMetaVars": []
+    }
+  },
+  "primarypanel": "lexp_time",
+  "thumbnailurl": "panels/lexp_time/Afghanistan_Asia.svg",
+  "infoOnLoad": false,
+  "hasCustomInfo": false,
+  "order": 0
+})

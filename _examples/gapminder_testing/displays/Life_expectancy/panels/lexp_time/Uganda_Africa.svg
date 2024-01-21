@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' width='600.00pt' height='400.00pt' viewBox='0 0 600.00 400.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw2MDAuMDB8MC4wMHw0MDAuMDA='>
+    <rect x='0.00' y='0.00' width='600.00' height='400.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw2MDAuMDB8MC4wMHw0MDAuMDA=)'>
+<circle cx='27.27' cy='280.88' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='76.86' cy='264.90' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='126.45' cy='247.81' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='176.03' cy='231.12' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='225.62' cy='212.85' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='275.21' cy='216.95' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='324.79' cy='220.04' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='374.38' cy='209.81' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='423.97' cy='226.35' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='473.55' cy='252.53' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='523.14' cy='232.59' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+<circle cx='572.73' cy='209.61' r='3.91' style='stroke-width: 1.42; fill: #000000;' />
+</g>
+</svg>

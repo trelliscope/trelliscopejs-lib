@@ -54,6 +54,7 @@
   },
   "scripts": {
     "start": "vite",
+    "start-test": "export CI=1; vite --port 3080 --no-open",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "./deploy.sh",

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('./');
 });
 
 test('info modal is present and opens / closes', async ({ page }) => {
