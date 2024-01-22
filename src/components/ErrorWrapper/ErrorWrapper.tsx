@@ -18,8 +18,8 @@ const ErrorWrapper: React.FC<ErrorWrapperProps> = ({ children }) => {
   const handleClose = () => {
     dispatch(setErrorMessage(''));
   };
-  const handleError = (error: Error, info: { componentStack: string }) => {
-    setErrorInfo(info?.componentStack);
+  const handleError = (error: Error, info: { componentStack?: string | null | undefined }) => {
+    setErrorInfo(info?.componentStack || '');
     dispatch(setErrorMessage(error.message));
   };
 

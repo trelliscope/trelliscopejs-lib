@@ -116,18 +116,18 @@ export const hashMiddleware: Middleware<RootState> =
     if (!getState().app.singlePageApp) return next(action);
 
     const types = [
-      setSelectedDisplay.type,
-      setLayout.type,
-      setLabels.type,
-      setSort.type,
-      setReOrderSorts.type,
-      clearFilters.type,
-      addFilter.type,
-      updateFilter.type,
-      removeFilter.type,
-      updateFilterValues.type,
-      setFilterView.type,
-      setFiltersandFilterViews.type,
+      setSelectedDisplay.type as string,
+      setLayout.type as string,
+      setLabels.type as string,
+      setSort.type as string,
+      setReOrderSorts.type as string,
+      clearFilters.type as string,
+      addFilter.type as string,
+      updateFilter.type as string,
+      removeFilter.type as string,
+      updateFilterValues.type as string,
+      setFilterView.type as string,
+      setFiltersandFilterViews.type as string,
     ];
 
     const apiActions = [
@@ -136,7 +136,7 @@ export const hashMiddleware: Middleware<RootState> =
     ];
     const result = next(action);
 
-    if (types.indexOf(action.type) > -1 || apiActions.some((d) => d)) {
+    if (types.indexOf((action as { type: string }).type) > -1 || apiActions.some((d) => d)) {
       const hash = hashFromState(getState());
       if (window.location.hash !== hash) {
         window.location.hash = hash;

@@ -101,7 +101,8 @@ export default class DataClient implements IDataClient {
           case 'neq':
             return d[f.field] !== f.value;
           case 'range':
-            return d[f.field] >= (f.value as [number, number])[0] && d[f.field] <= (f.value as [number, number])[1];
+            return (d[f.field] as number) >= (f.value as [number, number])[0] &&
+              (d[f.field] as number) <= (f.value as [number, number])[1];
           case 'regex': {
             const regex = new RegExp(f.value as string);
             return regex.test(d[f.field] as string);
