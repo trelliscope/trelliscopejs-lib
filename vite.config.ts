@@ -1,15 +1,18 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import fs from 'fs'
 import * as pkg from './package.json';
 
-// change this to the name of the example you want to run in dev environment
-// can be any of the folders in the _examples directory
-let EXAMPLE = 'gapminder'
+process.env = {...process.env, ...loadEnv('dev', process.cwd())};
+
+let EXAMPLE = process.env.VITE_DEV_APP_EXAMPLE;
 
 if (process.env.CI) {
   console.log(`Running in CI environment. Forcing to use 'gapminder_testing' example.`)
+  EXAMPLE = 'gapminder_testing';
+} else if (EXAMPLE === undefined) {
+  console.log(`\x1b[31mWARNING:\x1b[0m No example display specified. Defaulting to 'gapminder_testing' example. You can specify a different example by setting the VITE_DEV_APP_EXAMPLE variable in '.env' to a folder name in '_examples'.`)
   EXAMPLE = 'gapminder_testing';
 }
 
