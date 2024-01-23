@@ -3,12 +3,14 @@
   min-width: 0;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 
   &Graphic {
     padding: var(--padding-2);
     justify-content: center;
     display: flex;
     flex-grow: 1;
+    box-sizing: border-box;
 
     :global(.MuiDialog-container) & {
       transform: none;

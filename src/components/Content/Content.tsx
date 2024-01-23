@@ -107,26 +107,53 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const { ncol } = layout;
       const labelCount = labels.length;
 
+      // width and height are the dimensions of the content wrapper
+      // gridGap is the gap between panels and includes space to left and right
+      //   (so one panel has 2 * gridGap space to its left and right)
+      //   (and two panels have 3 * gridGap space between them, etc.)
+      // panelPadding is the padding around the inside of the panel
+      // panelWidth will be the width of the panel itself (not including padding)
+      // totalPanelContentHeight will be the height of the panel including table and padding
+
       const curPanelMeta = displayInfo?.metas.find((meta: IMeta) => meta.varname === curPanel) as IPanelMeta;
       const aspectRatio = curPanelMeta?.aspect || 1;
 
-      const panelWidth = (width - ((gridGap + 4 * panelPadding) * ncol + gridGap + 2)) / ncol;
+      const panelSpace = 2 * panelPadding + 2;
+
+      const panelWidth = (width - ((gridGap + panelSpace) * ncol + gridGap + 2)) / ncol;
       // const panelWidth = (width - ((gridGap) * ncol + gridGap + 2)) / ncol;
 
-      const tableHeight = labelHeight * labelCount;
+      const tableHeight = labelHeight * labelCount - 0.5;
 
-      const panelHeight = panelWidth / aspectRatio + 4 * panelPadding + tableHeight + gridGap;
-      // const panelHeight = panelWidth / aspectRatio + tableHeight + gridGap;
-
+      const totalPanelContentHeight = panelWidth / aspectRatio + panelSpace + gridGap + tableHeight;
+      // const totalPanelContentHeight = panelWidth / aspectRatio + tableHeight + gridGap;
+      
       res.width = panelWidth;
-      if (panelHeight > height) {
-        const newWidth = (height - tableHeight - gridGap * 2 - panelPadding * 4) * aspectRatio;
-        // const newWidth = (height - tableHeight - gridGap * 2) * aspectRatio;
-        res.width = newWidth;
-        res.contentWidth = `${newWidth}px`;
+      if (totalPanelContentHeight > height) {
+        const newPanelWidth = (height - tableHeight - gridGap - panelSpace) * aspectRatio;
+        // const newPanelWidth = (height - tableHeight - gridGap * 2) * aspectRatio;
+        res.width = newPanelWidth;
+        res.contentWidth = `${(newPanelWidth + panelSpace + gridGap) * ncol - gridGap}px`;
       }
-      const rowCount = Math.max(Math.floor(height / panelHeight), 1);
+      const rowCount = Math.max(Math.floor(height / totalPanelContentHeight), 1);
+
+      const newTotalPanelContentHeight = res.width / aspectRatio + panelSpace + gridGap + tableHeight;
+
+      // what area does all the panel content take up?
+      const panelArea = ((panelWidth + gridGap + panelSpace) * newTotalPanelContentHeight * ncol * rowCount) / (width * height);
+
       res.nrow = rowCount;
+
+      // what if we had one more row?
+      const ph = height / (rowCount + 1);
+      const pw = (ph - tableHeight - gridGap - panelSpace) * aspectRatio;
+      const panelArea2 = ((pw + gridGap + panelSpace) * ph * ncol * (rowCount + 1)) / (width * height);
+      // if one more row fills up more area of the content wrapper, then add it
+      if (panelArea2 > panelArea) {
+        res.width = pw;
+        res.contentWidth = `${(pw + panelSpace + gridGap) * ncol - gridGap}px`;
+        res.nrow = rowCount + 1;
+      }      
     }
 
     return res;
