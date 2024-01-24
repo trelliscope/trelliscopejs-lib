@@ -145,15 +145,17 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       res.nrow = rowCount;
 
       // what if we had one more row?
-      const ph = height / (rowCount + 1);
-      const pw = (ph - tableHeight - gridGap - panelSpace) * aspectRatio;
-      const panelArea2 = ((pw + gridGap + panelSpace) * ph * ncol * (rowCount + 1)) / (width * height);
-      // if one more row fills up more area of the content wrapper, then add it
-      if (panelArea2 > panelArea) {
-        res.width = pw;
-        res.contentWidth = `${(pw + panelSpace + gridGap) * ncol - gridGap}px`;
-        res.nrow = rowCount + 1;
-      }      
+      if (ncol * rowCount < filteredData.length) { // only applies if we have enough data for another row
+        const ph = height / (rowCount + 1);
+        const pw = (ph - tableHeight - gridGap - panelSpace) * aspectRatio;
+        const panelArea2 = ((pw + gridGap + panelSpace) * ph * ncol * (rowCount + 1)) / (width * height);
+        // if one more row fills up more area of the content wrapper, then add it
+        if (panelArea2 > panelArea) {
+          res.width = pw;
+          res.contentWidth = `${(pw + panelSpace + gridGap) * ncol - gridGap}px`;
+          res.nrow = rowCount + 1;
+        }
+      }
     }
 
     return res;
@@ -169,6 +171,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
     height,
     displayInfo,
     curPanel,
+    filteredData.length,
   ]);
 
   const setCalcs = () => {
