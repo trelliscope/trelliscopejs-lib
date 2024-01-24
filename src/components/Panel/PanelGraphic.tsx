@@ -28,11 +28,10 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
   sourceClean,
 }) => {
   const socketUrl = `ws://127.0.0.1:${port || '8080'}`;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadImage = async () => {
-      setLoading(true);
       const socket = new WebSocket(socketUrl);
       socket.onopen = () => {
         socket.send(JSON.stringify({ panelName: name, panelURL: sourceClean }));
@@ -40,10 +39,11 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
       socket.onmessage = (event) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = JSON.parse(event.data);
+        setLoading(false);
         socket.close();
       };
       socket.onclose = () => {
-        setLoading(false);
+        // setLoading(false);
       };
       // eslint-disable-next-line consistent-return
       return () => {
