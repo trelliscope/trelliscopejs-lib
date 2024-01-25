@@ -1,0 +1,80 @@
+__loadDisplayInfo__5ae49320({
+  "name": "Life expectancy by continent",
+  "description": "Life expectancy over time by continent",
+  "tags": [],
+  "keycols": ["continent"],
+  "metas": [
+    {
+      "levels": ["Africa", "Americas", "Asia", "Europe", "Oceania"],
+      "maxnchar": 8,
+      "sortable": true,
+      "filterable": true,
+      "tags": [],
+      "label": "continent",
+      "type": "factor",
+      "varname": "continent"
+    },
+    {
+      "log": false,
+      "locale": true,
+      "digits": 2,
+      "maxnchar": 5,
+      "sortable": true,
+      "filterable": true,
+      "tags": [],
+      "label": "mean_lexp",
+      "type": "number",
+      "varname": "mean_lexp"
+    },
+    {
+      "digits": 2,
+      "log": false,
+      "code": "USD",
+      "maxnchar": 8,
+      "sortable": true,
+      "filterable": true,
+      "tags": [],
+      "label": "mean_gdp",
+      "type": "currency",
+      "varname": "mean_gdp"
+    },
+    {
+      "source": {
+        "isLocal": true,
+        "type": "file"
+      },
+      "aspect": 1.5,
+      "paneltype": "img",
+      "maxnchar": 0,
+      "sortable": false,
+      "filterable": false,
+      "tags": [],
+      "label": "lexp_time",
+      "type": "panel",
+      "varname": "lexp_time"
+    }
+  ],
+  "state": {
+    "layout": {
+      "viewtype": "grid",
+      "sidebarActive": false,
+      "page": 1,
+      "ncol": 3,
+      "type": "layout"
+    },
+    "labels": {
+      "varnames": ["continent"],
+      "type": "labels"
+    },
+    "sort": [],
+    "filter": [],
+    "filterView": []
+  },
+  "views": [],
+  "inputs": null,
+  "primarypanel": "lexp_time",
+  "thumbnailurl": "panels/lexp_time/Africa.svg",
+  "infoOnLoad": false,
+  "hasCustomInfo": false,
+  "order": 0
+})
