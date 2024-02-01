@@ -31,6 +31,14 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### Deployment
 
+### `npx playwright install`
+
+installs the latest browsers for playwright
+
+### `npm run start-test`
+
+This will start the test server and dataset. This is useful for running tests against a local server.
+
 ### `npx playwright test`
 
 Runs all playwright tests

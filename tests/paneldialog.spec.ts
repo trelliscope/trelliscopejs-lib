@@ -2,11 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./');
-  await expect(page.getByTestId('column-selector')).toBeVisible();
-  await page.getByTestId('column-selector-input').fill('1');
-  await expect(page.getByTestId('panel-hover')).toBeVisible();
-  await page.getByTestId('panel-hover').hover();
-  await page.getByTestId('panel-expand-button').click();
+  await expect(page.getByTestId('panel-hover').first()).toBeVisible();
+  await page.getByTestId('panel-hover').first().hover();
+  await page.getByTestId('panel-expand-button').first().click();
 });
 
 test('panel dialog modal open and closes', async ({ page }) => {
@@ -22,7 +20,7 @@ test('panel dialog modal can paginate and panel picker is present and clickable'
   await page.getByTestId('variable-selector-button').click();
   await expect(page.getByTestId('variable-picker')).toBeVisible();
   await page.keyboard.press('Escape');
-  await expect(page.getByTestId('pagination-numbers')).toHaveText('2 of  16,860');
+  await expect(page.getByTestId('pagination-numbers')).toHaveText('1 - 6 of  31142 total');
 });
 
 test('panel dialog image and tables are present', async ({ page }) => {

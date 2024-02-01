@@ -12,7 +12,7 @@ test('info modal is present and opens / closes', async ({ page }) => {
 });
 
 test('title is present', async ({ page }) => {
-  await expect(page.getByTestId('selected-title')).toHaveText('gapminder');
+  await expect(page.getByTestId('selected-title')).toHaveText('Life expectancy');
 });
 
 test('display can be changed', async ({ page }) => {});
