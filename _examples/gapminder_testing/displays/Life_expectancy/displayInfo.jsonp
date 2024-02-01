@@ -246,7 +246,7 @@ __loadDisplayInfo__15fe2f4c({
       "type": "localStorage"
     },
     "feedbackInterface": {
-      "feedbackEmail": null,
+      "feedbackEmail": 'null',
       "includeMetaVars": []
     }
   },

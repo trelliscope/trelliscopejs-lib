@@ -22,9 +22,10 @@ test('views can be added, clicked, and deleted', async ({ page }) => {
   await page.getByTestId('view-description-input').type('test description');
   await page.getByTestId('view-save-button').click();
   const localStorageItem = await page.evaluate(() => {
-    return localStorage.getItem('_:_gapminder_:_trelliscope_views_:_test view');
+    return localStorage.getItem('_:_Life expectancy_:_trelliscope_views_:_test view');
   });
   const jsonObject = JSON.parse(localStorageItem as string);
+  console.log(jsonObject)
   await expect(jsonObject.name).toBe('test view');
   await expect(jsonObject.description).toBe('test description');
   await page.click('body');

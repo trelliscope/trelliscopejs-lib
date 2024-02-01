@@ -17,12 +17,12 @@ test('label can be selected and deselected', async ({ page }) => {
   await expect(page.getByRole('row', { name: 'Set number 31203-1' }).locator('span')).not.toBeVisible();
   await page.getByTestId('labels-button').click();
   await expect(page.getByTestId('variable-picker')).toBeVisible();
-  await page.getByRole('option', { name: 'set_num Set number' }).getByRole('checkbox').click();
+  await page.getByRole('option', { name: 'mean_lexp Mean life expectancy' }).getByRole('checkbox').click();
   await page.click('body');
-  await expect(page.getByRole('row', { name: 'Set number 31203-1' }).locator('span')).toBeVisible();
+  await expect(page.getByRole('row', { name: 'Mean life expectancy 49.00' }).locator('span')).toBeVisible();
   await page.getByTestId('labels-button').click();
   await expect(page.getByTestId('variable-picker')).toBeVisible();
-  await page.getByRole('option', { name: 'set_num Set number' }).getByRole('checkbox').click();
+  await page.getByRole('option', { name: 'mean_lexp Mean life expectancy' }).getByRole('checkbox').click();
   await page.click('body');
-  await expect(page.getByRole('row', { name: 'Set number 31203-1' }).locator('span')).not.toBeVisible();
+  await expect(page.getByRole('row', { name: 'Mean life expectancy 49.00' }).locator('span')).not.toBeVisible();
 });

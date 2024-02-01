@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -179,7 +180,7 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ data, handleTableResiz
         }
         if (meta.type === META_TYPE_HREF) {
           return (
-            <a href={value} rel="noopener noreferrer" target="_blank">
+            <a href={value} aria-label="externallink" rel="noopener noreferrer" target="_blank">
               <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
             </a>
           );
