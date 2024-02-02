@@ -1,8 +1,10 @@
 {
   "name": "trelliscopejs-lib",
   "version": "0.7.0",
+  "files": [
+    "dist"
+  ],
   "type": "module",
-  "private": true,
   "homepage": ".",
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
