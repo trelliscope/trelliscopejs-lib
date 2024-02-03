@@ -469,3 +469,18 @@ interface ITheme {
 interface Datum {
   [key: string | symbol]: string | number;
 }
+
+type DataFrame = Array<object>;
+
+interface IDisplaySpec {
+  displayInfo: IDisplay;
+  metaData: Datum[];
+}
+
+interface ITrelliscopeAppSpec {
+  config: IConfig;
+  displayList: IDisplayListItem[];
+  displays: {
+    [key: string]: IDisplaySpec;
+  };
+}

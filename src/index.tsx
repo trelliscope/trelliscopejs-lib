@@ -36,7 +36,7 @@ import type { IDataClient } from './DataClient';
 
 const trelliscopeApp = (
   id: string,
-  config: string,
+  config: string | ITrelliscopeAppSpec,
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
 ) => {
   // Sets up msw worker for mocking api calls
@@ -158,7 +158,7 @@ const trelliscopeApp = (
     setLayout: (nrow: number, ncol: number) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
-    currentCogs: () => crossFilterClient.getData(),
+    currentMeta: () => crossFilterClient.getData(),
   };
 };
 
@@ -177,6 +177,15 @@ if (import.meta.env.MODE === 'development') {
   // div.className = 'trelliscope-not-spa';
   div.className = 'trelliscope-spa';
   document.body.appendChild(div);
-  trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
-  { logger: true });
+  if (example.name === 'gapminder_js') {
+    fetch('_examples/gapminder_js/data.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data from the JSON file here
+        trelliscopeApp(example.id, data);
+      });
+  } else {
+    trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
+    { logger: true });
+  }
 }

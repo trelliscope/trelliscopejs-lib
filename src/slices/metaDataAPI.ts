@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useSelectedDisplay } from './selectedDisplaySlice';
-import { selectBasePath } from '../selectors/app';
+import { selectBasePath, selectAppData } from '../selectors/app';
 import { snakeCase } from '../utils';
 // import { useDataType } from './configAPI';
 import { META_DATA_STATUS } from '../constants';
@@ -10,6 +10,7 @@ export const metaIndex: unique symbol = Symbol('metaIndex');
 
 export const useMetaData = () => {
   const basePath = useSelector(selectBasePath);
+  const appData = useSelector(selectAppData);
   const selectedDisplay = useSelectedDisplay();
   // const dataType = useDataType();
 
@@ -22,6 +23,11 @@ export const useMetaData = () => {
 
   useEffect(() => {
     setLoadingState(META_DATA_STATUS.IDLE);
+    if (appData && selectedDisplay?.name) {
+      setMetaData(appData.displays[selectedDisplay?.name].metaData);
+      setLoadingState(META_DATA_STATUS.READY);
+      return; 
+    }
     if (!url || !basePath || !selectedDisplay?.name) {
       return;
     }
@@ -71,5 +77,5 @@ export const useMetaData = () => {
       }
     };
   }, [url]);
-  return { loadingState, metaData };
+  return { loadingState, metaData, appData };
 };

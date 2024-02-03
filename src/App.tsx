@@ -5,7 +5,7 @@ import { SnackbarProvider } from 'notistack';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import blue from '@mui/material/colors/blue';
 import lightBlue from '@mui/material/colors/lightBlue';
-import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths } from './slices/appSlice';
+import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setAppData } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
 import type { IDataClient } from './DataClient';
@@ -20,7 +20,7 @@ import ErrorSnack from './components/ErrorSnack';
 
 interface AppProps {
   client: IDataClient;
-  config: string;
+  config: string | ITrelliscopeAppSpec;
   id: string;
   singlePageApp?: boolean;
   options?: AppOptions;
@@ -86,7 +86,11 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
 
   useEffect(() => {
     dispatch(setAppID(id));
-    dispatch(setPaths(config));
+    if (typeof config === 'string') {
+      dispatch(setPaths(config));
+    } else {
+      dispatch(setAppData(config));
+    }
     dispatch(setOptions(options));
     dispatch(setFullscreen(fullscreen));
     dispatch(setSinglePageApp(singlePageApp));

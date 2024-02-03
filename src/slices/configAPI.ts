@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
-import { selectAppId, selectConfigPath } from '../selectors/app';
+import { selectAppId, selectConfigPath, selectAppData } from '../selectors/app';
 import { getFileExtentionErrorMessage, getRequestErrorMessage, handleJSONResponse } from '../utils';
 
 const JSONPBaseQuery =
@@ -9,21 +9,25 @@ const JSONPBaseQuery =
     {
       url: string;
       id: string;
+      appData: ITrelliscopeAppSpec | undefined;
     },
     unknown,
     unknown
   > =>
-  ({ url, id }) =>
+  ({ url, id, appData }) =>
     new Promise((resolve) => {
       const fileExt = url.split('.').pop();
 
       const cfgCallback = `__loadAppConfig__${id}`;
 
-      window[cfgCallback] = (data: IConfig) => {
+      const cb = (data: IConfig) => {
         resolve({ data });
       };
+      window[cfgCallback] = cb;
 
-      if (fileExt === 'jsonp') {
+      if (appData) {
+        cb(appData.config);
+      } else if (fileExt === 'jsonp') {
         getJSONP({
           url,
           callbackName: cfgCallback,
@@ -47,8 +51,8 @@ export const configAPI = createApi({
   reducerPath: 'config',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getConfig: builder.query<IConfig, { config: string; id: string }>({
-      query: ({ config, id }) => ({ url: config, id }),
+    getConfig: builder.query<IConfig, { config: string; id: string, appData: ITrelliscopeAppSpec | undefined }>({
+      query: ({ config, id, appData }) => ({ url: config, id, appData }),
     }),
   }),
 });
@@ -58,7 +62,8 @@ export const { useGetConfigQuery } = configAPI;
 export const useConfig = () => {
   const appId = useSelector(selectAppId);
   const configPath = useSelector(selectConfigPath);
-  return useGetConfigQuery({ config: configPath, id: appId }, { skip: !configPath || !appId });
+  const appData = useSelector(selectAppData);
+  return useGetConfigQuery({ config: configPath, id: appId, appData }, { skip: !(appData || (configPath && appId)) });
 };
 
 export const useDataType = () => {
