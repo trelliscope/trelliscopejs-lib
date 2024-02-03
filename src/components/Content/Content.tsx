@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useCallback, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useRef, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
 import { Box, CircularProgress } from '@mui/material';
@@ -20,34 +20,14 @@ import { META_DATA_STATUS } from '../../constants';
 import ErrorWrapper from '../ErrorWrapper';
 
 interface ContentProps {
-  tableRef: React.MutableRefObject<null>;
-  rerender: never;
+  table: any;
+  tableWrapperRef: React.RefCallback<HTMLDivElement>;
+  tableContentRef: React.RefObject<HTMLDivElement>;
+  handlePanelClick: (meta: IPanelMeta, source: string, index: number) => void;
 }
 
-function getDataTableRowCount() {
-  const tableRows = document.querySelectorAll('.MuiTableRow-root');
-  // tableContentRef.current?.clientHeight
-  // we know that app header + subheader is 100
-  const tableHeight = window.innerHeight - 100 - 1;
-
-  let rowCount = 1;
-  if (tableHeight && tableRows.length > 0) {
-    // first row is header but all subsequent rows should have same height
-    const headerHeight = tableRows[0].clientHeight;
-    if (tableRows.length >= 2) {
-      const rowHeight = tableRows[1].clientHeight;
-      rowCount = Math.floor(((tableHeight || 0) - headerHeight) / rowHeight);
-      if (rowCount === 0) {
-        rowCount = 1;
-      }
-    }
-  }
-  return rowCount;
-}
-
-const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
+const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentRef, handlePanelClick }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const tableContentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const { data, filteredData, allData } = useContext(DataContext);
   const labels = useSelector(labelsSelector);
@@ -69,23 +49,6 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   }, [displayInfo?.primarypanel, layout?.panel]);
 
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
-
-  const {
-    ref: tableWrapperRef,
-    width: tableWrapperRefWidth = 1,
-    height: tableWrapperRefHeight = 1,
-  } = useResizeObserver<HTMLDivElement>();
-
-  const handleTableResize = () => {
-    if (tableContentRef.current) {
-      const rowCount = getDataTableRowCount();
-      if (rowCount !== layout.nrow) {
-        dispatch(setLayout({ nrow: rowCount }));
-      }
-    }
-  };
-
-  useEffect(handleTableResize, [tableWrapperRefHeight, tableWrapperRefWidth, dispatch, layout?.nrow, layout?.viewtype]);
 
   // const handleResize = (rowCount) => {
 
@@ -127,7 +90,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
 
       const totalPanelContentHeight = panelWidth / aspectRatio + panelSpace + gridGap + tableHeight;
       // const totalPanelContentHeight = panelWidth / aspectRatio + tableHeight + gridGap;
-      
+
       res.width = panelWidth;
       if (totalPanelContentHeight > height) {
         const newPanelWidth = (height - tableHeight - gridGap - panelSpace) * aspectRatio;
@@ -140,12 +103,14 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       const newTotalPanelContentHeight = res.width / aspectRatio + panelSpace + gridGap + tableHeight;
 
       // what area does all the panel content take up?
-      const panelArea = ((panelWidth + gridGap + panelSpace) * newTotalPanelContentHeight * ncol * rowCount) / (width * height);
+      const panelArea =
+        ((panelWidth + gridGap + panelSpace) * newTotalPanelContentHeight * ncol * rowCount) / (width * height);
 
       res.nrow = rowCount;
 
       // what if we had one more row?
-      if (ncol * rowCount < filteredData.length) { // only applies if we have enough data for another row
+      if (ncol * rowCount < filteredData.length) {
+        // only applies if we have enough data for another row
         const ph = height / (rowCount + 1);
         const pw = (ph - tableHeight - gridGap - panelSpace) * aspectRatio;
         const panelArea2 = ((pw + gridGap + panelSpace) * ph * ncol * (rowCount + 1)) / (width * height);
@@ -185,20 +150,6 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
   useEffect(setCalcs, [layout.nrow, layout.viewtype, calcs.contentWidth, calcs.nrow, dispatch]);
 
   const panelDialog = useSelector(selectPanelDialog);
-
-  const handlePanelClick = useCallback(
-    (meta: IPanelMeta, source: string, index: number) => {
-      dispatch(
-        setPanelDialog({
-          open: true,
-          panel: meta,
-          source,
-          index,
-        }),
-      );
-    },
-    [dispatch],
-  );
 
   if (!displayInfoSuccess) return null;
 
@@ -282,13 +233,7 @@ const Content: React.FC<ContentProps> = ({ tableRef, rerender }) => {
       ) : (
         <div className={styles.tableContainer} ref={tableWrapperRef}>
           <div data-testid="table-content" className={styles.tableContainer} ref={tableContentRef}>
-            <DataTable
-              data={data}
-              handleTableResize={handleTableResize}
-              handleClick={handlePanelClick}
-              tableRef={tableRef}
-              rerender={rerender}
-            />
+            {data?.length > 0 && <DataTable table={table} />}
           </div>
         </div>
       )}

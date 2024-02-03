@@ -16,15 +16,15 @@ test('table is present and columns button transforms into table columns settings
 test('table column global controls function', async ({ page }) => {
   await expect(page.getByTestId('data-table')).toBeVisible();
   await expect(page.getByTestId('columns-table')).toBeVisible();
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await page.getByRole('button', { name: 'Hide all' }).click();
   await page.click('body');
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).not.toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).not.toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.click('body');
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await page.getByRole('button', { name: 'Unpin all' }).click();
   await expect(
@@ -35,23 +35,23 @@ test('table column global controls function', async ({ page }) => {
 test('columns are able to be hidden and shown on the table', async ({ page }) => {
   await expect(page.getByTestId('data-table')).toBeVisible();
   await expect(page.getByTestId('columns-table')).toBeVisible();
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility img_url' }).click();
+  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility lexp_time' }).click();
   await page.click('body');
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).not.toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).not.toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility img_url' }).click();
+  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility lexp_time' }).click();
   await page.click('body');
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
 });
 
 test('columns are able to be pinned left and right and unpinned on the table', async ({ page }) => {
   await expect(page.getByTestId('data-table')).toBeVisible();
   await expect(page.getByTestId('columns-table')).toBeVisible();
-  await expect(page.getByRole('columnheader', { name: 'img_url Move' }).locator('div').first()).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
   await page

@@ -19,11 +19,10 @@ import styles from './ContentHeader.module.scss';
 import ErrorWrapper from '../ErrorWrapper';
 
 interface ContentHeaderProps {
-  tableRef: React.RefObject<null>;
-  rerender: never;
+  table: any;
 }
 
-const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => {
+const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
   const selectedDisplay = useSelectedDisplay();
   const dispatch = useDispatch();
   const { data } = useDisplayInfo();
@@ -79,11 +78,11 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ tableRef, rerender }) => 
             <div className={styles.contentHeaderControlsItem}>
               <Sort />
             </div>
-            {tableRef?.current && rerender && layout?.viewtype === 'table' && (
+            {layout?.viewtype === 'table' && (
               <div data-testid="columns-table" id="column-control" className={styles.contentHeaderControlsItem}>
                 <span>Columns</span>
                 {/* eslint-disable-next-line react/jsx-pascal-case */}
-                <MRT_ShowHideColumnsButton table={tableRef?.current} />
+                <MRT_ShowHideColumnsButton table={table} />
               </div>
             )}
             {layout?.viewtype !== 'table' && (
