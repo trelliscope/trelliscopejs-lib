@@ -217,10 +217,19 @@ interface IFactorMeta extends IMeta {
   levels: string[];
 }
 
+interface IStringMeta extends IMeta {
+}
+
+interface IDateMeta extends IMeta {
+}
+
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 interface IDatetimeMeta extends IMeta {
   timezone: string;
+}
+
+interface IHrefMeta extends IMeta {
 }
 
 interface IGraphMeta extends IMeta {
@@ -314,13 +323,13 @@ interface IState {
 type ViewType = 'table' | 'grid';
 
 interface ILayoutState extends IState {
-  nrow: number;
+  nrow: number; // why??
   ncol: number;
   page: number;
   viewtype: ViewType;
-  panel: string;
+  panel: string; // why??
   sidebarActive: boolean;
-  showLabels: boolean;
+  showLabels: boolean; // why??
 }
 
 interface ILabelState extends IState {
@@ -334,6 +343,7 @@ interface ISortState extends IState {
   metatype: MetaType;
 }
 
+// what is this?!?!?!?!
 interface IFilterState extends IState {
   varname: string;
   filtertype: FilterType;
@@ -443,13 +453,13 @@ interface IDisplayListItem {
 /* config                                                 */
 /* ------------------------------------------------------ */
 
-type AppDataType = 'jsonp' | 'json';
+type AppDataType = 'jsonp' | 'json' | 'js'; // js means created in JavaScript and doesn't need to be read from a file
 
 interface IConfig {
   name: string;
   datatype: AppDataType;
   id: string;
-  theme: ITheme;
+  theme?: ITheme;
 }
 
 interface ITheme {
@@ -469,8 +479,6 @@ interface ITheme {
 interface Datum {
   [key: string | symbol]: string | number;
 }
-
-type DataFrame = Array<object>;
 
 interface IDisplaySpec {
   displayInfo: IDisplay;

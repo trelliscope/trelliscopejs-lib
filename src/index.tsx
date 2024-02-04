@@ -16,6 +16,7 @@ import '@fontsource/source-code-pro/300.css';
 import '@fontsource/source-code-pro/600.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'react-virtualized/styles.css'; // only needs to be imported once
+import { Trelliscope, prepareTrelliscope } from './jsApi';
 
 import store from './store';
 
@@ -139,7 +140,7 @@ const trelliscopeApp = (
     <Provider store={store}>
       <App
         client={crossFilterClient as unknown as IDataClient}
-        config={config}
+        config={typeof config === 'string' ? config : prepareTrelliscope(config, id)}
         id={id}
         singlePageApp={singlePageApp}
         options={options}
@@ -177,12 +178,14 @@ if (import.meta.env.MODE === 'development') {
   // div.className = 'trelliscope-not-spa';
   div.className = 'trelliscope-spa';
   document.body.appendChild(div);
+
   if (example.name === 'gapminder_js') {
-    fetch('_examples/gapminder_js/data.json')
+    fetch('_examples/gapminder_js/gapminder.json')
       .then(response => response.json())
       .then(data => {
         // Use the data from the JSON file here
-        trelliscopeApp(example.id, data);
+        const appdat = Trelliscope({ data: data as Datum[], name: 'gapminder', keycols: ['country', 'continent'] });
+        trelliscopeApp(example.id, appdat);
       });
   } else {
     trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,

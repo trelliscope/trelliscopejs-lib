@@ -20,6 +20,7 @@
 .env.production.local
 _examples/*
 !_examples/gapminder_testing/*
+!_examples/gapminder_js/gapminder.json
 
 npm-debug.log*
 yarn-debug.log*
