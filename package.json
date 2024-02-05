@@ -111,7 +111,8 @@
     "redux-mock-store": "^1.5.4",
     "sass": "^1.70.0",
     "source-map-explorer": "^2.5.3",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite-plugin-css-injected-by-js": "^3.4.0"
   },
   "msw": {
     "workerDirectory": "public"

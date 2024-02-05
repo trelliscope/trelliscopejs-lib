@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import fs from 'fs'
 import * as pkg from './package.json';
@@ -31,7 +32,7 @@ export default defineConfig({
   },
   // depending on your application, base can also be "/"
   base: '',
-  plugins: [react(), viteTsconfigPaths()],
+  plugins: [react(), viteTsconfigPaths(), cssInjectedByJsPlugin()],
   build: {
     // sourcemap: 'hidden',
     chunkSizeWarningLimit: 1500,
