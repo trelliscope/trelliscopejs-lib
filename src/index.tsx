@@ -166,16 +166,18 @@ window.trelliscopeApp = trelliscopeApp;
 
 interface TrelliscopeAppProps {
   data: ITrelliscopeAppSpec;
+  width: number;
+  height: number;
   options: { logger?: boolean; mockData?: boolean };
 }
 
 // component for embedding a Trelliscope app in a React app
-const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, options = {}}) => {
+const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, width, height, options = {}}) => {
   const crossFilterClient = new CrossfilterClient();
   const id = 'trelliscope_app';
   // TODO: need to get appDims from a ref of parent component
-  const appDims = { width: 1400, height: 800 }
-  
+  const appDims = { width, height }
+
   return (
     <Provider store={store}>
       <App
@@ -213,7 +215,6 @@ if (import.meta.env.MODE === 'development') {
     fetch('_examples/gapminder_js/gapminder.json')
       .then(response => response.json())
       .then(data => {
-        // Use the data from the JSON file here
         const appdat = Trelliscope({
           data: data as Datum[],
           name: 'gapminder',
