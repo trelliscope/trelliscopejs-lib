@@ -41,7 +41,12 @@ export default defineConfig({
       fileName: 'trelliscope-viewer.js',
     },
     rollupOptions: {
+      external: ['react', 'react-dom'],
       output: {
+        globals: {
+          react: "React",
+          'react-dom': "reactdom",
+        },
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: `assets/[name].[ext]`,
