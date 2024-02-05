@@ -6,8 +6,8 @@
   ],
   "type": "module",
   "module": "dist/assets/index.js",
-  "main": "./dist/index.js",
-  "exports": "./dist/index.js",
+  "main": "./dist/assets/index.js",
+  "exports": "./dist/assets/index.js",
   "homepage": ".",
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
