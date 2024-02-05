@@ -37,6 +37,9 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
+        globals: {
+          react: "React",
+        },
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: `assets/[name].[ext]`,

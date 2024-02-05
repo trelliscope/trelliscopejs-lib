@@ -231,4 +231,8 @@ if (import.meta.env.MODE === 'development') {
   }
 }
 
-export default TrelliscopeApp;
+export {
+  Trelliscope,
+  TrelliscopeApp,
+  trelliscopeApp,
+}

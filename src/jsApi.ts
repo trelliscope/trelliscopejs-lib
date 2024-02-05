@@ -422,10 +422,15 @@ export function LayoutState({
   return new LayoutStateClass({ ncol, page, viewtype, sidebarActive });
 }
 
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 class LabelsStateClass extends State implements ILabelState {
   varnames: string[];
   tags: string[];
   constructor({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     varnames = [],
     tags = [],
   } : {
@@ -444,6 +449,8 @@ export function LabelsState({
   varnames?: string[],
   tags?: string[],
 }): ILabelState {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return new LabelsStateClass({ varnames, tags });
 }
 
@@ -644,8 +651,12 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     varnames?: string[],
     tags?: string[]
   }): ITrelliscopeAppSpec {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const ls = new LabelsStateClass({ varnames, tags });
     const {name} = this.displayList[0];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.displays[name].displayInfo.state.labels = ls;
     return this;
   }

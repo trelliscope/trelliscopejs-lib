@@ -68,7 +68,7 @@ export const displayInfoAPI = createApi({
   reducerPath: 'displayInfo',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json'; displayName: string, appData: ITrelliscopeAppSpec | undefined }>({
+    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json' | 'js'; displayName: string, appData: ITrelliscopeAppSpec | undefined }>({
       query: ({ url, id, dataType, displayName, appData }) => ({ url, id, dataType, displayName, appData }),
     }),
     getRelatedDisplays: builder.query<{ data: IDisplay }[], IGetRelatedDisplaysArgs>({

@@ -42,7 +42,7 @@ export const displayListAPI = createApi({
   reducerPath: 'displayList',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json', appData: ITrelliscopeAppSpec | undefined }>({
+    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json' | 'js', appData: ITrelliscopeAppSpec | undefined }>({
       query: ({ url, id, dataType, appData }) => ({ url, id, dataType, appData }),
     }),
   }),
