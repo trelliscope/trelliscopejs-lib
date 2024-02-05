@@ -33,8 +33,7 @@ import App from './App';
 import CrossfilterClient from './CrossfilterClient';
 import type { IDataClient } from './DataClient';
 
-// import appData from './appData';
-
+// function for populating a div with a trelliscope app
 const trelliscopeApp = (
   id: string,
   config: string | ITrelliscopeAppSpec,
@@ -165,6 +164,37 @@ const trelliscopeApp = (
 
 window.trelliscopeApp = trelliscopeApp;
 
+interface TrelliscopeAppProps {
+  data: ITrelliscopeAppSpec;
+  options: { logger?: boolean; mockData?: boolean };
+}
+
+// component for embedding a Trelliscope app in a React app
+const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, options = {}}) => {
+  const crossFilterClient = new CrossfilterClient();
+  const id = 'trelliscope_app';
+  // TODO: need to get appDims from a ref of parent component
+  const appDims = { width: 1400, height: 800 }
+  
+  return (
+    <Provider store={store}>
+      <App
+        client={crossFilterClient as unknown as IDataClient}
+        config={prepareTrelliscope(data, id)}
+        id={id}
+        singlePageApp={false}
+        options={options}
+        appDims={appDims}
+      />
+    </Provider>
+  );
+};
+
+// TODO: should be able to just attach this to window so that it can be loaded in other apps
+// by including the js script and then using the component (vs. having to import and bundle it in the app)
+// window.TrelliscopeApp = TrelliscopeApp;
+
+// if in development mode, populate div with an example trelliscope app
 if (import.meta.env.MODE === 'development') {
   const example = window.__DEV_EXAMPLE__ as unknown as
     { id: string; name: string; datatype: string };
@@ -189,8 +219,8 @@ if (import.meta.env.MODE === 'development') {
           name: 'gapminder',
           keycols: ['country', 'continent']
         })
-          .setLayout({ sidebarActive: true, ncol: 2, activeFilterVars: ['continent', 'mean_lexp'] })
-          .setLabels({ varnames: ['country', 'continent', 'mean_lexp']})
+          .setLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
+          .setLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link']})
           .setSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']});
         trelliscopeApp(example.id, appdat);
       });
@@ -199,3 +229,5 @@ if (import.meta.env.MODE === 'development') {
     { logger: true });
   }
 }
+
+export default TrelliscopeApp;

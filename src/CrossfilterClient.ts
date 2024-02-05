@@ -246,6 +246,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     const allData = this.crossfilter.all();
     const sortKey = this._sorts.map((s) => s.field).join('-');
 
+    // TODO: this is EXTREMELY inefficient - we re-sort the whole dataset every time we move to a new page
     if (allData.length) {
       // console.log('SORTING')
       const sortData = allData.map((d) => {

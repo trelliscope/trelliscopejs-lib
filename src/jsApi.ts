@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+import { metaIndex } from "./slices/metaDataAPI";
 
 export class Meta implements IMeta {
   name: string; // why??
@@ -25,7 +26,7 @@ export class Meta implements IMeta {
     log = false,
     digits = 2,
     locale = true,
-    filterSortOrder = 'ct,asc',
+    filterSortOrder = 'ct,desc',
   } : {
     type: MetaType,
     varname: string,
@@ -475,6 +476,9 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
       // remove any undefined values
       .filter((value) => !(value === undefined || value === null));
 
+    // TODO: add this in everywhere
+    // const maxnchar = Math.max(...values.map((value) => String(value).length));
+
     if (values.length === 0) {
       return StringMeta({ varname: key }) as IMeta;
     }
@@ -495,7 +499,7 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
       .startsWith("http") && /\.(png|jpg|jpeg|gif|bmp|svg)$/i
       .test(value as string))
     ) {
-      return PanelMeta({ varname: key, paneltype: "img", format: "png", aspect: 1, sourcetype: "file" }) as IMeta;
+      return PanelMeta({ varname: key, paneltype: "img", format: "png", aspect: 1.5, sourcetype: "file" }) as IMeta;
     }
 
     if (values.every((value) => (value as string).startsWith("http"))) {
@@ -503,7 +507,7 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
     }
 
     // get distinct values from all rows (all data, not just first 1000)
-    const levels = Array.from(new Set(data.flatMap((row) => row[key as keyof typeof row])));
+    const levels = Array.from(new Set(data.flatMap((row) => row[key as keyof typeof row]))).sort();
     if (levels.length <= 25) {
       return FactorMeta({ varname: key, levels: (levels as string[]) }) as IMeta;
     }
@@ -767,9 +771,14 @@ export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrel
       }
     })
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  md?.forEach((row: any, i: number) => {
+    // eslint-disable-next-line no-param-reassign
+    row[metaIndex] = i;
+  });
+
   return data2;
 }
-
 
 // const meta = [
 //   {

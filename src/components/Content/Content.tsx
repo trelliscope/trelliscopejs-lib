@@ -51,9 +51,6 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
   const { ref: wrapperRef, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
   // const handleResize = (rowCount) => {
-
-  //     debugger; // eslint-disable-line
-
   //     if (rowCount !== layout.nrow) {
   //       dispatch(setLayout({ nrow: rowCount }));
   //     }
