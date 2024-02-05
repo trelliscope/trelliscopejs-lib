@@ -35,6 +35,11 @@ export default defineConfig({
   build: {
     // sourcemap: 'hidden',
     chunkSizeWarningLimit: 1500,
+    lib: {
+      entry: 'src/index.tsx',
+      name: 'TrelliscopeViewer',
+      fileName: 'index.js',
+    },
     rollupOptions: {
       output: {
         globals: {
