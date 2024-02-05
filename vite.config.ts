@@ -37,8 +37,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     lib: {
       entry: 'src/index.tsx',
-      name: 'TrelliscopeViewer',
-      fileName: 'index.js',
+      name: 'trelliscope-viewer',
+      fileName: 'trelliscope-viewer.js',
     },
     rollupOptions: {
       output: {
