@@ -446,25 +446,25 @@ export function LabelsState({
   return new LabelsStateClass({ varnames, tags });
 }
 
-// class SortStateClass extends State implements ISortState {
-//   varname: string;
-//   dir: SortDirType;
-//   metatype: MetaType;
-//   constructor({
-//     varname,
-//     dir,
-//     metatype,
-//   } : {
-//     varname: string,
-//     dir: SortDirType,
-//     metatype: MetaType,
-//   }) {
-//     super('sort');
-//     this.varname = varname;
-//     this.dir = dir;
-//     this.metatype = metatype;
-//   }
-// }
+class SortStateClass extends State implements ISortState {
+  varname: string;
+  dir: SortDirType;
+  metatype: MetaType;
+  constructor({
+    varname,
+    dir,
+    metatype,
+  } : {
+    varname: string,
+    dir: SortDirType,
+    metatype: MetaType,
+  }) {
+    super('sort');
+    this.varname = varname;
+    this.dir = dir;
+    this.metatype = metatype;
+  }
+}
 
 
 function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
@@ -526,7 +526,7 @@ function checkKeycols(data: Datum[], keycols: string[], colNames: string[]) {
   }
 }
 
-class TrelliscopeClass implements ITrelliscopeAppSpec{
+class TrelliscopeClass implements ITrelliscopeAppSpec {
   config: IConfig;
   displayList: IDisplayListItem[];
   displays: {
@@ -611,8 +611,73 @@ class TrelliscopeClass implements ITrelliscopeAppSpec{
     };
   }
 
-  // setDefaultLayout(layout: string): void {
-  // }
+  setLayout({
+    ncol = 3,
+    page = 1,
+    viewtype = 'grid',
+    sidebarActive = false,
+    activeFilterVars,
+  } : {
+    ncol?: number,
+    page?: number,
+    viewtype?: ViewType,
+    sidebarActive?: boolean,
+    activeFilterVars?: string[],
+  }): ITrelliscopeAppSpec {
+    const ls = new LayoutStateClass({ ncol, page, viewtype, sidebarActive });
+    const {name} = this.displayList[0];
+    this.displays[name].displayInfo.state.layout = ls;
+    if (activeFilterVars !== undefined) {
+      this.displays[name].displayInfo.state.filterView = activeFilterVars;
+    }
+    return this;
+  }
+
+  setLabels({
+    varnames = [],
+    tags = []
+  } : {
+    varnames?: string[],
+    tags?: string[]
+  }): ITrelliscopeAppSpec {
+    const ls = new LabelsStateClass({ varnames, tags });
+    const {name} = this.displayList[0];
+    this.displays[name].displayInfo.state.labels = ls;
+    return this;
+  }
+
+  setSort({
+    varnames,
+    dirs,
+  } : {
+    varnames: string[],
+    dirs?: SortDirType[],
+  }): ITrelliscopeAppSpec {
+    let sdirs: SortDirType[];
+    if (dirs === undefined) {
+      sdirs = varnames.map(() => 'asc');
+    } else {
+      sdirs = dirs;
+    }
+    if (varnames.length !== sdirs.length) {
+      throw new Error('varname and dir must be the same length');
+    }
+    const {metas} = this.displays[this.displayList[0].name].displayInfo;
+    if (varnames.some((vn) => !metas.map((m) => m.varname).includes(vn))) {
+      throw new Error(`all varname values in setSort() must be in the data`);
+    }
+    // create a lookup object of meta types
+    const metatypes: {[key: string]: MetaType} = {};
+    metas.forEach((m) => {
+      metatypes[m.varname] = m.type;
+    });
+    const ss = varnames.map((vn, i) =>
+      new SortStateClass({ varname: vn, dir: sdirs[i], metatype: metatypes[vn] })
+    );
+    const {name} = this.displayList[0];
+    this.displays[name].displayInfo.state.sort = ss;
+    return this;
+  }
 
   // setDefaultLabels(labels: string[]): void {
   // }

@@ -491,4 +491,7 @@ interface ITrelliscopeAppSpec {
   displays: {
     [key: string]: IDisplaySpec;
   };
+  setLayout(arg0: { ncol?: number; page?: number; viewtype?: ViewType; sidebarActive?: boolean; activeFilterVars?: string[] }): ITrelliscopeAppSpec;
+  setLabels(arg0: { varnames?: string[]; tags?: string[]; }): ITrelliscopeAppSpec;
+  setSort(arg0: { varnames: string[]; dirs?: SortDirType[]; }): ITrelliscopeAppSpec;
 }

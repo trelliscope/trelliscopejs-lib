@@ -184,7 +184,14 @@ if (import.meta.env.MODE === 'development') {
       .then(response => response.json())
       .then(data => {
         // Use the data from the JSON file here
-        const appdat = Trelliscope({ data: data as Datum[], name: 'gapminder', keycols: ['country', 'continent'] });
+        const appdat = Trelliscope({
+          data: data as Datum[],
+          name: 'gapminder',
+          keycols: ['country', 'continent']
+        })
+          .setLayout({ sidebarActive: true, ncol: 2, activeFilterVars: ['continent', 'mean_lexp'] })
+          .setLabels({ varnames: ['country', 'continent', 'mean_lexp']})
+          .setSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']});
         trelliscopeApp(example.id, appdat);
       });
   } else {
