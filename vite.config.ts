@@ -42,9 +42,6 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        globals: {
-          react: "React",
-        },
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: `assets/[name].[ext]`,
