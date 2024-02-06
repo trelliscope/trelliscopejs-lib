@@ -56,7 +56,7 @@ const JSONPRelatedQuery = async ({ url, id, dataType, displayNames }: IGetRelate
   const relatedDisplayInfoCallback = `__loadDisplayInfo__${id}`;
 
   const displayNameRequests = displayNames.map(
-    (displayName) => displayRequest(url, displayName, dataType, undefined, relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
+    (displayName) => displayRequest(url, displayName, dataType, '', relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
   );
 
   const results = await Promise.all(displayNameRequests);

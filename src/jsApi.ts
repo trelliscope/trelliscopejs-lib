@@ -788,9 +788,9 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  setVarLabels(labels: [{[index: string]: string}]): ITrelliscopeAppSpec {
+  setVarLabels(labels: {[index: string]: string}): ITrelliscopeAppSpec {
     const {metas} = this.displays[this.displayList[0].name].displayInfo;
-    metas.forEach((m) => {
+    metas.forEach((m: { varname: string, label: string }) => {
       if (labels[m.varname] !== undefined) {
         m.label = labels[m.varname];
       }
@@ -830,7 +830,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
         throw new Error(`varname ${varname} is not a number`);
       }
       // TODO: make sure the filter is not already set
-      this.displays[name].displayInfo.state.filter.push(new NumberRangeFilterStateClass({ varname, min, max }));
+      this.displays[name].displayInfo.state.filter.push(new NumberRangeFilterStateClass({ varname, min: min as number, max: max as number }));
     } else if (min instanceof Date || max instanceof Date) {
       if (meta.type === 'date') {
         // TODO: make sure the filter is not already set
