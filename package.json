@@ -66,7 +66,7 @@
   "scripts": {
     "start": "vite",
     "start-test": "export CI=1; vite --port 3080 --no-open",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && vite build -c vite.lib.config.ts --emptyOutDir=false",
     "preview": "vite preview",
     "deploy": "./deploy.sh",
     "analyze": "source-map-explorer 'dist/assets/*.js'",

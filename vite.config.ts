@@ -1,9 +1,9 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import fs from 'fs'
 import * as pkg from './package.json';
+
 
 process.env = {...process.env, ...loadEnv('dev', process.cwd())};
 
@@ -32,26 +32,15 @@ export default defineConfig({
   },
   // depending on your application, base can also be "/"
   base: '',
-  plugins: [react(), viteTsconfigPaths(), cssInjectedByJsPlugin()],
+  plugins: [react(), viteTsconfigPaths()],
   build: {
     // sourcemap: 'hidden',
-    chunkSizeWarningLimit: 1500,
-    lib: {
-      entry: 'src/index.tsx',
-      name: 'trelliscope-viewer',
-      fileName: 'trelliscope-viewer',
-    },
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
-      external: ['react', 'react-dom'],
-      // external: Object.keys(pkg.dependencies || {}),
       output: {
-        globals: {
-          react: "React",
-          'react-dom': "reactdom",
-        },
-        // entryFileNames: `assets/[name].js`,
-        // chunkFileNames: `assets/[name].js`,
-        // assetFileNames: `assets/[name].[ext]`,
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
       },
     },
   },
