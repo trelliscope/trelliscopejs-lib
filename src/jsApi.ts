@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
+import { max } from "d3-array";
 import { metaIndex } from "./slices/metaDataAPI";
 
 export class Meta implements IMeta {
@@ -474,6 +475,99 @@ class SortStateClass extends State implements ISortState {
   }
 }
 
+class FilterState extends State implements IFilterState {
+  varname: string;
+  filtertype: FilterType;
+  metatype: MetaType;
+  constructor({
+    varname,
+    filtertype,
+    metatype,
+  } : {
+    varname: string,
+    filtertype: FilterType,
+    metatype: MetaType,
+  }) {
+    super('filter');
+    this.varname = varname;
+    this.filtertype = filtertype;
+    this.metatype = metatype;
+  }
+}
+
+class CategoryFilterStateClass extends FilterState implements ICategoryFilterState {
+  regexp: string | null;
+  values: string[];
+  constructor({
+    varname,
+    values = [],
+    regexp = null,
+    metatype = 'string',
+  } : {
+    varname: string,
+    values: string[],
+    regexp: string | null,
+    metatype: MetaType,
+  }) {
+    super({ varname, filtertype: 'category', metatype });
+    this.values = values;
+    this.regexp = regexp;
+  }
+}
+
+class NumberRangeFilterStateClass extends FilterState implements INumberRangeFilterState {
+  min: number | null;
+  max: number | null;
+  constructor({
+    varname,
+    min = null,
+    max = null,
+  } : {
+    varname: string,
+    min: number | null,
+    max: number | null,
+  }) {
+    super({ varname, filtertype: 'numberrange', metatype: 'number' });
+    this.min = min;
+    this.max = max;
+  }
+}
+
+class DateRangeFilterStateClass extends FilterState implements IDateRangeFilterState {
+  min: Date | null;
+  max: Date | null;
+  constructor({
+    varname,
+    min = null,
+    max = null,
+  } : {
+    varname: string,
+    min: Date | null,
+    max: Date | null,
+  }) {
+    super({ varname, filtertype: 'daterange', metatype: 'date' });
+    this.min = min;
+    this.max = max;
+  }
+}
+
+class DatetimeRangeFilterStateClass extends FilterState implements IDatetimeRangeFilterState {
+  min: Date | null;
+  max: Date | null;
+  constructor({
+    varname,
+    min = null,
+    max = null,
+  } : {
+    varname: string,
+    min: Date | null,
+    max: Date | null,
+  }) {
+    super({ varname, filtertype: 'datetimerange', metatype: 'datetime' });
+    this.min = min;
+    this.max = max;
+  }
+}
 
 function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
   const types = colNames.map((key) => {
@@ -622,7 +716,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     };
   }
 
-  setLayout({
+  setDefaultLayout({
     ncol = 3,
     page = 1,
     viewtype = 'grid',
@@ -644,7 +738,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  setLabels({
+  setDefaultLabels({
     varnames = [],
     tags = []
   } : {
@@ -661,7 +755,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  setSort({
+  setDefaultSort({
     varnames,
     dirs,
   } : {
@@ -694,10 +788,77 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  // setDefaultLabels(labels: string[]): void {
-  // }
+  setVarLabels(labels: [{[index: string]: string}]): ITrelliscopeAppSpec {
+    const {metas} = this.displays[this.displayList[0].name].displayInfo;
+    metas.forEach((m) => {
+      if (labels[m.varname] !== undefined) {
+        m.label = labels[m.varname];
+      }
+    });
+    return this;
+  }
 
-  // setDefaultSort(sort: string): void {
+  setPrimaryPanel(panel: string): ITrelliscopeAppSpec {
+    const {name} = this.displayList[0];
+    this.displays[name].displayInfo.primarypanel = panel;
+    return this;
+  }
+
+  setRangeFilter({
+    varname,
+    min = null,
+    max = null,
+  } : {
+    varname: string,
+    min?: number | Date | null,
+    max?: number | Date | null
+  }): ITrelliscopeAppSpec {
+    if (min === null && max === null) {
+      throw new Error('min and max cannot both be null');
+    }
+    const {name} = this.displayList[0];
+    const {metas} = this.displays[name].displayInfo;
+    const meta = metas.find((m) => m.varname === varname);
+    if (meta === undefined) {
+      throw new Error(`varname ${varname} not found in metas`);
+    }
+    if ((typeof min === 'number' && max instanceof Date) || (min instanceof Date && typeof max === 'number')) {
+      throw new Error('min and max must be the same type');
+    }
+    if (typeof min === 'number' || typeof max === 'number') {
+      if (meta.type !== 'number') {
+        throw new Error(`varname ${varname} is not a number`);
+      }
+      // TODO: make sure the filter is not already set
+      this.displays[name].displayInfo.state.filter.push(new NumberRangeFilterStateClass({ varname, min, max }));
+    } else if (min instanceof Date || max instanceof Date) {
+      if (meta.type === 'date') {
+        // TODO: make sure the filter is not already set
+        this.displays[name].displayInfo.state.filter.push(new DateRangeFilterStateClass({ varname, min, max }));
+      } else if (meta.type === 'datetime') {
+        // TODO: make sure the filter is not already set
+        this.displays[name].displayInfo.state.filter.push(new DatetimeRangeFilterStateClass({ varname, min, max }));
+      } else {
+        throw new Error(`varname ${varname} is not a date or datetime`);
+      }
+    } else {
+      throw new Error('min and max must be the same type');
+    }
+    return this;
+  }
+
+  // setStringFilter(varname: string, values: string[], regexp: string): ITrelliscopeAppSpec {
+  //   const {metas} = this.displays[this.displayList[0].name].displayInfo;
+  //   const meta = metas.find((m) => m.varname === varname);
+  //   if (meta === undefined) {
+  //     throw new Error(`varname ${varname} not found in metas`);
+  //   }
+  //   if (meta.type !== 'factor') {
+  //     throw new Error(`varname ${varname} is not a factor`);
+  //   }
+  //   const {name} = this.displayList[0];
+  //   this.displays[name].displayInfo.state.filter.push(new CategoryFilterStateClass({ varname, values, regexp }));
+  //   return this;
   // }
 
   // setDefaultFilters(filters: string[]): void {
@@ -707,9 +868,6 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
   // }
 
   // addInputs(inputs: any[]): void {
-  // }
-
-  // setPrimaryPanel(panel: string): void {
   // }
 
   // setShowInfoOnLoad(showInfo: boolean): void {
@@ -790,95 +948,3 @@ export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrel
 
   return data2;
 }
-
-// const meta = [
-//   {
-//     "country": "Afghanistan",
-//     "continent": 3,
-//     "iso_alpha2": "AF",
-//     "mean_lexp": 37.4788333333333,
-//     "mean_gdp": 802.674598425,
-//     "dt_lexp_max_pct_chg": "1977-01-01",
-//     "dttm_lexp_max_pct_chg": "1977-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Afghanistan",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/AF.png"
-//   },
-//   {
-//     "country": "Albania",
-//     "continent": 4,
-//     "iso_alpha2": "AL",
-//     "mean_lexp": 68.4329166666667,
-//     "mean_gdp": 3255.36663266667,
-//     "max_lexp_pct_chg": 9.34547908232117,
-//     "dt_lexp_max_pct_chg": "1962-01-01",
-//     "dttm_lexp_max_pct_chg": "1962-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Albania",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/AL.png"
-//   },
-//   {
-//     "country": "Algeria",
-//     "continent": 1,
-//     "iso_alpha2": "DZ",
-//     "mean_lexp": 59.0301666666667,
-//     "mean_gdp": 4426.02597316667,
-//     "max_lexp_pct_chg": 7.22037543996872,
-//     "dt_lexp_max_pct_chg": "1987-01-01",
-//     "dttm_lexp_max_pct_chg": "1987-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Algeria",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/DZ.png"
-//   },
-//   {
-//     "country": "Angola",
-//     "continent": 1,
-//     "iso_alpha2": "AO",
-//     "mean_lexp": 37.8835,
-//     "mean_gdp": 3607.10052883333,
-//     "max_lexp_pct_chg": 6.61002831917374,
-//     "dt_lexp_max_pct_chg": "1957-01-01",
-//     "dttm_lexp_max_pct_chg": "1957-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Angola",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/AO.png"
-//   },
-//   {
-//     "country": "Argentina",
-//     "continent": 2,
-//     "iso_alpha2": "AR",
-//     "mean_lexp": 69.0604166666667,
-//     "mean_gdp": 8955.55378266667,
-//     "max_lexp_pct_chg": 3.06313515243659,
-//     "dt_lexp_max_pct_chg": "1957-01-01",
-//     "dttm_lexp_max_pct_chg": "1957-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Argentina",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/AR.png"
-//   },
-//   {
-//     "country": "Australia",
-//     "continent": 5,
-//     "iso_alpha2": "AU",
-//     "mean_lexp": 74.6629166666667,
-//     "mean_gdp": 19980.5956341667,
-//     "max_lexp_pct_chg": 2.16877519810926,
-//     "dt_lexp_max_pct_chg": "1977-01-01",
-//     "dttm_lexp_max_pct_chg": "1977-01-01T00:00:00",
-//     "wiki_link": "https://en.wikipedia.org/wiki/Australia",
-//     "flag": "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/AU.png"
-//   }
-// ];
-
-
-// const trs = Trelliscope({ data: meta, name: 'gapminder', keycols: ['continent', 'country'] });
-
-// trs
-
-
-// const a = NumberMeta({
-//   varname: 'var1',
-//   locale: false
-// })
-
-// a
-// a.type
-
-
-
-

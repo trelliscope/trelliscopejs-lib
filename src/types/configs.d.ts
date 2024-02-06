@@ -3,6 +3,9 @@
 /* ------------------------------------------------------ */
 
 type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency' | 'panel';
+// type RangeMetaType = 'number' | 'currency' | 'date' | 'datetime';
+// type StringMetaType = 'string' | 'factor';
+
 type GraphDirection = 'none' | 'from' | 'to';
 type CurrencyCode =
   | 'AED'
@@ -491,7 +494,10 @@ interface ITrelliscopeAppSpec {
   displays: {
     [key: string]: IDisplaySpec;
   };
-  setLayout(arg0: { ncol?: number; page?: number; viewtype?: ViewType; sidebarActive?: boolean; activeFilterVars?: string[] }): ITrelliscopeAppSpec;
-  setLabels(arg0: { varnames?: string[]; tags?: string[]; }): ITrelliscopeAppSpec;
-  setSort(arg0: { varnames: string[]; dirs?: SortDirType[]; }): ITrelliscopeAppSpec;
+  setDefaultLayout(arg0: { ncol?: number; page?: number; viewtype?: ViewType; sidebarActive?: boolean; activeFilterVars?: string[] }): ITrelliscopeAppSpec;
+  setDefaultLabels(arg0: { varnames?: string[]; tags?: string[]; }): ITrelliscopeAppSpec;
+  setDefaultSort(arg0: { varnames: string[]; dirs?: SortDirType[]; }): ITrelliscopeAppSpec;
+  setVarLabels(labels: [{[index: string]: string}]): ITrelliscopeAppSpec;
+  setPrimaryPanel(panel: string): ITrelliscopeAppSpec;
+  setRangeFilter(arg0: { varname: string; min?: number | Date | null; max?: number | Date | null }): ITrelliscopeAppSpec;
 }

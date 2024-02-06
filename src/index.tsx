@@ -193,9 +193,20 @@ if (import.meta.env.MODE === 'development') {
           name: 'gapminder',
           keycols: ['country', 'continent']
         })
-          .setLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
-          .setLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link']})
-          .setSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']});
+          .setDefaultLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
+          .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link']})
+          .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']})
+          .setRangeFilter({ varname: 'mean_lexp', max: 60 }) // not working yet
+          .setVarLabels({
+            mean_lexp: 'Mean life expectancy',
+            mean_gdp: 'Mean GDP per capita',
+            iso_alpha2: 'ISO country code',
+            max_lexp_pct_chg: 'Max % year-to-year change in life expectancy',
+            dt_lexp_max_pct_chg: 'Date of max % year-to-year change in life expectancy',
+            dttm_lexp_max_pct_chg: 'Date-time of max % year-to-year change in life expectancy',
+            wiki_link: 'Link to country Wikipedia entry',
+            flag: 'Country flag'
+          });
         trelliscopeApp(example.id, appdat);
       });
   } else {
