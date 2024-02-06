@@ -179,16 +179,18 @@ const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, width, height, op
   const appDims = { width, height }
 
   return (
-    <Provider store={store}>
-      <App
-        client={crossFilterClient as unknown as IDataClient}
-        config={prepareTrelliscope(data, id)}
-        id={id}
-        singlePageApp={false}
-        options={options}
-        appDims={appDims}
-      />
-    </Provider>
+    <div style={{ width, height, position: 'relative', overflow: 'hidden' }}>
+      <Provider store={store}>
+        <App
+          client={crossFilterClient as unknown as IDataClient}
+          config={prepareTrelliscope(data, id)}
+          id={id}
+          singlePageApp={false}
+          options={options}
+          appDims={appDims}
+        />
+      </Provider>
+    </div>
   );
 };
 
@@ -204,11 +206,11 @@ if (import.meta.env.MODE === 'development') {
   // append div to body for testing with id gapminder
   const div = document.createElement('div');
   div.id = example.id;
-  // div.style.width = '1000px';
-  // div.style.height = '600px';
-  // div.style.border = '1px solid red';
-  // div.className = 'trelliscope-not-spa';
-  div.className = 'trelliscope-spa';
+  div.style.width = '1000px';
+  div.style.height = '600px';
+  div.style.border = '1px solid red';
+  div.className = 'trelliscope-not-spa';
+  // div.className = 'trelliscope-spa';
   document.body.appendChild(div);
 
   if (example.name === 'gapminder_js') {
@@ -229,10 +231,4 @@ if (import.meta.env.MODE === 'development') {
     trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
     { logger: true });
   }
-}
-
-export {
-  Trelliscope,
-  TrelliscopeApp,
-  trelliscopeApp,
 }
