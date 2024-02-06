@@ -2,7 +2,10 @@
 /* meta                                                   */
 /* ------------------------------------------------------ */
 
-type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency';
+type MetaType = 'string' | 'number' | 'factor' | 'date' | 'datetime' | 'href' | 'geo' | 'graph' | 'currency' | 'panel';
+// type RangeMetaType = 'number' | 'currency' | 'date' | 'datetime';
+// type StringMetaType = 'string' | 'factor';
+
 type GraphDirection = 'none' | 'from' | 'to';
 type CurrencyCode =
   | 'AED'
@@ -188,17 +191,20 @@ type CurrencyCode =
   | 'ZWL';
 
 interface IMeta {
+  name: string;
   varname: string;
   type: MetaType;
   label: string;
   tags: string[];
   filterable: boolean;
   sortable: boolean;
+  maxnchar: number;
   code?: string;
   log: boolean;
   levels?: string[];
   digits: number;
   filterSortOrder: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';
+  locale: boolean;
 }
 
 interface INumberMeta extends IMeta {
@@ -214,10 +220,19 @@ interface IFactorMeta extends IMeta {
   levels: string[];
 }
 
+interface IStringMeta extends IMeta {
+}
+
+interface IDateMeta extends IMeta {
+}
+
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 interface IDatetimeMeta extends IMeta {
   timezone: string;
+}
+
+interface IHrefMeta extends IMeta {
 }
 
 interface IGraphMeta extends IMeta {
@@ -250,10 +265,17 @@ interface IInputs {
 type InputType = 'radio' | 'checkbox' | 'select' | 'multiselect' | 'text' | 'number';
 
 interface IInput {
+  varname: string;
   name: string;
   label: string;
   active: boolean;
   type: InputType;
+  maxnchar: number;
+  sortable: boolean;
+  tags: string[];
+  levels?: string[];
+  digits?: number;
+  code?: string;
 }
 
 interface IRadioInput extends IInput {
@@ -273,8 +295,12 @@ interface IMultiselectInput extends IInput {
 }
 
 interface ITextInput extends IInput {
-  width: number;
   height: number;
+}
+
+interface INumberInput extends IInput {
+  min: number | null;
+  max: number | null;
 }
 
 /* ------------------------------------------------------ */
@@ -290,20 +316,28 @@ interface IDisplayState {
   labels: ILabelState;
   sort: ISortState[];
   filter: IFilterState[];
+  filterView: string[];
 }
 
 interface IState {
   type: StateType;
 }
 
+type ViewType = 'table' | 'grid';
+
 interface ILayoutState extends IState {
-  nrow: number;
+  nrow: number; // why??
   ncol: number;
   page: number;
+  viewtype: ViewType;
+  panel: string; // why??
+  sidebarActive: boolean;
+  showLabels: boolean; // why??
 }
 
 interface ILabelState extends IState {
   varnames: string[];
+  tags: string[];
 }
 
 interface ISortState extends IState {
@@ -312,6 +346,7 @@ interface ISortState extends IState {
   metatype: MetaType;
 }
 
+// what is this?!?!?!?!
 interface IFilterState extends IState {
   varname: string;
   filtertype: FilterType;
@@ -321,6 +356,7 @@ interface IFilterState extends IState {
 interface ILabelState {
   varname: string;
   label: string;
+  sortable: boolean;
 }
 
 interface ICategoryFilterState extends IFilterState {
@@ -349,6 +385,7 @@ interface IDatetimeRangeFilterState extends IFilterState {
 
 interface IView {
   name: string;
+  description: string;
   state: IDisplayState;
 }
 
@@ -358,21 +395,48 @@ interface IView {
 
 type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' | 'pjp' | 'png' | 'svg' | 'webp';
 
-type PanelType = 'img' | 'iframe' | 'REST';
+type PanelType = 'img' | 'iframe';
+
+type PanelSourceType = 'file' | 'REST' | 'localWebSocket';
+
+interface IPanelSource {
+  type: PanelSourceType;
+  isLocal: boolean;
+  port: number;
+}
+
+interface IPanelMeta extends IMeta {
+  paneltype: PanelType;
+  // format?: PanelFormat;
+  aspect: number;
+  source: IPanelSource;
+}
+
+// interface IFilePanelSource extends IPanelSource {
+// }
+
+interface IRESTPanelSource extends IPanelSource {
+  url: string;
+  apiKey: string | undefined;
+  headers: string | undefined;
+}
 
 interface IDisplay {
   name: string;
   description: string;
   tags: string[];
+  hasCustomInfo: boolean;
+  infoOnLoad: boolean;
   keycols: string[];
   keysig: string;
   metas: IMeta[];
   inputs?: IInputs;
   state: IDisplayState;
   views: IView[];
-  paneltype: PanelType;
-  panelformat?: PanelFormat;
-  panelaspect: number;
+  // paneltype: PanelType;
+  // panelformat?: PanelFormat;
+  // panelaspect: number;
+  primarypanel: string;
   thumbnailurl: string;
 }
 
@@ -392,14 +456,48 @@ interface IDisplayListItem {
 /* config                                                 */
 /* ------------------------------------------------------ */
 
-type AppDataType = 'jsonp' | 'json';
+type AppDataType = 'jsonp' | 'json' | 'js'; // js means created in JavaScript and doesn't need to be read from a file
 
 interface IConfig {
   name: string;
   datatype: AppDataType;
   id: string;
+  theme?: ITheme;
+}
+
+interface ITheme {
+  primary: string;
+  dark: string;
+  light: string;
+  isLightTextOnDark: boolean;
+  darkText: string;
+  lightText: string;
+  logo: string;
+  header: {
+    background: string;
+    text: string;
+  };
 }
 
 interface Datum {
   [key: string | symbol]: string | number;
+}
+
+interface IDisplaySpec {
+  displayInfo: IDisplay;
+  metaData: Datum[];
+}
+
+interface ITrelliscopeAppSpec {
+  config: IConfig;
+  displayList: IDisplayListItem[];
+  displays: {
+    [key: string]: IDisplaySpec;
+  };
+  setDefaultLayout(arg0: { ncol?: number; page?: number; viewtype?: ViewType; sidebarActive?: boolean; activeFilterVars?: string[] }): ITrelliscopeAppSpec;
+  setDefaultLabels(arg0: { varnames?: string[]; tags?: string[]; }): ITrelliscopeAppSpec;
+  setDefaultSort(arg0: { varnames: string[]; dirs?: SortDirType[]; }): ITrelliscopeAppSpec;
+  setVarLabels(labels: {[index: string]: string}): ITrelliscopeAppSpec;
+  setPrimaryPanel(panel: string): ITrelliscopeAppSpec;
+  setRangeFilter(arg0: { varname: string; min?: number | Date | null; max?: number | Date | null }): ITrelliscopeAppSpec;
 }

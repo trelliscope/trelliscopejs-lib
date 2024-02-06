@@ -62,13 +62,13 @@
   --displayList-container-height: 400px;
   --displayList-grid-list-width: 700px;
   --displaySelect-size: var(--header-container-height);
-  --filter-width: 220px;
+  --filter-width: 399px;
   --filterCat-input-containter-height: 39px;
   --filterNum-plot-container-height: 100px;
   --footer-wrapper-height: 30px;
   --footer-spacer-width: 12px;
-  --footerChip-wrapper-height: 22px;
-  --footerChip-closeIcon-size: 21px;
+  --chip-wrapper-height: 22px;
+  --chip-closeIcon-size: 21px;
   --fullscreenButton-size: 30px;
   --header-container-height: calc(var(--header-height) * 1px);
   --helpInfo-height: var(--header-container-height);
@@ -104,14 +104,14 @@
   --sideButton-icon-height: 22px;
   --sideButtons-container-width: var(--header-container-height);
   --sideButtons-spacer-height: 25px;
-  --panelLabel-height: 27px;
-  --panelGridGap: 8px;
+  --panelLabel-height: 29px;
+  --panelGridGap: 5px;
 
   // line-height
   --displaySelect-button-line-height: 50px;
   --filterCatPlotBar-label-line-height: 19px;
   --footer-wrapper-line-height: 30px;
-  --footerChip-label-line-height: 20px;
+  --chip-label-line-height: 20px;
   --pagination-buttonText-line-height: 10px;
   --pagination-progress-line-height: 48px;
   --sidebar-container-header-line-height: 25px;
@@ -155,7 +155,7 @@
   --displaySelect-empty-transition: transform 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0ms;
   --displaySelect-button-transition: all 500ms ease-in;
   --displaySelect-button-hover-transition: opacity 250ms;
-  --footerChip-closeIcon-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  --chip-closeIcon-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   --fullscreenButton-transition: all 100ms ease-in;
   --panel-transition: 300ms ease;
   --panel-bounding-transition: all 300ms ease;

@@ -8,8 +8,8 @@ module.exports = {
       },
       {
         type: 'confirm',
-        name: 'unitTest',
-        message: 'Will this component have unit tests?',
+        name: 'test',
+        message: 'Will this component have playwright tests?',
       },
     ];
 

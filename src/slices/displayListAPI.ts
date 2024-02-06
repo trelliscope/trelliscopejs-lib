@@ -2,22 +2,25 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
 import getJSONP from 'browser-jsonp';
 import { useSelector } from 'react-redux';
 import { COMMON_TAGS_KEY } from '../constants';
-import { selectAppId, selectBasePath } from '../selectors/app';
+import { selectAppId, selectBasePath, selectAppData } from '../selectors/app';
 import { getRequestErrorMessage, handleJSONResponse } from '../utils';
 import { useDataType } from './configAPI';
 import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 
 const JSONPBaseQuery =
-  (): BaseQueryFn<{ url: string; id: string; dataType: string }, unknown, unknown> =>
-  ({ url, id, dataType }) =>
+  (): BaseQueryFn<{ url: string; id: string; dataType: string, appData: string }, unknown, unknown> =>
+  ({ url, id, dataType, appData }) =>
     new Promise((resolve) => {
       const displayListCallback = `__loadDisplayList__${id}`;
 
-      window[displayListCallback] = (data: Config) => {
+      const cb = (data: IDisplayListItem[]) => {
         resolve({ data });
       };
+      window[displayListCallback] = cb;
 
-      if (dataType === 'jsonp') {
+      if (appData && appData !== '' ) {
+        cb(window.appData[appData].displayList);
+      } else if (dataType === 'jsonp') {
         getJSONP({
           url: `${url}/displays/displayList.jsonp`,
           callbackName: displayListCallback,
@@ -39,8 +42,8 @@ export const displayListAPI = createApi({
   reducerPath: 'displayList',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json' }>({
-      query: ({ url, id, dataType }) => ({ url, id, dataType }),
+    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json' | 'js', appData: string }>({
+      query: ({ url, id, dataType, appData }) => ({ url, id, dataType, appData }),
     }),
   }),
 });
@@ -50,8 +53,9 @@ export const { useGetDisplayListQuery } = displayListAPI;
 export const useDisplayList = () => {
   const appId = useSelector(selectAppId);
   const basePath = useSelector(selectBasePath);
+  const appData = useSelector(selectAppData);
   const dataType = useDataType() as AppDataType;
-  return useGetDisplayListQuery({ url: basePath, id: appId, dataType }, { skip: !dataType || !basePath });
+  return useGetDisplayListQuery({ url: basePath, id: appId, dataType, appData }, { skip: !(appData !== '' || (dataType && basePath)) });
 };
 
 export const useRelatedDisplayNames = () => {

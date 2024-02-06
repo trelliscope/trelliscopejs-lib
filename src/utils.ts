@@ -38,3 +38,6 @@ export const getFactorFromLabel = (values: string[], levels: string[]) =>
       return index !== -1 ? index + 1 : undefined;
     })
     .filter((label) => label !== undefined);
+
+export const panelSrcGetter = (basePath: string, fileName: string, displayName: string) =>
+  `${basePath}/displays/${displayName}/${fileName}`;

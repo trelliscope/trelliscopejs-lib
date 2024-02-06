@@ -1,159 +1,188 @@
 import React, { useEffect, useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import type { MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import DisplayList from '../DisplayList';
-import { setDispSelectDialogOpen } from '../../slices/appSlice';
-import { FilterState, clearFilters, setFilterView } from '../../slices/filterSlice';
-import { setSort } from '../../slices/sortSlice';
-import { setLabels } from '../../slices/labelsSlice';
-import { setLayout } from '../../slices/layoutSlice';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { clearFilters, selectFilterState, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
+import { selectSort, setSort } from '../../slices/sortSlice';
+import { selectLabels, setLabels } from '../../slices/labelsSlice';
+import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import type { LayoutAction } from '../../slices/layoutSlice';
-import { setActiveSidebar } from '../../slices/sidebarSlice';
-import { fullscreenSelector, dispSelectDialogSelector } from '../../selectors';
 import { setSelectedDisplay, useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import { setRelDispPositions } from '../../slices/relDispPositionsSlice';
-import { setSelectedRelDisps } from '../../slices/selectedRelDispsSlice';
 import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
-import styles from './DisplaySelect.module.scss';
+import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
+import { filterViewSelector } from '../../selectors';
+import { useConfig } from '../../slices/configAPI';
+// import styles from './DisplaySelect.module.scss';
+import ErrorWrapper from '../ErrorWrapper';
 
-interface DisplaySelectProps {
-  setDialogOpen: (isOpen: boolean) => void;
-}
-
-const DisplaySelect: React.FC<DisplaySelectProps> = ({ setDialogOpen }) => {
+const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
   const { name: selectedDisplay } = useSelectedDisplay();
-  const fullscreen = useSelector(fullscreenSelector);
-  const isOpen = useSelector(dispSelectDialogSelector);
-  const [btnScale, setBtnScale] = useState(1);
-  const [attnCircle, setAttnCircle] = useState<HTMLElement>();
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [selectedDisplayName, setSelectedDisplayName] = useState('');
-  const { data: displayList, isSuccess } = useDisplayList();
+  const { data: displayList } = useDisplayList();
   const { data: displayInfo } = useDisplayInfo();
+  const [isOpen, setIsOpen] = useState(false);
+  const STORED_NAME = 'trelliscope_display_switch_state';
+  const { setStoredValue } = useStoredInputValue(STORED_NAME, '');
+  const { data: configObj } = useConfig();
+
+  const filterViews = useSelector(filterViewSelector);
+  const filters = useSelector(selectFilterState);
+  const sorts = useSelector(selectSort);
+  const labels = useSelector(selectLabels);
+  const layout = useSelector(selectLayout);
 
   const stateLayout = displayInfo?.state?.layout;
   const stateLabels = displayInfo?.state?.labels?.varnames;
+  const stateSort = displayInfo?.state?.sort;
+  const stateFilters = displayInfo?.state?.filter;
   const activeDisplayName = displayInfo?.name;
 
-  // This is needed to make sure the default state is applied when switching to a new display
+  // This is needed to make sure the default state or the state from local storage that the user was previously on is applied when switching to a new display
   useEffect(() => {
     if (selectedDisplayName === activeDisplayName) {
-      dispatch(setLayout(stateLayout as LayoutAction));
+      const localSavedState = localStorage.getItem(getLocalStorageKey([], displayInfo?.name || '', STORED_NAME, ''));
+
+      if (localSavedState) {
+        const {
+          filter: valueFilter,
+          labels: valueLabels,
+          layout: valueLayout,
+          sort: valueSort,
+          filterView: valueFilterView,
+        } = JSON.parse(localSavedState).state;
+
+        if (valueLayout) dispatch(setLayout(valueLayout as LayoutAction));
+
+        if (valueLabels) dispatch(setLabels(valueLabels.varnames));
+
+        if (valueSort) dispatch(setSort(valueSort));
+
+        if (valueFilter) dispatch(setFiltersandFilterViews(valueFilter));
+
+        if (valueFilterView) {
+          const inactiveFilters = filterViews.inactive.filter((filter) => !valueFilterView.includes(filter));
+          dispatch(setFilterView({ name: { active: valueFilterView, inactive: inactiveFilters }, which: 'set' }));
+        }
+
+        return;
+      }
+      dispatch(setLayout({ ...(stateLayout as LayoutAction), panel: '' }));
       dispatch(setLabels(stateLabels as string[]));
+      dispatch(setFiltersandFilterViews(stateFilters as IFilterState[]));
+      dispatch(setSort(stateSort as number | ISortState[]));
     }
   }, [stateLabels, stateLayout, dispatch, selectedDisplayName, activeDisplayName]);
 
-  const handleDispDialogOpen = (dispIsOpen: boolean) => {
-    dispatch(setDispSelectDialogOpen(dispIsOpen));
-  };
-
   const handleClose = () => {
-    setDialogOpen(false);
-    handleDispDialogOpen(false);
+    setIsOpen(false);
+    setAnchorEl(null);
   };
 
-  const handleOpen = () => {
-    if (displayList && isSuccess) {
-      setDialogOpen(true);
-      handleDispDialogOpen(true);
-    }
+  const handleOpen = (event: MouseEvent) => {
+    setAnchorEl(event.currentTarget);
+    setIsOpen(true);
   };
-
   const handleClick = (name: string) => {
+    // Need to save to local storage a "view" of the current display before switching
+    // If a view is saved we want to load that in the new display
+    // Otherwise we want to load the default state of the new display
+    setStoredValue(
+      JSON.stringify({
+        name: activeDisplayName,
+        state: {
+          layout,
+          labels: { varnames: labels, type: 'labels' },
+          sort: sorts,
+          filter: filters,
+          filterView: filterViews?.active,
+        },
+      }),
+    );
+
     // need to clear out state for new display...
-    // first close sidebars for safety
-    // (there is an issue when the filter sidebar stays open when changing - revisit this)
-    dispatch(setActiveSidebar(''));
-    dispatch(setSelectedRelDisps([]));
-    dispatch(setFilterView({ name: { active: [], inactive: [] } as FilterState['view'] }));
+    dispatch(setFilterView({ name: '', which: 'removeActive' }));
     dispatch(clearFilters());
     dispatch(setSort([]));
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
+    dispatch(setLayout({ page: 1, sidebarActive: false, viewtype: 'grid' }));
     setSelectedDisplayName(name);
   };
 
-  const handleKey = () => {
-    setDialogOpen(true);
-    handleDispDialogOpen(true);
-  };
-
-  useHotkeys('o', handleKey, { enabled: fullscreen && !isOpen });
-  useHotkeys('o', handleClose, { enabled: fullscreen && isOpen });
-  useHotkeys('esc', handleClose, { enabled: isOpen });
-
   const handleSelect = (name: string) => {
     handleClick(name);
-    setDialogOpen(false);
-    handleDispDialogOpen(false);
+    handleClose();
   };
 
-  useEffect(() => {
-    const attnInterval = setInterval(() => {
-      const elem = attnCircle as HTMLDivElement | undefined;
-      if (selectedDisplay !== '') {
-        clearInterval(attnInterval);
-      }
-      if (elem) {
-        elem.style.transform = `scale(${btnScale})`;
-        setBtnScale(btnScale === 1 ? 0.85 : 1);
-      }
-    }, 750);
-  }, []);
-
   return (
-    <div>
-      <button
-        type="button"
-        aria-label="display select open"
+    <ErrorWrapper>
+      <Button
+        sx={{
+          color: configObj?.theme?.header
+            ? configObj.theme?.header?.text
+            : configObj?.theme?.isLightTextOnDark && configObj?.theme
+            ? configObj?.theme?.lightText
+            : !configObj?.theme?.isLightTextOnDark && configObj?.theme
+            ? configObj?.theme?.darkText
+            : '#757575',
+          textTransform: 'unset',
+        }}
+        id="display-select-button"
+        aria-haspopup="true"
+        aria-controls={isOpen ? 'basic-menu' : undefined}
+        aria-expanded={isOpen ? 'true' : undefined}
         onClick={handleOpen}
-        className={classNames({ [styles.displaySelectButton]: true, [styles.displaySelectButtonInactive]: !isSuccess })}
+        endIcon={<FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} size="xs" />}
       >
-        {(selectedDisplay === '' || !isOpen) && (
-          <div className={styles.displaySelectAttnOuter}>
-            <div className={styles.displaySelectAttnInner}>
-              <div
-                ref={(d: HTMLDivElement) => {
-                  setAttnCircle(d);
-                }}
-                className={styles.displaySelectAttnEmpty}
-              />
-            </div>
-          </div>
-        )}
-        <div className={styles.displaySelectFolderIcon}>
-          <FontAwesomeIcon icon={faFolder} />
-        </div>
-      </button>
-      <Dialog
+        <span
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '300px',
+          }}
+        >
+          View other displays ({displayList?.find((d) => d.name !== selectedDisplay)?.name || ''}
+        </span>
+        {displayList && displayList?.length - 2 > 0 ? ` + ${displayList?.length - 2} more` : ''})
+      </Button>
+      <Menu
+        id="display-select-menu"
+        anchorEl={anchorEl}
         open={isOpen}
-        className="trelliscope-app"
-        aria-labelledby="dialog-dispselect-title"
         onClose={handleClose}
-        disableEscapeKeyDown
-        maxWidth="md"
-        fullWidth
+        MenuListProps={{
+          'aria-labelledby': 'display-select-button',
+        }}
       >
-        <DialogTitle id="dialog-dispselect-title">Select a Display to Open</DialogTitle>
-        <DialogContent>
-          <DisplayList displayItems={displayList as IDisplayListItem[]} handleClick={handleSelect} selectable={false} />
-        </DialogContent>
-        <DialogActions>
-          <Button aria-label="display select close" color="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+        <div
+          style={{
+            fontWeight: 600,
+            paddingLeft: 15,
+            paddingRight: 15,
+            paddingBottom: 5,
+          }}
+        >
+          Select a different display
+        </div>
+        {displayList
+          ?.filter((display) => display.name !== selectedDisplay)
+          .map((d) => (
+            <MenuItem key={d.name} onClick={() => handleSelect(d.name)}>
+              <div>
+                <div>{d.name}</div>
+                <div style={{ fontStyle: 'italic', fontSize: 14 }}>{d.description}</div>
+              </div>
+            </MenuItem>
+          ))}
+      </Menu>
+    </ErrorWrapper>
   );
 };
 

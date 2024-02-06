@@ -3,12 +3,13 @@
 
   &BarWrapper {
     position: relative;
-    color: var(--gray-900);
-    font-size: 9px;
+    color: var(--gray-1300);
+    font-size: 14px;
     margin-bottom: 1px;
     border: none;
     background: none;
     overflow-x: hidden;
+    width: 100%;
 
     &:hover {
       background: var(--white-200);
@@ -31,7 +32,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: var(--white-300);
+    background: var(--gray-300);
+    display: flex;
+    align-items: center;
 
     &:hover {
       background: var(--orange-100);
@@ -49,9 +52,20 @@
       position: absolute;
       color: var(--gray-1400);
       right: var(--margin-3);
+      top: 5px;
       line-height: 15px;
-      font-size: var(--text-3xs);
+      font-size: var(--text-base);
       opacity: 0;
+      padding-right: 2px;
+    }
+
+    &Indicator {
+      position: absolute;
+      background: #448aff;
+      width: 3px;
+      height: 24px;
+      top: 0;
+      right: 0;
     }
   }
 }

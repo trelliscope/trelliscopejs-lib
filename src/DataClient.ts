@@ -1,6 +1,4 @@
-import type { NaturallyOrderedValue } from 'crossfilter2';
-
-export type DataType = 'string' | 'number' | 'date';
+export type DataType = 'string' | 'number' | 'date' | 'datetime';
 export interface DataClientFilter {
   field: string;
   value: string | number | string[] | [number, number] | [null, null];
@@ -30,8 +28,8 @@ export interface IDataClient {
   clearFilters(): void;
   groupBy: (
     field: string,
-    dataType: 'string' | 'number' | 'date',
-    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+    dataType: 'string' | 'number' | 'date' | 'datetime',
+    groupFunc?: (d: number) => number | null | undefined,
   ) => { key: string | number; value: number }[];
   clearData(): void;
   getData(count?: number, offset?: number): Datum[];
@@ -103,7 +101,8 @@ export default class DataClient implements IDataClient {
           case 'neq':
             return d[f.field] !== f.value;
           case 'range':
-            return d[f.field] >= (f.value as [number, number])[0] && d[f.field] <= (f.value as [number, number])[1];
+            return (d[f.field] as number) >= (f.value as [number, number])[0] &&
+              (d[f.field] as number) <= (f.value as [number, number])[1];
           case 'regex': {
             const regex = new RegExp(f.value as string);
             return regex.test(d[f.field] as string);

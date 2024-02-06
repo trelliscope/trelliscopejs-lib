@@ -5,6 +5,10 @@ import type { RootState } from '../store';
 import { displayInfoAPI } from './displayInfoAPI';
 import { selectHash, selectHashFilters, selectHashFilterView } from '../selectors/hash';
 
+interface FilterView {
+  active: string[];
+  inactive: string[];
+}
 export interface FilterState {
   state: IFilterState[];
   view: FilterView;
@@ -32,7 +36,12 @@ export const filterSlice = createSlice({
         filterState.push(action.payload);
       }
     },
-    updateFilter: (state, action: PayloadAction<ICategoryFilterState | INumberRangeFilterState>) => {
+    updateFilter: (
+      state,
+      action: PayloadAction<
+        ICategoryFilterState | INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState
+      >,
+    ) => {
       const { state: filterState } = state;
       const { varname } = action.payload;
       const idx = filterState.findIndex((f) => f.varname === varname);
@@ -64,10 +73,22 @@ export const filterSlice = createSlice({
         }
       }
     },
+    setFiltersandFilterViews: (state, action: PayloadAction<IFilterState[]>) => {
+      state.state = action.payload;
+      const { view } = state;
+      const filterables = action.payload.map((m) => m.varname);
+      state.view = {
+        active: filterables,
+        inactive: difference(view.active.concat(view.inactive), filterables) as string[],
+      };
+    },
     clearFilters: (state) => {
       state.state = [];
     },
-    setFilterView: (state, action: PayloadAction<{ which?: 'remove' | 'add' | 'set'; name: string | FilterView }>) => {
+    setFilterView: (
+      state,
+      action: PayloadAction<{ which?: 'remove' | 'add' | 'set' | 'removeActive'; name: string | FilterView }>,
+    ) => {
       const { view } = state;
       const { which, name } = action.payload;
       if (which === 'remove') {
@@ -79,6 +100,9 @@ export const filterSlice = createSlice({
         if (idxI < 0) {
           view.inactive.push(name as string);
         }
+      } else if (which === 'removeActive') {
+        view.inactive = [...view.inactive, ...view.active];
+        view.active = [];
       } else if (which === 'add') {
         const idxA = view.inactive.indexOf(name as string);
         if (idxA > -1) {
@@ -122,13 +146,27 @@ export const filterSlice = createSlice({
       if (hashFilterView.length > 0) {
         state.view.active = hashFilterView;
         state.view.inactive = difference(filterables, hashFilterView);
+      } else {
+        const { filterView } = action.payload.state;
+        if (filterView === undefined || filterView.length === 0) {
+          state.view.active = [];
+        } else {
+          state.view.active = filterView;
+        }
       }
     });
   },
 });
 
-export const { setFilterView, addFilter, updateFilterValues, updateFilter, removeFilter, clearFilters } =
-  filterSlice.actions;
+export const {
+  setFilterView,
+  addFilter,
+  updateFilterValues,
+  updateFilter,
+  removeFilter,
+  clearFilters,
+  setFiltersandFilterViews,
+} = filterSlice.actions;
 
 // Selectors
 export const selectFilterState = (state: RootState) => state.filter.state;

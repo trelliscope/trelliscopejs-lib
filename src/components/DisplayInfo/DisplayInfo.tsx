@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { Box, Checkbox, IconButton, Tooltip, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,106 +9,151 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import classNames from 'classnames';
-import { fullscreenSelector, dispInfoDialogSelector } from '../../selectors';
-import { setDispInfoDialogOpen } from '../../slices/appSlice';
+import { fullscreenSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
+import { DataContext } from '../DataProvider';
 import styles from './DisplayInfo.module.scss';
+import { selectBasePath } from '../../selectors/app';
+import { snakeCase } from '../../utils';
+import { useConfig } from '../../slices/configAPI';
 
-interface DisplayInfoProps {
-  singleDisplay: boolean;
-  setDialogOpen: (isOpen: boolean) => void;
-  totPanels: number;
-}
-
-const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen, totPanels }) => {
-  const dispatch = useDispatch();
+const DisplayInfo: React.FC = () => {
+  const { allData } = useContext(DataContext);
   const { data: displayInfo, isLoading } = useDisplayInfo();
   const fullscreen = useSelector(fullscreenSelector);
-  const isOpen = useSelector(dispInfoDialogSelector);
+  const basePath = useSelector(selectBasePath);
   const [hasInputs, setHasInputs] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: configObj } = useConfig();
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     if (displayInfo && displayInfo.inputs) {
       setHasInputs(true);
+    } else {
+      setHasInputs(false);
     }
   }, [displayInfo]);
 
-  const handleDispInfoDialogOpen = (dispInfoIsOpen: boolean) => {
-    dispatch(setDispInfoDialogOpen(dispInfoIsOpen));
-  };
-  const handleClose = () => {
-    setDialogOpen(false);
-    handleDispInfoDialogOpen(false);
-  };
-  const handleOpen = () => {
-    setDialogOpen(true);
-    handleDispInfoDialogOpen(true);
+  const showInfoSkipped = localStorage.getItem(`trelliscope_info_${displayInfo?.name}`);
+
+  const [showInfo, setShowInfo] = useState(showInfoSkipped === 'skipped');
+
+  const handleShowInfoChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    if (value) {
+      localStorage.setItem(`trelliscope_info_${displayInfo?.name}`, 'skipped');
+      setShowInfo(true);
+    } else {
+      localStorage.removeItem(`trelliscope_info_${displayInfo?.name}`);
+      setShowInfo(false);
+    }
   };
 
-  const handleKey = () => {
-    setDialogOpen(true);
-    handleDispInfoDialogOpen(true);
-  };
+  useEffect(() => {
+    if (showInfoSkipped === 'skipped') {
+      setShowInfo(true);
+    } else {
+      setShowInfo(false);
+    }
+  }, [showInfoSkipped, displayInfo?.name]);
 
-  useHotkeys('i', handleKey, { enabled: fullscreen && !isOpen });
-  useHotkeys('i', handleClose, { enabled: fullscreen && isOpen });
-  useHotkeys('esc', handleClose, { enabled: isOpen });
+  useEffect(() => {
+    if (displayInfo?.infoOnLoad && !showInfoSkipped) {
+      setIsOpen(true);
+    }
+  }, [displayInfo?.infoOnLoad, displayInfo?.name]);
+
+  useHotkeys('i', handleToggle, { enabled: fullscreen }, [isOpen]);
+  useHotkeys('esc', () => setIsOpen(false), { enabled: isOpen });
 
   return (
     <div>
-      <button
-        type="button"
-        aria-label="display info open"
-        onClick={handleOpen}
-        className={classNames(
-          singleDisplay ? [styles.displayInfoButton, styles.displayInfoButtonLeft] : styles.displayInfoButton,
-        )}
-      >
+      <IconButton data-testid="display-info-button" onClick={handleToggle}>
         <div className={styles.displayInfoIcon}>
-          <FontAwesomeIcon icon={faCircleInfo} size="lg" />
+          <FontAwesomeIcon
+            color={
+              configObj?.theme?.header
+                ? configObj?.theme?.header?.text
+                : configObj?.theme?.isLightTextOnDark
+                ? configObj?.theme?.lightText
+                : configObj?.theme?.darkText
+            }
+            icon={faCircleInfo}
+            size="sm"
+          />
         </div>
-      </button>
+      </IconButton>
       <Dialog
         open={isOpen}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-info-title"
-        onClose={handleClose}
+        onClose={handleToggle}
         disableEscapeKeyDown
-        maxWidth="md"
+        maxWidth="lg"
+        fullWidth
+        data-testid="display-info-modal"
       >
-        <DialogTitle id="dialog-info-title">Information About This Display</DialogTitle>
+        <DialogTitle id="dialog-info-title">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box>Information About This Display</Box>
+            {displayInfo?.infoOnLoad && (
+              <Tooltip
+                arrow
+                title="When this checkbox is unchecked, this modal will not appear when viewing this display again."
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Checkbox checked={showInfo} onChange={handleShowInfoChange} />
+                  <Typography>Do not show on next load</Typography>
+                </Box>
+              </Tooltip>
+            )}
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <div className={styles.displayInfoModalContainer}>
-            <div>
-              <div style={{ background: '#ededed', padding: 5 }}>
-                <strong>{displayInfo?.name}</strong>
-                <br />
-                {displayInfo?.description && <em>{displayInfo?.description}</em>}
+            {displayInfo?.hasCustomInfo ? (
+              <iframe
+                key="customInfo"
+                width="100%"
+                height="100%"
+                src={`${basePath}/displays/${snakeCase(displayInfo?.name || '')}/info.html`}
+                title="customInfo"
+              />
+            ) : (
+              <div>
+                <div style={{ background: '#ededed', padding: 5 }}>
+                  <strong>{displayInfo?.name}</strong>
+                  <br />
+                  {displayInfo?.description && <em>{displayInfo?.description}</em>}
+                </div>
+                <p>
+                  {`This visualization contains ${allData?.length} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
+                </p>
+                <p>
+                  To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top
+                  right corner of the display.
+                </p>
+                {hasInputs && (
+                  <p>
+                    There are user input variables available in this visualization with which you can provide feedback for
+                    any panel. These will show up as either a radio button or free text entry in the labels that show up
+                    under each panel. As you enter inputs, these are saved in your local web browser&apos;s storage and will
+                    be remembered in subsequent views of the display.
+                  </p>
+                )}
+                {hasInputs && (
+                  <p>
+                    If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo;
+                    icon at the top right of the display and follow the prompts in the dialog box that pops up.
+                  </p>
+                )}
               </div>
-              <p>
-                {`This visualization contains ${totPanels} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
-              </p>
-              <p>
-                To learn more about how to interact with this visualization, click the &ldquo;?&rdquo; icon in the top right
-                corner of the display.
-              </p>
-              {hasInputs && (
-                <p>
-                  There are user input variables available in this visualization with which you can provide feedback for any
-                  panel. These will show up as either a radio button or free text entry in the labels that show up under each
-                  panel. As you enter inputs, these are saved in your local web browser&apos;s storage and will be remembered
-                  in subsequent views of the display.
-                </p>
-              )}
-              {hasInputs && (
-                <p>
-                  If you&apos;d like to pull the data that you have input, you can click the &ldquo;Export Inputs&rdquo;
-                  button at the bottom left corner of the display and follow the prompts in the dialog box that pops up.
-                </p>
-              )}
-            </div>
+            )}
+
             {!isLoading && (
               <div
               // we can dangerously set because the HTML is generated from marked()
@@ -123,7 +169,7 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({ singleDisplay, setDialogOpen,
           </div>
         </DialogContent>
         <DialogActions>
-          <Button aria-label="display info close" color="secondary" onClick={handleClose}>
+          <Button data-testid="display-info-button-close" aria-label="display info close" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

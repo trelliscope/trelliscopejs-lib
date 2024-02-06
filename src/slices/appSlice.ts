@@ -2,33 +2,42 @@ import { CaseReducer, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { configAPI } from './configAPI';
 import { displayInfoAPI } from './displayInfoAPI';
-import { metaDataAPI } from './metaDataAPI';
 import { displayListAPI } from './displayListAPI';
 
+export interface PanelDialog {
+  open: boolean;
+  panel?: IMeta;
+  source?: string;
+  index?: number;
+}
 export interface AppState {
   appId: string;
   options: AppOptions;
   dialog: boolean;
-  dispSelectDialog: boolean;
-  dispInfoDialog: boolean;
   singlePageApp: boolean;
   fullscreen: boolean;
   errorMsg: string;
   basePath: string;
+  appData: string;
   configPath: string;
+  panelDialog: PanelDialog;
 }
 
 const initialState: AppState = {
   appId: 'app',
   options: {},
   dialog: false,
-  dispSelectDialog: false,
-  dispInfoDialog: false,
   singlePageApp: true,
   fullscreen: true,
   errorMsg: '',
   basePath: '',
+  appData: '',
   configPath: '',
+  panelDialog: {
+    open: false,
+    panel: undefined,
+    source: '',
+  },
 };
 
 const apiErrorHandler: CaseReducer = (state, action) => ({
@@ -46,15 +55,6 @@ export const appSlice = createSlice({
     setOptions: (state, action: PayloadAction<AppOptions | undefined>) => {
       state.options = action.payload || {};
     },
-    setDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dialog = action.payload;
-    },
-    setDispSelectDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dispSelectDialog = action.payload;
-    },
-    setDispInfoDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.dispInfoDialog = action.payload;
-    },
     setSinglePageApp: (state, action: PayloadAction<boolean | undefined>) => {
       state.singlePageApp = !!action.payload;
     },
@@ -68,26 +68,22 @@ export const appSlice = createSlice({
       state.configPath = action.payload;
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
+    setAppData: (state, action: PayloadAction<string>) => {
+      state.appData = action.payload;
+    },
+    setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean; index?: number }>) => {
+      state.panelDialog = { ...state.panelDialog, ...action.payload };
+    },
   },
   // Listen for rejected API calls and set the error message
   extraReducers: (builder) => {
     builder.addMatcher(configAPI.endpoints.getConfig.matchRejected, apiErrorHandler);
     builder.addMatcher(displayInfoAPI.endpoints.getDisplayInfo.matchRejected, apiErrorHandler);
-    builder.addMatcher(metaDataAPI.endpoints.getMetaData.matchRejected, apiErrorHandler);
     builder.addMatcher(displayListAPI.endpoints.getDisplayList.matchRejected, apiErrorHandler);
   },
 });
 
-export const {
-  setAppID,
-  setOptions,
-  setDialogOpen,
-  setDispSelectDialogOpen,
-  setDispInfoDialogOpen,
-  setSinglePageApp,
-  setFullscreen,
-  setErrorMessage,
-  setPaths,
-} = appSlice.actions;
+export const { setAppID, setOptions, setSinglePageApp, setFullscreen, setErrorMessage, setPaths, setAppData, setPanelDialog } =
+  appSlice.actions;
 
 export default appSlice.reducer;

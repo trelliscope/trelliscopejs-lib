@@ -1,6 +1,7 @@
 .pagination {
   &Outer {
     white-space: nowrap;
+    display: flex;
   }
 
   &Button {
@@ -8,6 +9,10 @@
     height: var(--pagination-button-size);
     border: 0;
     padding: 0;
+
+    &Container {
+      display: flex;
+    }
 
     &Wrap {
       width: var(--pagination-button-size);
@@ -37,9 +42,13 @@
   }
 
   &Label {
-    vertical-align: middle;
-    height: var(--pagination-label-height);
-    display: inline-block;
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    text-align: end;
+    align-items: center;
+    padding-right: 20px;
+    padding-top: 3px;
   }
 
   &Icon {

@@ -1,7 +1,7 @@
 .content {
   padding: var(--panelGridGap);
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  // grid-template-columns: repeat(6, 1fr);
   grid-gap: var(--panelGridGap);
   width: 100%;
 
@@ -10,8 +10,8 @@
     width: 100%;
     align-items: flex-start;
     justify-content: center;
-    height: calc(100% - (var(--header-container-height) + var(--footer-wrapper-height)));
-    overflow: auto;
+    height: calc(100% - 46px); // TODO: replace with variables
+    overflow: hidden;
   }
 }
 
@@ -19,10 +19,12 @@
   border: var(--border-2);
   min-width: 0;
   overflow: hidden;
+  box-sizing: border-box;
 
   &Graphic {
     display: flex;
-    padding: var(--padding-4);
+    padding: var(--padding-2);
+    box-sizing: border-box;
 
     img {
       max-width: 100%;
@@ -46,7 +48,7 @@
     border-bottom: var(--border-2);
 
     &Cell {
-      padding: var(--padding-4);
+      padding: var(--padding-2);
       white-space: nowrap;
 
       &:first-of-type {
@@ -64,4 +66,8 @@
       border-bottom: none;
     }
   }
+}
+
+.tableContainer {
+  height: 100%;
 }

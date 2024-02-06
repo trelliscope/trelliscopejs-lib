@@ -1,0 +1,36 @@
+.filterNum {
+  &Container {
+    margin-left: var(--margin-4);
+    margin-right: var(--margin-4);
+    margin-top: var(--margin-4);
+  }
+
+  &InputContainer {
+    width: var(--filter-width);
+    margin-bottom: var(--neg-margin-8);
+    padding-bottom: var(--padding-6);
+    padding-top: var(--padding-2);
+    z-index: 100;
+    position: relative;
+    vertical-align: center;
+  }
+
+  &RangeInputLabel {
+    font-size: var(--text-sm);
+    padding-right: var(--padding-9);
+    padding-left: var(--padding-3);
+    display: inline-block;
+  }
+
+  &RangeInputText {
+    width: 150px;
+    margin-top: -5px;
+    font-size: 16px;
+    transform: scale(0.85);
+    transform-origin: 0 0;
+  }
+
+  &RangeInputTextDash {
+    transform: scale(2, 1); // to deal with some browsers not being able to handle endash
+  }
+}

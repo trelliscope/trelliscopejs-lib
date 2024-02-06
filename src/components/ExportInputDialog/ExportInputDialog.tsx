@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Step, StepLabel, Stepper, Tooltip } from '@mui/material';
+import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserInfo from '../UserInfo';
 import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
 import ConfirmationModal from '../ConfirmationModal';
 import styles from './ExportInputDialog.module.scss';
+import { useConfig } from '../../slices/configAPI';
+import ErrorWrapper from '../ErrorWrapper';
 
 interface ExportInputDialogProps {
-  open: boolean;
-  handleClose: () => void;
   displayInfo: IDisplay;
   hasInputs: boolean;
   hasLocalStorage: boolean;
@@ -27,13 +23,8 @@ const OTHERINFO = '__trelliscope_otherinfo';
 
 const storageItems: [string, string, string, string] = [USERNAME, EMAIL, JOBTITLE, OTHERINFO];
 
-const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
-  open,
-  handleClose,
-  displayInfo,
-  hasInputs,
-  hasLocalStorage,
-}) => {
+const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasInputs, hasLocalStorage }) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [fullName, setFullName] = useState<string>(localStorage.getItem(USERNAME) || '');
   const [email, setEmail] = useState<string>(localStorage.getItem(EMAIL) || '');
   const [jobTitle, setJobTitle] = useState<string>(localStorage.getItem(JOBTITLE) || '');
@@ -42,6 +33,9 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const { data: configObj } = useConfig();
+
+  const hasEmail = !!displayInfo?.inputs?.feedbackInterface?.feedbackEmail || false;
 
   if (!(hasInputs && hasLocalStorage)) {
     return null;
@@ -59,7 +53,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
 
   const clearInputs = () => {
     Object.keys(localStorage).forEach((key) => {
-      if (key.includes(displayInfo.name) || storageItems.includes(key)) {
+      if ((key.includes(displayInfo.name) || storageItems.includes(key)) && !key.includes('_trelliscope_views_')) {
         localStorage.removeItem(key);
       }
       setFullName('');
@@ -80,105 +74,156 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({
     setConfirmationModalOpen(false);
   };
 
+  const handleOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={() => {
-          handleClose();
-          setTimeout(() => {
-            setActiveStep(0);
-          }, 500);
-        }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Export user inputs</DialogTitle>
-        <DialogContent dividers>
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === 0 && (
-            <UserInfo
-              fullName={fullName}
-              email={email}
-              jobTitle={jobTitle}
-              otherInfo={otherInfo}
-              validEmail={validEmail}
-              setValidEmail={setValidEmail}
-              setFullName={setFullName}
-              setEmail={setEmail}
-              setJobTitle={setJobTitle}
-              setOtherInfo={setOtherInfo}
-              storageItems={storageItems}
+    <ErrorWrapper>
+      <div>
+        <Tooltip title="Export Inputs">
+          <IconButton data-testid="export-button" aria-label="close" onClick={handleOpen}>
+            <FontAwesomeIcon
+              color={
+                configObj?.theme?.header
+                  ? configObj.theme?.header?.text
+                  : configObj?.theme?.isLightTextOnDark
+                  ? configObj?.theme?.lightText
+                  : configObj?.theme?.darkText
+              }
+              icon={faFileArrowDown}
             />
-          )}
-          {activeStep === 1 && (
-            <DownloadCsv
-              displayInfo={displayInfo}
-              setCsvDownloaded={setCsvDownloaded}
-              fullName={fullName}
-              email={email}
-              jobTitle={jobTitle}
-            />
-          )}
-          {activeStep === 2 && (
-            <ComposeEmail
-              displayInfo={displayInfo}
-              fullName={fullName}
-              email={email}
-              jobTitle={jobTitle}
-              otherInfo={otherInfo}
-            />
-          )}
-        </DialogContent>
-        <div className={styles.exportInputDialogControlsContainer}>
-          <Button onClick={() => setConfirmationModalOpen(true)}>Clear inputs</Button>
-          <ConfirmationModal
-            isOpen={confirmationModalOpen}
-            handleCancel={handleCancel}
-            handleConfirm={handleConfirm}
-            dialogText="This will delete all local storage input items on all panels."
-          />
-          <div className={styles.exportInputDialogControlsContainerStepper}>
-            <Button disabled={activeStep === 0} onClick={handleBack} className={styles.exportInputDialogButton}>
-              Back
-            </Button>
-            {activeStep <= 1 && (
-              <Button
-                disabled={
-                  (activeStep === 0 && fullName === '') ||
-                  (activeStep === 0 && !validEmail) ||
-                  (activeStep === 1 && !csvDownloaded)
-                }
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={styles.exportInputDialogButton}
-              >
-                Next
-              </Button>
+          </IconButton>
+        </Tooltip>
+        <Dialog
+          open={dialogOpen}
+          onClose={() => {
+            handleClose();
+            setTimeout(() => {
+              setActiveStep(0);
+            }, 500);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          data-testid="export-input-dialog"
+        >
+          <DialogTitle id="alert-dialog-title">Export user inputs</DialogTitle>
+          <DialogContent dividers>
+            {hasEmail ? (
+              <>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                  {steps.map((label) => (
+                    <Step key={label}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+                {activeStep === 0 && (
+                  <UserInfo
+                    fullName={fullName}
+                    email={email}
+                    jobTitle={jobTitle}
+                    otherInfo={otherInfo}
+                    validEmail={validEmail}
+                    setValidEmail={setValidEmail}
+                    setFullName={setFullName}
+                    setEmail={setEmail}
+                    setJobTitle={setJobTitle}
+                    setOtherInfo={setOtherInfo}
+                    storageItems={storageItems}
+                  />
+                )}
+                {activeStep === 1 && (
+                  <DownloadCsv
+                    displayInfo={displayInfo}
+                    setCsvDownloaded={setCsvDownloaded}
+                    fullName={fullName}
+                    email={email}
+                    jobTitle={jobTitle}
+                    hasEmail={hasEmail}
+                  />
+                )}
+                {activeStep === 2 && (
+                  <ComposeEmail
+                    displayInfo={displayInfo}
+                    fullName={fullName}
+                    email={email}
+                    jobTitle={jobTitle}
+                    otherInfo={otherInfo}
+                  />
+                )}
+              </>
+            ) : (
+              <DownloadCsv
+                displayInfo={displayInfo}
+                setCsvDownloaded={setCsvDownloaded}
+                fullName={fullName}
+                email={email}
+                jobTitle={jobTitle}
+                hasEmail={hasEmail}
+              />
             )}
+          </DialogContent>
+          <div className={styles.exportInputDialogControlsContainer}>
+            <Button data-testid="export-input-clear" onClick={() => setConfirmationModalOpen(true)}>
+              Clear inputs
+            </Button>
+            <ConfirmationModal
+              isOpen={confirmationModalOpen}
+              handleCancel={handleCancel}
+              handleConfirm={handleConfirm}
+              dialogText="This will delete all local storage input items on all panels."
+            />
+            {hasEmail && (
+              <div className={styles.exportInputDialogControlsContainerStepper}>
+                <Button
+                  data-testid="export-input-back"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  className={styles.exportInputDialogButton}
+                >
+                  Back
+                </Button>
+                {activeStep <= 1 && (
+                  <Button
+                    disabled={
+                      (activeStep === 0 && fullName === '') ||
+                      (activeStep === 0 && !validEmail) ||
+                      (activeStep === 1 && !csvDownloaded)
+                    }
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNext}
+                    className={styles.exportInputDialogButton}
+                    data-testid="export-input-next"
+                  >
+                    Next
+                  </Button>
+                )}
+              </div>
+            )}
+
+            <Button
+              onClick={() => {
+                handleClose();
+                setTimeout(() => {
+                  setActiveStep(0);
+                }, 500);
+              }}
+              color="primary"
+              autoFocus
+              data-testid="export-input-close"
+            >
+              Close
+            </Button>
           </div>
-          <Button
-            onClick={() => {
-              handleClose();
-              setTimeout(() => {
-                setActiveStep(0);
-              }, 500);
-            }}
-            color="primary"
-            autoFocus
-          >
-            Close
-          </Button>
-        </div>
-      </Dialog>
-    </div>
+        </Dialog>
+      </div>
+    </ErrorWrapper>
   );
 };
 

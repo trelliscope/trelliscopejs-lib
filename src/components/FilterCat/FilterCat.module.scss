@@ -1,0 +1,21 @@
+.filterCat {
+  &InputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--padding-3);
+    padding-bottom: var(--padding-3);
+  }
+
+  &Chart {
+    background-color: var(--white-300);
+  }
+
+  &Regex {
+    width: 360px;
+    margin-top: var(--neg-margin-6);
+    font-size: var(--text-xl);
+    transform: scale(0.85);
+    transform-origin: 0 0;
+  }
+}

@@ -4,36 +4,32 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Button from '@mui/material/Button';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Tab,
+  Tabs,
+} from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
 import Credits from '../Credits';
 import styles from './HelpInfo.module.scss';
+import { useConfig } from '../../slices/configAPI';
 
-interface HelpInfoProps {
-  setDialogOpen: (arg0: boolean) => void;
-}
-
-const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
+const HelpInfo: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
   const [tabNumber, setTabNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const { data: configObj } = useConfig();
 
-  const handleClose = () => {
-    setDialogOpen(false);
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setDialogOpen(true);
-    setOpen(true);
+  const handleToggle = () => {
+    setOpen(!open);
   };
 
   const handleChange = (event: SyntheticEvent, value: number) => {
@@ -41,38 +37,53 @@ const HelpInfo: React.FC<HelpInfoProps> = ({ setDialogOpen }) => {
     setTabNumber(value);
   };
 
-  useHotkeys('h', handleOpen, { enabled: fullscreen && !open });
-  useHotkeys('h', handleClose, { enabled: fullscreen && open });
-  useHotkeys('esc', handleClose, { enabled: open });
+  useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
+  useHotkeys('esc', () => setOpen(false), { enabled: open });
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen} className={styles.helpInfo}>
-        Trelliscope
-        <div className={styles.helpInfoIcon}>
-          <FontAwesomeIcon icon={faCircleQuestion} />
-        </div>
-      </button>
+    <div className={styles.helpInfoIcon}>
+      <IconButton data-testid="help-button" id="help-control" color="inherit" size="small" onClick={handleToggle}>
+        <FontAwesomeIcon
+          color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
+          icon={faCircleQuestion}
+          size="sm"
+        />
+      </IconButton>
       <Dialog
         open={open}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
         aria-labelledby="dialog-viewer-title"
-        onClose={handleClose}
+        onClose={handleToggle}
+        maxWidth="md"
+        data-testid="help-modal"
       >
-        <DialogTitle id="dialog-viewer-title">{`Trelliscope Viewer v${process.env.REACT_APP_VERSION}`}</DialogTitle>
+        <DialogTitle
+          id="dialog-viewer-title"
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+        >
+          <Box>
+            <div>{`Trelliscope v${window.__VERSION__}`}</div>
+            <div className={styles.helpInfoDialogWebsite}>
+              Learn more at{' '}
+              <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
+                trelliscope.org
+              </a>
+            </div>
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
-            <Tab label="How to Use" />
-            <Tab label="Shortcuts" />
-            <Tab label="Credits" />
+            <Tab data-testid="how-to-tab" label="How to Use" />
+            <Tab data-testid="shortcuts-tab" label="Shortcuts" />
+            <Tab data-testid="credits-tab" label="Credits" />
           </Tabs>
           {tabNumber === 0 && <HowToUse />}
           {tabNumber === 1 && <Shortcuts />}
           {tabNumber === 2 && <Credits />}
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={handleClose}>
+          <Button data-testid="help-button-close" onClick={handleToggle}>
             Close
           </Button>
         </DialogActions>

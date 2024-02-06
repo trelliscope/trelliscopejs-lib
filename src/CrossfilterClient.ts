@@ -42,13 +42,25 @@ const getNumberVal = (d: Datum, key: string, dir?: string) => {
   return Number.isNaN(Number(d[key])) || d[key] === undefined ? -Infinity : d[key];
 };
 
+const getDateVal = (d: Datum, key: string, dir?: string) => {
+  if (dir) {
+    const sign = dir === 'asc' ? -1 : 1;
+    const dateValue = new Date(d[key]).getTime();
+    return Number.isNaN(dateValue) || d[key] === undefined ? sign * -Infinity : dateValue;
+  }
+
+  const dateValue = new Date(d[key]).getTime();
+  return Number.isNaN(dateValue) || d[key] === undefined ? -Infinity : dateValue;
+};
+
 const valueGetter = {
   string: getStringVal,
   number: getNumberVal,
-  date: getStringVal,
+  date: getDateVal,
+  datetime: getDateVal,
 };
 
-type D = Dimension<Datum, string | number>;
+type D = Dimension<Datum, string | number | Date>;
 
 interface SortParam {
   [key: string | symbol]: string | number;
@@ -78,6 +90,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   }
 
   addData(data: Datum[]) {
+    this.crossfilter.remove();
     super.addData(data);
     this.crossfilter.add(data);
   }
@@ -85,6 +98,7 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
   clearData() {
     super.clearData();
     this.crossfilter.remove();
+    this.clearFilters();
   }
 
   addFilter(filter: DataClientFilter) {
@@ -97,7 +111,6 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
         this.crossfilter.dimension((d) => valueGetter[filter.dataType](d, filter.field as string)),
       );
     }
-
     // filter the dimension based on the filter operation
     switch (filter.operation) {
       case 'eq':
@@ -112,7 +125,35 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
         this.dimensions.get(filter.field)?.filter((d) => d !== filter.value);
         break;
       case 'range':
-        this.dimensions.get(filter.field)?.filter(filter.value as [number, number]);
+        this.dimensions.get(filter.field)?.filter((d) => {
+          if (filter.dataType === 'date') {
+            // the following typescript ignores are present due to the fix greatly complicating this situation.
+
+            // add a day to the  date to make it inclusive
+            return (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 86400000 >= filter.value[0] &&
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 86400000 <= filter.value[1]
+            );
+          }
+          if (filter.dataType === 'datetime') {
+            // add a minute to the date to make it inclusive
+            return (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 60000 >= filter.value[0] &&
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              new Date(d as number).getTime() + 60000 <= filter.value[1]
+            );
+          }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return d >= filter.value[0] && d <= filter.value[1];
+        });
         break;
       case 'regex':
         this.dimensions.get(filter.field)?.filter((d) => {
@@ -150,8 +191,8 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
 
   groupBy(
     field: string | symbol,
-    dataType: 'string' | 'number' | 'date' = 'string',
-    groupFunc?: (d: string | number) => NaturallyOrderedValue,
+    dataType: 'string' | 'number' | 'date' | 'datetime' = 'string',
+    groupFunc?: (d: string | number | Date) => NaturallyOrderedValue,
   ) {
     if (this.dimensions.has(field)) {
       if (groupFunc) {
@@ -176,10 +217,12 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     return this.crossfilter.allFiltered();
   }
 
+  // TODO: why is this being called multiple times with the same data?
+  // This could impact performance...
   getData(count = Infinity, page = 1) {
     const offset = (page - 1) * count;
 
-    if (this._sorts.length < 2) {
+    if (this._sorts.length <= 1) {
       const lastSort = this._sorts[this._sorts.length - 1];
 
       if (lastSort) {
@@ -203,7 +246,9 @@ export default class CrossfilterClient extends DataClient implements ICrossFilte
     const allData = this.crossfilter.all();
     const sortKey = this._sorts.map((s) => s.field).join('-');
 
+    // TODO: this is EXTREMELY inefficient - we re-sort the whole dataset every time we move to a new page
     if (allData.length) {
+      // console.log('SORTING')
       const sortData = allData.map((d) => {
         const elem: SortParam = { [sortKey]: d[metaIndex] };
         this._sorts.forEach((s) => {

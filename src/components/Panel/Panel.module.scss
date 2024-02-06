@@ -2,11 +2,20 @@
   border: var(--border-2);
   min-width: 0;
   overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
 
   &Graphic {
+    padding: var(--padding-2);
+    justify-content: center;
     display: flex;
-    padding: var(--padding-4);
     flex-grow: 1;
+    box-sizing: border-box;
+
+    :global(.MuiDialog-container) & {
+      transform: none;
+      cursor: default;
+    }
 
     img {
       object-fit: contain;
@@ -14,6 +23,32 @@
       min-width: 1px;
       width: 100%;
       height: 100%;
+    }
+
+    &Expand {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    &PickerContainer {
+      display: none;
+      position: absolute;
+      left: 2px;
+      top: 0px;
+    }
+    &PickerContainerOpen {
+      display: block;
+    }
+  }
+
+  &:hover &Graphic {
+    &Expand {
+      display: block;
+    }
+    &PickerContainer {
+      display: block;
     }
   }
 
@@ -35,7 +70,7 @@
     }
 
     &Cell {
-      padding: 0 var(--padding-4);
+      padding: 0 var(--padding-2);
       white-space: nowrap;
       height: var(--panelLabel-height);
       line-height: var(--panelLabel-height);

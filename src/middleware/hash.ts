@@ -1,28 +1,38 @@
 import type { Middleware } from 'redux';
 import type { RootState } from '../store';
-import { SB_REV_LOOKUP } from '../constants';
 import { sortSlice } from '../slices/sortSlice';
 import { labelsSlice } from '../slices/labelsSlice';
 import { layoutSlice } from '../slices/layoutSlice';
-import { addFilter, filterSlice, removeFilter, updateFilter, updateFilterValues } from '../slices/filterSlice';
+import {
+  addFilter,
+  clearFilters,
+  filterSlice,
+  removeFilter,
+  setFiltersandFilterViews,
+  updateFilter,
+  updateFilterValues,
+} from '../slices/filterSlice';
 import { selectedDisplaySlice } from '../slices/selectedDisplaySlice';
-import { sidebarSlice } from '../slices/sidebarSlice';
 import { displayListAPI } from '../slices/displayListAPI';
 import { displayInfoAPI } from '../slices/displayInfoAPI';
 
 // Example hash
 // /#display=life_expectancy&nrow=5&ncol=3&arr=rows&pg=2&labels=country,year&sort=country;asc,year;desc&filter=var:country;type:select;val:United%20States#Australia#Canada#China#France#Germany#India#Japan#Mexico#Russia#United%20Kingdom#United%20States,var:year;type:range;from:2000;to:2010,var:life_expectancy;type:regex;val:80,var:life_expectancy;type:range;from:80;to:90&sidebar=filter&fv=country,year
 
-const { setSort } = sortSlice.actions;
+const { setSort, setReOrderSorts } = sortSlice.actions;
 const { setLabels } = labelsSlice.actions;
 const { setLayout } = layoutSlice.actions;
 const { setFilterView } = filterSlice.actions;
 const { setSelectedDisplay } = selectedDisplaySlice.actions;
-const { setActiveSidebar } = sidebarSlice.actions;
 
 // this updates the window hash whenever the state changes
 export const hashFromState = (state: RootState) => {
   const hashURL = new URLSearchParams();
+
+  const { selectedDisplay } = state;
+  if (selectedDisplay) {
+    hashURL.append('selectedDisplay', encodeURIComponent(selectedDisplay));
+  }
 
   // layout
   const { layout } = state;
@@ -32,6 +42,22 @@ export const hashFromState = (state: RootState) => {
   }
   if (layout.page) {
     hashURL.append('pg', layout.page.toString());
+  }
+
+  if (layout.viewtype) {
+    hashURL.append('viewtype', layout.viewtype);
+  }
+
+  if (layout.panel) {
+    hashURL.append('panel', layout.panel);
+  }
+
+  if (layout.sidebarActive !== undefined) {
+    hashURL.append('sidebarActive', layout.sidebarActive.toString() || 'false');
+  }
+
+  if (layout.showLabels !== undefined) {
+    hashURL.append('showLabels', layout.showLabels.toString() || 'true');
   }
 
   // labels
@@ -54,20 +80,14 @@ export const hashFromState = (state: RootState) => {
         const { values, regexp } = flt as ICategoryFilterState;
         res = `var:${flt.varname};type:category;regexp:${encodeURIComponent((regexp as string) ?? '')};metatype:${
           flt.metatype
-        };val:${values.map(encodeURIComponent).join('#')}`;
+        }${regexp === null ? `;val:${values.map(encodeURIComponent).join('#')}` : ''}`;
       } else if (['numberrange', 'daterange', 'datetimerange'].includes(flt.filtertype)) {
-        const { min, max } = flt as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
-        res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min || ''};max:${max || ''}`;
+        const { min, max } = flt as INumberRangeFilterState | IDatetimeRangeFilterState;
+        res = `var:${flt.varname};type:numberrange;metatype:${flt.metatype};min:${min ?? -Infinity};max:${max ?? Infinity}`;
       }
       return res;
     });
     hashURL.append('filter', filterStrs.join(','));
-  }
-
-  // sidebar
-  const { sidebar } = state;
-  if (sidebar) {
-    hashURL.append('sidebar', SB_REV_LOOKUP[sidebar.active].toString());
   }
 
   // filterView
@@ -96,16 +116,18 @@ export const hashMiddleware: Middleware<RootState> =
     if (!getState().app.singlePageApp) return next(action);
 
     const types = [
-      setSelectedDisplay.type,
-      setLayout.type,
-      setLabels.type,
-      setSort.type,
-      addFilter.type,
-      updateFilter.type,
-      removeFilter.type,
-      updateFilterValues.type,
-      setActiveSidebar.type,
-      setFilterView.type,
+      setSelectedDisplay.type as string,
+      setLayout.type as string,
+      setLabels.type as string,
+      setSort.type as string,
+      setReOrderSorts.type as string,
+      clearFilters.type as string,
+      addFilter.type as string,
+      updateFilter.type as string,
+      removeFilter.type as string,
+      updateFilterValues.type as string,
+      setFilterView.type as string,
+      setFiltersandFilterViews.type as string,
     ];
 
     const apiActions = [
@@ -114,7 +136,7 @@ export const hashMiddleware: Middleware<RootState> =
     ];
     const result = next(action);
 
-    if (types.indexOf(action.type) > -1 || apiActions.some((d) => d)) {
+    if (types.indexOf((action as { type: string }).type) > -1 || apiActions.some((d) => d)) {
       const hash = hashFromState(getState());
       if (window.location.hash !== hash) {
         window.location.hash = hash;

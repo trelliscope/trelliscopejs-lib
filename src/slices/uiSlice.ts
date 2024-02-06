@@ -6,7 +6,7 @@ export interface UIState {
   windowWidth: number;
   origHeight: number;
   origWidth: number;
-};
+}
 
 const initialState: UIState = {
   windowHeight: typeof window === 'object' ? window.innerHeight : 0,
@@ -26,7 +26,7 @@ export const uiSlice = createSlice({
     setAppDims: (state, action: PayloadAction<{ width: number; height: number }>) => {
       state.origHeight = action.payload.height;
       state.origWidth = action.payload.width;
-    }
+    },
   },
 });
 

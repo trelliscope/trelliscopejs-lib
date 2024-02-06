@@ -1,35 +1,83 @@
-// ignore all ts errors in this file
-// FIXME remove this once refactor is done with new architecture
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import React from 'react';
-import classNames from 'classnames';
-import { useSelector } from 'react-redux';
-import SidebarLabels from '../SidebarLabels';
-import SidebarLayout from '../SidebarLayout';
-import SidebarSort from '../SidebarSort';
-import SidebarViews from '../SidebarViews';
-import { sidebarActiveSelector } from '../../selectors/ui';
-import { SB_PANEL_LAYOUT, SB_PANEL_FILTER, SB_PANEL_SORT, SB_PANEL_LABELS, SB_CONFIG, SB_VIEWS } from '../../constants';
-import { useDisplayInfo } from '../../slices/displayInfoAPI';
-import SidebarFilter from '../SidebarFilter';
+import React, { useState } from 'react';
+import { Drawer } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import Filters from '../Filters';
+import { filterViewSelector } from '../../selectors';
+import FilterInput from '../FilterInput';
 import styles from './Sidebar.module.scss';
+import { setFilterView } from '../../slices/filterSlice';
+import { selectLayout } from '../../slices/layoutSlice';
+import ErrorWrapper from '../ErrorWrapper';
+
+const drawerWidth = 400;
 
 const Sidebar: React.FC = () => {
-  const { isSuccess: displayLoaded } = useDisplayInfo();
-  const active = useSelector(sidebarActiveSelector);
+  const dispatch = useDispatch();
+  const layout = useSelector(selectLayout);
+  const { active: activeFilters, inactive: inactiveFilters } = useSelector(filterViewSelector);
+  const mutableFilters = [...activeFilters].reverse();
+
+  const [showFilterHelpText, setShowFilterHelpText] = useState(false);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!active || !over) return;
+    if (active.id !== over.id) {
+      const oldIndex = activeFilters.findIndex((filter) => `${filter}_filter` === active.id);
+      const newIndex = activeFilters.findIndex((filter) => `${filter}_filter` === over.id);
+      const newFilters = arrayMove(activeFilters, oldIndex, newIndex);
+      dispatch(setFilterView({ name: { active: newFilters, inactive: inactiveFilters }, which: 'set' }));
+    }
+  };
 
   return (
-    <div className={classNames(active === '' ? [styles.sidebarHidden, styles.sidebarContainer] : styles.sidebarContainer)}>
-      <div className={styles.sidebarHeader}>{active}</div>
-      {active === SB_CONFIG && <div className={styles.sidebarEmpty}>Configuration...</div>}
-      {!displayLoaded && <div className={styles.sidebarEmpty}>Load a display...</div>}
-      {active === SB_PANEL_LAYOUT && displayLoaded && <SidebarLayout />}
-      {active === SB_PANEL_FILTER && displayLoaded && <SidebarFilter />}
-      {active === SB_PANEL_SORT && displayLoaded && <SidebarSort />}
-      {active === SB_PANEL_LABELS && displayLoaded && <SidebarLabels />}
-      {active === SB_VIEWS && displayLoaded && <SidebarViews />}
-    </div>
+    <ErrorWrapper>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          height: 'inherit',
+          '& .MuiDrawer-paper': {
+            paddingTop: '54px',
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            overflowX: 'hidden',
+            height: 'inherit',
+            zIndex: 'initial',
+          },
+        }}
+        data-testid="filter-drawer"
+        open={layout.sidebarActive}
+        className={styles.sidebar}
+        variant="persistent"
+        anchor="left"
+      >
+        <Filters setShowFilterHelpText={setShowFilterHelpText} />
+        {mutableFilters.length === 0 && showFilterHelpText && (
+          <div className={styles.sidebarNoFilter}>
+            Select a filter...
+            <FontAwesomeIcon className={styles.sidebarBobbingArrow} icon={faArrowUp} />
+          </div>
+        )}
+        <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+          <SortableContext items={mutableFilters.map((el: string) => ({ id: `${el}_filter` }))}>
+            <div className={styles.sidebarDragContainer}>
+              <div className={styles.sidebarDragSubContainer}>
+                {mutableFilters.map((filter) => (
+                  <FilterInput key={filter} filterName={filter} />
+                ))}
+              </div>
+            </div>
+          </SortableContext>
+        </DndContext>
+      </Drawer>
+    </ErrorWrapper>
   );
 };
 

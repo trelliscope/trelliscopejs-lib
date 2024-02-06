@@ -2,7 +2,7 @@ import React from 'react';
 
 interface FormattedNumberProps {
   value: number;
-  maximumFractionDigits: number;
+  maximumFractionDigits?: number;
   isCurrency?: boolean;
   currencyCode?: string;
   isSuffix?: boolean;
@@ -11,7 +11,7 @@ interface FormattedNumberProps {
 
 export const format = (
   value: number,
-  maximumFractionDigits: number,
+  maximumFractionDigits = Infinity,
   isCurrency = false,
   isSuffix = false,
   currencyCode = 'USD',
@@ -37,7 +37,7 @@ export const format = (
   }
 
   if (maximumFractionDigits !== -1) {
-    Object.assign(options, maxDigits);
+    Object.assign(options, { minimumFractionDigits: maxDigits.maximumFractionDigits, ...maxDigits });
   } else {
     // Display all decimal places
     Object.assign(options, { minimumFractionDigits: value.toString().split('.')[1].length });
@@ -60,6 +60,7 @@ FormattedNumber.defaultProps = {
   isSuffix: false,
   currencyCode: 'USD',
   removeGrouping: false,
+  maximumFractionDigits: Infinity,
 };
 
 export default FormattedNumber;

@@ -2,75 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#000000" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-0      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <link rel="manifest" href="/manifest.json" />
     <title>Trelliscope</title>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!-- <div id="96c61ca5" class="trelliscope-not-spa" style="width: 800px; height: 500px"></div> -->
-    <!-- <div id="3a3019d9" class="trelliscope-spa"></div> -->
-    <script>
-      (function () {
-        // trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
-        // trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp', { logger: true });
-        // trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: false });
-        // trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
-      })();
-    </script>
+    <!-- <div id="0404e8a0" class="trelliscope-not-spa" style="width: 1000px; height: 600px; border: 1px solid red;"></div> -->
+    <div id="0404e8a0" class="trelliscope-spa"></div>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
-
-<!-- <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Trelliscope</title>
-  </head>
-  <body style="margin: 40px">
-    <div id="32b2482a" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
-        <div style="height:25px;"></div>
-    <div style="width:800px; height:500px;">
-      <div id="ebbfa969" class="trelliscope-not-spa" style="width:100%; height:100%;"></div>
-    </div>
-        <div style="height:25px;"></div>
-    <div style="width:800px; height:500px;">
-      <div id="c50c3713" class="trelliscope-not-spa" style="width:100%; height:100%;"></div>
-    </div>
-        <div style="height:25px;"></div>
-    <div id="8a43f2dd" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
-        <div style="height:25px;"></div>
-    <div id="4f5aa246" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
-        <div style="height:25px;"></div>
-    <div id="aa7b91b4" class="trelliscope-not-spa" style="width:800px; height:500px;"></div>
-    <script src="trelliscope.js"></script>
-    <script>
-      (function() {
-        trelliscopeApp('32b2482a', '_test/example_gapminder/config.jsonp');
-        trelliscopeApp('ebbfa969', '_test/example_mpg/config.jsonp');
-        trelliscopeApp('c50c3713', '_test/example_plotly/config.jsonp');
-        trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp');
-        trelliscopeApp('4f5aa246', '_test/example_insta/config.jsonp');
-        trelliscopeApp('aa7b91b4', '_test/example_pokemon/config.jsonp');
-      })();
-    </script>
-  </body>
-</html>
- -->
-<!-- uncomment below and comment above for single page app mode -->

@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import sidebar from '../slices/sidebarSlice';
 import selectedDisplay from '../slices/selectedDisplaySlice';
 import relDispPositions from '../slices/relDispPositionsSlice';
 import selectedRelDisps from '../slices/selectedRelDispsSlice';
@@ -13,13 +12,12 @@ import filter from '../slices/filterSlice';
 import cogDataMutable from '../slices/cogDataMutableSlice';
 import { configAPI } from '../slices/configAPI';
 import { displayListAPI } from '../slices/displayListAPI';
-import { metaDataAPI } from '../slices/metaDataAPI';
 import { displayInfoAPI } from '../slices/displayInfoAPI';
+import { htmlAPI } from '../slices/htmlAPI';
 
 const reducers = combineReducers({
   app,
   ui,
-  sidebar,
   selectedDisplay,
   selectedRelDisps,
   relDispPositions,
@@ -31,8 +29,8 @@ const reducers = combineReducers({
   cogDataMutable,
   [configAPI.reducerPath]: configAPI.reducer,
   [displayListAPI.reducerPath]: displayListAPI.reducer,
-  [metaDataAPI.reducerPath]: metaDataAPI.reducer,
   [displayInfoAPI.reducerPath]: displayInfoAPI.reducer,
+  [htmlAPI.reducerPath]: htmlAPI.reducer,
 });
 
 export default reducers;

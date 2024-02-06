@@ -13,10 +13,14 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+_examples/*
+!_examples/gapminder_testing/*
+!_examples/gapminder_js/gapminder.json
 
 npm-debug.log*
 yarn-debug.log*
@@ -25,5 +29,13 @@ yarn-error.log*
 dist
 _ignore
 public/_test/
+public/info.html
 *.code-workspace
 .history
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

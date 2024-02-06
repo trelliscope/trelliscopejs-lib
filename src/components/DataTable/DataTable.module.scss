@@ -1,0 +1,44 @@
+.dataTable {
+  table,
+  td,
+  tr,
+  th,
+  thead,
+  tbody {
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  th {
+    font-weight: 600;
+  }
+
+  &CellNumber {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &PanelGraphic {
+    display: flex;
+    margin: -5px;
+    position: relative;
+
+    &Expand {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    iframe {
+      border: none;
+    }
+  }
+
+  tr {
+    &:hover .dataTablePanelGraphic {
+      &Expand {
+        display: block;
+      }
+    }
+  }
+}

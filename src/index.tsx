@@ -1,15 +1,23 @@
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+// latin-only reduces bundle size by 0.5MB but users's might have data with non-latin characters
+// import '@fontsource/poppins/latin-300.css';
+// import '@fontsource/poppins/latin-500.css';
+// import '@fontsource/poppins/latin-600.css';
+// import '@fontsource/jost/latin-500.css';
+// import '@fontsource/source-code-pro/latin-300.css';
+// import '@fontsource/source-code-pro/latin-600.css';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
-
+import '@fontsource/jost/latin-500.css';
+import '@fontsource/source-code-pro/300.css';
+import '@fontsource/source-code-pro/600.css';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'react-virtualized/styles.css'; // only needs to be imported once
-
-import blue from '@mui/material/colors/blue';
-import lightBlue from '@mui/material/colors/lightBlue';
+import { Trelliscope, prepareTrelliscope } from './jsApi';
+import TrelliscopeApp from './TrelliscopeApp';
 
 import store from './store';
 
@@ -20,27 +28,24 @@ import './assets/styles/variables.scss';
 
 import { setLayout } from './slices/layoutSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
-import reducers from './reducers';
+// import reducers from './reducers';
 import App from './App';
 
-import * as serviceWorker from './serviceWorker';
 import CrossfilterClient from './CrossfilterClient';
 import type { IDataClient } from './DataClient';
 
-// import appData from './appData';
-
+// function for populating a div with a trelliscope app
 const trelliscopeApp = (
   id: string,
-  config: string,
+  config: string | ITrelliscopeAppSpec,
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
 ) => {
   // Sets up msw worker for mocking api calls
-  /* if (process.env.NODE_ENV !== 'production' && options.mockData) {
+  /* if (import.meta.env.MODE !== 'production' && options.mockData) {
     const worker = await import('./test/__mockData__/worker');
     worker.default.start(import { IDataClient } from './DataClient';
 );
   } */
-
   const crossFilterClient = new CrossfilterClient();
 
   const el = document.getElementById(id) as HTMLElement;
@@ -65,11 +70,9 @@ const trelliscopeApp = (
   const noWidth = el.style.width === undefined || el.style.width === '' || el.style.width === '100%';
 
   let singlePageApp = false;
-  let fullscreen = false;
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
-    fullscreen = true;
     // el.parentNode.nodeName === 'BODY'
     el.style.width = '100%';
     el.style.height = '100%';
@@ -119,13 +122,6 @@ const trelliscopeApp = (
 
   if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
     singlePageApp = true;
-    fullscreen = true;
-  }
-
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      store.replaceReducer(reducers);
-    });
   }
 
   // resize handler only when in fullscreen mode (which is always for SPA)
@@ -140,55 +136,18 @@ const trelliscopeApp = (
     }
   });
 
-  const themeV1 = createTheme({
-    palette: {
-      primary: { light: blue.A100, main: blue.A200 }, // '#4285f4', // lightBlue500,
-      secondary: { light: lightBlue[200], main: lightBlue[700] },
-      // accent1Color: redA200
-    },
-    typography: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeightLight: 200,
-      fontWeightRegular: 300,
-      fontWeightMedium: 400,
-    },
-  });
-
   root.render(
-    <ThemeProvider theme={themeV1}>
-      <Provider store={store}>
-        <App
-          client={crossFilterClient as unknown as IDataClient}
-          config={config}
-          id={id}
-          singlePageApp={singlePageApp}
-          options={options}
-          appDims={appDims}
-          fullscreen={fullscreen}
-        />
-      </Provider>
-    </ThemeProvider>,
+    <Provider store={store}>
+      <App
+        client={crossFilterClient as unknown as IDataClient}
+        config={typeof config === 'string' ? config : prepareTrelliscope(config, id)}
+        id={id}
+        singlePageApp={singlePageApp}
+        options={options}
+        appDims={appDims}
+      />
+    </Provider>,
   );
-
-  if (module.hot) {
-    module.hot.accept('./App', () => {
-      root.render(
-        <ThemeProvider theme={themeV1}>
-          <Provider store={store}>
-            <App
-              client={crossFilterClient as unknown as IDataClient}
-              config={config}
-              id={id}
-              singlePageApp={singlePageApp}
-              options={options}
-              appDims={appDims}
-              fullscreen={fullscreen}
-            />
-          </Provider>
-        </ThemeProvider>,
-      );
-    });
-  }
 
   return {
     resize: (width: number, height: number) => {
@@ -200,48 +159,60 @@ const trelliscopeApp = (
     setLayout: (nrow: number, ncol: number) => {
       store.dispatch(setLayout({ nrow, ncol }));
     },
-    currentCogs: () => crossFilterClient.getData(),
+    currentMeta: () => crossFilterClient.getData(),
   };
 };
 
 window.trelliscopeApp = trelliscopeApp;
 
-// trelliscopeApp('22375e25', '_test/example_gapminder/config.jsonp', { logger: true });
-// trelliscopeApp('f1c43f6b', '_test/dt/config.jsonp', { logger: true });
-// trelliscopeApp('02a6e2cc', '_test/univar/config.jsonp', { logger: true });
-// trelliscopeApp('001a3be8', '_test/foundationtest/config.jsonp', { logger: true });
-// trelliscopeApp('fcf74975', '_test/gapminder_autocogs/config.jsonp', { logger: true });
-// trelliscopeApp('80222985', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.jsonp', { logger: true });
-// trelliscopeApp('62e90658', '_test/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('62e90658', '_test/trelliscope-examples2/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('80222985', '_test/gapminder_coggroups/config.json', { logger: true });
-// trelliscopeApp('96c61ca5', '_test/trelliscope-examples2/gapminder_reldisp/config.jsonp', { logger: true });
-// trelliscopeApp('17a6ca23', '_test/trelliscope-examples2/network_nonraster/config.jsonp', { logger: true });
-// trelliscopeApp('96c61ca5', '/config.json', { logger: true, mockData: true });
-// trelliscopeApp('9bdb39b4', '_test/trelliscope-examples3/gapminder_bells/config.jsonp', { logger: true });
-// trelliscopeApp('44c922eb', '_test/trelliscope-examples3/gapminder_reldisp/config.jsonp', { logger: true });
-// trelliscopeApp('3a3019d9', '_test/trelliscope-examples3/network_nonraster/config.jsonp', { logger: true });
-// trelliscopeApp('c060b1f7', '_test/trelliscope-examples3/mars/config.jsonp', { logger: true });
-// trelliscopeApp('b2296d6a', '_test/trelliscope-examples3/pokemon/config.jsonp', { logger: true });
-// trelliscopeApp('097af825', '_test/trelliscope-examples3/gapminder/config.jsonp', { logger: true });
-// trelliscopeApp('86af5747', '_test/trelliscope-examples3/mpg/config.jsonp', { logger: true });
+// TODO: should be able to just attach this to window so that it can be loaded in other apps
+// by including the js script and then using the component (vs. having to import and bundle it in the app)
+// window.TrelliscopeApp = TrelliscopeApp;
 
-// trelliscopeApp('87203c56', '_test/error/config.jsonp', { logger: true });
-// trelliscopeApp('07ed5efb', '_test/error2/config.jsonp', { logger: true });
-// trelliscopeApp('d4116f83', '_test/terra/config.jsonp', { logger: true });
-// trelliscopeApp('8653174a', '_test/adversarial/config.jsonp', { logger: true });
-// trelliscopeApp('mydisplay', '_test/who2/config.jsonp', { logger: true });
+// if in development mode, populate div with an example trelliscope app
+if (import.meta.env.MODE === 'development') {
+  const example = window.__DEV_EXAMPLE__ as unknown as
+    { id: string; name: string; datatype: string };
 
-// trelliscopeApp('9bfa811b', '_test/housing/config.jsonp', { logger: true });
-// trelliscopeApp('f681aaa2', '_test/vdb_gg2/config.jsonp', { logger: true });
-// trelliscopeApp('6c048a7', '_test/example_gapminder_plotly/config.jsonp', { logger: true });
-// trelliscopeApp('d27693de', '_test/pc_ratio/config.jsonp', { logger: true });
-// trelliscopeApp('8a43f2dd', '_test/example_housing/config.jsonp', { logger: true });
+  // append div to body for testing with id gapminder
+  const div = document.createElement('div');
+  div.id = example.id;
+  // div.style.width = '1000px';
+  // div.style.height = '600px';
+  // div.style.border = '1px solid red';
+  // div.className = 'trelliscope-not-spa';
+  div.className = 'trelliscope-spa';
+  document.body.appendChild(div);
 
-// https://toddmotto.com/react-create-class-versus-component/
-// http://stackoverflow.com/questions/35073669/window-resize-react-redux
-// hover scroll: http://jsfiddle.net/r36cuuvr/
-// https://github.com/StevenIseki/react-search
+  if (example.name === 'gapminder_js') {
+    fetch('_examples/gapminder_js/gapminder.json')
+      .then(response => response.json())
+      .then(data => {
+        const appdat = Trelliscope({
+          data: data as Datum[],
+          name: 'gapminder',
+          keycols: ['country', 'continent']
+        })
+          .setDefaultLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
+          .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link']})
+          .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']})
+          .setRangeFilter({ varname: 'mean_lexp', max: 60 }) // not working yet
+          .setVarLabels({
+            mean_lexp: 'Mean life expectancy',
+            mean_gdp: 'Mean GDP per capita',
+            iso_alpha2: 'ISO country code',
+            max_lexp_pct_chg: 'Max % year-to-year change in life expectancy',
+            dt_lexp_max_pct_chg: 'Date of max % year-to-year change in life expectancy',
+            dttm_lexp_max_pct_chg: 'Date-time of max % year-to-year change in life expectancy',
+            wiki_link: 'Link to country Wikipedia entry',
+            flag: 'Country flag'
+          });
+        trelliscopeApp(example.id, appdat);
+      });
+  } else {
+    trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
+    { logger: true });
+  }
+}
 
-serviceWorker.register();
+export { Trelliscope, TrelliscopeApp };

@@ -48,6 +48,7 @@ const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, fullName, emai
           className={styles.composeEmailButton}
           endIcon={<FontAwesomeIcon icon={faPaperPlane} />}
           onClick={sendMail}
+          data-testid="export-input-compose-email"
         >
           Compose Email
         </Button>

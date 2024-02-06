@@ -1,0 +1,27 @@
+.panelDialog {
+  &Graphic {
+    padding: var(--padding-10);
+    display: flex;
+    justify-content: center;
+    max-height: 500px;
+
+    img {
+      max-height: 500px;
+      width: clamp(320px, 100vw, 800px);
+      max-width: 100%;
+    }
+
+    iframe {
+      border: none;
+      max-height: 500px;
+      // max-width: 100%;
+      // width: min(80vw, 80vh);
+      // height: min(80vw, 80vh);
+    }
+  }
+
+  &LabelsWrapper {
+    border-top: var(--border-2);
+    border-bottom: var(--border-2);
+  }
+}

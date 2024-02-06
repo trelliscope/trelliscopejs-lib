@@ -46,27 +46,26 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
   const scale = scaleLinear().domain(domain).range([0, width]);
 
   // move active bars to the top
+  const activeKeys = new Set(actives);
+
   dataFiltered.sort((a, b) => {
+    const aKey = a.key === MISSING_TEXT ? '-Infinity' : String(a.key);
+    const bKey = b.key === MISSING_TEXT ? '-Infinity' : String(b.key);
+
     if (metaType !== META_TYPE_FACTOR) {
-      if (actives.includes(a.key as string) && !actives.includes(b.key as string)) return -1;
-      if (!actives.includes(a.key as string) && actives.includes(b.key as string)) return 1;
+      if (activeKeys.has(aKey) && !activeKeys.has(bKey)) return -1;
+      if (!activeKeys.has(aKey) && activeKeys.has(bKey)) return 1;
     }
-    if (
-      actives.includes((a.key === MISSING_TEXT ? -Infinity : a.key) as string) &&
-      !actives.includes((b.key === MISSING_TEXT ? -Infinity : b.key) as string)
-    )
-      return -1;
-    if (
-      !actives.includes((a.key === MISSING_TEXT ? -Infinity : a.key) as string) &&
-      actives.includes((b.key === MISSING_TEXT ? -Infinity : b.key) as string)
-    )
-      return 1;
+
+    if (activeKeys.has(aKey) && !activeKeys.has(bKey)) return -1;
+    if (!activeKeys.has(aKey) && activeKeys.has(bKey)) return 1;
+
     return 0;
   });
 
   return (
     <div className={styles.catHistogram}>
-      <List height={height} width={width} itemSize={barHeight} itemCount={count}>
+      <List height={count < 7 ? count * barHeight : height} width="100%" itemSize={barHeight} itemCount={count}>
         {({ index, style }) => (
           <CatHistogramBar
             style={style}
@@ -74,19 +73,19 @@ const CatHistogram: React.FC<CatHistogramProps> = ({
             active={
               metaType === META_TYPE_FACTOR
                 ? actives.includes(
-                    (dataFiltered[index].key === MISSING_TEXT ? -Infinity : dataFiltered[index].key) as string,
+                    (dataFiltered[index]?.key === MISSING_TEXT ? -Infinity : dataFiltered[index]?.key) as string,
                   )
-                : actives.includes(dataFiltered[index].key as string)
+                : actives.includes(dataFiltered[index]?.key as string)
             }
             onClick={onClick}
-            width={scale(dataFiltered[index].value || 1)}
+            width={scale(dataFiltered[index]?.value || 0)}
             height={barHeight - 1}
-            label={dataFiltered[index].key as string}
+            label={dataFiltered[index]?.key as string}
             metaLevels={metaLevels}
             value={
-              dataFiltered[index].value === allData[dataFiltered[index].key]
-                ? dataFiltered[index].value
-                : `${dataFiltered[index].value} / ${allData[dataFiltered[index].key] || 0}`
+              dataFiltered[index]?.value === allData[dataFiltered[index]?.key]
+                ? dataFiltered[index]?.value
+                : `${dataFiltered[index]?.value} / ${allData[dataFiltered[index]?.key] || 0}`
             }
           />
         )}

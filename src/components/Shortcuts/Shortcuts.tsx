@@ -13,29 +13,6 @@ const Shortcuts: React.FC = () => {
           <p className={styles.shortcutsKeynote}>Note: keyboard shortcuts are only available when the app is fullscreen.</p>
         )}
         <div className={styles.shortcutsDiv}>
-          <h4 className={styles.shortcutsH4}>Sidebar controls</h4>
-          <ul className={styles.shortcutsUl}>
-            <li>
-              <code className={styles.shortcutsCode}>g</code>
-              &ensp;open &quot;Grid&quot; sidebar
-            </li>
-            <li>
-              <code className={styles.shortcutsCode}>l</code>
-              &ensp;open &quot;Labels&quot; sidebar
-            </li>
-            <li>
-              <code className={styles.shortcutsCode}>f</code>
-              &ensp;open &quot;Filter&quot; sidebar
-            </li>
-            <li>
-              <code className={styles.shortcutsCode}>s</code>
-              &ensp;open &quot;Sort&quot; sidebar
-            </li>
-            <li>
-              <code className={styles.shortcutsCode}>esc</code>
-              &ensp;close sidebar
-            </li>
-          </ul>
           <h4 className={styles.shortcutsH4}>Panel navigation</h4>
           <ul className={styles.shortcutsUl}>
             <li>

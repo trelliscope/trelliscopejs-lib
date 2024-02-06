@@ -1,25 +1,21 @@
 .helpInfo {
-  position: absolute;
-  top: -1px; // cover up top app border
-  right: 0;
-  cursor: pointer;
-  border: none;
-  height: var(--helpInfo-height);
-  text-align: center;
-  width: var(--helpInfo-width);
-  font-size: var(--text-2xl);
-  background: var(--red-200);
-  color: var(--white);
-
   &Icon {
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    color: var(--red);
-    margin-right: var(--margin-2);
+    margin-top: -9px;
+    opacity: 0.7;
   }
 
   &Dialog {
+    &Website {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--black);
+      opacity: 0.8;
+
+      a {
+        color: var(--black);
+      }
+    }
+
     &Headline {
       font-size: var(--text-7xl);
       padding-top: var(--padding-10);

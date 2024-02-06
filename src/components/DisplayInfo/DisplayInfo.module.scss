@@ -32,6 +32,10 @@
   &ModalContainer {
     overflow-y: auto;
     max-height: var(--dispayInfo-container-max-height);
+
+    iframe {
+      border: none;
+    }
   }
 
   &ButtonLeft {

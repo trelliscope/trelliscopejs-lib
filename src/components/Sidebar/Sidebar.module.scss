@@ -1,38 +1,38 @@
 .sidebar {
-  &Container {
-    display: inline-block;
-    transition: var(--sidebar-transition);
-    height: 100%;
-    width: calc(var(--sidebar-width) * 1px);
-    box-sizing: border-box;
-    border-right: var(--border);
-    border-color: var(--gray-200) !important;
-    background: var(--white);
-    z-index: 999;
+  flex-shrink: 0;
+
+  &DragContainer {
+    overflow: auto;
+  }
+
+  &DragSubContainer {
     overflow: hidden;
+    min-height: 600px;
   }
 
-  &Hidden {
-    transition: var(--sidebar-transition);
-    transform: translateX(-182px);
-    opacity: 0;
-    width: 0;
-    visibility: hidden;
+  &NoFilter {
+    margin-left: 5px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
   }
 
-  &Header {
-    padding-left: var(--padding-7);
-    box-sizing: border-box;
-    font-size: var(--text-xl);
-    background: var(--gray-200);
-    height: var(--sidebar-container-header-height);
-    line-height: var(--sidebar-container-header-line-height);
-    color: var(--white);
-    border-left: var(--border-5);
+  &BobbingArrow {
+    margin-top: 3px;
+    margin-left: 5px;
+    position: relative;
+    animation: bobbing 1.5s ease-in-out infinite;
   }
 
-  &Empty {
-    padding-left: var(--padding-6);
-    padding-top: var(--padding-3);
+  @keyframes bobbing {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
   }
 }

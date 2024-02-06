@@ -11,9 +11,10 @@ interface NumHistogramAxisProps {
   ticks: number[];
   scale: ScaleLinear<number, number>;
   log: boolean;
+  isDate: boolean;
 }
 
-const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale, log }) => (
+const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y, ticks, scale, log, isDate }) => (
   <g className={styles.axis} transform={`translate(0, ${y})`}>
     <line className={styles.axisXLine} x1={x} y="0" x2={width} />
     <g className={styles.axisEdgeTick} transform={`translate(${x}, 0)`}>
@@ -22,15 +23,21 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
     {ticks.map((d) => (
       <g className={styles.axisTick} key={d} transform={`translate(${scale(d) || 0}, 0)`}>
         <line y1={4} y2={0} x1={x} x2={x} />
-        {log ? (
+        {log && (
           <text y={height} x={x} className={styles.axisTickSuper} transform="translate(3,0)">
             10
             <tspan baselineShift="super">
               <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
             </tspan>
           </text>
-        ) : (
-          <text y={height} x={x}>
+        )}
+        {isDate && (
+          <text className={styles.axisTickText} y={height} x={x}>
+            {new Date(d).toLocaleDateString()}
+          </text>
+        )}
+        {!log && !isDate && (
+          <text className={styles.axisTickText} y={height} x={x}>
             <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
           </text>
         )}

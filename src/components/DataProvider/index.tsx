@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { selectNumPerPage, selectPage } from '../../slices/layoutSlice';
@@ -6,7 +6,7 @@ import { selectFilterState } from '../../slices/filterSlice';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import { selectSort } from '../../slices/sortSlice';
 import type { DataType, IDataClient } from '../../DataClient';
-import { TYPE_MAP } from '../../constants';
+import { META_DATA_STATUS, TYPE_MAP } from '../../constants';
 
 interface DataProviderProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export const DataContext = React.createContext<{
 
 const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const [data, setData] = React.useState<Datum[]>([]);
-  const { data: metaData } = useMetaData();
+  const { loadingState: metaDataState, metaData } = useMetaData();
   const displayMetas = useDisplayMetas();
   const numPerPage = useSelector(selectNumPerPage);
   const page = useSelector(selectPage);
@@ -30,28 +30,34 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
   const sorts = useSelector(selectSort);
 
   useEffect(() => {
-    if (metaData) {
+    if (metaDataState === META_DATA_STATUS.READY && metaData) {
       client.clearData();
-      client.addData(metaData);
+      client.addData(metaData as Datum[]);
+      window.metaData = null;
     }
-  }, [metaData, client]);
+  }, [metaDataState, client, metaData]);
 
   useEffect(() => {
+    if (metaDataState !== META_DATA_STATUS.READY) return;
     // Add filters
     client.clearFilters();
     filters.forEach((filter) => {
-      if (filter.filtertype === 'category') {
+      if (filter.filtertype === 'category' && (filter as ICategoryFilterState).values !== undefined) {
         client.addFilter({
           field: filter.varname,
           value: (filter as ICategoryFilterState).values,
           operation: 'eq',
           dataType: TYPE_MAP[filter.metatype] as DataType,
         });
-      } else if (filter.filtertype === 'numberrange') {
+      } else if (
+        filter.filtertype === 'numberrange' ||
+        filter.filtertype === 'daterange' ||
+        filter.filtertype === 'datetimerange'
+      ) {
         const { min, max } = filter as INumberRangeFilterState;
         client.addFilter({
           field: filter.varname,
-          value: max && min && max < min ? [null, null] : [min || 0, max || Infinity],
+          value: max && min && max < min ? [null, null] : [min ?? -Infinity, max ?? Infinity],
           operation: 'range',
           dataType: TYPE_MAP[filter.metatype] as DataType,
         });
@@ -75,11 +81,21 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     }
 
     setData(client.getData(numPerPage, page));
-  }, [metaData, numPerPage, filters, sorts, displayMetas, client, page]);
+  }, [metaDataState, numPerPage, filters, sorts, displayMetas, client, metaData]);
+
+  useEffect(() => {
+    setData(client.getData(numPerPage, page));
+  }, [numPerPage, page]);
+
+  const dataContextValue = useMemo(() => ({
+    data, allData: client.allData,
+    filteredData: client.filteredData,
+    groupBy: client.groupBy
+  }), [data, client.allData, client.filteredData, client.groupBy]);
 
   return (
     <DataContext.Provider
-      value={{ data, allData: client.allData, filteredData: client.filteredData, groupBy: client.groupBy }}
+      value={dataContextValue}
     >
       {children}
     </DataContext.Provider>

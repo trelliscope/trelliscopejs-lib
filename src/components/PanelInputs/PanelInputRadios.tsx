@@ -1,5 +1,7 @@
-import React from 'react';
-import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RadioGroup, FormControlLabel, Radio, ClickAwayListener, Popover, Tooltip } from '@mui/material';
 import { useStoredInputValue } from '../../inputUtils';
 import styles from './PanelInputs.module.scss';
 
@@ -7,31 +9,69 @@ interface PanelInputRadiosProps {
   name: string;
   options: string[];
   panelKey: string;
+  iconFontSize?: number;
 }
 
-const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey }) => {
-  const { getStoredValue, setStoredValue } = useStoredInputValue(panelKey, name);
+const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, panelKey, iconFontSize }) => {
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [inputOpen, setInputOpen] = useState(false);
+  const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
+
+  const handleClickAway = () => {
+    setInputOpen(false);
+  };
 
   return (
-    <RadioGroup
-      classes={{ root: styles.panelInputRadioGroup }}
-      name={name}
-      value={getStoredValue() || ''}
-      onChange={(e) => {
-        setStoredValue(e.target.value);
-      }}
-    >
-      {options.map((option) => (
-        <FormControlLabel
-          classes={{ label: styles.panelInputRadioGroupLabel }}
-          key={option}
-          value={option}
-          control={<Radio classes={{ root: styles.panelInputRadioGroupRadio }} disableRipple size="small" />}
-          label={option}
-        />
-      ))}
-    </RadioGroup>
+    <div className={styles.panelInputText}>
+      <div className={styles.panelInputTextButtonContainer}>
+        <Tooltip title={getStoredValue()} placement="left" arrow>
+          <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+        </Tooltip>
+        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
+          <span ref={anchorRef}>
+            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
+          </span>
+        </button>
+      </div>
+      <Popover
+        open={inputOpen}
+        anchorEl={anchorRef.current}
+        classes={{ paper: styles.panelInputTextPopover }}
+        sx={{ left: '20px' }}
+        disableEscapeKeyDown
+      >
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <RadioGroup
+            name={name}
+            value={getStoredValue() || ''}
+            onChange={(e) => {
+              setStoredValue(e.target.value);
+            }}
+            onClick={() => {
+              if (getStoredValue()) {
+                setStoredValue('');
+                clearStoredValue();
+              }
+            }}
+          >
+            {options.map((option) => (
+              <FormControlLabel
+                classes={{ label: styles.panelInputRadioGroupLabel }}
+                key={option}
+                value={option}
+                control={<Radio classes={{ root: styles.panelInputRadioGroupRadio }} disableRipple size="small" />}
+                label={option}
+              />
+            ))}
+          </RadioGroup>
+        </ClickAwayListener>
+      </Popover>
+    </div>
   );
+};
+
+PanelInputRadios.defaultProps = {
+  iconFontSize: 12,
 };
 
 export default PanelInputRadios;

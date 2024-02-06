@@ -1,0 +1,52 @@
+.filterInput {
+  padding: var(--padding-px);
+  background-color: #fefefe;
+  position: relative;
+
+  &Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+
+    svg {
+      width: 20px;
+      font-size: 20px;
+      color: var(--gray-1100);
+    }
+
+    &Name {
+      padding: var(--padding-px) var(--padding-3);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    &Label {
+      padding: var(--padding-px) var(--padding-3);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    &Controls {
+      display: flex;
+      align-items: center;
+
+      &Icon {
+        cursor: move;
+      }
+    }
+  }
+
+  &SubMenu {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--padding-px) var(--padding-3);
+    align-items: center;
+  }
+
+  &Count {
+    font-size: var(--text-xs);
+    color: var(--gray-1100);
+    margin: 0 var(--margin-6) 0 var(--margin-3);
+  }
+}

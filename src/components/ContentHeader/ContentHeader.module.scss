@@ -1,0 +1,98 @@
+.contentHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--white-600);
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  &Controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    justify-content: space-between;
+    font-weight: 600;
+
+    &Left {
+      display: flex;
+    }
+
+    &Item {
+      max-height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0px 3px 0px 10px;
+      margin: 0 6px;
+      border-radius: 4px;
+      background: var(--white-500);
+
+      Button {
+        max-height: 34px;
+        font-weight: 600;
+      }
+
+      svg {
+        font-size: 15px !important;
+      }
+
+      &Toggle {
+        border-radius: 0px;
+        margin: 0px 8px 0px 0px;
+        padding: 0px;
+        left: 0;
+        position: sticky;
+        z-index: 1001;
+
+        &Icon {
+          position: fixed;
+          cursor: pointer;
+          z-index: 1200;
+          color: #000;
+          top: 63px;
+          width: 18px;
+          height: 18px;
+          background: var(--white-500);
+          border: 1px solid #cccccc;
+          border-radius: 50%;
+          padding: 4px;
+          transition: left 0.2s ease;
+        }
+
+        &Badge {
+          position: absolute;
+          top: -4px;
+          right: 2px;
+          font-size: 14px;
+
+          svg {
+            font-size: 20px !important;
+          }
+
+          &Num {
+            position: absolute;
+            z-index: 1002;
+            color: var(--white);
+            // top: 1px;
+            // right: 1px;
+            font-size: 12px;
+            font-weight: 500;
+          }
+
+          svg {
+            color: var(--gray-600);
+            position: absolute;
+            top: 1px;
+            right: -8px;
+            z-index: 1001;
+          }
+        }
+      }
+    }
+
+    &Pagination {
+      font-weight: 500;
+      margin-right: 10px;
+    }
+  }
+}

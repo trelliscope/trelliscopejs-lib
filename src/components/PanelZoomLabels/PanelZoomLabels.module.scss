@@ -1,0 +1,84 @@
+.panelZoomLabels {
+  width: 100%;
+  background: var(--white-200);
+  list-style-type: none;
+  margin: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  &Row {
+    width: 100%;
+    font-size: var(--text-xs);
+    border-bottom: var(--border-2);
+
+    &__title {
+      width: 100%;
+      background: var(--white-100);
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    &Missing {
+      color: var(--gray-600);
+    }
+  }
+
+  &Label {
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  &Cell {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 70%;
+
+    &:first-of-type {
+      white-space: nowrap;
+      font-weight: bold;
+      border-right: var(--border-2);
+      cursor: default;
+      width: 30%;
+    }
+
+    &Content {
+      display: flex;
+      justify-content: space-between;
+
+      &Text {
+        margin-right: 5px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 20px;
+        // hack to remove default safari tooltip
+        &::after {
+          content: '';
+          display: block;
+        }
+      }
+    }
+
+    &Link {
+      color: #ff5252;
+    }
+  }
+
+  &Close {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+
+    svg {
+      margin-top: 3px;
+      width: 12px;
+      height: 12px;
+    }
+  }
+}

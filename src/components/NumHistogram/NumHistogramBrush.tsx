@@ -19,6 +19,7 @@ interface NumHistogramBrushProps {
   selection: [number, number];
   onBrushStart: (selection: [number, number]) => void;
   onBrushEnd: (selection: [number, number]) => void;
+  xPad: number;
 }
 
 const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
@@ -30,6 +31,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   selection,
   onBrushStart,
   onBrushEnd,
+  xPad,
 }) => {
   const initialState: BrushState = {
     x: -1,
@@ -41,32 +43,30 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   };
 
   const [state, setState] = useState(initialState);
-  const activeX = state.isDragging ? state.x : selection[0];
-  const activeDx = state.isDragging ? state.dx : selection[1];
+  const activeX = state.isDragging ? state.x : selection[0] < 0 ? 0 : selection[0];
+  const activeDx = state.isDragging ? state.dx : selection[1] >= width ? width - xPad : selection[1];
 
   const handleMouseMove = (e: MouseEvent) => {
     const { offsetX } = e.nativeEvent;
     if (state.isDragging) {
       if (state.activeHandle === 'x') {
-        setState({ ...state, x: offsetX });
+        setState({ ...state, x: offsetX - xPad });
       } else if (state.isMoving) {
         const deltaX = offsetX - state.startX;
         const newX = offsetX - (offsetX - deltaX);
         const newDx = deltaX + (state.dx - state.x);
-
-        if (newX < x || newDx > width) return;
-
+        if (newX < 0 || newDx > width - xPad) return;
         setState({ ...state, x: newX, dx: newDx });
       } else {
-        setState({ ...state, dx: offsetX });
+        setState({ ...state, dx: offsetX - xPad });
       }
     }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const { offsetX, clientX } = e.nativeEvent;
-    setState({ ...state, x: offsetX, dx: offsetX, isDragging: true, startX: clientX });
-    onBrushStart([offsetX, offsetX]);
+    setState({ ...state, x: offsetX - xPad, dx: offsetX - xPad, isDragging: true, startX: clientX });
+    onBrushStart([offsetX - xPad, offsetX - xPad]);
   };
 
   const handleMoveMouseDown = (e: React.MouseEvent) => {
@@ -101,7 +101,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
   // If isDragging or isMoving use the state otherwise use the selection
   const maxX = Math.max(activeX, activeDx);
   const minX = Math.min(activeX, activeDx);
-  const brushX = state.isDragging || state.isMoving ? minX : activeX;
+  const brushX = state.isDragging || state.isMoving ? minX + xPad : activeX + xPad || 0;
   const brushWidth = state.isDragging || state.isMoving ? maxX - minX : activeDx - activeX;
 
   let overlayCursor = 'crosshair';
@@ -143,14 +143,14 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
           <rect
             className={styles.brushHandle}
             height={height}
-            x={activeX - 5}
+            x={activeX + xPad}
             y={y}
             onMouseDown={(e) => handleResizeMouseDown(e, 'x')}
           />
           <rect
             className={styles.brushHandle}
             height={height}
-            x={activeDx - 5}
+            x={activeDx + xPad}
             y={y}
             onMouseDown={(e) => handleResizeMouseDown(e, 'dx')}
           />

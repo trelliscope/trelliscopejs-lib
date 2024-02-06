@@ -1,7 +1,7 @@
 // URL hash selectors
 //
 
-import { SB_LOOKUP, META_TYPE_FACTOR } from '../constants';
+import { META_TYPE_FACTOR } from '../constants';
 
 // get url hash
 export const selectHash = () => {
@@ -21,7 +21,7 @@ export const selectHash = () => {
 // select display from url hash
 export const selectHashDisplay = () => {
   const hash = selectHash();
-  return hash.display;
+  return hash.selectedDisplay;
 };
 
 interface HashLayout {
@@ -29,6 +29,10 @@ interface HashLayout {
   nrow?: number;
   ncol?: number;
   page?: number;
+  viewtype?: ViewType;
+  panel?: string;
+  sidebarActive?: boolean;
+  showLabels?: boolean;
 }
 // select layout from url hash
 export const selectHashLayout = (): HashLayout => {
@@ -41,7 +45,11 @@ export const selectHashLayout = (): HashLayout => {
 
   if (!Number.isNaN(nrow)) returnObj.nrow = nrow;
   if (!Number.isNaN(ncol)) returnObj.ncol = ncol;
+  if (hash.viewtype) returnObj.viewtype = hash.viewtype as ViewType;
   if (!Number.isNaN(page)) returnObj.page = page;
+  if (hash.panel) returnObj.panel = hash.panel;
+  if (hash.sidebarActive) returnObj.sidebarActive = hash.sidebarActive === 'true';
+  if (hash.showLabels) returnObj.showLabels = hash.showLabels === 'true';
 
   return returnObj;
 };
@@ -66,11 +74,11 @@ export const selectHashSorts = () => {
 export const selectHashFilters = () => {
   const hash = selectHash();
   if (!hash.filter) return hash.filter;
-  return hash.filter.split(',').map((d: string) => {
+  return hash.filter.split(/,(?=var)/).map((d: string) => {
     const hashProps = {} as { var: string; type: string; [key: string]: string };
 
     d.split(';').forEach((f: string) => {
-      const [key, value] = f.split(':');
+      const [key, value] = f.split(/:(.*)/s);
       hashProps[key] = value;
     });
 
@@ -84,18 +92,20 @@ export const selectHashFilters = () => {
     if (['numberrange', 'daterange', 'datetimerange'].includes(hashProps.type)) {
       return {
         ...filter,
-        min: Number(hashProps.min),
-        max: Number(hashProps.max),
-      } as INumberRangeFilterState | IDateRangeFilterState | IDatetimeRangeFilterState;
+        min: Number(hashProps.min) === -Infinity ? null : Number(hashProps.min),
+        max: Number(hashProps.max) === Infinity ? null : Number(hashProps.max),
+      } as INumberRangeFilterState | IDatetimeRangeFilterState;
     }
 
     return {
       ...filter,
-      regexp: decodeURIComponent(hashProps.regexp),
+      regexp: hashProps.regexp !== '' ? decodeURIComponent(hashProps.regexp) : null,
       values:
-        hashProps.metatype === META_TYPE_FACTOR
-          ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))
-          : hashProps.val.split('#').map(decodeURIComponent),
+        hashProps.regexp === ''
+          ? hashProps.metatype === META_TYPE_FACTOR
+            ? hashProps.val.split('#').map((v) => (v === '-Infinity' ? -Infinity : parseInt(v, 10)))
+            : hashProps.val.split('#').map(decodeURIComponent)
+          : undefined,
     } as ICategoryFilterState;
   });
 };
@@ -104,9 +114,4 @@ export const selectHashFilterView = () => {
   const hash = selectHash();
   const fvString = hash?.fv;
   return fvString ? fvString.split(',') : [];
-};
-
-export const selectHashSidebar = () => {
-  const hash = selectHash();
-  return { active: (SB_LOOKUP[Number(hash.sidebar)] || '') as SidebarType };
 };

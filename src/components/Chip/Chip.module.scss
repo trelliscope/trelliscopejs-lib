@@ -1,0 +1,74 @@
+.chip {
+  &Wrapper {
+    border: var(--border-8);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    margin-left: var(--margin-2);
+    padding: 0;
+    outline: none;
+    border-radius: var(--rounded);
+    white-space: nowrap;
+    width: -webkit-fit-content;
+    height: var(--chip-wrapper-height);
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    cursor: pointer;
+
+    &Contained {
+      max-width: 115px;
+
+      span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px;
+      }
+    }
+  }
+
+  &Label {
+    display: flex;
+    align-items: center;
+    font-size: var(--text-xs);
+    font-weight: var(--font-normal);
+    line-height: var(--chip-label-line-height);
+    padding-left: var(--padding-8);
+    padding-right: var(--padding-8);
+    white-space: nowrap;
+    -webkit-user-select: none;
+
+    svg {
+      padding-right: 5px;
+    }
+  }
+
+  &Text {
+    padding-left: var(--padding-3);
+    font-size: var(--text-2xs);
+    font-style: italic;
+  }
+
+  &DragIcon {
+    margin-right: 15px;
+    cursor: move;
+  }
+
+  &CloseIcon {
+    display: inline-block;
+    color: var(--gray);
+    fill: var(--gray);
+    height: var(--chip-closeIcon-size);
+    width: var(--chip-closeIcon-size);
+    transition: var(--chip-closeIcon-transition);
+    cursor: pointer;
+    margin: var(--margin-1) var(--margin-1) 0 var(--neg-margin-6);
+    -webkit-user-select: none;
+
+    &:hover {
+      color: var(--black-400);
+      fill: var(--white);
+    }
+  }
+}
