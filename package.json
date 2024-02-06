@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.7.1-alpha13",
+  "version": "0.7.1-alpha14",
   "type": "module",
   "files": [
     "dist"
