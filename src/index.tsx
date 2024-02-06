@@ -232,3 +232,9 @@ if (import.meta.env.MODE === 'development') {
     { logger: true });
   }
 }
+
+export {
+  Trelliscope,
+  TrelliscopeApp,
+  trelliscopeApp,
+}
