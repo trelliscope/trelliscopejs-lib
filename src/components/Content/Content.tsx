@@ -198,7 +198,7 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
                     labels={activeLabels}
                     inputs={activeInputs as IInput[]}
                     // eslint-disable-next-line react/no-array-index-key
-                    key={`${d.id}${i}`}
+                    key={`panel_${d[metaIndex]}`}
                     primaryMeta={primaryMeta}
                     handlePanelChange={handlePanelChange}
                     selectedValue={curPanel}

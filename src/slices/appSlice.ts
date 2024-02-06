@@ -18,7 +18,7 @@ export interface AppState {
   fullscreen: boolean;
   errorMsg: string;
   basePath: string;
-  appData?: ITrelliscopeAppSpec;
+  appData: string;
   configPath: string;
   panelDialog: PanelDialog;
 }
@@ -31,6 +31,7 @@ const initialState: AppState = {
   fullscreen: true,
   errorMsg: '',
   basePath: '',
+  appData: '',
   configPath: '',
   panelDialog: {
     open: false,
@@ -67,7 +68,7 @@ export const appSlice = createSlice({
       state.configPath = action.payload;
       state.basePath = action.payload.substring(0, action.payload.lastIndexOf('/')) || './';
     },
-    setAppData: (state, action: PayloadAction<ITrelliscopeAppSpec>) => {
+    setAppData: (state, action: PayloadAction<string>) => {
       state.appData = action.payload;
     },
     setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean; index?: number }>) => {

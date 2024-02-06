@@ -23,8 +23,8 @@ export const useMetaData = () => {
 
   useEffect(() => {
     setLoadingState(META_DATA_STATUS.IDLE);
-    if (appData && selectedDisplay?.name) {
-      setMetaData(appData.displays[selectedDisplay?.name].metaData);
+    if (appData !== '' && selectedDisplay?.name) {
+      setMetaData(window.appData[appData].displays[selectedDisplay?.name].metaData);
       setLoadingState(META_DATA_STATUS.READY);
       return; 
     }

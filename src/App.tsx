@@ -18,6 +18,12 @@ import ErrorWrapper from './components/ErrorWrapper';
 import './assets/styles/main.css';
 import ErrorSnack from './components/ErrorSnack';
 
+declare global {
+  interface Window {
+    appData: any;
+  }
+}
+
 interface AppProps {
   client: IDataClient;
   config: string | ITrelliscopeAppSpec;
@@ -89,7 +95,10 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
     if (typeof config === 'string') {
       dispatch(setPaths(config));
     } else {
-      dispatch(setAppData(config));
+      const appDataName = `TRELLISCOPE_APP_DATA_${Math.random().toString().substr(2, 5)}`
+      window.appData = {};
+      window.appData[appDataName] = config || {};
+      dispatch(setAppData(appDataName));
     }
     dispatch(setOptions(options));
     dispatch(setFullscreen(fullscreen));

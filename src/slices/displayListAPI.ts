@@ -8,7 +8,7 @@ import { useDataType } from './configAPI';
 import { selectSelectedRelDisps } from './selectedRelDispsSlice';
 
 const JSONPBaseQuery =
-  (): BaseQueryFn<{ url: string; id: string; dataType: string, appData: ITrelliscopeAppSpec | undefined }, unknown, unknown> =>
+  (): BaseQueryFn<{ url: string; id: string; dataType: string, appData: string }, unknown, unknown> =>
   ({ url, id, dataType, appData }) =>
     new Promise((resolve) => {
       const displayListCallback = `__loadDisplayList__${id}`;
@@ -18,8 +18,8 @@ const JSONPBaseQuery =
       };
       window[displayListCallback] = cb;
 
-      if (appData) {
-        cb(appData.displayList);
+      if (appData && appData !== '' ) {
+        cb(window.appData[appData].displayList);
       } else if (dataType === 'jsonp') {
         getJSONP({
           url: `${url}/displays/displayList.jsonp`,
@@ -42,7 +42,7 @@ export const displayListAPI = createApi({
   reducerPath: 'displayList',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json' | 'js', appData: ITrelliscopeAppSpec | undefined }>({
+    getDisplayList: builder.query<IDisplayListItem[], { url: string; id: string; dataType: 'jsonp' | 'json' | 'js', appData: string }>({
       query: ({ url, id, dataType, appData }) => ({ url, id, dataType, appData }),
     }),
   }),
@@ -55,7 +55,7 @@ export const useDisplayList = () => {
   const basePath = useSelector(selectBasePath);
   const appData = useSelector(selectAppData);
   const dataType = useDataType() as AppDataType;
-  return useGetDisplayListQuery({ url: basePath, id: appId, dataType, appData }, { skip: !(appData || (dataType && basePath)) });
+  return useGetDisplayListQuery({ url: basePath, id: appId, dataType, appData }, { skip: !(appData !== '' || (dataType && basePath)) });
 };
 
 export const useRelatedDisplayNames = () => {

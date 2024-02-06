@@ -9,7 +9,7 @@ import { COMMON_TAGS_KEY } from '../constants';
 import { selectAppId, selectBasePath, selectAppData } from '../selectors/app';
 import { getRequestErrorMessage, handleJSONResponse, snakeCase } from '../utils';
 
-const displayRequest = (url: string, displayName: string, dataType: string, appData: ITrelliscopeAppSpec | undefined, callback: string) =>
+const displayRequest = (url: string, displayName: string, dataType: string, appData: string, callback: string) =>
   new Promise((resolve) => {
     const displayPath = snakeCase(displayName);
 
@@ -19,7 +19,7 @@ const displayRequest = (url: string, displayName: string, dataType: string, appD
     window[callback] = cb;
 
     if (appData) {
-      cb(appData.displays[displayName]?.displayInfo);
+      cb(window.appData[appData].displays[displayName]?.displayInfo);
     } else if (dataType === 'jsonp') {
       getJSONP({
         url: `${url}/displays/${displayPath}/displayInfo.jsonp`,
@@ -39,7 +39,7 @@ const displayRequest = (url: string, displayName: string, dataType: string, appD
   });
 
 const JSONPBaseQuery =
-  (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string, appData: ITrelliscopeAppSpec | undefined }, unknown, unknown> =>
+  (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string, appData: string }, unknown, unknown> =>
   ({ url, id, dataType, appData, displayName }) => {
     const displayInfoCallback = `__loadDisplayInfo__${id}`;
     return displayRequest(url, displayName, dataType, appData, displayInfoCallback) as Promise<{ data: IDisplay }>;
@@ -68,7 +68,7 @@ export const displayInfoAPI = createApi({
   reducerPath: 'displayInfo',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json' | 'js'; displayName: string, appData: ITrelliscopeAppSpec | undefined }>({
+    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json' | 'js'; displayName: string, appData: string }>({
       query: ({ url, id, dataType, displayName, appData }) => ({ url, id, dataType, displayName, appData }),
     }),
     getRelatedDisplays: builder.query<{ data: IDisplay }[], IGetRelatedDisplaysArgs>({
@@ -87,7 +87,7 @@ export const useDisplayInfo = () => {
   const selectedDisplay = useSelectedDisplay();
   return useGetDisplayInfoQuery(
     { url: basePath, id: appId, dataType, displayName: selectedDisplay?.name || '', appData },
-    { skip: !((appData && selectedDisplay?.name) || (dataType && basePath && selectedDisplay?.name)) },
+    { skip: !((appData !== '' && selectedDisplay?.name) || (dataType && basePath && selectedDisplay?.name)) },
   );
 };
 

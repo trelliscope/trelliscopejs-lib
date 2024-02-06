@@ -9,7 +9,7 @@ const JSONPBaseQuery =
     {
       url: string;
       id: string;
-      appData: ITrelliscopeAppSpec | undefined;
+      appData: string;
     },
     unknown,
     unknown
@@ -26,7 +26,7 @@ const JSONPBaseQuery =
       window[cfgCallback] = cb;
 
       if (appData) {
-        cb(appData.config);
+        cb(window.appData[appData].config);
       } else if (fileExt === 'jsonp') {
         getJSONP({
           url,
@@ -51,7 +51,7 @@ export const configAPI = createApi({
   reducerPath: 'config',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getConfig: builder.query<IConfig, { config: string; id: string, appData: ITrelliscopeAppSpec | undefined }>({
+    getConfig: builder.query<IConfig, { config: string; id: string, appData: string }>({
       query: ({ config, id, appData }) => ({ url: config, id, appData }),
     }),
   }),
@@ -63,7 +63,7 @@ export const useConfig = () => {
   const appId = useSelector(selectAppId);
   const configPath = useSelector(selectConfigPath);
   const appData = useSelector(selectAppData);
-  return useGetConfigQuery({ config: configPath, id: appId, appData }, { skip: !(appData || (configPath && appId)) });
+  return useGetConfigQuery({ config: configPath, id: appId, appData }, { skip: !(appData !== '' || (configPath && appId)) });
 };
 
 export const useDataType = () => {
