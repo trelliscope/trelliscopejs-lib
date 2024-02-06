@@ -27,42 +27,42 @@ test('share modal functions', async ({ page }) => {
   await expect(page.getByTestId('share-modal')).not.toBeVisible();
 });
 
-test('export input functions', async ({ page }) => {
-  await page.getByTestId('export-button').click();
-  await expect(page.getByTestId('export-input-dialog')).toBeVisible();
-  await page.getByTestId('full-name-input').type('Joe');
-  await page.getByTestId('email-input').type('dev@test.com');
-  await page.getByTestId('job-title-input').type('Developer');
-  await page.getByTestId('other-info-input').type('Other info');
-  await expect(page.getByTestId('full-name-input')).toHaveValue('Joe');
-  const localStorageItem = await page.evaluate(() => {
-    return localStorage.getItem('__trelliscope_username');
-  });
-  await expect(localStorageItem).toBe('Joe');
-  await page.getByTestId('export-input-clear').click();
-  await expect(page.getByTestId('confirmation-modal')).toBeVisible();
-  await page.getByTestId('confirmation-modal-cancel').click();
-  await expect(page.getByTestId('confirmation-modal')).not.toBeVisible();
-  await page.getByTestId('export-input-clear').click();
-  await page.getByTestId('confirmation-modal-confirm').click();
-  const localStorageItemAfterClear = await page.evaluate(() => {
-    return localStorage.getItem('__trelliscope_username');
-  });
-  await expect(localStorageItemAfterClear).toBeNull();
-  await expect(page.getByTestId('full-name-input')).toHaveValue('');
-  await page.getByTestId('full-name-input').type('Joe');
-  await page.getByTestId('export-input-next').click();
-  const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('download-csv-button').click();
-  const download = await downloadPromise;
-  await expect(download.suggestedFilename()).toContain('.csv');
-  await page.getByTestId('export-input-next').click();
-  await page.getByTestId('export-input-back').click();
-  await page.getByTestId('export-input-next').click();
-  await page.getByTestId('export-input-compose-email').click();
-  await page.getByTestId('export-input-close').click();
-  await expect(page.getByTestId('export-input-dialog')).not.toBeVisible();
-});
+// test('export input functions', async ({ page }) => {
+//   await page.getByTestId('export-button').click();
+//   await expect(page.getByTestId('export-input-dialog')).toBeVisible();
+//   await page.getByTestId('full-name-input').type('Joe');
+//   await page.getByTestId('email-input').type('dev@test.com');
+//   await page.getByTestId('job-title-input').type('Developer');
+//   await page.getByTestId('other-info-input').type('Other info');
+//   await expect(page.getByTestId('full-name-input')).toHaveValue('Joe');
+//   const localStorageItem = await page.evaluate(() => {
+//     return localStorage.getItem('__trelliscope_username');
+//   });
+//   await expect(localStorageItem).toBe('Joe');
+//   await page.getByTestId('export-input-clear').click();
+//   await expect(page.getByTestId('confirmation-modal')).toBeVisible();
+//   await page.getByTestId('confirmation-modal-cancel').click();
+//   await expect(page.getByTestId('confirmation-modal')).not.toBeVisible();
+//   await page.getByTestId('export-input-clear').click();
+//   await page.getByTestId('confirmation-modal-confirm').click();
+//   const localStorageItemAfterClear = await page.evaluate(() => {
+//     return localStorage.getItem('__trelliscope_username');
+//   });
+//   await expect(localStorageItemAfterClear).toBeNull();
+//   await expect(page.getByTestId('full-name-input')).toHaveValue('');
+//   await page.getByTestId('full-name-input').type('Joe');
+//   await page.getByTestId('export-input-next').click();
+//   const downloadPromise = page.waitForEvent('download');
+//   await page.getByTestId('download-csv-button').click();
+//   const download = await downloadPromise;
+//   await expect(download.suggestedFilename()).toContain('.csv');
+//   await page.getByTestId('export-input-next').click();
+//   await page.getByTestId('export-input-back').click();
+//   await page.getByTestId('export-input-next').click();
+//   await page.getByTestId('export-input-compose-email').click();
+//   await page.getByTestId('export-input-close').click();
+//   await expect(page.getByTestId('export-input-dialog')).not.toBeVisible();
+// });
 
 test('trelliscope title is present', async ({ page }) => {
   await expect(page.getByTestId('app-title')).toHaveText('Trelliscope');

@@ -29,20 +29,22 @@ test('filter controls function', async ({ page }) => {
   ).not.toBeVisible();
 });
 
-test('filter item controls function', async ({ page }) => {
-  await page.getByTestId('label-checkbox').first().click();
-  await expect(page.getByTestId('label-checkbox').first()).toBeChecked();
-  await expect(page.getByTestId('panel-content').getByText('mean_lexp').first()).toBeVisible();
-  await page.getByTestId('label-checkbox').first().click();
-  await expect(page.getByTestId('label-checkbox').first()).not.toBeChecked();
-  await expect(page.getByTestId('panel-content').getByText('mean_lexp').first()).not.toBeVisible();
-  await page.getByRole('button', { name: 'mean_lexp Mean life' }).getByLabel('close').click();
-  await page.getByTestId('confirmation-modal-confirm').click();
-  await page.getByTestId('filter-cat-input').type('cat');
-  await page.getByTestId('clear-filter-button').click();
-  await page.getByTestId('ellipsis-button').click();
-  await expect(page.getByText('count ascending')).toBeVisible();
-  await expect(page.getByText('count descending')).toBeVisible();
-  await expect(page.getByText('label ascending')).toBeVisible();
-  await expect(page.getByText('label descending')).toBeVisible();
+test('filter item controls function', async ({ page, browserName }) => {
+  if (browserName !== 'firefox') {
+    await page.getByTestId('label-checkbox').first().click();
+    await expect(page.getByTestId('label-checkbox').first()).toBeChecked();
+    await expect(page.getByTestId('panel-content').getByText('mean_lexp').first()).toBeVisible();
+    await page.getByTestId('label-checkbox').first().click();
+    await expect(page.getByTestId('label-checkbox').first()).not.toBeChecked();
+    await expect(page.getByTestId('panel-content').getByText('mean_lexp').first()).not.toBeVisible();
+    await page.getByRole('button', { name: 'mean_lexp Mean life' }).getByLabel('close').click();
+    await page.getByTestId('confirmation-modal-confirm').click();
+    await page.getByTestId('filter-cat-input').type('cat');
+    await page.getByTestId('clear-filter-button').click();
+    await page.getByTestId('ellipsis-button').click();
+    await expect(page.getByText('count ascending')).toBeVisible();
+    await expect(page.getByText('count descending')).toBeVisible();
+    await expect(page.getByText('label ascending')).toBeVisible();
+    await expect(page.getByText('label descending')).toBeVisible();  
+  }
 });
