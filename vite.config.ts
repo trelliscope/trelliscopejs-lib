@@ -39,18 +39,19 @@ export default defineConfig({
     lib: {
       entry: 'src/index.tsx',
       name: 'trelliscope-viewer',
-      fileName: 'trelliscope-viewer.js',
+      fileName: 'trelliscope-viewer',
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
+      // external: Object.keys(pkg.dependencies || {}),
       output: {
         globals: {
           react: "React",
           'react-dom': "reactdom",
         },
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`,
+        // entryFileNames: `assets/[name].js`,
+        // chunkFileNames: `assets/[name].js`,
+        // assetFileNames: `assets/[name].[ext]`,
       },
     },
   },

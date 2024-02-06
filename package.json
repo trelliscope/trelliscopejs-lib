@@ -1,13 +1,16 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.7.1-alpha10",
-  "files": [
-    "dist"
-  ],
+  "version": "0.7.1-alpha11",
   "type": "module",
-  "module": "dist/assets/index.js",
-  "main": "./dist/assets/index.js",
-  "exports": "./dist/assets/index.js",
+  "files": ["dist"],
+  "main": "./dist/trelliscope-viewer.umd.cjs",
+  "module": "./dist/trelliscope-viewer.js",
+  "exports": {
+    ".": {
+      "import": "./dist/trelliscope-viewer.js",
+      "require": "./dist/trelliscope-viewer.umd.cjs"
+    }
+  },
   "homepage": ".",
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
