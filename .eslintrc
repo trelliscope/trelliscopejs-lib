@@ -29,8 +29,9 @@
     "browser": true,
     "jest": true
   },
-  "plugins": ["react-hooks"],
+  "plugins": ["react-hooks", "react-refresh"],
   "rules": {
+    "react-refresh/only-export-components": "warn",
     "react/function-component-definition": 0,
     "no-restricted-exports": 0,
     "react/prop-types": 0,

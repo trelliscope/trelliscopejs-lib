@@ -17,6 +17,7 @@ import '@fontsource/source-code-pro/600.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 import { Trelliscope, prepareTrelliscope } from './jsApi';
+import TrelliscopeApp from './TrelliscopeApp';
 
 import store from './store';
 
@@ -164,36 +165,6 @@ const trelliscopeApp = (
 
 window.trelliscopeApp = trelliscopeApp;
 
-interface TrelliscopeAppProps {
-  data: ITrelliscopeAppSpec;
-  width: number;
-  height: number;
-  options: { logger?: boolean; mockData?: boolean };
-}
-
-// component for embedding a Trelliscope app in a React app
-const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, width, height, options = {}}) => {
-  const crossFilterClient = new CrossfilterClient();
-  const id = 'trelliscope_app';
-  // TODO: need to get appDims from a ref of parent component
-  const appDims = { width, height }
-
-  return (
-    <div style={{ width, height, position: 'relative', overflow: 'hidden' }}>
-      <Provider store={store}>
-        <App
-          client={crossFilterClient as unknown as IDataClient}
-          config={prepareTrelliscope(data, id)}
-          id={id}
-          singlePageApp={false}
-          options={options}
-          appDims={appDims}
-        />
-      </Provider>
-    </div>
-  );
-};
-
 // TODO: should be able to just attach this to window so that it can be loaded in other apps
 // by including the js script and then using the component (vs. having to import and bundle it in the app)
 // window.TrelliscopeApp = TrelliscopeApp;
@@ -233,7 +204,4 @@ if (import.meta.env.MODE === 'development') {
   }
 }
 
-export {
-  Trelliscope,
-  TrelliscopeApp,
-}
+export { Trelliscope, TrelliscopeApp };
