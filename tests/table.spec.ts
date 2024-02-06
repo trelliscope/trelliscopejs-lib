@@ -28,7 +28,7 @@ test('table column global controls function', async ({ page }) => {
   await page.getByLabel('Show/Hide columns').click();
   await page.getByRole('button', { name: 'Unpin all' }).click();
   await expect(
-    page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility color_map' }).getByLabel('Unpin'),
+    page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility lexp_time' }).getByLabel('Unpin'),
   ).not.toBeVisible();
 });
 
@@ -55,18 +55,18 @@ test('columns are able to be pinned left and right and unpinned on the table', a
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
   await page
-    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility set_num' })
+    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
     .getByLabel('Pin to left')
     .click();
   await page.click('body');
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility color_map' }).getByLabel('Unpin').click();
+  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility country' }).getByLabel('Unpin').click();
   await page.click('body');
   await page.getByLabel('Show/Hide columns').click();
   await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
   await page
-    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility color_map' })
+    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
     .getByLabel('Pin to right')
     .click();
   await page.click('body');

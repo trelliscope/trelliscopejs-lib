@@ -25,7 +25,6 @@ test('views can be added, clicked, and deleted', async ({ page }) => {
     return localStorage.getItem('_:_Life expectancy_:_trelliscope_views_:_test view');
   });
   const jsonObject = JSON.parse(localStorageItem as string);
-  console.log(jsonObject)
   await expect(jsonObject.name).toBe('test view');
   await expect(jsonObject.description).toBe('test description');
   await page.click('body');
