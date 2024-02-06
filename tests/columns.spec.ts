@@ -5,6 +5,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('columns can be adjusted', async ({ page }) => {
+  await page.getByTestId('fullscreen-button').click();
   await expect(page.getByTestId('column-selector-input')).toBeVisible();
   await page.getByTestId('column-selector-input').fill('3');
   await expect(page.getByTestId('column-selector-input')).toHaveValue('3');
