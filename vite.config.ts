@@ -4,7 +4,6 @@ import viteTsconfigPaths from 'vite-tsconfig-paths'
 import fs from 'fs'
 import * as pkg from './package.json';
 
-
 process.env = {...process.env, ...loadEnv('dev', process.cwd())};
 
 let EXAMPLE = process.env.VITE_DEV_APP_EXAMPLE;
