@@ -48,28 +48,26 @@ test('columns are able to be hidden and shown on the table', async ({ page }) =>
   await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
 });
 
-test('columns are able to be pinned left and right and unpinned on the table', async ({ page, browserName }) => {
-  if (browserName === 'firefox') {
-    await expect(page.getByTestId('data-table')).toBeVisible();
-    await expect(page.getByTestId('columns-table')).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
-    await page.getByLabel('Show/Hide columns').click();
-    await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-    await page
-      .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
-      .getByLabel('Pin to left')
-      .click();
-    await page.click('body');
-    await page.getByLabel('Show/Hide columns').click();
-    await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-    await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility country' }).getByLabel('Unpin').click();
-    await page.click('body');
-    await page.getByLabel('Show/Hide columns').click();
-    await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
-    await page
-      .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
-      .getByLabel('Pin to right')
-      .click();
-    await page.click('body');
-  }
+test('columns are able to be pinned left and right and unpinned on the table', async ({ page }) => {
+  await expect(page.getByTestId('data-table')).toBeVisible();
+  await expect(page.getByTestId('columns-table')).toBeVisible();
+  await expect(page.getByRole('columnheader', { name: 'lexp_time Move' }).locator('div').first()).toBeVisible();
+  await page.getByLabel('Show/Hide columns').click();
+  await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
+  await page
+    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
+    .getByLabel('Pin to left')
+    .click();
+  await page.click('body');
+  await page.getByLabel('Show/Hide columns').click();
+  await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
+  await page.getByRole('menuitem', { name: 'Move Unpin Toggle visibility country' }).getByLabel('Unpin').click();
+  await page.click('body');
+  await page.getByLabel('Show/Hide columns').click();
+  await expect(page.getByRole('button', { name: 'Hide all' })).toBeVisible();
+  await page
+    .getByRole('menuitem', { name: 'Move Pin to left Pin to right Toggle visibility country' })
+    .getByLabel('Pin to right')
+    .click();
+  await page.click('body');
 });
