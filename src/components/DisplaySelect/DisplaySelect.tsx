@@ -18,6 +18,8 @@ import { filterViewSelector } from '../../selectors';
 import { useConfig } from '../../slices/configAPI';
 // import styles from './DisplaySelect.module.scss';
 import ErrorWrapper from '../ErrorWrapper';
+import { setMetaData, setMetaDataState } from '../../slices/appSlice';
+import { META_DATA_STATUS } from '../../constants';
 
 const DisplaySelect: React.FC = () => {
   const dispatch = useDispatch();
@@ -112,6 +114,8 @@ const DisplaySelect: React.FC = () => {
     dispatch(setRelDispPositions([]));
     dispatch(setSelectedDisplay(name));
     dispatch(setLayout({ page: 1, sidebarActive: false, viewtype: 'grid' }));
+    dispatch(setMetaData([]));
+    dispatch(setMetaDataState(META_DATA_STATUS.LOADING));
     setSelectedDisplayName(name);
   };
 
@@ -127,10 +131,10 @@ const DisplaySelect: React.FC = () => {
           color: configObj?.theme?.header
             ? configObj.theme?.header?.text
             : configObj?.theme?.isLightTextOnDark && configObj?.theme
-            ? configObj?.theme?.lightText
-            : !configObj?.theme?.isLightTextOnDark && configObj?.theme
-            ? configObj?.theme?.darkText
-            : '#757575',
+              ? configObj?.theme?.lightText
+              : !configObj?.theme?.isLightTextOnDark && configObj?.theme
+                ? configObj?.theme?.darkText
+                : '#757575',
           textTransform: 'unset',
         }}
         id="display-select-button"
