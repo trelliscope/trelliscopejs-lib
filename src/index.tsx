@@ -165,29 +165,12 @@ const trelliscopeApp = (
 
 window.trelliscopeApp = trelliscopeApp;
 
-const querystringParams = new URLSearchParams(window.location.search);
-const embeddedOrigin = querystringParams.get('embeddedOrigin');
-
-window.addEventListener('message', (event) => {
-  if (!embeddedOrigin || event.origin !== embeddedOrigin) {
-    return;
-  }
-
-  if (event?.data?.config?.name === 'Trelliscope App') {
-    const div = document.createElement('div');
-    div.id = 'third-party-iframe';
-    div.className = 'trelliscope-spa';
-    document.body.appendChild(div);
-    trelliscopeApp('third-party-iframe', event.data);
-  }
-});
-
 // TODO: should be able to just attach this to window so that it can be loaded in other apps
 // by including the js script and then using the component (vs. having to import and bundle it in the app)
 // window.TrelliscopeApp = TrelliscopeApp;
 
 // if in development mode, populate div with an example trelliscope app
-if (import.meta.env.MODE === 'development' && !embeddedOrigin) {
+if (import.meta.env.MODE === 'development') {
   const example = window.__DEV_EXAMPLE__ as unknown as { id: string; name: string; datatype: string };
 
   // append div to body for testing with id gapminder
