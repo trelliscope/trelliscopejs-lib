@@ -1,16 +1,20 @@
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { useSelectedDisplay } from './selectedDisplaySlice';
-import { selectBasePath, selectAppData } from '../selectors/app';
+import { selectBasePath, selectAppData, selectMetaData, selectMetaDataState } from '../selectors/app';
 import { snakeCase } from '../utils';
 // import { useDataType } from './configAPI';
 import { META_DATA_STATUS } from '../constants';
+import { setMetaData, setMetaDataState } from './appSlice';
 
 export const metaIndex: unique symbol = Symbol('metaIndex');
 
 export const useMetaData = () => {
+  const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
   const appData = useSelector(selectAppData);
+  const metaData = useSelector(selectMetaData);
+  const metaDataState = useSelector(selectMetaDataState);
   const selectedDisplay = useSelectedDisplay();
   // const dataType = useDataType();
 
@@ -18,15 +22,12 @@ export const useMetaData = () => {
 
   const url = `${basePath}/displays/${displayPath}/metaData.js`;
 
-  const [loadingState, setLoadingState] = useState(url ? META_DATA_STATUS.LOADING : META_DATA_STATUS.IDLE);
-  const [metaData, setMetaData] = useState<Datum[] | null>(null);
-
   useEffect(() => {
-    setLoadingState(META_DATA_STATUS.IDLE);
+    dispatch(setMetaDataState(META_DATA_STATUS.IDLE));
     if (appData !== '' && selectedDisplay?.name) {
-      setMetaData(window.appData[appData].displays[selectedDisplay?.name].metaData);
-      setLoadingState(META_DATA_STATUS.READY);
-      return; 
+      dispatch(setMetaData(window.appData[appData].displays[selectedDisplay?.name].metaData));
+      dispatch(setMetaDataState(META_DATA_STATUS.READY));
+      return;
     }
     if (!url || !basePath || !selectedDisplay?.name) {
       return;
@@ -50,11 +51,12 @@ export const useMetaData = () => {
     let script = document.querySelector(`script[src="${url}"]`) as HTMLScriptElement;
 
     const handleScript = (e: Event) => {
-      setLoadingState(e.type === 'load' ? META_DATA_STATUS.READY : META_DATA_STATUS.ERROR);
+      if ((e.type === 'load' && metaDataState === META_DATA_STATUS.READY) || !window.metaData) return;
+      dispatch(setMetaDataState(e.type === 'load' ? META_DATA_STATUS.READY : META_DATA_STATUS.ERROR));
       window.metaData?.forEach((datum, i) => {
         datum[metaIndex] = i;
       });
-      setMetaData(window.metaData);
+      dispatch(setMetaData(window.metaData));
     };
 
     if (!script) {
@@ -77,5 +79,5 @@ export const useMetaData = () => {
       }
     };
   }, [url]);
-  return { loadingState, metaData, appData };
+  return { loadingState: metaDataState, metaData, appData };
 };

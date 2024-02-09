@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { configAPI } from './configAPI';
 import { displayInfoAPI } from './displayInfoAPI';
 import { displayListAPI } from './displayListAPI';
+import { META_DATA_STATUS } from '../constants';
 
 export interface PanelDialog {
   open: boolean;
@@ -20,6 +21,8 @@ export interface AppState {
   basePath: string;
   appData: string;
   configPath: string;
+  metaData: Datum[] | null;
+  metaDataState: string;
   panelDialog: PanelDialog;
 }
 
@@ -33,6 +36,8 @@ const initialState: AppState = {
   basePath: '',
   appData: '',
   configPath: '',
+  metaData: [],
+  metaDataState: META_DATA_STATUS.LOADING,
   panelDialog: {
     open: false,
     panel: undefined,
@@ -74,6 +79,12 @@ export const appSlice = createSlice({
     setPanelDialog: (state, action: PayloadAction<{ panel?: IMeta; source?: string; open?: boolean; index?: number }>) => {
       state.panelDialog = { ...state.panelDialog, ...action.payload };
     },
+    setMetaData: (state, action: PayloadAction<Datum[] | null>) => {
+      state.metaData = action.payload;
+    },
+    setMetaDataState: (state, action: PayloadAction<string>) => {
+      state.metaDataState = action.payload;
+    },
   },
   // Listen for rejected API calls and set the error message
   extraReducers: (builder) => {
@@ -83,7 +94,17 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setAppID, setOptions, setSinglePageApp, setFullscreen, setErrorMessage, setPaths, setAppData, setPanelDialog } =
-  appSlice.actions;
+export const {
+  setAppID,
+  setOptions,
+  setSinglePageApp,
+  setFullscreen,
+  setErrorMessage,
+  setPaths,
+  setAppData,
+  setPanelDialog,
+  setMetaData,
+  setMetaDataState,
+} = appSlice.actions;
 
 export default appSlice.reducer;
