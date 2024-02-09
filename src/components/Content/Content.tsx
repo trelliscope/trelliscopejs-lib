@@ -159,7 +159,6 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
     setCurPanel(value);
     dispatch(setLayout({ panel: value }));
   };
-
   if (metaDataState === META_DATA_STATUS.LOADING || metaDataState === META_DATA_STATUS.IDLE || !allData.length)
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>

@@ -165,14 +165,30 @@ const trelliscopeApp = (
 
 window.trelliscopeApp = trelliscopeApp;
 
+const querystringParams = new URLSearchParams(window.location.search);
+const embeddedOrigin = querystringParams.get('embeddedOrigin');
+
+window.addEventListener('message', (event) => {
+  if (!embeddedOrigin || event.origin !== embeddedOrigin) {
+    return;
+  }
+
+  if (event?.data?.config?.name === 'Trelliscope App') {
+    const div = document.createElement('div');
+    div.id = 'third-party-iframe';
+    div.className = 'trelliscope-spa';
+    document.body.appendChild(div);
+    trelliscopeApp('third-party-iframe', event.data);
+  }
+});
+
 // TODO: should be able to just attach this to window so that it can be loaded in other apps
 // by including the js script and then using the component (vs. having to import and bundle it in the app)
 // window.TrelliscopeApp = TrelliscopeApp;
 
 // if in development mode, populate div with an example trelliscope app
-if (import.meta.env.MODE === 'development') {
-  const example = window.__DEV_EXAMPLE__ as unknown as
-    { id: string; name: string; datatype: string };
+if (import.meta.env.MODE === 'development' && !embeddedOrigin) {
+  const example = window.__DEV_EXAMPLE__ as unknown as { id: string; name: string; datatype: string };
 
   // append div to body for testing with id gapminder
   const div = document.createElement('div');
@@ -186,16 +202,16 @@ if (import.meta.env.MODE === 'development') {
 
   if (example.name === 'gapminder_js') {
     fetch('_examples/gapminder_js/gapminder.json')
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const appdat = Trelliscope({
           data: data as Datum[],
           name: 'gapminder',
-          keycols: ['country', 'continent']
+          keycols: ['country', 'continent'],
         })
           .setDefaultLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
-          .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link']})
-          .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc']})
+          .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link'] })
+          .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc'] })
           .setRangeFilter({ varname: 'mean_lexp', max: 60 }) // not working yet
           .setVarLabels({
             mean_lexp: 'Mean life expectancy',
@@ -205,13 +221,12 @@ if (import.meta.env.MODE === 'development') {
             dt_lexp_max_pct_chg: 'Date of max % year-to-year change in life expectancy',
             dttm_lexp_max_pct_chg: 'Date-time of max % year-to-year change in life expectancy',
             wiki_link: 'Link to country Wikipedia entry',
-            flag: 'Country flag'
+            flag: 'Country flag',
           });
         trelliscopeApp(example.id, appdat);
       });
   } else {
-    trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`,
-    { logger: true });
+    trelliscopeApp(example.id, `_examples/${example.name}/config.${example.datatype}`, { logger: true });
   }
 }
 

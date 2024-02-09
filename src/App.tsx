@@ -80,6 +80,10 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
         main: configObj?.theme?.primary || blue.A200,
         dark: configObj?.theme?.dark || '#2e60b1',
       }, // '#4285f4', // lightBlue500,
+      // background: {
+      //   default: '#151C24', // Set default background to black
+      //   paper: '#151C24', // Optional: Set background of paper components to black
+      // },
       secondary: { light: lightBlue[200], main: lightBlue[700] },
     },
     typography: {
@@ -95,7 +99,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
     if (typeof config === 'string') {
       dispatch(setPaths(config));
     } else {
-      const appDataName = `TRELLISCOPE_APP_DATA_${Math.random().toString().substr(2, 5)}`
+      const appDataName = `TRELLISCOPE_APP_DATA_${Math.random().toString().substr(2, 5)}`;
       window.appData = {};
       window.appData[appDataName] = config || {};
       dispatch(setAppData(appDataName));
