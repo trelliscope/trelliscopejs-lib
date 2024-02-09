@@ -6,6 +6,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  overflow: hidden;
 }
 
 .trelliscope-app-container {

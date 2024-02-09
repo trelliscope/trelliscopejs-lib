@@ -220,11 +220,9 @@ interface IFactorMeta extends IMeta {
   levels: string[];
 }
 
-interface IStringMeta extends IMeta {
-}
+interface IStringMeta extends IMeta {}
 
-interface IDateMeta extends IMeta {
-}
+interface IDateMeta extends IMeta {}
 
 // do we want to support this?
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
@@ -232,8 +230,7 @@ interface IDatetimeMeta extends IMeta {
   timezone: string;
 }
 
-interface IHrefMeta extends IMeta {
-}
+interface IHrefMeta extends IMeta {}
 
 interface IGraphMeta extends IMeta {
   idvarname: string;
@@ -397,7 +394,13 @@ type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' |
 
 type PanelType = 'img' | 'iframe';
 
-type PanelSourceType = 'file' | 'REST' | 'localWebSocket';
+type PanelSourceType = 'file' | 'REST' | 'localWebSocket' | 'JS';
+
+type PanelFunction = (args: []) => string;
+
+interface IJSPanelSource extends IPanelSource {
+  function: PanelFunction;
+}
 
 interface IPanelSource {
   type: PanelSourceType;
@@ -494,10 +497,16 @@ interface ITrelliscopeAppSpec {
   displays: {
     [key: string]: IDisplaySpec;
   };
-  setDefaultLayout(arg0: { ncol?: number; page?: number; viewtype?: ViewType; sidebarActive?: boolean; activeFilterVars?: string[] }): ITrelliscopeAppSpec;
-  setDefaultLabels(arg0: { varnames?: string[]; tags?: string[]; }): ITrelliscopeAppSpec;
-  setDefaultSort(arg0: { varnames: string[]; dirs?: SortDirType[]; }): ITrelliscopeAppSpec;
-  setVarLabels(labels: {[index: string]: string}): ITrelliscopeAppSpec;
+  setDefaultLayout(arg0: {
+    ncol?: number;
+    page?: number;
+    viewtype?: ViewType;
+    sidebarActive?: boolean;
+    activeFilterVars?: string[];
+  }): ITrelliscopeAppSpec;
+  setDefaultLabels(arg0: { varnames?: string[]; tags?: string[] }): ITrelliscopeAppSpec;
+  setDefaultSort(arg0: { varnames: string[]; dirs?: SortDirType[] }): ITrelliscopeAppSpec;
+  setVarLabels(labels: { [index: string]: string }): ITrelliscopeAppSpec;
   setPrimaryPanel(panel: string): ITrelliscopeAppSpec;
   setRangeFilter(arg0: { varname: string; min?: number | Date | null; max?: number | Date | null }): ITrelliscopeAppSpec;
 }

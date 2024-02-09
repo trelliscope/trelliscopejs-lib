@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { max } from "d3-array";
-import { metaIndex } from "./slices/metaDataAPI";
+import { max } from 'd3-array';
+import { metaIndex } from './slices/metaDataAPI';
 
 export class Meta implements IMeta {
   name: string; // why??
@@ -28,18 +28,18 @@ export class Meta implements IMeta {
     digits = 2,
     locale = true,
     filterSortOrder = 'ct,desc',
-  } : {
-    type: MetaType,
-    varname: string,
-    tags: string[],
-    maxnchar?: number,
-    label?: string | undefined,
-    filterable?: boolean,
-    sortable?: boolean,
-    log?: boolean,
-    digits?: number,
-    locale?: boolean,
-    filterSortOrder?: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc',
+  }: {
+    type: MetaType;
+    varname: string;
+    tags: string[];
+    maxnchar?: number;
+    label?: string | undefined;
+    filterable?: boolean;
+    sortable?: boolean;
+    log?: boolean;
+    digits?: number;
+    locale?: boolean;
+    filterSortOrder?: 'ct,asc' | 'ct,desc' | 'id,asc' | 'id,desc';
   }) {
     this.type = type;
     this.name = varname;
@@ -60,14 +60,7 @@ export class PanelSource implements IPanelSource {
   type: PanelSourceType;
   isLocal: boolean; // what is this?
   port: number; // why??
-  constructor({
-    type,
-    port = 0,
-  } : {
-    type: PanelSourceType,
-    port: number,
-  }
-  ) {
+  constructor({ type, port = 0 }: { type: PanelSourceType; port: number }) {
     this.type = type;
     this.isLocal = false;
     this.port = port;
@@ -79,27 +72,25 @@ class PanelMetaClass extends Meta implements IPanelMeta {
   format?: PanelFormat;
   aspect: number;
   source: PanelSource;
-  constructor(
-    {
-      varname,
-      label,
-      tags = [],
-      paneltype,
-      format,
-      aspect,
-      sourcetype,
-      port = 0,
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[],
-      paneltype: PanelType,
-      port?: number,
-      format: PanelFormat | undefined,
-      sourcetype: PanelSourceType,
-      aspect: number,
-    }
-  ) {
+  constructor({
+    varname,
+    label,
+    tags = [],
+    paneltype,
+    format,
+    aspect,
+    sourcetype,
+    port = 0,
+  }: {
+    varname: string;
+    label?: string | undefined;
+    tags?: string[];
+    paneltype: PanelType;
+    port?: number;
+    format: PanelFormat | undefined;
+    sourcetype: PanelSourceType;
+    aspect: number;
+  }) {
     super({ type: 'panel', varname, tags, label });
     this.paneltype = paneltype;
     if (format !== undefined) {
@@ -122,15 +113,15 @@ export function PanelMeta({
   aspect,
   sourcetype,
   port = 0,
-} : {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[],
-  paneltype: PanelType,
-  format: PanelFormat | undefined,
-  aspect: number,
-  sourcetype: PanelSourceType,
-  port?: number,
+}: {
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
+  paneltype: PanelType;
+  format: PanelFormat | undefined;
+  aspect: number;
+  sourcetype: PanelSourceType;
+  port?: number;
 }): IPanelMeta {
   return new PanelMetaClass({ varname, label, tags, paneltype, format, aspect, sourcetype, port });
 }
@@ -139,28 +130,26 @@ class NumberMetaClass extends Meta implements INumberMeta {
   digits: number;
   locale: boolean;
   log: boolean;
-  constructor(
-    {
-      varname,
-      label,
-      tags = [],
-      digits,
-      locale,
-      log
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[],
-      digits?: number,
-      locale?: boolean,
-      log?: boolean,
-    }
-  ) {
-    super({type: 'number', varname, tags, label });
+  constructor({
+    varname,
+    label,
+    tags = [],
+    digits,
+    locale,
+    log,
+  }: {
+    varname: string;
+    label?: string | undefined;
+    tags?: string[];
+    digits?: number;
+    locale?: boolean;
+    log?: boolean;
+  }) {
+    super({ type: 'number', varname, tags, label });
     this.digits = digits === undefined ? 2 : digits;
     this.locale = locale === undefined ? true : locale;
     this.log = log === undefined ? false : log;
-  };
+  }
 }
 export function NumberMeta({
   varname,
@@ -168,63 +157,51 @@ export function NumberMeta({
   tags = [],
   digits,
   locale,
-  log
-} : {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[],
-  digits?: number,
-  locale?: boolean,
-  log?: boolean,
+  log,
+}: {
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
+  digits?: number;
+  locale?: boolean;
+  log?: boolean;
 }): INumberMeta {
   return new NumberMetaClass({ varname, label, tags, digits, locale, log });
 }
 
 class DateMetaClass extends Meta implements IDateMeta {
-  constructor(
-    {
-      varname,
-      label,
-      tags = []
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[]
-    }
-  ) {
+  constructor({ varname, label, tags = [] }: { varname: string; label?: string | undefined; tags?: string[] }) {
     super({ type: 'date', varname, tags, label });
-  };
+  }
 }
 export function DateMeta({
   varname,
   label,
-  tags = []
+  tags = [],
 }: {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[]
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
 }): IDateMeta {
   return new DateMetaClass({ varname, label, tags });
 }
 
 class DatetimeMetaClass extends Meta implements IDatetimeMeta {
   timezone: string; // Add the missing 'timezone' property
-  constructor(
-    {
-      varname,
-      label,
-      tags = [],
-      timezone = 'UTC',
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[],
-      timezone?: string,
-    }
-  ) {
+  constructor({
+    varname,
+    label,
+    tags = [],
+    timezone = 'UTC',
+  }: {
+    varname: string;
+    label?: string | undefined;
+    tags?: string[];
+    timezone?: string;
+  }) {
     super({ type: 'datetime', varname, tags, label });
     this.timezone = timezone;
-  };
+  }
 }
 export function DatetimeMeta({
   varname,
@@ -232,10 +209,10 @@ export function DatetimeMeta({
   tags = [],
   timezone = 'UTC',
 }: {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[],
-  timezone?: string,
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
+  timezone?: string;
 }): IDatetimeMeta {
   return new DatetimeMetaClass({ varname, label, tags, timezone });
 }
@@ -244,28 +221,26 @@ class CurrencyMetaClass extends Meta implements ICurrencyMeta {
   code: CurrencyCode;
   digits: number;
   log: boolean;
-  constructor(
-    {
-      varname,
-      label,
-      tags = [],
-      code,
-      digits,
-      log,
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[],
-      code?: CurrencyCode,
-      digits?: number,
-      log?: boolean,
-    }
-  ) {
-    super({type: 'number', varname, tags, label });
+  constructor({
+    varname,
+    label,
+    tags = [],
+    code,
+    digits,
+    log,
+  }: {
+    varname: string;
+    label?: string | undefined;
+    tags?: string[];
+    code?: CurrencyCode;
+    digits?: number;
+    log?: boolean;
+  }) {
+    super({ type: 'number', varname, tags, label });
     this.code = code === undefined ? 'USD' : code;
     this.digits = digits === undefined ? 2 : digits;
     this.log = log === undefined ? false : log;
-  };
+  }
 }
 export function CurrencyMeta({
   varname,
@@ -273,101 +248,79 @@ export function CurrencyMeta({
   tags = [],
   code,
   digits,
-  log
-} : {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[],
-  code?: CurrencyCode,
-  digits?: number,
-  log?: boolean,
+  log,
+}: {
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
+  code?: CurrencyCode;
+  digits?: number;
+  log?: boolean;
 }): ICurrencyMeta {
   return new CurrencyMetaClass({ varname, label, tags, code, digits, log });
 }
 
 class StringMetaClass extends Meta implements IStringMeta {
-  constructor(
-    {
-      varname,
-      label,
-      tags = []
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[]
-    }
-  ) {
+  constructor({ varname, label, tags = [] }: { varname: string; label?: string | undefined; tags?: string[] }) {
     super({ type: 'string', varname, tags, label });
-  };
+  }
 }
 export function StringMeta({
   varname,
   label,
-  tags = []
-} : {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[]
+  tags = [],
+}: {
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
 }): IStringMeta {
   return new StringMetaClass({ varname, label, tags });
 }
 
 class HrefMetaClass extends Meta implements IHrefMeta {
-  constructor(
-    {
-      varname,
-      label,
-      tags = []
-    } : {
-      varname: string,
-      label?: string | undefined,
-      tags?: string[]
-    }
-  ) {
+  constructor({ varname, label, tags = [] }: { varname: string; label?: string | undefined; tags?: string[] }) {
     super({ type: 'href', varname, tags, label });
-  };
+  }
 }
 export function HrefMeta({
   varname,
   label,
-  tags = []
-} : {
-  varname: string,
-  label?: string | undefined,
-  tags?: string[]
+  tags = [],
+}: {
+  varname: string;
+  label?: string | undefined;
+  tags?: string[];
 }): IHrefMeta {
   return new HrefMetaClass({ varname, label, tags });
 }
 
 class FactorMetaClass extends Meta implements IFactorMeta {
   levels: string[];
-  constructor(
-    { 
-      varname,
-      levels,
-      label,
-      tags = []
-    }: {
-      varname: string,
-      levels: string[],
-      label?: string | undefined,
-      tags?: string[],
-    }
-  ) {
+  constructor({
+    varname,
+    levels,
+    label,
+    tags = [],
+  }: {
+    varname: string;
+    levels: string[];
+    label?: string | undefined;
+    tags?: string[];
+  }) {
     super({ type: 'factor', varname, tags, label });
     this.levels = levels;
-  };
+  }
 }
 export function FactorMeta({
   varname,
   levels,
   label,
-  tags = []
+  tags = [],
 }: {
-  varname: string,
-  levels: string[],
-  label?: string | undefined,
-  tags?: string[],
+  varname: string;
+  levels: string[];
+  label?: string | undefined;
+  tags?: string[];
 }): IFactorMeta {
   return new FactorMetaClass({ varname, levels, label, tags });
 }
@@ -392,11 +345,11 @@ class LayoutStateClass extends State implements ILayoutState {
     page = 1,
     viewtype = 'grid',
     sidebarActive = false,
-  } : {
-    ncol?: number,
-    page?: number,
-    viewtype?: ViewType,
-    sidebarActive?: boolean,
+  }: {
+    ncol?: number;
+    page?: number;
+    viewtype?: ViewType;
+    sidebarActive?: boolean;
   }) {
     super('layout');
     this.ncol = ncol;
@@ -415,14 +368,13 @@ export function LayoutState({
   viewtype = 'grid',
   sidebarActive = false,
 }: {
-  ncol?: number,
-  page?: number,
-  viewtype?: ViewType,
-  sidebarActive?: boolean,
+  ncol?: number;
+  page?: number;
+  viewtype?: ViewType;
+  sidebarActive?: boolean;
 }): ILayoutState {
   return new LayoutStateClass({ ncol, page, viewtype, sidebarActive });
 }
-
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -434,22 +386,16 @@ class LabelsStateClass extends State implements ILabelState {
     // @ts-ignore
     varnames = [],
     tags = [],
-  } : {
-    varname?: string[],
-    tags?: string[],
+  }: {
+    varname?: string[];
+    tags?: string[];
   }) {
     super('labels');
     this.varnames = varnames;
     this.tags = tags;
   }
 }
-export function LabelsState({
-  varnames = [],
-  tags = [],
-}: {
-  varnames?: string[],
-  tags?: string[],
-}): ILabelState {
+export function LabelsState({ varnames = [], tags = [] }: { varnames?: string[]; tags?: string[] }): ILabelState {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return new LabelsStateClass({ varnames, tags });
@@ -459,15 +405,7 @@ class SortStateClass extends State implements ISortState {
   varname: string;
   dir: SortDirType;
   metatype: MetaType;
-  constructor({
-    varname,
-    dir,
-    metatype,
-  } : {
-    varname: string,
-    dir: SortDirType,
-    metatype: MetaType,
-  }) {
+  constructor({ varname, dir, metatype }: { varname: string; dir: SortDirType; metatype: MetaType }) {
     super('sort');
     this.varname = varname;
     this.dir = dir;
@@ -479,15 +417,7 @@ class FilterState extends State implements IFilterState {
   varname: string;
   filtertype: FilterType;
   metatype: MetaType;
-  constructor({
-    varname,
-    filtertype,
-    metatype,
-  } : {
-    varname: string,
-    filtertype: FilterType,
-    metatype: MetaType,
-  }) {
+  constructor({ varname, filtertype, metatype }: { varname: string; filtertype: FilterType; metatype: MetaType }) {
     super('filter');
     this.varname = varname;
     this.filtertype = filtertype;
@@ -503,11 +433,11 @@ class CategoryFilterStateClass extends FilterState implements ICategoryFilterSta
     values = [],
     regexp = null,
     metatype = 'string',
-  } : {
-    varname: string,
-    values: string[],
-    regexp: string | null,
-    metatype: MetaType,
+  }: {
+    varname: string;
+    values: string[];
+    regexp: string | null;
+    metatype: MetaType;
   }) {
     super({ varname, filtertype: 'category', metatype });
     this.values = values;
@@ -518,15 +448,7 @@ class CategoryFilterStateClass extends FilterState implements ICategoryFilterSta
 class NumberRangeFilterStateClass extends FilterState implements INumberRangeFilterState {
   min: number | null;
   max: number | null;
-  constructor({
-    varname,
-    min = null,
-    max = null,
-  } : {
-    varname: string,
-    min: number | null,
-    max: number | null,
-  }) {
+  constructor({ varname, min = null, max = null }: { varname: string; min: number | null; max: number | null }) {
     super({ varname, filtertype: 'numberrange', metatype: 'number' });
     this.min = min;
     this.max = max;
@@ -536,15 +458,7 @@ class NumberRangeFilterStateClass extends FilterState implements INumberRangeFil
 class DateRangeFilterStateClass extends FilterState implements IDateRangeFilterState {
   min: Date | null;
   max: Date | null;
-  constructor({
-    varname,
-    min = null,
-    max = null,
-  } : {
-    varname: string,
-    min: Date | null,
-    max: Date | null,
-  }) {
+  constructor({ varname, min = null, max = null }: { varname: string; min: Date | null; max: Date | null }) {
     super({ varname, filtertype: 'daterange', metatype: 'date' });
     this.min = min;
     this.max = max;
@@ -554,15 +468,7 @@ class DateRangeFilterStateClass extends FilterState implements IDateRangeFilterS
 class DatetimeRangeFilterStateClass extends FilterState implements IDatetimeRangeFilterState {
   min: Date | null;
   max: Date | null;
-  constructor({
-    varname,
-    min = null,
-    max = null,
-  } : {
-    varname: string,
-    min: Date | null,
-    max: Date | null,
-  }) {
+  constructor({ varname, min = null, max = null }: { varname: string; min: Date | null; max: Date | null }) {
     super({ varname, filtertype: 'datetimerange', metatype: 'datetime' });
     this.min = min;
     this.max = max;
@@ -584,7 +490,7 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
       return StringMeta({ varname: key }) as IMeta;
     }
 
-    if (values.every((value) => typeof value === "number")) {
+    if (values.every((value) => typeof value === 'number')) {
       return NumberMeta({ varname: key }) as IMeta;
     }
 
@@ -596,23 +502,22 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
       return DatetimeMeta({ varname: key }) as IMeta;
     }
 
-    if (values.every((value) => (value as string)
-      .startsWith("http") && /\.(png|jpg|jpeg|gif|bmp|svg)$/i
-      .test(value as string))
+    if (
+      values.every((value) => (value as string).startsWith('http') && /\.(png|jpg|jpeg|gif|bmp|svg)$/i.test(value as string))
     ) {
-      return PanelMeta({ varname: key, paneltype: "img", format: "png", aspect: 1.5, sourcetype: "file" }) as IMeta;
+      return PanelMeta({ varname: key, paneltype: 'img', format: 'png', aspect: 1.5, sourcetype: 'file' }) as IMeta;
     }
 
-    if (values.every((value) => (value as string).startsWith("http"))) {
+    if (values.every((value) => (value as string).startsWith('http'))) {
       return HrefMeta({ varname: key }) as IMeta;
     }
 
     // get distinct values from all rows (all data, not just first 1000)
     const levels = Array.from(new Set(data.flatMap((row) => row[key as keyof typeof row]))).sort();
     if (levels.length <= 25) {
-      return FactorMeta({ varname: key, levels: (levels as string[]) }) as IMeta;
+      return FactorMeta({ varname: key, levels: levels as string[] }) as IMeta;
     }
-    
+
     return StringMeta({ varname: key }) as IMeta;
   });
   return types;
@@ -621,13 +526,13 @@ function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
 // function checkKeycols makes sure that the keycols are in the data and that together they uniqueily identify each row - if not, it throws an error
 function checkKeycols(data: Datum[], keycols: string[], colNames: string[]) {
   if (keycols.length === 0) {
-    throw new Error("keycols must be non-empty");
+    throw new Error('keycols must be non-empty');
   }
   if (keycols.some((keycol) => !colNames.includes(keycol))) {
-    throw new Error("keycols must be in the data");
+    throw new Error('keycols must be in the data');
   }
   if (new Set(data.map((row) => keycols.map((keycol) => row[keycol as keyof typeof row]).join())).size !== data.length) {
-    throw new Error("keycols must uniquely identify each row");
+    throw new Error('keycols must uniquely identify each row');
   }
 }
 
@@ -654,20 +559,20 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     infoOnLoad = false,
     // hasCustomInfo = false,
     // order = 0,
-  } : {
-    data: Datum[],
-    name: string,
-    description?: string,
-    tags?: string[],
-    keycols: string[],
-    guessMax: number,
+  }: {
+    data: Datum[];
+    name: string;
+    description?: string;
+    tags?: string[];
+    keycols: string[];
+    guessMax: number;
     // metas?: IMeta[],
     // state?: IDisplayState,
     // views?: IView[],
     // inputs?: IInputs,
-    primarypanel?: string,
+    primarypanel?: string;
     // thumbnailurl?: string,
-    infoOnLoad?: boolean,
+    infoOnLoad?: boolean;
     // hasCustomInfo?: boolean,
     // order?: number,
   }) {
@@ -698,16 +603,18 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
         keysig: keycols.join(), // TODO
         thumbnailurl: '', // TODO
       },
-      metaData: data
+      metaData: data,
     };
 
-    this.displayList = [{
-      name,
-      description: description === undefined ? name : description,
-      tags,
-      keysig: keycols.join(),
-      thumbnailurl: '', // TODO
-    }];
+    this.displayList = [
+      {
+        name,
+        description: description === undefined ? name : description,
+        tags,
+        keysig: keycols.join(),
+        thumbnailurl: '', // TODO
+      },
+    ];
 
     this.config = {
       name: 'Trelliscope App',
@@ -722,15 +629,15 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     viewtype = 'grid',
     sidebarActive = false,
     activeFilterVars,
-  } : {
-    ncol?: number,
-    page?: number,
-    viewtype?: ViewType,
-    sidebarActive?: boolean,
-    activeFilterVars?: string[],
+  }: {
+    ncol?: number;
+    page?: number;
+    viewtype?: ViewType;
+    sidebarActive?: boolean;
+    activeFilterVars?: string[];
   }): ITrelliscopeAppSpec {
     const ls = new LayoutStateClass({ ncol, page, viewtype, sidebarActive });
-    const {name} = this.displayList[0];
+    const { name } = this.displayList[0];
     this.displays[name].displayInfo.state.layout = ls;
     if (activeFilterVars !== undefined) {
       this.displays[name].displayInfo.state.filterView = activeFilterVars;
@@ -738,30 +645,18 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  setDefaultLabels({
-    varnames = [],
-    tags = []
-  } : {
-    varnames?: string[],
-    tags?: string[]
-  }): ITrelliscopeAppSpec {
+  setDefaultLabels({ varnames = [], tags = [] }: { varnames?: string[]; tags?: string[] }): ITrelliscopeAppSpec {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const ls = new LabelsStateClass({ varnames, tags });
-    const {name} = this.displayList[0];
+    const { name } = this.displayList[0];
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.displays[name].displayInfo.state.labels = ls;
     return this;
   }
 
-  setDefaultSort({
-    varnames,
-    dirs,
-  } : {
-    varnames: string[],
-    dirs?: SortDirType[],
-  }): ITrelliscopeAppSpec {
+  setDefaultSort({ varnames, dirs }: { varnames: string[]; dirs?: SortDirType[] }): ITrelliscopeAppSpec {
     let sdirs: SortDirType[];
     if (dirs === undefined) {
       sdirs = varnames.map(() => 'asc');
@@ -771,26 +666,24 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     if (varnames.length !== sdirs.length) {
       throw new Error('varname and dir must be the same length');
     }
-    const {metas} = this.displays[this.displayList[0].name].displayInfo;
+    const { metas } = this.displays[this.displayList[0].name].displayInfo;
     if (varnames.some((vn) => !metas.map((m) => m.varname).includes(vn))) {
       throw new Error(`all varname values in setSort() must be in the data`);
     }
     // create a lookup object of meta types
-    const metatypes: {[key: string]: MetaType} = {};
+    const metatypes: { [key: string]: MetaType } = {};
     metas.forEach((m) => {
       metatypes[m.varname] = m.type;
     });
-    const ss = varnames.map((vn, i) =>
-      new SortStateClass({ varname: vn, dir: sdirs[i], metatype: metatypes[vn] })
-    );
-    const {name} = this.displayList[0];
+    const ss = varnames.map((vn, i) => new SortStateClass({ varname: vn, dir: sdirs[i], metatype: metatypes[vn] }));
+    const { name } = this.displayList[0];
     this.displays[name].displayInfo.state.sort = ss;
     return this;
   }
 
-  setVarLabels(labels: {[index: string]: string}): ITrelliscopeAppSpec {
-    const {metas} = this.displays[this.displayList[0].name].displayInfo;
-    metas.forEach((m: { varname: string, label: string }) => {
+  setVarLabels(labels: { [index: string]: string }): ITrelliscopeAppSpec {
+    const { metas } = this.displays[this.displayList[0].name].displayInfo;
+    metas.forEach((m: { varname: string; label: string }) => {
       if (labels[m.varname] !== undefined) {
         m.label = labels[m.varname];
       }
@@ -799,7 +692,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
   }
 
   setPrimaryPanel(panel: string): ITrelliscopeAppSpec {
-    const {name} = this.displayList[0];
+    const { name } = this.displayList[0];
     this.displays[name].displayInfo.primarypanel = panel;
     return this;
   }
@@ -808,16 +701,16 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     varname,
     min = null,
     max = null,
-  } : {
-    varname: string,
-    min?: number | Date | null,
-    max?: number | Date | null
+  }: {
+    varname: string;
+    min?: number | Date | null;
+    max?: number | Date | null;
   }): ITrelliscopeAppSpec {
     if (min === null && max === null) {
       throw new Error('min and max cannot both be null');
     }
-    const {name} = this.displayList[0];
-    const {metas} = this.displays[name].displayInfo;
+    const { name } = this.displayList[0];
+    const { metas } = this.displays[name].displayInfo;
     const meta = metas.find((m) => m.varname === varname);
     if (meta === undefined) {
       throw new Error(`varname ${varname} not found in metas`);
@@ -830,7 +723,9 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
         throw new Error(`varname ${varname} is not a number`);
       }
       // TODO: make sure the filter is not already set
-      this.displays[name].displayInfo.state.filter.push(new NumberRangeFilterStateClass({ varname, min: min as number, max: max as number }));
+      this.displays[name].displayInfo.state.filter.push(
+        new NumberRangeFilterStateClass({ varname, min: min as number, max: max as number }),
+      );
     } else if (min instanceof Date || max instanceof Date) {
       if (meta.type === 'date') {
         // TODO: make sure the filter is not already set
@@ -891,15 +786,15 @@ export function Trelliscope({
   // thumbnailurl = undefined,
   infoOnLoad = false,
   // order = 0,
-} : {
-  data: Datum[],
-  name: string,
-  description?: string,
-  tags?: string[],
-  keycols: string[],
-  primarypanel?: string,
+}: {
+  data: Datum[];
+  name: string;
+  description?: string;
+  tags?: string[];
+  keycols: string[];
+  primarypanel?: string;
   // thumbnailurl?: string,
-  infoOnLoad?: boolean,
+  infoOnLoad?: boolean;
   // order?: number,
 }): ITrelliscopeAppSpec {
   return new TrelliscopeClass({
@@ -914,7 +809,7 @@ export function Trelliscope({
     guessMax: 1000,
     // order,
   });
-};
+}
 
 export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrelliscopeAppSpec {
   const data2 = JSON.parse(JSON.stringify(data));
@@ -922,7 +817,7 @@ export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrel
   const di = data2.displays[data2.displayList[0].name].displayInfo;
   // make sure there is a primary panel specified
   if (di.primarypanel === undefined || di.primarypanel === '') {
-    const panels = di.metas.filter((d: { type: string; }) => d.type === 'panel');
+    const panels = di.metas.filter((d: { type: string }) => d.type === 'panel');
     if (panels.length === 0) {
       throw new Error('At least one panel must be specified');
     }
@@ -930,16 +825,18 @@ export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrel
   }
   // replace factor metas with numbers
   const md = data2.displays[data2.displayList[0].name].metaData;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    di.metas.filter((d: { type: string; }) => d.type === 'factor').forEach((d: { name: string | number; levels: string | any[]; }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    md.forEach((row: { [x: string]: any; }) => {
-      if (row[d.name]) {
-        // eslint-disable-next-line no-param-reassign
-        row[d.name] = d.levels.indexOf(row[d.name]) + 1;
-      }
-    })
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  di.metas
+    .filter((d: { type: string }) => d.type === 'factor')
+    .forEach((d: { name: string | number; levels: string | any[] }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      md.forEach((row: { [x: string]: any }) => {
+        if (row[d.name]) {
+          // eslint-disable-next-line no-param-reassign
+          row[d.name] = d.levels.indexOf(row[d.name]) + 1;
+        }
+      });
+    });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   md?.forEach((row: any, i: number) => {
     // eslint-disable-next-line no-param-reassign
