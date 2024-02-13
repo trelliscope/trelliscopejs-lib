@@ -14,11 +14,10 @@ interface TrelliscopeAppProps {
 }
 
 // component for embedding a Trelliscope app in a React app
-const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, width, height, options = {}}) => {
+const TrelliscopeApp: React.FC<TrelliscopeAppProps> = ({ data, width, height, options = {} }) => {
   const crossFilterClient = new CrossfilterClient();
   const id = 'trelliscope_app';
-  // TODO: need to get appDims from a ref of parent component
-  const appDims = { width, height }
+  const appDims = { width, height };
 
   return (
     <div style={{ width, height, position: 'relative', overflow: 'hidden' }}>

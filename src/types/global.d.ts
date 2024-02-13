@@ -15,6 +15,16 @@ interface HTMLWidgetData {
   jsHooks: unknown[];
 }
 
+interface TrelliscopeFuncGlobalSpec {
+  data: Datum[];
+  name: string;
+  description?: string;
+  tags?: string[];
+  keycols: string[];
+  primarypanel?: string;
+  infoOnLoad?: boolean;
+}
+
 type PanelData = string | HTMLWidgetData;
 declare global {
   interface Window {
@@ -24,7 +34,8 @@ declare global {
       | ((data: IDisplay) => void)
       | ((data: Datum[]) => void)
       | ((data: IConfig) => void)
-      | ((data: IDisplay[]) => void);
+      | ((data: IDisplay[]) => void)
+      | ((data: TrelliscopeAppGlobalSpec) => void);
     metaData: Datum[] | null;
   }
   interface Document {

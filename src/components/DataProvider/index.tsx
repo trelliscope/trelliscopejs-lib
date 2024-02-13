@@ -87,19 +87,17 @@ const DataProvider: React.FC<DataProviderProps> = ({ children, client }) => {
     setData(client.getData(numPerPage, page));
   }, [numPerPage, page]);
 
-  const dataContextValue = useMemo(() => ({
-    data, allData: client.allData,
-    filteredData: client.filteredData,
-    groupBy: client.groupBy
-  }), [data, client.allData, client.filteredData, client.groupBy]);
-
-  return (
-    <DataContext.Provider
-      value={dataContextValue}
-    >
-      {children}
-    </DataContext.Provider>
+  const dataContextValue = useMemo(
+    () => ({
+      data,
+      allData: client.allData,
+      filteredData: client.filteredData,
+      groupBy: client.groupBy,
+    }),
+    [data, client.allData, client.filteredData, client.groupBy],
   );
+
+  return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
 
 export default DataProvider;
