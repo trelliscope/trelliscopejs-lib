@@ -206,9 +206,11 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
                     <PanelGraphic
                       type={primaryMeta?.paneltype}
                       src={
-                        primaryMeta?.source?.isLocal === false
-                          ? d[curPanel].toString()
-                          : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name || '')).toString()
+                        primaryMeta?.source?.type === 'JS' && primaryMeta?.source?.function
+                          ? primaryMeta.source.function(d)
+                          : primaryMeta?.source?.isLocal === false
+                            ? d[curPanel].toString()
+                            : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name || '')).toString()
                       }
                       alt={primaryMeta?.label}
                       aspectRatio={primaryMeta?.aspect}

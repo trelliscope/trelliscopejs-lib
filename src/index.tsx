@@ -164,6 +164,7 @@ const trelliscopeApp = (
 };
 
 window.trelliscopeApp = trelliscopeApp;
+window.Trelliscope = Trelliscope;
 
 // TODO: should be able to just attach this to window so that it can be loaded in other apps
 // by including the js script and then using the component (vs. having to import and bundle it in the app)
@@ -192,7 +193,7 @@ if (import.meta.env.MODE === 'development') {
           name: 'gapminder',
           keycols: ['country', 'continent'],
         })
-          .setDefaultLayout({ sidebarActive: true, ncol: 3, activeFilterVars: ['continent', 'mean_lexp'] })
+          .setDefaultLayout({ sidebarActive: true, ncol: 4, activeFilterVars: ['continent', 'mean_lexp'] })
           .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link'] })
           .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc'] })
           .setRangeFilter({ varname: 'mean_lexp', max: 60 }) // not working yet
@@ -205,6 +206,9 @@ if (import.meta.env.MODE === 'development') {
             dttm_lexp_max_pct_chg: 'Date-time of max % year-to-year change in life expectancy',
             wiki_link: 'Link to country Wikipedia entry',
             flag: 'Country flag',
+          })
+          .setPanelFunction('flag', (row: Datum) => {
+            return `https://raw.githubusercontent.com/hafen/countryflags/master/png/512/${row.iso_alpha2}.png`;
           });
         trelliscopeApp(example.id, appdat);
       });

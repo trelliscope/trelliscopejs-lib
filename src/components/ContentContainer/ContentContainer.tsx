@@ -289,13 +289,15 @@ const ContentContainer: React.FC = () => {
             <PanelGraphic
               type={meta?.paneltype as PanelType}
               src={
-                meta?.source?.isLocal === false
-                  ? cell.row.original[meta.varname].toString()
-                  : panelSrcGetter(
-                      basePath,
-                      cell.row.original[meta.varname] as string,
-                      snakeCase(displayInfo?.name || ''),
-                    ).toString()
+                meta?.source?.type === 'JS' && meta?.source?.function
+                  ? meta.source.function(cell.row.original)
+                  : meta?.source?.isLocal === false
+                    ? cell.row.original[meta.varname].toString()
+                    : panelSrcGetter(
+                        basePath,
+                        cell.row.original[meta.varname] as string,
+                        snakeCase(displayInfo?.name || ''),
+                      ).toString()
               }
               alt={cell.row.original.name as string}
               aspectRatio={meta?.aspect}

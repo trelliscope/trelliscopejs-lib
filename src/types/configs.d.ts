@@ -396,10 +396,10 @@ type PanelType = 'img' | 'iframe';
 
 type PanelSourceType = 'file' | 'REST' | 'localWebSocket' | 'JS';
 
-type PanelFunction = (args: []) => string;
+type PanelFunction = (args) => string;
 
 interface IJSPanelSource extends IPanelSource {
-  function: PanelFunction;
+  function?: PanelFunction;
 }
 
 interface IPanelSource {
@@ -412,7 +412,7 @@ interface IPanelMeta extends IMeta {
   paneltype: PanelType;
   // format?: PanelFormat;
   aspect: number;
-  source: IPanelSource;
+  source: IJSPanelSource;
 }
 
 // interface IFilePanelSource extends IPanelSource {
@@ -509,4 +509,5 @@ interface ITrelliscopeAppSpec {
   setVarLabels(labels: { [index: string]: string }): ITrelliscopeAppSpec;
   setPrimaryPanel(panel: string): ITrelliscopeAppSpec;
   setRangeFilter(arg0: { varname: string; min?: number | Date | null; max?: number | Date | null }): ITrelliscopeAppSpec;
+  setPanelFunction(arg0: string, arg1: PanelFunction): ITrelliscopeAppSpec;
 }

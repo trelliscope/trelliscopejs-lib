@@ -99,7 +99,8 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": true,
-        "type": "file"
+        "type": "JS",
+        'function': null
       },
       "aspect": 1.5,
       "paneltype": "img",
@@ -114,7 +115,7 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": true,
-        "type": "file"
+        "type": "JS"
       },
       "aspect": 0.5,
       "paneltype": "iframe",
@@ -129,7 +130,7 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": false,
-        "type": "file"
+        "type": "JS"
       },
       "aspect": 1.50146627565982,
       "paneltype": "img",

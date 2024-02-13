@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import { max } from 'd3-array';
 import { metaIndex } from './slices/metaDataAPI';
+import { cloneDeep } from 'lodash';
 
 export class Meta implements IMeta {
   name: string; // why??
@@ -697,6 +698,24 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
+  setPanelFunction(varname: string, func: PanelFunction): ITrelliscopeAppSpec {
+    const { name } = this.displayList[0];
+    const { metas } = this.displays[name].displayInfo;
+    const meta = metas.find((m) => m.varname === varname) as IPanelMeta;
+    if (meta === undefined) {
+      throw new Error(`varname ${varname} not found in metas`);
+    }
+    if (meta.type !== 'panel') {
+      throw new Error(`varname ${varname} is not a panel`);
+    }
+    meta.source = {
+      ...meta.source,
+      type: 'JS',
+      function: func,
+    };
+    return this;
+  }
+
   setRangeFilter({
     varname,
     min = null,
@@ -812,7 +831,7 @@ export function Trelliscope({
 }
 
 export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrelliscopeAppSpec {
-  const data2 = JSON.parse(JSON.stringify(data));
+  const data2 = cloneDeep(data);
   data2.config.id = id;
   const di = data2.displays[data2.displayList[0].name].displayInfo;
   // make sure there is a primary panel specified
@@ -827,13 +846,13 @@ export function prepareTrelliscope(data: ITrelliscopeAppSpec, id: string): ITrel
   const md = data2.displays[data2.displayList[0].name].metaData;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   di.metas
-    .filter((d: { type: string }) => d.type === 'factor')
-    .forEach((d: { name: string | number; levels: string | any[] }) => {
+    .filter((d: IMeta) => d.type === 'factor')
+    .forEach((d: IMeta) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       md.forEach((row: { [x: string]: any }) => {
         if (row[d.name]) {
           // eslint-disable-next-line no-param-reassign
-          row[d.name] = d.levels.indexOf(row[d.name]) + 1;
+          row[d.name] = (d.levels ?? []).indexOf(row[d.name]) + 1;
         }
       });
     });

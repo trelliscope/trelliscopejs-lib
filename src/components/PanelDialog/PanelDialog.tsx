@@ -59,7 +59,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           ({
             ...variable,
             sourcePath: curMetaData?.[variable.varname],
-          } as PanelExtended),
+          }) as PanelExtended,
       ),
     );
   }, [curMetaData, panel?.varname, selectedVariables]);
@@ -179,6 +179,10 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     setSelectedVariables(value);
   };
 
+  const getDataForPanel = (selectedPanel: IPanelMeta, selectedSource: string) => {
+    return data.find((datum) => datum[selectedPanel?.name] === selectedSource);
+  };
+
   return (
     <Dialog
       maxWidth="lg"
@@ -243,9 +247,11 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
               <PanelGraphic
                 type={panel?.paneltype}
                 src={
-                  panel?.source?.isLocal === false
-                    ? curSource
-                    : panelSrcGetter(basePath, curSource, snakeCase(displayInfo?.name || '')).toString()
+                  panel?.source?.type === 'JS' && panel?.source?.function
+                    ? panel.source.function(getDataForPanel(panel, curSource))
+                    : panel?.source?.isLocal === false
+                      ? curSource
+                      : panelSrcGetter(basePath, curSource, snakeCase(displayInfo?.name || '')).toString()
                 }
                 alt={panel?.label}
                 key={`${panel?.source}_${panel?.label}`}
@@ -262,9 +268,11 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
                 <PanelGraphic
                   type={panelSource?.paneltype}
                   src={
-                    panelSource?.source?.isLocal === false
-                      ? panelSource.sourcePath
-                      : panelSrcGetter(basePath, panelSource.sourcePath, snakeCase(displayInfo?.name || '')).toString()
+                    panelSource?.source?.type === 'JS' && panelSource?.source?.function
+                      ? panelSource.source.function(getDataForPanel(panelSource, panelSource?.sourcePath))
+                      : panelSource?.source?.isLocal === false
+                        ? panelSource.sourcePath
+                        : panelSrcGetter(basePath, panelSource.sourcePath, snakeCase(displayInfo?.name || '')).toString()
                   }
                   alt={panelSource?.label}
                   key={`${panelSource?.source}_${panelSource?.label}`}
