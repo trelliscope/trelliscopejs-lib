@@ -207,8 +207,29 @@ if (import.meta.env.MODE === 'development') {
             wiki_link: 'Link to country Wikipedia entry',
             flag: 'Country flag',
           })
-          .setPanelFunction('flag', (row: Datum) => {
-            return `https://raw.githubusercontent.com/hafen/countryflags/master/png/512/${row.iso_alpha2}.png`;
+          .setPanelFunction({
+            varname: 'lexp_time',
+            label: 'Life expectancy over time',
+            aspect: 0.66,
+            func: (row: Datum) => {
+              console.log('row::::', row);
+              return `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${row.country}_${row.continent}.png`;
+            },
+          })
+          .setPanelFunction({
+            varname: 'flag',
+            label: 'Country flag',
+            aspect: 0.66,
+            func: (row: Datum) =>
+              `https://raw.githubusercontent.com/hafen/countryflags/master/png/512/${row.iso_alpha2}.png`,
+          })
+          .setPanelFunction({
+            varname: 'html_panel',
+            label: 'Dummy "plot" to test html panels',
+            aspect: 2,
+            panelType: 'iframeSrcDoc',
+            func: (row: Datum) =>
+              `<div style="width: 100%; height: 100%; border: 4px solid red; text-align: center; box-sizing: border-box;">${row.country}</div>`,
           });
         trelliscopeApp(example.id, appdat);
       });

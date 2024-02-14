@@ -89,12 +89,23 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           title={alt}
         />
       )}
+      {type === 'iframeSrcDoc' && (
+        <iframe
+          key={`${src}_${window.innerWidth}`}
+          width="100%"
+          height="100%"
+          // scrolling="no"
+          srcDoc={src}
+          title={alt}
+        />
+      )}
       {loading && sourceType === 'localWebSocket' ? (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <CircularProgress />
         </Box>
       ) : (
         type === 'img' && (
+          // eslint-disable-next-line react/jsx-no-useless-fragment
           <>
             {imageLoaded ? (
               <img key={`${src}_${name}`} src={src} alt={alt} onLoad={handleImageLoad} onError={handleImageError} />
