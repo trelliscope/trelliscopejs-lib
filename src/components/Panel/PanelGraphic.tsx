@@ -56,6 +56,12 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
     }
   }, [src, alt, sourceType, port, name, sourceClean, socketUrl]);
 
+  useEffect(() => {
+    if (src && sourceType === 'JS') {
+      setLoading(false);
+    }
+  }, [src]);
+
   const [imageLoaded, setImageLoaded] = useState(true);
 
   const handleImageLoad = () => {
@@ -99,7 +105,7 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           title={alt}
         />
       )}
-      {loading && sourceType === 'localWebSocket' ? (
+      {loading && (sourceType === 'localWebSocket' || sourceType === 'JS') ? (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <CircularProgress />
         </Box>

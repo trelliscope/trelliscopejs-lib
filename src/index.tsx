@@ -207,6 +207,9 @@ if (import.meta.env.MODE === 'development') {
             wiki_link: 'Link to country Wikipedia entry',
             flag: 'Country flag',
           })
+          // FIXME
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           .setPanelFunction({
             varname: 'lexp_time',
             label: 'Life expectancy over time',
@@ -216,6 +219,9 @@ if (import.meta.env.MODE === 'development') {
               return `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${row.country}_${row.continent}.png`;
             },
           })
+          // FIXME
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           .setPanelFunction({
             varname: 'flag',
             label: 'Country flag',

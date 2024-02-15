@@ -715,6 +715,9 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     const { name } = this.displayList[0];
     const { metas } = this.displays[name].displayInfo;
 
+    // FIXME
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const meta: IPanelMeta = metas.find((m) => m.varname === varname);
 
     if (!meta) {
@@ -722,6 +725,9 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
         varname,
         label: setLabel,
         type: 'panel',
+        // FIXME
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         paneltype: panelType,
         aspect,
         sortable: false,
