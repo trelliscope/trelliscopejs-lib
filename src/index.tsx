@@ -36,7 +36,7 @@ import type { IDataClient } from './DataClient';
 
 // function for populating a div with a trelliscope app
 const trelliscopeApp = (
-  id: string,
+  element: string | HTMLElement, // either the id of the div or the div itself
   config: string | ITrelliscopeAppSpec,
   options: { logger?: boolean; mockData?: boolean } = {} as AppOptions,
 ) => {
@@ -48,8 +48,27 @@ const trelliscopeApp = (
   } */
   const crossFilterClient = new CrossfilterClient();
 
-  const el = document.getElementById(id) as HTMLElement;
-  const container = document.getElementById(id) as HTMLElement;
+  let el: HTMLElement;
+  let container: HTMLElement;
+  let id: string;
+  let divInput: boolean = false;
+  if (typeof element === 'string') {
+    id = element;
+    el = document.getElementById(element) as HTMLElement;
+    container = document.getElementById(element) as HTMLElement;
+  } else {
+    divInput = true;
+    el = element;
+    addClass(el, 'trelliscope-not-spa');
+    container = element;
+    id = el.id;
+    if (id === '') {
+      id = `trelliscope-app-${Math.random().toString(36).substring(2, 15)}`;
+      el.id = id;
+    }
+  }
+  // const el = document.getElementById(id) as HTMLElement;
+  // const container = document.getElementById(id) as HTMLElement;
   const root = ReactDOMClient.createRoot(container);
 
   addClass(el, 'trelliscope-app');
@@ -76,17 +95,7 @@ const trelliscopeApp = (
     // el.parentNode.nodeName === 'BODY'
     el.style.width = '100%';
     el.style.height = '100%';
-    addClass(document.body, 'trelliscope-fullscreen-body');
-    addClass(document.getElementsByTagName('html')[0], 'trelliscope-fullscreen-html');
-  } else {
-    const bodyEl = document.createElement('div');
-    bodyEl.style.width = '100%';
-    bodyEl.style.height = '100%';
-    bodyEl.style.display = 'none';
-    bodyEl.id = 'trelliscope-fullscreen-div';
-    document.getElementsByTagName('body')[0].appendChild(bodyEl);
-
-    if (noHeight) {
+  } else if (noHeight) {
       const nSiblings =
         [].slice
           .call(el?.parentNode?.childNodes)
@@ -97,15 +106,6 @@ const trelliscopeApp = (
         el.style.width = `${el?.parentNode?.firstElementChild?.clientWidth}px`;
       }
     }
-
-    // give 'el' a new parent so we know where to move div back to after fullscreen
-    const parent = el.parentNode as ParentNode;
-    const wrapper = document.createElement('div');
-    wrapper.id = `${el.id}-parent`;
-    parent.replaceChild(wrapper, el);
-    // set element as child of wrapper
-    wrapper.appendChild(el);
-  }
 
   // need to store original app dims (constant) if it isn't a SPA
   // this will only be used in that case, but store it always anyway
@@ -120,22 +120,6 @@ const trelliscopeApp = (
     appDims.height = el.clientHeight;
   }
 
-  if (!el.classList.contains('trelliscope-not-spa') && (noHeight || noWidth)) {
-    singlePageApp = true;
-  }
-
-  // resize handler only when in fullscreen mode (which is always for SPA)
-  window.addEventListener('resize', () => {
-    if (store.getState().app.fullscreen) {
-      store.dispatch(
-        windowResize({
-          height: window.innerHeight,
-          width: window.innerWidth,
-        }),
-      );
-    }
-  });
-
   root.render(
     <Provider store={store}>
       <App
@@ -148,6 +132,10 @@ const trelliscopeApp = (
       />
     </Provider>,
   );
+
+  if (divInput) {
+    return el;
+  }
 
   return {
     resize: (width: number, height: number) => {
@@ -166,10 +154,6 @@ const trelliscopeApp = (
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
 
-// TODO: should be able to just attach this to window so that it can be loaded in other apps
-// by including the js script and then using the component (vs. having to import and bundle it in the app)
-// window.TrelliscopeApp = TrelliscopeApp;
-
 // if in development mode, populate div with an example trelliscope app
 if (import.meta.env.MODE === 'development') {
   const example = window.__DEV_EXAMPLE__ as unknown as { id: string; name: string; datatype: string };
@@ -185,6 +169,7 @@ if (import.meta.env.MODE === 'development') {
   document.body.appendChild(div);
 
   if (example.name === 'gapminder_js') {
+    const snakeCase = (str: string) => str.replace(/([^a-zA-Z0-9_])/g, '_');
     fetch('_examples/gapminder_js/gapminder.json')
       .then((response) => response.json())
       .then((data) => {
@@ -213,11 +198,9 @@ if (import.meta.env.MODE === 'development') {
           .setPanelFunction({
             varname: 'lexp_time',
             label: 'Life expectancy over time',
-            aspect: 0.66,
-            func: (row: Datum) => {
-              console.log('row::::', row);
-              return `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${row.country}_${row.continent}.png`;
-            },
+            aspect: 1 / 0.66,
+            func: (row: Datum) =>
+              `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${snakeCase(row.country)}_${row.continent}.png`,
           })
           // FIXME
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -225,18 +208,30 @@ if (import.meta.env.MODE === 'development') {
           .setPanelFunction({
             varname: 'flag',
             label: 'Country flag',
-            aspect: 0.66,
+            aspect: 1 / 0.66,
             func: (row: Datum) =>
               `https://raw.githubusercontent.com/hafen/countryflags/master/png/512/${row.iso_alpha2}.png`,
           })
+          // FIXME
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           .setPanelFunction({
             varname: 'html_panel',
             label: 'Dummy "plot" to test html panels',
-            aspect: 2,
+            aspect: 1 / 2,
             panelType: 'iframeSrcDoc',
             func: (row: Datum) =>
               `<div style="width: 100%; height: 100%; border: 4px solid red; text-align: center; box-sizing: border-box;">${row.country}</div>`,
           });
+
+        // // optionally, you can create a new div pass the div to trelliscopeApp instead of needing a div to already exist
+        // const el = document.createElement('div');
+        // el.id = 'test';
+        // el.style.width = '1400px';
+        // el.style.height = '900px';
+        // const newEl = trelliscopeApp(el, appdat);
+        // document.getElementById(example.id)?.appendChild(newEl as HTMLElement);
+
         trelliscopeApp(example.id, appdat);
       });
   } else {
