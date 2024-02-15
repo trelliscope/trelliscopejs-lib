@@ -41,30 +41,24 @@ const PanelGraphicWrapper: React.FC<PanelGraphicProps> = ({
   }, [meta, data]);
 
   return (
-    <>
-      {panelSrc ? (
-        <PanelGraphic
-          type={meta?.paneltype}
-          src={
-            meta?.source?.type === 'JS' && meta?.source?.function
-              ? panelSrc
-              : meta?.source?.isLocal === false
-                ? fileName.toString()
-                : panelSrcGetter(basePath, fileName as string, snakeCase(displayName)).toString()
-          }
-          alt={alt}
-          aspectRatio={meta?.aspect}
-          imageWidth={imageWidth}
-          key={panelKey}
-          port={meta?.source?.port}
-          sourceType={meta?.source?.type}
-          name={meta?.varname}
-          sourceClean={fileName}
-        />
-      ) : (
-        'loading...'
-      )}
-    </>
+    <PanelGraphic
+      type={meta?.paneltype}
+      src={
+        meta?.source?.type === 'JS' && meta?.source?.function
+          ? panelSrc
+          : meta?.source?.isLocal === false
+            ? fileName.toString()
+            : panelSrcGetter(basePath, fileName as string, snakeCase(displayName)).toString()
+      }
+      alt={alt}
+      aspectRatio={meta?.aspect}
+      imageWidth={imageWidth}
+      key={panelKey}
+      port={meta?.source?.port}
+      sourceType={meta?.source?.type}
+      name={meta?.varname}
+      sourceClean={fileName}
+    />
   );
 };
 
