@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useState, useEffect } from 'react';
 import PanelGraphic from './PanelGraphic';
-import { panelSrcGetter, snakeCase } from '../../utils';
+import { getLabelFromFactor, panelSrcGetter, snakeCase } from '../../utils';
+import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 interface PanelGraphicProps {
   data: Datum;
@@ -24,10 +25,19 @@ const PanelGraphicWrapper: React.FC<PanelGraphicProps> = ({
   panelKey,
   fileName,
 }) => {
+  const { data: displayInfo } = useDisplayInfo();
   const [panelSrc, setPanelSrc] = useState('');
-
   const sourceFunc = async (func: PanelFunction) => {
-    const res = await func(data);
+    const dataWithFactorLabels = Object.keys(data).reduce((acc, key) => {
+      const foundFactor = displayInfo?.metas?.find((curMeta) => curMeta.varname === key && curMeta.type === 'factor');
+      if (foundFactor) {
+        const factorLabel = getLabelFromFactor(data[key] as number, foundFactor.levels as string[]);
+        return { ...acc, [key]: factorLabel };
+      }
+      return { ...acc, [key]: data[key] };
+    }, {});
+
+    const res = await func(dataWithFactorLabels);
     setPanelSrc(res);
     return res;
   };
