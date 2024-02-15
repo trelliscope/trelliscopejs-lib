@@ -698,21 +698,51 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  setPanelFunction(varname: string, func: PanelFunction): ITrelliscopeAppSpec {
+  setPanelFunction({
+    varname,
+    label,
+    panelType = 'img',
+    aspect = 1,
+    func,
+  }: {
+    varname: string;
+    label: string;
+    panelType: PanelType;
+    aspect: number;
+    func: PanelFunction;
+  }): ITrelliscopeAppSpec {
+    const setLabel = label || varname;
     const { name } = this.displayList[0];
     const { metas } = this.displays[name].displayInfo;
-    const meta = metas.find((m) => m.varname === varname) as IPanelMeta;
-    if (meta === undefined) {
-      throw new Error(`varname ${varname} not found in metas`);
+
+    const meta: IPanelMeta = metas.find((m) => m.varname === varname);
+
+    if (!meta) {
+      metas.push({
+        varname,
+        label: setLabel,
+        type: 'panel',
+        paneltype: panelType,
+        aspect,
+        sortable: false,
+        filterable: false,
+        source: {
+          type: 'JS',
+          function: func,
+        },
+      });
+    } else {
+      meta.label = setLabel;
+      meta.paneltype = panelType;
+      meta.aspect = aspect;
+      meta.source = {
+        type: 'JS',
+        function: func,
+        isLocal: false,
+        port: 0,
+      };
     }
-    if (meta.type !== 'panel') {
-      throw new Error(`varname ${varname} is not a panel`);
-    }
-    meta.source = {
-      ...meta.source,
-      type: 'JS',
-      function: func,
-    };
+
     return this;
   }
 

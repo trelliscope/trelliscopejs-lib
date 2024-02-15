@@ -392,7 +392,7 @@ interface IView {
 
 type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' | 'pjp' | 'png' | 'svg' | 'webp';
 
-type PanelType = 'img' | 'iframe';
+type PanelType = 'img' | 'iframe' | 'iframeSrcDoc';
 
 type PanelSourceType = 'file' | 'REST' | 'localWebSocket' | 'JS';
 
@@ -509,5 +509,11 @@ interface ITrelliscopeAppSpec {
   setVarLabels(labels: { [index: string]: string }): ITrelliscopeAppSpec;
   setPrimaryPanel(panel: string): ITrelliscopeAppSpec;
   setRangeFilter(arg0: { varname: string; min?: number | Date | null; max?: number | Date | null }): ITrelliscopeAppSpec;
-  setPanelFunction(arg0: string, arg1: PanelFunction): ITrelliscopeAppSpec;
+  setPanelFunction(arg0: {
+    varname: string;
+    label: string;
+    panelType: string;
+    aspect: number;
+    func: PanelFunction;
+  }): ITrelliscopeAppSpec;
 }
