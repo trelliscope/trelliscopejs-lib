@@ -41,3 +41,13 @@ export const getFactorFromLabel = (values: string[], levels: string[]) =>
 
 export const panelSrcGetter = (basePath: string, fileName: string, displayName: string) =>
   `${basePath}/displays/${displayName}/${fileName}`;
+
+export const replaceDatumFactorsWithLabels = (data: Datum, displayMetas: IMeta[]) =>
+  Object.keys(data).reduce((acc, key) => {
+    const foundFactor = displayMetas?.find((curMeta) => curMeta.varname === key && curMeta.type === 'factor');
+    if (foundFactor) {
+      const factorLabel = getLabelFromFactor(data[key] as number, foundFactor.levels as string[]);
+      return { ...acc, [key]: factorLabel };
+    }
+    return { ...acc, [key]: data[key] };
+  }, {});
