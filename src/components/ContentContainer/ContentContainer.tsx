@@ -14,9 +14,9 @@ import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import ErrorWrapper from '../ErrorWrapper';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { useDisplayInfo, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
-import PanelGraphic from '../Panel/PanelGraphic';
+import PanelGraphicWrapper from '../Panel/PanelGraphicWrapper';
 import { selectBasePath } from '../../selectors/app';
-import { getLabelFromFactor, panelSrcGetter, snakeCase } from '../../utils';
+import { getLabelFromFactor } from '../../utils';
 import stylesTable from '../DataTable/DataTable.module.scss';
 import FormattedNumber, { format } from '../FormattedNumber/FormattedNumber';
 import { setPanelDialog } from '../../slices/appSlice';
@@ -286,28 +286,15 @@ const ContentContainer: React.FC = () => {
             </IconButton>
           </div>
           {displayInfoSuccess && (
-            <PanelGraphic
-              type={meta?.paneltype as PanelType}
-              src={
-                meta?.source?.type === 'JS' && meta?.source?.function
-                  ? meta.source.function(cell.row.original)
-                  : meta?.source?.isLocal === false
-                    ? cell.row.original[meta.varname].toString()
-                    : panelSrcGetter(
-                        basePath,
-                        cell.row.original[meta.varname] as string,
-                        snakeCase(displayInfo?.name || ''),
-                      ).toString()
-              }
+            <PanelGraphicWrapper
+              data={cell.row.original}
+              meta={meta}
               alt={cell.row.original.name as string}
-              aspectRatio={meta?.aspect}
               imageWidth={columnSize[meta?.varname] || 110}
-              inTable
-              key={`${cell.row.index}_${displayInfo?.name}`}
-              port={meta?.source?.port}
-              sourceType={meta?.source?.type}
-              name={meta?.varname}
-              sourceClean={cell.row.original[meta.varname]}
+              basePath={basePath}
+              displayName={displayInfo?.name}
+              panelKey={`${cell.row.index}_${displayInfo?.name}`}
+              fileName={cell.row.original[meta.varname]}
             />
           )}
         </div>
