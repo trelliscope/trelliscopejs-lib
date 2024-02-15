@@ -8,8 +8,7 @@ import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import { metaIndex, useMetaData } from '../../slices/metaDataAPI';
 import { DataContext } from '../DataProvider';
-import Panel, { PanelGraphic } from '../Panel';
-import { panelSrcGetter, snakeCase } from '../../utils';
+import Panel, { PanelGraphicWrapper } from '../Panel';
 import { selectBasePath, selectPanelDialog } from '../../selectors/app';
 import getCustomProperties from '../../getCustomProperties';
 import DataTable from '../DataTable';
@@ -203,24 +202,15 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
                     selectedValue={curPanel}
                     index={i}
                   >
-                    <PanelGraphic
-                      type={primaryMeta?.paneltype}
-                      src={
-                        primaryMeta?.source?.type === 'JS' && primaryMeta?.source?.function
-                          ? primaryMeta.source.function(d)
-                          : primaryMeta?.source?.isLocal === false
-                            ? d[curPanel].toString()
-                            : panelSrcGetter(basePath, d[curPanel] as string, snakeCase(displayInfo?.name || '')).toString()
-                      }
+                    <PanelGraphicWrapper
+                      data={d}
+                      meta={primaryMeta}
                       alt={primaryMeta?.label}
-                      aspectRatio={primaryMeta?.aspect}
                       imageWidth={calcs.width}
-                      // primaryMeta={primaryMeta}
-                      key={`${d[metaIndex]}_${primaryMeta?.label}`}
-                      port={primaryMeta?.source?.port}
-                      sourceType={primaryMeta?.source?.type}
-                      name={primaryMeta?.varname}
-                      sourceClean={d[curPanel] as string}
+                      basePath={basePath}
+                      displayName={displayInfo?.name}
+                      panelKey={`${d[metaIndex]}_${primaryMeta?.label}`}
+                      fileName={d[curPanel] as string}
                     />
                   </Panel>
                 ))}

@@ -7,14 +7,13 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import PanelZoomLabels from '../PanelZoomLabels/PanelZoomLabels';
 import styles from './PanelDialog.module.scss';
-import { PanelGraphic } from '../Panel';
 import { panelDialogIsOpenSelector, selectBasePath } from '../../selectors/app';
-import { panelSrcGetter, snakeCase } from '../../utils';
 import { selectLayout, selectNumPerPage, selectPage, setLayout } from '../../slices/layoutSlice';
 import { setPanelDialog } from '../../slices/appSlice';
 import { META_TYPE_PANEL } from '../../constants';
 import VariableSelector from '../VariableSelector';
 import { singlePageAppSelector } from '../../selectors';
+import PanelGraphicWrapper from '../Panel/PanelGraphicWrapper';
 
 interface PanelDialogProps {
   data: Datum[];
@@ -244,44 +243,28 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
               sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}
               data-testid="panel-dialog-image"
             >
-              <PanelGraphic
-                type={panel?.paneltype}
-                src={
-                  panel?.source?.type === 'JS' && panel?.source?.function
-                    ? panel.source.function(getDataForPanel(panel, curSource))
-                    : panel?.source?.isLocal === false
-                      ? curSource
-                      : panelSrcGetter(basePath, curSource, snakeCase(displayInfo?.name || '')).toString()
-                }
+              <PanelGraphicWrapper
+                data={getDataForPanel(panel, curSource) as Datum}
+                meta={panel}
                 alt={panel?.label}
-                key={`${panel?.source}_${panel?.label}`}
                 imageWidth={-1}
-                aspectRatio={panel?.aspect}
-                port={panel?.source?.port}
-                sourceType={panel?.source?.type}
-                name={panel?.varname}
-                sourceClean={curSource}
+                basePath={basePath}
+                displayName={displayInfo?.name as string}
+                panelKey={`${panel?.source}_${panel?.label}`}
+                fileName={curSource}
               />
             </Box>
             {panelSources.map((panelSource: PanelExtended) => (
               <Box sx={{ flex: '0 0 50%' }} key={panelSource?.varname}>
-                <PanelGraphic
-                  type={panelSource?.paneltype}
-                  src={
-                    panelSource?.source?.type === 'JS' && panelSource?.source?.function
-                      ? panelSource.source.function(getDataForPanel(panelSource, panelSource?.sourcePath))
-                      : panelSource?.source?.isLocal === false
-                        ? panelSource.sourcePath
-                        : panelSrcGetter(basePath, panelSource.sourcePath, snakeCase(displayInfo?.name || '')).toString()
-                  }
+                <PanelGraphicWrapper
+                  data={getDataForPanel(panelSource, panelSource?.sourcePath) as Datum}
+                  meta={panelSource}
                   alt={panelSource?.label}
-                  key={`${panelSource?.source}_${panelSource?.label}`}
                   imageWidth={-1}
-                  aspectRatio={panelSource?.aspect}
-                  port={panelSource?.source?.port}
-                  sourceType={panelSource?.source?.type}
-                  name={panelSource?.varname}
-                  sourceClean={panelSource.sourcePath}
+                  basePath={basePath}
+                  displayName={displayInfo?.name as string}
+                  panelKey={`${panelSource?.source}_${panelSource?.label}`}
+                  fileName={curSource}
                 />
               </Box>
             ))}
