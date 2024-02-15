@@ -200,7 +200,7 @@ if (import.meta.env.MODE === 'development') {
             label: 'Life expectancy over time',
             aspect: 1 / 0.66,
             func: (row: Datum) =>
-              `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${snakeCase(row.country)}_${row.continent}.png`,
+              `https://apps.trelliscope.org/gapminder/displays/Life_expectancy/panels/lexp_time_unfacet/${snakeCase(row.country as string)}_${row.continent}.png`,
           })
           // FIXME
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
