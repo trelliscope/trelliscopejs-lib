@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.7.3",
+  "version": "0.7.5",
   "type": "module",
   "files": [
     "dist"
@@ -41,6 +41,7 @@
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
     "dompurify": "^3.0.8",
+    "lodash.clonedeep": "^4.5.0",
     "lodash.difference": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "material-react-table": "^2.11.1",
@@ -92,6 +93,7 @@
     "@types/d3-array": "^3.2.1",
     "@types/d3-scale": "^4.0.8",
     "@types/dompurify": "^3.0.5",
+    "@types/lodash.clonedeep": "^4.5.9",
     "@types/lodash.difference": "^4.5.9",
     "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^20.11.16",

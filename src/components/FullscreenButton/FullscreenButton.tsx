@@ -29,12 +29,14 @@ const FullscreenButton: React.FC = () => {
         document.body.webkitRequestFullscreen();
         if (mainEl) {
           addClass(mainEl, 'trelliscope-spa');
+          addClass(mainEl, 'trelliscope-fullscreen');
         }
         dispatch(setFullscreen(true));
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
         if (mainEl) {
           removeClass(mainEl, 'trelliscope-spa');
+          removeClass(mainEl, 'trelliscope-fullscreen');
         }
         dispatch(setFullscreen(false));
         dispatch(windowResize(originalDims));
@@ -45,12 +47,14 @@ const FullscreenButton: React.FC = () => {
       document.body.requestFullscreen();
       if (mainEl) {
         addClass(mainEl, 'trelliscope-spa');
+        addClass(mainEl, 'trelliscope-fullscreen');
       }
       dispatch(setFullscreen(true));
     } else if (document.exitFullscreen) {
       document.exitFullscreen();
       if (mainEl) {
         removeClass(mainEl, 'trelliscope-spa');
+        removeClass(mainEl, 'trelliscope-fullscreen');
       }
       dispatch(setFullscreen(false));
       dispatch(windowResize(originalDims));
@@ -61,6 +65,7 @@ const FullscreenButton: React.FC = () => {
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       if (mainEl) {
         removeClass(mainEl, 'trelliscope-spa');
+        removeClass(mainEl, 'trelliscope-fullscreen');
       }
       dispatch(setFullscreen(false));
       dispatch(windowResize(originalDims));

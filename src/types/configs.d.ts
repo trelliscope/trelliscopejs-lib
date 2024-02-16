@@ -516,4 +516,5 @@ interface ITrelliscopeAppSpec {
     aspect: number;
     func: PanelFunction;
   }): ITrelliscopeAppSpec;
+  view({ width: number, height: number }): HTMLElement;
 }
