@@ -28,6 +28,7 @@ const PanelGraphicWrapper: React.FC<PanelGraphicProps> = ({
   const { data: displayInfo } = useDisplayInfo();
   const [panelSrc, setPanelSrc] = useState('');
   const sourceFunc = async (func: PanelFunction) => {
+    setPanelSrc('');
     const dataWithFactorLabels = replaceDatumFactorsWithLabels(data, displayInfo?.metas as IMeta[]);
     const res = await func(dataWithFactorLabels);
     setPanelSrc(res);

@@ -225,15 +225,17 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
           </div>
         </div>
       )}
-      <PanelDialog
-        data={data}
-        filteredData={filteredData}
-        open={panelDialog.open}
-        panel={panelDialog.panel as IPanelMeta}
-        source={panelDialog.source as string}
-        index={panelDialog.index as number}
-        onClose={() => dispatch(setPanelDialog({ open: false }))}
-      />
+      {panelDialog.open && (
+        <PanelDialog
+          data={data}
+          filteredData={filteredData}
+          open={panelDialog.open}
+          panel={panelDialog.panel as IPanelMeta}
+          source={panelDialog.source as string}
+          index={panelDialog.index as number}
+          onClose={() => dispatch(setPanelDialog({ open: false }))}
+        />
+      )}
     </ErrorWrapper>
   );
 };
