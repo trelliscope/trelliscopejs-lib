@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { max } from 'd3-array';
+// import { max } from 'd3-array';
+import cloneDeep from 'lodash.clonedeep';
+import trelliscopeApp from './trelliscopeAppFunc';
 import { metaIndex } from './slices/metaDataAPI';
-import { cloneDeep } from 'lodash';
 
 export class Meta implements IMeta {
   name: string; // why??
@@ -795,6 +796,21 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
       throw new Error('min and max must be the same type');
     }
     return this;
+  }
+
+  view({
+    width = 1200,
+    height = 800,
+  } : {
+    width: number;
+    height: number;
+  }): HTMLElement {
+    const div = document.createElement("div") as HTMLElement;
+    div.id = `trelliscope-app-${Math.random().toString(36).substring(2, 15)}`;
+    div.style.width = `${width}px`;
+    div.style.height = `${height}px`;
+    const newEl = trelliscopeApp(div, this, {});
+    return newEl as HTMLElement;
   }
 
   // setStringFilter(varname: string, values: string[], regexp: string): ITrelliscopeAppSpec {

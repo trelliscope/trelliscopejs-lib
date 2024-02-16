@@ -57,6 +57,7 @@ const Sidebar: React.FC = () => {
         className={styles.sidebar}
         variant="persistent"
         anchor="left"
+        PaperProps={{ sx: { position: 'relative !important' }}}
       >
         <Filters setShowFilterHelpText={setShowFilterHelpText} />
         {mutableFilters.length === 0 && showFilterHelpText && (
