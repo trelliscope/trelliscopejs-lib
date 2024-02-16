@@ -12,7 +12,6 @@ import { selectLayout, selectNumPerPage, selectPage, setLayout } from '../../sli
 import { setPanelDialog } from '../../slices/appSlice';
 import { META_TYPE_PANEL } from '../../constants';
 import VariableSelector from '../VariableSelector';
-import { singlePageAppSelector } from '../../selectors';
 import PanelGraphicWrapper from '../Panel/PanelGraphicWrapper';
 
 interface PanelDialogProps {
@@ -49,7 +48,6 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const [anchorSelectorEl, setAnchorSelectorEl] = useState<null | HTMLElement>(null);
   const [panelSources, setPanelSources] = useState<PanelExtended[]>([]);
   const panelDialogOpen = useSelector(panelDialogIsOpenSelector);
-  const singlePageApp = useSelector(singlePageAppSelector);
 
   useEffect(() => {
     setPanelSources(
@@ -148,7 +146,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     return null;
   };
 
-  useHotkeys('right', pageRight as () => void, { enabled: singlePageApp && panelDialogOpen }, [
+  useHotkeys('right', pageRight as () => void, { enabled: panelDialogOpen }, [
     n,
     totPanels,
     npp,
@@ -156,9 +154,10 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     curIndex,
     totPages,
     panel,
-    curSource,
+    curIndex,
   ]);
-  useHotkeys('left', pageLeft as () => void, { enabled: singlePageApp && panelDialogOpen }, [
+
+  useHotkeys('left', pageLeft as () => void, { enabled: panelDialogOpen }, [
     n,
     totPanels,
     npp,
@@ -166,7 +165,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
     curIndex,
     totPages,
     panel,
-    curSource,
+    curIndex,
   ]);
 
   const handleVariableSelectorClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -177,10 +176,8 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
   const handleSelectorChange = (event: React.SyntheticEvent<Element, Event>, value: { varname: string }[]) => {
     setSelectedVariables(value);
   };
-
-  const getDataForPanel = (selectedPanel: IPanelMeta, selectedSource: string) => {
-    return data.find((datum) => datum[selectedPanel?.name] === selectedSource);
-  };
+  const getDataForPanel = (selectedPanel: IPanelMeta, selectedSource: string) =>
+    data.find((datum) => datum[selectedPanel?.name] === selectedSource);
 
   return (
     <Dialog
@@ -237,40 +234,37 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
             <FontAwesomeIcon icon={faChevronLeft} />
           </IconButton>
         </Box>
-        {curSource && (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-            <Box
-              sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}
-              data-testid="panel-dialog-image"
-            >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+          <Box
+            sx={{ minWidth: panelSources.length === 0 ? '800px' : '0px', flex: '1 0 50%' }}
+            data-testid="panel-dialog-image"
+          >
+            <PanelGraphicWrapper
+              data={panel.source.type === 'JS' ? (data[curIndex] as Datum) : (getDataForPanel(panel, curSource) as Datum)}
+              meta={panel}
+              alt={panel?.label}
+              imageWidth={-1}
+              basePath={basePath}
+              displayName={displayInfo?.name as string}
+              panelKey={`${curIndex}_${panel?.label}`}
+              fileName={curSource}
+            />
+          </Box>
+          {panelSources.map((panelSource: PanelExtended) => (
+            <Box sx={{ flex: '0 0 50%' }} key={panelSource?.varname}>
               <PanelGraphicWrapper
-                data={getDataForPanel(panel, curSource) as Datum}
-                meta={panel}
-                alt={panel?.label}
+                data={getDataForPanel(panelSource, panelSource?.sourcePath) as Datum}
+                meta={panelSource}
+                alt={panelSource?.label}
                 imageWidth={-1}
                 basePath={basePath}
                 displayName={displayInfo?.name as string}
-                panelKey={`${panel?.source}_${panel?.label}`}
+                panelKey={`${panelSource?.source}_${panelSource?.label}`}
                 fileName={curSource}
               />
             </Box>
-            {panelSources.map((panelSource: PanelExtended) => (
-              <Box sx={{ flex: '0 0 50%' }} key={panelSource?.varname}>
-                <PanelGraphicWrapper
-                  data={getDataForPanel(panelSource, panelSource?.sourcePath) as Datum}
-                  meta={panelSource}
-                  alt={panelSource?.label}
-                  imageWidth={-1}
-                  basePath={basePath}
-                  displayName={displayInfo?.name as string}
-                  panelKey={`${panelSource?.source}_${panelSource?.label}`}
-                  fileName={curSource}
-                />
-              </Box>
-            ))}
-          </Box>
-        )}
-
+          ))}
+        </Box>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
           <IconButton
             data-testid="paginate-right"

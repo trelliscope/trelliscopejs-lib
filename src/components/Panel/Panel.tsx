@@ -44,9 +44,7 @@ const Panel: React.FC<PanelProps> = ({
     displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL && meta.varname !== selectedValue) || [];
 
   const handleClick = () => {
-    if (data[primaryMeta.varname]) {
-      onClick(primaryMeta, data[primaryMeta.varname] as string, index);
-    }
+    onClick(primaryMeta, data[primaryMeta.varname] as string, index);
   };
 
   const handleRemoveLabel = (label: string) => {

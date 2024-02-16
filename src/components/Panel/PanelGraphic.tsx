@@ -57,8 +57,13 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
   }, [src, alt, sourceType, port, name, sourceClean, socketUrl]);
 
   useEffect(() => {
-    if (src && sourceType === 'JS') {
-      setLoading(false);
+    if (sourceType === 'JS') {
+      if (!loading && !src) {
+        setLoading(true);
+      }
+      if (src) {
+        setLoading(false);
+      }
     }
   }, [src]);
 
