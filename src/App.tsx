@@ -81,8 +81,8 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
         dark: configObj?.theme?.dark || '#2e60b1',
       }, // '#4285f4', // lightBlue500,
       // background: {
-      //   default: '#151C24', // Set default background to black
-      //   paper: '#151C24', // Optional: Set background of paper components to black
+      //   default: '#151C24',
+      //   paper: '#151C24',
       // },
       secondary: { light: lightBlue[200], main: lightBlue[700] },
     },

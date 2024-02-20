@@ -4,23 +4,14 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Tab,
-  Tabs,
-} from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
 import Credits from '../Credits';
 import styles from './HelpInfo.module.scss';
 import { useConfig } from '../../slices/configAPI';
+import { BACK } from '../../constants';
 
 const HelpInfo: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
@@ -41,12 +32,23 @@ const HelpInfo: React.FC = () => {
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
   return (
-    <div className={styles.helpInfoIcon}>
-      <IconButton data-testid="help-button" id="help-control" color="inherit" size="small" onClick={handleToggle}>
+    <Box
+      sx={{
+        marginTop: configObj && configObj.config1 !== BACK.OUTATIME ? '-9px' : '-2px',
+        opacity: configObj && configObj.config1 !== BACK.OUTATIME ? 0.7 : 1,
+      }}
+      className={styles.helpInfoIcon}
+    >
+      <IconButton
+        data-testid="help-button"
+        id="help-control"
+        color="inherit"
+        size={configObj && configObj.config1 !== BACK.OUTATIME ? 'small' : 'medium'}
+        onClick={handleToggle}
+      >
         <FontAwesomeIcon
           color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
           icon={faCircleQuestion}
-          size="sm"
         />
       </IconButton>
       <Dialog
@@ -88,7 +90,7 @@ const HelpInfo: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 };
 

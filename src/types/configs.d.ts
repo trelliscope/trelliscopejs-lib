@@ -466,6 +466,8 @@ interface IConfig {
   datatype: AppDataType;
   id: string;
   theme?: ITheme;
+  config1?: string;
+  exportEnabled?: boolean;
 }
 
 interface ITheme {

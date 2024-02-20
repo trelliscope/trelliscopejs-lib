@@ -12,7 +12,7 @@ import styles from './Header.module.scss';
 import HelpInfo from '../HelpInfo';
 import Share from '../Share';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
-import { META_TYPE_PANEL } from '../../constants';
+import { BACK, META_TYPE_PANEL } from '../../constants';
 import { useConfig } from '../../slices/configAPI';
 import PanelPicker from '../PanelPicker';
 import ErrorWrapper from '../ErrorWrapper';
@@ -61,14 +61,14 @@ const Header: React.FC = () => {
             background: configObj?.theme?.header
               ? configObj.theme?.header?.background
               : configObj?.theme?.primary
-              ? theme.palette.primary.main
-              : '#fefefe',
+                ? theme.palette.primary.main
+                : '#fefefe',
           },
           color: configObj?.theme?.header
             ? configObj?.theme?.header?.text
             : configObj?.theme?.isLightTextOnDark
-            ? configObj?.theme?.lightText
-            : configObj?.theme?.darkText,
+              ? configObj?.theme?.lightText
+              : configObj?.theme?.darkText,
         }}
         elevation={0}
       >
@@ -89,8 +89,8 @@ const Header: React.FC = () => {
                     color: configObj?.theme?.header
                       ? configObj?.theme?.header?.text
                       : configObj?.theme?.isLightTextOnDark
-                      ? configObj?.theme?.lightText
-                      : configObj?.theme?.darkText || '#757575',
+                        ? configObj?.theme?.lightText
+                        : configObj?.theme?.darkText || '#757575',
                   }}
                 >
                   {selectedDisplay?.name}
@@ -107,8 +107,8 @@ const Header: React.FC = () => {
                       color: configObj?.theme?.header
                         ? configObj?.theme?.header?.text
                         : configObj?.theme?.isLightTextOnDark
-                        ? configObj?.theme?.lightText
-                        : configObj?.theme?.darkText || '#757575',
+                          ? configObj?.theme?.lightText
+                          : configObj?.theme?.darkText || '#757575',
                     }}
                   >
                     {selectedDisplay?.description}
@@ -137,7 +137,7 @@ const Header: React.FC = () => {
               <div id="share-control">
                 <Share />
               </div>
-              {hasInputs && hasLocalStorage && (
+              {hasInputs && hasLocalStorage && configObj && configObj.exportEnabled !== false && (
                 <div id="export-control">
                   <ExportInputDialog
                     displayInfo={displayInfo as IDisplay}
@@ -146,24 +146,41 @@ const Header: React.FC = () => {
                   />
                 </div>
               )}
-              <Box
-                sx={{
-                  background: theme.palette.primary.main,
-                  color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
-                }}
-                data-testid="app-title"
-                className={styles.headerTrelliscope}
-              >
-                Trelliscope
-                <HelpInfo />
+              {configObj && configObj.config1 !== BACK.OUTATIME ? (
                 <Box
-                  sx={{ background: theme.palette.primary.light }}
-                  id="fullscreen-control"
-                  className={styles.headerTrelliscopeFullscreen}
+                  sx={{
+                    paddingLeft: '22px',
+                    marginLeft: '15px',
+                    background: theme.palette.primary.main,
+                    color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                  }}
+                  data-testid="app-title"
+                  className={styles.headerTrelliscope}
                 >
-                  <FullscreenButton />
+                  Trelliscope
+                  <HelpInfo />
+                  <Box
+                    sx={{ background: theme.palette.primary.light }}
+                    id="fullscreen-control"
+                    className={styles.headerTrelliscopeFullscreen}
+                  >
+                    <FullscreenButton />
+                  </Box>
                 </Box>
-              </Box>
+              ) : (
+                <Box className={styles.headerTrelliscope}>
+                  <Box sx={{ color: '#757575' }}>
+                    <HelpInfo />
+                  </Box>
+                  <Box
+                    sx={{ background: theme.palette.primary.light }}
+                    id="fullscreen-control"
+                    className={styles.headerTrelliscopeFullscreen}
+                  >
+                    <FullscreenButton />
+                  </Box>
+                </Box>
+              )}
             </div>
           </div>
         </Toolbar>
