@@ -2,6 +2,4 @@ __loadAppConfig__5ae49320({
   "name": "Trelliscope App",
   "datatype": "jsonp",
   "id": "5ae49320",
-  "config1": '88mph',
-  "exportEnabled": false,
 })

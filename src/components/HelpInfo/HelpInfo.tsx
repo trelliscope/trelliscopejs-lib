@@ -31,6 +31,9 @@ const HelpInfo: React.FC = () => {
   useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
+  console.log('config:::', configObj);
+  console.log('configObj.config1:::', configObj && configObj.config1 !== BACK.OUTATIME);
+
   return (
     <Box
       sx={{
@@ -60,25 +63,27 @@ const HelpInfo: React.FC = () => {
         maxWidth="md"
         data-testid="help-modal"
       >
-        <DialogTitle
-          id="dialog-viewer-title"
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-        >
-          <Box>
-            <div>{`Trelliscope v${window.__VERSION__}`}</div>
-            <div className={styles.helpInfoDialogWebsite}>
-              Learn more at{' '}
-              <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
-                trelliscope.org
-              </a>
-            </div>
-          </Box>
-        </DialogTitle>
+        {configObj && configObj.config1 !== BACK.OUTATIME && (
+          <DialogTitle
+            id="dialog-viewer-title"
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <Box>
+              <div>{`Trelliscope v${window.__VERSION__}`}</div>
+              <div className={styles.helpInfoDialogWebsite}>
+                Learn more at{' '}
+                <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
+                  trelliscope.org
+                </a>
+              </div>
+            </Box>
+          </DialogTitle>
+        )}
         <DialogContent>
           <Tabs value={tabNumber} onChange={handleChange}>
             <Tab data-testid="how-to-tab" label="How to Use" />
             <Tab data-testid="shortcuts-tab" label="Shortcuts" />
-            <Tab data-testid="credits-tab" label="Credits" />
+            {configObj && configObj.config1 !== BACK.OUTATIME && <Tab data-testid="credits-tab" label="Credits" />}
           </Tabs>
           {tabNumber === 0 && <HowToUse />}
           {tabNumber === 1 && <Shortcuts />}
