@@ -193,7 +193,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                 onClick={handleVariableFilterSelectorClick}
                 endIcon={<FontAwesomeIcon icon={variableFilterSelectorIsOpen ? faChevronUp : faChevronDown} />}
               >
-                Show / Hide
+                Add/Remove
               </Button>
               <VariableSelector
                 isOpen={variableFilterSelectorIsOpen}
