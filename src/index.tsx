@@ -1,6 +1,6 @@
-import TrelliscopeApp from "./TrelliscopeApp";
-import trelliscopeApp from "./trelliscopeAppFunc";
-import { Trelliscope } from "./jsApi";
+import TrelliscopeApp from './TrelliscopeApp';
+import trelliscopeApp from './trelliscopeAppFunc';
+import { Trelliscope } from './jsApi';
 
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
@@ -29,6 +29,13 @@ if (import.meta.env.MODE === 'development') {
           name: 'gapminder',
           keycols: ['country', 'continent'],
         })
+          .setDefaultConfig({
+            name: 'Trelliscope App',
+            datatype: 'jsonp',
+            id: '5ae49320',
+            config1: '88mph',
+            exportEnabled: false,
+          })
           .setDefaultLayout({ sidebarActive: true, ncol: 4, activeFilterVars: ['continent', 'mean_lexp'] })
           .setDefaultLabels({ varnames: ['country', 'continent', 'mean_lexp', 'wiki_link'] })
           .setDefaultSort({ varnames: ['continent', 'mean_lexp'], dirs: ['asc', 'desc'] })

@@ -519,4 +519,5 @@ interface ITrelliscopeAppSpec {
     func: PanelFunction;
   }): ITrelliscopeAppSpec;
   view({ width: number, height: number }): HTMLElement;
+  setDefaultConfig(arg0: IConfig): ITrelliscopeAppSpec;
 }
