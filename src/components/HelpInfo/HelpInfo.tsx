@@ -31,9 +31,6 @@ const HelpInfo: React.FC = () => {
   useHotkeys('h', handleToggle, { enabled: fullscreen }, [open]);
   useHotkeys('esc', () => setOpen(false), { enabled: open });
 
-  console.log('config:::', configObj);
-  console.log('configObj.config1:::', configObj && configObj.config1 !== BACK.OUTATIME);
-
   return (
     <Box
       sx={{

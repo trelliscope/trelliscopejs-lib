@@ -625,6 +625,21 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     };
   }
 
+  setConfig({
+    config1,
+    exportEnabled,
+    theme,
+  }: {
+    config1?: string;
+    exportEnabled?: boolean;
+    theme?: ITheme;
+  }): ITrelliscopeAppSpec {
+    this.config.config1 = config1;
+    this.config.exportEnabled = exportEnabled;
+    this.config.theme = theme;
+    return this;
+  }
+
   setDefaultLayout({
     ncol = 3,
     page = 1,
@@ -798,14 +813,8 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
-  view({
-    width = 1200,
-    height = 800,
-  } : {
-    width: number;
-    height: number;
-  }): HTMLElement {
-    const div = document.createElement("div") as HTMLElement;
+  view({ width = 1200, height = 800 }: { width: number; height: number }): HTMLElement {
+    const div = document.createElement('div') as HTMLElement;
     div.id = `trelliscope-app-${Math.random().toString(36).substring(2, 15)}`;
     div.style.width = `${width}px`;
     div.style.height = `${height}px`;

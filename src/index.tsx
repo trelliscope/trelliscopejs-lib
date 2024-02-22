@@ -1,6 +1,6 @@
-import TrelliscopeApp from "./TrelliscopeApp";
-import trelliscopeApp from "./trelliscopeAppFunc";
-import { Trelliscope } from "./jsApi";
+import TrelliscopeApp from './TrelliscopeApp';
+import trelliscopeApp from './trelliscopeAppFunc';
+import { Trelliscope } from './jsApi';
 
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
