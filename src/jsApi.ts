@@ -625,26 +625,18 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     };
   }
 
-  setDefaultConfig({
-    name,
-    datatype,
-    id,
+  setConfig({
     config1,
     exportEnabled,
+    theme,
   }: {
-    name: string;
-    datatype: AppDataType;
-    id: string;
     config1?: string;
     exportEnabled?: boolean;
+    theme?: ITheme;
   }): ITrelliscopeAppSpec {
-    this.config = {
-      name,
-      datatype,
-      id,
-      config1,
-      exportEnabled,
-    };
+    this.config.config1 = config1;
+    this.config.exportEnabled = exportEnabled;
+    this.config.theme = theme;
     return this;
   }
 

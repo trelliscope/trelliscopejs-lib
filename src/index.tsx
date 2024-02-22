@@ -29,10 +29,7 @@ if (import.meta.env.MODE === 'development') {
           name: 'gapminder',
           keycols: ['country', 'continent'],
         })
-          .setDefaultConfig({
-            name: 'Trelliscope App',
-            datatype: 'jsonp',
-            id: '5ae49320',
+          .setConfig({
             config1: '88mph',
             exportEnabled: false,
           })
