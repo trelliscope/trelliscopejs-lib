@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "type": "module",
   "files": [
     "dist"
@@ -47,6 +47,7 @@
     "material-react-table": "^2.11.1",
     "msw": "^2.1.7",
     "notistack": "^3.0.1",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
     "react-dom": "^18.2.0",

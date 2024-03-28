@@ -3,6 +3,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { unparse } from 'papaparse';
 import { DataContext } from '../DataProvider';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './DownloadCsv.module.scss';
@@ -50,8 +51,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
         if (data[panelKey] === undefined) {
           data[panelKey] = {};
         }
-        // strip out all /n and add a space for items in the text input that have a new line
-        data[panelKey][parts[3]] = localStorage.getItem(key)?.replace(/[\n[\],]/g, ' ') || null;
+        data[panelKey][parts[3]] = localStorage.getItem(key) || null;
 
         if (cols.indexOf(parts[3]) < 0) {
           cols.push(parts[3]);
@@ -110,7 +110,8 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
   cols.unshift('__PANEL_KEY__', ...includedMetaVars);
 
   const downloadCsv = () => {
-    const csvString = [cols.join(','), ...rows.map((d) => d.join(','))].join('\n');
+    const csvString = unparse([cols, ...rows]);
+    // const csvString = [cols.join(','), ...rows.map((d) => d.join(','))].join('\n');
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const downloadLink = document.createElement('a');
     downloadLink.download = `${displayInfo.name}_export_inputs_${new Date().toISOString().split('T')[0]}.csv`;
