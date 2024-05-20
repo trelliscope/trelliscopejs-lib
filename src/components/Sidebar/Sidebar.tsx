@@ -43,8 +43,17 @@ const Sidebar: React.FC = () => {
           width: drawerWidth,
           flexShrink: 0,
           height: 'inherit',
-          '& .MuiDrawer-paper': {
+        }}
+        data-testid="filter-drawer"
+        open={layout.sidebarActive}
+        className={styles.sidebar}
+        variant="persistent"
+        anchor="left"
+        PaperProps={{
+          sx: {
+            position: 'relative !important',
             paddingTop: '54px',
+            overflow: 'hidden',
             width: drawerWidth,
             boxSizing: 'border-box',
             overflowX: 'hidden',
@@ -52,12 +61,6 @@ const Sidebar: React.FC = () => {
             zIndex: 'initial',
           },
         }}
-        data-testid="filter-drawer"
-        open={layout.sidebarActive}
-        className={styles.sidebar}
-        variant="persistent"
-        anchor="left"
-        PaperProps={{ sx: { position: 'relative !important' }}}
       >
         <Filters setShowFilterHelpText={setShowFilterHelpText} />
         {mutableFilters.length === 0 && showFilterHelpText && (
