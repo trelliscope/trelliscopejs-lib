@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, Popover, Tooltip, Autocomplete, TextField, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useStoredInputValue } from '../../inputUtils';
 import styles from './PanelInputs.module.scss';
 
@@ -13,6 +14,7 @@ interface PanelInputMultiSelectProps {
 }
 
 const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, options, panelKey, iconFontSize }) => {
+  const theme = useTheme();
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = useState(false);
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
@@ -36,7 +38,13 @@ const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, opt
         <Tooltip title={JSON.parse(getStoredValue() || '[]').join(', ')} placement="left" arrow>
           <div className={styles.panelInputTextValue}>{JSON.parse(getStoredValue() || '[]').join(', ')}</div>
         </Tooltip>
-        <button type="button" tabIndex={-1} className={styles.panelInputTextEditButton} onClick={() => setInputOpen(true)} style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}>
+        <button
+          type="button"
+          tabIndex={-1}
+          className={styles.panelInputTextEditButton}
+          onClick={() => setInputOpen(true)}
+          style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}
+        >
           <span ref={anchorRef}>
             <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
@@ -45,6 +53,7 @@ const PanelInputMultiSelect: React.FC<PanelInputMultiSelectProps> = ({ name, opt
       <Popover
         open={inputOpen}
         anchorEl={anchorRef.current}
+        slotProps={{ paper: { sx: { backgroundColor: theme.palette.secondary.main } } }}
         classes={{ paper: styles.panelInputTextPopover }}
         sx={{ left: '20px' }}
         disableEscapeKeyDown

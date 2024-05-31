@@ -9,13 +9,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
 import { fullscreenSelector } from '../../selectors';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { DataContext } from '../DataProvider';
 import styles from './DisplayInfo.module.scss';
 import { selectBasePath } from '../../selectors/app';
 import { snakeCase } from '../../utils';
-import { useConfig } from '../../slices/configAPI';
 
 const DisplayInfo: React.FC = () => {
   const { allData } = useContext(DataContext);
@@ -24,7 +24,7 @@ const DisplayInfo: React.FC = () => {
   const basePath = useSelector(selectBasePath);
   const [hasInputs, setHasInputs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { data: configObj } = useConfig();
+  const theme = useTheme();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -71,19 +71,13 @@ const DisplayInfo: React.FC = () => {
 
   return (
     <div>
-      <IconButton data-testid="display-info-button" onClick={handleToggle}>
+      <IconButton
+        sx={{ color: theme.palette.primary.contrastText }}
+        data-testid="display-info-button"
+        onClick={handleToggle}
+      >
         <div className={styles.displayInfoIcon}>
-          <FontAwesomeIcon
-            color={
-              configObj?.theme?.header
-                ? configObj?.theme?.header?.text
-                : configObj?.theme?.isLightTextOnDark
-                ? configObj?.theme?.lightText
-                : configObj?.theme?.darkText
-            }
-            icon={faCircleInfo}
-            size="sm"
-          />
+          <FontAwesomeIcon icon={faCircleInfo} size="sm" />
         </div>
       </IconButton>
       <Dialog
@@ -96,6 +90,7 @@ const DisplayInfo: React.FC = () => {
         maxWidth="lg"
         fullWidth
         data-testid="display-info-modal"
+        PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
       >
         <DialogTitle id="dialog-info-title">
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -125,11 +120,11 @@ const DisplayInfo: React.FC = () => {
               />
             ) : (
               <div>
-                <div style={{ background: '#ededed', padding: 5 }}>
+                <Box sx={{ background: theme.palette.secondary.light, padding: '5px' }}>
                   <strong>{displayInfo?.name}</strong>
                   <br />
                   {displayInfo?.description && <em>{displayInfo?.description}</em>}
-                </div>
+                </Box>
                 <p>
                   {`This visualization contains ${allData?.length} "panels" that you can interactively view through various controls. Each panel has a set of variables or metrics, called "metas", that you can use to sort and filter the panels that you want to view.`}
                 </p>

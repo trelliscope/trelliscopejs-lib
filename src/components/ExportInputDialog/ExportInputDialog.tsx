@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton, Step, StepLabel, Stepper, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserInfo from '../UserInfo';
@@ -7,7 +8,6 @@ import DownloadCsv from '../DownloadCsv';
 import ComposeEmail from '../ComposeEmail';
 import ConfirmationModal from '../ConfirmationModal';
 import styles from './ExportInputDialog.module.scss';
-import { useConfig } from '../../slices/configAPI';
 import ErrorWrapper from '../ErrorWrapper';
 
 interface ExportInputDialogProps {
@@ -33,7 +33,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
   const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState(true);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const { data: configObj } = useConfig();
+  const theme = useTheme();
 
   const hasEmail = !!displayInfo?.inputs?.feedbackInterface?.feedbackEmail || false;
 
@@ -86,17 +86,13 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
     <ErrorWrapper>
       <div>
         <Tooltip title="Export Inputs">
-          <IconButton data-testid="export-button" aria-label="close" onClick={handleOpen}>
-            <FontAwesomeIcon
-              color={
-                configObj?.theme?.header
-                  ? configObj.theme?.header?.text
-                  : configObj?.theme?.isLightTextOnDark
-                  ? configObj?.theme?.lightText
-                  : configObj?.theme?.darkText
-              }
-              icon={faFileArrowDown}
-            />
+          <IconButton
+            sx={{ color: theme.palette.primary.contrastText }}
+            data-testid="export-button"
+            aria-label="close"
+            onClick={handleOpen}
+          >
+            <FontAwesomeIcon icon={faFileArrowDown} />
           </IconButton>
         </Tooltip>
         <Dialog
@@ -107,6 +103,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
               setActiveStep(0);
             }, 500);
           }}
+          PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           data-testid="export-input-dialog"
@@ -115,7 +112,11 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
           <DialogContent dividers>
             {hasEmail ? (
               <>
-                <Stepper activeStep={activeStep} alternativeLabel>
+                <Stepper
+                  sx={{ '.MuiStepIcon-text': { fill: theme.palette.text.secondary } }}
+                  activeStep={activeStep}
+                  alternativeLabel
+                >
                   {steps.map((label) => (
                     <Step key={label}>
                       <StepLabel>{label}</StepLabel>
@@ -190,6 +191,7 @@ const ExportInputDialog: React.FC<ExportInputDialogProps> = ({ displayInfo, hasI
                 </Button>
                 {activeStep <= 1 && (
                   <Button
+                    sx={{ color: theme.palette.text.secondary }}
                     disabled={
                       (activeStep === 0 && fullName === '') ||
                       (activeStep === 0 && !validEmail) ||

@@ -3,7 +3,6 @@
 
   &BarWrapper {
     position: relative;
-    color: var(--gray-1300);
     font-size: 14px;
     margin-bottom: 1px;
     border: none;
@@ -12,18 +11,8 @@
     width: 100%;
 
     &:hover {
-      background: var(--white-200);
-
       .catHistogramBarValue {
         opacity: 1;
-      }
-    }
-
-    &__active {
-      color: var(--black);
-
-      .catHistogramBar {
-        background: var(--orange-200);
       }
     }
   }
@@ -32,14 +21,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: var(--gray-300);
     display: flex;
     align-items: center;
-
-    &:hover {
-      background: var(--orange-100);
-      color: var(--black);
-    }
 
     &Label {
       padding-left: var(--margin-3);
@@ -50,7 +33,6 @@
 
     &Value {
       position: absolute;
-      color: var(--gray-1400);
       right: var(--margin-3);
       top: 5px;
       line-height: 15px;
@@ -61,7 +43,6 @@
 
     &Indicator {
       position: absolute;
-      background: #448aff;
       width: 3px;
       height: 24px;
       top: 0;

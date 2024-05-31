@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
 import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { cogDataSelector, singlePageAppSelector } from '../../selectors';
 import { selectDialogOpen, panelDialogIsOpenSelector } from '../../selectors/app';
 import { DataContext } from '../DataProvider';
@@ -24,6 +25,7 @@ const Pagination: React.FC = () => {
   const singlePageApp = useSelector(singlePageAppSelector);
   const cogData = useSelector(cogDataSelector);
   const totPages = Math.ceil(totPanels / npp);
+  const theme = useTheme();
 
   const handleChange = (page: number) => {
     dispatch(
@@ -91,7 +93,7 @@ const Pagination: React.FC = () => {
     <ErrorWrapper>
       <div className={styles.paginationOuter}>
         <div className={styles.paginationLabel}>
-          <span data-testid="pagination-numbers">
+          <span style={{ color: theme.palette.text.primary }} data-testid="pagination-numbers">
             {pRange}
             <span>
               {` of `} <FormattedNumber value={totPanels} maximumFractionDigits={0} />
@@ -108,6 +110,7 @@ const Pagination: React.FC = () => {
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
+                sx={{ color: theme.palette.primary.contrastText }}
                 data-testid="pagination-first"
                 size="small"
                 disabled={n <= 1}
@@ -117,11 +120,14 @@ const Pagination: React.FC = () => {
                 <FontAwesomeIcon icon={faBackwardStep} size="sm" />
               </IconButton>
             </div>
-            <div className={styles.paginationButtonText}>First</div>
+            <div style={{ color: theme.palette.text.primary }} className={styles.paginationButtonText}>
+              First
+            </div>
           </div>
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
+                sx={{ color: theme.palette.primary.contrastText }}
                 data-testid="pagination-previous"
                 size="small"
                 disabled={n <= 1}
@@ -131,11 +137,14 @@ const Pagination: React.FC = () => {
                 <FontAwesomeIcon icon={faChevronLeft} size="sm" />
               </IconButton>
             </div>
-            <div className={styles.paginationButtonText}>Prev</div>
+            <div style={{ color: theme.palette.text.primary }} className={styles.paginationButtonText}>
+              Prev
+            </div>
           </div>
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
+                sx={{ color: theme.palette.primary.contrastText }}
                 data-testid="pagination-next"
                 size="small"
                 disabled={n >= totPages}
@@ -145,11 +154,14 @@ const Pagination: React.FC = () => {
                 <FontAwesomeIcon icon={faChevronRight} size="sm" />
               </IconButton>
             </div>
-            <div className={styles.paginationButtonText}>Next</div>
+            <div style={{ color: theme.palette.text.primary }} className={styles.paginationButtonText}>
+              Next
+            </div>
           </div>
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
+                sx={{ color: theme.palette.primary.contrastText }}
                 data-testid="pagination-last"
                 size="small"
                 disabled={n >= totPages}
@@ -159,7 +171,9 @@ const Pagination: React.FC = () => {
                 <FontAwesomeIcon icon={faForwardStep} size="sm" />
               </IconButton>
             </div>
-            <div className={styles.paginationButtonText}>Last</div>
+            <div style={{ color: theme.palette.text.primary }} className={styles.paginationButtonText}>
+              Last
+            </div>
           </div>
         </div>
       </div>

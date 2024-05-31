@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
 import styles from './AddViewModal.module.scss';
 import { useGetAllLocalViews, useStoredInputValue } from '../../inputUtils';
 import { selectFilterState } from '../../slices/filterSlice';
@@ -46,6 +47,7 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
   const sorts = useSelector(selectSort);
   const labels = useSelector(selectLabels);
   const layout = useSelector(selectLayout);
+  const theme = useTheme();
 
   const { setStoredValue } = useStoredInputValue('trelliscope_views', viewForm?.name);
 
@@ -107,11 +109,39 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
 
   return (
     <div className={styles.addViewModal}>
-      <Dialog data-testid="views-modal" fullWidth open={isOpen} onClose={handleViewToggle}>
+      <Dialog
+        PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
+        data-testid="views-modal"
+        fullWidth
+        open={isOpen}
+        onClose={handleViewToggle}
+      >
         <DialogTitle>Add a new view</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter a description and save this view locally.</DialogContentText>
+          <DialogContentText sx={{ color: theme.palette.primary.contrastText }}>
+            Enter a description and save this view locally.
+          </DialogContentText>
           <TextField
+            sx={{
+              // change outline color to use theme and text color contrast text
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.primary.contrastText,
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.text.primary,
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main,
+                },
+              },
+              '& .MuiInputLabel-outlined': {
+                color: theme.palette.primary.contrastText,
+                '&.Mui-focused': {
+                  color: theme.palette.primary.main,
+                },
+              },
+            }}
             id="name"
             data-testid="view-name-input"
             autoFocus
@@ -126,6 +156,26 @@ const AddViewModal: React.FC<AddViewModalProps> = ({ isOpen, handleViewToggle, s
             onChange={handleFormChange}
           />
           <TextField
+            sx={{
+              // change outline color to use theme and text color contrast text
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.primary.contrastText,
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.text.primary,
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main,
+                },
+              },
+              '& .MuiInputLabel-outlined': {
+                color: theme.palette.primary.contrastText,
+                '&.Mui-focused': {
+                  color: theme.palette.primary.main,
+                },
+              },
+            }}
             id="description"
             data-testid="view-description-input"
             autoFocus

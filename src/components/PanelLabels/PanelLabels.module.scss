@@ -1,6 +1,5 @@
 .panelLabels {
   width: 100%;
-  background: var(--white-200);
   list-style-type: none;
   margin: 0;
   border-collapse: collapse;
@@ -8,19 +7,9 @@
 
   &Row {
     width: 100%;
-    // font-size: var(--text-xs);
-    border-bottom: var(--border-2);
-
-    &__input {
-      background: var(--white-100);
-    }
 
     &:last-of-type {
       border-bottom: none;
-    }
-
-    &Missing {
-      color: var(--gray-600);
     }
   }
 
@@ -33,7 +22,6 @@
     &:first-of-type {
       white-space: nowrap;
       font-weight: bold;
-      border-right: var(--border-2);
       cursor: default;
       width: 30%;
     }
@@ -53,10 +41,6 @@
         }
       }
     }
-
-    &Link {
-      color: #ff5252;
-    }
   }
 
   &Close {
@@ -64,14 +48,7 @@
     border: none;
     background: none;
     padding: 0;
-    // padding-right: 4px;
     margin: 0;
     opacity: 0.5;
-
-    // svg {
-    //   margin-top: 3px;
-    //   width: 12px;
-    //   height: 12px;
-    // }
   }
 }

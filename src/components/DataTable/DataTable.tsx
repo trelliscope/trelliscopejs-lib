@@ -2,7 +2,6 @@
 import React from 'react';
 
 import { MaterialReactTable } from 'material-react-table';
-
 import styles from './DataTable.module.scss';
 
 interface DataTableProps {

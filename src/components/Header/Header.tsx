@@ -57,18 +57,7 @@ const Header: React.FC = () => {
         position="absolute"
         sx={{
           zIndex: (mtheme) => mtheme.zIndex.drawer + 1,
-          '&.MuiAppBar-root': {
-            background: configObj?.theme?.header
-              ? configObj.theme?.header?.background
-              : configObj?.theme?.primary
-                ? theme.palette.primary.main
-                : '#fefefe',
-          },
-          color: configObj?.theme?.header
-            ? configObj?.theme?.header?.text
-            : configObj?.theme?.isLightTextOnDark
-              ? configObj?.theme?.lightText
-              : configObj?.theme?.darkText,
+          background: theme.palette.secondary.main,
         }}
         elevation={0}
       >
@@ -86,11 +75,6 @@ const Header: React.FC = () => {
                   sx={{
                     flexGrow: 1,
                     lineHeight: '1.25',
-                    color: configObj?.theme?.header
-                      ? configObj?.theme?.header?.text
-                      : configObj?.theme?.isLightTextOnDark
-                        ? configObj?.theme?.lightText
-                        : configObj?.theme?.darkText || '#757575',
                   }}
                 >
                   {selectedDisplay?.name}
@@ -104,11 +88,6 @@ const Header: React.FC = () => {
                       flexGrow: 1,
                       lineHeight: '1.25',
                       fontSize: '13px',
-                      color: configObj?.theme?.header
-                        ? configObj?.theme?.header?.text
-                        : configObj?.theme?.isLightTextOnDark
-                          ? configObj?.theme?.lightText
-                          : configObj?.theme?.darkText || '#757575',
                     }}
                   >
                     {selectedDisplay?.description}
@@ -123,7 +102,6 @@ const Header: React.FC = () => {
                   anchorEl={anchorEl}
                   setAnchorEl={setAnchorEl}
                   selectedValue={layout?.panel}
-                  useCustomStyles
                   isInHeader
                   panelMetas={panelMetas}
                 />
@@ -152,7 +130,7 @@ const Header: React.FC = () => {
                     paddingLeft: '22px',
                     marginLeft: '15px',
                     background: theme.palette.primary.main,
-                    color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText,
+                    color: theme.palette.secondary.main,
                   }}
                   data-testid="app-title"
                   className={styles.headerTrelliscope}
@@ -169,14 +147,8 @@ const Header: React.FC = () => {
                 </Box>
               ) : (
                 <Box className={styles.headerTrelliscope}>
-                  <Box sx={{ color: '#757575' }}>
-                    <HelpInfo />
-                  </Box>
-                  <Box
-                    sx={{ background: theme.palette.primary.light }}
-                    id="fullscreen-control"
-                    className={styles.headerTrelliscopeFullscreen}
-                  >
+                  <HelpInfo />
+                  <Box id="fullscreen-control" className={styles.headerTrelliscopeFullscreen}>
                     <FullscreenButton />
                   </Box>
                 </Box>

@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { Box, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate, faClipboard, faPaperPlane, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
 interface ErrorSnackInterface {
@@ -14,6 +15,7 @@ interface ErrorSnackInterface {
 
 const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, errorInfo, handleClose }) => {
   const [copyText, setCopyText] = useState('Copy');
+  const theme = useTheme();
 
   const { data: displayInfo } = useDisplayInfo();
 
@@ -44,7 +46,7 @@ const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, errorInfo, handle
 
   return (
     <Snackbar
-      ContentProps={{ sx: { backgroundColor: 'white' } }}
+      ContentProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center',
@@ -54,7 +56,7 @@ const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, errorInfo, handle
       message={
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="subtitle1">The following error has occurred:</Typography>
-          <Typography sx={{ color: 'red', ml: 1 }}>{errorMsg}</Typography>
+          <Typography sx={{ color: theme.palette.error.main, ml: 1 }}>{errorMsg}</Typography>
         </Box>
       }
       action={[

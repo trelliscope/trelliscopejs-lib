@@ -3,6 +3,7 @@ import { faChevronUp, faChevronDown, faRotateLeft, faXmark } from '@fortawesome/
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, ButtonGroup, ClickAwayListener, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
 import { useDisplayMetas, useMetaGroups } from '../../slices/displayInfoAPI';
 import VariableSelector from '../VariableSelector';
 import styles from './Filters.module.scss';
@@ -15,7 +16,6 @@ import {
 } from '../../slices/filterSlice';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import ConfirmationModal from '../ConfirmationModal';
-import { useConfig } from '../../slices/configAPI';
 import ErrorWrapper from '../ErrorWrapper';
 
 interface FiltersProps {
@@ -23,6 +23,7 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const activeStateFilters = useSelector(selectFilterState);
   const activeFilters = useSelector(selectActiveFilterView);
@@ -33,7 +34,6 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
   const [confirmationRemoveModalOpen, setConfirmationRemoveModalOpen] = useState(false);
   const [confirmationClearModalOpen, setConfirmationClearModalOpen] = useState(false);
   const [valueToRemove, setValueToRemove] = useState<{ varname: string }[]>([]);
-  const { data: configObj } = useConfig();
 
   const metaGroups = useMetaGroups(unfilterableMetas);
 
@@ -168,7 +168,10 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
           handleConfirm={handleClear}
           dialogText="This will clear all of the active filters."
         />
-        <ButtonGroup sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '131px' } }} variant="outlined">
+        <ButtonGroup
+          sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '131px', borderColor: theme.palette.primary.main } }}
+          variant="outlined"
+        >
           <ClickAwayListener
             mouseEvent="onMouseUp"
             onClickAway={() => {
@@ -179,7 +182,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
             <Box>
               <Button
                 sx={{
-                  color: '#000000',
+                  color: theme.palette.primary.contrastText,
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,
@@ -218,13 +221,10 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
             <span>
               <Button
                 sx={{
-                  color: '#000000',
+                  color: theme.palette.primary.contrastText,
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,
-                  '&:hover': {
-                    borderRightColor: `${configObj?.theme?.primary ? configObj?.theme?.primary : 'initial'} !important`,
-                  },
                 }}
                 data-testid="filter-remove-all-button"
                 disabled={activeFilters.length === 0}
@@ -239,7 +239,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
             <span>
               <Button
                 sx={{
-                  color: '#000000',
+                  color: theme.palette.primary.contrastText,
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,

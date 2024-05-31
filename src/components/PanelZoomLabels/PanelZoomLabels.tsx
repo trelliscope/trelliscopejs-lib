@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
 import {
   INPUT_TYPE_CHECKBOX,
   INPUT_TYPE_MULTISELECT,
@@ -33,6 +34,7 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
   const stateLabels = useSelector(selectLabels);
+  const theme = useTheme();
 
   const selectedLabels = labels.filter((label) => stateLabels.includes(label.varname));
   const nonSelectedLabels = labels.filter((label) => !stateLabels.includes(label.varname));
@@ -51,16 +53,25 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
     <table data-testid="panel-dialog-table" className={styles.panelZoomLabels} width="100%">
       <tbody>
         {inputs.length !== 0 && (
-          <tr>
+          <tr
+            style={{
+              borderBottom: `1px solid ${theme.palette.secondary.dark}`,
+              borderTop: `1px solid ${theme.palette.secondary.dark}`,
+            }}
+          >
             <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
               Inputs
             </th>
           </tr>
         )}
         {inputs?.map((input) => (
-          <tr key={input.name} className={styles.panelZoomLabelsRow}>
+          <tr
+            style={{ color: theme.palette.text.primary, borderBottom: `1px solid ${theme.palette.secondary.dark}` }}
+            key={input.name}
+            className={styles.panelZoomLabelsRow}
+          >
             <PanelZoomLabelsCell value={input.name} label={input.label} />
-            <td className={styles.panelZoomLabelsCell}>
+            <td style={{ backgroundColor: theme.palette.secondary.light }} className={styles.panelZoomLabelsCell}>
               <div className={styles.panelZoomLabelsCellContent}>
                 {(input.type === INPUT_TYPE_TEXT || input.type === INPUT_TYPE_NUMBER) && (
                   <PanelInputText
@@ -104,7 +115,12 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
           </tr>
         ))}
         {selectedLabels.length !== 0 && (
-          <tr>
+          <tr
+            style={{
+              borderBottom: `1px solid ${theme.palette.secondary.dark}`,
+              borderTop: `1px solid ${theme.palette.secondary.dark}`,
+            }}
+          >
             <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
               Selected Labels
             </th>
@@ -112,6 +128,7 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
         )}
         {selectedLabels.map((label) => (
           <tr
+            style={{ borderBottom: `1px solid ${theme.palette.secondary.dark}` }}
             key={label.varname}
             className={
               !data[label.varname] && data[label.varname] !== 0
@@ -124,7 +141,12 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
           </tr>
         ))}
         {nonSelectedLabels.length !== 0 && (
-          <tr>
+          <tr
+            style={{
+              borderBottom: `1px solid ${theme.palette.secondary.dark}`,
+              borderTop: `1px solid ${theme.palette.secondary.dark}`,
+            }}
+          >
             <th colSpan={2} className={styles.panelZoomLabelsRow__title}>
               Additional Labels
             </th>
@@ -133,6 +155,7 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
         {nonSelectedLabels.map((label) => (
           <tr
             key={label.varname}
+            style={{ borderBottom: `1px solid ${theme.palette.secondary.dark}` }}
             className={
               !data[label.varname] && data[label.varname] !== 0
                 ? `${styles.panelZoomLabelsRow} ${styles.panelZoomLabelsRowMissing}`

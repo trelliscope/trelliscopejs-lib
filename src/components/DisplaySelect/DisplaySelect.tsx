@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 import { clearFilters, selectFilterState, setFilterView, setFiltersandFilterViews } from '../../slices/filterSlice';
 import { selectSort, setSort } from '../../slices/sortSlice';
 import { selectLabels, setLabels } from '../../slices/labelsSlice';
@@ -15,7 +16,6 @@ import { useDisplayList } from '../../slices/displayListAPI';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 import { useStoredInputValue, getLocalStorageKey } from '../../inputUtils';
 import { filterViewSelector } from '../../selectors';
-import { useConfig } from '../../slices/configAPI';
 // import styles from './DisplaySelect.module.scss';
 import ErrorWrapper from '../ErrorWrapper';
 import { setMetaData, setMetaDataState } from '../../slices/appSlice';
@@ -31,7 +31,7 @@ const DisplaySelect: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const STORED_NAME = 'trelliscope_display_switch_state';
   const { setStoredValue } = useStoredInputValue(STORED_NAME, '');
-  const { data: configObj } = useConfig();
+  const theme = useTheme();
 
   const filterViews = useSelector(filterViewSelector);
   const filters = useSelector(selectFilterState);
@@ -128,13 +128,7 @@ const DisplaySelect: React.FC = () => {
     <ErrorWrapper>
       <Button
         sx={{
-          color: configObj?.theme?.header
-            ? configObj.theme?.header?.text
-            : configObj?.theme?.isLightTextOnDark && configObj?.theme
-              ? configObj?.theme?.lightText
-              : !configObj?.theme?.isLightTextOnDark && configObj?.theme
-                ? configObj?.theme?.darkText
-                : '#757575',
+          color: theme.palette.primary.contrastText,
           textTransform: 'unset',
         }}
         id="display-select-button"
@@ -163,6 +157,7 @@ const DisplaySelect: React.FC = () => {
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'display-select-button',
+          sx: { backgroundColor: theme.palette.secondary.main },
         }}
       >
         <div

@@ -3,6 +3,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 import styles from './ComposeEmail.module.scss';
 
 interface ComposeEmailProps {
@@ -27,10 +28,14 @@ const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, fullName, emai
     mail.href = `mailto:${displayInfo.inputs?.feedbackInterface.feedbackEmail}?subject=${subject}&body=${body}`;
     mail.click();
   };
-
+  const theme = useTheme();
   return (
     <div className={styles.composeEmailContainer}>
-      <DialogContentText id="alert-dialog-description" className={styles.composeEmailContentText}>
+      <DialogContentText
+        sx={{ color: theme.palette.primary.contrastText }}
+        id="alert-dialog-description"
+        className={styles.composeEmailContentText}
+      >
         <span className={styles.composeEmailDescription}>
           {`By clicking the 'Compose Email' button below, an email will be drafted and opened in your email client
           to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
@@ -43,6 +48,7 @@ const ComposeEmail: React.FC<ComposeEmailProps> = ({ displayInfo, fullName, emai
       </DialogContentText>
       <div className={styles.composeEmailWrapperCenter}>
         <Button
+          sx={{ color: theme.palette.text.secondary }}
           variant="contained"
           color="primary"
           className={styles.composeEmailButton}

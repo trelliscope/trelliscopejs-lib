@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControl, ListItemIcon, ListItemText, MenuItem, Select } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableList, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
@@ -12,6 +13,7 @@ const LayoutSelector: React.FC = () => {
   const dispatch = useDispatch();
   const layout = useSelector(selectLayout);
   const [viewLayout, setViewLayout] = useState(layout?.viewtype || '');
+  const theme = useTheme();
 
   useEffect(() => {
     setViewLayout(layout?.viewtype || '');
@@ -25,9 +27,12 @@ const LayoutSelector: React.FC = () => {
   return (
     <ErrorWrapper>
       <div className={styles.layoutSelector}>
-        <span className={styles.layoutSelectorText}>Layout</span>
+        <span style={{ color: theme.palette.text.primary }} className={styles.layoutSelectorText}>
+          Layout
+        </span>
         <FormControl size="small">
           <Select
+            MenuProps={{ PaperProps: { sx: { backgroundColor: theme.palette.secondary.main } } }}
             data-testid="layout-selector"
             sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
             labelId="layout-label"

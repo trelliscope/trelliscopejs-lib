@@ -2,6 +2,7 @@ import { Tooltip } from '@mui/material';
 import React from 'react';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTheme } from '@mui/material/styles';
 import {
   META_TYPE_FACTOR,
   MISSING_TEXT,
@@ -24,6 +25,7 @@ interface PanelZoomLabelsCellContentProps {
 }
 
 const PanelZoomLabelsCellContent: React.FC<PanelZoomLabelsCellContentProps> = ({ label, data }) => {
+  const theme = useTheme();
   const displayMetas = useDisplayMetas();
   const getMetaLevels = (varname: string) => {
     const foundMeta = displayMetas.find((meta) => meta.varname === varname);
@@ -31,7 +33,7 @@ const PanelZoomLabelsCellContent: React.FC<PanelZoomLabelsCellContentProps> = ({
   };
 
   return (
-    <td className={styles.panelZoomLabelsCell}>
+    <td style={{ backgroundColor: theme.palette.secondary.light }} className={styles.panelZoomLabelsCell}>
       <div className={styles.panelZoomLabelsCellContent}>
         <Tooltip
           title={
@@ -67,6 +69,7 @@ const PanelZoomLabelsCellContent: React.FC<PanelZoomLabelsCellContentProps> = ({
                 href={data[label.varname] as string}
                 rel="noopener noreferrer"
                 target="_blank"
+                style={{ color: theme.palette.error.main }}
               >
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
               </a>

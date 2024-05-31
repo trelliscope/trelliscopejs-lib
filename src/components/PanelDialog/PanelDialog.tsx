@@ -4,6 +4,7 @@ import { Box, Button, Dialog, DialogActions, IconButton, ClickAwayListener } fro
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { useTheme } from '@mui/material/styles';
 import { useDisplayInfo, useDisplayMetas } from '../../slices/displayInfoAPI';
 import PanelZoomLabels from '../PanelZoomLabels/PanelZoomLabels';
 import styles from './PanelDialog.module.scss';
@@ -30,6 +31,7 @@ interface PanelExtended extends IPanelMeta {
 
 const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, panel, source, onClose, index }) => {
   const displayMetas = useDisplayMetas();
+  const theme = useTheme();
   const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
   const dispatch = useDispatch();
   const n = useSelector(selectPage);
@@ -181,6 +183,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
 
   return (
     <Dialog
+      PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
       maxWidth="lg"
       className={styles.panelDialog}
       classes={{ paper: styles.panelDialogInner }}
@@ -198,7 +201,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         <Box>
           <Button
             sx={{
-              color: '#000000',
+              color: theme.palette.text.primary,
               textTransform: 'unset',
               fontSize: '15px',
             }}
@@ -230,7 +233,12 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
       </ClickAwayListener>
       <div className={styles.panelDialogGraphic}>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
-          <IconButton data-testid="paginate-left" disabled={n === 1 && curIndex === 0} onClick={pageLeft}>
+          <IconButton
+            sx={{ color: theme.palette.primary.contrastText }}
+            data-testid="paginate-left"
+            disabled={n === 1 && curIndex === 0}
+            onClick={pageLeft}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
           </IconButton>
         </Box>
@@ -267,6 +275,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
         </Box>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
           <IconButton
+            sx={{ color: theme.palette.primary.contrastText }}
             data-testid="paginate-right"
             disabled={n === totPages && curIndex === data.length - 1}
             onClick={pageRight}
@@ -275,9 +284,7 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           </IconButton>
         </Box>
       </div>
-      <div className={styles.panelDialogLabelsWrapper}>
-        <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
-      </div>
+      <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
       <DialogActions>
         <Button data-testid="panel-dialog-close" aria-label="display info close" onClick={handleClose}>
           Close

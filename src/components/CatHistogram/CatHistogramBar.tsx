@@ -1,5 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useTheme, lighten, darken } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import { getLabelFromFactor } from '../../utils';
 
 import styles from './CatHistogram.module.scss';
@@ -28,6 +30,7 @@ const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
   metaLevels,
   metaType,
 }) => {
+  const theme = useTheme();
   const handleClick = () => {
     if (label === MISSING_TEXT && metaType === META_TYPE_FACTOR) {
       return onClick(-Infinity as unknown as string);
@@ -35,29 +38,41 @@ const CatHistogramBar: React.FC<CatHistogramBarProps> = ({
     return onClick(label);
   };
 
+  const styleObj = {
+    ...style,
+    color: active ? theme.palette.text.primary : theme.palette.primary.contrastText,
+    '&:hover': {
+      background: lighten(theme.palette.secondary.light, 0.5),
+    },
+  };
+
   return (
-    <div
-      className={classNames(styles.catHistogramBarWrapper, {
-        [styles.catHistogramBarWrapper__active]: active,
-      })}
-      style={style}
-      role="presentation"
-      onClick={handleClick}
-    >
-      <div className={styles.catHistogramBar} style={{ width, height }}>
+    <Box className={styles.catHistogramBarWrapper} sx={styleObj} role="presentation" onClick={handleClick}>
+      <Box
+        className={styles.catHistogramBar}
+        sx={{
+          width,
+          height,
+          background: active ? theme.palette.secondary.contrastText : darken(theme.palette.secondary.dark, 0.15),
+          '&:hover': {
+            background: lighten(theme.palette.secondary.contrastText, 0.25),
+            color: theme.palette.text.primary,
+          },
+        }}
+      >
         <div className={styles.catHistogramBarLabel}>
           {label === MISSING_TEXT
             ? MISSING_TEXT
             : !metaLevels
-            ? label
-            : getLabelFromFactor(label as unknown as number, metaLevels)}
+              ? label
+              : getLabelFromFactor(label as unknown as number, metaLevels)}
         </div>
+      </Box>
+      <div style={{ color: theme.palette.text.primary }} className={styles.catHistogramBarValue}>
+        {value}
       </div>
-      <div className={styles.catHistogramBarValue}>{value}</div>
-      {active && (
-        <div className={styles.catHistogramBarIndicator} />
-      )}
-    </div>
+      {active && <div style={{ background: theme.palette.primary.main }} className={styles.catHistogramBarIndicator} />}
+    </Box>
   );
 };
 

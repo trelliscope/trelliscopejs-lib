@@ -7,6 +7,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { useTheme } from '@mui/material/styles';
 import Filters from '../Filters';
 import { filterViewSelector } from '../../selectors';
 import FilterInput from '../FilterInput';
@@ -19,6 +20,7 @@ const drawerWidth = 400;
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const layout = useSelector(selectLayout);
   const { active: activeFilters, inactive: inactiveFilters } = useSelector(filterViewSelector);
   const mutableFilters = [...activeFilters].reverse();
@@ -59,6 +61,7 @@ const Sidebar: React.FC = () => {
             overflowX: 'hidden',
             height: 'inherit',
             zIndex: 'initial',
+            backgroundColor: theme.palette.secondary.main,
           },
         }}
       >

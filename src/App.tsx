@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import blue from '@mui/material/colors/blue';
-import lightBlue from '@mui/material/colors/lightBlue';
 import { setAppID, setFullscreen, setSinglePageApp, setOptions, setPaths, setAppData } from './slices/appSlice';
 import { windowResize, setAppDims } from './slices/uiSlice';
 import DataProvider from './components/DataProvider';
@@ -17,6 +15,7 @@ import ErrorWrapper from './components/ErrorWrapper';
 
 import './assets/styles/main.css';
 import ErrorSnack from './components/ErrorSnack';
+import { theme } from './palette';
 
 declare global {
   interface Window {
@@ -73,26 +72,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   const dispatch = useDispatch();
   const { data: configObj } = useConfig();
 
-  const themeV1 = createTheme({
-    palette: {
-      primary: {
-        light: configObj?.theme?.light || '#4dabf5',
-        main: configObj?.theme?.primary || blue.A200,
-        dark: configObj?.theme?.dark || '#2e60b1',
-      }, // '#4285f4', // lightBlue500,
-      // background: {
-      //   default: '#151C24',
-      //   paper: '#151C24',
-      // },
-      secondary: { light: lightBlue[200], main: lightBlue[700] },
-    },
-    typography: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeightLight: 200,
-      fontWeightRegular: 300,
-      fontWeightMedium: 400,
-    },
-  });
+  console.log('configObj', configObj);
 
   useEffect(() => {
     dispatch(setAppID(id));
@@ -130,7 +110,7 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   return (
     <ErrorWrapper>
       <DataProvider client={client}>
-        <ThemeProvider theme={themeV1}>
+        <ThemeProvider theme={createTheme(configObj?.theme ? configObj.theme : theme)}>
           <SnackbarProvider>
             <Box sx={{ display: 'flex', height: 'inherit' }}>
               <ErrorWrapper>

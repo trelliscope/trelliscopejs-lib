@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useResizeObserver from 'use-resize-observer';
 import { Box, CircularProgress } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { labelsSelector } from '../../selectors';
 import { panelLabelSizeSelector } from '../../selectors/ui';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
@@ -26,6 +27,7 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentRef, handlePanelClick }) => {
+  const theme = useTheme();
   const contentRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const { data, filteredData, allData } = useContext(DataContext);
@@ -160,7 +162,15 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
   };
   if (metaDataState === META_DATA_STATUS.LOADING || metaDataState === META_DATA_STATUS.IDLE || !allData.length)
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          backgroundColor: theme.palette.secondary.main,
+        }}
+      >
         <CircularProgress size="80px" />
       </Box>
     );
@@ -180,12 +190,21 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
   return (
     <ErrorWrapper>
       {!data?.length && (
-        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.text.primary,
+          }}
+        >
           No panels meet the current filter criteria
         </Box>
       )}
       {layout?.viewtype === 'grid' ? (
-        <div className={styles.contentWrapper} ref={wrapperRef}>
+        <div style={{ backgroundColor: theme.palette.secondary.main }} className={styles.contentWrapper} ref={wrapperRef}>
           <div data-testid="panel-content" className={styles.content} style={contentStyle} ref={contentRef}>
             {metaDataState === META_DATA_STATUS.READY && displayInfoSuccess && data?.length > 0 && curPanel && (
               <>
@@ -219,7 +238,11 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
           </div>
         </div>
       ) : (
-        <div className={styles.tableContainer} ref={tableWrapperRef}>
+        <div
+          style={{ backgroundColor: theme.palette.secondary.main }}
+          className={styles.tableContainer}
+          ref={tableWrapperRef}
+        >
           <div data-testid="table-content" className={styles.tableContainer} ref={tableContentRef}>
             {data?.length > 0 && <DataTable table={table} />}
           </div>

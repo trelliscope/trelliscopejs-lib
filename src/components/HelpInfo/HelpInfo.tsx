@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { fullscreenSelector } from '../../selectors';
 import HowToUse from '../HowToUse';
 import Shortcuts from '../Shortcuts';
@@ -18,6 +19,7 @@ const HelpInfo: React.FC = () => {
   const [tabNumber, setTabNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const { data: configObj } = useConfig();
+  const theme = useTheme();
 
   const handleToggle = () => {
     setOpen(!open);
@@ -42,16 +44,14 @@ const HelpInfo: React.FC = () => {
       <IconButton
         data-testid="help-button"
         id="help-control"
-        color="inherit"
+        sx={{ color: theme.palette.secondary.light }}
         size={configObj && configObj.config1 !== BACK.OUTATIME ? 'small' : 'medium'}
         onClick={handleToggle}
       >
-        <FontAwesomeIcon
-          color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-          icon={faCircleQuestion}
-        />
+        <FontAwesomeIcon icon={faCircleQuestion} />
       </IconButton>
       <Dialog
+        PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
         open={open}
         className="trelliscope-app"
         style={{ zIndex: 8000, fontWeight: 300 }}
@@ -67,20 +67,47 @@ const HelpInfo: React.FC = () => {
           >
             <Box>
               <div>{`Trelliscope v${window.__VERSION__}`}</div>
-              <div className={styles.helpInfoDialogWebsite}>
+              <Box
+                sx={{
+                  a: {
+                    color: theme.palette.error.main,
+                  },
+                }}
+                className={styles.helpInfoDialogWebsite}
+              >
                 Learn more at{' '}
                 <a href="https://trelliscope.org" target="_blank" rel="noopener noreferrer">
                   trelliscope.org
                 </a>
-              </div>
+              </Box>
             </Box>
           </DialogTitle>
         )}
         <DialogContent>
-          <Tabs value={tabNumber} onChange={handleChange}>
-            <Tab data-testid="how-to-tab" label="How to Use" />
-            <Tab data-testid="shortcuts-tab" label="Shortcuts" />
-            {configObj && configObj.config1 !== BACK.OUTATIME && <Tab data-testid="credits-tab" label="Credits" />}
+          <Tabs textColor="primary" indicatorColor="primary" value={tabNumber} onChange={handleChange}>
+            <Tab
+              sx={{
+                color: theme.palette.primary.contrastText,
+              }}
+              data-testid="how-to-tab"
+              label="How to Use"
+            />
+            <Tab
+              sx={{
+                color: theme.palette.primary.contrastText,
+              }}
+              data-testid="shortcuts-tab"
+              label="Shortcuts"
+            />
+            {configObj && configObj.config1 !== BACK.OUTATIME && (
+              <Tab
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                }}
+                data-testid="credits-tab"
+                label="Credits"
+              />
+            )}
           </Tabs>
           {tabNumber === 0 && <HowToUse />}
           {tabNumber === 1 && <Shortcuts />}

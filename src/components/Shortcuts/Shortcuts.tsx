@@ -1,26 +1,35 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { fullscreenSelector } from '../../selectors';
 import styles from './Shortcuts.module.scss';
 
 const Shortcuts: React.FC = () => {
   const fullscreen = useSelector(fullscreenSelector);
+  const theme = useTheme();
 
   return (
     <div className={styles.shortcuts}>
       <div>
         {!fullscreen && (
-          <p className={styles.shortcutsKeynote}>Note: keyboard shortcuts are only available when the app is fullscreen.</p>
+          <Typography sx={{ fontStyle: 'italic', color: theme.palette.primary.contrastText, mt: 3 }}>
+            Note: keyboard shortcuts are only available when the app is fullscreen.
+          </Typography>
         )}
         <div className={styles.shortcutsDiv}>
           <h4 className={styles.shortcutsH4}>Panel navigation</h4>
           <ul className={styles.shortcutsUl}>
             <li>
-              <code className={styles.shortcutsCode}>left</code>
+              <Typography sx={{ display: 'inline-block', color: theme.palette.error.main }} variant="h6">
+                left
+              </Typography>
               &ensp;page back
             </li>
             <li>
-              <code className={styles.shortcutsCode}>right</code>
+              <Typography sx={{ display: 'inline-block', color: theme.palette.error.main }} variant="h6">
+                right
+              </Typography>
               &ensp;page forward
             </li>
           </ul>
@@ -29,15 +38,21 @@ const Shortcuts: React.FC = () => {
           <h4 className={styles.shortcutsH4}>Dialog boxes</h4>
           <ul className={styles.shortcutsUl}>
             <li>
-              <code className={styles.shortcutsCode}>i</code>
+              <Typography sx={{ display: 'inline-block', color: theme.palette.error.main }} variant="h6">
+                i
+              </Typography>
               &ensp;open &quot;Display Info&quot; dialog
             </li>
             <li>
-              <code className={styles.shortcutsCode}>h</code>
+              <Typography sx={{ display: 'inline-block', color: theme.palette.error.main }} variant="h6">
+                h
+              </Typography>
               &ensp;open &quot;Help/About&quot; dialog
             </li>
             <li>
-              <code className={styles.shortcutsCode}>esc</code>
+              <Typography sx={{ display: 'inline-block', color: theme.palette.error.main }} variant="h6">
+                esc
+              </Typography>
               &ensp;close dialog
             </li>
           </ul>

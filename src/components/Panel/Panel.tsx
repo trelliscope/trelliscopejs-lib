@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Tooltip } from '@mui/material';
 import classNames from 'classnames';
+import { useTheme } from '@mui/material/styles';
 import PanelLabels from '../PanelLabels/PanelLabels';
 import { setLabels } from '../../slices/labelsSlice';
 import PanelPicker from '../PanelPicker';
@@ -40,6 +41,7 @@ const Panel: React.FC<PanelProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const layout = useSelector(selectLayout);
   const showLabels = layout?.showLabels;
+  const theme = useTheme();
   const panelMetas =
     displayInfo?.metas.filter((meta: IMeta) => meta.type === META_TYPE_PANEL && meta.varname !== selectedValue) || [];
 
@@ -55,18 +57,18 @@ const Panel: React.FC<PanelProps> = ({
   };
 
   return (
-    <div data-testid="panel-hover" id="panel-control" className={styles.panel}>
+    <div
+      style={{ border: `1px solid ${theme.palette.secondary.dark}` }}
+      data-testid="panel-hover"
+      id="panel-control"
+      className={styles.panel}
+    >
       <div role="presentation" className={styles.panelGraphic}>
         {children}
         <div className={styles.panelGraphicExpand}>
           <Tooltip arrow title="Open panel dialog">
             <IconButton
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.5);',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.7);',
-                },
-              }}
+              sx={{ color: theme.palette.primary.contrastText }}
               data-testid="panel-expand-button"
               size="small"
               onClick={handleClick}
@@ -86,7 +88,6 @@ const Panel: React.FC<PanelProps> = ({
               selectedValue={selectedValue}
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
-              useCustomStyles={false}
               isInHeader={false}
               panelMetas={panelMetas}
             />

@@ -3,6 +3,7 @@ import type { InputHTMLAttributes } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateLeft, faXmark, faArrowDownShortWide, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { IconButton, Checkbox, FormControlLabel, Button, Divider } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
@@ -50,6 +51,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
   const labelIsSelected = labels.includes(filterName);
   const filterType = META_FILTER_TYPE_MAP[meta?.type || ''];
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const theme = useTheme();
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: `${filterName}_filter`,
@@ -61,6 +63,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
     transform: matchTranslate ? `${matchTranslate[0]} scaleX(1) scaleY(1)` : '',
     transition,
     zIndex: isDragging ? 1000 : undefined,
+    backgroundColor: theme.palette.secondary.main,
   };
 
   const handleReset = () => {
@@ -143,7 +146,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
           </div>
           <div className={styles.filterInputHeaderControls}>
             {meta?.type === META_TYPE_FACTOR && (
-              <div className={styles.filterInputCount}>
+              <div style={{ color: theme.palette.primary.contrastText }} className={styles.filterInputCount}>
                 {(filter as ICategoryFilterState)?.values?.length || 0} of {(meta as IFactorMeta)?.levels?.length}
               </div>
             )}
@@ -154,9 +157,16 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
               dialogText="This will clear the selected active filter."
             />
             <div className={styles.filterInputHeaderControlsIcon}>
-              <FontAwesomeIcon {...listeners} icon={faGripVertical} />
+              <FontAwesomeIcon color={theme.palette.primary.contrastText} {...listeners} icon={faGripVertical} />
             </div>
-            <IconButton aria-label="close" size="small" onClick={checkIfFilterIsActive}>
+            <IconButton
+              sx={{
+                color: theme.palette.primary.contrastText,
+              }}
+              aria-label="close"
+              size="small"
+              onClick={checkIfFilterIsActive}
+            >
               <FontAwesomeIcon icon={faXmark} />
             </IconButton>
           </div>
@@ -179,6 +189,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             <FormControlLabel
               control={
                 <Checkbox
+                  sx={{ color: theme.palette.primary.contrastText }}
                   checked={labelIsSelected}
                   onClick={() => handleLabelChange(meta?.varname as string)}
                   size="small"

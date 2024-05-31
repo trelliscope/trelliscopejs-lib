@@ -48,11 +48,9 @@ body {
 .trelliscope-app h5,
 .trelliscope-app h6 {
   font-weight: 500;
-  color: black;
 }
 
 .trelliscope-app strong {
-  color: black;
   font-weight: 500;
 }
 
@@ -66,10 +64,6 @@ body {
 
 .trelliscope-app h2 {
   font-size: 20px;
-}
-
-.trelliscope-app a {
-  color: #ff5252;
 }
 
 .trelliscope-fullscreen {
