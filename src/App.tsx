@@ -72,8 +72,6 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
   const dispatch = useDispatch();
   const { data: configObj } = useConfig();
 
-  console.log('configObj', configObj);
-
   useEffect(() => {
     dispatch(setAppID(id));
     if (typeof config === 'string') {
