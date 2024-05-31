@@ -247,7 +247,7 @@ __loadDisplayInfo__5ae49320({
       "type": "localStorage"
     },
     "feedbackInterface": {
-      "feedbackEmail": "test@test.com",
+      "feedbackEmail": null,
       "includeMetaVars": []
     }
   },
