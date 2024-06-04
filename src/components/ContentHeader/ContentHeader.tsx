@@ -93,6 +93,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
                 sx={{
                   backgroundColor: theme.palette.secondary.light,
                   '.MuiList-root': { backgroundColor: theme.palette.primary.main },
+                  svg: { color: theme.palette.primary.contrastText },
                 }}
                 data-testid="columns-table"
                 id="column-control"

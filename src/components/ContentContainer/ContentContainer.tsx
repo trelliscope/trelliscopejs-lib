@@ -357,7 +357,11 @@ const ContentContainer: React.FC = () => {
     muiTableHeadCellProps: {
       sx: {
         '.Mui-TableHeadCell-Content svg': {
-          color: `${theme.palette.secondary.dark} !important`,
+          color: `${theme.palette.primary.contrastText} !important`,
+        },
+        '.MuiDivider-root': { borderColor: theme.palette.primary.contrastText, opacity: 0.3 },
+        '[data-testid="PushPinIcon"]': {
+          fill: `${theme.palette.primary.contrastText} !important`,
         },
       },
     },

@@ -492,6 +492,9 @@ interface ITheme {
     background: {
       default: string;
     };
+    action: {
+      active: string;
+    };
     error: {
       main: string;
     };

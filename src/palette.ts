@@ -32,6 +32,11 @@ const theme: ITheme = {
       // ***Summary***: table background color / table menu background color
       // ***Components***: table background / table column selector background for the paper element
     },
+    action: {
+      active: '#757575',
+      // ***Summary***: primarily used for the table column selector icons
+      // ***Components***: table column selector icon colors
+    },
     text: {
       primary: '#000', // general text throughout the app, histogram tick text, table text etc.
       secondary: '#fff', // button text
