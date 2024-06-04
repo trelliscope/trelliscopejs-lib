@@ -44,7 +44,12 @@ const HelpInfo: React.FC = () => {
       <IconButton
         data-testid="help-button"
         id="help-control"
-        sx={{ color: theme.palette.secondary.light }}
+        sx={{
+          color:
+            configObj && configObj.config1 !== BACK.OUTATIME
+              ? theme.palette.text.secondary
+              : theme.palette.primary.contrastText,
+        }}
         size={configObj && configObj.config1 !== BACK.OUTATIME ? 'small' : 'medium'}
         onClick={handleToggle}
       >

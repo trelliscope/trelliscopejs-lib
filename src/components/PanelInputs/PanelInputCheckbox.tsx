@@ -51,7 +51,7 @@ const PanelInputCheckbox: React.FC<PanelInputCheckboxProps> = ({ name, panelKey,
           style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}
         >
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
+            <FontAwesomeIcon color={theme.palette.text.primary} icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>

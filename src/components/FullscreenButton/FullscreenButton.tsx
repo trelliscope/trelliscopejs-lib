@@ -9,11 +9,14 @@ import { fullscreenSelector } from '../../selectors';
 import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
 import { origHeightSelector, origWidthSelector } from '../../selectors/ui';
+import { useConfig } from '../../slices/configAPI';
+import { BACK } from '../../constants';
 // import styles from './FullscreenButton.module.scss';
 
 const FullscreenButton: React.FC = () => {
   const dispatch = useDispatch();
   const fullscreen = useSelector(fullscreenSelector);
+  const { data: configObj } = useConfig();
   // const singlePageApp = useSelector(singlePageAppSelector);
   const theme = useTheme();
   const ww = useSelector(origWidthSelector);
@@ -93,7 +96,10 @@ const FullscreenButton: React.FC = () => {
     <Tooltip title="Toggle Fullscreen">
       <IconButton
         sx={{
-          color: theme.palette.text.secondary,
+          color:
+            configObj && configObj.config1 !== BACK.OUTATIME
+              ? theme.palette.text.secondary
+              : theme.palette.primary.contrastText,
         }}
         data-testid="fullscreen-button"
         onClick={toggleFullScreen}

@@ -37,7 +37,12 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
   return (
     <ErrorWrapper>
       <FontAwesomeIcon
-        style={{ left: leftPosition, borderColor: theme.palette.secondary.dark, background: theme.palette.secondary.light }}
+        style={{
+          left: leftPosition,
+          color: theme.palette.text.primary,
+          borderColor: theme.palette.secondary.dark,
+          background: theme.palette.secondary.light,
+        }}
         onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
         size="sm"
         className={styles.contentHeaderControlsItemToggleIcon}
@@ -68,11 +73,8 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
               >
                 Filters
                 {activeFilters.length > 0 && (
-                  <span
-                    style={{ color: theme.palette.primary.contrastText }}
-                    className={styles.contentHeaderControlsItemToggleBadge}
-                  >
-                    <FontAwesomeIcon icon={faCircle} />
+                  <span className={styles.contentHeaderControlsItemToggleBadge}>
+                    <FontAwesomeIcon color={theme.palette.primary.main} icon={faCircle} />
                     <span
                       className={styles.contentHeaderControlsItemToggleBadgeNum}
                       style={{ right: activeFilters.length > 9 ? '-5px' : '-1px', color: theme.palette.text.secondary }}

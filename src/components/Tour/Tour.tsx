@@ -64,6 +64,7 @@ const Tour: React.FC = () => {
           }}
           styles={{
             options: {
+              arrowColor: theme.palette.secondary.main,
               primaryColor: theme.palette.primary.main,
               backgroundColor: theme.palette.secondary.main,
               zIndex: 9000,

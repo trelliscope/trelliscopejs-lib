@@ -32,7 +32,13 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
         <g className={styles.axisTick} key={d} transform={`translate(${scale(d) || 0}, 0)`}>
           <line style={tickStyles} y1={4} y2={0} x1={x} x2={x} />
           {log && (
-            <text y={height} x={x} className={styles.axisTickSuper} transform="translate(3,0)">
+            <text
+              style={{ fill: theme.palette.text.primary }}
+              y={height}
+              x={x}
+              className={styles.axisTickSuper}
+              transform="translate(3,0)"
+            >
               10
               <tspan baselineShift="super">
                 <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
@@ -40,12 +46,12 @@ const NumHistogramAxis: React.FC<NumHistogramAxisProps> = ({ width, height, x, y
             </text>
           )}
           {isDate && (
-            <text className={styles.axisTickText} y={height} x={x}>
+            <text style={{ fill: theme.palette.text.primary }} className={styles.axisTickText} y={height} x={x}>
               {new Date(d).toLocaleDateString()}
             </text>
           )}
           {!log && !isDate && (
-            <text className={styles.axisTickText} y={height} x={x}>
+            <text style={{ fill: theme.palette.text.primary }} className={styles.axisTickText} y={height} x={x}>
               <FormattedNumber value={d} maximumFractionDigits={2} isSuffix />
             </text>
           )}

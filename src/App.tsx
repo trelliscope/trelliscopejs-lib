@@ -110,7 +110,15 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
       <DataProvider client={client}>
         <ThemeProvider theme={createTheme(configObj?.theme ? configObj.theme : theme)}>
           <SnackbarProvider>
-            <Box sx={{ display: 'flex', height: 'inherit' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                height: 'inherit',
+                backgroundColor: configObj?.theme
+                  ? configObj.theme.palette?.secondary.main
+                  : theme?.palette?.secondary?.main || 'initial',
+              }}
+            >
               <ErrorWrapper>
                 <Header />
               </ErrorWrapper>

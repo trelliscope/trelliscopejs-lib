@@ -55,7 +55,9 @@ const ErrorSnack: React.FC<ErrorSnackInterface> = ({ errorMsg, errorInfo, handle
       onClose={handleClose}
       message={
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="subtitle1">The following error has occurred:</Typography>
+          <Typography color={theme.palette.text.primary} variant="subtitle1">
+            The following error has occurred:
+          </Typography>
           <Typography sx={{ color: theme.palette.error.main, ml: 1 }}>{errorMsg}</Typography>
         </Box>
       }

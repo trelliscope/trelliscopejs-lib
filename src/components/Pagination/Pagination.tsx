@@ -110,7 +110,12 @@ const Pagination: React.FC = () => {
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
-                sx={{ color: theme.palette.primary.contrastText }}
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
+                  },
+                }}
                 data-testid="pagination-first"
                 size="small"
                 disabled={n <= 1}
@@ -127,7 +132,12 @@ const Pagination: React.FC = () => {
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
-                sx={{ color: theme.palette.primary.contrastText }}
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
+                  },
+                }}
                 data-testid="pagination-previous"
                 size="small"
                 disabled={n <= 1}
@@ -144,7 +154,12 @@ const Pagination: React.FC = () => {
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
-                sx={{ color: theme.palette.primary.contrastText }}
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
+                  },
+                }}
                 data-testid="pagination-next"
                 size="small"
                 disabled={n >= totPages}
@@ -161,7 +176,12 @@ const Pagination: React.FC = () => {
           <div className={styles.paginationButtonWrap}>
             <div className={styles.paginationButtonDiv}>
               <IconButton
-                sx={{ color: theme.palette.primary.contrastText }}
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
+                  },
+                }}
                 data-testid="pagination-last"
                 size="small"
                 disabled={n >= totPages}

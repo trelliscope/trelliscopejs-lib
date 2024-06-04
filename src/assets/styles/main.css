@@ -9,10 +9,6 @@ body {
   overflow: hidden;
 }
 
-.trelliscope-app-container {
-  background: white;
-}
-
 .trelliscope-app {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;

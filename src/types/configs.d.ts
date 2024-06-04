@@ -471,25 +471,30 @@ interface IConfig {
 }
 
 interface ITheme {
-  primary: {
-    main: string;
-    light: string;
-    dark: string;
-    contrastText: string;
-  };
-  secondary: {
-    main: string;
-    light: string;
-    dark: string;
-    contrastText: string;
-  };
-  text: {
-    primary: string;
-    secondary: string;
-    disabled: string;
-  };
-  error: {
-    main: string;
+  palette: {
+    primary: {
+      main: string;
+      light: string;
+      dark: string;
+      contrastText: string;
+    };
+    secondary: {
+      main: string;
+      light: string;
+      dark: string;
+      contrastText: string;
+    };
+    text: {
+      primary: string;
+      secondary: string;
+      disabled: string;
+    };
+    background: {
+      default: string;
+    };
+    error: {
+      main: string;
+    };
   };
   typography?: {
     fontFamily: string;
@@ -497,7 +502,7 @@ interface ITheme {
     fontWeightRegular: number;
     fontWeightMedium: number;
   };
-  logo: string;
+  logo?: string;
 }
 
 interface Datum {

@@ -32,9 +32,17 @@ const LayoutSelector: React.FC = () => {
         </span>
         <FormControl size="small">
           <Select
-            MenuProps={{ PaperProps: { sx: { backgroundColor: theme.palette.secondary.main } } }}
+            MenuProps={{
+              PaperProps: { sx: { backgroundColor: theme.palette.secondary.main } },
+            }}
             data-testid="layout-selector"
-            sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
+            sx={{
+              boxShadow: 'none',
+              '.MuiOutlinedInput-notchedOutline': { border: 0 },
+              svg: {
+                color: theme.palette.text.primary,
+              },
+            }}
             labelId="layout-label"
             id="layout"
             value={viewLayout}
@@ -46,13 +54,13 @@ const LayoutSelector: React.FC = () => {
           >
             <MenuItem data-testid="grid-select" value="grid">
               <ListItemIcon>
-                <FontAwesomeIcon icon={faTableCellsLarge} />
+                <FontAwesomeIcon color={theme.palette.primary.contrastText} icon={faTableCellsLarge} />
               </ListItemIcon>
               <ListItemText>Grid</ListItemText>
             </MenuItem>
             <MenuItem data-testid="table-select" value="table">
               <ListItemIcon>
-                <FontAwesomeIcon icon={faTableList} />
+                <FontAwesomeIcon color={theme.palette.primary.contrastText} icon={faTableList} />
               </ListItemIcon>
               <ListItemText>Table</ListItemText>
             </MenuItem>

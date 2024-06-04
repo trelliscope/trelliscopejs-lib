@@ -186,9 +186,8 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,
-                  borderRight: 'none',
-                  '&:hover': {
-                    borderRight: 'none',
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
                   },
                 }}
                 type="button"
@@ -225,6 +224,9 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
+                  },
                 }}
                 data-testid="filter-remove-all-button"
                 disabled={activeFilters.length === 0}
@@ -246,6 +248,9 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                   borderRight: 'none',
                   '&:hover': {
                     borderRight: 'none',
+                  },
+                  '&.Mui-disabled': {
+                    color: theme.palette.text.disabled,
                   },
                 }}
                 data-testid="filter-clear-all-button"
