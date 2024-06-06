@@ -64,6 +64,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
     transition,
     zIndex: isDragging ? 1000 : undefined,
     backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.secondary.dark,
   };
 
   const handleReset = () => {
@@ -237,7 +238,7 @@ const FilterInputs: React.FC<FilterInputsProps> = ({ filterName }) => {
             </Button>
           </div>
         </div>
-        <Divider />
+        <Divider sx={{ borderColor: theme.palette.secondary.dark }} />
       </div>
     </ErrorWrapper>
   );

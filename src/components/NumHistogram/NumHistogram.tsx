@@ -95,7 +95,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
             width={barWidth}
             height={yScale(d.value)}
             x={(xScale(d.key as number) || 0) + xPad}
-            y={height - yScale(d.value) - axisPad - 1}
+            y={height - yScale(d.value) - axisPad}
             active={brushActive || sel0 !== sel1}
           />
         ))}

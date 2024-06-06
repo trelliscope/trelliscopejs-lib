@@ -153,6 +153,11 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
             onChange={handleRegex}
             variant="standard"
             inputProps={{ 'data-testid': 'filter-cat-input', style: { marginLeft: '5px' } }}
+            sx={{
+              '& .MuiInput-underline:before': {
+                borderBottomColor: theme.palette.primary.contrastText,
+              },
+            }}
           />
         </div>
         <Ellipsis options={sortOptions} curItem={curSort} setCurItem={setCurSort} />

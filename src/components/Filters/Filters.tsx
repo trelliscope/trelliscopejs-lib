@@ -169,7 +169,7 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
           dialogText="This will clear all of the active filters."
         />
         <ButtonGroup
-          sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '131px', borderColor: theme.palette.primary.main } }}
+          sx={{ width: '100%', '& .MuiButtonGroup-grouped': { minWidth: '127px', borderColor: theme.palette.primary.main } }}
           variant="outlined"
         >
           <ClickAwayListener
@@ -245,10 +245,6 @@ const Filters: React.FC<FiltersProps> = ({ setShowFilterHelpText }) => {
                   textTransform: 'unset',
                   fontSize: '14px',
                   borderRadius: 0,
-                  borderRight: 'none',
-                  '&:hover': {
-                    borderRight: 'none',
-                  },
                   '&.Mui-disabled': {
                     color: theme.palette.text.disabled,
                   },

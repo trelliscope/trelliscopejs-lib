@@ -53,6 +53,7 @@ const Sidebar: React.FC = () => {
         anchor="left"
         PaperProps={{
           sx: {
+            borderColor: theme.palette.secondary.dark,
             position: 'relative !important',
             paddingTop: '54px',
             overflow: 'hidden',
