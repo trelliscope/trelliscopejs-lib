@@ -1,6 +1,7 @@
 import React from 'react';
 import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
+import { useTheme } from '@mui/material/styles';
 import styles from './UserInfo.module.scss';
 
 interface UserInfoProps {
@@ -30,6 +31,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
   setOtherInfo,
   storageItems,
 }) => {
+  const theme = useTheme();
   const emailRegex =
     /^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
@@ -64,13 +66,33 @@ const UserInfo: React.FC<UserInfoProps> = ({
 
   return (
     <div className={styles.userInfoContainer}>
-      <DialogContentText className={styles.userInfoContentText}>
+      <DialogContentText sx={{ color: theme.palette.primary.contrastText }} className={styles.userInfoContentText}>
         Before exporting the inputs you have provided, we would like to gather some information about you. Please provide at
         least your full name, after which you will be able to click the &apos;Export&apos; tab in this window to proceed with
         the export.
       </DialogContentText>
       <div>
         <TextField
+          sx={{
+            // change outline color to use theme and text color contrast text
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.contrastText,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputLabel-outlined': {
+              color: theme.palette.primary.contrastText,
+              '&.Mui-focused': {
+                color: theme.palette.primary.main,
+              },
+            },
+          }}
           className={styles.userInfoTextField}
           required
           label="Full Name"
@@ -80,6 +102,26 @@ const UserInfo: React.FC<UserInfoProps> = ({
           inputProps={{ 'data-testid': 'full-name-input' }}
         />
         <TextField
+          sx={{
+            // change outline color to use theme and text color contrast text
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.contrastText,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputLabel-outlined': {
+              color: theme.palette.primary.contrastText,
+              '&.Mui-focused': {
+                color: theme.palette.primary.main,
+              },
+            },
+          }}
           className={styles.userInfoTextField}
           label="Email Address"
           fullWidth
@@ -90,6 +132,26 @@ const UserInfo: React.FC<UserInfoProps> = ({
           inputProps={{ 'data-testid': 'email-input' }}
         />
         <TextField
+          sx={{
+            // change outline color to use theme and text color contrast text
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.contrastText,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputLabel-outlined': {
+              color: theme.palette.primary.contrastText,
+              '&.Mui-focused': {
+                color: theme.palette.primary.main,
+              },
+            },
+          }}
           className={styles.userInfoTextField}
           label="Job Title"
           fullWidth
@@ -98,6 +160,26 @@ const UserInfo: React.FC<UserInfoProps> = ({
           inputProps={{ 'data-testid': 'job-title-input' }}
         />
         <TextField
+          sx={{
+            // change outline color to use theme and text color contrast text
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.contrastText,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputLabel-outlined': {
+              color: theme.palette.primary.contrastText,
+              '&.Mui-focused': {
+                color: theme.palette.primary.main,
+              },
+            },
+          }}
           className={styles.userInfoTextField}
           multiline
           rows={3}

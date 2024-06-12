@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { TextField, debounce } from '@mui/material';
+import { Box, TextField, debounce } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import { FILTER_TYPE_CATEGORY, MISSING_TEXT, META_TYPE_FACTOR, TYPE_MAP } from '../../constants';
 import useMetaInfo from '../../selectors/useMetaInfo';
@@ -18,6 +19,7 @@ interface FilterCatProps {
 }
 
 const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
+  const theme = useTheme();
   const { domain = [0, 0], dist = {} } = useMetaInfo(meta.varname, meta.type);
   const cleanMeta = meta.levels?.map((m) => (m === null ? MISSING_TEXT : m));
   const displayMetas = useDisplayMetas();
@@ -127,7 +129,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
 
   return (
     <div className={styles.filterCat}>
-      <div className={styles.filterCatChart}>
+      <Box sx={{ backgroundColor: theme.palette.secondary.light }}>
         <CatHistogram
           data={sortChartData(curSort, memoizedGroupByData)}
           allData={dist}
@@ -141,7 +143,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           metaLevels={cleanMeta}
           metaType={meta.type}
         />
-      </div>
+      </Box>
       <div className={styles.filterCatInputContainer}>
         <div>
           <TextField
@@ -151,6 +153,11 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
             onChange={handleRegex}
             variant="standard"
             inputProps={{ 'data-testid': 'filter-cat-input', style: { marginLeft: '5px' } }}
+            sx={{
+              '& .MuiInput-underline:before': {
+                borderBottomColor: theme.palette.primary.contrastText,
+              },
+            }}
           />
         </div>
         <Ellipsis options={sortOptions} curItem={curSort} setCurItem={setCurSort} />

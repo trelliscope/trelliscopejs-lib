@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: var(--white-600);
   overflow-x: auto;
   overflow-y: hidden;
 
@@ -25,7 +24,6 @@
       padding: 0px 3px 0px 10px;
       margin: 0 6px;
       border-radius: 4px;
-      background: var(--white-500);
 
       Button {
         max-height: 34px;
@@ -48,12 +46,10 @@
           position: absolute;
           cursor: pointer;
           z-index: 1200;
-          color: #000;
           top: 62px;
           width: 18px;
           height: 18px !important;
-          background: var(--white-500);
-          border: 1px solid #cccccc;
+          border: 1px solid;
           border-radius: 50%;
           padding: 4px;
           transition: left 0.2s ease;
@@ -67,24 +63,19 @@
 
           svg {
             font-size: 20px !important;
+            position: absolute;
+            top: 1px;
+            right: -8px;
+            z-index: 1001;
           }
 
           &Num {
             position: absolute;
             z-index: 1002;
-            color: var(--white);
             // top: 1px;
             // right: 1px;
             font-size: 12px;
             font-weight: 500;
-          }
-
-          svg {
-            color: var(--gray-600);
-            position: absolute;
-            top: 1px;
-            right: -8px;
-            z-index: 1001;
           }
         }
       }

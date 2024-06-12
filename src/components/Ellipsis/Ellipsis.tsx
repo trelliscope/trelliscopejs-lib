@@ -3,6 +3,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 // import styles from './Ellipsis.module.scss';
 
 interface EllipsisProps {
@@ -14,6 +15,7 @@ interface EllipsisProps {
 const Ellipsis: React.FC<EllipsisProps> = ({ options, curItem, setCurItem }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const theme = useTheme();
 
   const handleSortChange = (sortOrder: string) => {
     setCurItem(sortOrder as IMeta['filterSortOrder']);
@@ -37,11 +39,21 @@ const Ellipsis: React.FC<EllipsisProps> = ({ options, curItem, setCurItem }) => 
         aria-controls="long-menu"
         aria-haspopup="true"
         onClick={handleMenuIconClick}
-        sx={{ width: 25, height: 25 }}
+        sx={{
+          width: 25,
+          height: 25,
+          color: theme.palette.primary.contrastText,
+        }}
       >
         <FontAwesomeIcon icon={faEllipsisV} size="xs" />
       </IconButton>
-      <Menu id="long-menu" open={menuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
+      <Menu
+        id="long-menu"
+        slotProps={{ paper: { sx: { backgroundColor: theme.palette.secondary.main } } }}
+        open={menuOpen}
+        anchorEl={anchorEl}
+        onClose={handleMenuClose}
+      >
         {options.map((d) => (
           <MenuItem
             key={d.payload}

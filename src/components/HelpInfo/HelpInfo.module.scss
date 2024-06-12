@@ -7,12 +7,7 @@
     &Website {
       font-size: 16px;
       font-weight: 300;
-      color: var(--black);
       opacity: 0.8;
-
-      a {
-        color: var(--black);
-      }
     }
 
     &Headline {
@@ -38,11 +33,6 @@
       break-inside: avoid-column;
     }
 
-    &Code {
-      color: var(--red-100);
-      font-size: var(--text-4xl);
-    }
-
     &P {
       text-indent: -20px;
       padding-left: var(--padding-11);
@@ -57,15 +47,5 @@
       text-indent: 0;
       padding-left: var(--padding-11);
     }
-
-    &Hi {
-      color: var(--red-100);
-    }
-  }
-
-  &Keynote {
-    margin-bottom: 0;
-    color: var(--gray-900);
-    font-style: italic;
   }
 }

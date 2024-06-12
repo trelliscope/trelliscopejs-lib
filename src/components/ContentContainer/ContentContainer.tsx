@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { useMaterialReactTable } from 'material-react-table';
-import { IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import useResizeObserver from 'use-resize-observer';
+import { useTheme } from '@mui/material/styles';
 import Content from '../Content/Content';
 import ContentHeader from '../ContentHeader';
 import styles from './ContentContainer.module.scss';
@@ -48,6 +49,7 @@ import { DataContext } from '../DataProvider';
 const ContentContainer: React.FC = () => {
   const layout = useSelector(selectLayout);
   const { data } = useContext(DataContext);
+  const theme = useTheme();
 
   const dispatch = useDispatch();
   const basePath = useSelector(selectBasePath);
@@ -244,9 +246,11 @@ const ContentContainer: React.FC = () => {
         }
         if (meta.type === META_TYPE_HREF) {
           return (
-            <a href={value} aria-label="externallink" rel="noopener noreferrer" target="_blank">
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-            </a>
+            <Box sx={{ svg: { color: theme.palette.error.main } }}>
+              <a href={value} aria-label="externallink" rel="noopener noreferrer" target="_blank">
+                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+              </a>
+            </Box>
           );
         }
         return (
@@ -271,12 +275,7 @@ const ContentContainer: React.FC = () => {
           <div className={stylesTable.dataTablePanelGraphicExpand}>
             <IconButton
               size="small"
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.5);',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.7);',
-                },
-              }}
+              sx={{ color: theme.palette.primary.contrastText }}
               onClick={() => {
                 if (!meta) return;
                 handlePanelClick(meta, cell.row.original[meta.varname] as string, row?.index);
@@ -348,7 +347,26 @@ const ContentContainer: React.FC = () => {
     muiTablePaperProps: {
       elevation: 0,
     },
-    muiTableContainerProps: {
+    muiTableBodyCellProps: {
+      sx: {
+        svg: {
+          color: theme.palette.primary.contrastText,
+        },
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        '.Mui-TableHeadCell-Content svg': {
+          color: `${theme.palette.primary.contrastText} !important`,
+        },
+        '.MuiDivider-root': { borderColor: theme.palette.primary.contrastText, opacity: 0.3 },
+        '[data-testid="PushPinIcon"]': {
+          fill: `${theme.palette.primary.contrastText} !important`,
+        },
+      },
+    },
+
+    muiTableHeadProps: {
       style: {
         overflowX: 'auto',
         overscrollBehaviorX: 'none',

@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { faArrowUpRightFromSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { panelLabelSizeSelector } from '../../selectors/ui';
 import {
   INPUT_TYPE_CHECKBOX,
@@ -44,6 +45,7 @@ interface PanelLabelsProps {
 }
 
 const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabelRemove }) => {
+  const theme = useTheme();
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
 
@@ -70,11 +72,22 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
           <tr
             key={input.name}
             className={classNames(styles.panelLabelsRow, styles.panelLabelsRow__input)}
-            style={{ fontSize: panelLabelSize.fontSize, lineHeight: `${panelLabelSize.lineHeight}px` }}
+            style={{
+              fontSize: panelLabelSize.fontSize,
+              lineHeight: `${panelLabelSize.lineHeight}px`,
+              color: theme.palette.text.primary,
+              borderBottom: `1px solid ${theme.palette.secondary.dark}`,
+            }}
           >
             <PanelLabelsCell value={input.name} label={input.label} padding={panelLabelSize.padding} />
             <td className={styles.panelLabelsCell}>
-              <div className={styles.panelLabelsCellContent} style={{ maxHeight: panelLabelSize.lineHeight }}>
+              <div
+                className={styles.panelLabelsCellContent}
+                style={{
+                  maxHeight: panelLabelSize.lineHeight,
+                  paddingLeft: panelLabelSize.padding,
+                }}
+              >
                 {(input.type === INPUT_TYPE_TEXT || input.type === INPUT_TYPE_NUMBER) && (
                   <PanelInputText
                     name={input.name}
@@ -117,14 +130,17 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     iconFontSize={panelLabelSize.fontSize}
                   />
                 )}
-                <button
-                  type="button"
+                <IconButton
                   className={styles.panelLabelsClose}
                   onClick={() => onLabelRemove(input.name)}
                   style={{ lineHeight: `${panelLabelSize.lineHeight}px`, paddingRight: panelLabelSize.padding }}
                 >
-                  <FontAwesomeIcon icon={faXmark} style={{ fontSize: panelLabelSize.fontSize }} />
-                </button>
+                  <FontAwesomeIcon
+                    color={theme.palette.text.primary}
+                    icon={faXmark}
+                    style={{ fontSize: panelLabelSize.fontSize }}
+                  />
+                </IconButton>
               </div>
             </td>
           </tr>
@@ -137,11 +153,21 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                 ? `${styles.panelLabelsRow} ${styles.panelLabelsRowMissing}`
                 : styles.panelLabelsRow
             }
-            style={{ fontSize: panelLabelSize.fontSize, lineHeight: `${panelLabelSize.lineHeight}px` }}
+            style={{
+              fontSize: panelLabelSize.fontSize,
+              lineHeight: `${panelLabelSize.lineHeight}px`,
+              backgroundColor: theme.palette.secondary.light,
+              borderBottom: `1px solid ${theme.palette.secondary.dark}`,
+              color:
+                !data[label.varname] && data[label.varname] !== 0 ? theme.palette.text.disabled : theme.palette.text.primary,
+            }}
           >
             <PanelLabelsCell value={label.varname} label={label.label} padding={panelLabelSize.padding} />
             <td className={styles.panelLabelsCell}>
-              <div className={styles.panelLabelsCellContent} style={{ maxHeight: panelLabelSize.lineHeight }}>
+              <div
+                className={styles.panelLabelsCellContent}
+                style={{ maxHeight: panelLabelSize.lineHeight, paddingLeft: panelLabelSize.padding }}
+              >
                 <Tooltip
                   title={
                     label.type === META_TYPE_FACTOR
@@ -179,6 +205,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                         href={data[label.varname] as string}
                         rel="noopener noreferrer"
                         target="_blank"
+                        style={{ color: theme.palette.error.main }}
                       >
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ fontSize: panelLabelSize.fontSize }} />
                       </a>
@@ -191,7 +218,11 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                   onClick={() => onLabelRemove(label.varname)}
                   style={{ lineHeight: `${panelLabelSize.lineHeight}px`, paddingRight: panelLabelSize.padding }}
                 >
-                  <FontAwesomeIcon icon={faXmark} style={{ fontSize: panelLabelSize.fontSize }} />
+                  <FontAwesomeIcon
+                    color={theme.palette.text.primary}
+                    icon={faXmark}
+                    style={{ fontSize: panelLabelSize.fontSize }}
+                  />
                 </button>
               </div>
             </td>

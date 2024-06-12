@@ -8,7 +8,6 @@ import ErrorWrapper from '../ErrorWrapper';
 import { TOUR_STEPS } from '../../constants';
 import styles from './Tour.module.scss';
 import { selectLayout } from '../../slices/layoutSlice';
-import { useConfig } from '../../slices/configAPI';
 
 const Tour: React.FC = () => {
   const [tourIndex, setTourIndex] = useState(0);
@@ -16,7 +15,6 @@ const Tour: React.FC = () => {
   const [tourIsOpen, setTourIsOpen] = useState(false);
   const layout = useSelector(selectLayout);
   const theme = useTheme();
-  const { data: configObj } = useConfig();
 
   const handleCallBack = (event: {
     status: string;
@@ -66,23 +64,21 @@ const Tour: React.FC = () => {
           }}
           styles={{
             options: {
-              primaryColor: theme.palette.primary.main || '#4489FF',
+              arrowColor: theme.palette.secondary.main,
+              primaryColor: theme.palette.primary.main,
+              backgroundColor: theme.palette.secondary.main,
               zIndex: 9000,
+              textColor: theme.palette.primary.contrastText,
             },
           }}
         />
         <Tooltip title="Launch Help Tour">
-          <IconButton data-testid="tour-button" onClick={() => setTourIsOpen(true)}>
-            <FontAwesomeIcon
-              color={
-                configObj?.theme?.header
-                  ? configObj.theme?.header?.text
-                  : configObj?.theme?.isLightTextOnDark
-                  ? configObj?.theme?.lightText
-                  : configObj?.theme?.darkText
-              }
-              icon={faHand}
-            />
+          <IconButton
+            sx={{ color: theme.palette.primary.contrastText }}
+            data-testid="tour-button"
+            onClick={() => setTourIsOpen(true)}
+          >
+            <FontAwesomeIcon icon={faHand} />
           </IconButton>
         </Tooltip>
       </div>

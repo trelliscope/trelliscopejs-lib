@@ -4,12 +4,12 @@ import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { unparse } from 'papaparse';
+import { useTheme } from '@mui/material';
 import { DataContext } from '../DataProvider';
 import { useDisplayMetas } from '../../slices/displayInfoAPI';
 import styles from './DownloadCsv.module.scss';
 import { META_TYPE_FACTOR, MISSING_TEXT } from '../../constants';
 import { getLabelFromFactor } from '../../utils';
-import { useConfig } from '../../slices/configAPI';
 
 interface DownloadCsvProps {
   displayInfo: IDisplay;
@@ -28,14 +28,12 @@ interface Data {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded, fullName, email, jobTitle, hasEmail }) => {
+  const theme = useTheme();
   const { allData } = useContext(DataContext);
   const displayMetas = useDisplayMetas();
   const includedMetaVars = displayInfo.inputs?.feedbackInterface.includeMetaVars || [];
   const data: Data = {};
   const cols: string[] = [];
-
-  const { data: configObj } = useConfig();
-
   // This loop basically goes over the local storage keys and checks if they are from the current display
   // If they are we split the key by _:_ and get the panelKey and the column name. We then set the data object to
   // have the panelKey as a key and the column name as a key and the value as the value from local storage.
@@ -123,7 +121,11 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
   return (
     <div className={styles.downloadCsvContainer}>
       {hasEmail ? (
-        <DialogContentText id="alert-dialog-description" className={styles.downloadCsvContentText}>
+        <DialogContentText
+          sx={{ color: theme.palette.primary.contrastText }}
+          id="alert-dialog-description"
+          className={styles.downloadCsvContentText}
+        >
           <span className={styles.downloadCsvDescription}>
             {`A csv file of the inputs you provided has been created. By clicking the 'Compose Email' on the next step, an email will be drafted and opened in your email client to relay this csv file back to us, at ${displayInfo.inputs?.feedbackInterface.feedbackEmail}.`}
           </span>
@@ -132,7 +134,11 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
           </span>
         </DialogContentText>
       ) : (
-        <DialogContentText id="alert-dialog-description" className={styles.downloadCsvContentText}>
+        <DialogContentText
+          sx={{ color: theme.palette.primary.contrastText }}
+          id="alert-dialog-description"
+          className={styles.downloadCsvContentText}
+        >
           <span className={styles.downloadCsvDescription}>
             A csv file of the inputs you provided has been created. You can download the csv by clicking the button below.
           </span>
@@ -142,14 +148,9 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
       <div className={styles.downloadCsvWrapperCenter}>
         <Button
           variant="contained"
-          sx={{ color: configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText }}
           className={styles.downloadCsvButton}
-          endIcon={
-            <FontAwesomeIcon
-              color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-              icon={faDownload}
-            />
-          }
+          sx={{ color: theme.palette.text.secondary }}
+          endIcon={<FontAwesomeIcon icon={faDownload} />}
           onClick={downloadCsv}
           data-testid="download-csv-button"
         >

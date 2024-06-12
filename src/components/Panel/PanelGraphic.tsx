@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from './Panel.module.scss';
 
 interface PanelGraphicProps {
@@ -29,6 +30,7 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
 }) => {
   const socketUrl = `ws://127.0.0.1:${port || '8080'}`;
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
 
   useEffect(() => {
     const loadImage = async () => {
@@ -126,8 +128,8 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: '#f5f5f5',
-                  color: '#9ba3af',
+                  backgroundColor: theme.palette.secondary.main,
+                  color: theme.palette.primary.contrastText,
                   height: 'auto',
                   width: 'clamp(320px, 100vw, 800px)',
                   maxWidth: '100%',

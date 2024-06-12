@@ -15,8 +15,8 @@ import {
   createFilterOptions,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from './VariableSelector.module.scss';
-import { useConfig } from '../../slices/configAPI';
 
 interface VariableSelectorProps {
   isOpen: boolean;
@@ -43,14 +43,13 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   hasTags,
   disablePortal,
 }) => {
+  const theme = useTheme();
   const filterOptions = createFilterOptions({
     matchFrom: 'any',
     stringify: (option: { [key: string]: string }) => option.label + option.varname,
   });
 
   const [tagGroup, setTagGroup] = useState('__ALL__');
-
-  const { data: configObj } = useConfig();
 
   const handleTagChange = (event: SelectChangeEvent<string>) => {
     setTagGroup(event.target.value);
@@ -85,7 +84,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={0}>
-            <div style={{ width: 350, background: '#FFFFFF', borderRadius: '4px' }}>
+            <div style={{ width: 350, background: theme.palette.secondary.main, borderRadius: '4px' }}>
               <Box sx={{ p: 1, display: 'flex', flexDirection: 'row' }}>
                 <Autocomplete
                   classes={{ popupIndicatorOpen: styles.variableSelectorPopupIndicatorOpen }}
@@ -107,27 +106,17 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                             pr: 2,
                             pt: 2,
                             pb: 1,
-                            backgroundColor: (theme) => theme.palette.primary.main,
+                            backgroundColor: theme.palette.primary.main,
                             zIndex: 2001,
                           }}
                         >
                           <FormControl variant="standard" size="small" fullWidth>
-                            <InputLabel
-                              sx={{
-                                color: configObj?.theme?.isLightTextOnDark
-                                  ? configObj?.theme?.lightText
-                                  : configObj?.theme?.darkText || '#FFFFFF',
-                              }}
-                              id="demo-simple-select-label"
-                            >
-                              Variable Type
-                            </InputLabel>
+                            <InputLabel id="demo-simple-select-label">Variable Type</InputLabel>
                             <Select
                               sx={{
-                                color: configObj?.theme?.isLightTextOnDark
-                                  ? configObj?.theme?.lightText
-                                  : configObj?.theme?.darkText || '#FFFFFF',
+                                color: theme.palette.text.secondary,
                               }}
+                              MenuProps={{ PaperProps: { sx: { backgroundColor: theme.palette.secondary.main } } }}
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"
                               value={tagGroup}
@@ -155,6 +144,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   }
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
                   getOptionLabel={(option) => option.varname}
+                  ListboxProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
                   renderOption={(props, option, { selected }) => {
                     const hasLabel = option.label && option.label !== option.varname;
                     const showOption = tagGroup === '__ALL__' || option?.tags?.includes(tagGroup);
@@ -163,11 +153,20 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                       <li {...props} style={{ display: showOption ? 'inherit' : 'none' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Checkbox disableTouchRipple style={{ marginRight: 8 }} checked={selected} />
+                            <Checkbox
+                              sx={{ color: theme.palette.primary.contrastText }}
+                              disableTouchRipple
+                              style={{ marginRight: 8 }}
+                              checked={selected}
+                            />
                           </Box>
                           <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ lineHeight: hasLabel ? '20px' : '36px' }}>{optionVal?.varname}</div>
-                            {hasLabel && <div style={{ fontSize: 13, color: '#555555' }}>{optionVal?.label}</div>}
+                            {hasLabel && (
+                              <div style={{ fontSize: 13, color: theme.palette.primary.contrastText }}>
+                                {optionVal?.label}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </li>
@@ -175,7 +174,9 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   }}
                   value={selectedVariables}
                   onChange={handleChange}
-                  getLimitTagsText={(more) => <span style={{ marginLeft: 5, color: '#888888' }}>{`${more} selected`}</span>}
+                  getLimitTagsText={(more) => (
+                    <span style={{ marginLeft: 5, color: theme.palette.primary.contrastText }}>{`${more} selected`}</span>
+                  )}
                   renderInput={(params) => (
                     <TextField autoFocus {...params} label="Search or select a variable" placeholder="" />
                   )}

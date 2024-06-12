@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { selectLayout, setLayout } from '../../slices/layoutSlice';
 import styles from './ColumnSelector.module.scss';
 import ErrorWrapper from '../ErrorWrapper';
@@ -8,6 +9,7 @@ import ErrorWrapper from '../ErrorWrapper';
 const ColumnSelector: React.FC = () => {
   const dispatch = useDispatch();
   const layout = useSelector(selectLayout);
+  const theme = useTheme();
 
   const handleColumnChange = (value: string) => {
     let nonZeroValue = value;
@@ -22,7 +24,9 @@ const ColumnSelector: React.FC = () => {
   return (
     <ErrorWrapper>
       <div>
-        <span className={styles.columnSelectorText}>Columns:</span>
+        <span style={{ color: theme.palette.text.primary }} className={styles.columnSelectorText}>
+          Columns:
+        </span>
       </div>
       <TextField
         sx={{
@@ -30,10 +34,10 @@ const ColumnSelector: React.FC = () => {
           minWidth: 30,
           pt: 0,
           '& .MuiInput-root::before': {
-            borderColor: 'var(--white-600)',
+            borderColor: theme.palette.secondary.dark,
           },
           '& .MuiInput-root:hover::before': {
-            borderColor: 'var(--white-700)',
+            borderColor: theme.palette.primary.contrastText,
           },
         }}
         data-testid="column-selector"

@@ -50,25 +50,13 @@
     font-style: italic;
   }
 
-  &DragIcon {
-    margin-right: 15px;
-    cursor: move;
-  }
-
   &CloseIcon {
     display: inline-block;
-    color: var(--gray);
-    fill: var(--gray);
     height: var(--chip-closeIcon-size);
     width: var(--chip-closeIcon-size);
     transition: var(--chip-closeIcon-transition);
     cursor: pointer;
     margin: var(--margin-1) var(--margin-1) 0 var(--neg-margin-6);
     -webkit-user-select: none;
-
-    &:hover {
-      color: var(--black-400);
-      fill: var(--white);
-    }
   }
 }

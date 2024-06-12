@@ -4,6 +4,7 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, B
 import { useSnackbar } from 'notistack';
 import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTheme } from '@mui/material/styles';
 import styles from './ImportViewsModal.module.scss';
 import { useDisplayInfo } from '../../slices/displayInfoAPI';
 
@@ -16,6 +17,7 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
   const { data: displayInfo } = useDisplayInfo();
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const theme = useTheme();
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
@@ -78,10 +80,15 @@ const ImportViewsModal: React.FC<ImportViewsModalProps> = ({ isOpen, handleImpor
 
   return (
     <div className={styles.importViewsModal}>
-      <Dialog data-testid="import-views-modal" open={isOpen} onClose={handleImportToggle}>
+      <Dialog
+        PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
+        data-testid="import-views-modal"
+        open={isOpen}
+        onClose={handleImportToggle}
+      >
         <DialogTitle>Import Views</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{ color: theme.palette.primary.contrastText }}>
             Import views by uploading a json file below. If a view already exists with the same name it will be skipped.
           </DialogContentText>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>

@@ -3,6 +3,7 @@ import { faChevronUp, faChevronDown, faEye, faEyeSlash } from '@fortawesome/free
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, ClickAwayListener, IconButton, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
 import { labelsSelector } from '../../selectors';
 import { useMetaGroupsWithInputs, useDisplayMetasWithInputs } from '../../slices/displayInfoAPI';
 import { setLabels } from '../../slices/labelsSlice';
@@ -16,6 +17,7 @@ const Labels: React.FC = () => {
   const metaGroupsWithInputs = useMetaGroupsWithInputs();
   const metasWithInputs = useDisplayMetasWithInputs();
   const labels = useSelector(labelsSelector);
+  const theme = useTheme();
   const labelFormatted = useMemo(
     () =>
       labels.map((label) => {
@@ -66,15 +68,15 @@ const Labels: React.FC = () => {
       >
         <div className={styles.labelsContainer}>
           <Tooltip arrow title={`${showLabels ? 'Hide' : 'Show'} labels under panels`}>
-            <IconButton onClick={handleShowLabels}>
+            <IconButton sx={{ color: theme.palette.primary.contrastText }} onClick={handleShowLabels}>
               <FontAwesomeIcon icon={showLabels ? faEye : faEyeSlash} />
             </IconButton>
           </Tooltip>
           <Button
             sx={{
-              color: '#000000',
               textTransform: 'unset',
               fontSize: '15px',
+              color: theme.palette.text.primary,
             }}
             data-testid="labels-button"
             type="button"

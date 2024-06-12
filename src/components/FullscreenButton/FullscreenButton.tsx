@@ -3,19 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 import { addClass, removeClass } from '../../classManipulation';
 import { fullscreenSelector } from '../../selectors';
 import { setFullscreen } from '../../slices/appSlice';
 import { windowResize } from '../../slices/uiSlice';
 import { origHeightSelector, origWidthSelector } from '../../selectors/ui';
 import { useConfig } from '../../slices/configAPI';
+import { BACK } from '../../constants';
 // import styles from './FullscreenButton.module.scss';
 
 const FullscreenButton: React.FC = () => {
   const dispatch = useDispatch();
   const fullscreen = useSelector(fullscreenSelector);
-  // const singlePageApp = useSelector(singlePageAppSelector);
   const { data: configObj } = useConfig();
+  // const singlePageApp = useSelector(singlePageAppSelector);
+  const theme = useTheme();
   const ww = useSelector(origWidthSelector);
   const hh = useSelector(origHeightSelector);
   const originalDims = useMemo(() => ({ width: ww, height: hh }), [ww, hh]);
@@ -91,20 +94,18 @@ const FullscreenButton: React.FC = () => {
 
   return (
     <Tooltip title="Toggle Fullscreen">
-      <IconButton data-testid="fullscreen-button" onClick={toggleFullScreen} color="inherit">
-        {!fullscreen ? (
-          <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-            icon={faExpand}
-            size="sm"
-          />
-        ) : (
-          <FontAwesomeIcon
-            color={configObj?.theme?.isLightTextOnDark ? configObj?.theme?.lightText : configObj?.theme?.darkText}
-            icon={faCompress}
-            size="sm"
-          />
-        )}
+      <IconButton
+        sx={{
+          color:
+            configObj && configObj.config1 !== BACK.OUTATIME
+              ? theme.palette.text.secondary
+              : theme.palette.primary.contrastText,
+        }}
+        data-testid="fullscreen-button"
+        onClick={toggleFullScreen}
+        color="inherit"
+      >
+        {!fullscreen ? <FontAwesomeIcon icon={faExpand} size="sm" /> : <FontAwesomeIcon icon={faCompress} size="sm" />}
       </IconButton>
     </Tooltip>
   );

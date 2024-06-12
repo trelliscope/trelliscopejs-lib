@@ -1,10 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faCircle, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { MRT_ShowHideColumnsButton } from 'material-react-table';
+import { useTheme } from '@mui/material/styles';
 import { useSelectedDisplay } from '../../slices/selectedDisplaySlice';
 import Pagination from '../Pagination';
 import ColumnSelector from '../ColumnSelector/ColumnSelector';
@@ -29,29 +30,38 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
   const layout = useSelector(selectLayout);
   const displayLoaded = selectedDisplay?.name !== '';
   const activeFilters = useSelector(selectFilterState);
+  const theme = useTheme();
 
   const leftPosition = layout?.sidebarActive ? '386px' : '-30px';
 
   return (
     <ErrorWrapper>
       <FontAwesomeIcon
-        style={{ left: leftPosition }}
+        style={{
+          left: leftPosition,
+          color: theme.palette.text.primary,
+          borderColor: theme.palette.secondary.dark,
+          background: theme.palette.secondary.light,
+        }}
         onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
         size="sm"
         className={styles.contentHeaderControlsItemToggleIcon}
         icon={faChevronLeft}
       />
-      <div className={styles.contentHeader}>
+      <div style={{ backgroundColor: theme.palette.secondary.dark }} className={styles.contentHeader}>
         <div className={styles.contentHeaderControls}>
           <div className={styles.contentHeaderControlsLeft}>
-            <div className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}>
+            <Box
+              sx={{ backgroundColor: theme.palette.secondary.light }}
+              className={classNames(styles.contentHeaderControlsItem, styles.contentHeaderControlsItemToggle)}
+            >
               <Button
                 id="filter-drawer-button"
                 data-testid="filter-drawer-button"
                 onClick={() => dispatch(setLayout({ sidebarActive: !layout.sidebarActive }))}
                 variant="text"
                 sx={{
-                  color: '#000',
+                  color: theme.palette.text.primary,
                   textTransform: 'unset',
                   fontSize: '15px',
                   borderRadius: 0,
@@ -64,45 +74,70 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ table }) => {
                 Filters
                 {activeFilters.length > 0 && (
                   <span className={styles.contentHeaderControlsItemToggleBadge}>
-                    <FontAwesomeIcon icon={faCircle} />
+                    <FontAwesomeIcon color={theme.palette.primary.main} icon={faCircle} />
                     <span
                       className={styles.contentHeaderControlsItemToggleBadgeNum}
-                      style={activeFilters.length > 9 ? { right: '-5px' } : { right: '-1px' }}
+                      style={{ right: activeFilters.length > 9 ? '-5px' : '-1px', color: theme.palette.text.secondary }}
                     >
                       {activeFilters.length}
                     </span>
                   </span>
                 )}
               </Button>
-            </div>
-            <div className={styles.contentHeaderControlsItem}>
+            </Box>
+            <Box sx={{ backgroundColor: theme.palette.secondary.light }} className={styles.contentHeaderControlsItem}>
               <Sort />
-            </div>
+            </Box>
             {layout?.viewtype === 'table' && (
-              <div data-testid="columns-table" id="column-control" className={styles.contentHeaderControlsItem}>
-                <span>Columns</span>
+              <Box
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  '.MuiList-root': { backgroundColor: theme.palette.primary.main },
+                  svg: { color: theme.palette.primary.contrastText },
+                }}
+                data-testid="columns-table"
+                id="column-control"
+                className={styles.contentHeaderControlsItem}
+              >
+                <span style={{ color: theme.palette.text.primary }}>Columns</span>
                 {/* eslint-disable-next-line react/jsx-pascal-case */}
                 <MRT_ShowHideColumnsButton table={table} />
-              </div>
+              </Box>
             )}
             {layout?.viewtype !== 'table' && (
               <>
-                <div id="column-control" className={styles.contentHeaderControlsItem}>
+                <Box
+                  sx={{ backgroundColor: theme.palette.secondary.light }}
+                  id="column-control"
+                  className={styles.contentHeaderControlsItem}
+                >
                   <ColumnSelector />
-                </div>
-                <div id="label-control" className={styles.contentHeaderControlsItem}>
+                </Box>
+                <Box
+                  sx={{ backgroundColor: theme.palette.secondary.light }}
+                  id="label-control"
+                  className={styles.contentHeaderControlsItem}
+                >
                   <Labels />
-                </div>
+                </Box>
               </>
             )}
             {data && (
-              <div id="view-control" className={styles.contentHeaderControlsItem}>
+              <Box
+                sx={{ backgroundColor: theme.palette.secondary.light }}
+                id="view-control"
+                className={styles.contentHeaderControlsItem}
+              >
                 <Views />
-              </div>
+              </Box>
             )}
-            <div id="layout-control" className={styles.contentHeaderControlsItem}>
+            <Box
+              sx={{ backgroundColor: theme.palette.secondary.light }}
+              id="layout-control"
+              className={styles.contentHeaderControlsItem}
+            >
               <LayoutSelector />
-            </div>
+            </Box>
           </div>
           <div className={styles.contentHeaderControlsPagination}>{displayLoaded && <Pagination />}</div>
         </div>

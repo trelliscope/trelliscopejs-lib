@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextField } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { FILTER_TYPE_NUMBERRANGE } from '../../constants';
 import useMetaInfo from '../../selectors/useMetaInfo';
 import { addFilter, removeFilter, updateFilter } from '../../slices/filterSlice';
@@ -23,6 +24,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
   const metaObj = metas.find((m) => m.varname === meta.varname);
   const { log } = metaObj as IMeta;
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     if (filter?.min === null) {
@@ -75,7 +77,7 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
 
   if (!data?.length) return null;
 
-  const inputStyle = { textAlign: 'center', paddingBottom: 2 } as CSSProperties;
+  const inputStyle = { textAlign: 'center', paddingBottom: 2, color: theme.palette.text.primary } as CSSProperties;
 
   if (
     filter?.max !== undefined &&
@@ -150,6 +152,11 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
             style: inputStyle,
             step,
           }}
+          sx={{
+            '& .MuiInput-underline:before': {
+              borderBottomColor: theme.palette.primary.contrastText,
+            },
+          }}
           type="number"
           value={minInput}
           onChange={(e) => setMinInput(e.target.value)}
@@ -168,6 +175,11 @@ const FilterNum: React.FC<FilterNumProps> = ({ meta, filter }) => {
           inputProps={{
             style: inputStyle,
             step,
+          }}
+          sx={{
+            '& .MuiInput-underline:before': {
+              borderBottomColor: theme.palette.primary.contrastText,
+            },
           }}
           type="number"
           value={maxInput}

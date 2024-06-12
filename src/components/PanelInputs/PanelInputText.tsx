@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { faPencil, faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, InputAdornment, Popover, TextField, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from './PanelInputs.module.scss';
 import { useStoredInputValue } from '../../inputUtils';
 
@@ -15,6 +16,7 @@ interface PanelInputTextProps {
 }
 
 const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, isNumeric, input, iconFontSize }) => {
+  const theme = useTheme();
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = React.useState(false);
   const [textInputValue, setTextInputValue] = React.useState<string | undefined>(undefined);
@@ -79,7 +81,7 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
           style={{ lineHeight: `${(iconFontSize || 12) * 1.5}px` }}
         >
           <span ref={anchorRef}>
-            <FontAwesomeIcon icon={faPencil} style={{ fontSize: iconFontSize }} />
+            <FontAwesomeIcon color={theme.palette.text.primary} icon={faPencil} style={{ fontSize: iconFontSize }} />
           </span>
         </button>
       </div>
@@ -87,6 +89,7 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
         open={inputOpen}
         anchorEl={anchorRef.current}
         classes={{ paper: styles.panelInputTextPopover }}
+        slotProps={{ paper: { sx: { backgroundColor: theme.palette.secondary.main } } }}
         TransitionProps={{
           onEntered: () => {
             setTextInputValue(getStoredValue() || '');

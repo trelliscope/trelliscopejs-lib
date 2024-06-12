@@ -1,5 +1,6 @@
-import { Box, Tooltip } from '@mui/material';
 import React from 'react';
+import { Box, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from './PanelLabels.module.scss';
 
 interface PanelLabelsCellProps {
@@ -8,18 +9,24 @@ interface PanelLabelsCellProps {
   padding: number | null;
 }
 
-const PanelLabelsCell: React.FC<PanelLabelsCellProps> = ({ value, label, padding }) => (
-  <td style={{ padding: `${padding}px` }} className={styles.panelLabelsCell}>
-    {label ? (
-      <Tooltip title={label} placement="left" arrow>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <span>{value}</span>
-        </Box>
-      </Tooltip>
-    ) : (
-      <span>{value}</span>
-    )}
-  </td>
-);
+const PanelLabelsCell: React.FC<PanelLabelsCellProps> = ({ value, label, padding }) => {
+  const theme = useTheme();
+  return (
+    <td
+      style={{ padding: `${padding}px`, borderRight: `1px solid ${theme.palette.secondary.dark}` }}
+      className={styles.panelLabelsCell}
+    >
+      {label ? (
+        <Tooltip title={label} placement="left" arrow>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <span>{value}</span>
+          </Box>
+        </Tooltip>
+      ) : (
+        <span>{value}</span>
+      )}
+    </td>
+  );
+};
 
 export default PanelLabelsCell;

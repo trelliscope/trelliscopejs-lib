@@ -1,6 +1,7 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, IconButton } from '@mui/material';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
@@ -28,6 +29,7 @@ const Sort: React.FC = () => {
   const [selectedSortVariables, setSelectedSortVariables] = useState(sort || []);
   const [variableSortSelectorIsOpen, setVariableSortSelectorIsOpen] = useState(false);
   const [anchorSortEl, setAnchorSortEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
 
   const sortRes: { varname: string; icon: string }[] = [];
   for (let i = 0; i < sort.length; i += 1) {
@@ -133,7 +135,9 @@ const Sort: React.FC = () => {
       >
         <div className={styles.sortContainer}>
           <div>
-            <span className={styles.sortText}>Sort</span>
+            <span style={{ color: theme.palette.text.primary }} className={styles.sortText}>
+              Sort
+            </span>
           </div>
           <div className={styles.sortDragContainer}>
             <DndContext modifiers={[restrictToHorizontalAxis]} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
@@ -161,6 +165,7 @@ const Sort: React.FC = () => {
             data-testid="sort-add-button"
             id="sort-add-icon"
             onClick={handleVariableSortSelectorClick}
+            sx={{ color: theme.palette.primary.contrastText }}
             aria-label="add-icon"
           >
             <FontAwesomeIcon icon={faPlusCircle} fontSize="sm" />

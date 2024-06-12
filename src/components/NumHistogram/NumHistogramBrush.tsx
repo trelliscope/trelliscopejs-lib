@@ -1,4 +1,5 @@
 import React, { useState, MouseEvent } from 'react';
+import { useTheme } from '@mui/material/styles';
 import styles from './NumHistogram.module.scss';
 
 interface BrushState {
@@ -41,6 +42,8 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
     isMoving: false,
     activeHandle: null,
   };
+
+  const theme = useTheme();
 
   const [state, setState] = useState(initialState);
   const activeX = state.isDragging ? state.x : selection[0] < 0 ? 0 : selection[0];
@@ -130,6 +133,7 @@ const NumHistogramBrush: React.FC<NumHistogramBrushProps> = ({
         onMouseLeave={handleMouseUp}
       />
       <rect
+        style={{ fill: theme.palette.secondary.contrastText, stroke: theme.palette.secondary.contrastText }}
         className={styles.brushSelection}
         width={brushWidth > 0 ? brushWidth : 0}
         height={height}

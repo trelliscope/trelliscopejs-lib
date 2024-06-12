@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { scaleLinear } from 'd3-scale';
+import { useTheme } from '@mui/material/styles';
 import styles from './NumHistogram.module.scss';
 import NumHistogramBrush from './NumHistogramBrush';
 import NumHistogramAxis from './NumHistogramAxis';
@@ -30,6 +31,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
   log,
   isDate,
 }) => {
+  const theme = useTheme();
   const axisPad = 16;
   const xPad = 20;
   const innerWidth = width - xPad;
@@ -71,18 +73,18 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
     selection[0] === -Infinity && selection[1] === Infinity
       ? xScale(0)
       : selection[0] === 0
-      ? xScale(selection[0])
-      : xScale(log ? Math.log10(selection[0]) : selection[0]) || 0;
+        ? xScale(selection[0])
+        : xScale(log ? Math.log10(selection[0]) : selection[0]) || 0;
   const sel1 =
     selection[0] === -Infinity && selection[1] === Infinity
       ? xScale(0)
       : selection[1] === 0
-      ? selection[0] === 0
-        ? xScale(selection[0])
-        : selection[1] === 0
-        ? xScale(selection[1])
-        : innerWidth
-      : xScale(log ? Math.log10(selection[1]) : selection[1]) || innerWidth;
+        ? selection[0] === 0
+          ? xScale(selection[0])
+          : selection[1] === 0
+            ? xScale(selection[1])
+            : innerWidth
+        : xScale(log ? Math.log10(selection[1]) : selection[1]) || innerWidth;
   return (
     <svg width={width} height={height} className={styles.numHistogram}>
       <g>
@@ -93,7 +95,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
             width={barWidth}
             height={yScale(d.value)}
             x={(xScale(d.key as number) || 0) + xPad}
-            y={height - yScale(d.value) - axisPad - 1}
+            y={height - yScale(d.value) - axisPad}
             active={brushActive || sel0 !== sel1}
           />
         ))}
@@ -126,15 +128,15 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
           Number.isNaN(sel1 - sel0)
             ? 0
             : sel0 < 0 && sel1 === innerWidth
-            ? innerWidth - xPad
-            : sel0 < 0
-            ? sel1
-            : sel1 >= innerWidth - xPad
-            ? innerWidth - xPad - sel0
-            : sel1 - sel0
+              ? innerWidth - xPad
+              : sel0 < 0
+                ? sel1
+                : sel1 >= innerWidth - xPad
+                  ? innerWidth - xPad - sel0
+                  : sel1 - sel0
         }
         height={3}
-        style={{ fill: '#448aff' }}
+        style={{ fill: theme.palette.primary.main }}
       />
     </svg>
   );

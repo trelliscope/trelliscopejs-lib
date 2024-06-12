@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareNodes, faCopy } from '@fortawesome/free-solid-svg-icons';
 import styles from './Share.module.scss';
-import { useConfig } from '../../slices/configAPI';
 
 const Share: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const url = window.location.href;
   const [copyText, setCopyText] = useState('Copy');
-  const { data: configObj } = useConfig();
+  const theme = useTheme();
 
   const handleShareModal = () => {
     setIsOpen(!isOpen);
@@ -26,17 +26,8 @@ const Share: React.FC = () => {
   return (
     <div className={styles.share}>
       <Tooltip title="Share">
-        <IconButton data-testid="share-button" onClick={handleShareModal}>
-          <FontAwesomeIcon
-            color={
-              configObj?.theme?.header
-                ? configObj.theme?.header?.text
-                : configObj?.theme?.isLightTextOnDark
-                ? configObj?.theme?.lightText
-                : configObj?.theme?.darkText
-            }
-            icon={faShareNodes}
-          />
+        <IconButton sx={{ color: theme.palette.primary.contrastText }} data-testid="share-button" onClick={handleShareModal}>
+          <FontAwesomeIcon icon={faShareNodes} />
         </IconButton>
       </Tooltip>
       <Dialog
@@ -47,12 +38,27 @@ const Share: React.FC = () => {
         onClose={handleShareModal}
         maxWidth="md"
         data-testid="share-modal"
+        PaperProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
       >
         <DialogTitle id="dialog-info-title">Share a link to this display</DialogTitle>
         <DialogContent>
           <div className={styles.shareContent}>
             <Tooltip data-testid="share-tooltip" title={`${copyText} to clipboard`} followCursor placement="top" arrow>
               <TextField
+                sx={{
+                  // change outline color to use theme
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: theme.palette.primary.contrastText,
+                    },
+                    '&:hover fieldset': {
+                      borderColor: theme.palette.text.primary,
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: theme.palette.primary.main,
+                    },
+                  },
+                }}
                 data-testid="share-url"
                 className={styles.shareContentText}
                 onClick={copyUrlToClipboard}
