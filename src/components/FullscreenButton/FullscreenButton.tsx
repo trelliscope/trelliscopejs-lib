@@ -13,7 +13,11 @@ import { useConfig } from '../../slices/configAPI';
 import { BACK } from '../../constants';
 // import styles from './FullscreenButton.module.scss';
 
-const FullscreenButton: React.FC = () => {
+interface FullscreenButtonProps {
+  appRef: React.RefObject<HTMLDivElement>;
+}
+
+const FullscreenButton: React.FC<FullscreenButtonProps> = ({ appRef }) => {
   const dispatch = useDispatch();
   const fullscreen = useSelector(fullscreenSelector);
   const { data: configObj } = useConfig();
@@ -29,7 +33,7 @@ const FullscreenButton: React.FC = () => {
   const toggleFullScreen = () => {
     if (isSafari) {
       if (!document.webkitFullscreenElement) {
-        document.body.webkitRequestFullscreen();
+        appRef.current?.webkitRequestFullscreen();
         if (mainEl) {
           addClass(mainEl, 'trelliscope-spa');
           addClass(mainEl, 'trelliscope-fullscreen');
@@ -47,7 +51,7 @@ const FullscreenButton: React.FC = () => {
       return;
     }
     if (!document.fullscreenElement) {
-      document.body.requestFullscreen();
+      appRef.current?.requestFullscreen();
       if (mainEl) {
         addClass(mainEl, 'trelliscope-spa');
         addClass(mainEl, 'trelliscope-fullscreen');
