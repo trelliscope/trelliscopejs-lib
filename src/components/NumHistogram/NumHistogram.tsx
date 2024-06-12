@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { useTheme } from '@mui/material/styles';
-import styles from './NumHistogram.module.scss';
 import NumHistogramBrush from './NumHistogramBrush';
 import NumHistogramAxis from './NumHistogramAxis';
 import NumHistogramBar from './NumHistogramBar';
@@ -86,7 +85,7 @@ const NumHistogram: React.FC<NumHistogramProps> = ({
             : innerWidth
         : xScale(log ? Math.log10(selection[1]) : selection[1]) || innerWidth;
   return (
-    <svg width={width} height={height} className={styles.numHistogram}>
+    <svg width={width} height={height}>
       <g>
         {data.map((d) => (
           <NumHistogramBar

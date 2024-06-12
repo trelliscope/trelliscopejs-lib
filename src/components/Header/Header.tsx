@@ -18,7 +18,11 @@ import PanelPicker from '../PanelPicker';
 import ErrorWrapper from '../ErrorWrapper';
 import Tour from '../Tour';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  appRef: React.RefObject<HTMLDivElement>;
+}
+
+const Header: React.FC<HeaderProps> = ({ appRef }) => {
   const { data: displayList = [] } = useDisplayList();
   const [hasInputs, setHasInputs] = useState(false);
   const theme = useTheme();
@@ -142,14 +146,14 @@ const Header: React.FC = () => {
                     id="fullscreen-control"
                     className={styles.headerTrelliscopeFullscreen}
                   >
-                    <FullscreenButton />
+                    <FullscreenButton appRef={appRef} />
                   </Box>
                 </Box>
               ) : (
                 <Box className={styles.headerTrelliscope}>
                   <HelpInfo />
                   <Box id="fullscreen-control" className={styles.headerTrelliscopeFullscreen}>
-                    <FullscreenButton />
+                    <FullscreenButton appRef={appRef} />
                   </Box>
                 </Box>
               )}

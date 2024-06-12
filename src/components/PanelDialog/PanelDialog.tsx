@@ -191,46 +191,48 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
       onClose={handleClose}
       data-testid="panel-dialog"
     >
-      <ClickAwayListener
-        mouseEvent="onMouseUp"
-        onClickAway={() => {
-          setVariableSelectorIsOpen(false);
-          setAnchorSelectorEl(null);
-        }}
-      >
-        <Box>
-          <Button
-            sx={{
-              color: theme.palette.text.primary,
-              textTransform: 'unset',
-              fontSize: '15px',
-            }}
-            type="button"
-            data-testid="variable-selector-button"
-            onClick={handleVariableSelectorClick}
-            endIcon={<FontAwesomeIcon icon={variableSelectorIsOpen ? faChevronUp : faChevronDown} />}
-          >
-            Show Additional Panels
-          </Button>
-          <VariableSelector
-            isOpen={variableSelectorIsOpen}
-            setVariableSelectorIsOpen={setVariableSelectorIsOpen}
-            setAnchorEl={setAnchorSelectorEl}
-            selectedVariables={selectedVariables}
-            metaGroups={null}
-            anchorEl={anchorSelectorEl}
-            displayMetas={panelMetas as unknown as { [key: string]: string }[]}
-            handleChange={
-              handleSelectorChange as unknown as (
-                event: React.SyntheticEvent<Element, Event>,
-                value: { [key: string]: string }[],
-              ) => void
-            }
-            hasTags={false}
-            disablePortal
-          />
-        </Box>
-      </ClickAwayListener>
+      {panelMetas?.length > 0 && (
+        <ClickAwayListener
+          mouseEvent="onMouseUp"
+          onClickAway={() => {
+            setVariableSelectorIsOpen(false);
+            setAnchorSelectorEl(null);
+          }}
+        >
+          <Box>
+            <Button
+              sx={{
+                color: theme.palette.text.primary,
+                textTransform: 'unset',
+                fontSize: '15px',
+              }}
+              type="button"
+              data-testid="variable-selector-button"
+              onClick={handleVariableSelectorClick}
+              endIcon={<FontAwesomeIcon icon={variableSelectorIsOpen ? faChevronUp : faChevronDown} />}
+            >
+              Show Additional Panels
+            </Button>
+            <VariableSelector
+              isOpen={variableSelectorIsOpen}
+              setVariableSelectorIsOpen={setVariableSelectorIsOpen}
+              setAnchorEl={setAnchorSelectorEl}
+              selectedVariables={selectedVariables}
+              metaGroups={null}
+              anchorEl={anchorSelectorEl}
+              displayMetas={panelMetas as unknown as { [key: string]: string }[]}
+              handleChange={
+                handleSelectorChange as unknown as (
+                  event: React.SyntheticEvent<Element, Event>,
+                  value: { [key: string]: string }[],
+                ) => void
+              }
+              hasTags={false}
+              disablePortal
+            />
+          </Box>
+        </ClickAwayListener>
+      )}
       <div className={styles.panelDialogGraphic}>
         <Box sx={{ alignItems: 'center', display: 'flex' }}>
           <IconButton

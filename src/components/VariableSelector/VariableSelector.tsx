@@ -75,6 +75,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
   return (
     <div className={styles.variableSelector}>
       <Popper
+        sx={{ zIndex: 2001 }}
         data-testid="variable-picker"
         open={isOpen || false}
         anchorEl={anchorEl}
@@ -95,6 +96,16 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   options={displayMetas}
                   filterOptions={filterOptions}
                   disableCloseOnSelect
+                  ChipProps={{
+                    sx: {
+                      background: theme.palette.primary.main,
+                      color: theme.palette.text.secondary,
+                      '&:hover': { background: theme.palette.primary.dark },
+                      svg: {
+                        fill: theme.palette.secondary.dark,
+                      },
+                    },
+                  }}
                   PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} disablePortal={disablePortal} />}
                   PaperComponent={(props) =>
                     hasTags && metaGroups ? (
@@ -107,7 +118,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                             pt: 2,
                             pb: 1,
                             backgroundColor: theme.palette.primary.main,
-                            zIndex: 2001,
+                            zIndex: 9999,
                           }}
                         >
                           <FormControl variant="standard" size="small" fullWidth>
