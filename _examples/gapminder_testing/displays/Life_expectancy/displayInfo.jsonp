@@ -1,4 +1,4 @@
-__loadDisplayInfo__5ae49320({
+__loadDisplayInfo__cc1e6a06({
   "name": "Life expectancy",
   "description": "Life expectancy over time by country",
   "tags": [],
@@ -99,8 +99,7 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": true,
-        "type": "JS",
-        'function': null
+        "type": "file"
       },
       "aspect": 1.5,
       "paneltype": "img",
@@ -115,7 +114,7 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": true,
-        "type": "JS"
+        "type": "file"
       },
       "aspect": 0.5,
       "paneltype": "iframe",
@@ -130,7 +129,7 @@ __loadDisplayInfo__5ae49320({
     {
       "source": {
         "isLocal": false,
-        "type": "JS"
+        "type": "file"
       },
       "aspect": 1.50146627565982,
       "paneltype": "img",
