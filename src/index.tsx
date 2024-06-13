@@ -1,9 +1,26 @@
+import React from 'react';
 import TrelliscopeApp from './TrelliscopeApp';
 import trelliscopeApp from './trelliscopeAppFunc';
 import { Trelliscope } from './jsApi';
 
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
+
+const TestComponent = ({ row }) => {
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        border: '4px solid red',
+        textAlign: 'center',
+        boxSizing: 'border-box',
+      }}
+    >
+      {row.country}
+    </div>
+  );
+};
 
 // if in development mode, populate div with an example trelliscope app
 if (import.meta.env.MODE === 'development') {
@@ -73,6 +90,13 @@ if (import.meta.env.MODE === 'development') {
             panelType: 'iframeSrcDoc',
             func: (row: Datum) =>
               `<div style="width: 100%; height: 100%; border: 4px solid red; text-align: center; box-sizing: border-box;">${row.country}</div>`,
+          })
+          .setPanelFunction({
+            varname: 'test div',
+            label: 'Dummy "plot" to test react component panels',
+            aspect: 1 / 2,
+            panelType: 'htmlContent',
+            func: (row: Datum) => <TestComponent row={row} />,
           });
 
         const testCase = 'view';
