@@ -6,21 +6,23 @@ import { Trelliscope } from './jsApi';
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
 
-const TestComponent = ({ row }) => {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        border: '4px solid red',
-        textAlign: 'center',
-        boxSizing: 'border-box',
-      }}
-    >
-      {row.country}
-    </div>
-  );
-};
+interface TestComponentProps {
+  row: Datum;
+}
+
+const TestComponent: React.FC<TestComponentProps> = ({ row }) => (
+  <div
+    style={{
+      width: '100%',
+      height: '100%',
+      border: '4px solid red',
+      textAlign: 'center',
+      boxSizing: 'border-box',
+    }}
+  >
+    {row.country}
+  </div>
+);
 
 // if in development mode, populate div with an example trelliscope app
 if (import.meta.env.MODE === 'development') {
