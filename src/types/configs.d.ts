@@ -392,11 +392,11 @@ interface IView {
 
 type PanelFormat = 'apng' | 'avif' | 'gif' | 'jpg' | 'jpeg' | 'jfif' | 'pjpeg' | 'pjp' | 'png' | 'svg' | 'webp';
 
-type PanelType = 'img' | 'iframe' | 'iframeSrcDoc';
+type PanelType = 'img' | 'iframe' | 'iframeSrcDoc' | 'htmlContent';
 
 type PanelSourceType = 'file' | 'REST' | 'localWebSocket' | 'JS';
 
-type PanelFunction = (args) => string;
+type PanelFunction = (args) => string | React.ReactElement;
 
 interface IJSPanelSource extends IPanelSource {
   function?: PanelFunction;

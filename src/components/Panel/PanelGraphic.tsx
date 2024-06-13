@@ -5,7 +5,7 @@ import styles from './Panel.module.scss';
 
 interface PanelGraphicProps {
   type: PanelType;
-  src: string;
+  src: string | React.ReactElement;
   alt: string;
   aspectRatio?: number;
   imageWidth: number;
@@ -98,7 +98,7 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           width="100%"
           height="100%"
           // scrolling="no"
-          src={src}
+          src={src as string}
           title={alt}
         />
       )}
@@ -108,10 +108,19 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           width="100%"
           height="100%"
           // scrolling="no"
-          srcDoc={src}
+          srcDoc={src as string}
           title={alt}
         />
       )}
+      {type === 'htmlContent' && typeof src === 'string' && (
+        <div
+          key={`${src}_${window.innerWidth}`}
+          dangerouslySetInnerHTML={{ __html: src }}
+          style={{ width: '100%', height: '100%' }}
+        />
+      )}
+      {type === 'htmlContent' && typeof src !== 'string' && React.cloneElement(src as React.ReactElement)}
+
       {loading && (sourceType === 'localWebSocket' || sourceType === 'JS') ? (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <CircularProgress />
@@ -121,7 +130,13 @@ const PanelGraphic: React.FC<PanelGraphicProps> = ({
           // eslint-disable-next-line react/jsx-no-useless-fragment
           <>
             {imageLoaded ? (
-              <img key={`${src}_${name}`} src={src} alt={alt} onLoad={handleImageLoad} onError={handleImageError} />
+              <img
+                key={`${src}_${name}`}
+                src={src as string}
+                alt={alt}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+              />
             ) : (
               <Box
                 sx={{
