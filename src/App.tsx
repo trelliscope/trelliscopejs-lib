@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
@@ -71,7 +71,6 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
 
   const dispatch = useDispatch();
   const { data: configObj } = useConfig();
-  const appRef = useRef() as React.RefObject<HTMLDivElement>;
 
   useEffect(() => {
     dispatch(setAppID(id));
@@ -119,10 +118,9 @@ const App: React.FC<AppProps> = ({ client, config, id, singlePageApp, options, f
                   ? configObj.theme.palette?.secondary.main
                   : theme?.palette?.secondary?.main || 'initial',
               }}
-              ref={appRef}
             >
               <ErrorWrapper>
-                <Header appRef={appRef} />
+                <Header />
               </ErrorWrapper>
               <ErrorWrapper>
                 <Sidebar />

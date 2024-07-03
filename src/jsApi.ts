@@ -629,14 +629,17 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     config1,
     exportEnabled,
     theme,
+    fullScreenCallback,
   }: {
     config1?: string;
     exportEnabled?: boolean;
     theme?: ITheme;
+    fullScreenCallback?: () => void;
   }): ITrelliscopeAppSpec {
     this.config.config1 = config1;
     this.config.exportEnabled = exportEnabled;
     this.config.theme = theme;
+    this.config.fullScreenCallback = fullScreenCallback;
     return this;
   }
 

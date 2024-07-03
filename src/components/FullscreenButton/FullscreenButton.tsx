@@ -13,11 +13,7 @@ import { useConfig } from '../../slices/configAPI';
 import { BACK } from '../../constants';
 // import styles from './FullscreenButton.module.scss';
 
-interface FullscreenButtonProps {
-  appRef: React.RefObject<HTMLDivElement>;
-}
-
-const FullscreenButton: React.FC<FullscreenButtonProps> = ({ appRef }) => {
+const FullscreenButton = () => {
   const dispatch = useDispatch();
   const fullscreen = useSelector(fullscreenSelector);
   const { data: configObj } = useConfig();
@@ -30,10 +26,16 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({ appRef }) => {
   const mainEl = document.getElementsByClassName('trelliscope-not-spa')[0] as HTMLElement;
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-  const toggleFullScreen = () => {
+  const embeddedFunc = () => {
+    if (!configObj?.fullScreenCallback) return;
+    configObj?.fullScreenCallback();
+    dispatch(setFullscreen(!fullscreen));
+  };
+
+  const toggleFullScreenNative = () => {
     if (isSafari) {
       if (!document.webkitFullscreenElement) {
-        appRef.current?.webkitRequestFullscreen();
+        document.body.webkitRequestFullscreen();
         if (mainEl) {
           addClass(mainEl, 'trelliscope-spa');
           addClass(mainEl, 'trelliscope-fullscreen');
@@ -51,7 +53,7 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({ appRef }) => {
       return;
     }
     if (!document.fullscreenElement) {
-      appRef.current?.requestFullscreen();
+      document.body.requestFullscreen();
       if (mainEl) {
         addClass(mainEl, 'trelliscope-spa');
         addClass(mainEl, 'trelliscope-fullscreen');
@@ -106,7 +108,7 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({ appRef }) => {
               : theme.palette.primary.contrastText,
         }}
         data-testid="fullscreen-button"
-        onClick={toggleFullScreen}
+        onClick={() => (configObj?.fullScreenCallback ? embeddedFunc() : toggleFullScreenNative())}
         color="inherit"
       >
         {!fullscreen ? <FontAwesomeIcon icon={faExpand} size="sm" /> : <FontAwesomeIcon icon={faCompress} size="sm" />}
