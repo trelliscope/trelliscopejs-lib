@@ -468,6 +468,7 @@ interface IConfig {
   theme?: ITheme;
   config1?: string;
   exportEnabled?: boolean;
+  fullScreenCallback?: () => void;
 }
 
 interface ITheme {
@@ -543,5 +544,10 @@ interface ITrelliscopeAppSpec {
     func: PanelFunction;
   }): ITrelliscopeAppSpec;
   view({ width: number, height: number }): HTMLElement;
-  setConfig(arg0: { config1?: string; exportEnabled?: boolean; theme?: ITheme }): ITrelliscopeAppSpec;
+  setConfig(arg0: {
+    config1?: string;
+    exportEnabled?: boolean;
+    theme?: ITheme;
+    fullScreenCallback?: () => void;
+  }): ITrelliscopeAppSpec;
 }
