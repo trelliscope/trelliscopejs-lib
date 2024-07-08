@@ -162,7 +162,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
                   getOptionLabel={(option) => option.varname}
                   ListboxProps={{
-                    sx: { backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.contrastText },
+                    sx: { backgroundColor: theme.palette.secondary.main },
                   }}
                   renderOption={(props, option, { selected }) => {
                     const hasLabel = option.label && option.label !== option.varname;
