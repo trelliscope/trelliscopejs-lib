@@ -161,9 +161,7 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   }
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
                   getOptionLabel={(option) => option.varname}
-                  ListboxProps={{
-                    sx: { backgroundColor: theme.palette.secondary.main },
-                  }}
+                  ListboxProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
                   renderOption={(props, option, { selected }) => {
                     const hasLabel = option.label && option.label !== option.varname;
                     const showOption = tagGroup === '__ALL__' || option?.tags?.includes(tagGroup);
