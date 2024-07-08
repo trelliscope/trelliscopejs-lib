@@ -109,7 +109,13 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} disablePortal={disablePortal} />}
                   PaperComponent={(props) =>
                     hasTags && metaGroups ? (
-                      <Paper {...props}>
+                      <Paper
+                        sx={{
+                          backgroundColor: theme.palette.secondary.main,
+                          '& .MuiAutocomplete-noOptions': { color: theme.palette.primary.contrastText },
+                        }}
+                        {...props}
+                      >
                         <Box
                           sx={{
                             minWidth: 150,
@@ -155,7 +161,9 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   }
                   isOptionEqualToValue={(option, value) => option.varname === value.varname}
                   getOptionLabel={(option) => option.varname}
-                  ListboxProps={{ sx: { backgroundColor: theme.palette.secondary.main } }}
+                  ListboxProps={{
+                    sx: { backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.contrastText },
+                  }}
                   renderOption={(props, option, { selected }) => {
                     const hasLabel = option.label && option.label !== option.varname;
                     const showOption = tagGroup === '__ALL__' || option?.tags?.includes(tagGroup);
