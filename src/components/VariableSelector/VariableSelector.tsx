@@ -109,7 +109,13 @@ const VariableSelector: React.FC<VariableSelectorProps> = ({
                   PopperComponent={(props) => <Popper sx={{ zIndex: 2001 }} {...props} disablePortal={disablePortal} />}
                   PaperComponent={(props) =>
                     hasTags && metaGroups ? (
-                      <Paper {...props}>
+                      <Paper
+                        sx={{
+                          backgroundColor: theme.palette.secondary.main,
+                          '& .MuiAutocomplete-noOptions': { color: theme.palette.primary.contrastText },
+                        }}
+                        {...props}
+                      >
                         <Box
                           sx={{
                             minWidth: 150,
