@@ -69,7 +69,14 @@ const PanelInputRadios: React.FC<PanelInputRadiosProps> = ({ name, options, pane
                 classes={{ label: styles.panelInputRadioGroupLabel }}
                 key={option}
                 value={option}
-                control={<Radio classes={{ root: styles.panelInputRadioGroupRadio }} disableRipple size="small" />}
+                control={
+                  <Radio
+                    classes={{ root: styles.panelInputRadioGroupRadio }}
+                    sx={{ color: theme.palette.primary.main }}
+                    disableRipple
+                    size="small"
+                  />
+                }
                 label={option}
               />
             ))}
