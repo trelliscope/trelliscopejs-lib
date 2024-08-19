@@ -43,7 +43,7 @@ const DownloadCsv: React.FC<DownloadCsvProps> = ({ displayInfo, setCsvDownloaded
   Object.keys(localStorage).forEach((key) => {
     // check if the key in local storage is from the current display
     if (key.includes(displayInfo.name)) {
-      if (key.includes('_:_') && !key.includes('trelliscope_views')) {
+      if (key.includes('_:_') && !key.includes('trelliscope_views') && !key.includes('trelliscope_display_switch_state')) {
         const parts = key.split('_:_');
         const panelKey = parts[2];
         if (data[panelKey] === undefined) {
