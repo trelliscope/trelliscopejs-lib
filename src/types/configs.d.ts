@@ -247,6 +247,12 @@ interface IInputClientSideStorage {
   type: 'localStorage';
 }
 
+interface IInputServerSideStorage {
+  type: 'server';
+  getInput: (panelKey: string, varname: string) => string;
+  setInput: (panelKey: string, varname: string, value: string) => void;
+}
+
 // how the inputs will be relayed back to the creator of the display
 interface IInputEmailFeedback {
   feedbackEmail: string;
@@ -255,7 +261,7 @@ interface IInputEmailFeedback {
 
 interface IInputs {
   inputs: IInput[];
-  storageInterface: IInputClientSideStorage;
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
   feedbackInterface: IInputEmailFeedback;
 }
 

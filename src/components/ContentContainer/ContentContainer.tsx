@@ -173,6 +173,7 @@ const ContentContainer: React.FC = () => {
                 panelKey={panelKey as string}
                 isNumeric={meta.type === INPUT_TYPE_NUMBER}
                 input={meta as ITextInput | INumberInput}
+                storageInterface={displayInfo?.inputs?.storageInterface || { type: 'localStorage' }}
               />
             );
           }

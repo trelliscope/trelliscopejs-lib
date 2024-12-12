@@ -23,6 +23,7 @@ interface PanelProps {
   handlePanelChange: (value: string) => void;
   selectedValue: string;
   index: number;
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
 }
 
 const Panel: React.FC<PanelProps> = ({
@@ -35,6 +36,7 @@ const Panel: React.FC<PanelProps> = ({
   handlePanelChange,
   selectedValue,
   index,
+  storageInterface,
 }) => {
   const dispatch = useDispatch();
   const { data: displayInfo } = useDisplayInfo();
@@ -94,7 +96,15 @@ const Panel: React.FC<PanelProps> = ({
           </div>
         )}
       </div>
-      {showLabels && <PanelLabels data={data} labels={labels} inputs={inputs} onLabelRemove={handleRemoveLabel} />}
+      {showLabels && (
+        <PanelLabels
+          data={data}
+          labels={labels}
+          inputs={inputs}
+          onLabelRemove={handleRemoveLabel}
+          storageInterface={storageInterface}
+        />
+      )}
     </div>
   );
 };

@@ -771,6 +771,12 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     return this;
   }
 
+  setDefaultInputs(inputs: IInputs): ITrelliscopeAppSpec {
+    const { name } = this.displayList[0];
+    this.displays[name].displayInfo.inputs = inputs;
+    return this;
+  }
+
   setRangeFilter({
     varname,
     min = null,

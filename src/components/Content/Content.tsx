@@ -220,6 +220,7 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
                     handlePanelChange={handlePanelChange}
                     selectedValue={curPanel}
                     index={i}
+                    storageInterface={displayInfo?.inputs?.storageInterface || { type: 'localStorage' }}
                   >
                     <PanelGraphicWrapper
                       data={d}
@@ -257,6 +258,7 @@ const Content: React.FC<ContentProps> = ({ table, tableWrapperRef, tableContentR
           source={panelDialog.source as string}
           index={panelDialog.index as number}
           onClose={() => dispatch(setPanelDialog({ open: false }))}
+          storageInterface={displayInfo?.inputs?.storageInterface || { type: 'localStorage' }}
         />
       )}
     </ErrorWrapper>
