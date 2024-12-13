@@ -23,13 +23,23 @@ interface PanelDialogProps {
   source: string;
   onClose: () => void;
   index: number;
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
 }
 
 interface PanelExtended extends IPanelMeta {
   sourcePath: string;
 }
 
-const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, panel, source, onClose, index }) => {
+const PanelDialog: React.FC<PanelDialogProps> = ({
+  data,
+  filteredData,
+  open,
+  panel,
+  source,
+  onClose,
+  index,
+  storageInterface,
+}) => {
   const displayMetas = useDisplayMetas();
   const theme = useTheme();
   const panelMetas = displayMetas.filter((meta) => meta.type === META_TYPE_PANEL && meta.varname !== panel?.varname);
@@ -286,7 +296,12 @@ const PanelDialog: React.FC<PanelDialogProps> = ({ data, filteredData, open, pan
           </IconButton>
         </Box>
       </div>
-      <PanelZoomLabels data={curMetaData || {}} inputs={displayInfo?.inputs?.inputs || []} labels={labels} />
+      <PanelZoomLabels
+        data={curMetaData || {}}
+        inputs={displayInfo?.inputs?.inputs || []}
+        labels={labels}
+        storageInterface={storageInterface}
+      />
       <DialogActions>
         <Button data-testid="panel-dialog-close" aria-label="display info close" onClick={handleClose}>
           Close

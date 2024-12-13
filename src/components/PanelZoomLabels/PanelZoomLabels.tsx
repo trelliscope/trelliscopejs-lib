@@ -28,9 +28,10 @@ interface PanelZoomLabelsProps {
   data: Datum;
   labels: IMeta[];
   inputs: IInput[];
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
 }
 
-const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs }) => {
+const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs, storageInterface }) => {
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
   const stateLabels = useSelector(selectLabels);
@@ -80,6 +81,7 @@ const PanelZoomLabels: React.FC<PanelZoomLabelsProps> = ({ labels, data, inputs 
                     panelKey={panelKey as string}
                     isNumeric={input.type === INPUT_TYPE_NUMBER}
                     input={input as ITextInput | INumberInput}
+                    storageInterface={storageInterface}
                   />
                 )}
                 {input.type === INPUT_TYPE_RADIO && (

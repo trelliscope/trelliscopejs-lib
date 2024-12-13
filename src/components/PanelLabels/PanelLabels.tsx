@@ -42,9 +42,10 @@ interface PanelLabelsProps {
   labels: IMeta[];
   inputs: IInput[];
   onLabelRemove: (label: string) => void;
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
 }
 
-const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabelRemove }) => {
+const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabelRemove, storageInterface }) => {
   const theme = useTheme();
   const displayMetas = useDisplayMetas();
   const { data: displayInfo } = useDisplayInfo();
@@ -96,6 +97,7 @@ const PanelLabels: React.FC<PanelLabelsProps> = ({ labels, data, inputs, onLabel
                     isNumeric={input.type === INPUT_TYPE_NUMBER}
                     input={input as ITextInput | INumberInput}
                     iconFontSize={panelLabelSize.fontSize}
+                    storageInterface={storageInterface}
                   />
                 )}
                 {input.type === INPUT_TYPE_RADIO && (

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { faPencil, faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener, InputAdornment, Popover, TextField, Tooltip } from '@mui/material';
@@ -13,9 +13,18 @@ interface PanelInputTextProps {
   isNumeric?: boolean;
   input: ITextInput | INumberInput;
   iconFontSize?: number;
+  storageInterface: IInputClientSideStorage | IInputServerSideStorage;
 }
 
-const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, isNumeric, input, iconFontSize }) => {
+const PanelInputText: React.FC<PanelInputTextProps> = ({
+  name,
+  rows,
+  panelKey,
+  isNumeric,
+  input,
+  iconFontSize,
+  storageInterface,
+}) => {
   const theme = useTheme();
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [inputOpen, setInputOpen] = React.useState(false);
@@ -23,14 +32,28 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
   const { getStoredValue, setStoredValue, clearStoredValue } = useStoredInputValue(panelKey, name);
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-
-  const handleSave = (value: string) => {
-    if (!value) {
-      setStoredValue('');
-      clearStoredValue();
-      return;
+  useEffect(() => {
+    if (storageInterface.type === 'server') {
+      const fetchStoredValue = async () => {
+        const value = await storageInterface.getInput(panelKey, name);
+        setTextInputValue(value);
+      };
+      fetchStoredValue();
     }
-    setStoredValue(value);
+  }, [storageInterface, panelKey, name]);
+  const handleSave = (value: string) => {
+    if (storageInterface.type === 'server') {
+      storageInterface.setInput(panelKey, name, value);
+      setTextInputValue(value);
+    }
+    if (storageInterface.type === 'localStorage') {
+      if (!value) {
+        setStoredValue('');
+        clearStoredValue();
+        return;
+      }
+      setStoredValue(value);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,14 +87,13 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
 
   const handleClickAway = () => {
     setInputOpen(false);
-    setTextInputValue('');
   };
 
   return (
     <div className={styles.panelInputText}>
       <div className={styles.panelInputTextButtonContainer}>
-        <Tooltip title={getStoredValue()} placement="left" arrow>
-          <div className={styles.panelInputTextValue}>{getStoredValue()}</div>
+        <Tooltip title={getStoredValue() || textInputValue} placement="left" arrow>
+          <div className={styles.panelInputTextValue}>{getStoredValue() || textInputValue}</div>
         </Tooltip>
         <button
           type="button"
@@ -90,11 +112,6 @@ const PanelInputText: React.FC<PanelInputTextProps> = ({ name, rows, panelKey, i
         anchorEl={anchorRef.current}
         classes={{ paper: styles.panelInputTextPopover }}
         slotProps={{ paper: { sx: { backgroundColor: theme.palette.secondary.main } } }}
-        TransitionProps={{
-          onEntered: () => {
-            setTextInputValue(getStoredValue() || '');
-          },
-        }}
         sx={{ left: '20px' }}
         onKeyDown={(e) => {
           if (e.key === 'Escape') {
