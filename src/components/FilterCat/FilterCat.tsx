@@ -29,6 +29,7 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
   const dispatch = useDispatch();
   const defaultSort = filterSortOrder || 'ct,desc';
   const [curSort, setCurSort] = useState(defaultSort);
+  const [filterRegex, setFilterRegex] = useState(filter?.regexp || '');
 
   const sortChartData = (sortOrder: string, data: { key: string | number; value: number }[]) => {
     const [sortKey, sortDir] = sortOrder.split(',');
@@ -108,6 +109,18 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
     }
   }, 500);
 
+  const handleRegexTextField = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = event.target;
+    setFilterRegex(value);
+    handleRegex(event);
+  };
+
+  useEffect(() => {
+    if (!filter?.regexp) {
+      setFilterRegex('');
+    }
+  }, [filter]);
+
   const memoizedGroupByData = useMemo(
     () => groupBy(meta.varname, TYPE_MAP[meta.type]),
     [allData, meta?.varname, meta?.type],
@@ -149,8 +162,8 @@ const FilterCat: React.FC<FilterCatProps> = ({ meta, filter }) => {
           <TextField
             placeholder="regex"
             classes={{ root: styles.filterCatRegex }}
-            defaultValue={filter?.regexp || ''}
-            onChange={handleRegex}
+            value={filterRegex}
+            onChange={handleRegexTextField}
             variant="standard"
             inputProps={{ 'data-testid': 'filter-cat-input', style: { marginLeft: '5px' } }}
             sx={{
