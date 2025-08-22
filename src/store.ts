@@ -9,7 +9,9 @@ import { htmlAPI } from './slices/htmlAPI';
 
 const store = configureStore({
   reducer,
-  middleware: (getDefaultMiddleware: any) => getDefaultMiddleware().concat(    
+  middleware: (getDefaultMiddleware: any) => getDefaultMiddleware({
+    serializableCheck: false,
+  }).concat(    
     htmlAPI.middleware,
     configAPI.middleware,
     displayListAPI.middleware,
