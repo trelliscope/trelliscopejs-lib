@@ -39,7 +39,7 @@ const displayRequest = (url: string, displayName: string, dataType: string, appD
   });
 
 const JSONPBaseQuery =
-  (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string, appData: string }, unknown, unknown> =>
+  (): BaseQueryFn<{ url: string; id: string; dataType: string; displayName: string; appData: string }, unknown, unknown> =>
   ({ url, id, dataType, appData, displayName }) => {
     const displayInfoCallback = `__loadDisplayInfo__${id}`;
     return displayRequest(url, displayName, dataType, appData, displayInfoCallback) as Promise<{ data: IDisplay }>;
@@ -56,7 +56,8 @@ const JSONPRelatedQuery = async ({ url, id, dataType, displayNames }: IGetRelate
   const relatedDisplayInfoCallback = `__loadDisplayInfo__${id}`;
 
   const displayNameRequests = displayNames.map(
-    (displayName) => displayRequest(url, displayName, dataType, '', relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
+    (displayName) =>
+      displayRequest(url, displayName, dataType, '', relatedDisplayInfoCallback) as Promise<{ data: IDisplay }>,
   );
 
   const results = await Promise.all(displayNameRequests);
@@ -68,7 +69,10 @@ export const displayInfoAPI = createApi({
   reducerPath: 'displayInfo',
   baseQuery: JSONPBaseQuery(),
   endpoints: (builder) => ({
-    getDisplayInfo: builder.query<IDisplay, { url: string; id: string; dataType: 'jsonp' | 'json' | 'js'; displayName: string, appData: string }>({
+    getDisplayInfo: builder.query<
+      IDisplay,
+      { url: string; id: string; dataType: 'jsonp' | 'json' | 'js'; displayName: string; appData: string }
+    >({
       query: ({ url, id, dataType, displayName, appData }) => ({ url, id, dataType, displayName, appData }),
     }),
     getRelatedDisplays: builder.query<{ data: IDisplay }[], IGetRelatedDisplaysArgs>({
@@ -125,7 +129,7 @@ export const useDisplayMetasWithInputs = () => {
     varname: input.name,
     tags: ['input'],
   })) as IInput[];
-  return useMemo(() => [...((data?.metas as IMeta[]) || []), ...(inputInformation || [])] || [], [data, inputInformation]);
+  return useMemo(() => [...((data?.metas as IMeta[]) || []), ...(inputInformation || [])], [data, inputInformation]);
 };
 
 export const useMetaByVarname = (varname: string) => {
@@ -138,23 +142,26 @@ export const useMetaByVarname = (varname: string) => {
 export const useMetaGroups = (omitMetas: string[] = []) => {
   const metas = useDisplayMetas();
 
-  return metas.reduce((acc, meta) => {
-    const omit = omitMetas.length > 0 && omitMetas.includes(meta.varname);
-    const tags = meta.tags || [];
-    if (tags.length === 0 && !omit) {
-      acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
+  return metas.reduce(
+    (acc, meta) => {
+      const omit = omitMetas.length > 0 && omitMetas.includes(meta.varname);
+      const tags = meta.tags || [];
+      if (tags.length === 0 && !omit) {
+        acc?.get(COMMON_TAGS_KEY)?.push(meta.varname);
+        return acc;
+      }
+      tags.forEach((tag: string) => {
+        if (!acc.has(tag)) {
+          acc.set(tag, []);
+        }
+        if (!omit) {
+          acc?.get(tag)?.push(meta.varname);
+        }
+      });
       return acc;
-    }
-    tags.forEach((tag: string) => {
-      if (!acc.has(tag)) {
-        acc.set(tag, []);
-      }
-      if (!omit) {
-        acc?.get(tag)?.push(meta.varname);
-      }
-    });
-    return acc;
-  }, new Map<string | symbol, string[]>([[COMMON_TAGS_KEY, []]]));
+    },
+    new Map<string | symbol, string[]>([[COMMON_TAGS_KEY, []]]),
+  );
 };
 
 export const useMetaGroupsWithInputs = () => {
