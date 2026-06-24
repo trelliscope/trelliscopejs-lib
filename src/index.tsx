@@ -1,7 +1,16 @@
 import React from 'react';
 import TrelliscopeApp from './TrelliscopeApp';
 import trelliscopeApp from './trelliscopeAppFunc';
-import { Trelliscope } from './jsApi';
+import {
+  Trelliscope,
+  StringMeta,
+  NumberMeta,
+  FactorMeta,
+  DateMeta,
+  DatetimeMeta,
+  CurrencyMeta,
+  HrefMeta,
+} from './jsApi';
 
 window.trelliscopeApp = trelliscopeApp;
 window.Trelliscope = Trelliscope;
@@ -133,4 +142,14 @@ if (import.meta.env.MODE === 'development') {
   }
 }
 
-export { Trelliscope, TrelliscopeApp };
+export {
+  Trelliscope,
+  TrelliscopeApp,
+  StringMeta,
+  NumberMeta,
+  FactorMeta,
+  DateMeta,
+  DatetimeMeta,
+  CurrencyMeta,
+  HrefMeta,
+};
