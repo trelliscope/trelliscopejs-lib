@@ -1,6 +1,6 @@
 {
   "name": "trelliscopejs-lib",
-  "version": "0.7.23",
+  "version": "0.8.0",
   "type": "module",
   "files": [
     "dist"
@@ -72,7 +72,8 @@
     "deploy": "./deploy.sh",
     "analyze": "source-map-explorer 'dist/assets/*.js'",
     "lint": "node_modules/eslint/bin/eslint.js src",
-    "create:component": "hygen new component"
+    "create:component": "hygen new component",
+    "test:unit": "vitest run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -116,12 +117,14 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "hygen": "^6.2.11",
     "jest-fail-on-console": "^3.1.2",
+    "jsdom": "^29.1.1",
     "prettier": "3.2.5",
     "redux-mock-store": "^1.5.4",
     "sass": "^1.72.0",
     "source-map-explorer": "^2.5.3",
     "typescript": "^5.4.3",
-    "vite-plugin-css-injected-by-js": "^3.5.0"
+    "vite-plugin-css-injected-by-js": "^3.5.0",
+    "vitest": "^4.1.9"
   },
   "msw": {
     "workerDirectory": "public"

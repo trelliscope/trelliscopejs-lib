@@ -315,12 +315,13 @@ class FactorMetaClass extends Meta implements IFactorMeta {
 }
 export function FactorMeta({
   varname,
-  levels,
+  levels = [],
   label,
   tags = [],
 }: {
   varname: string;
-  levels: string[];
+  // Optional: when omitted (or empty), Trelliscope derives the levels from the data.
+  levels?: string[];
   label?: string | undefined;
   tags?: string[];
 }): IFactorMeta {
@@ -477,52 +478,96 @@ class DatetimeRangeFilterStateClass extends FilterState implements IDatetimeRang
   }
 }
 
-function inferMeta(data: Datum[], colNames: string[], guessMax: number = 1000) {
-  const types = colNames.map((key) => {
-    const values = data
-      .slice(0, guessMax)
-      .map((row) => row[key as keyof typeof row])
-      // remove any undefined values
-      .filter((value) => !(value === undefined || value === null));
+// Distinct, non-empty values for a column, sorted — used to populate factor levels.
+function getLevels(data: Datum[], key: string): string[] {
+  return Array.from(new Set(data.flatMap((row) => row[key as keyof typeof row])))
+    .filter((value) => !(value === undefined || value === null))
+    .sort() as string[];
+}
 
-    // TODO: add this in everywhere
-    // const maxnchar = Math.max(...values.map((value) => String(value).length));
+// Date/datetime detection. We require an ISO-ish shape (not just a parseable string):
+// `Date.parse` is far too lenient — e.g. Date.parse('01-001') succeeds — which would
+// misclassify categorical codes like '01-001' as dates. Matching an explicit format
+// first, then validating with Date.parse, keeps that from happening.
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const DATETIME_RE = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2})?/;
+const isDatetimeValue = (value: unknown): boolean =>
+  typeof value === 'string' && DATETIME_RE.test(value) && !Number.isNaN(Date.parse(value));
+const isDateValue = (value: unknown): boolean =>
+  typeof value === 'string' && DATE_RE.test(value) && !Number.isNaN(Date.parse(value));
 
-    if (values.length === 0) {
-      return StringMeta({ varname: key }) as IMeta;
-    }
+// Infer a meta for a single column from its values.
+function inferColumnMeta(data: Datum[], key: string, guessMax: number): IMeta {
+  const values = data
+    .slice(0, guessMax)
+    .map((row) => row[key as keyof typeof row])
+    // remove any undefined/null values
+    .filter((value) => !(value === undefined || value === null));
 
-    if (values.every((value) => typeof value === 'number')) {
-      return NumberMeta({ varname: key }) as IMeta;
-    }
+  // TODO: add this in everywhere
+  // const maxnchar = Math.max(...values.map((value) => String(value).length));
 
-    if (values.every((value) => !Number.isNaN(Date.parse(value as string)))) {
-      return DateMeta({ varname: key }) as IMeta;
-    }
-
-    if (values.every((value) => !Number.isNaN(Date.parse(value as string)))) {
-      return DatetimeMeta({ varname: key }) as IMeta;
-    }
-
-    if (
-      values.every((value) => (value as string).startsWith('http') && /\.(png|jpg|jpeg|gif|bmp|svg)$/i.test(value as string))
-    ) {
-      return PanelMeta({ varname: key, paneltype: 'img', format: 'png', aspect: 1.5, sourcetype: 'file' }) as IMeta;
-    }
-
-    if (values.every((value) => (value as string).startsWith('http'))) {
-      return HrefMeta({ varname: key }) as IMeta;
-    }
-
-    // get distinct values from all rows (all data, not just first 1000)
-    const levels = Array.from(new Set(data.flatMap((row) => row[key as keyof typeof row]))).sort();
-    if (levels.length <= 25) {
-      return FactorMeta({ varname: key, levels: levels as string[] }) as IMeta;
-    }
-
+  if (values.length === 0) {
     return StringMeta({ varname: key }) as IMeta;
+  }
+
+  if (values.every((value) => typeof value === 'number')) {
+    return NumberMeta({ varname: key }) as IMeta;
+  }
+
+  if (values.every(isDatetimeValue)) {
+    return DatetimeMeta({ varname: key }) as IMeta;
+  }
+
+  if (values.every(isDateValue)) {
+    return DateMeta({ varname: key }) as IMeta;
+  }
+
+  if (
+    values.every((value) => (value as string).startsWith('http') && /\.(png|jpg|jpeg|gif|bmp|svg)$/i.test(value as string))
+  ) {
+    return PanelMeta({ varname: key, paneltype: 'img', format: 'png', aspect: 1.5, sourcetype: 'file' }) as IMeta;
+  }
+
+  if (values.every((value) => (value as string).startsWith('http'))) {
+    return HrefMeta({ varname: key }) as IMeta;
+  }
+
+  // get distinct values from all rows (all data, not just first `guessMax`)
+  const levels = getLevels(data, key);
+  if (levels.length <= 25) {
+    return FactorMeta({ varname: key, levels }) as IMeta;
+  }
+
+  return StringMeta({ varname: key }) as IMeta;
+}
+
+// Resolve the meta for every column. Caller-declared metas are authoritative; any
+// column the caller doesn't declare falls back to inference. Passing no metas (the
+// default) means every column is inferred, identical to the original behavior. A
+// declared factor with no/empty levels has its levels derived from the data, so
+// `FactorMeta({ varname })` "just works".
+function resolveMetas(data: Datum[], colNames: string[], declaredMetas: IMeta[], guessMax: number): IMeta[] {
+  const declaredByVar = new Map(declaredMetas.map((m) => [m.varname, m]));
+  const metas = colNames.map((key) => {
+    const declared = declaredByVar.get(key);
+    if (declared === undefined) {
+      return inferColumnMeta(data, key, guessMax);
+    }
+    declaredByVar.delete(key);
+    if (declared.type === 'factor' && (declared.levels === undefined || declared.levels.length === 0)) {
+      return FactorMeta({
+        varname: declared.varname,
+        label: declared.label,
+        tags: declared.tags,
+        levels: getLevels(data, declared.varname),
+      }) as IMeta;
+    }
+    return declared;
   });
-  return types;
+  // Keep declared metas for varnames that aren't columns in the data (e.g. computed columns).
+  declaredByVar.forEach((declared) => metas.push(declared));
+  return metas;
 }
 
 // function checkKeycols makes sure that the keycols are in the data and that together they uniqueily identify each row - if not, it throws an error
@@ -552,7 +597,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     tags = [],
     keycols = [],
     guessMax = 1000,
-    // metas = [],
+    metas: userMetas = [],
     // state = {},
     // views = [],
     // inputs = {},
@@ -568,7 +613,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
     tags?: string[];
     keycols: string[];
     guessMax: number;
-    // metas?: IMeta[],
+    metas?: IMeta[];
     // state?: IDisplayState,
     // views?: IView[],
     // inputs?: IInputs,
@@ -580,7 +625,7 @@ class TrelliscopeClass implements ITrelliscopeAppSpec {
   }) {
     this.displays = {};
     const colNames = Array.from(new Set(data.slice(0, guessMax).flatMap(Object.keys)));
-    const metas = inferMeta(data, colNames, guessMax);
+    const metas = resolveMetas(data, colNames, userMetas, guessMax);
     checkKeycols(data, keycols, colNames);
 
     this.displays[name] = {
@@ -871,6 +916,7 @@ export function Trelliscope({
   description = undefined,
   tags = [],
   keycols = [],
+  metas = [],
   primarypanel = undefined,
   // thumbnailurl = undefined,
   infoOnLoad = false,
@@ -881,6 +927,10 @@ export function Trelliscope({
   description?: string;
   tags?: string[];
   keycols: string[];
+  // Optional per-variable type declarations. Declared metas are authoritative; any
+  // column not declared here falls back to type inference. Build them with the
+  // exported meta helpers, e.g. `StringMeta({ varname })` or `FactorMeta({ varname })`.
+  metas?: IMeta[];
   primarypanel?: string;
   // thumbnailurl?: string,
   infoOnLoad?: boolean;
@@ -892,6 +942,7 @@ export function Trelliscope({
     description,
     tags,
     keycols,
+    metas,
     primarypanel,
     // thumbnailurl,
     infoOnLoad,
